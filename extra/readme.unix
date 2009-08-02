@@ -1,0 +1,9 @@
+Instructions:
+
+Simply place this rtext/ directory wherever you want and add it to your PATH.
+You can then either run the jar directly like so:
+
+$ <java-path>/java -jar <rtext-path>/rtext/rtext.jar
+
+or, you can make the above a one-liner shell script in your ~/bin directory.
+It's your choice.

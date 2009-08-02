@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!--
+     This file defines all icon groups available to RText.
+
+     Additional icon groups can be downloaded from
+     http://sourceforge.net/projects/rtext.  These icon groups will be in
+     Jar files that should be placed in the directory
+     <RText-root>/icongroups, where <RText-root> is the directory in which
+     you installed RText.  The new icon group(s) will then be available via
+     the Options dialog.
+
+     To add a custom icon group, add all icons to a jar file, say
+     "MyIcons.jar".  Place MyIcons.jar in <RText-root>/icongroups.  Then,
+     add some XML to this file in the following format:
+        <group name="<group-name>"
+              path="<icon-path>"
+              extension="<extension>"
+              jar="<jar>"/>
+     where:
+       <name>      is the "name" of the icon group as it will appear in
+                   RText's options dialog.  You could specify, for example,
+                   "My Icon Group".
+       <icon-path> is the path in the Jar file of the icons.  For example,
+                   if the Jar contained icons under org/fife/rtext/icons,
+                   this value would be "org/fife/rtext/icons/".
+                   If the icons are in the "root directory" of the Jar,
+                   this parameter can be omitted.
+       <extension> is the extension of the image files.  This value must be
+                   one of "gif", "jpg", or "png", as Swing understands
+                   those image types.  If you leave this value off, RText
+                   defaults to "gif".
+       <jar>       is the RELATIVE PATH from the RText install to the Jar
+                   file.  In this example, this value would be:
+                   icongroups/MyIcons.jar.
+
+     Note that you can also simply have the icons in a directory instead of
+     in a Jar file.  In this case, <icon-path> should be the FULL PATH of
+     the directory containing the icons, and the <jar> parameter should not
+     be specified at all.
+
+     NOTE: Do NOT remove the "Eclipse Icons" entry - this is the default icon
+           group used by RText.  If you remove this entry, RText may not start!
+
+     Please see RText's Help for more information.
+-->
+
+<IconGroups>
+   <group name="BlueSphere Icons" extension="png" jar="icongroups/BlueSphereIcons.jar"/>
+   <group name="Eclipse Icons" jar="icongroups/EclipseIcons.jar"/>
+   <group name="Java Icons" largeIconSubDir="large" jar="icongroups/JavaIcons.jar"/>
+   <group name="Windows XP Icons" largeIconSubDir="large" jar="icongroups/XPIcons.jar"/>
+</IconGroups>

@@ -1,0 +1,48 @@
+Last updated 7/22/2009
+
+
+UI Features
+-----------
+1.  Add option to have Find/Replace in Files syntax highlight matches.
+2.  Create better icons for file types.
+
+
+Functionality
+-------------
+1.  Add XML validation (squiggle underlining).
+2.  Add scripted macro support (Java 6+ only).
+3.  Add VB syntax highlighting.
+4.  Add drag-and-drop support to list view (rearranging files, opening).
+5.  Add right-click menu to list view (close file, properties, etc.).
+6.  Make list view a DockableWindow so it's grouped with docked plugins.
+7.  Make OptionsDialogPanels lazy-initialize on first display.
+8.  If Source Browser isn't configured for ctags location, make context menu
+    contain a single item "Configure ctags...".  Requires Options dialog API
+    to display a specific option panel.
+9.  Provide Exuberant ctags with Windows install.
+
+
+Miscellaney
+-----------
+1.  Update localizations.
+2.  Optimize printing code.
+3.  Add color printing option.
+4.  Make auto-indentation configurable and remembered as well.
+
+
+Bugs that nobody cares about
+----------------------------
+1.  Icons view doesn't update encoding selection.
+2.  Inserting spaces in WrappedSyntaxView at the end of a wrapped line
+    messes up.
+
+
+Probably won't happen
+---------------------
+1.  WW:  Make WrappedSyntaxView implement TokenOrientedView so that
+    it could use the more efficient RSyntaxUtilities.getNextVisualPositionFrom
+    instead of View's version (which calls Utilities.getPositionAbove/Below,
+    which are very inefficient because of multiple calls to modelToView).
+2.  WW: Make tokens with whitespace break at whitespace boundaries too
+    (e.g. MLC's)!
+3.  Make plugins have their own help that gets added dynamically to RText's.

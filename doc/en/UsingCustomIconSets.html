@@ -1,0 +1,60 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html">
+</head>
+
+<body lang=EN-US style='tab-interval:.5in'>
+
+<h2>Using Custom Icon Sets</h2>
+<HR ALIGN="center" WIDTH="100%">
+
+<p>By default, RText comes with several different icon sets.  You can choose
+   what icon set RText uses via the <a href="OptionsUserInterface.html">User
+   Interface</a> panel of the <a href="OptionsDialog.html">Options dialog</a>.
+
+<p>You can add additional icon sets for RText to use, adding a whole level of
+   customization.  Additional icon sets are available for download at RText's
+   project page:  http://sourceforge.net/projects/rtext.  These icon sets are
+   available in Jar files.  To make them usable in RText:
+
+<ul>
+   <li>Take the icon set Jar file, say "NewIconSet.jar", and place it in
+       <i>&lt;RText-root&gt;/extraIcons</i>, where <i>&lt;RText-root&gt;</i>
+       is the directory in which you have RText installed.
+   <li>Add some XML to the file <i>&lt;RText-root&gt;/extraIcons/ExtraIcons.xml</i>
+       as follows:
+       <pre>
+          <font color="#FF0000">&lt;</font>group name=<font color="#0000FF">"<i>&lt;name&gt;</i>"</font>
+                path=<font color="#0000FF">"<i>&lt;icon-path&gt;</i>"</font>
+                extension=<font color="#0000FF">"<i>&lt;extension&gt;</i>"</font>
+                jar=<font color="#0000FF">"<i>&lt;jar&gt;</i>"</font><font color="#FF0000">/&gt;</font>
+       </pre>
+       where:
+          <ul>
+             <li><i>&lt;name&gt;</i> is the name of the icon set, as it will
+                 appear in RText's Options dialog.
+             <li><i>&lt;path&gt;</i> is the path in the Jar file of the icons.
+                 If the icons are in the "root directory" of the Jar, this
+                 parameter should be the empty string, "".
+             <li><i>&lt;extension&gt;</i> is the extension of the icon files.
+                 This value should be one of <i>gif</i>, <i>jpg</i>, or
+                 <i>png</i>, as these are the image file types Swing understands.
+                 If this value is not specified, RText assumes an extension of
+                 <i>gif</i>.
+             <li><i>&lt;jar&gt;</i> is the FULL PATH of the Jar file containing
+                 the icon set.  In this example, this value would be
+                 <i>&lt;RText-root&gt;/extraIcons/NewIconSet.jar</i>.
+           </ul>
+    </li>
+</ul>
+
+<p>Then, the next time you start RText, the icon set specified in
+   NewIconSet.jar will be available from the Options dialog!
+
+
+<p>See also: <a href="OptionsDialog.html">The Options Dialog</a></p>
+
+</body>
+
+</html>

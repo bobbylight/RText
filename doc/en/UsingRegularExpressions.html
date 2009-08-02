@@ -1,0 +1,223 @@
+<html>
+
+<head>
+
+<meta http-equiv=Content-Type content="text/html">
+
+<style type="text/css">
+   EM.regex {color:blue; font-family:monospaced}
+   EM.value {color:red; font-family:monospaced}
+</style>
+
+</head>
+
+<body lang=EN-US style='tab-interval:.5in'>
+
+<h2>Using Regular Expressions</h2>
+<HR ALIGN="center" WIDTH="100%">
+
+<p>RText uses Java regular expressions, so the ultimate source of information
+   on this topic would be Sun's Javadoc.  Check out the Java home page at
+   http://java.sun.com and do a search for the latest API Specification, then
+   click on the <em>Pattern</em> class.</p>
+
+<p>However, for the eager, what follows is a brief tutorial containing
+   everything you probably want to know.  This tutorial assumes you already
+   understand the basic concepts of regular expressions.</p>
+
+<p><b>I. The Basics</b><br>
+   <table align="center" width="90%">
+      <tr>
+         <td>
+            Java regular expressions contain every construct you'll need when
+            searching for text, including character classes, greedy and
+            reluctant qualifiers, and back references.
+            <p>The basics are all here:</p><br>
+               <table align="center" border="1" width="90%">
+                  <tr>
+                     <td><b>Regular Expression</b></td>
+                     <td><b>Matches</b></td>
+                  </tr>
+                  <tr>
+                     <td><em class="regex">ab</em></td>
+                     <td><em class="value">ab</em></td>
+                  </tr>
+                  <tr>
+                     <td><em class="regex">a*b</em></td>
+                     <td>0 or more <em class="value">a</em>'s, followed by
+                         a <em class="value">b</em></td>
+                  <tr>
+                     <td><em class="regex">a+b</em></td>
+                     <td>1 or more <em class="value">a</em>'s, followed by
+                         a <em class="value">b</em></td>
+                  </tr>
+                  <tr>
+                     <td><em class="regex">a{n}b</em></td>
+                     <td>Exactly <em>n</em> <em class="value">a</em>'s, followed
+                         by a <em class="value">b</em></td>
+                  </tr>
+                  <tr>
+                     <td><em class="regex">a{n,}b</em></td>
+                     <td><em>n</em> or more <em class="value">a</em>'s, followed
+                         by a <em class="value">b</em></td>
+                  </tr>
+                  <tr>
+                     <td><em class="regex">a{n,m}b</em></td>
+                     <td>Between <em>n</em> and <em>m</em>
+                         <em class="value">a</em>'s, followed by a
+                         <em class="value">b</em></td>
+                  </tr>
+                  <tr>
+                     <td><em class="regex">a?b</em></td>
+                     <td>0 or 1 <em class="value">a</em>'s, followed by a
+                         <em class="value">b</em></td>
+                  </tr>
+                  <tr>
+                     <td><em class="regex">car[sd]</em></td>
+                     <td><em class="value">cars</em> and
+                         <em class="value">card</em></td>
+                  </tr>
+                  <tr>
+                     <td><em class="regex">ca(rt|talog|nary)</em></td>
+                     <td>Any of <em class="value">cart</em>,
+                         <em class="value">catalog</em>, or
+                         <em class="value">canary</em></td>
+                  </tr>
+                  <tr>
+                     <td><em class="regex">a.c</em></td>
+                     <td>A three-letter string beginning with
+                         <em class="value">a</em>, followed by any character,
+                         followed by <em class="value">c</em></td>
+                  </tr>
+               </table>
+         </td>
+      </tr>
+   </table>
+</p>
+
+<p><b>II. Characters and Character Classes</b><br>
+   <table align="center" width="90%">
+      <tr>
+         <td>
+            <table align="center" width="90%">
+               <tr>
+                  <td><em class="regex">\\</em></td>
+                  <td>Backslash</td>
+               </tr>
+               <tr>
+                  <td><em class="regex">\t</em></td>
+                  <td>Tab</td>
+               </tr>
+               <tr>
+                  <td><em class="regex">\n</em></td>
+                  <td>Newline</td>
+               </tr>
+               <tr>
+                  <td><em class="regex">[abc]</em></td>
+                  <td>Any of <em class="value">a</em>, <em class="value">b</em>,
+                      or <em class="value">c</em></td>
+               </tr>
+               <tr>
+                  <td><em class="regex">[^abc]</em></td>
+                  <td>Any character except <em class="value">a</em>, <em class="value">b</em>,
+                      or <em class="value">c</em></td>
+               </tr>
+               <tr>
+                  <td><em class="regex">.</em></td>
+                  <td>Any character</td>
+               </tr>
+               <tr>
+                  <td><em class="regex">\d</em></td>
+                  <td>Any digit (equivalent to <em class="regex">[0-9]</em>)</td>
+               </tr>
+               <tr>
+                  <td><em class="regex">\D</em></td>
+                  <td>Any non-digit (equivalent to <em class="regex">[^0-9]</em>)</td>
+               </tr>
+               <tr>
+                  <td><em class="regex">\s</em></td>
+                  <td>A whitespace character</td>
+               </tr>
+               <tr>
+                  <td><em class="regex">\S</em></td>
+                  <td>A non-whitespace character.</td>
+               </tr>
+               <tr>
+                  <td><em class="regex">\w</em></td>
+                  <td>A word character (equivalent to <em class="regex">[A-Za-z0-9]</em>)</td>
+               </tr>
+               <tr>
+                  <td><em class="regex">\W</em></td>
+                  <td>A non-word character (equivalent to <em class="regex">[^\w]</em>)</td>
+               </tr>
+            </table>
+         </td>
+      </tr>
+   </table>
+</p>
+
+
+<p><b>III. Boundary Characters</b><br>
+   <table align="center" width="90%">
+      <tr>
+         <td>
+            <table align="center" width="90%">
+               <tr>
+                  <td><em class="regex">^</em></td>
+                  <td>The beginning of a line</td>
+               </tr>
+               <tr>
+                  <td><em class="regex">$</em></td>
+                  <td>The end of a line</td>
+               </tr>
+               <tr>
+                  <td><em class="regex">\b</em></td>
+                  <td>A word boundary</td>
+               </tr>
+               <tr>
+                  <td><em class="regex">\B</em></td>
+                  <td>A non-word boundary</td>
+               </tr>
+            </table>
+         </td>
+      </tr>
+   </table>
+</p>
+
+<p><b>IV. Back References</b><br>
+   <table align="center" width="90%">
+      <tr>
+         <td>
+            Back references allow you to capture a subsequence in a regex
+            match, and use that subsequence later in the regex's matching.
+            Back references are referred to as <em>capturing groups</em>, and
+            are enclosed in parentheses.  For example, in the regular
+            expression:<p>
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em class="regex">Fred([ \t])Joe\1Sue\1Tommy</em>,
+            <p>the first capturing group is <em class="regex">([ \t])</em>.
+               Anywhere following it in the regular expression, you can refer
+               back to it with <em class="regex">\1</em>; this means that a
+               match must contain the text matched with the capturing group, at
+               that location.  Thus, in the example, Fred, Joe, Sue, and Tommy
+               are all separated by the same character, either a space or a tab.
+               </p>
+            <p>Note that you can have multiple capturing groups per regular
+               expression.  In this case, the first group will be referred to
+               as <em class="regex">\1</em>, the second as
+               <em class="regex">\2</em>, etc.  Note also that capturing groups
+               can be embedded in one another; that is,</p><p>
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<em class="regex">((A)B)\1\2</em>
+            <p>is valid.</p>
+         </td>
+      </tr>
+   </table>
+</p>
+
+<p>See also: <a href="Find.html">Fint</a>,
+             <a href="FindNext.html">Find Next</a>,
+             <a href="Replace.html">Replace</a></p>
+
+
+</body>
+
+</html>

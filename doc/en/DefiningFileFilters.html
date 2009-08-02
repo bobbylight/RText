@@ -1,0 +1,41 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html">
+</head>
+
+<body lang=EN-US style='tab-interval:.5in'>
+
+<h2>Adding File Filters</h2>
+<HR ALIGN="center" WIDTH="100%">
+
+<p>You can add custom file filters to the File Chooser to easily view file types
+   you edit frequently.</p>
+
+<p>To do this, you must edit the file <b>ExtraFileChooserFilters.xml</b> in
+   the main RText installation directory.  In this XML file, you can define
+   filters to add to the File Chooser, and several properties for these filters.
+   The format for a file filter is as follows:</p>
+
+<pre>
+   <font color="#FF0000">&lt;</font>ExtensionFileFilter name=<font color="#0000FF">"Foobar Source Files"</font>
+         ignoreCase=<font color="#0000FF"><em>"true|false"</em></font>
+         showExtensions=<font color="#0000FF"><em>"true|false"</em></font><font color="#FF0000">&gt;</font>
+      <font color="#FF0000">&lt;</font>Extension<font color="#FF0000">&gt;</font><font color="#007700">foo</font><font color="#FF0000">&lt;/</font>Extension<font color="#FF0000">&gt;</font>
+      <font color="#FF0000">&lt;</font>Extension<font color="#FF0000">&gt;</font><font color="#007700">bar</font><font color="#FF0000">&lt;/</font>Extension<font color="#FF0000">&gt;</font>
+   <font color="#FF0000">&lt;/</font>ExtensionFileFilter<font color="#FF0000">&gt;</font>
+</pre>
+
+<p>In the previous example, a file filter will be added filtering everything
+   except "Foobar" source files, which are files with the extension "foo" or
+   "bar".  Notice that you should not include the initial period at the
+   beginning of extensions.</p>
+
+
+<p>See also: <a href="FileChooser.html">The File Chooser</a>,
+             <a href="OptionsFileChooser.html">The 'File Chooser' Options Panel</a></p>
+
+
+</body>
+
+</html>

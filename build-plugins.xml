@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+
+<!-- 
+
+	This is the Ant build script for all standard RText plugins.
+
+	Author:	Robert Futrell
+	Version:	0.6
+	Date:	20jan2006
+
+-->
+
+
+<project name="RText-Plugins" default="make-plugin-jars" basedir=".">
+
+	<description>RText Standard Plugins Build File</description>
+
+
+	<!-- Set global properties for this build. -->
+	<property name="app-name-small" value="rtext_standard_plugins"/>
+	<property name="version"        value="0.9.9.9"/>
+	<property name="source-dir"     location="src"/>
+	<property name="class-dir"      location="ant-classes"/>
+	<property name="dist-dir"       location="dist"/>
+	<property name="compiler"       value="Robert Futrell"/>
+	<property name="debug"          value="true"/>
+	<property name="debuglevel"     value="lines,var,source"/>
+	<property name="java-level"     value="1.4"/>
+
+
+	<!-- Compiles all org.fife.rtext.plugin classes.  This target should -->
+	<!-- be used when RText has been built, and you want to simply work  -->
+	<!-- on plugins without having to recompile everything.              -->
+	<target name="compile-plugin-classes"
+			description="Compile the source without deleting classes dir.">
+		<javac srcdir="${source-dir}" destdir="${class-dir}" deprecation="yes"
+				classpath="${class-dir};${dist-dir}/rsyntaxtextarea.jar;${dist-dir}/fife.common.jar"
+				debug="${debug}" debuglevel="${debuglevel}"
+				source="${java-level}" target="${java-level}">
+			<include name="org/fife/rtext/plugins/**"/>
+		</javac>
+	</target>
+
+
+	<!-- Builds the plugin jar files into the "plugins" subdirectory     -->
+	<!-- of dist-dir, but does not clear out anything else in dist-dir.  -->
+	<!-- This target can be run, for example, after RText has been       -->
+	<!-- built so that an RText image exists to test the plugins         -->
+	<!-- with.                                                           -->
+	<target name="make-plugin-jars" depends="compile-plugin-classes"
+			description="Physically builds the plugin jar files.">
+
+		<!-- Ensure plugins directory in dist-dir is empty. -->
+		<delete includeEmptyDirs="true" quiet="true">
+			<fileset dir="${dist-dir}/plugins"/>
+		</delete>
+		<mkdir dir="${dist-dir}/plugins"/>
+
+		<!-- Ant plugin. -->
+<!--
+		<jar destfile="${dist-dir}/plugins/Ant.jar">
+			<fileset dir="${class-dir}">
+				<include name="org/fife/rtext/plugins/ant/**"/>
+			</fileset>
+			<fileset dir="i18n">
+				<include name="org/fife/rtext/plugins/ant/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="${compiler}"/>
+			</manifest>
+		</jar>
+-->
+
+		<!-- Source Browser plugin. -->
+		<jar destfile="${dist-dir}/plugins/SourceBrowser.jar">
+			<fileset dir="${class-dir}">
+				<include name="org/fife/rtext/plugins/sourcebrowser/**"/>
+			</fileset>
+			<fileset dir="${source-dir}">
+				<include name="org/fife/rtext/plugins/sourcebrowser/**/*.gif"/>
+			</fileset>
+			<fileset dir="i18n">
+				<include name="org/fife/rtext/plugins/sourcebrowser/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="${compiler}"/>
+			</manifest>
+		</jar>
+
+		<!-- "File System View" plugin. -->
+		<jar destfile="${dist-dir}/plugins/FileSystemTree.jar">
+			<fileset dir="${class-dir}">
+				<include name="org/fife/rtext/plugins/filesystemtree/**"/>
+			</fileset>
+			<fileset dir="${source-dir}">
+				<include name="org/fife/rtext/plugins/filesystemtree/*.gif"/>
+			</fileset>
+			<fileset dir="i18n">
+				<include name="org/fife/rtext/plugins/filesystemtree/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="${compiler}"/>
+			</manifest>
+		</jar>
+
+		<!-- HeapIndicator plugin. -->
+		<jar destfile="${dist-dir}/plugins/HeapIndicator.jar">
+			<fileset dir="${class-dir}">
+				<include name="org/fife/rtext/plugins/heapindicator/**"/>
+			</fileset>
+			<fileset dir="${source-dir}">
+				<include name="org/fife/rtext/plugins/heapindicator/*.gif"/>
+			</fileset>
+			<fileset dir="i18n">
+				<include name="org/fife/rtext/plugins/heapindicator/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="${compiler}"/>
+			</manifest>
+		</jar>
+
+	</target>
+
+
+	<!-- Builds the plugin source zip.  The source for all "standard" -->
+	<!-- plugins will be shipped in a single zip, since we currently  -->
+	<!-- build them all together (plus they're all too tiny           -->
+	<!-- individually).                                               -->
+	<target name="make-source-zips" description="Builds the source zips.">
+		<zip destfile="./${app-name-small}_${version}_Source.zip">
+			<fileset dir="${source-dir}">
+				<include name="build-rtext-plugins.xml"/>
+				<include name="rtext/org/fife/rtext/plugins/**"/>
+				<include name="i18n/org/fife/rtext/plugins/**"/>
+			</fileset>
+			<fileset file="License.txt"/>
+		</zip>
+	</target>
+
+
+	<!-- Builds both the jar files and their source zip.  -->
+	<target name="make-all" description="Builds both the jars and source zip."
+		depends="make-plugin-jars,make-source-zips">
+	</target>
+
+
+</project>

@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 
+
+	This is the Ant build script for the RText Programmer's Text Editor and
+	all of its pieces.  Most of the time, you will only be running this
+	with the default target: make-rtext-app (builds RText as it is
+	shipped).  Regardless, here is a list of all available targets:
+
+       1. make-rtext-app:          Builds entire RText application
+                                   in ${dist-dir}.
+       2. compile:                 Compiles all org.fife classes
+                                   into ${class-dir}.
+       3. make-rtext-jar:          Creates rtext.jar in ${dist-dir}.
+       4. make-rtext-source-zip:   Creates RText source zip in the
+                                   current directory.
+       5. make-unix-installer:     Creates the *NIX installer in the
+                                   current directory.
+       6. make-all:                Makes RText application, source zip,
+                                   and *NIX installer.
+       7. make-javadoc:            Creates javadoc for all /org/fife
+                                   classes in ${doc-dir}.
+       8. make-mac-insatller:      Creates a dmg file for installing on
+                                   Mac OS X.
+
+	This script assumes that, from the current directory, you have the
+	RText source tree (starting with org/fife) in a "src" subdirectory.
+	It will generate class files into ./${class-dir}, javadoc into
+	./${doc-dir}, and the RText application into ${dist-dir}.
+
+	In short, this Ant script can build the RText application, make a zip-
+	file containing the RText source, make the *NIX RText installer, and
+	generate Javadoc for all org.fife.classes.  It can thus do everything
+	except generate the RText Windows installer.
+
+	Author:     Robert Futrell
+	Version:    0.9
+	Date:       02jun2009
+
+-->
+
+
+<project name="RText" default="make-rtext-app" basedir=".">
+
+	<description>RText build file</description>
+
+
+	<!-- Set global properties for this build. -->
+	<property name="app-name"         value="RText"/>
+	<property name="app-name-small"   value="rtext"/>
+	<property name="version"          value="0.9.9.9"/>
+	<property name="source-dir"       location="src"/>
+	<property name="common-dir"       location="../common"/>
+	<property name="class-dir"        location="ant-classes"/>
+	<property name="dist-dir"         location="dist"/>
+	<property name="mac-dist-dir"     location="dist-mac"/>
+	<property name="mac-stub-loc"     value="/System/Library/Frameworks/JavaVM.framework/Versions/Current/Resources/MacOS"/>
+	<property name="doc-dir"          location="javadoc"/>
+	<property name="compiler"         value="Robert Futrell"/>
+	<property name="debug"            value="true"/>
+	<property name="debuglevel"       value="lines,var,source"/>
+	<property name="java-level"       value="1.4"/>
+
+
+	<!-- Compiles all classes except for plugin classes.  -->
+	<target name="compile-main-classes" description="Compile the source.">
+		<!-- Build all common classes. -->
+		<ant antfile="${common-dir}/build.xml" target="make-common-jar"
+				inheritall="false"/>
+		<!-- Build RText-specific classes. -->
+		<delete includeEmptyDirs="true" quiet="true" dir="${class-dir}"/>
+		<mkdir dir="${class-dir}"/>
+		<javac srcdir="${source-dir}" destdir="${class-dir}"
+				classpath="lib/rsyntaxtextarea.jar:lib/autocomplete.jar:${common-dir}/dist/fife.common.jar"
+				deprecation="yes"
+				debug="${debug}" debuglevel="${debuglevel}"
+				source="${java-level}" target="${java-level}">
+			<!-- Don't compile plugins; their own build script -->
+			<!-- does that.                                    -->
+			<exclude name="org/fife/rtext/plugins/**"/>
+		</javac>
+	</target>
+
+
+	<!-- Build the main RText executable jar.  -->
+	<target name="make-rtext-jar" depends="compile-main-classes"
+			description="generate the RText distribution" >
+		<delete includeEmptyDirs="true" quiet="true">
+			<!-- Remove as other projects are built here too. -->
+			<fileset dir="${dist-dir}"/>
+		</delete>
+		<mkdir dir="${dist-dir}"/>
+		<jar destfile="${dist-dir}/${app-name}.jar">
+			<!-- Class files. -->
+			<fileset dir="${class-dir}"/>
+			<!-- Localization files. -->
+			<fileset dir="i18n">
+				<exclude name="org/fife/rtext/plugins/**"/>
+			</fileset>
+			<!-- Images. -->
+			<fileset dir="${source-dir}">
+				<include name="org/fife/rtext/graphics/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="${compiler}"/>
+				<attribute name="Main-Class"
+					value="org/fife/rtext/${app-name}"/>
+				<!-- OfficeLnFs are only available on Windows, but -->
+				<!-- it doesn't hurt anything to have them on the  -->
+				<!-- classpath everywhere.                         -->
+				<attribute name="Class-Path" value="fife.common.jar rsyntaxtextarea.jar autocomplete.jar lnfs/OfficeLnFs.jar"/>
+			</manifest>
+		</jar>
+	</target>
+
+
+	<!-- Builds everything RText needs and places it in ${dist-dir} -->
+	<!-- except for the javadoc and Mac version.                    -->
+	<target name="make-rtext-app" depends="make-rtext-jar"
+			description="Builds the entire RText application.">
+		<!-- Copy "extra stuff." -->
+		<copy todir="${dist-dir}">
+			<fileset dir="extra"/>
+			<fileset dir="lib"/>
+			<fileset dir="${common-dir}/dist"/>
+			<fileset dir="${common-dir}/native"/>
+		</copy>
+		<!-- Build and create the plugin jars.  We do this separately -->
+		<!-- from the rest of RText in case one day we don't want to  -->
+		<!-- ship any "standard" plugins with it.                     -->
+		<ant antfile="build-plugins.xml"
+				target="make-plugin-jars" inheritall="false"/>
+		<mkdir dir="${dist-dir}/doc"/>
+		<!-- Copy English help. -->
+		<copy todir="${dist-dir}/doc">
+			<fileset dir="doc"/>
+		</copy>
+	</target>
+
+
+	<!-- Builds the source zip for RText.  This zip will also include -->
+	<!-- source for the "standard" plugins.                           -->
+	<target name="make-rtext-source-zip"
+		description="Builds the source zip for RText.">
+		<zip destfile="./${app-name-small}_${version}_Source.zip">
+			<fileset dir="..">
+				<include name="RText/**"/>
+				<exclude name="RText/classes/**"/>
+				<exclude name="RText/ant-classes/**"/>
+				<exclude name="RText/dist/**"/>
+				<exclude name="RText/.*"/>
+				<exclude name="RText/*.dll"/>
+				<exclude name="RText/*.gz"/>
+				<exclude name="*.zip"/>
+				<include name="Common/build.xml"/>
+				<include name="Common/src/**"/>
+				<include name="Common/i18n/**"/>
+				<include name="Common/extra/**"/>
+				<include name="Common/native/**"/>
+			</fileset>
+		</zip>
+	</target>
+
+
+	<!-- Builds a UNIX "installer" gzipped tar file.  -->
+	<target name="make-unix-installer" depends="make-rtext-app"
+			description="Makes the rtext tar.gz installer for *NIX.">
+		<tar destfile="${app-name-small}_${version}_unix_bin.tar">
+			<tarfileset dir="${dist-dir}" prefix="/rtext"
+					preserveleadingslashes="false">
+				<exclude name="lnfs/OfficeLnFs.jar"/>
+				<exclude name="lnfs/OfficeLnFs.License.txt"/>
+				<exclude name="*.dll"/>
+			</tarfileset>
+			<tarfileset dir="." prefix="/rtext"
+					preserveleadingslashes="false">
+				<include name="README"/>
+			</tarfileset>
+		</tar>
+		<gzip zipfile="${app-name-small}_${version}_unix_bin.tar.gz"
+			src="${app-name-small}_${version}_unix_bin.tar"/>
+		<delete file="${app-name-small}_${version}_unix_bin.tar"/>
+	</target>
+
+
+	<!-- Builds both the RText application and its source zip.  -->
+	<target name="make-all"
+		description="Builds the RText application and its source zip."
+		depends="make-rtext-app,make-rtext-source-zip,make-unix-installer">
+	</target>
+
+
+	<!-- Builds the javadoc for all org.fife classes.  -->
+	<target name="make-javadoc" depends="compile-main-classes">
+		<javadoc  destdir="${doc-dir}" author="true" version="true"
+			 	breakiterator="yes"
+				classpath="lib/rsyntaxtextarea.jar:lib/autocomplete.jar:${common-dir}/dist/fife.common.jar">
+			<packageset dir="${common-dir}/src" defaultexcludes="yes">
+				<include name="org/**"/>
+			</packageset>
+			<packageset dir="${source-dir}" defaultexcludes="yes">
+				<include name="org/**"/>
+			</packageset>
+			<link href="http://javadoc.fifesoft.com/rsyntaxtextarea/"/>
+		</javadoc>
+	</target>
+
+
+	<!-- Creates an Mac OS X application bundle (double clickable app). -->
+	<target name="make-mac-installer" depends="make-rtext-app">
+		<delete includeEmptyDirs="true" quiet="true">
+			<!-- Remove as other projects are built here too. -->
+			<fileset dir="${mac-dist-dir}"/>
+		</delete>
+		<property name="appdir" value="${mac-dist-dir}/${app-name}.app"/>
+		<mkdir dir="${mac-dist-dir}"/>
+		<mkdir dir="${appdir}"/>
+		<mkdir dir="${appdir}/Contents"/>
+		<mkdir dir="${appdir}/Contents/MacOS"/>
+		<mkdir dir="${appdir}/Contents/Resources"/>
+		<mkdir dir="${appdir}/Contents/Resources/Java"/>
+		<copy file="${mac-stub-loc}/JavaApplicationStub" tofile="${appdir}/Contents/MacOS/${app-name}"/>
+		<exec executable="chmod">
+			<arg value="755"/>
+			<arg value="${appdir}/Contents/MacOS/${app-name}"/>
+		</exec>
+		<copy file="./mac/PkgInfo" todir="${appdir}/Contents"/>
+		<copy file="./mac/Info.plist" todir="${appdir}/Contents"/>
+		<copy file="./mac/${app-name}.icns" todir="${appdir}/Contents/Resources"/>
+		<copy todir="${appdir}/Contents/Resources/Java">
+			<fileset dir="${dist-dir}">
+				<exclude name="lnfs/OfficeLnFs.jar"/>
+				<exclude name="lnfs/OfficeLnFs.License.txt"/>
+				<exclude name="*.dll"/>
+			</fileset>
+		</copy>
+		<exec executable="/Developer/Tools/SetFile">
+			<arg value="-a"/>
+			<arg value="B"/>
+			<arg value="${appdir}"/>
+		</exec>
+	</target>
+
+
+</project>

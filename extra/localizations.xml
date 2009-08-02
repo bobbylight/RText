@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!--
+    This file contains all localizations that will appear in RText's
+    "Language" panel in the Options dialog.  In order for your translation
+    to be selectable, you must add it here.
+
+    If your language's name contains non-ASCII characters, please use the
+    proper escape for them (such as the '&#241;' for Spanish (es) below).
+    Check out http://www.unicode.org/charts if you don't know the Unicode
+    escape for a character.
+-->
+
+<RText-languages>
+   <language name="Arabic"                    id="ar"/>
+   <language name="Bahasa Indonesia"          id="in"/>
+   <language name="Bulgarian"                 id="bg"/>
+   <language name="Chinese (Simplified)"      id="zh_CN"/>
+   <language name="Chinese (Tranditional)"    id="zh_TW"/>
+   <language name="Deutsch"                   id="de"/>
+   <language name="Dutch"                     id="nl"/>
+   <language name="English"                   id="en"/>
+   <language name="Espa&#241;ol"              id="es"/>
+   <language name="Fran&#231;ais"             id="fr"/>
+   <language name="Magyar"                    id="hu"/>
+   <language name="Italiano"                  id="it"/>
+   <language name="Korean"                    id="ko"/>
+   <language name="Japanese"                  id="ja"/>
+   <language name="Portugu&#234;s (Brasil)"   id="pt_BR"/>
+   <language name="&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;" id="ru"/>
+   <language name="Turkish"                   id="tr"/>
+</RText-languages>

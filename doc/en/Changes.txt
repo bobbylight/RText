@@ -1,0 +1,1528 @@
+RText Change Log
+http://rtext.sourceforge.net
+----------------------------
+
+0.9.9.9 (07/22/2009):
+---------------------
+   - If you edit a file with no extension, RText now guesses the file content
+     type by checking for a "#!" line at the top.  If it finds one, it
+     highlights the file appropriately.  This helps with file types that often
+     have no extension, such as shell scripts.  This feature can be toggled in
+     the "File Filters" panel of the Options dialog.
+   - Content Assist is available in the Find and Replace dialogs when regular
+     expressions are enabled.  Ctrl+Space will display a list of regex
+     constructs for the current caret position.
+   - Add Lisp language support (syntax highlighting and Source Browser).
+   - Large amount of code cleanup and re-organization.
+   - RTL improvements throughout the UI (usually in combo boxes and tables).
+   - Better-behaved Mark Occurrences support.
+   - Default value of the "Use BOM in UTF-8" option is now false (as it always
+     should have been).
+   - Updated translations: German (Pete), Turkish (Burak), Spanish (Rafael), 
+     Russian (Vladimir), Indonesian (XXX), Arabic (Linostar), Japanese (izumi).
+
+
+0.9.9.8 (03/04/2009):
+---------------------
+   - Added bookmarking support.  This is configurable in the new "Gutter"
+     panel in the Options dialog.
+   - Added "Mark Occurrences" support.  This can be configured in the Options
+     dialog, under "Text Editor" -> "Caret and Selection".
+   - Added PHP syntax highlighting (including source browser).
+   - Source Browser can now use regular ctags as well as Exuberant ctags.
+   - A middle mouse button click now closes a tab.
+   - Added "thick vertical line" caret, similar to that seen in Eclipse and
+     NetBeans.
+   - Improved size grip on main window and Find in Files dialog.
+   - Minor bug fixes.
+   - Updated French, Russian and Italian translations.
+
+
+0.9.9.7 (12/08/2008):
+---------------------
+   - Added "Open Remote" and "Save Remote" options to load and save remote
+     files via ftp or http (Feature Request 1210965).
+   - The file chooser's filename text field tries to be even friendlier and
+     pre-fills in the next matching filename when possible, similar to Microsoft
+     Office.  This can be toggled on or off in the Options dialog.
+   - Some languages now recognize hyperlinks in comments.  These hyperlinks
+     are clickable (Ctrl+click) and open the link in the system default web
+     browser (requires Java 6).  This behavior is configurable in the Options
+     dialog.
+   - Changing the encoding or line separator of a file via the "Document
+     Properties" dialog now marks the file as dirty.
+   - The Windows version now sends files to the Recycle Bin when you delete
+     them from the file chooser.
+   - Added Makefile language support (highlighting and source browser).
+   - Added Ruby language support (highlighting and source browser).
+   - Made file opening slightly more efficient.
+   - Fixid bug 2315788: Replace dialog didn't like empty "Replace with" strings.
+   - Added "Open in new window" option to File System Tree's popup menu.
+   - "Save a Copy As Web Page..." now passes XHTML 1.0 Strict validation.
+   - Fixed RTL issues when running in Arabic locale (tables, plugin trees).
+   - Updated translations: Arabic (thanks Linostar), Chinese (SunYi),
+     Hungarian (Flatron), Russian (Vladimir), Spanish (Rafael), Turkish (Burak).
+
+
+
+0.9.9.6 (09/12/2008):
+---------------------
+   - Fixed a bug in RTF copy/paste.
+   - Separated RSyntaxTextArea into its own project.  Check out
+     http://fifesoft.com/rsyntaxtextarea for more information.
+   - Fixed bug 2056201: Plugins menu wasn't populated on OS X.
+   - When doing a find or replace with regular expressions enabled, regex
+     errors are now identified on the fly, highlighted in red, and a tooltip
+     displays the exact error.
+   - Improved XML syntax highlighting.  Multiline attributes and single-quoted
+     attributes are now supported, and entity references are better recognized.
+   - Slightly improved startup time.
+   - A few small bug fixes.
+   - Updated French and German translations (thanks Pivwan and Pete).
+
+
+0.9.9.5 (06/25/2008):
+---------------------
+   - Added "Copy as RTF" menu item.  Its shortcut is Ctrl+Shift+C, and
+     can be configured from the Shortcuts panel of the Options dialog. This
+     allows you to copy-and-paste syntax highlighted code into applications
+     such as Outlook.
+   - Updated some custom components that had problems with the upcoming
+     Nimbus Look and Feel (actually, any LaF that didn't extend
+     BasicLookAndFeel could have had problems).
+   - Font choosers now display several common fonts known to be monospaced
+     in bold.  Not all monospaced fonts will be detected, but most of the
+     common ones will be.
+   - Removed OfficeLnFs source from the RText source distribution.  The source
+     distribution now only comes with the OfficeLnFs jar file, and its license
+     file (that states where to find the source).
+   - The OfficeLnFs jar is no longer a part of the *NIX and Mac packages.
+     It never made sense to be in them anyway, since those LaFs aren't usable
+     on those platforms.
+   - Updated some child dialogs of the Options dialog.
+
+
+0.9.9.4 (04/09/2008):
+---------------------
+   - Cleaned up Options dialog code.
+   - Added "Favorites" functionality to the file chooser.  You can now
+     mark directories as "Favorites" and have them available from a popup
+     menu.
+   - Added wide-char related functions (wchar.h) to function list for C.
+   - You can now set what text antialiasing method RText will use in code
+     editors.  The actual methods available to choose from depend on your
+     JVM version.
+   - Added JSP syntax highlighting.
+   - Updated Perl syntax highlighting.  Changes include:
+        1. Recognizes variables of the form ${foo} as well as $foo.
+        2. Recognizes "heredoc" <<EOF syntax (not exhaustive, only common
+           cases).
+        3. Recognizes POD blocks.
+        4. Recognizes m//, s///, tr///, and y/// patterns (again, this isn't
+           exhaustive, only common cases).
+        5. Should be faster overall.
+   - Removed a couple of unused files from the source distribution.
+   - Updated translations: Arabic, Spanish, Hungarian, Italian, Japanese,
+     Korean, Dutch, Russian, Turkish, and Traditional Chinese.
+
+
+0.9.9.3 (12/20/2007):
+---------------------
+   - Added Groovy language support (Feature Request 1803457).
+   - Added Tcl language support (syntax highlighting and source browser)
+     (Feature Request 1796206).
+   - The Source Browser now analyzes Lua files.
+   - Fixed bug 1807734: Character insertions were not included in macros.
+   - Added accelerators to file chooser's popup menu actions: "F2" is now a
+     shortcut for "Rename", and "F5" is a shortcut for "Refresh".
+   - Added an option to display the hostname in the title bar.  This option is
+     togglable in the "User Interface" panel of the Options dialog.
+   - Fixed some stuff pointed out by FindBugs (see
+     http://findbugs.sourceforge.net/).
+   - Made Shift+Home toggle between selecting to the start of a line, and
+     selecting to the first non-whitespace character in the line.
+   - Made the link to the RText home page in the About dialog clickable (only
+     supported on 1.6 JRE's or newer).
+   - Made background chooser dialog resizable.
+   - If you're using a 1.5 JRE or greater, you can select *.bmp files for
+     your background now.
+   - Fixed bug 1813006: Filename dropdown in file chooser "popping under"
+     on 1.6 JRE's.
+   - Fix Source Browser bug - opening java file uses ctags for wrong
+     language (only lists "Functions").
+   - Fixed error recovery when ctags.exe specified is invalid.
+   - Improved SQL syntax highlighting - more keywords recognized, standard
+     SQL99 functions are colored, and multiline comments are now colored.
+   - Updated translations:  Spanish, French, Hungarian, Indonesian, Italian,
+     Japanese, Dutch, Russian, Turkish, and Traditional Chinese.
+
+
+0.9.9.2 (09/10/2007):
+---------------------
+   - Fixed bug 1757880: "Go To Matching Bracket" didn't work for Perl syntax
+     highlighting with curly braces.
+   - Fixed bug 1766385: Exception thrown when trying to open a file from
+     file history that no longer exists.
+   - Unnoticable performance enhancements to syntax highlighting code.
+   - Small improvements to overwrite mode.
+   - Improved performance of "replace tabs with spaces."
+   - Fixed bug where some prompting dialogs didn't honor RTL setting.
+   - Fixed a minor bug in the "Shortcuts" option panel.
+   - Removed more unused code/files.
+   - Directory choosers in Find in Files dialog and in the Options dialog now
+     default to the currently-entered directory.
+   - Made table columns in Find in Files/Replace in Files dialogs sortable.
+   - Shift+Backspace now behaves just like Backspace in the editor.  Previously,
+     it did nothing.
+   - Solaris packages have been made available on the SourceForge download
+     page.  Thanks to Steve Christensen for doing this!  Be sure to check out
+     his website, www.sunfreeware.com, for more great Solaris software.
+   - Updated French translation (pivwan).
+   - Updated German translation (bikerpete).
+   - Updated Hungarian translation (Flatron).
+   - Updated Italian translation (Luca).
+
+
+0.9.9.1 (06/01/2007):
+---------------------
+   - Added ability to set the line terminator used for new files ("General"
+     panel in the Options dialog).
+   - Removed some unnecessary text editor code.
+   - Removed unimplemented menu items unintentionally left around in 0.9.9.0.
+   - Updated Arabic translation (Linostar).
+   - Updated Dutch translation (Sebastiaan).
+   - Updated French translation (pivwan).
+   - Updated Hungarian translation (Flatron).
+   - Updated Indonesian translation (Sonny).
+   - Updated Italian translation (Luca).
+   - Updated Japanese translation (haru haru).
+   - Updated Korean translation (sbrownii).
+   - Updated Russian translation (Vladimir).
+   - Updated Simplified Chinese translation (sonyichi).
+   - Updated Spanish translation (phrodo).
+   - Updated Traditional Chinese translation (Liu).
+   - Updated Turkish translation (Burak).
+
+
+0.9.9.0 (04/10/2007):
+---------------------
+   - Added a right-click popup menu for editor tabs when using the tabbed view.
+   - Added actions to move the current line up or down (Ctrl+Shift+Up and
+     Ctrl+Shift+Down).
+   - Fixed a couple of bugs that occur only when running RText with gcj.
+
+
+0.9.8.5 (01/28/2007):
+---------------------
+   - Improved RTL support in the GUI.  The only piece still not supporting
+     RTL locales is, unfortunately, the editor.
+   - Made templates stored on a per-user basis, instead of per-install.
+   - Added '!' as a comment-starting token for properties file highlighting.
+   - "Find in Files" now has a shortcut, Ctrl+Shift+F.  This is still changable
+     in the Options dialog.
+   - Updated Dutch translation (Sebastiaan).
+   - Updated German translation (bikerpete).
+   - Updated Hungarian translation (Flatron).
+   - Updated Indonesian translation (Sonny).
+   - Updated Japanese translation (haru haru).
+   - Updated Russian translation (Vladimir).
+   - Updated Simplified Chinese translation (sonyichi).
+   - Updated Spanish translation (phrodo).
+   - Updated Traditional Chinese translation (Liu).
+   - Updated Turkish translation (Burak).
+   - Updated to OfficeLnFs 2.6.
+
+
+0.9.8.0 (11/14/2006):
+---------------------
+   - Added a "Toggle Comment" menu item (Ctrl+/).
+   - Changed default shortcuts for closing a file and the "go to line" dialog.
+   - The Source Browser's source tree now automatically expands all nodes when
+     refreshed.
+   - Fixed Bug 1567642: Bug in syntax highlighting strings in C/C++/C#/Java.
+   - Fixed Bug 1578333: Source Browser's syntax-highlighted tooltips stopped
+     working.
+   - Fixed Bug 1585830: Cannot remove shortcuts in options dialog.
+   - Fixed Bug 1591069: An exception was thrown at startup on Ubuntu Linux.
+   - Removed a few classes that are no longer used.
+   - Cleaned up the Options dialog code a little.
+   - Added Arabic translation (Linostar).  This also involved a lot of code
+     changes to support RTL locales.
+   - Updated Dutch translation (Sebastiaan).
+   - Updated Indonesian translation (Sonny).
+   - Updated Japanese translation (haru haru).
+   - Updated Portuguese translation (Leandro).
+   - Updated Simplified Chinese translation (sonyichi).
+   - Updated Spanish translation (phrodo).
+   - Updated Traditional Chinese translation (Liu).
+   - Updated Turkish translation (Burak).
+   - Updated to OfficeLnFs 2.4.
+
+
+0.9.7.5 (09/20/2006):
+---------------------
+   - Added a "Replace in Files" dialog.
+   - Added Lua syntax highlighting.
+   - Properites file syntax highlighting now highlights substitution markers.
+   - Ctrl+Up and Ctrl+Down move the text area up and down one line,
+     respectively, without changing the caret position.
+   - Shift+Enter now inserts a line break (just like regular Enter), instead
+     of the old behavior of doing nothing.
+   - Ctrl+Backspace now deletes the previous word.
+   - Made dialogs that are resizable have a "size grip" in the bottom
+     right-hand corner as a visual indicator.
+   - Fixes to the Indonesian translation.
+   - Updated Dutch translation (Sebastiaan).
+   - Updated French translation (pivwan).
+   - Updated German translation (bikerpete).
+   - Updated Japanese translation (haru haru).
+   - Updated Korean translation (sbrownii).
+   - Updated Russian translation (Vladimir).
+   - Updated Simplified Chinese translation (sonyichi).
+   - Updated Spanish translation (phrodo).
+   - Updated Traditional Chinese translation (Liu).
+   - Updated Turkish translation (Burak).
+   - Updated to OfficeLnFs 2.3.
+
+
+0.9.7.0 (06/24/2006):
+---------------------
+   - The text area now has a "default" foreground color and font that
+     are used if you do not explicitly set these values for a token type
+     (finally!).  These are configurable on the "Text Area" option panel.
+   - Made token background painting faster.
+   - You now get a more detailed error message when an I/O error occurs
+     while trying to save a file.
+   - Fixed bug 1505540: Cancelling the "Save before closing?" dialog via
+     pressing Escape closed the file anyway.
+   - RText now uses the flag icons from http://www.famfamfam.com for
+     localizations.  Check that site out, they have a really nice "Silk" icon
+     set for applications!
+   - Added Traditional Chinese translation (Liu Xiaoxi).
+   - Updated Chinese translation (sonyichi).
+   - Updated Dutch translation (Sebastiaan).
+   - Updated French translation (pivwan).
+   - Updated Hungarian translation (Flatron).
+   - Updated Japanese translation (haru haru).
+   - Updated Portuguese translation (Leandro).
+   - Updated Russian translation (Vladimir).
+   - Updated Spanish translation (phrodo).
+   - Updated Turkish translation (Burak).
+   - Updated to OfficeLnFs 2.2.
+
+
+0.9.5.0 (03/25/2006):
+---------------------
+   - You can now set the default encoding for new documents from the Options
+     dialog.
+   - You can also now configure RText to warn you before opening files larger
+     than an arbitrary size.  This can come in handy because, unfortunately,
+     most JVMs' default maximum heap sizes are too small for editing large text
+     files.  So, for example, you could configure RText to warn you before
+     opening files larger than 20MB if you're opening log files of arbitrary
+     size to keep from accidentally opening the 200MB one.  By default this
+     option is off.
+   - Made the "Printing" panel of the options dialog look a little nicer.
+   - Made HTML files created via "Save a Copy as HTML" more compact.
+   - Cleaned up the localization code a little.
+   - Fixed bug when selecting the "Find" text from combo box's history
+     in Find in Files dialog.
+   - Updated to OfficeLnFs 2.1.
+
+
+0.9.4.5 (03/08/2006):
+---------------------
+   - Replace operations now recognize captured groups when "Regular Expressions"
+     is selected (RFE 1438886).  For example, if you have the text
+        if (x<7) {
+     and replace "(\w+)<(\d+)" with "$2<$1", the new value of the text will be:
+        if (7<x) {
+   - Fixed Bug 1431105, which caused all files opened from the Find in Files
+     dialog to be opened with the system's default encoding.
+   - Fixed Bug 1428584, which sometimes left a plugin title bar displaying the
+     wrong plugin name.
+   - The speed of a "Find in Files" search when "Regular Expressions" is
+     enabled has been greatly improved.
+   - Added Korean translation (thanks sbrownii!).
+   - Updated Russian translation (Vladimir).
+   - Updated Dutch translation (Sebastiaan).
+   - Updated German translation (bikerpete).
+   - Updated Turkish translation (Burak).
+   - Updated OfficeLnFs.jar to 2.0.
+   - Fixed a UI "bug" that caused exceptions to be thrown when a menu item
+     without an icon was armed when using a 6.0 b74 JRE.
+
+
+0.9.4.0 (01/13/2006):
+---------------------
+   - Added Python syntax highlighting.
+   - Fix bug where closing "last" document in tabbed pane does not give
+     focus to the newly-fucused text area (Bug ID 1387510).
+   - Made the file chooser case-insensitive for OS X (Bug ID 1387585).
+   - Fixed bug:  Open the same file twice so they're numbered (1) and (2), then
+     save (2) with a new filename - the first file's (1) does not disappear
+     (Bug ID 1387594).
+   - Updated Hungarian translation (Flatron).
+   - Added Portuguese translation (thanks Leandro!).
+   - The scanners used for syntax highlighting are now in their own package.
+   - Updated JFlex-based scanners to using 1.4.1 (the latest JFlex release).
+
+
+0.9.3.5 (12/06/2005):
+---------------------
+   - RText now takes command line arguments.  Files to initially open can be
+     specified on the command line (Bug ID 1349745).  The RText.exe starter
+     executable shipped with the Windows version can also take a special
+     "jvmargs" parameter specifying parameters for the JVM.  This parameter
+     MUST be wrapped in quotes to be parsed correctly.  An example:
+        RText.exe -jvmargs "-Xmx256M" C:\foo.java
+   - A Mac OSX application package is now a download option.
+   - Fixed bug on OSX that made the "OK" button on the Options dialog not
+     work (Bug ID 1357539).
+   - Fixed a bug in the Find in Files dialog when doing regular expression
+     searches (Bug ID 1356899).
+   - Fixed a bug that made many icon groups not work if running on UNIX
+     (Bug ID 1364382).
+   - RText now works as an "external editor" in Total Commander.  This was a
+     side effect of making RText accept command line arguments (Bug ID 1270550).
+   - Fixed a bug that made it possible to have some of the UI in one language
+     and some in another (Bug ID 1349750).
+   - Tokens can now be styled with an underline as well as bold and italics.
+   - The UI for plugin tabbed panes has been completely redone to somewhat
+     resemble those in Visual Studio.  I'm trying to make the appearance unique,
+     but I want to be sure it looks good in all Look and Feels.  Any feedback
+     on the new appearance is welcome.
+   - HTML syntax highlighting was redone to be much more efficient.  If you see
+     ANY errors in HTML document rendering, please let me know!
+   - DTD elements are now syntax highlighted in XML files.
+   - Various tweaks for Mac OS X.
+   - When using the tabbed pane view, each tab now has a tooltip containing
+     the full path of its file.
+   - Made increase/decrease indent menu items use more common shortcuts ('tab'
+     and 'shift+tab' respectively).
+   - Made the GUI look a little better when Motif Look and Feel is used.
+   - Fixed a small bug in the Source Browser plugin - it parsed the newly active
+     buffer twice instead of once when a document was closed.
+   - Updated the splash screen/about dialog image.
+   - Added Russian translation (thanks Vladimir!).
+   - Fixed and updated Hungarian translation (Flatron).
+   - Updated Dutch translation (Sebastiaan).
+   - Updated Turkish translation (Burak).
+
+
+0.9.3.0 (10/28/2005):
+---------------------
+   - Made the Find in Files dialog run searches in a separate thread.
+   - Fixed a bug in the file chooser that prevented the editing of files in
+     any encoding other than the system default and Unicode (Bug ID 1301806).
+   - The Source Browser stopped working in 0.9.2.6; this is fixed
+     (Bug ID 1295881).
+   - The Source Browser can now use syntax-highlighted tooltips for a more
+     attractive presentation.
+   - The Source Browser now parses Fortran, JavaScript and SQL files.
+   - Added a JVM "Heap Indicator" plugin.  Disabled by default, this plugin
+     is a progress bar in RText's status bar that tells you the current state
+     of the JVM heap.  Double-clicking on it will attempt to perform a garbage
+     collection.
+   - When drag-and-dropping tabs in the tabbed view, you now see a gray
+     rectangle indicating where the tab will be placed, giving more visual
+     assurance.
+   - Updated German translation (bikerpete).
+   - Updated Dutch translation (Sebastiaan).
+   - Updated Italian translation (stepagweb).
+   - Updated French translation (PivWan).
+   - The Find and Replace dialogs are now initially populated with the
+     currently selected text, if the selection is non-empty (Feature Request
+     1338387).
+   - A couple of minor enhancements to the Options dialog.
+   - Fixed an erroneous error message when searching for strings with '+' in
+     them via the Find dialog and the string wasn't found.
+   - Modified the behavior of the left and right arrow keys in the text area
+     when there is a selection to behave more like modern applications.
+   - The Ant build scripts for RText and the standard plugins now make it easy
+     to build "debug" versions of RText (e.g., line numbers in stack traces,
+     etc.).
+   - Added a workaround to Sun Bug ID 6329226, which would sometimes cause
+     RText to hang when run over Exceed.
+   - Upgraded to OfficeLnFs 1.1.2.
+
+
+0.9.2.6 (09/15/2005):
+---------------------
+   - Added CSS syntax highlighting.
+   - The size of docked plugins is now remembered between sessions (Feature
+     Request 1238530).
+   - Added Hungarian translation (thanks Flatron!).
+   - Updated Dutch translation (Sebastiaan).
+   - Updated to OfficeLnFs 1.1.1.
+
+
+0.9.2.3 (09/01/2005):
+---------------------
+   - You can now associate filename extensions with colors in the file chooser.
+     For example, if you associate the color blue with files ending in "java",
+     then the file chooser will display the filenames of all *.java files in
+     blue.  This makes a directory listing easy to parse visually for the files
+     you want.  Before you could only modify extension/color mappings for a
+     fixed set of file types, but now you can add your own, or remove any you
+     don't want.  This mapping is remembered between RText sessions.
+   - Icons are now displayed alongside file names in the GUI.  These icons
+     correspond to the files' types.
+   - The default filter in the file dialog now displays all file types
+     recognized and supported by RText.
+   - Added a new icon group containg icons from Eclipse.  The icons in this
+     group are under the Eclipse Public License.
+   - Added a new icon group containing the BlueSphere icons
+     (http://svgicons.sourceforge.net/).
+   - A little GUI work on tables in the Options dialog.
+   - Added Turkish translation (Burak).
+   - Updated Dutch translation (Sebastiaan).
+   - Updated Italian translation (stepagweb).
+   - Updated to OfficeLnFs 1.1.0, which adds a new "Visual Studio 2005" Look
+     and Feel.
+
+
+0.9.2.0 (07/07/2005):
+---------------------
+   - The File System Tree now displays tooltips over filenames like Windows
+     Explorer does.
+   - Made the "Text Area" panel of the Options dialog a little nicer.
+   - Code refactoring for the file chooser and file system tree.
+   - Fixed a focus bug when drag-and-dropping tabs in the tabbed pane view.
+   - Fixed a bug in the Background dialog.
+   - A wait (hourglass) cursor is now displayed when the file chooser, options
+     dialog, and help dialog are first created.  This gives a nice visual cue
+     that the system is busy (and Java's just not hung) on slower systems.
+   - Add country flags beside supported localizations in the Languages panel of
+     the Options dialog.
+
+
+0.9.1.6 (06/21/2005):
+---------------------
+   - Added a "File System Tree" plugin.  This plugin allows you to open
+     files directly from a file tree in RText's UI, without having to open up
+     the file chooser.
+   - Added a "Search" menu, and moved all searching functionality out of
+     the Edit menu.
+   - Removed the "Format" menu, moving most functionality into the Options
+     dialog.
+   - Added "Go to Matching Bracket" menu item (Ctrl+[).
+   - You can now delete multiple files simultaneously in the file chooser (you
+     used to only be able to delete 1 at a time).
+   - You can now use the Delete key to delete files in the file chooser (as
+     opposed to the context menu).
+   - Made the "Goto Line" dialog cancellable via the Escape key.
+   - Decreased the creation time of the Options dialog.
+
+
+0.9.1.3 (05/30/2005):
+---------------------
+   - Fixed a bug where using find/replace with regular expressions always did
+     a case-insensitive search.
+   - Fixed a bug that prevented the dialog stating the number of replacements
+     done in a "replace all" from showing if the search string contained any
+     regular expression characters.
+   - The user can now get RText to use custom icon sets.  As an example, I will
+     make an extra icon set available for download on RText's project site.
+     There is also documentation of this in RText's online help.
+   - The Source Browser is now an official "plugin," although it still comes
+     standard with RText.  RText is now much closer to official plugin support.
+   - Updated the Chinese translation.
+   - Renaming of some internal stuff that should make things more clear when
+     reading source code.
+
+
+0.9.1.0 (04/22/2005):
+---------------------
+   - You can now drag-and-drop files into RText!  The encoding of the files
+     will be automagically detected (files will be checked for Unicode; if they
+     aren't a Unicode, the system default encoding is used) and syntax
+     highlighting will be applied as necessary.
+   - Add syntax highlighting for Java properties files.
+   - Added syntax highlighting for Fortran.
+   - Enhanced the Find in Files dialog:  When searching files with the dialog,
+     Unicode files are now automatically recognized as such and searched
+     correctly; before, they were (incorrectly) searched as the system's
+     defualt encoding.  Also, if you are on Windows, filenames are now matched
+     non-case-sensitively, as expected.
+   - Added the ability to add file filters to the Open/Save dialog.  This is
+     useful when you frequently use RText to modify files of a certain type
+     that doesn't have its own filter by default.  (It's also a great feature
+     to have when user-defined syntax highlighting becomes available, if it
+     ever does...).  Anyway, the online help describes how to add file
+     filters to the file chooser (it's just modifying an XML file).
+   - Added French translation (thanks PivWan!).
+   - Updated the Chinese translation (Ming).
+   - The source browser now runs ctags in a separate thread.  There is no
+     performance boost from this since the process is usually so short; rather,
+     this was done so that we can kill the process if something goes wrong and
+     it never returns (timeout is set at 10 seconds).
+   - Updated the text area to correctly paint itself when it has borders.  The
+     Look and Feels shipped with Java don't have borders around text areas, but
+     JGoodies for example does.
+   - Word-wrap mode is now much, much more effecient with documents containing
+     very long lines.
+   - If an Exception is caught and displayed in RText, it will now be syntax
+     highlighted, just to make things a little more pretty.
+   - Updated the text area's undo manager to be a little more efficient.
+   - Updated SAS syntax highlighting; SAS allows strings to span multiple lines,
+     but the old highlighter didn't paint this correctly; this is fixed.  Also,
+     macro variables are now identified.
+   - Made the Escape key hide the Options dialog and the About dialog.
+   - Added a section on Java regular expressions to the online help's search
+     section.
+   - Upgraded to the Office Look and Feels to 1.0.5.
+   - Changed the text component's document structure a little; should be
+     (unnoticably) better performing now.
+   - Refactored some of the syntax highlighting parsers.
+
+
+0.9.0.8 (03/15/2005):
+---------------------
+   - Added menu items to increase or decrease the sizes of all fonts in the
+     text areas simultaneously.  This is helpful because previously you would
+     have had to go into the Options dialog and changed the size of each font
+     individually.  These menu items are found in the View->Font Sizes menu.
+   - Added support for 3rd party Look and Feels.  To use a 3rd party Look and
+     Feel (such as the JGoodies looks), do the following:
+        1. Place the Look and Feel's jar file in directory <RText-root>/lnfs.
+        2. Open up the file <RText-root>/lnfs/lookandfeels.xml.  Add the XML
+           necessary to have RText display your Look and Feel as an option
+           (an example is in lookandfeels.xml).
+        3. Restart RText.  In the Format->Look & Feel menu, you should now see
+           the Look and Feel you added as an option!
+     Your third party Look and Feel will be remembered and used on subsequent
+     startups.  If the Jar file is moved, RText will default to the JRE's
+     default look and feel.
+   - Added Japanese translation (thanks tomoM!).
+   - Updated Italian translation to have correct mnemonics.
+   - The time/date stamp action (F5) now inserts a localized time/date stamp.
+     Before it always used the format used by US Windows XP's Notepad.
+   - Fixed a bug where a silent exception would be thrown if you tried to print
+     when no print services were available.
+   - Made changes to the internal workings of localization.
+   - Upgraded to the new 1.0.2 Office Look and Feels jar.
+
+
+0.9.0.6 (02/26/2005):
+---------------------
+   - RText can now load/save text files in any encoding supported by your JVM.
+     Unicode files are still auto-detected (via checking for a BOM).  This is
+     a wonderful improvement, as RText's old default encoding was US-ASCII,
+     which wouldn't properly save characters needing more than 7 bits.  The new
+     default encoding is OS dependant (Cp1252 for Windows, ISO-8859-1 for UNIX).
+   - Gave the online Help a new title page, and improved the Help API a tad.
+   - Added Italian translation (thanks stepagweb!).
+   - Updated the Spanish translation (thanks daloporhecho!).
+
+
+0.9.0.3 (02/22/2005):
+---------------------
+   - Added SQL syntax highlighting.
+   - Added Indonesian translation (thanks Andi!), although you cannot
+     actually use it as Sun's JRE doesn't support Indonesian.
+   - Added the beginnings of the Simplified Chinese translation (thanks
+     Ming!).
+   - Added Dutch translation (thanks Martin!).
+   - Made it easy to configure what languages are displayed as selectable in
+     the "Language" panel of the Options dialog.  This is now done via an
+     XML file.  This makes it easier for people translating RText into new
+     languages to test their localizations before submitting them.
+   - Isolated a bug in the Windows 1.4.2_06 JRE that made RText's custom
+     file chooser not instantiate; this further caused the Options dialog to not
+     be viewable.  This behavior was not seen in J2SE 1.5.0 Update 1.  In any
+     case, a workaround is now in place.
+   - Fixed bug: When the Java icon set was enabled, trying to bring up the
+     Help dialog threw Exceptions that kept it from coming up.
+   - Fixed bug: Opening a file when word wrap was enabled caused RText to
+     hang!
+   - Fixed a couple of bugs in the OfficeXP and Office2003 Look and Feels that
+     didn't show themselves in RText, but may have in the future.
+   - The Help dialog API now supports hyperlinks containing anchors.
+
+
+0.9.0.0 (02/07/2005):
+---------------------
+   - RText is now translated into German!  You can change the language from the
+     Options dialog.  Thanks to Pete Maier for maintaining this translation!
+   - Made some changes to the source tree structure to allow for easier
+     translation into other languages.  Note that many other languages are also
+     now in the "Language" list in the Options dialog; these are works in
+     progress, and will be functional in the next release.
+   - Simplified some options parsing.  As a side effect of this, if you are
+     upgrading from a previous verision of RText, the first time you start
+     version 0.9.0.0, you'll likely receive a message about an Exception being
+     thrown while loading options, and you may lose your preferences.  This will
+     only happen the first time you start 0.9.0.0.
+   - Cleaned up the Print Preview dialog's code.
+
+
+0.8.9.9 (01/24/2005):
+---------------------
+   - Fixed Defect 872764 that was preventing background images from being
+     usable on UNIX/Linux.
+   - Updated the QuickSearch bar so that it's more user-friendly:  added
+     icons to the "Find Next" and "Find Previous" buttons, made the search
+     field select all of its text when it gains focus, and added a button
+     directly on it to "hide" it.
+   - Made XML syntax highlighting more efficient, and it also now recognizes
+     CDATA sections and highlights them appropriately.
+   - "virtual" wasn't being highlighted as a reserved word in C++ files.  This
+     is fixed (bug 1108576).
+   - Fixed a bug where, if a file was reloaded from disk because it was
+     modified out from under your RText session, that file's encoding was set
+     to a value RText couldn't understand, preventing you from being able to
+     save the document unless you manually fixed the encoding in the
+     "Document Properties" dialog (1108573).
+   - Changed mouse-clicking behavior in the text area such that if you
+     repeatedly click, every click after 3 alternates between selecting the
+     current word and selecting the current line, to mimic Windows text
+     components.
+   - Made the OfficeXP Look and Feel a little more memory-efficient.
+
+
+0.8.9.8 (01/17/2005):
+---------------------
+   - Added "code templates" (abbreviations).  This is a way to quickly
+     insert text you frequently use while coding.  Whenever you type a
+     space, if the previous token matches one of the template "abbreviations,"
+     the value of the template is inserted into the document.  Common templates
+     for C# and Java come standard; you can also add your own via the Options
+     dialog.
+   - Added a "QuickSearch toolbar" that can be toggle via the View menu.
+     When visible, this toolbar is activated either by clicking in its search
+     field or via Ctrl+F (or whatever shortcut you've defined for the "Find"
+     action).  Simply type the text to search for; pressing Enter searches
+     forward, Ctrl+Enter searches backward, and Escape places the caret back
+     into the current text area.
+   - C# syntax highlighting mistakenly highlighted "boolean" instead of "bool"
+     as a data type; this is corrected.
+   - Updated the Windows starter executable to add "-Dswing.aatext=true" to
+     the command line; this should make the UI in general have better-looking
+     fonts if you're using Sun's 5.0 JVM or greater.
+   - Removed some unnecessary dependencies between various packages so
+     more parts of RText can be used in other applications easily.
+   - A tad more work on the plugin system.
+
+
+0.8.9.7 (01/05/2005):
+---------------------
+   - The caret used by the text areas now no longer derives form DefaultCaret.
+     It can now be configured to be a vertical line, an underline, a block or a
+     rectangle for both insert and overwrite modes, and its blink rate can be
+     configured, via the Text Area panel in the Options dialog.  Also, the new
+     caret allowed us to fix the minor "bug" where switching between insert and
+     overwrite modes while the caret was "blinked out" didn't make the caret
+     immediately become visible, as it should.
+   - A middle-mouse button click on Windows now performs a "paste."  UNIX
+     variants and other systems that support a system selection still behave as
+     they used to.
+   - Redid the Online Help documentation.  It's now much more up-to-date,
+     and the Help API has been made much simpler.  Help structure is no longer
+     hard-coded into an application; rather, it is specified in an XML file.
+   - Added the very beginning of a simple plugin system.  Note that "plugin"
+     doesn't necessarily mean "anyone can extend RText;" rather, it means
+     "it becomes easier for an RText developer to extend RText."  But, it's
+     a start.
+   - Various minor updates to the code.
+
+
+0.8.9.6 (12/14/2004):
+---------------------
+   - Added x86 assembler syntax highlighting.
+   - Added a new "Document Properties" option in the View menu.  This item
+     brings up a dialog with summary statistics for the file (line and character
+     count, file size, date modified, etc.).  From this dialog you can also
+     change the file's encoding and line terminator (CR, LF, or CR/LF).  This
+     feature can be handy, for example, when saving a file to a UNIX file system
+     from a Windows terminal (you won't get all of those nasty ^M's  ;-)  ). 
+   - Added a new shortcut:  Ctrl+J now joins the current line with the next one.
+     This action is also found in the Edit menu.
+   - Made the "current working directory" (i.e., the directory in which all
+     "Untitled.txt" files are placed) configurable.  This option is found under
+     a new Option dialog panel titled "General".  This property is remembered
+     between RText sessions.
+   - You can now toggle whether the file chooser's auto-complete list pops up
+     while you are typing a filename into it.  You can toggle this property from
+     the File Chooser option panel in the Options dialog.  This property was
+     added because Java's file I/O operations tend to be slow over networks, and
+     I didn't want this nice feature to be a bottleneck in those situations.
+   - Decreased memory footprint by being a little bit smarter about what
+     resource bundles I load when.
+   - Fixed a bug in C, C++, Java, and C# syntax highlighting where strings with
+     multiple escaped double-quote characters weren't colorized correctly.
+   - Fixed a bug where opening a file from the File History in the File menu
+     made the assumption that the file was ASCII.  RText now attempts to read
+     a BOM at the beginning of a file before opening it this way; if one is
+     found, it is opened as the proper Unicode encoding; otherwise, ASCII is
+     used.
+   - Fixed a bug that prevented shortcuts from being configurable in the Options
+     dialog (pressing "Apply" simply didn't do anything because a
+     NullPointerException was thrown).
+
+
+0.8.9.5 (12/04/2004):
+---------------------
+   - You can now use different fonts for each individual token type!
+     Although I find doing it distracting, others may like it.  As a side-
+     effect, the "Font" menu item in the Format menu has been removed; the
+     font used for plain text files is configurable in the Syntax Highlighting
+     option panel under "Plain Text/Identifier".
+   - Added the ability to make the edges of selections rounded.  This is
+     configurable from the Options dialog.
+   - A couple of minor fixes to some syntax highlighting lexers.
+   - Fixed a bug where if you opened the same file twice (i.e., had
+     "file.txt (1)" and "file.txt (2)"), and did a "Save As..." to save one of
+     them with a new filename, the number for the other document(s) weren't
+     changed/removed.
+   - Fixed a bug in RTextArea's replaceRange() method that made certain text
+     insertions require two undos to completely "undo."
+   - Fixed a big bug that prevented the caret from being repositioned properly
+     sometimes when word wrap was enabled.
+   - Fixed a bug that made the combo boxes in the Find and Replace dialogs too
+     wide if you entered a string into them longer than their preferred width.
+   - You can now change the status bar's style in the Options dialog.  The
+     current choices are "Windows 98-style" and "Windows XP-style."  This
+     property is remembered between sessions.
+
+
+0.8.9.4 (11/19/2004):
+---------------------
+   - Redid the syntax highlighting code for C, C++, Java, and C#.  These
+     syntax styles are now over 33% faster, and are more intelligent.  Some
+     changes in their behavior include:
+        - Java:  Redone to completely follow the language specification in
+          "The Java Language Reference" (O'Reilly, Mark Grand, 1997).
+             - Identifiers can now have unicode escapes (e.g. "\u003D") in them
+               and not be colored as errors.
+             - All char literals are correctly identified as well-formed or
+               errors (including valid escape sequences, octal chars ('\377'),
+               and Unicode escapes ('\u54F7')).
+             - String literals are now colored as invalid if they contain
+               invalid escape sequences (such as "foo\899bar").
+             - HTML tags in Javadoc comments are now recognized as such and
+               highlighted.
+        - C/C++:
+             - Strings and char literals recognize trigraphs, simple escapes,
+               octal escapes and hex escapes.  They will be painted as invalid
+               tokens if an invalid escape is contained in them.
+        - C#:  Redone to completely follow the language specification found at:
+          http://msdn.microsoft.com/library/default.asp?url=
+                  /library/en-us/csspec/html/vclrfcsharpspec_C.asp
+             - Strings and char literals recognize simple escapes, hexadecimal
+               escapes and unicode escapes.  They will be painted as invalid
+               tokens if an invalid escape is contained in them.
+             - Verbatim strings are recognized and painted correctly.
+             - Documentation comments "/// <...>" are identified and painted
+               as such.  HTML tags inside of them (such as "<summary>") are
+               highlighted as well.
+     These enhancements were made possibly by JFlex (http://www.jflex.de).
+     Thanks also go out to http://www.ostermiller.org/syntax for many ideas,
+     inspiration, and test cases.
+   - Made line numbering code more efficient.  There should be a slight
+     performance boost because of this.
+   - Added "Mark All" functionality to the find and replace dialogs.  The color
+     used for "mark all" can be toggled in the Options dialog and is remembered
+     between RText sessions.
+   - Made find, replace, and replace all actions more memory efficient.
+   - Fixed a bug where an NPE was thrown if you tried to bring up the file
+     chooser, but its working directory was removed out from under it (1069094).
+   - Fixed a bug where if you saved a read-only file with a new filename, the
+     newly-created file was assumed to be read-only (even though it isn't)
+     (1069102).
+   - Fixed a bug where drag-and-drop FROM a text area in RText (not into) was
+     accidentally disabled in 0.8.9.2.
+   - Minor tweaks to the syntax highlighting code (made it more extendable,
+     etc.).
+
+
+0.8.9.3 (11/06/2004):
+---------------------
+   - RText now uses token styles (bold, italics) in word wrap mode!
+   - Added JavaScript syntax highlighting, both for *.js files and inside
+     "<script>"/"</script>" tag pairs when highlighting HTML.  This is
+     configurable in the "File Filters" option panel.
+   - Enhanced Java syntax highlighting as follows:
+        - Javadoc metadata tags (@author, @version, etc.), are now highlighted.
+        - Annotations are highlighted (JDK 5.0 addition)
+        - Now colorizes Unicode char literals (e.g. '\u0003') as chars.  Before
+          this release, such tokens were colored as errors.
+   - Added the ability to toggle viewing whitespace. This is remembered
+     between RText sessions.
+   - Added menu items/actions to block-indent the current line/all selected
+     lines (Alt+left arrow, Alt+right arrow).
+   - Added menu items under the Edit menu to make the current selection upper-
+     case, lower-case, or invert its case.  These actions will be remembered
+     in macros.
+   - Added a "Macro" option panel in the Options dialog.  From here you can
+     delete old macros you don't want/need anymore.
+   - Added a "File Chooser" option panel in the Options dialog.  From here you
+     can fully configure the file chooser.
+   - Added an option in the Options dialog to enable "smooth fonts" (i.e.,
+     antialiasing).  This option is remembered between RText sessions.
+   - Fixed a bug in macros where the actions cut, copy, paste, and delete
+     wouldn't be recorded in a macro.
+   - Modified the syntax-highlighting API to be more like that found in the
+     javax.swing.text package.
+   - Added a custom cursor for when macros are being recorded.
+   - Enhanced the "file-system aware" text fields found in the file dialog and
+     the find in files dialogs.  You can now actually scroll their popup menus
+     via the mouse, and use page-up/down to scroll through them pages at a time.
+   - Made the "Text Area" option panel into two separate panels, "Text Area"
+     and "Syntax Highlighting".  Note that some of the options in the "Syntax
+     Highlighting" panel may appear to belong in the "Text Area" one, but these
+     options panels actually reflect options for RTextArea and RSyntaxTextArea
+     respectively; thus, options for each text area are on their respective
+     panels.  This unfortunately makes "Syntax Highlighting" an inaccurate
+     option panel title.
+   - Simplified the insert/overwrite caret code in RTextArea.
+   - Made the Options dialog default to taking up much less screen real estate.
+   - Fixed a bug where you could insert a time/datestamp or change some text's
+     case via menu options when editing a read-only document.
+   - Moved TimeDateAction from package org.fife.rtext to be a subclass in
+     org.fife.ui.rtextarea.RTextAreaEditorKit.
+   - Extended the default file associations to include *.pm files as Perl files
+     and *.manifest files as XML (for C#).
+   - Fixed up the Javadoc to build with no warnings.
+   - A few other small bug fixes.
+
+
+0.8.9.2 (09/29/2004):
+---------------------
+   - Added macro support.  Recording a temporary macro stores it in memory, and
+     every time you execute a macro after that (Ctrl+Shift+M), the temporary
+     macro will play.  If you record a non-temporary macro, you will be prompted
+     for a name for it after you finish recording it.  It can then be accessed
+     via the Macros menu.  Ctrl+Shift+M will always play back the last recorded/
+     played macro, regardless of whether it was temporary or not.  The next
+     release should see a "Macro Manager" panel in the Options dialog, where you
+     will be able to remove/rename macros.  While recording a macro, the cursor
+     currently changes to a crosshair cursor over text areas; a custom cursor
+     will come with the next release.
+   - Made the File chooser automatically detect the encoding of files.  Now,
+     when you select a file, its encoding (one of ASCII, UTF-8, or one of the
+     16-bit Unicodes) will be selected as well.
+   - Added initial drag-and-drop support to the tabbed view.  You can now
+     drag tabs across the tabbed pane to sort the documents opened in it.
+   - Made the Options dialog resizable and spiced it up a tad.
+   - Changed all "Color buttons" so they now present a popup menu when clicked
+     instaed of a JColorChooser.  This popup has several common color "swatches"
+     to choose from, as well as a menu item to bring up the color chooser.
+     This feature should make it easier to change the various color properties
+     in RText.
+   - Made the status bar look Windows XP-ish, and made the Find in Files dialog
+     use an "official" StatusBar instead of its own homebrew version.
+   - Made the Help dialog into a JFrame so it can be minimized/put behind the
+     main RText window, etc.
+   - Improved undo/redo while in overwrite mode.
+   - Fixed a benign NullPointerException from occuring when switching the view
+     style from tabbed to any one of the others.
+   - Fixed bug:  Case-insensitive languages such as HTML, Windows batch and SAS
+     were being case-sensitive in their keyword identification.  This is fixed.
+
+
+0.8.9.1 (09/07/2004):
+---------------------
+   - Enhanced the About dialog to contain some system information.
+   - Made the Replace dialog's layout a little nicer.
+   - Added mnemonics to Font dialog.
+   - Made yet more preparations for macro support (still not there yet).
+   - Enhanced auto-indent intelligence.
+   - Made pressing the Home key first go to the first non-whitespace character
+     on the current line, then to the first position in the line (used to be the
+     other way around; this new behavior matches that of other programming
+     editors).
+
+
+0.8.9.0 (09/01/2004):
+---------------------
+   - Added "auto-indent" functionality to the text area.  It simply remembers
+     the whitespace at the beginning of the previous line and applies it to the
+     new line when you press Enter.  This is not yet configurable.
+   - Added a "Shortcuts" section to the Options dialog where you can change the
+     shortcuts (accelerators) associated with the various menu items.
+   - Small optimizations to the syntax highlighting code.
+   - Added the following key mappings:
+      - Ctrl+Delete - Deletes the text from the caret position to the end of the
+                      current line.
+   - Made text area's input model more closely aligned with that of JTextArea.
+   - Fixed a bug in the XML syntax highlighting with multiline tags.
+   - Made the Print dialog contain the name of the file being printed as the
+     "Job name."
+   - Added more mnemonics here and there.
+   - Began laying the foundation for macros.
+   - Added "RText" 3D text to the About dialog and splash screen image.
+
+
+0.8.8.9 (08/18/2004):
+---------------------
+   - Deleting from the longest line in no-line-wrap mode did not
+	update the text area's horizontal scrollbar.  This was fixed.
+   - Added XML syntax highlighting.
+   - RText now handles long lines better (it's a little smarter about clipping
+     when painting, and it shows up when scrolling a document with long lines).
+   - Fixed a bug in the background rendering code when the background was set to
+     an image that was introduced in 0.8.8.7.
+   - HTML syntax highlighting sometimes broke down in 0.8.8.7 due to
+     the expanded syntax highlighting styles; this should be fixed now.
+   - Updated "Save a Copy as Web Page" to include the new syntax styles (bold,
+     italic) in generated web pages.
+   - Fixed a focus bug when using the tabbed pane view with a 1.5 JRE.
+   - Made RTextAreas slightly more memory efficient.
+   - The "Window" menu visible in MDI view wasn't properly updated
+     when the user changed Look and Feels.  This was fixed.
+   - Although it would never affect RText, a bug in the RTextArea API
+     was fixed where if the user right-clicked to bring up the popup
+     menu, but no icons had been assigned to the popup menu, an
+     exception was thrown and the popup wasn't shown.  This was fixed,
+     so now an RTextArea can show the popup menu with no icons.
+   - FindInFilesDialog quietly threw an exception when the user double-
+     clicked in the match list if it was empty.  Although it did no damage,
+     it still got fixed.
+   - Updated RTextFileChooser and FindInFilesDialog's constructors to
+     use SpringLayout in a couple of places, simplifying their initialization.
+   - Made the size grip friendlier toward *NIX systems that don't support
+     java.awt.Robot.  You now don't get a dialog box with the "not supported"
+     error every time you start up RText.
+
+
+0.8.8.8 (08/11/2004):
+---------------------
+   - Changed all "file-system-aware" combo boxes into "file-system-aware"
+     text fields.  These new components simplify the code a little, but more
+     importantly, they're a little more flexible for the user (i.e., you can now
+     select the only item in a one-item dropdown list).
+   - Moved FindInFilesDialog into the more-apt org.fife.ui.search. Now any
+     program can take advantage of the "find in files" features found in RText.
+     You interact with it via a new FindInFilesListener interface.
+   - Fixed a bug with file-system-aware combo boxes:  they didn't draw their
+     borders in most Look-and-Feels.
+   - Fixed a bug in line numbering code that sometimes kept the line numbers
+     from being updated when the user inserted multiple lines.
+   - Line numbering was very goobered when word wrap was enabled in the
+     last release, thanks to my tweaking with the painting code.  This should
+     be fixed now.
+   - Internationalized the Find in Files dialog (translations for English and
+     Spanish locales, just like the rest of RText).
+   - Added mnemonics to the Find in Files dialog.
+
+
+0.8.8.7 (08/07/2004):
+---------------------
+   - Added the ability to change the style of individual token types to
+     include bold and italic.  This is a very nice feature that further extends
+     the ability to customize the view and makes the code easier to grasp
+     visually.  This is currently only available when word wrap is off; when
+     word wrap is turned on, any individually-set token styles will be ignored.
+   - Updated the line numbering code to be more efficient.
+   - Added mnemonics to the various widgets on the Find and Replace dialogs.
+
+
+0.8.8.6 (07/31/2004):
+---------------------
+   - Did some refactoring so more of RText's widgets and tools were usable by
+     other applications.
+   - You can now set the background color of tokens, as well as the text
+     color.
+   - Fixed an intermittent bug where the caret wouldn't properly change to
+     reflect the text mode (insert vs. overwrite).
+
+
+0.8.8.5 (07/19/2004):
+---------------------
+   - RText now uses its own custom file chooser for opening/saving files.
+     I did this for several reasons, including:
+        - The new file chooser is more flexible than the standard Java one.
+          For all Look and Feels, it includes list, details, and icons views,
+          as well as a right-click popup menu allowing you to rename files,
+          delete files, create new directories, and more.
+        - It knows what files are open, and displays open files with an
+          underlined file name so you don't accidentally open the same file
+          twice.
+        - It recognizes file types RText can syntax-highlight, and color-
+          codes them so you can easily pick them out.
+        - I hate the Motif file chooser, and now I won't have to deal with
+          it when I use RText on UNIX hosts.
+     Soon there will be a panel in the Options dialog allowing you to
+     configure the file chooser.
+   - Added support for file encodings.  RText can now open files with ANSI,
+     UTF-8, or Unicode encoding.  This is handled through the new file
+     chooser.
+   - The source browser can now be made floatable in its own window, as well
+     as docked to one side of the main RText window.
+   - Fixed a bug where the source browser didn't always destroy the spawned
+     ctags process when an exception occured during its execution.
+
+
+0.8.8.1 (06/22/2004):
+---------------------
+   - Made source browser refresh its contents when the current file
+     is saved.
+   - Made source browser tree's nodes expand/contract in response to
+     single-clicks.
+
+
+0.8.8.0 (06/19/2004):
+---------------------
+   - Added a Source Browser component.  This component requires you
+     to have Exhuberant Ctags installed on your machine
+     (http://sourceforge.net/projects/ctags).  When the Source
+     Browser is enabled, an extra panel is visible in RText listing
+     all functions/variables, etc. found in the current document's
+     code code; clicking on an item in this panel takes you directly
+     to the item's definition.  This component is configurable via
+     the Options dialog.
+   - Added a right-margin line.  Useful for example if you want
+     to keep your document's lines to 80 characters or less.  This
+     is configurable from the "Text Area" panel on the Options
+     dialog.
+   - Coverted to use the Java Preferences API to remember your
+     configuration between sessions.  This means that if you migrate
+     from a previous version of RText to 0.8.7.1, the first time you
+     start it back up, your options won't be remembered.  After that
+     though, your options will be stored in the new location (OS-
+     dependant), and everything will work as it did before.
+   - Fixed a bug preventing a user from loading/saving files with
+     names containing the '$' character.
+   - Beefed up the Options dialog API.  You now cannot enter invalid
+     file filters (you could trick it before), and on the whole, it
+     checks for invalid input better.
+   - Moved all "Tabs" options in Options dialog to the Text Area
+     panel, as they made more sense there than as their own separate
+     category.
+   - Many smaller bux fixes.
+
+
+0.8.7.0 (06/04/2004):
+---------------------
+   - Internationalized RText.  You can now choose between English
+     and Spanish as the language used by the RText GUI.  Changes
+     will not be made until RText is stopped and restarted.  New
+     languages can easily be added in the future; if you are
+     interested in translating RText to a new language, please
+     contact me (see the bottom of this file).
+   - Added bracket matching!  You can change the colors used
+     to highlight matching brackets in the "Text Area" portion of
+     the Options dialog.
+   - Slightly optimized the Find algorithm when regular expressions
+     aren't being used.
+   - Optimized the Find in Files dialog.  Searches should now be
+     much quicker (2-2.5x faster in most cases, from my tests).
+   - Fixed bug:  Checking for file changes on disk would ask
+     multiple times for the same file if more than one file was
+     modified at the same time.
+   - Added "file-system-aware" combo box as Find in Files
+     dialog's "In Folder" combo.  It tries to be smart and gives
+     you a list of all directories matching what you've typed
+     thus far.
+   - Added SAS syntax highlighting.  May not be 100% accurate, as I'm
+     by no means a good SAS programmer.  It also isn't smart enough to
+     recognize when tokens are in invalid locations (such as a proc name
+     is in the middle of a data step), so it will always color tokens
+     as it sees 'em.  Please let me know if you see a bug in this
+     syntax highlighting scheme, and I'll be glad to fix it.
+   - Added SAS file filters to open/save dialogs.
+
+
+0.8.6.9 (05/15/2004):
+---------------------
+   - MANY updates to make RText run on Mac OS X.  Special thanks
+     to Peter Wyss for making these changes and sharing his Mac
+     expertise ;-)
+   - Fixed bug:  Lack of "forward" and "backward" images for the
+     Office2003 icon set made the Help dialog not show up when
+     these icons were used.  This is now fixed.
+   - Fixed bug:  When you switch to the MDI view from another
+     view, there is no active window.
+   - RText now checks for files being updated outside of the
+     editor.  For example, if you have a file "foo.txt" open in
+     RText, then open "foo.txt" in another editor and save it,
+     RText will realize this and ask you whether or not you
+     want to reload the file.
+   - Fixed bug: The Read-only indicator was broken from when I
+     added the ability to change your view style.  This is now
+     fixed.
+   - Changed recent file list in the File menu to be its own
+     popup menu, allowing RText to remember many more files.
+   - Made the "Recent Files" submenu keep track of the files in
+     the order in which you opened them.
+   - Fixed bug: The "current line highlighter" when word wrap was
+     enabled was broken in 0.8.6.8.  I believe this is actually due
+     to a bug in Sun's JRE.  Either way, it's fixed now.
+   - You can now toggle word wrap and line numbers separately.  This
+     means you can now have line numbers enabled while word wrap is on.
+     This is due to a new line numbering class that enables more
+     functionality and should be a little mor efficient.
+   - Updated status bar indicators so that the line/column indicator
+     should never truncate its text, even for very high line/column
+     values.
+   - Fixed bug: For Perl syntax highlighting, builtin "shell"
+     variables (such as $@ and $!) messed up the rendering for the
+     line they were on.  This is now fixed.
+   - Fixed bug: When using the MDI view, the name of the currently
+     active document in RText's title bar wasn't always properly
+     updated.  This is now fixed.
+   - Added an open document list to the Window menu, similar to that
+     found in many MDI applications.  Clicking on one of the open
+     document menu items makes that document the active one.
+
+
+0.8.6.8 (04/29/2004):
+---------------------
+   - Added a third view style - an "MDI" view.  In this view,
+     RText is basically a desktop pane with all open documents
+     in floating internal frames.  When using this view style,
+     a new Window menu is available (from the menu bar or by
+     right-clicking on the desktop pane) that allows you to
+     organize your desktop frames with the traditional
+     "Tile Vertically," "Tile Horizontally," and "Cascade"
+     options.  The MDI view style is useful when you want to
+     modify two or more documents side-by-side, viewing both
+     simultaneously.
+   - Made the menu bar floatable.  It CANNOT be docked on the
+     left- or right- hand side of RText; it can only be docked
+     on the top or bottom, or made floatable.  Although this
+     isn't necessarily a useful feature, it is functionality
+     found in more recent Microsoft products, and so I
+     decided to see whether or not I could mimic it.
+   - Look and Feels:
+        - Added a new Look and Feel - "Office 2003".  This
+          Look and Feel just mimics the blue toolbar and
+          menubar found in Office 2003 applications.
+        - Updated the Office XP Look and Feel.  Hopefully all
+          colors used are now 100% accurate.  Made the menu
+          bar item correctly "connect" to the popup menu when
+          the popup menu appears above the menu bar.  Made
+          toolbar grips look like Office XP toolbar grips.
+          Made grip disappear when the toolbar is made
+          floatable.
+   - Right-clicking the toolbar now allows you to add or remove
+     buttons from it.  Also included is a "Reset the toolbar"
+     choice which replaces all buttons.
+   - Fixed a bug that made insert/overwrite not work sometimes
+     when the Look and Feel was changed.
+   - Added new icon set:  Office XP icons.
+   - Fixed bug:  In the options dialog, if you chose Split Pane
+     view with the document selection being somewhere other than
+     "left," and clicked the Apply button, the document selection
+     was still placed on the left.  Clicking "Okay" placed the
+     document selection pane correctly.  This is now fixed.
+
+
+0.8.6.7 (04/16/2004):
+---------------------
+   - Made Undo/Redo much more intelligent; it now behaves much
+     like undo functionality in Microsoft Word or other
+     commercial applications:
+        - Groups of characters typed together are remembered as
+          a single edit, and so undo no longer removes text one
+          character at a time.
+        - A "replace" action is remembered as a single edit
+          instead of two (a remove, then a replace).
+   - Syntax highlighting:
+        - HTML:  Made tags able to be multiline.  In the last
+          release, only comment tags could be multiline, but
+          now any kind of open tag can span multiple lines.
+   - Added right-click popup options menu to the toolbar.
+     Currently the only thing you can do from this menu is
+     "lock" the toolbar (toggle whether or not it is floatable).
+   - Improved the OfficeXP Look and Feel:
+        - Combo boxes now look like the newer Windows "flat
+          style" combo boxes found, for example, in the toolbar
+          of Outlook XP.
+        - Made the colors used for menu item selection more
+          accurate.
+   - Made Find/Replace dialogs go away on escape keypress (this
+     mostly worked in past versions, but was a little dodgy).
+   - Factored find/replace dialogs out of rtext package into
+     their own generic package.  This makes for better logical
+     segregation of code, as well as makes the search dialogs
+     available to different Java projects.
+   - Factored other pieces of code out of project-specific rtext
+     package into more general packages, so they can be used by
+     other projects.
+   - Cleaned up a few of the icons again.
+
+
+0.8.6.6 (04/07/2004):
+---------------------
+   - Syntax highlighting:
+        - Added HTML syntax highlighting.
+   - Fixed bug - Line/column indicator stopped working on the
+     currently active document when you switch from split-pane
+     view to tabbed pane view (and not vice-versa).  You would
+     have to switch active documents, then switch back to get
+     the line/column indicator to work on the originally active
+     document.  This is now fixed.
+   - Took out some debug code that wrote to stderr, which probably
+     slowed some stuff down a tad in 0.8.6.5.
+
+
+0.8.6.5 (04/02/2004):
+---------------------
+   - Syntax highlighting:
+        - Added Perl syntax highlighting.  Note that this currently
+          does NOT currently handle patterns (/foo/, s/foo/bar/, etc.),
+          as I didn't have the time to add them.
+        - All: Increased efficiency during insert/delete text.
+        - C, C++, C#, Java: Removed a little unnecessary code in
+          parser.
+        - Fixed a bug in the C++ highlighting code that prevented
+          the '~' character from being interpreted as the beginning
+          of a destructor method.
+   - Added "Save a Copy as Web Page..." option in File menu.  Now
+     you can export your syntax highlighted souce code into an HTML
+     file for display on the web.
+   - The toolbar is now dockable.  Until now it's not been dockable,
+     as I didn't know how to keep the status bar from interfering with
+     the toolbar when it was docked at the bottom.  After some clever
+     work with nested JPanels, it's now working ;-)
+   - Added an option to highlight the display names of modified
+     documents with a different color.  For example, if you have
+     opened and modified a document "foo.txt", then the "foo.txt*"
+     found on that document's tab or in the document list split pane
+     can be highlighted red (or any other color) as a visual cue of
+     unsaved modifications.  This preference is saved between RText
+     sessions.
+   - Enhanced line numbers; the highlight of the current line's line
+     number is now toggled with the current line highlight option,
+     and the color with which the current line number is highlighted
+     now matches the current line's highlight color.  This makes
+     things look a little nicer.
+   - Fixed a bug that made all search options ("Match Case", etc.)
+     not modifiable if you changed the view style.
+   - Fixed a bug where the line/column indicator was always enabled
+     on startup, even if word wrap was enabled.
+   - Improved handling of Home/Insert keypresses and actions.
+
+
+0.8.6.4 (03/25/2004):
+---------------------
+   - Syntax highlighting:
+        - UNIX shell: Fixed bug in quoted string termination.
+        - Added C# syntax highlighting.
+   - Fixed a bug in undo/redo.
+   - Added new "view" - a split pane view.  I find this to be a
+     much cleaner view than the tabbed pane, but the choice is yours;
+     you can toggle between the two views.  Your choice is remembered
+     between RText sessions.
+   - Fixed bug - Find in Files dialog went into a loop when you
+     tried to do a find with an invalid regular expression.
+   - Made syntax filters case-insensitive.  This way, AUTOEXEC.BAT
+     will be syntax highlighted if the Windows batch file filter
+     contains "*.bat".
+
+
+0.8.6.3 (03/19/2004):
+---------------------
+   - Syntax Highlighting:
+        - Added Windows batch file syntax.
+        - Added UNIX shell syntax.
+   - Added the ability to have the text editor highlight the current
+     line.  This feature can be toggled and the highlighting color
+     can be changed via the options dialog.  This property is also
+     remembered between RText sessions.
+   - Added file filters to the Open/Save dialog corresponding to the
+     file types now recognized for syntax highlighting.
+   - Factored out logic code from display code in the class that
+     was in charge of displaying the tabbed pane of text areas.  This
+     allows for the possibility of alternate views (besides just being
+     better programming).
+   - Fixed bug - If you closed a document in a "middle tab" (i.e.,
+     not the first or last tab when three or more files are open), the
+     file name displayed in the title bar wouldn't update.
+   - Fixed bug - File history was remembered in reverse order.  Thus,
+     if your file history contained files a.txt, b.txt, and c.txt, in
+     that order, and you closed and reopened RText 0.8.6.2, your file
+     history would contain the files in the order c.txt, b.txt, a.txt.
+   - Now better at catching errors in rtext.properties file; if the
+     properties file is invaild in any way, RText will give you a
+     dialog box at startup telling you as much, and use the defaults.
+   - Touched up a few of the 16x16 WinXP/Win98 icons.
+
+
+0.8.6.2 (03/06/2004):
+---------------------
+   - Touchups to syntax highlighting:
+        - C, C++, Java: Fixed a bug that caused exceptions to be thrown
+                        sometimes if a multiline comment's end token was
+                        modified.
+        - Java: Made all java.lang.* classes, interfaces, exceptions and
+                errors into syntax highlighted tokens.  I classified them
+                as "functions" even though they aren't functions, but
+                I didn't have a token type descriptive enough for them.
+   - Updated Options Dialog:
+        - You can now decide what file extensions get associated with
+          what file types, and thus control what files get syntax
+          highlighted.
+        - Fixed 'Text Area' panel so that clicking the 'Restore Defaults'
+          button only enables the Apply button when it changes something.
+   - RText once again remembers more between sessions:
+        - Whether or not the window was maximized.
+        - File filters
+        - File history
+   - Fixed bug: Background as image stopped working on Windows with the
+     introduction of syntax highlighting.
+
+
+0.8.6.1 (02/27/2004):
+---------------------
+   - Touchups to syntax highlighting:
+        - All:     Word wrap now works with syntax highlighting.
+        - C, C++:  Made characters '?' and ':' highlighted as operators.
+                   Preprocessor directives now colored.
+        - Java:    Made characters '?' and ':' highlighted as operators.
+                   Documentation comments distinguished from
+                   multiline comments.
+   - Overhaul of Options dialog; designed to reflect more modern
+     Options dialog style found in many Windows applications.  Also
+     added support for customizing syntax highlighting and other text
+     area options.
+   - RText now remembers more of your preferences between sessions:
+     whether or not word wrap was on, caret color, selection color, and
+     syntax highlighting colors.
+   - Fixed small bug involving changing carets and selections:  if you
+     had a selection then switched from insert to overwrite mode or
+     vice versa and moved the caret, it appeared that the old selection
+     stayed (even though it really didn't).  This is now fixed.
+   - Block caret used in overwrite mode now sizes itself to the character
+     it's over; this makes it look a little nicer when using a
+     proportional font.
+   - Fixed up inline comments; Javadoc now generates with no errors
+     or warnings.
+   - Fixed bug: Bad regular expressions in find/replace operations threw
+     unreported exceptions and appeard to not do anything; you now get a
+     dialog box telling you to check your regular expression.
+
+
+0.8.6.0 (02/24/2004):
+---------------------
+   - VERY PRELIMINARY support for syntax highlighting.  Currently
+     supported languages are:
+            1. Java
+            2. C
+            3. C++
+     You currently have no control over the syntax highlighting.  When
+     you open a file with an appropriate file extension (.java, .c, etc.),
+     syntax highlighting will be used appropriately for that file.  You
+     cannot currently change the color scheme used for syntax highlighting.
+     Word wrap is not yet supported when syntax highlighting; if you
+     turn on word wrap while editing a *.java/*.c/*.cpp/*.h file, you
+     will not be able to scroll horizontally in the file.  All of these
+     issues will be fixed in the next couple of releases, after I ensure
+     that the syntax highlighting is working correctly.
+   - Fixed nasty bug where cut, copy and delete actions alternated
+     between active/inactive when the selection size grew/shrank.
+   - Fixed very malicious bug that slowed RText down when dealing with
+     files much larger than 500 kb... It has since been tested on a
+     2.12 MB file (representing over 60,000 lines of Java source code)
+     and it ran fine.  Further scalability testing may come later.
+     
+
+0.8.5.0 (01/23/2004):
+---------------------
+   - RText now remembers some of your editing preferences between
+     sessions, such as look and feel, icon set, font, background,
+     window size, etc.  The next release should remember much more.
+   - Worked around a Java "bug" where the default backspace action is
+     triggered by the same event as Ctrl+H, thus whenever you used that
+     shortcut to bring up the Replace dialog, the character previous to
+     the cursor position was deleted.
+   - Made text fields on Replace dialog and Find in Files dialog
+     into "smart" combo boxes that remember your last searches.
+   - Changed default button on Replace dialog from "Replace Next" to
+     "Find Next" for safety reasons.
+   - Fixed a bug where if you opened the Find or Replace dialog, then
+     closed all open documents, you could still perform the search
+     and get some Java exception.  You now get a message box telling
+     you there's no text to search.
+   - Fixed a bug in the Find dialog's combo box where you would have
+     to press enter twice to do a search whenever you changed the
+     search string (damn Java JComboBoxes...).
+   - The File History in the File menu now intelligently abbreviates
+     file paths, instead of just sticking an elipsis wherever it
+     feels like it.
+   - When you do a "Replace All", RText now tells you how many times
+     it did the replacement.
+   - Find in Files dialog now clearly identifies multi-line regular
+     expression matches as such, to help prevent some confusion.
+   - Fixed a bug where if you double-clicked on a "<Verbose>" line
+     in the Find in Files dialog that described a directory, RText
+     would try to open the directory as if it were a file, and give
+     you an error indicating it couldn't do so.  Now it tells you
+     that the line describes a directory.
+   - Fixed a bug where opening a document from the Find in Files
+     dialog didn't add the document to the File menu's "File
+     History."
+   - Find in Files dialog now updates it's "status bar" when you
+     double-click on an search result to open the file, telling you
+     what file it opened.
+   - RText's status bar now has more to say; it changes its message
+     when you open a file, close a file, and more.
+   - Enhanced the "File History" in the File menu so that, if there
+     are no recently opened files, it shows just 1 separator, not 2
+     (very minor change, I know; but it was bugging me).
+
+
+0.8.4.0 (01/15/2004):
+---------------------
+   - Find in Files dialog now fully operational (added Regular Expression
+     searching, searching subdirectories, and some UI "prettiness"
+     enhancements).
+   - Fixed JRE 1.4 bug cauing popup menus to disappear when a modal dialog
+     is displayed (See
+	http://developer.java.sun.com/developer/bugParade/bugs/4911422.html
+     for more details).  Hopefully this won't break anything else...
+     Also note that I didn't fix this for the Mac Look and Feel, so it
+     will still have this bug.  All other LnF's should be okay.
+   - Added "Printing" tab to Options dialog, allowing you to configure some
+     printing options.  From here, you can specify whether you want to always
+     print using RText's current font, or always print with some other font
+     (for example, you may edit with a larger font, but print with a smaller-
+     point font to save paper).
+   - Made the edit field on the Find dialog into a combo box that remembers
+     your last few searches.  Eventually, I will do the same thing for
+     the text fields in the Replace and Find in Files dialogs.
+   - Fixed bug where printing cut off first line of every page (see
+     Request ID #859349).
+   - Updated text editor so that repeatedly pressing the "Home" key moves
+     the cursor between the start of the current line and the first non-tab,
+     non-space character on the current line.  This is sort of a programmer's
+     editor thing I think, but I like it.
+   - Updated Find dialog so that the edit box isn't extra tall when using
+     the Motif Look and Feel.
+   - Changed the startup code to give more information when RText is
+     initializing, in the hopes of finding out why it hangs when starting
+     on MacOS X 10.2.x - Perhaps it has to do with Robot...
+
+0.8.3.5 (01/07/2004):
+---------------------
+   - Huge overhaul of printing.  Before, whenever you printed, it always came
+     out in a monospaced font.  Now, RText prints in whatever font and size
+     you're currently editing with.  This is a big change!
+   - Overhaul of the Print Preview dialog.  Added zoom in/zoom out
+     functionality, and tried to speed up performance a bit when flipping
+     through pages.
+
+0.8.3  (12/23/2003):
+--------------------
+   - Redid the "Find in Files" dialog's UI, and added some functionality.  You
+     can now search for files (as long as you don't use the Regular Expression
+     option, it's still broken), and open files from this dialog by double-
+     clicking on them.  Note that this is STILL an unfinished part of RText
+     and may not work properly; however, if you find it not working as you'd
+     expect, please post a bug report and let me know!
+   - Fixed "Linux - BG Dialog doesn't position preview image correctly" bug
+     (see Request ID 863395).
+   - Fixed "Linux - UI allows you to choose Windows & XP LnF" bug (see
+     Request ID 863684).
+   - Fixed "Opening second document makes some Java/WinXP menu icons big" bug
+     (See Request ID 864448).
+   - Fixed "Background dialog allows you to select 'No Image' as BG (see Request
+     ID 863682).
+   - I also finally got a Linux box (running RedHat Linux 9) available for
+     testing!  So now, all versions will be tested on Win98, WinXP and Linux.
+
+0.8.2:
+------
+   I didn't keep a change log before 0.8.3.  Sorry!

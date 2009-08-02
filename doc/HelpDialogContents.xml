@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+
+<HelpDialogContents>
+   <PropertiesFile name="RTextHelpDialog.properties"/>
+   <RootNode name="rootNodeKey" visible="true" page="RText.html">
+      <Page name="introKey" page="Introduction.html"/>
+      <Page name="whatsNewKey" page="Changes.txt"/>
+      <Page name="faqKey" page="FAQ.html"/>
+      <Page name="bugsKey" page="BugList.html"/>
+	 <Page name="licenseKey" page="License.txt"/>
+	 <Page name="developersKey" page="Developers.html"/>
+      <Node name="managingTextDocumentsNodeKey">
+         <Page name="newKey" page="New.html"/>
+         <Page name="openKey" page="Open.html"/>
+         <Page name="openInNewWindowKey" page="OpenInNewWindow.html"/>
+         <Page name="saveKey" page="Save.html"/>
+         <Page name="saveAsKey" page="SaveAs.html"/>
+         <Page name="saveAsWebPageKey" page="SaveAsWebPage.html"/>
+         <Page name="saveAllKey" page="SaveAll.html"/>
+         <Page name="closeKey" page="Close.html"/>
+         <Page name="closeAllKey" page="Close.html"/>
+         <Page name="printKey" page="Print.html"/>
+         <Page name="printPreviewKey" page="PrintPreview.html"/>
+      </Node>
+      <Node name="editNodeKey">
+         <Node name="macrosNodeKey" page="Macros.html">
+            <Node name="macrosRecordingKey" page="MacrosRecording.html"/>
+            <Node name="macrosRecordingTempKey" page="MacrosRecordingTemporary.html"/>
+            <Node name="macrosStopRecordingKey" page="MacrosStopRecording.html"/>
+            <Node name="macrosPlaybackKey" page="MacrosPlayback.html"/>
+         </Node>
+         <Page name="editKey" page="AllEditOptions.html"/>
+         <Page name="cutKey" page="Cut.html"/>
+         <Page name="copyKey" page="Copy.html"/>
+         <Page name="pasteKey" page="Paste.html"/>
+         <Page name="deleteKey" page="Delete.html"/>
+         <Page name="deleteToLineEndKey" page="DeleteToLineEnd.html"/>
+         <Page name="joinLinesKey" page="JoinLines.html"/>
+         <Page name="undoKey" page="Undo.html"/>
+         <Page name="redoKey" page="Redo.html"/>
+         <Page name="selectAllKey" page="SelectAll.html"/>
+         <Page name="timeDateKey" page="TimeDate.html"/>
+         <Page name="increaseIndentKey" page="IncreaseIndent.html"/>
+         <Page name="decreaseIndentKey" page="DecreaseIndent.html"/>
+         <Page name="insertKey" page="InsertOverwriteModes.html"/>
+         <Page name="overwriteKey" page="InsertOverwriteModes.html"/>
+         <Page name="templatesKey" page="Templates.html"/>
+         <Page name="syntaxHighlightingKey" page="SyntaxHighlighting.html"/>
+      </Node>
+      <Node name="searchNodeKey">
+         <Page name="findKey" page="Find.html"/>
+         <Page name="findNextKey" page="FindNext.html"/>
+         <Page name="replaceKey" page="Replace.html"/>
+         <Page name="replaceNextKey" page="ReplaceNext.html"/>
+         <Page name="replaceAllKey" page="ReplaceAll.html"/>
+         <Page name="usingRegExKey" page="UsingRegularExpressions.html"/>
+         <Page name="goToKey" page="GoTo.html"/>
+      </Node>
+      <Node name="displaySettingsKey">
+         <Page name="wordWrapKey" page="WordWrap.html"/>
+         <Page name="backgroundKey" page="Background.html"/>
+         <Page name="lineNumbersKey" page="LineNumbers.html"/>
+         <Page name="lnfKey" page="LookAndFeel.html"/>
+      </Node>
+      <Node name="uiNodeKey">
+         <Node name="optionsDialogKey" page="OptionsDialog.html">
+            <Page name="generalOpKey" page="OptionsGeneral.html"/>
+            <Page name="uiOpKey" page="OptionsUserInterface.html"/>
+            <Page name="taOpKey" page="OptionsTextArea.html"/>
+            <Page name="shOpKey" page="OptionsSyntaxHighlighting.html"/>
+            <Page name="teOpKey" page="OptionsTemplates.html"/>
+            <Page name="macroOpKey" page="OptionsMacros.html"/>
+            <Page name="fcOpKey" page="OptionsFileChooser.html"/>
+            <Page name="printOpKey" page="OptionsPrinting.html"/>
+            <Page name="langOpKey" page="OptionsLanguage.html"/>
+            <Page name="ffOpKey" page="OptionsFileFilters.html"/>
+            <Page name="sbOpKey" page="OptionsSourceBrowser.html"/>
+            <Page name="shortcutOpKey" page="OptionsShortcuts.html"/>
+         </Node>
+         <Node name="menuBarKey" page="MenuBar.html">
+            <Page name="fileMenuKey" page="FileMenu.html"/>
+            <Page name="editMenuKey" page="EditMenu.html"/>
+            <Page name="formatMenuKey" page="FormatMenu.html"/>
+            <Page name="viewMenuKey" page="ViewMenu.html"/>
+            <Page name="windowMenuKey" page="WindowMenu.html"/>
+            <Page name="macrosMenuKey" page="MacrosMenu.html"/>
+            <Page name="helpMenuKey" page="HelpMenu.html"/>
+         </Node>
+         <Node name="fileChooserKey" page="FileChooser.html">
+            <Page name="fileFiltersKey" page="DefiningFileFilters.html"/>
+         </Node>
+         <Page name="toolBarKey" page="Toolbar.html"/>
+         <Page name="quickSearchBarKey" page="QuickSearchBar.html"/>
+         <Page name="statusBarKey" page="StatusBar.html"/>
+         <Page name="sourceBrowserKey" page="SourceBrowser.html"/>
+         <Page name="definingShortcutsKey" page="DefiningShortcuts.html"/>
+         <Page name="usingCustomIconsKey" page="UsingCustomIconSets.html"/>
+      </Node>
+   </RootNode>
+   <IndexItems>
+      <IndexItem name="Background"/>
+      <IndexItem name="Close"/>
+      <IndexItem name="Close All"/>
+      <IndexItem name="Copy"/>
+      <IndexItem name="Icon Sets"/>
+      <IndexItem name="Cut"/>
+      <IndexItem name="Delete"/>
+      <IndexItem name="Find"/>
+      <IndexItem name="Find Next"/>
+      <IndexItem name="Font"/>
+      <IndexItem name="Go to"/>
+      <IndexItem name="Line Numbers"/>
+      <IndexItem name="Look and Feel"/>
+      <IndexItem name="Macros"/>
+      <IndexItem name="Menu Bar"/>
+      <IndexItem name="New"/>
+      <IndexItem name="Open"/>
+      <IndexItem name="Open in new window"/>
+      <IndexItem name="Options dialog"/>
+      <IndexItem name="Paste"/>
+      <IndexItem name="Print"/>
+      <IndexItem name="Print Preview"/>
+      <IndexItem name="QuickSearch"/>
+      <IndexItem name="Regular Expressions"/>
+      <IndexItem name="Replace"/>
+      <IndexItem name="Replace Next"/>
+      <IndexItem name="Replace All"/>
+      <IndexItem name="RText"/>
+      <IndexItem name="Save"/>
+      <IndexItem name="Save All"/>
+      <IndexItem name="Save As"/>
+      <IndexItem name="Select All"/>
+      <IndexItem name="Shortcuts"/>
+      <IndexItem name="Source Browser"/>
+      <IndexItem name="Status Bar"/>
+      <IndexItem name="Templates"/>
+      <IndexItem name="Time/Date"/>
+      <IndexItem name="Toolbar"/>
+      <IndexItem name="Undo"/>
+      <IndexItem name="Word Wrap"/>
+   </IndexItems>
+</HelpDialogContents>

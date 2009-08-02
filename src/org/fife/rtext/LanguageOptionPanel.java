@@ -1,0 +1,494 @@
+/*
+ * 05/25/2004
+ *
+ * LanguageOptionPanel.java - Option panel letting the user choose the
+ * language they are most comfortable with.
+ * Copyright (C) 2004 Robert Futrell
+ * robert_futrell at users.sourceforge.net
+ * http://rtext.fifesoft.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+package org.fife.rtext;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
+import org.xml.sax.InputSource;
+
+import org.fife.io.UnicodeReader;
+import org.fife.ui.OptionsDialogPanel;
+import org.fife.ui.RScrollPane;
+import org.fife.ui.RListSelectionModel;
+import org.fife.ui.UIUtil;
+import org.fife.ui.app.GUIApplication;
+
+
+/**
+ * Option panel letting the user choose the language he or she is most
+ * comfortable with.
+ *
+ * @author Robert Futrell
+ * @version 0.5
+ */
+class LanguageOptionPanel extends OptionsDialogPanel
+								implements ListSelectionListener {
+
+	private DefaultListModel listModel;
+	private JList languageList;	// Contains all available languages.
+	private HashMap languageMap;
+	private GUIApplication app;
+
+	private static final String LANGUAGE_PROPERTY	= "language";
+
+	private static final String ROOT_ELEMENT		= "RText-languages";
+	private static final String LANGUAGE			= "language";
+	private static final String NAME				= "name";
+	private static final String ID				= "id";
+
+	private static final int EMPTY_ICON_WIDTH		= 16;
+	private static final int EMPTY_ICON_HEIGHT		= 11;
+
+	private static final String FILE_NAME			= "localizations.xml";
+
+
+	/**
+	 * Constructor.
+	 *
+	 * @param app The owner of the options dialog in which this panel appears.
+	 * @param msg The resource bundle to use.
+	 */
+	public LanguageOptionPanel(final GUIApplication app,
+							final ResourceBundle msg) {
+
+		super(msg.getString("OptLaName"));
+		this.app = app;
+
+		ComponentOrientation orientation = ComponentOrientation.
+									getOrientation(getLocale());
+
+		setBorder(UIUtil.getEmpty5Border());
+		setLayout(new BorderLayout());
+
+		JPanel languagePanel = new JPanel();
+		languagePanel.setBorder(BorderFactory.createCompoundBorder(
+							new OptionPanelBorder(
+									msg.getString("OptLaLabel")),
+									UIUtil.getEmpty5Border()));
+		languagePanel.setLayout(new BorderLayout());
+		JPanel temp = new JPanel(new BorderLayout());
+		temp.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
+		JLabel label = new JLabel(msg.getString("OptLaDesc"));
+		temp.add(label, BorderLayout.LINE_START);
+		languagePanel.add(temp, BorderLayout.NORTH);
+
+		listModel = new DefaultListModel();
+		languageList = new JList(listModel);
+		languageList.setCellRenderer(new CellRenderer());
+		languageMap = new HashMap(1);
+		try {
+			File file = new File(app.getInstallLocation(), FILE_NAME);
+			getLocalizations(file);
+		} catch (Exception e) {
+			app.displayException(e);
+		}
+
+		languageList.setSelectionModel(new RListSelectionModel());
+		languageList.addListSelectionListener(this);
+		RScrollPane scrollPane = new RScrollPane(languageList);
+		languagePanel.add(scrollPane);
+
+		add(languagePanel);
+		applyComponentOrientation(orientation);
+
+	}
+
+
+	/**
+	 * Applies the settings entered into this dialog on the specified
+	 * application.
+	 *
+	 * @param owner The application.
+	 */
+	protected void doApplyImpl(Frame owner) {
+		RText rtext = (RText)owner;
+		rtext.setLanguage(getSelectedLanguage());
+	}
+
+
+	/**
+	 * Checks whether or not all input the user specified on this panel is
+	 * valid.  This should be overridden to check, for example, whether
+	 * text fields have valid values, etc.  This method will be called
+	 * whenever the user clicks "OK" or "Apply" on the options dialog to
+	 * ensure all input is valid.  If it isn't, the component with invalid
+	 * data will be given focus and the user will be prompted to fix it.<br>
+	 * 
+	 *
+	 * @return <code>null</code> if the panel has all valid inputs, or an
+	 *         <code>OptionsPanelCheckResult</code> if an input was invalid.
+	 *         This component is the one that had the error and will be
+	 *         given focus, and the string is an error message that will be
+	 *         displayed.
+	 */
+	public OptionsPanelCheckResult ensureValidInputs() {
+		// They can't input invalid stuff on this options panel.
+		return null;
+	}
+
+
+	/**
+	 * Returns the icon to use for the specified localization.
+	 *
+	 * @param id The localization (such as <code>en</code> or
+	 *        <code>zh_CN</code>).
+	 * @return The icon.
+	 */
+	private Icon getIconFor(String id) {
+		Icon icon = null;
+		URL url = getClass().getClassLoader().getResource(
+						"org/fife/rtext/graphics/flags/" + id + ".png");
+		if (url!=null) {
+			try {
+				icon = new ImageIcon(ImageIO.read(url));
+			} catch (IOException ioe) {
+				app.displayException(ioe);
+				icon = EmptyIcon.getInstance();
+			}
+		}
+		else {
+			icon = EmptyIcon.getInstance();
+		}
+		return icon;
+	}
+
+
+	/**
+	 * Loads the languages to display as selectable.
+	 *
+	 * @param xmlFile The XML file from which to load.
+	 * @throws IOException If an error occurs while parsing the file.
+	 */
+	private void getLocalizations(File xmlFile) throws IOException {
+
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = null;
+		Document doc = null;
+		try {
+			db = dbf.newDocumentBuilder();
+			//InputSource is = new InputSource(new FileReader(file));
+			InputSource is = new InputSource(new UnicodeReader(
+							new BufferedInputStream(
+							new FileInputStream(xmlFile)), "UTF-8"));
+			is.setEncoding("UTF-8");
+			doc = db.parse(is);//db.parse(file);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new IOException("XML error:  Error parsing file");
+		}
+
+		// Traverse the XML tree.
+		initializeFromXMLFile(doc);
+
+	}
+
+
+	/**
+	 * Returns the selected language, as a <code>Locale</code> string value.
+	 *
+	 * @return The selected language; i.e., <code>en</code> or
+	 *         <code>es</code>.
+	 */
+	public final String getSelectedLanguage() {
+		IconTextInfo iti = (IconTextInfo)languageList.getSelectedValue();
+		String language = iti.getText();
+		String code = (String)languageMap.get(language);
+		if (code==null) {
+			app.displayException(
+				new InternalError("Couldn't find language code for " +
+					"language: " + language));
+			code = "en";
+		}
+		return code;
+	}
+
+	
+	/**
+	 * Returns the <code>JComponent</code> at the "top" of this Options
+	 * panel.  This is the component that will receive focus if the user
+	 * switches to this Options panel in the Options dialog.  As an added
+	 * bonus, if this component is a <code>JTextComponent</code>, its
+	 * text is selected for easy changing.
+	 */
+	public JComponent getTopJComponent() {
+		return languageList;
+	}
+
+
+	/**
+	 * Used in parsing an XML document containing a macro.  This method
+	 * initializes this macro with the data contained in the passed-in node.
+	 *
+	 * @param node The root node of the parsed XML document.
+	 * @throws IOException If an error occurs while parsing the XML.
+	 */
+	private void initializeFromXMLFile(Node node) throws IOException {
+
+		if (node==null)
+			throw new IOException("XML error:  node==null!");
+
+		int type = node.getNodeType();
+		switch (type) {
+
+			// The document node is ???
+			case Node.DOCUMENT_NODE:
+				initializeFromXMLFile(
+							((Document)node).getDocumentElement());
+				break;
+
+			// Handle element nodes.
+			case Node.ELEMENT_NODE:
+
+				String nodeName = node.getNodeName();
+
+				// Might be the "topmost" node.
+				if (nodeName.equals(ROOT_ELEMENT)) {
+					NodeList childNodes = node.getChildNodes();
+					// We should at least have English.
+					if (childNodes==null || childNodes.getLength()==0) {
+						throw new IOException("XML error:  There must " +
+							"be at least 1 language declared!");
+					}
+					int childCount = childNodes.getLength();
+					for (int i=0; i<childCount; i++)
+						initializeFromXMLFile(childNodes.item(i));
+				}
+
+				// Might be a language declaration.
+				else if (nodeName.equals(LANGUAGE)) {
+					// Shouldn't have any children.
+					NodeList childNodes = node.getChildNodes();
+					if (childNodes!=null && childNodes.getLength()>0) {
+						throw new IOException("XML error:  language " +
+							"tags shouldn't have children!");
+					}
+					NamedNodeMap attributes = node.getAttributes();
+					if (attributes==null || attributes.getLength()!=2) {
+						throw new IOException("XML error:  language " +
+							"tags should have two attributes!");
+					}
+					String name = null;
+					String id = null;
+					for (int i=0; i<2; i++) {
+						Node node2 = attributes.item(i);
+						nodeName = node2.getNodeName();
+						if (nodeName.equals(NAME))
+							name = node2.getNodeValue();
+						else if (nodeName.equals(ID))
+							id = node2.getNodeValue();
+						else
+							throw new IOException("XML error: unknown " +
+								"attribute: '" + nodeName + "'");
+					}
+					if (name==null || id==null) {
+						throw new IOException("XML error: language " +
+							"must have attributes 'name' and 'id'.");
+					}
+					Icon icon = getIconFor(id);
+					IconTextInfo iti = new IconTextInfo(name, icon);
+					listModel.addElement(iti);
+					languageMap.put(name, id);
+				}
+
+				// Anything else is an error.
+				else {
+					throw new IOException("XML error:  Unknown element " +
+						"node: " + nodeName);
+				}
+
+				break;
+
+			// Whitespace nodes.
+			case Node.TEXT_NODE:
+				break;
+
+			// An error occurred?
+			default:
+				throw new IOException("XML error:  Unknown node type: " +
+					type);
+
+		} // End of switch (type).
+
+	}
+
+
+	/**
+	 * Sets the language selected in this Options panel.
+	 *
+	 * @param language The language to be selected, as a Locale string
+	 *        constant (e.g., <code>en</code> or <code>es</code>).
+	 */
+	private void setSelectedLanguage(String language) {
+
+		int count = listModel.size();
+		for (int i=0; i<count; i++) {
+			Object obj = listModel.get(i);
+			String langName = ((IconTextInfo)obj).getText();
+			String langValue = (String)languageMap.get(langName);
+			if (language.startsWith(langValue)) {
+				languageList.setSelectedIndex(i);
+				return;
+			}
+		}
+
+		// If the passed-in language wasn't "recognized," default to
+		// English.
+		for (int i=0; i<count; i++) {
+			Object obj = listModel.get(i);
+			String langName = ((IconTextInfo)obj).getText();
+			String langValue = (String)languageMap.get(langName);
+			if (langValue.equals("en")) {
+				languageList.setSelectedIndex(i);
+				return;
+			}
+		}
+
+	}
+
+
+	/**
+	 * Sets the values displayed by this panel to reflect those in the
+	 * application.  Child panels are not handled.
+	 *
+	 * @param owner The parent application.
+	 * @see #setValues(Frame)
+	 */
+	protected void setValuesImpl(Frame owner) {
+		setSelectedLanguage(((RText)owner).getLanguage());
+	}
+
+
+	/**
+	 * Called when the user changes the language in the language list.
+	 * Do not override.
+	 */
+	public void valueChanged(ListSelectionEvent e) {
+		hasUnsavedChanges = true;
+		firePropertyChange(LANGUAGE_PROPERTY,
+						-1, languageList.getSelectedIndex());
+	}
+
+
+	/**
+	 * Cell renderer that knows how to display both an icon and text (as
+	 * <code>DefaultListCellRenderer</code> only knows how to display
+	 * either/or).
+	 */
+	static class CellRenderer extends DefaultListCellRenderer {
+
+		public Component getListCellRendererComponent(JList list,
+										Object value,
+										int index,
+										boolean isSelected,
+										boolean cellHasFocus) {
+			super.getListCellRendererComponent(list, value, index,
+										isSelected, cellHasFocus);
+			IconTextInfo iti = (IconTextInfo)value;
+			setIcon(iti.getIcon());
+			setText(iti.getText());
+			return this;
+		}
+
+	}
+
+
+	/**
+	 * An empty icon.
+	 */
+	static class EmptyIcon implements Icon {
+
+		private static EmptyIcon instance;
+
+		public int getIconHeight() {
+			return EMPTY_ICON_HEIGHT;
+		}
+
+		public int getIconWidth() {
+			return EMPTY_ICON_WIDTH;
+		}
+
+		public static EmptyIcon getInstance() {
+			if (instance==null)
+				instance = new EmptyIcon();
+			return instance;
+		}
+
+		public void paintIcon(Component c, Graphics g, int x, int y) {
+			// Do nothing.
+		}
+
+	}
+
+
+	/**
+	 * Wrapper class for an icon and text; used in the language list to
+	 * wrap the two into a single list element.
+	 */
+	static class IconTextInfo {
+
+		private Icon icon;
+		private String text;
+
+		public IconTextInfo(String text, Icon icon) {
+			this.text = text;
+			this.icon = icon;
+		}
+
+		public Icon getIcon() {
+			return icon;
+		}
+
+		public String getText() {
+			return text;
+		}
+
+	}
+
+
+}

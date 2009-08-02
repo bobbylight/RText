@@ -1,0 +1,437 @@
+/*
+ * 09/16/2005
+ *
+ * HeapIndicatorPlugin.java - Status bar panel showing the current JVM heap.
+ * Copyright (C) 2005 Robert Futrell
+ * robert_futrell at users.sourceforge.net
+ * http://rtext.fifesoft.com
+ *
+ * This file is a part of RText.
+ *
+ * RText is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * RText is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+package org.fife.rtext.plugins.heapindicator;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+
+import org.fife.ui.app.AbstractPluggableGUIApplication;
+import org.fife.ui.app.PluginOptionsDialogPanel;
+import org.fife.ui.app.StatusBarPlugin;
+
+
+/**
+ * A status bar component displaying the current JVM heap.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
+public class HeapIndicatorPlugin extends StatusBarPlugin {
+
+	private AbstractPluggableGUIApplication app;
+	private HeapIcon heapIcon;
+	private Timer timer;
+	private TimerEvent timerEvent;
+	private long usedMem;
+	private long totalMem;
+	private ResourceBundle msg;
+	private HeapIndicatorOptionPanel optionPanel;
+
+	private boolean useSystemColors;
+	private Color iconForeground;
+	private Color iconBorderColor;
+
+	private static Object[] objArray;
+
+	private static final String BUNDLE_NAME		=
+					"org.fife.rtext.plugins.heapindicator.HeapIndicator";
+	private static final String VERSION		= "0.9.9.9";
+
+
+	/**
+	 * Constructor.
+	 *
+	 * @param app The GUI application.
+	 */
+	public HeapIndicatorPlugin(AbstractPluggableGUIApplication app) {
+
+		msg = ResourceBundle.getBundle(BUNDLE_NAME);
+
+		HeapIndicatorPreferences prefs = (HeapIndicatorPreferences)
+									HeapIndicatorPreferences.load();
+
+		this.app = app;
+		heapIcon = new HeapIcon(this);
+		setLayout(new BorderLayout());
+		setBorder(BorderFactory.createEmptyBorder(2,2,4,2));
+		add(new JLabel(heapIcon));
+
+		setUseSystemColors(prefs.useSystemColors);
+		setIconForeground(prefs.iconForeground);
+		setIconBorderColor(prefs.iconBorderColor);
+		setVisible(prefs.visible);
+
+		getData();
+		setRefreshInterval(prefs.refreshInterval); // Must be called!
+
+		ToolTipManager.sharedInstance().registerComponent(this);
+
+	}
+
+
+	protected static final long bytesToKb(long bytes) {
+		return bytes / 1024L;
+	}
+
+
+	/**
+	 * Returns this plugin's resource bundle.
+	 *
+	 * @return The resource bundle.
+	 */
+	ResourceBundle getBundle() {
+		return msg;
+	}
+
+
+	/**
+	 * Updates heap memory information.
+	 */
+	protected void getData() {
+		totalMem = Runtime.getRuntime().totalMemory();
+		usedMem =  totalMem - Runtime.getRuntime().freeMemory();
+	}
+
+
+	public Color getIconBorderColor() {
+		return getUseSystemColors() ?
+				UIManager.getColor("Label.foreground") :
+				iconBorderColor;
+	}
+
+
+	public Color getIconForeground() {
+		return getUseSystemColors() ?
+				UIManager.getColor("ProgressBar.foreground") :
+				iconForeground;
+	}
+
+
+	/**
+	 * Returns an options panel for use in an Options dialog.  This panel
+	 * should contain all options pertaining to this plugin.
+	 *
+	 * @return The options panel.
+	 */
+	public PluginOptionsDialogPanel getOptionsDialogPanel() {
+		if (optionPanel==null)
+			optionPanel = new HeapIndicatorOptionPanel(app, this);
+		return optionPanel;
+	}
+
+
+	/**
+	 * Returns the two long values in an <code>Object</code> array.
+	 *
+	 * @param num The first long.
+	 * @param denom The second long.
+	 * @return The two longs in an <code>Object</code> array.
+	 */
+	private static final Object[] getParams(long num, long denom) {
+		if (objArray==null)
+			objArray = new Object[2];
+		objArray[0] = new Long(num);
+		objArray[1] = new Long(denom);
+		return objArray;
+	}
+
+
+	/**
+	 * Returns the author of the plugin.
+	 *
+	 * @return The author.
+	 */
+	public String getPluginAuthor() {
+		return "Robert Futrell";
+	}
+
+
+	/**
+	 * Returns the icon to display beside the name of this plugin in the
+	 * application's interface.
+	 *
+	 * @return The icon for this plugin.  This value may be <code>null</code>
+	 *         to represent no icon.
+	 */
+	public Icon getPluginIcon() {
+		return null;
+	}
+
+
+	/**
+	 * Returns the menu for this plugin.
+	 *
+	 * @return The menu for this plugin.
+	 */
+	public JMenu getPluginMenu() {
+		return null;
+	}
+
+
+	/**
+	 * Returns the name of the plugin.
+	 *
+	 * @return The plugin name.
+	 */
+	public String getPluginName() {
+		return msg.getString("Plugin.Name");
+	}
+
+
+	/**
+	 * Returns the version of the plugin.
+	 *
+	 * @return The version number of this plugin.
+	 */
+	public String getPluginVersion() {
+		return VERSION;
+	}
+
+
+	/**
+	 * Returns the refresh interval of the heap indicator.
+	 *
+	 * @return The refresh interval, in milliseconds.
+	 * @see #setRefreshInterval
+	 */
+	public int getRefreshInterval() {
+		return timer==null ? -1 : timer.getDelay();
+	}
+
+
+	/**
+	 * Returns the text to display for the tooltip.
+	 *
+	 * @return The tooltip text.
+	 */
+	public String getToolTipText() {
+		long num = bytesToKb(getUsedMemory());
+		long denom = bytesToKb(getTotalMemory());
+		String toolTip = msg.getString("Plugin.ToolTip.text");
+		toolTip = MessageFormat.format(toolTip, getParams(num, denom));
+		return toolTip;
+	}
+
+
+	/**
+	 * Returns the total amount of memory available to the JVM.
+	 *
+	 * @return The total memory available to the JVM, in bytes.
+	 * @see #getUsedMemory
+	 */
+	public long getTotalMemory() {
+		return totalMem;
+	}
+
+
+	/**
+	 * Returns the amount of memory currently being used by the JVM.
+	 *
+	 * @return The memory being used by the JVM, in bytes.
+	 * @see #getTotalMemory
+	 */
+	public long getUsedMemory() {
+		return usedMem;
+	}
+
+
+	/**
+	 * Returns whether or not system colors are used when painting the
+	 * heap indicator.
+	 *
+	 * @return Whether or not to use system colors.
+	 * @see #setUseSystemColors
+	 */
+	public boolean getUseSystemColors() {
+		return useSystemColors;
+	}
+
+
+	/**
+	 * Called just after a plugin is added to a GUI application.  If this is
+	 * a <code>GUIPlugin</code>, it has already been added visually.  Plugins
+	 * should use this method to register any listeners to the GUI application
+	 * and do any other necessary setup.
+	 *
+	 * @param app The application to which this plugin was just added.
+	 * @see #uninstall
+	 */
+	public void install(AbstractPluggableGUIApplication app) {
+	}
+
+
+	protected void installTimer(int interval) {
+		if (timer==null) {
+			timerEvent = new TimerEvent();
+			timer = new Timer(interval, timerEvent);
+		}
+		else {
+			timer.stop();
+			timer.setDelay(interval);
+		}
+		timer.start();
+	}
+
+
+	protected void processMouseEvent(MouseEvent e) {
+		switch (e.getID()) {
+			case MouseEvent.MOUSE_CLICKED:
+				if (e.getClickCount()==2) {
+					long oldMem = getUsedMemory();
+					Runtime.getRuntime().gc();
+					getData();
+					long newMem = getUsedMemory();
+					long difference = oldMem - newMem;
+					String text = msg.getString(
+									"Plugin.PopupDialog.GC.text");
+					text = MessageFormat.format(text,
+								new Object[] {
+									new Long(bytesToKb(difference))
+								}
+					);
+					JOptionPane.showMessageDialog(app, text,
+							msg.getString("Plugin.PopupDialog.GC.title"),
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+				break;
+			default:
+		}
+		super.processMouseEvent(e);
+	}
+
+
+	/**
+	 * Called when the GUI application is shutting down.  When this method is
+	 * called, the <code>Plugin</code> should save any properties via the
+	 * Java Preferences API.
+	 *
+	 * @see org.fife.ui.app.PluginPreferences
+	 */
+	public void savePreferences() {
+		HeapIndicatorPreferences.generatePreferences(this).save();
+	}
+
+
+	public void setIconBorderColor(Color iconBorderColor) {
+		this.iconBorderColor = iconBorderColor;
+		repaint();
+	}
+
+
+	public void setIconForeground(Color iconForeground) {
+		this.iconForeground = iconForeground;
+		repaint();
+	}
+
+
+	/**
+	 * Sets the refresh interval for the heap indicator.
+	 *
+	 * @param interval The new refresh interval, in milliseconds.
+	 * @see #getRefreshInterval
+	 */
+	public void setRefreshInterval(int interval) {
+		if (interval<=0 || interval==getRefreshInterval())
+			return;
+		installTimer(interval);
+	}
+
+
+	/**
+	 * Sets whether or not to use system colors when painting the heap
+	 * indicator.
+	 *
+	 * @param useSystemColors Whether or not to use system colors.
+	 * @see #getUseSystemColors
+	 */
+	public void setUseSystemColors(boolean useSystemColors) {
+		if (useSystemColors!=getUseSystemColors()) {
+			this.useSystemColors = useSystemColors;
+			repaint();
+		}
+	}
+
+
+	public void setVisible(boolean visible) {
+		if (visible)
+			installTimer(getRefreshInterval());
+		else
+			uninstallTimer();
+		super.setVisible(visible);
+	}
+
+
+	/**
+	 * Called just before this <code>Plugin</code> is removed from an
+	 * <code>GUIApplication</code>.  This gives the plugin a chance to clean
+	 * up any loose ends (kill any threads, close any files, remove listeners,
+	 * etc.).
+	 *
+	 * @return Whether the uninstall went cleanly.
+	 * @see #install
+	 */
+	public boolean uninstall() {
+		uninstallTimer();
+		return true;
+	}
+
+
+	protected void uninstallTimer() {
+		if (timer!=null) {
+			timer.stop();
+			timer.removeActionListener(timerEvent);
+			timerEvent = null;	// May help GC.
+			timer = null;		// May help GC.
+		}
+	}
+
+
+	/**
+	 * Timer event that gets fired.  This refreshes the GC icon.
+	 */
+	class TimerEvent implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			getData();
+			repaint();
+		}
+
+	}
+
+
+}
