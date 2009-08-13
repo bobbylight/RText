@@ -62,9 +62,9 @@ class NewAction extends StandardAction {
 		AbstractMainView mainView = owner.getMainView();
 
 		// First, remove old listeners.
-		if (mainView.currentTextArea != null) {
-			mainView.currentTextArea.removeCaretListener(owner);
-			mainView.currentTextArea.removeKeyListener(owner);
+		if (mainView.getCurrentTextArea() != null) {
+			mainView.getCurrentTextArea().removeCaretListener(owner);
+			mainView.getCurrentTextArea().removeKeyListener(owner);
 		}
 
 		// Create a new RTextDocument for an empty file with a default name.

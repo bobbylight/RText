@@ -89,7 +89,7 @@ class ReplaceNextAction extends ReplaceAction {
 		}
 
 		// Otherwise, repeat the last Replace action.
-		RTextEditorPane textArea = mainView.currentTextArea;
+		RTextEditorPane textArea = mainView.getCurrentTextArea();
 		String searchString = "";
 
 		// Get the text to search for.

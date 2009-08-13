@@ -526,9 +526,9 @@ class BackgroundDialog extends JDialog implements ActionListener {
 		}
 
 		public void paintIcon(Component c, Graphics g, int x, int y) {
-			if (color!=null) {
+			if (getColor()!=null) {
 				Color old = g.getColor();
-				g.setColor(color);
+				g.setColor(getColor());
 				g.fillRect(x,y, getIconWidth(), getIconHeight());
 				g.setColor(old);
 			}

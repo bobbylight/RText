@@ -65,7 +65,7 @@ class PrintAction extends StandardAction {
 	public void actionPerformed(ActionEvent e) {
 
 		RText owner = (RText)getApplication();
-		RTextEditorPane textArea = owner.getMainView().currentTextArea;
+		RTextEditorPane textArea = owner.getMainView().getCurrentTextArea();
 
 		DocFlavor flavor = DocFlavor.SERVICE_FORMATTED.PRINTABLE;
 		PrintRequestAttributeSet attributeSet = new HashPrintRequestAttributeSet();

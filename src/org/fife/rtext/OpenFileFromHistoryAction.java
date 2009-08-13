@@ -67,7 +67,7 @@ class OpenFileFromHistoryAction extends StandardAction {
 
 		RText owner = (RText)getApplication();
 		AbstractMainView mainView = owner.getMainView();
-		RTextEditorPane textArea = mainView.currentTextArea;
+		RTextEditorPane textArea = mainView.getCurrentTextArea();
 
 		// If the only document open is untitled and empty, remove
 		// (and thus replace) it.

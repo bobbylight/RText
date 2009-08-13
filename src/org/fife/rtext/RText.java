@@ -243,8 +243,8 @@ public class RText extends AbstractPluggableGUIApplication
 
 		// NOTE: e may be "null"; we do this sometimes to force caret
 		// updates to update e.g. the current line highlight.
-		RTextEditorPane textArea	= mainView.currentTextArea;
-		int dot		= textArea.getCaretPosition();//e.getDot();
+		RTextEditorPane textArea = mainView.getCurrentTextArea();
+		int dot = textArea.getCaretPosition();//e.getDot();
 
 		// Update row/column information in status field.
 		Element map = textArea.getDocument().getDefaultRootElement();
@@ -869,7 +869,7 @@ public class RText extends AbstractPluggableGUIApplication
 		// that file doesn't exist, RText will prompt with "File XXX does not
 		// exist, create it?", and in that time, currentTextArea will be null.
 		// Plugins, in the meantime, will try to load and find the null value.
-		RTextEditorPane textArea = getMainView().currentTextArea;
+		RTextEditorPane textArea = getMainView().getCurrentTextArea();
 		if (textArea!=null) {
 			textArea.requestFocusInWindow();
 		}
@@ -944,7 +944,7 @@ public class RText extends AbstractPluggableGUIApplication
 
 			default:
 				// You cannot modify a read-only document.
-				if (mainView.currentTextArea.isReadOnly()) {
+				if (mainView.getCurrentTextArea().isReadOnly()) {
 					getStatusBar().setStatusMessage(
 										"Document is read only!");
 				}

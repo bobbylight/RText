@@ -102,11 +102,11 @@ class OpenInNewWindowAction extends StandardAction {
 			//chooser.setUnderlinedFiles(null);	// Unnecessary since no files are yet open!
 			int returnVal = chooser.showOpenDialog(newWindow);
 
-			// If they selected a file and clicked "OK", open the flie!
+			// If they selected a file and clicked "OK", open the file!
 			if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
 
 				AbstractMainView newMainView = newWindow.getMainView();
-				RTextEditorPane newCurrentTextArea = newMainView.currentTextArea;
+				RTextEditorPane newCurrentTextArea = newMainView.getCurrentTextArea();
 				String encoding = chooser.getEncoding();
 
 				// First, remove old listeners.

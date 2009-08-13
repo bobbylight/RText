@@ -106,15 +106,17 @@ class FindAction extends StandardAction {
 
 			// If the current document has selected text, use the selection
 			// as the value to search for.
-			String selectedText = mainView.currentTextArea.getSelectedText();
-			if (selectedText!=null)
+			RTextEditorPane editor = mainView.getCurrentTextArea();
+			String selectedText = editor.getSelectedText();
+			if (selectedText!=null) {
 				findDialog.setSearchString(selectedText);
+			}
 
 			findDialog.setVisible(true);
 
 		}
 
-		// If ths find dialog is visible but not enabled, have it request
+		// If the find dialog is visible but not enabled, have it request
 		// focus.
 		else if (findDialogVisible) {
 			findDialog.toFront();

@@ -55,22 +55,21 @@ class RTextWindowListener extends WindowAdapter {
 
 	// Called when the window is activated.
 	public void windowActivated(WindowEvent e) {
-
 		// Ensure that the current text document (if any) has focus.
-		if (owner.getMainView().currentTextArea != null)
-			owner.getMainView().currentTextArea.requestFocusInWindow();
-
+		RTextEditorPane editor = owner.getMainView().getCurrentTextArea();
+		if (editor!=null) {
+			editor.requestFocusInWindow();
+		}
 	}
 
 
 	// Called when the window is deactivated
 	public void windowDeactivated(WindowEvent e) {
-
 		// Make sure the selection is always visible.
-		if (owner.getMainView().currentTextArea != null) {
-			owner.getMainView().currentTextArea.getCaret().setSelectionVisible(true);
+		RTextEditorPane editor = owner.getMainView().getCurrentTextArea();
+		if (editor!=null) {
+			editor.getCaret().setSelectionVisible(true);
 		}
-
 	}
 
 

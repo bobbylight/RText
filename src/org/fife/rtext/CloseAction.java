@@ -61,7 +61,8 @@ class CloseAction extends StandardAction {
 		RText owner = (RText)getApplication();
 		AbstractMainView mainView = owner.getMainView();
 		mainView.closeCurrentDocument();
-		owner.setStatusBarReadOnlyIndicatorEnabled(mainView.currentTextArea.isReadOnly());
+		owner.setStatusBarReadOnlyIndicatorEnabled(mainView.
+									getCurrentTextArea().isReadOnly());
 	}
 
 

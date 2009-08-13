@@ -66,7 +66,7 @@ class PrintPreviewAction extends StandardAction {
 		RText rtext = (RText)getApplication();
 		PrintPreviewDialog printPreviewDialog =
 				new PrintPreviewDialog(rtext,
-						rtext.getMainView().currentTextArea);
+						rtext.getMainView().getCurrentTextArea());
 		printPreviewDialog.setLocationRelativeTo(rtext);
 		printPreviewDialog.setVisible(true);
 	}

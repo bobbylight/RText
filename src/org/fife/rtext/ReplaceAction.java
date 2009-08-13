@@ -77,7 +77,8 @@ class ReplaceAction extends FindAction {
 
 			// If the current document has selected text, use the selection
 			// as the value to search for.
-			String selectedText = mainView.currentTextArea.getSelectedText();
+			RTextEditorPane editor = mainView.getCurrentTextArea();
+			String selectedText = editor.getSelectedText();
 			if (selectedText!=null)
 				replaceDialog.setSearchString(selectedText);
 

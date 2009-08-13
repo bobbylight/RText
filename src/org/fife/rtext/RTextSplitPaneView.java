@@ -165,14 +165,9 @@ class RTextSplitPaneView extends AbstractMainView
 
 	
 	/**
-	 * Attempts to close the current document.  This method is synchronized so
-	 * it doesn't interfere with the thread checking for files being modified
-	 * outside of the editor.
-	 *
-	 * @return JOptionPane.YES_OPTION/NO_OPTION/CANCEL_OPTION, depending on
-	 *         what the user does.
+	 * {@inheritDoc}
 	 */
-	public synchronized int closeCurrentDocument() {
+	protected synchronized int closeCurrentDocumentImpl() {
 
 		ResourceBundle msg = owner.getResourceBundle();
 
@@ -197,10 +192,11 @@ class RTextSplitPaneView extends AbstractMainView
 		updateStatusBar();
 
 		// Update RText's title and the status bar message.
-		if (currentTextArea.isDirty())
-			owner.setMessages(currentTextArea.getFileFullPath() + "*", msg.getString("Ready"));
+		RTextEditorPane editor = getCurrentTextArea();
+		if (editor.isDirty())
+			owner.setMessages(editor.getFileFullPath() + "*", msg.getString("Ready"));
 		else
-			owner.setMessages(currentTextArea.getFileFullPath(), msg.getString("Ready"));
+			owner.setMessages(editor.getFileFullPath(), msg.getString("Ready"));
 
 		// Return JOptionPane.YES_OPTION or JOptionPane.NO_OPTION.
 		return rc;
@@ -433,9 +429,10 @@ class RTextSplitPaneView extends AbstractMainView
 	public void valueChanged(ListSelectionEvent e) {
 
 		// Remove old listeners.
-		if (currentTextArea!=null) {
-			currentTextArea.removeCaretListener(owner);
-			currentTextArea.removeKeyListener(owner);
+		RTextEditorPane current = getCurrentTextArea();
+		if (current!=null) {
+			current.removeCaretListener(owner);
+			current.removeKeyListener(owner);
 		}
 
 		// We must check for this in case they removed the last document.
@@ -444,17 +441,18 @@ class RTextSplitPaneView extends AbstractMainView
 
 			String key = new Integer(selectedIndex).toString();
 			viewPanelLayout.show(viewPanel, key);
-			currentTextArea = getRTextEditorPaneAt(selectedIndex);
+			current = getRTextEditorPaneAt(selectedIndex);
+			setCurrentTextArea(current);
 
-			if (currentTextArea.isDirty())
-				owner.setMessages(currentTextArea.getFileFullPath() + "*", null);
+			if (current.isDirty())
+				owner.setMessages(current.getFileFullPath() + "*", null);
 			else
-				owner.setMessages(currentTextArea.getFileFullPath(), null);
+				owner.setMessages(current.getFileFullPath(), null);
 			updateStatusBar();	// Updates read-only indicator and line/column.
 
 			// Add back listeners.
-			currentTextArea.addCaretListener(owner);
-			currentTextArea.addKeyListener(owner);
+			current.addCaretListener(owner);
+			current.addKeyListener(owner);
 
 			// Trick the parent RText into updating the row/column indicator.
 			// We have to check mainView for null because this is called in
@@ -462,12 +460,12 @@ class RTextSplitPaneView extends AbstractMainView
 			if (owner.getMainView()!=null)
 				owner.caretUpdate(null); // Null because caretUpdate doesn't actually use the caret event.
 
-			currentTextArea.requestFocusInWindow();
+			current.requestFocusInWindow();
 
 			// Let any listeners know that the current document changed.
 			firePropertyChange(CURRENT_DOCUMENT_PROPERTY, -1, selectedIndex);
 			fireCurrentTextAreaEvent(CurrentTextAreaEvent.TEXT_AREA_CHANGED,
-								null, currentTextArea);
+								null, current);
 
 		}
 

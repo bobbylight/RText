@@ -66,7 +66,7 @@ class FilePropertiesAction extends StandardAction {
 	public void actionPerformed(ActionEvent e) {
 		RText rtext = (RText)getApplication();
 		TextFilePropertiesDialog dialog = new TextFilePropertiesDialog(
-							rtext, rtext.getMainView().currentTextArea);
+							rtext, rtext.getMainView().getCurrentTextArea());
 		dialog.setVisible(true);
 		dialog = null;
 	}

@@ -135,7 +135,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		// Do any extra stuff.
 		// This updates currentTextArea and shifts focus too.
 		setSelectedIndex(numDocuments-1);
-		if (currentTextArea.isDirty())
+		if (getCurrentTextArea().isDirty())
 			owner.setMessages(fileFullPath + "*", "Opened document '" + fileFullPath + "'");
 		else
 			owner.setMessages(fileFullPath, "Opened document '" + fileFullPath + "'");
@@ -182,14 +182,9 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 
 
 	/**
-	 * Attempts to close the current document.  This method is synchronized so
-	 * it doesn't interfere with the thread checking for files being modified
-	 * outside of the editor.
-	 *
-	 * @return JOptionPane.YES_OPTION/NO_OPTION/CANCEL_OPTION, depending on
-	 *         what the user does.
+	 * {@inheritDoc}
 	 */
-	public synchronized int closeCurrentDocument() {
+	protected synchronized int closeCurrentDocumentImpl() {
 
 		ResourceBundle msg = owner.getResourceBundle();
 
@@ -223,10 +218,11 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		updateStatusBar();
 
 		// Update RText's title and the status bar message.
-		if (currentTextArea.isDirty())
-			owner.setMessages(currentTextArea.getFileFullPath() + "*", msg.getString("Ready"));
+		RTextEditorPane editor = getCurrentTextArea();
+		if (editor.isDirty())
+			owner.setMessages(editor.getFileFullPath() + "*", msg.getString("Ready"));
 		else
-			owner.setMessages(currentTextArea.getFileFullPath(), msg.getString("Ready"));
+			owner.setMessages(editor.getFileFullPath(), msg.getString("Ready"));
 
 		// Return JOptionPane.YES_OPTION or JOptionPane.NO_OPTION.
 		return rc;
@@ -380,25 +376,26 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 */
 	public void internalFrameActivated(InternalFrameEvent e) {
 
-		currentTextArea = getRTextEditorPaneAt(getSelectedIndex());
+		RTextEditorPane current = getRTextEditorPaneAt(getSelectedIndex());
+		setCurrentTextArea(current);
 
 		// Update RText's title bar and status bar.
-		String title = currentTextArea.getFileFullPath() +
-						(currentTextArea.isDirty() ? "*" : "");
+		String title = current.getFileFullPath()+(current.isDirty() ? "*" : "");
 		owner.setMessages(title, null);
 		updateStatusBar();	// Updates read-only indicator and line/column.
 		// currentTextArea.requestFocusInWindow();
 
-		currentTextArea.addCaretListener(owner);
-		currentTextArea.addKeyListener(owner);
+		current.addCaretListener(owner);
+		current.addKeyListener(owner);
 
 		// Trick the parent RText into updating the row/column indicator.
-		owner.caretUpdate(null); // Null because caretUpdate doesn't actually use the caret event.
+		// Null because caretUpdate doesn't actually use the caret event.
+		owner.caretUpdate(null);
 
 		// Let any listeners know that the current document changed.
 		firePropertyChange(CURRENT_DOCUMENT_PROPERTY, -1, getSelectedIndex());
 		fireCurrentTextAreaEvent(CurrentTextAreaEvent.TEXT_AREA_CHANGED,
-										null, currentTextArea);
+										null, current);
 
 	}
 
@@ -429,8 +426,8 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 * Called when an internal frame is deactivated.
 	 */
 	public void internalFrameDeactivated(InternalFrameEvent e) {
-		currentTextArea.removeCaretListener(owner);
-		currentTextArea.removeKeyListener(owner);
+		getCurrentTextArea().removeCaretListener(owner);
+		getCurrentTextArea().removeKeyListener(owner);
 	}
 
 

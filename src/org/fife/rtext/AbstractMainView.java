@@ -51,6 +51,7 @@ import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
+import org.fife.ui.rsyntaxtextarea.spell.SpellingParser;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.IconGroup;
 import org.fife.ui.rtextarea.Macro;
@@ -119,14 +120,14 @@ public abstract class AbstractMainView extends JPanel
 	public static final String ROUNDED_SELECTION_PROPERTY		= "MainView.roundedSelection";
 	public static final String SMOOTH_TEXT_PROPERTY			= "MainView.smoothText";
 
-	public RTextEditorPane currentTextArea;			// Currently active text area.
+	private RTextEditorPane currentTextArea;			// Currently active text area.
 
 	private Action[] actions;
 
 	public FindDialog findDialog;					// The dialog that lets you search for text.
 	public ReplaceDialog replaceDialog;			// The dialog that lets you replace text.
 	public Vector searchStrings;					// The strings to go in the "Find What" combo boxes.
-	public boolean searchingForward;				// Whether to search foreward.
+	public boolean searchingForward;				// Whether to search forward.
 	public boolean searchMatchCase;				// If true, match case while searching.
 	public boolean searchWholeWord;				// Whether searches look for spaces around matches.
 	public boolean searchRegExpression;			// If true, searchString is a Java regular expression.
@@ -160,7 +161,7 @@ public abstract class AbstractMainView extends JPanel
 	private boolean highlightCurrentLine;			// Whether or not the current line is highlighted.
 	private Color currentLineColor;				// The color with which to highlight the current line.
 
-	private boolean highlightModifiedDocDisplayNames;	// Color display names of modified filsdifferently?
+	private boolean highlightModifiedDocDisplayNames;	// Color display names of modified files differently?
 	private Color modifiedDocumentDisplayNameColor;	// Color to color display names of modified editors.
 
 	private boolean checkForModification;			// Check for files being changed outside of RText?
@@ -180,7 +181,7 @@ public abstract class AbstractMainView extends JPanel
 
 	private boolean whitespaceVisible;			// Whether whitespace is visible in the text areas.
 
-	private String aaHintFieldName;			// Whether text is antialiased.
+	private String aaHintFieldName;			// Whether text is anti-aliased.
 	private boolean fractionalMetricsEnabled;	// Whether fractional fontmetrics are used.
 
 	private Color markAllHighlightColor;
@@ -587,6 +588,18 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Attempts to close the current document.
+	 *
+	 * @return JOptionPane.YES_OPTION/NO_OPTION/CANCEL_OPTION, depending on
+	 *         what the user does.
+	 */
+	public final int closeCurrentDocument() {
+		currentTextArea.clearParsers();
+		return closeCurrentDocumentImpl();
+	}
+
+
+	/**
 	 * Attempts to close the current document.  Any implementation of this
 	 * method <i>must be synchronized</i> so it doesn't interfere with the
 	 * thread checking for files being modified outside of the editor.
@@ -594,7 +607,7 @@ public abstract class AbstractMainView extends JPanel
 	 * @return JOptionPane.YES_OPTION/NO_OPTION/CANCEL_OPTION, depending on
 	 *         what the user does.
 	 */
-	public abstract int closeCurrentDocument();
+	protected abstract int closeCurrentDocumentImpl();
 
 
 	/**
@@ -938,6 +951,10 @@ public abstract class AbstractMainView extends JPanel
 //CompletionProvider provider = new WordCompletionProvider(C_FUNCTIONS);
 //AutoCompletion ac = new AutoCompletion(provider);
 //ac.install(pane);
+
+		// Add any parsers.
+		File file = new File("english_dic.zip").getAbsoluteFile();
+		pane.addParser(SpellingParser.createEnglishSpellingParser(file, false));
 
 		// Return him.
 		return pane;
@@ -2965,6 +2982,23 @@ public abstract class AbstractMainView extends JPanel
 			RTextEditorPane textArea = getRTextEditorPaneAt(i);
 			textArea.setHighlightCurrentLine(highlightCurrentLine);
 		}
+	}
+
+
+	/**
+	 * Sets the "currently active" text area.  This should only be called
+	 * by subclasses.  After this is called, subclasses should call
+	 * {@link #fireCurrentTextAreaEvent(int, Object, Object)} to notify any
+	 * registered listeners of the change.
+	 *
+	 * @param textArea The new text area.
+	 * @see #getCurrentTextArea()
+	 */
+	/*
+	 * TODO: Make this method fire the event.
+	 */
+	protected void setCurrentTextArea(RTextEditorPane textArea) {
+		currentTextArea = textArea;
 	}
 
 

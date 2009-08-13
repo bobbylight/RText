@@ -173,9 +173,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		// Insert the tag at the current caret position.
 		else if (actionCommand.equals("InsertAtCaret")) {
-			owner.getMainView().currentTextArea.replaceSelection(
-											getTagTextForRow(row));
-			owner.getMainView().currentTextArea.requestFocusInWindow();
+			RTextEditorPane editor = owner.getMainView().getCurrentTextArea();
+			editor.replaceSelection(getTagTextForRow(row));
+			editor.requestFocusInWindow();
 		}
 
 	}
@@ -675,7 +675,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 						// FIXME: Fix me to look line by line (as it's
 						// guaranteed to be just a a line!).
 						RTextEditorPane textArea = owner.getMainView().
-													currentTextArea;
+													getCurrentTextArea();
 						int pos = SearchEngine.getNextMatchPos(text,
 								textArea.getText(), true, true, false);
 						if (pos>-1) {
@@ -732,7 +732,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 		currentTextAreaPropertyChanged(new CurrentTextAreaEvent(
 					owner.getMainView(),
 					CurrentTextAreaEvent.TEXT_AREA_CHANGED,
-					null, owner.getMainView().currentTextArea));
+					null, owner.getMainView().getCurrentTextArea()));
 	}
 
 
@@ -845,16 +845,16 @@ public class SourceBrowserPlugin extends GUIPlugin
 								getLastPathComponent()).getUserObject();
 			if (object instanceof TagEntry) {
 				TagEntry entry = (TagEntry)object;
-				RTextEditorPane textArea = owner.getMainView().currentTextArea;
+				RTextEditorPane editor=owner.getMainView().getCurrentTextArea();
 				String pattern = entry.getPlainTextPattern();
 				if (pattern!=null) {
 					// FIXME: Fix me to look line by line (as it's
 					// guaranteed to be just a a line!).
 					int pos = SearchEngine.getNextMatchPos(pattern,
-								textArea.getText(), true, true, false);
+								editor.getText(), true, true, false);
 					if (pos>-1) {
-						textArea.setCaretPosition(pos);
-						textArea.moveCaretPosition(pos+pattern.length());
+						editor.setCaretPosition(pos);
+						editor.moveCaretPosition(pos+pattern.length());
 						owner.setMessages(null, lineFoundText);
 					}
 					else {
@@ -865,12 +865,12 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 				}
 				else { // Must use line number (used by C macros, for instance).
-					Element map = textArea.getDocument().getDefaultRootElement();
+					Element map = editor.getDocument().getDefaultRootElement();
 					Element line = map.getElement((int)entry.lineNumber-1);
-					textArea.setCaretPosition(line.getStartOffset());
-					textArea.moveCaretPosition(line.getEndOffset()-1);
+					editor.setCaretPosition(line.getStartOffset());
+					editor.moveCaretPosition(line.getEndOffset()-1);
 				}
-				textArea.requestFocusInWindow();	// So we can see the highlighted line.
+				editor.requestFocusInWindow();	// So we can see the highlighted line.
 			}
 		}
 	}

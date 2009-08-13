@@ -257,9 +257,10 @@ class ToolBar extends CustomizableToolBar {
 										implements FocusListener {
 
 		public void focusGained(FocusEvent e) {
-			RTextEditorPane textArea = owner.getMainView().currentTextArea;
-			if (!mouseInNewButton && textArea!=null)
+			RTextEditorPane textArea = owner.getMainView().getCurrentTextArea();
+			if (!mouseInNewButton && textArea!=null) {
 				textArea.requestFocusInWindow();
+			}
 		}
 
 		public void focusLost(FocusEvent e) {

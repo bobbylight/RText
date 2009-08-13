@@ -83,7 +83,8 @@ class SaveAsWebPageAction extends StandardAction {
 		chooser.addChoosableFileFilter(new HTMLFileFilter());
 		chooser.removeChoosableFileFilter(chooser.getChoosableFileFilters()[0]);
 
-		String htmlFileName = owner.getMainView().currentTextArea.getFileFullPath();
+		RTextEditorPane editor = owner.getMainView().getCurrentTextArea();
+		String htmlFileName = editor.getFileFullPath();
 		int extensionStart = htmlFileName.lastIndexOf('.');
 		if (extensionStart!=-1) {
 			htmlFileName = htmlFileName.substring(0,extensionStart) + ".html";
@@ -132,7 +133,7 @@ class SaveAsWebPageAction extends StandardAction {
 				out.println("<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />");
 				out.println("<title>" + chosenFilePath + "</title>");
 
-				RTextEditorPane textArea = owner.getMainView().currentTextArea;
+				RTextEditorPane textArea = owner.getMainView().getCurrentTextArea();
 				int lineCount = textArea.getLineCount();
 				for (int i=0; i<lineCount; i++) {
 					Token token = textArea.getTokenListForLine(i);

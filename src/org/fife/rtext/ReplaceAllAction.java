@@ -71,7 +71,7 @@ class ReplaceAllAction extends StandardAction {
 
 		RText rtext = (RText)getApplication();
 		AbstractMainView mainView = rtext.getMainView();
-		RTextEditorPane textArea = mainView.currentTextArea;
+		RTextEditorPane textArea = mainView.getCurrentTextArea();
 
 		// First, remember that they've searched for this string.
 		mainView.searchStrings = mainView.replaceDialog.getSearchStrings();

@@ -277,7 +277,7 @@ class SearchToolBar extends JToolBar {
 				forward = false;
 			}
 			String text = findField.getText();
-			RTextEditorPane textArea = owner.getMainView().currentTextArea;
+			RTextEditorPane textArea = owner.getMainView().getCurrentTextArea();
 			boolean found = SearchEngine.find(textArea, text, forward,
 									matchCaseCheckBox.isSelected(),
 									false, false);
@@ -467,8 +467,7 @@ class SearchToolBar extends JToolBar {
 
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {
-				owner.getMainView().currentTextArea.
-						requestFocusInWindow();
+				owner.getMainView().getCurrentTextArea().requestFocusInWindow();
 			}
 		}
 

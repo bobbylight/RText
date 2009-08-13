@@ -69,19 +69,19 @@ class GoToAction extends StandardAction {
 			mainView.goToDialog = new GoToDialog(rtext, mainView);
 
 		// Prepare and show the GoTo Line dialog.
-		mainView.goToDialog.setMaxLineNumberAllowed(mainView.currentTextArea.getLineCount());
+		RTextEditorPane editor = mainView.getCurrentTextArea();
+		mainView.goToDialog.setMaxLineNumberAllowed(editor.getLineCount());
 		mainView.goToDialog.setVisible(true);
 
 		// If a real line number is returned, go to that line number.
-		int lineNumber = mainView.goToDialog.getLineNumber();
-		if (lineNumber>0) {
+		int line = mainView.goToDialog.getLineNumber();
+		if (line>0) {
 
 			try {
-				mainView.currentTextArea.setCaretPosition(
-					mainView.currentTextArea.getLineStartOffset(lineNumber-1));
+				editor.setCaretPosition(editor.getLineStartOffset(line-1));
 			} catch (BadLocationException ble) {
 				String temp = rtext.getString("InternalErrorILN",
-									Integer.toString(lineNumber));
+									Integer.toString(line));
 				JOptionPane.showMessageDialog(rtext, temp,
 									rtext.getString("ErrorDialogTitle"),
 									JOptionPane.ERROR_MESSAGE);

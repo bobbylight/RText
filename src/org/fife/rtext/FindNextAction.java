@@ -90,7 +90,7 @@ class FindNextAction extends FindAction {
 		}
 
 		// Otherwise, repeat the last Find action.
-		RTextEditorPane textArea = mainView.currentTextArea;
+		RTextEditorPane textArea = mainView.getCurrentTextArea();
 		String searchString = null;
 
 		// Get the text last searched for.

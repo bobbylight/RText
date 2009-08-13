@@ -152,7 +152,8 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 		// "Physically" add the tab.
 		tabbedPane.addTab(title, getIconFor((RTextScrollPane)component),
 						component);
-		currentTextArea = getRTextEditorPaneAt(getSelectedIndex());
+		setCurrentTextArea(getRTextEditorPaneAt(getSelectedIndex()));
+		RTextEditorPane currentTextArea = getCurrentTextArea();
 
 		// Loop through all tabs (documents) except the last (the one just added).
 		int tabCount = getNumDocuments();
@@ -194,14 +195,9 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 
 
 	/**
-	 * Attempts to close the current document.  This method is synchronized so
-	 * it doesn't interfere with the thread checking for files being modified
-	 * outside of the editor.
-	 *
-	 * @return JOptionPane.YES_OPTION/NO_OPTION/CANCEL_OPTION, depending on
-	 *         what the user does.
+	 * {@inheritDoc}
 	 */
-	public synchronized int closeCurrentDocument() {
+	protected synchronized int closeCurrentDocumentImpl() {
 
 		ResourceBundle msg = owner.getResourceBundle();
 
@@ -213,13 +209,14 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 		}
 
 inCloseCurrentDocument = true;
+		RTextEditorPane oldTextArea = getCurrentTextArea();
 
 		// Remove listeners from current text area IFF stateChanged() won't do it
 		// (i.e., we're removing any document except the "rightmost" document).
 //		boolean removingLastDocument = (getSelectedIndex()==getNumDocuments()-1);
 //		if (removingLastDocument==false) {
-			currentTextArea.removeCaretListener(owner);
-			currentTextArea.removeKeyListener(owner);
+			oldTextArea.removeCaretListener(owner);
+			oldTextArea.removeKeyListener(owner);
 //		}
 
 		// Remove the document from this tabbed pane.
@@ -236,8 +233,9 @@ inCloseCurrentDocument = true;
 		// Note that this may also be done by stateChanged() but we need to
 		// do it here too because code below relies on currentTextArea being
 		// up-to-date.
-		RTextEditorPane oldTextArea = currentTextArea;
-		currentTextArea = getRTextEditorPaneAt(getSelectedIndex());
+		oldTextArea = getCurrentTextArea();
+		setCurrentTextArea(getRTextEditorPaneAt(getSelectedIndex()));
+		final RTextEditorPane currentTextArea = getCurrentTextArea();
 		// MUST be done by SwingUtilities.invokeLater(), I think because
 		// currentTextArea is not yet visible on this line of code, so
 		// calling requestFocusInWindow() now would do nothing.
@@ -490,9 +488,9 @@ inCloseCurrentDocument = false;
 	public void setSelectedIndex(int index) {
 		if (index>=0 && index<getNumDocuments()) {
 			tabbedPane.setSelectedIndex(index);
-			currentTextArea = getRTextEditorPaneAt(index);
+			setCurrentTextArea(getRTextEditorPaneAt(index));
 			updateStatusBar();
-			currentTextArea.requestFocusInWindow();
+			getCurrentTextArea().requestFocusInWindow();
 		}
 	}
 
@@ -510,15 +508,17 @@ inCloseCurrentDocument = false;
 
 		// Remove the RText listeners associated with the current
 		// currentTextArea.
-		if (currentTextArea!=null) {
-			currentTextArea.removeCaretListener(owner);
-			currentTextArea.removeKeyListener(owner);
+		RTextEditorPane oldTextArea = getCurrentTextArea();
+		if (oldTextArea!=null) {
+			oldTextArea.removeCaretListener(owner);
+			oldTextArea.removeKeyListener(owner);
 		}
 
 		// The new currentTextArea will only be null when we're closing the
 		// only open document.  Even then, after this a new document will be
 		// opened and this method will be re-called.
-		currentTextArea = getRTextEditorPaneAt(getSelectedIndex());
+		setCurrentTextArea(getRTextEditorPaneAt(getSelectedIndex()));
+		final RTextEditorPane currentTextArea = getCurrentTextArea();
 		if (currentTextArea!=null) {
 
 			if (currentTextArea.isDirty())
