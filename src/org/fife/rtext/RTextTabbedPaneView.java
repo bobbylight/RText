@@ -139,8 +139,7 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 
 	/**
 	 * Adds a tab to the tabbed pane, and places a number beside documents
-	 * opened multiple times.  In rtext, this is the preferred way to add a tab
-	 * (as opposed to <code>JTextPane</code>'s <code>addTab</code> methods).
+	 * opened multiple times.
 	 *
 	 * @param title The "display name" to use on the tab of the document.
 	 * @param component The scroll pane containing the text editor to add.
@@ -152,8 +151,6 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 		// "Physically" add the tab.
 		tabbedPane.addTab(title, getIconFor((RTextScrollPane)component),
 						component);
-		setCurrentTextArea(getRTextEditorPaneAt(getSelectedIndex()));
-		RTextEditorPane currentTextArea = getCurrentTextArea();
 
 		// Loop through all tabs (documents) except the last (the one just added).
 		int tabCount = getNumDocuments();
@@ -183,7 +180,7 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 		// Do any extra stuff.
 		// This updates currentTextArea and shifts focus too.
 		setSelectedIndex(tabCount-1);
-		if (currentTextArea.isDirty())
+		if (getCurrentTextArea().isDirty())
 			owner.setMessages(fileFullPath + "*", "Opened document '" + fileFullPath + "'");
 		else
 			owner.setMessages(fileFullPath, "Opened document '" + fileFullPath + "'");

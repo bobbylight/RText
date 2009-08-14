@@ -211,6 +211,11 @@ public abstract class AbstractMainView extends JPanel
 	private Color gutterBorderColor;
 
 	/**
+	 * TODO: Move me to a plugin.
+	 */
+	private SpellingParser spellingParser;
+
+	/**
 	 * The cursor used when recording a macro.
 	 */
 	private static Cursor macroCursor;
@@ -953,8 +958,12 @@ public abstract class AbstractMainView extends JPanel
 //ac.install(pane);
 
 		// Add any parsers.
-		File file = new File("english_dic.zip").getAbsoluteFile();
-		pane.addParser(SpellingParser.createEnglishSpellingParser(file, false));
+		if (spellingParser==null) {
+			File file = new File("english_dic.zip").getAbsoluteFile();
+			spellingParser = SpellingParser.
+									createEnglishSpellingParser(file, false);
+		}
+		pane.addParser(spellingParser);
 
 		// Return him.
 		return pane;
