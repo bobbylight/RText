@@ -58,6 +58,8 @@ interface RTextActionInfo {
 	public static final String TIME_DATE_ACTION		= "timeDateAction";
 	public static final String LINE_NUMBER_ACTION	= "lineNumberAction";
 	public static final String OPTIONS_ACTION		= "optionsAction";
+	public static final String HOME_PAGE_ACTION		= "homePageAction";
+
 
 	/**
 	 * The names of all actions in an array.  Note that the order of these
@@ -80,6 +82,7 @@ interface RTextActionInfo {
 		RText.HELP_ACTION_KEY,
 		RText.ABOUT_ACTION_KEY,
 		OPTIONS_ACTION,
+		HOME_PAGE_ACTION,
 	};
 
 	static final int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -105,6 +108,7 @@ interface RTextActionInfo {
 					KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
 					KeyStroke.getKeyStroke(KeyEvent.VK_1, defaultModifier),
 					KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0),
+					null,
 					null,
 					null,
 			};

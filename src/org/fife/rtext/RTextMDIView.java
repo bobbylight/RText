@@ -34,6 +34,7 @@ import javax.swing.*;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
+import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 
@@ -102,8 +103,15 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	protected void addTextAreaImpl(String title, Component component,
 							String fileFullPath) {
 
+		JPanel temp = new JPanel(new BorderLayout());
+		temp.add(component);
+		RTextScrollPane sp = (RTextScrollPane)component;
+		RTextEditorPane textArea = (RTextEditorPane)sp.getTextArea();
+		ErrorStrip es = new ErrorStrip(textArea);
+		temp.add(es, BorderLayout.LINE_END);
+
 		// "Physically" add the frame.
-		InternalFrame frame = new InternalFrame(title, component);
+		InternalFrame frame = new InternalFrame(title, temp);
 		frame.setVisible(true);	// Necessary.
 		frame.addInternalFrameListener(this);
 		desktopPane.add(frame);
@@ -320,34 +328,15 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 
 
 	/**
-	 * Returns the <code>org.fife.rtext.RTextEditorPane</code> on the specified tab.
-	 * This is a convenience method for
-	 * <code>((RTextEditorPane) ((RTextScrollPane)getComponentAt(i)).textArea)</code>
-	 *
-	 * @param index The tab for which you want to get the <code>org.fife.rtext.RTextEditorPane</code>.
-	 * @return The corresponding <code>org.fife.rtext.RTextEditorPane</code>.
-	 */
-	public RTextEditorPane getRTextEditorPaneAt(int index) {
-		if (index<0 || index>=getNumDocuments())
-			//throw new IndexOutOfBoundsException();
-			return null;
-		return (RTextEditorPane)
-			((RTextScrollPane)((JInternalFrame)frames.get(index)).getContentPane().getComponent(0)).
-					getTextArea();
-	}
-
-
-	/**
-	 * Returns the scroll pane at the specified tab.
-	 *
-	 * @param index The tab for which you want to get the scroll pane.
-	 * @return The scroll pane.
+	 * {@inheritDoc}
 	 */
 	public RTextScrollPane getRTextScrollPaneAt(int index) {
 		if (index<0 || index>=getNumDocuments())
 			//throw new IndexOutOfBoundsException();
 			return null;
-		return (RTextScrollPane)((JInternalFrame)frames.get(index)).getContentPane().getComponent(0);
+		JPanel temp = (JPanel)((JInternalFrame)frames.get(index)).
+											getContentPane().getComponent(0);
+		return (RTextScrollPane)temp.getComponent(0);
 	}
 
 
@@ -647,7 +636,9 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 
 		public InternalFrame(String title, Component component) {
 			super(title, true, true, true, true);
-			this.setFrameIcon(getIconFor((RTextScrollPane)component));
+			RTextScrollPane sp = (RTextScrollPane)((JPanel)component).
+													getComponent(0);
+			this.setFrameIcon(getIconFor(sp));
 			java.awt.Container contentPane = getContentPane();
 			contentPane.setLayout(new GridLayout(1,1));
 			contentPane.add(component);

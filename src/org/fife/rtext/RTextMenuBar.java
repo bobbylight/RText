@@ -107,6 +107,7 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	//private JRadioButtonMenuItem ltrItem, rtlItem;
 	//private JRadioButtonMenuItem splitHorizItem, splitVertItem, splitNoneItem;
 	private JMenuItem helpItem;
+	private JMenuItem homePageItem;
 	private JMenuItem aboutItem;
 
 	private JMenu fileMenu;
@@ -172,7 +173,6 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		openRemoteItem = createMenuItem(rtext.getAction(RText.OPEN_REMOTE_ACTION));
 		fileMenu.add(openRemoteItem);
-
 
 		closeItem = createMenuItem(mainView.getAction(AbstractMainView.CLOSE_ACTION));
 		fileMenu.add(closeItem);
@@ -511,35 +511,35 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		int ctrlshift = InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK;
 
 		a = new BeginRecordingMacroAction(menuMsg.getString("MacroBegin"),
-									null, // icon
-									null, // desc
-									null, // mnemonic
-									KeyStroke.getKeyStroke(KeyEvent.VK_R,ctrlshift),
-									rtext,
-									false); // false => NOT temporary.
+						null, // icon
+						null, // desc
+						null, // mnemonic
+						KeyStroke.getKeyStroke(KeyEvent.VK_R,ctrlshift),
+						rtext,
+						false); // false => NOT temporary.
 		JMenuItem item = new JMenuItem(a);
 		item.setToolTipText(null);
 		UIUtil.setDescription(item, menuMsg, "MacroBeginDesc");
 		menu.add(item);
 
 		a = new BeginRecordingMacroAction(menuMsg.getString("MacroBeginTemp"),
-								null, // icon
-								null, // desc
-								null, // mnemonic
-								null,//KeyStroke.getKeyStroke(KeyEvent.VK_R,ctrlshift),
-								rtext,
-								true); // true => temporary.
+						null, // icon
+						null, // desc
+						null, // mnemonic
+						null,//KeyStroke.getKeyStroke(KeyEvent.VK_R,ctrlshift),
+						rtext,
+						true); // true => temporary.
 		item = new JMenuItem(a);
 		item.setToolTipText(null);
 		UIUtil.setDescription(item, menuMsg, "MacroBeginTempDesc");
 		menu.add(item);
 
 		a = new EndRecordingMacroAction(menuMsg.getString("MacroEnd"),
-								null, // icon
-								null, // desc
-								null, // mnemonic
-								KeyStroke.getKeyStroke(KeyEvent.VK_S,ctrlshift),
-								rtext);
+						null, // icon
+						null, // desc
+						null, // mnemonic
+						KeyStroke.getKeyStroke(KeyEvent.VK_S,ctrlshift),
+						rtext);
 		item = new JMenuItem(a);
 		item.setToolTipText(null);
 		UIUtil.setDescription(item, menuMsg, "MacroEndDesc");
@@ -548,11 +548,11 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		menu.addSeparator();
 
 		a = new RTextAreaEditorKit.PlaybackLastMacroAction(
-								menuMsg.getString("MacroPlay"),
-								null, // icon
-								null, // desc
-								null, // mnemonic
-								KeyStroke.getKeyStroke(KeyEvent.VK_M,ctrlshift));
+							menuMsg.getString("MacroPlay"),
+							null, // icon
+							null, // desc
+							null, // mnemonic
+							KeyStroke.getKeyStroke(KeyEvent.VK_M,ctrlshift));
 		item = new JMenuItem(a);
 		item.setToolTipText(null);
 		UIUtil.setDescription(item, menuMsg, "MacroPlayDesc");
@@ -599,14 +599,15 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		add(menu);
 
 		// Help submenu's items.
-		helpItem = createMenuItem(rtext.getAction(RText.HELP_ACTION_KEY),
-				msg.getString("DescHelp"));
+		helpItem = createMenuItem(rtext.getAction(RText.HELP_ACTION_KEY));
 		menu.add(helpItem);
+
+		homePageItem = createMenuItem(rtext.getAction(RText.HOME_PAGE_ACTION));
+		menu.add(homePageItem);
 
 		menu.addSeparator();
 
-		aboutItem = createMenuItem(rtext.getAction(RText.ABOUT_ACTION_KEY),
-				msg.getString("DescAbout"));
+		aboutItem = createMenuItem(rtext.getAction(RText.ABOUT_ACTION_KEY));
 		menu.add(aboutItem);
 
 	}
@@ -840,6 +841,7 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		}
 		updateAction(lineNumbersItem, rtext.getAction(RText.LINE_NUMBER_ACTION));
 		updateAction(helpItem, rtext.getAction(RText.HELP_ACTION_KEY));
+		updateAction(homePageItem, rtext.getAction(RText.HOME_PAGE_ACTION));
 		updateAction(aboutItem, rtext.getAction(RText.ABOUT_ACTION_KEY));
 
 	}
@@ -1033,8 +1035,9 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		// would have been updated by super.updateUI(ui)).  We must also check
 		// windowMenu for null as this is called during initialization.
 		if (rtext!=null && rtext.getMainViewStyle()!=RText.MDI_VIEW &&
-			windowMenu!=null)
+				windowMenu!=null) {
 			SwingUtilities.updateComponentTreeUI(windowMenu);
+		}
 
 	}
 

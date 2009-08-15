@@ -26,6 +26,7 @@
  */
 package org.fife.rtext;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -46,6 +47,7 @@ import javax.swing.event.ListSelectionListener;
 import org.fife.ui.RListSelectionModel;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.UIUtil;
+import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 
@@ -132,10 +134,17 @@ class RTextSplitPaneView extends AbstractMainView
 	protected void addTextAreaImpl(String title, Component component,
 							String fileFullPath) {
 
+		JPanel temp = new JPanel(new BorderLayout());
+		temp.add(component);
+		RTextScrollPane sp = (RTextScrollPane)component;
+		RTextEditorPane textArea = (RTextEditorPane)sp.getTextArea();
+		ErrorStrip es = new ErrorStrip(textArea);
+		temp.add(es, BorderLayout.LINE_END);
+
 		int numDocuments = getNumDocuments();
 		listModel.addElement(new DocumentInfo(
 						title, getIconFor((RTextScrollPane)component)));
-		viewPanel.add(component, new Integer(numDocuments).toString());
+		viewPanel.add(temp, new Integer(numDocuments).toString());
 		scrollPanes.add(component);
 		setSelectedIndex(numDocuments);		// Sets currentTextArea.
 		numDocuments++;					// We just added a document.
@@ -241,26 +250,7 @@ class RTextSplitPaneView extends AbstractMainView
 
 
 	/**
-	 * Returns the <code>RTextEditorPane</code> at the specified index.
-	 *
-	 * @param index The index for which you want to get the
-	 *        <code>RTextEditorPane</code>.
-	 * @return The corresponding <code>org.fife.rtext.RTextEditorPane</code>.
-	 */
-	public RTextEditorPane getRTextEditorPaneAt(int index) {
-		if (index<0 || index>=getNumDocuments())
-			//throw new IndexOutOfBoundsException();
-			return null;
-		return (RTextEditorPane)((RTextScrollPane)scrollPanes.get(index)).
-						getTextArea();
-	}
-
-
-	/**
-	 * Returns the scroll pane at the specified index.
-	 *
-	 * @param index The index for which you want to get the scroll pane.
-	 * @return The scroll pane.
+	 * {@inheritDoc}
 	 */
 	public RTextScrollPane getRTextScrollPaneAt(int index) {
 		if (index<0 || index>=getNumDocuments())

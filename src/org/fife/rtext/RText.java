@@ -401,6 +401,12 @@ public class RText extends AbstractPluggableGUIApplication
 			msg.getString("OptionsActionMnemonic").charAt(0),
 			prefs.getAccelerator(OPTIONS_ACTION)));
 
+		temp = msg.getString("HomePageActionName");
+		addAction(HOME_PAGE_ACTION, new HomePageAction(this, temp, null,
+			getString("DescHomePage"),
+			msg.getString("HomePageActionMnemonic").charAt(0),
+			prefs.getAccelerator(HOME_PAGE_ACTION)));
+
 		msg = null; // May help with GC.
 
 	}

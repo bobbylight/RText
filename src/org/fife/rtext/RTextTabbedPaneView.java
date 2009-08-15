@@ -27,6 +27,7 @@ package org.fife.rtext;
 
 import java.awt.AWTEvent;
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -46,6 +47,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
@@ -58,6 +60,7 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.TabbedPaneUI;
 
 import org.fife.ui.DrawDnDIndicatorTabbedPane;
+import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 
@@ -149,8 +152,12 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 							String fileFullPath) {
 
 		// "Physically" add the tab.
-		tabbedPane.addTab(title, getIconFor((RTextScrollPane)component),
-						component);
+		JPanel temp = new JPanel(new BorderLayout());
+		temp.add(component);
+		RTextScrollPane sp = (RTextScrollPane)component;
+		RTextEditorPane textArea = (RTextEditorPane)sp.getTextArea();
+		temp.add(new ErrorStrip(textArea), BorderLayout.LINE_END);
+		tabbedPane.addTab(title, getIconFor(sp), temp);
 
 		// Loop through all tabs (documents) except the last (the one just added).
 		int tabCount = getNumDocuments();
@@ -322,34 +329,14 @@ inCloseCurrentDocument = false;
 
 
 	/**
-	 * Returns the <code>org.fife.rtext.RTextEditorPane</code> on the
-	 * specified tab.  This is a convenience method for
-	 * <code>(RTextEditorPane)getRTextScrollPaneAt(i).textArea</code>.
-	 *
-	 * @param index The tab for which you want to get the
-	 *        {@link org.fife.rtext.RTextEditorPane}.
-	 * @return The corresponding {@link org.fife.rtext.RTextEditorPane}.
-	 */
-	public RTextEditorPane getRTextEditorPaneAt(int index) {
-		if (index<0 || index>=getNumDocuments())
-			//throw new IndexOutOfBoundsException();
-			return null;
-		return (RTextEditorPane)((RTextScrollPane)tabbedPane.
-					getComponentAt(index)).getTextArea();
-	}
-
-
-	/**
-	 * Returns the scroll pane at the specified tab.
-	 *
-	 * @param index The tab for which you want to get the scroll pane.
-	 * @return The scroll pane.
+	 * {@inheritDoc}
 	 */
 	public RTextScrollPane getRTextScrollPaneAt(int index) {
 		if (index<0 || index>=getNumDocuments())
 			//throw new IndexOutOfBoundsException();
 			return null;
-		return (RTextScrollPane)tabbedPane.getComponentAt(index);
+		JPanel temp = (JPanel)tabbedPane.getComponentAt(index);
+		return (RTextScrollPane)temp.getComponent(0);
 	}
 
 

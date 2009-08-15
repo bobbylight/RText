@@ -709,6 +709,8 @@ public abstract class AbstractMainView extends JPanel
 		renumberDisplayNames();	// In case the same document is opened multiple times.
 		setSelectedIndex(fromSelectedIndex);
 
+		spellingParser = fromPanel.spellingParser;
+
 		// "Move over" all current text area listeners.
 		// Remember "listeners" is guaranteed to be non-null.
 		Object[] listeners = fromPanel.listenerList.getListenerList();
@@ -977,7 +979,7 @@ public abstract class AbstractMainView extends JPanel
 	 * @param textArea The text area.
 	 * @return The scroll pane.
 	 */
-	protected RTextScrollPane createScrollPane(RTextEditorPane textArea) {
+	private RTextScrollPane createScrollPane(RTextEditorPane textArea) {
 		RTextScrollPane scrollPane = new RTextScrollPane(textArea,
 						lineNumbersEnabled, null);
 		scrollPane.applyComponentOrientation(getComponentOrientation());
@@ -1642,13 +1644,18 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns the <code>RTextEditorPane</code> at the given index.
+	 * Returns the <code>org.fife.rtext.RTextEditorPane</code> on the
+	 * specified tab.  This is a convenience method for
+	 * <code>(RTextEditorPane)getRTextScrollPaneAt(i).textArea</code>.
 	 *
 	 * @param index The tab for which you want to get the
-	 *        <code>RTextEditorPane</code>.
-	 * @return The corresponding <code>RTextEditorPane</code>.
+	 *        {@link org.fife.rtext.RTextEditorPane}.
+	 * @return The corresponding {@link org.fife.rtext.RTextEditorPane}.
 	 */
-	public abstract RTextEditorPane getRTextEditorPaneAt(int index);
+	public RTextEditorPane getRTextEditorPaneAt(int index) {
+		RTextScrollPane sp = getRTextScrollPaneAt(index);
+		return sp!=null ? (RTextEditorPane)sp.getTextArea() : null;
+	}
 
 
 	/**
