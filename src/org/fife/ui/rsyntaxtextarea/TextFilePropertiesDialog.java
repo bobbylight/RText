@@ -31,6 +31,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.nio.charset.Charset;
+import java.text.BreakIterator;
+import java.text.CharacterIterator;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -42,6 +44,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Segment;
 
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.RButton;
@@ -68,6 +73,7 @@ public class TextFilePropertiesDialog extends EscapableDialog
 	public static final String TERM_CRLF	= "\r\n";
 	public static final String TERM_SYSTEM	= System.getProperty("line.separator");
 
+	private JLabel wordsCountLabel;
 	private SpecialValueComboBox terminatorCombo;
 	private JComboBox encodingCombo;
 
@@ -110,11 +116,16 @@ public class TextFilePropertiesDialog extends EscapableDialog
 		filePathLabel.setLabelFor(filePathField);
 
 		JLabel linesLabel = new JLabel(msg.getString("Lines"));
-		JLabel linesCountLabel = new JLabel("" + textArea.getLineCount());
+		JLabel linesCountLabel = new JLabel(
+								Integer.toString(textArea.getLineCount()));
 
 		JLabel charsLabel = new JLabel(msg.getString("Characters"));
-		JLabel charsCountLabel = new JLabel("" +
-								textArea.getDocument().getLength());
+		JLabel charsCountLabel = new JLabel(
+						Integer.toString(textArea.getDocument().getLength()));
+
+		JLabel wordsLabel = new JLabel(msg.getString("Words"));
+		wordsCountLabel = new JLabel(
+				Integer.toString(calculateWordCount(textArea)));
 
 		JLabel terminatorLabel = UIUtil.createLabel(msg,
 							"LineTerminator", "LineTerminatorMnemonic");
@@ -170,6 +181,7 @@ public class TextFilePropertiesDialog extends EscapableDialog
 			content2.add(filePathLabel);     content2.add(filePathField);
 			content2.add(linesLabel);        content2.add(linesCountLabel);
 			content2.add(charsLabel);        content2.add(charsCountLabel);
+			content2.add(wordsLabel);        content2.add(wordsCountLabel);
 			content2.add(terminatorLabel);   content2.add(terminatorCombo);
 			content2.add(encodingLabel);     content2.add(encodingCombo);
 			content2.add(sizeLabel);         content2.add(sizeLabel2);
@@ -179,6 +191,7 @@ public class TextFilePropertiesDialog extends EscapableDialog
 			content2.add(filePathField);     content2.add(filePathLabel);
 			content2.add(linesCountLabel);   content2.add(linesLabel);
 			content2.add(charsCountLabel);   content2.add(charsLabel);
+			content2.add(wordsCountLabel);   content2.add(wordsLabel);
 			content2.add(terminatorCombo);   content2.add(terminatorLabel);
 			content2.add(encodingCombo);     content2.add(encodingLabel);
 			content2.add(sizeLabel2);        content2.add(sizeLabel);
@@ -186,7 +199,7 @@ public class TextFilePropertiesDialog extends EscapableDialog
 		}
 
 		UIUtil.makeSpringCompactGrid(content2,
-									7,2,		// rows,cols,
+									8,2,		// rows,cols,
 									0,0,		// initial-x, initial-y,
 									5,5);	// x-spacing, y-spacing.
 
@@ -254,6 +267,32 @@ public class TextFilePropertiesDialog extends EscapableDialog
 	}
 
 
+	private int calculateWordCount(TextEditorPane textArea) {
+
+		int wordCount = 0;
+		RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
+
+		BreakIterator bi = BreakIterator.getWordInstance();
+		bi.setText(new DocumentCharIterator(textArea.getDocument()));
+		for (int nextBoundary=bi.first(); nextBoundary!=BreakIterator.DONE;
+				nextBoundary=bi.next()) {
+			// getWordInstance() returns boundaries for both words and
+			// non-words (whitespace, punctuation, etc.)
+			try {
+				char ch = doc.charAt(nextBoundary);
+				if (Character.isLetterOrDigit(ch)) {
+					wordCount++;
+				}
+			} catch (BadLocationException ble) {
+				ble.printStackTrace();
+			}
+		}
+
+		return wordCount;
+
+	}
+
+
 	/**
 	 * Sets the encoding selected by this dialog.
 	 *
@@ -286,6 +325,81 @@ public class TextFilePropertiesDialog extends EscapableDialog
 			}
 		}
 
+	}
+
+
+	private static class DocumentCharIterator implements CharacterIterator {
+
+		private Document doc;
+		private int index;
+		private Segment s;
+
+		public DocumentCharIterator(Document doc) {
+			this.doc = doc;
+			index = 0;
+			s = new Segment();
+		}
+
+		public Object clone() {
+			try {
+				return (DocumentCharIterator)super.clone();
+			} catch (CloneNotSupportedException cnse) { // Never happens
+				throw new InternalError("Clone not supported???");
+			}
+		}
+
+		public char current() {
+			if (index>=getEndIndex()) {
+				return DONE;
+			}
+			try {
+				doc.getText(index, 1, s);
+				return s.first();
+			} catch (BadLocationException ble) {
+				return DONE;
+			}
+		}
+
+		public char first() {
+			index = getBeginIndex();
+			return current();
+		}
+
+		public int getBeginIndex() {
+			return 0;
+		}
+
+		public int getEndIndex() {
+			return doc.getLength();
+		}
+
+		public int getIndex() {
+			return index;
+		}
+
+		public char last() {
+			index = Math.max(0, getEndIndex() - 1);
+			return current();
+		}
+
+		public char next() {
+			index = Math.min(index+1, getEndIndex());
+			return current();
+		}
+
+		public char previous() {
+			index = Math.max(index-1, getBeginIndex());
+			return current();
+		}
+
+		public char setIndex(int pos) {
+			if (pos<getBeginIndex() || pos>getEndIndex()) {
+				throw new IllegalArgumentException("Illegal index: " + index);
+			}
+			index = pos;
+			return current();
+		}
+		
 	}
 
 
