@@ -258,7 +258,6 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		setModal(false);
 		applyComponentOrientation(orientation);
 		pack();
-		inFolderTextField.discoverParentWindow();
 		setLocationRelativeTo(owner);
 
 	}

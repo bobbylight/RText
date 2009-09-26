@@ -128,13 +128,6 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 					sbb.getString("OptionPanel.Label.ExecutablePath"));
 		ctagsExecutableTextField = new FSATextField();
 		ctagsExecutableTextField.setColumns(30);
-		// Postpone discovering the parent window since this panel hasn't
-		// been added to the dialog yet.
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				ctagsExecutableTextField.discoverParentWindow();
-			}
-		});
 		ctagsExecutableTextField.getDocument().addDocumentListener(this);
 		ctagsExecutableLocationLabel.setLabelFor(ctagsExecutableTextField);
 		exeBrowseButton = new RButton(sbb.getString(
