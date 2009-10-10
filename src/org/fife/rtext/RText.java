@@ -172,7 +172,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 */
 	public static final String PROPERTY_PRINT_START_TIMES = "printStartTimes";
 
-	private static final String VERSION_STRING		= "0.9.9.9.20090722";
+	private static final String VERSION_STRING		= "1.0.0.????????-beta";
 
 
 	/**
@@ -1051,7 +1051,6 @@ setSearchWindowOpacity(0.5f);
 		}
 
 	}
-
 
 
 	/**

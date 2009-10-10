@@ -63,24 +63,24 @@ public class RTextPreferences extends GUIApplicationPreferences
 							implements RTextActionInfo {
 
 	private static final String[] mainViewAcceleratorKeys = {
-								"findActionAccelerator",
-								"findNextActionAccelerator",
-								"replaceActionAccelerator",
-								"replaceNextActionAccelerator",
-								"replaceAllActionAccelerator",
-								"findInFilesActionAccelerator",
-								"replaceInFilesActionAccelerator",
-								"printActionAccelerator",
-								"printPreviewActionAccelerator",
-								"closeActionAccelerator",
-								"closeAllActionAccelerator",
-								"gotoActionAccelerator",
-								"ltrActionAccelerator",
-								"rtlActionAccelerator",
-								"splitHorizActionAccelerator",
-								"splitNoneActionAccelerator",
-								"splitVertActionAccelerator",
-							};
+		"findActionAccelerator",
+		"findNextActionAccelerator",
+		"replaceActionAccelerator",
+		"replaceNextActionAccelerator",
+		"replaceAllActionAccelerator",
+		"findInFilesActionAccelerator",
+		"replaceInFilesActionAccelerator",
+		"printActionAccelerator",
+		"printPreviewActionAccelerator",
+		"closeActionAccelerator",
+		"closeAllActionAccelerator",
+		"gotoActionAccelerator",
+		"ltrActionAccelerator",
+		"rtlActionAccelerator",
+		"splitHorizActionAccelerator",
+		"splitNoneActionAccelerator",
+		"splitVertActionAccelerator",
+	};
 
 	private static final int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	private static final int defaultShift    = defaultModifier|InputEvent.SHIFT_MASK;
@@ -166,6 +166,10 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public Font lineNumberFont;
 	public Color lineNumberColor;
 	public Color gutterBorderColor;
+	public boolean spellCheckingEnabled;
+	public Color spellCheckingColor;
+	public String spellingDictionary;
+	public int maxSpellingErrors;
 
 	public KeyStroke[] mainViewActionAccelerators;
 
@@ -262,6 +266,10 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.lineNumberFont			= mainView.getLineNumberFont();
 		props.lineNumberColor			= mainView.getLineNumberColor();
 		props.gutterBorderColor			= mainView.getGutterBorderColor();
+		props.spellCheckingEnabled		= mainView.isSpellCheckingEnabled();
+		props.spellCheckingColor		= mainView.getSpellCheckingColor();
+		props.spellingDictionary		= mainView.getSpellingDictionary();
+		props.maxSpellingErrors			= mainView.getMaxSpellingErrors();
 
 		// Save the actions owned by RText.
 		props.accelerators = new HashMap();
@@ -478,6 +486,11 @@ public class RTextPreferences extends GUIApplicationPreferences
 			props.textAreaOrientation	= "rtl".equals(temp) ?
 						ComponentOrientation.RIGHT_TO_LEFT :
 						ComponentOrientation.LEFT_TO_RIGHT;
+			props.spellCheckingEnabled	= prefs.getBoolean("spellCheckingEnabled", props.spellCheckingEnabled);
+			props.spellCheckingColor	= new Color(
+				prefs.getInt("spellCheckingColor", props.spellCheckingColor.getRGB()));
+			props.spellingDictionary	= prefs.get("spellingDictionary", props.spellingDictionary);
+			props.maxSpellingErrors		= prefs.getInt("maxSpellingErrors", props.maxSpellingErrors);
 
 			// Get all properties associated with the RTextMenuBar class.
 			prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -632,6 +645,10 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs.putBoolean("textAreaUnderline",			textAreaUnderline);
 		prefs.putInt("textAreaForeground",				textAreaForeground.getRGB());
 		prefs.put("textAreaOrientation",				textAreaOrientation.isLeftToRight() ? "ltr" : "rtl");
+		prefs.putBoolean("spellCheckingEnabled",		spellCheckingEnabled);
+		prefs.putInt("spellCheckingColor",				spellCheckingColor.getRGB());
+		prefs.put("spellingDictionary", 				spellingDictionary);
+		prefs.putInt("maxSpellingErrors",				maxSpellingErrors);
 
 		// Save all properties related to the RTextMenuBar class.
 		prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -732,6 +749,10 @@ public class RTextPreferences extends GUIApplicationPreferences
 		lineNumberFont		= new Font("Monospaced", Font.PLAIN, 12);
 		lineNumberColor	= Color.GRAY;
 		gutterBorderColor	= new Color(221, 221, 221);
+		spellCheckingEnabled = false;
+		spellCheckingColor   = new Color(192,192,255);
+		spellingDictionary   = AbstractMainView.DICTIONARIES[1];
+		maxSpellingErrors    = 30;
 
 		accelerators = new HashMap();
 		for (int i=0; i<RText.actionNames.length; i++) {

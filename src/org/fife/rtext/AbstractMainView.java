@@ -120,6 +120,11 @@ public abstract class AbstractMainView extends JPanel
 	public static final String ROUNDED_SELECTION_PROPERTY		= "MainView.roundedSelection";
 	public static final String SMOOTH_TEXT_PROPERTY			= "MainView.smoothText";
 
+	public static final String[] DICTIONARIES	= {
+		"BritishEnglish",
+		"AmericanEnglish",
+	};
+
 	private RTextEditorPane currentTextArea;			// Currently active text area.
 
 	private Action[] actions;
@@ -214,6 +219,11 @@ public abstract class AbstractMainView extends JPanel
 	 * TODO: Move me to a plugin.
 	 */
 	private SpellingParser spellingParser;
+
+	private boolean spellCheckingEnabled;
+	private Color spellCheckingColor;
+	private String spellingDictionary;
+	private int maxSpellingErrors;
 
 	/**
 	 * The cursor used when recording a macro.
@@ -960,12 +970,9 @@ public abstract class AbstractMainView extends JPanel
 //ac.install(pane);
 
 		// Add any parsers.
-		if (spellingParser==null) {
-			File file = new File("english_dic.zip").getAbsoluteFile();
-			spellingParser = SpellingParser.
-									createEnglishSpellingParser(file, false);
+		if (isSpellCheckingEnabled()) {
+			pane.addParser(spellingParser);
 		}
-		pane.addParser(spellingParser);
 
 		// Return him.
 		return pane;
@@ -1576,6 +1583,17 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns the maximum number of spelling errors to report for a file.
+	 *
+	 * @return The maximum number of spelling errors.
+	 * @see #setMaxSpellingErrors(int)
+	 */
+	public int getMaxSpellingErrors() {
+		return maxSpellingErrors;
+	}
+
+
+	/**
 	 * Gets the color used to highlight modified documents' display names.
 	 *
 	 * @return color The color used.
@@ -1694,6 +1712,28 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public Color getSelectionColor() {
 		return selectionColor;
+	}
+
+
+	/**
+	 * Sets the color to use when squiggle underlining spelling errors.
+	 *
+	 * @return The color to use.
+	 * @see #setSpellCheckingColor(Color)
+	 */
+	public Color getSpellCheckingColor() {
+		return spellCheckingColor;
+	}
+
+
+	/**
+	 * Returns the spelling dictionary to use.
+	 *
+	 * @return The spelling dictionary.
+	 * @see #setSpellingDictionary(String)
+	 */
+	public String getSpellingDictionary() {
+		return spellingDictionary;
 	}
 
 
@@ -2096,6 +2136,10 @@ public abstract class AbstractMainView extends JPanel
 		setLineNumberFont(prefs.lineNumberFont);
 		setLineNumberColor(prefs.lineNumberColor);
 		setGutterBorderColor(prefs.gutterBorderColor);
+		setSpellCheckingEnabled(prefs.spellCheckingEnabled);
+		setSpellCheckingColor(prefs.spellCheckingColor);
+		setSpellingDictionary(prefs.spellingDictionary);
+		setMaxSpellingErrors(prefs.maxSpellingErrors);
 
 		// Start us out with whatever files they passed in.
 		if (filesToOpen==null) {
@@ -2159,6 +2203,17 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public boolean isMarginLineEnabled() {
 		return marginLineEnabled;
+	}
+
+
+	/**
+	 * Returns whether spell checking is enabled.
+	 *
+	 * @return Whether spell checking is enabled.
+	 * @see #setSpellCheckingEnabled(boolean)
+	 */
+	public boolean isSpellCheckingEnabled() {
+		return spellCheckingEnabled;
 	}
 
 
@@ -3469,6 +3524,22 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Changes the maximum number of spelling errors reported for a file.
+	 *
+	 * @param max The maximum number of spelling errors.
+	 * @see #getMaxSpellingErrors()
+	 */
+	public void setMaxSpellingErrors(int max) {
+		if (max>=0 && max!=maxSpellingErrors) {
+			maxSpellingErrors = max;
+			if (spellingParser!=null) {
+				spellingParser.setMaxErrorCount(maxSpellingErrors);
+			}
+		}
+	}
+
+
+	/**
 	 * Sets the color used to highlight modified documents' display names.
 	 *
 	 * @param color The color to use.
@@ -3557,6 +3628,91 @@ public abstract class AbstractMainView extends JPanel
 			int numDocuments = getNumDocuments();
 			for (int i=0; i<numDocuments; i++)
 				getRTextEditorPaneAt(i).setSelectionColor(color);
+		}
+	}
+
+
+	/**
+	 * Toggles the color used for squiggle underlining spelling errors.
+	 *
+	 * @param color The new color to use.
+	 * @see #getSpellCheckingColor()
+	 */
+	public void setSpellCheckingColor(Color color) {
+		if (color!=null && color!=spellCheckingColor) {
+			spellCheckingColor = color;
+			if (spellingParser!=null) {
+				spellingParser.setSquiggleUnderlineColor(spellCheckingColor);
+			}
+		}
+	}
+
+
+	/**
+	 * Toggles whether spell checking is enabled.
+	 *
+	 * @param enabled Whether spell checking is enabled.
+	 * @see #isSpellCheckingEnabled()
+	 */
+	public void setSpellCheckingEnabled(boolean enabled) {
+
+		if (enabled!=spellCheckingEnabled) {
+
+			spellCheckingEnabled = enabled;
+
+			// Lazily create the spelling parser.
+			if (enabled && spellingParser==null) {
+				new Thread(new Runnable() {
+					public void run() {
+						File file = new File("english_dic.zip").getAbsoluteFile();
+						try {
+							boolean british = DICTIONARIES[0].
+												equals(spellingDictionary);
+							spellingParser = SpellingParser.
+									createEnglishSpellingParser(file, !british);
+							spellingParser.setSquiggleUnderlineColor(
+									getSpellCheckingColor());
+							spellingParser.setMaxErrorCount(
+												getMaxSpellingErrors());
+							spellingParser.setAllowAdd(true);
+							spellingParser.setAllowIgnore(true);
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									toggleSpellingParserInstalled();
+								}
+							});
+						} catch (IOException ioe) { // Never happens
+							owner.displayException(ioe);
+						}
+					}
+				}).start();
+			}
+			else {
+				toggleSpellingParserInstalled(); // Already created
+			}
+
+		}
+
+	}
+
+
+	/**
+	 * Sets the spelling dictionary to use.
+	 *
+	 * @param dict The dictionary.  If this is unknown, American English is
+	 *        used.
+	 * @see #getSpellingDictionary()
+	 */
+	public void setSpellingDictionary(String dict) {
+		if (dict!=null && !dict.equals(spellingDictionary)) {
+			spellingDictionary = dict;
+			if (!DICTIONARIES[0].equals(spellingDictionary)) { // British
+				// If it was invalid, default to American English
+				spellingDictionary = DICTIONARIES[1];
+			}
+			if (spellingParser!=null) {
+				//xxx
+			}
 		}
 	}
 
@@ -3843,6 +3999,30 @@ public abstract class AbstractMainView extends JPanel
 	public void setWriteBOMInUtf8Files(boolean write) {
 		System.setProperty(UnicodeWriter.PROPERTY_WRITE_UTF8_BOM,
 						Boolean.toString(write));
+	}
+
+
+	/**
+	 * Toggles whether the spelling parser is installed on all currently
+	 * visible text areas.  This should only be called on the EDT.
+	 */
+	private void toggleSpellingParserInstalled() {
+		if (spellingParser!=null) { // Should always be true.
+			boolean installed = isSpellCheckingEnabled();
+			for (int i=0; i<getNumDocuments(); i++) {
+				RTextEditorPane textArea = getRTextEditorPaneAt(i);
+				if (installed) {
+					textArea.addParser(spellingParser);
+				}
+				else {
+					textArea.removeParser(spellingParser);
+				}
+			}
+		}
+		else {
+			Exception e = new Exception("Internal error: Spelling parser is null!");
+			owner.displayException(e);
+		}
 	}
 
 

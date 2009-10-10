@@ -2,7 +2,7 @@
  * 11/14/2003
  *
  * RTextWindowListener.java - Listens for RText instances to close, so it
- *                            knows when to terminate the JVM.
+ * knows when to terminate the JVM.
  * Copyright (C) 2003 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
@@ -53,7 +53,9 @@ class RTextWindowListener extends WindowAdapter {
 	}
 
 
-	// Called when the window is activated.
+	/**
+	 * {@inheritDoc}
+	 */
 	public void windowActivated(WindowEvent e) {
 		// Ensure that the current text document (if any) has focus.
 		RTextEditorPane editor = owner.getMainView().getCurrentTextArea();
@@ -63,13 +65,28 @@ class RTextWindowListener extends WindowAdapter {
 	}
 
 
-	// Called when the window is deactivated
+	/**
+	 * {@inheritDoc}
+	 */
 	public void windowDeactivated(WindowEvent e) {
 		// Make sure the selection is always visible.
 		RTextEditorPane editor = owner.getMainView().getCurrentTextArea();
 		if (editor!=null) {
 			editor.getCaret().setSelectionVisible(true);
 		}
+	}
+
+
+	/**
+	 * Overridden to help minimize a Swing issue on Windows.  If the main
+	 * application window is minimized for a long time (e.g. overnight), the
+	 * system seems to cache the entire app to disk, resulting in a very long
+	 * pause when the user brings the app back up.
+	 *
+	 * {@inheritDoc}
+	 */
+	public void windowIconified(WindowEvent e) {
+		System.gc();
 	}
 
 

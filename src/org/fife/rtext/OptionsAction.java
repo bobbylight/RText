@@ -28,12 +28,14 @@ import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.app.StandardAction;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaOptionPanel;
+import org.fife.ui.rsyntaxtextarea.SpellingOptionPanel;
 import org.fife.ui.rsyntaxtextarea.TemplateOptionPanel;
 import org.fife.ui.rtextarea.CaretAndSelectionOptionPanel;
 import org.fife.ui.rtextarea.GutterOptionPanel;
@@ -102,22 +104,33 @@ class OptionsAction extends StandardAction {
 			rtext.optionsDialog = new OptionsDialog(rtext);
 			ResourceBundle msg = ResourceBundle.getBundle(
 									"org.fife.rtext.OptionsDialog");
+			ClassLoader cl = getClass().getClassLoader();
+			String prefix = "org/fife/rtext/graphics/options_";
 
 			OptionsDialogPanel[] optionsPanels = new OptionsDialogPanel[8];
 			optionsPanels[0] = new GeneralOptionPanel(rtext, msg);
+			optionsPanels[0].setIcon(new ImageIcon(cl.getResource(prefix + "general.png")));
 			optionsPanels[1] = new UIOptionPanel(rtext, msg);
+			optionsPanels[1].setIcon(new ImageIcon(cl.getResource(prefix + "ui.png")));
 			optionsPanels[2] = new RTextAreaOptionPanel();
+			optionsPanels[2].setIcon(new ImageIcon(cl.getResource(prefix + "textarea.png")));
 			optionsPanels[2].addChildPanel(new CaretAndSelectionOptionPanel());
 			optionsPanels[2].addChildPanel(new RSyntaxTextAreaOptionPanel());
 			optionsPanels[2].addChildPanel(new GutterOptionPanel());
+			optionsPanels[2].addChildPanel(new SpellingOptionPanel());
 			optionsPanels[2].addChildPanel(new TemplateOptionPanel());
 			optionsPanels[2].addChildPanel(new MacroOptionPanel(rtext, msg));
 			optionsPanels[3] = new RTextFileChooserOptionPanel();
+			optionsPanels[3].setIcon(new ImageIcon(cl.getResource(prefix + "file_chooser.png")));
 			optionsPanels[3].addChildPanel(new FileChooserFavoritesOptionPanel());
 			optionsPanels[4] = new PrintingOptionPanel(rtext, msg);
+			optionsPanels[4].setIcon(new ImageIcon(cl.getResource(prefix + "printing.png")));
 			optionsPanels[5] = new LanguageOptionPanel(rtext, msg);
+			optionsPanels[5].setIcon(new ImageIcon(cl.getResource(prefix + "language.png")));
 			optionsPanels[6] = new FileFilterOptionPanel(rtext, msg);
+			optionsPanels[6].setIcon(new ImageIcon(cl.getResource(prefix + "file_filters.png")));
 			optionsPanels[7] = new ShortcutOptionPanel(rtext, msg);
+			optionsPanels[7].setIcon(new ImageIcon(cl.getResource(prefix + "shortcuts.png")));
 
 			msg = null;
 
