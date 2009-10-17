@@ -164,21 +164,9 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Checks whether or not all input the user specified on this panel is
-	 * valid.  This should be overridden to check, for example, whether
-	 * text fields have valid values, etc.  This method will be called
-	 * whenever the user clicks "OK" or "Apply" on the options dialog to
-	 * ensure all input is valid.  If it isn't, the component with invalid
-	 * data will be given focus and the user will be prompted to fix it.<br>
-	 * 
-	 *
-	 * @return <code>null</code> if the panel has all valid inputs, or an
-	 *         <code>OptionsPanelCheckResult</code> if an input was invalid.
-	 *         This component is the one that had the error and will be
-	 *         given focus, and the string is an error message that will be
-	 *         displayed.
+	 * {@inheritDoc}
 	 */
-	public OptionsPanelCheckResult ensureValidInputs() {
+	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 
 		// Make sure each filter value in the table is valid.
 		int rowCount = model.getRowCount();

@@ -34,6 +34,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.prefs.Preferences;
@@ -169,6 +170,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public boolean spellCheckingEnabled;
 	public Color spellCheckingColor;
 	public String spellingDictionary;
+	public File userDictionary;
 	public int maxSpellingErrors;
 
 	public KeyStroke[] mainViewActionAccelerators;
@@ -269,6 +271,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.spellCheckingEnabled		= mainView.isSpellCheckingEnabled();
 		props.spellCheckingColor		= mainView.getSpellCheckingColor();
 		props.spellingDictionary		= mainView.getSpellingDictionary();
+		props.userDictionary			= mainView.getUserDictionary();
 		props.maxSpellingErrors			= mainView.getMaxSpellingErrors();
 
 		// Save the actions owned by RText.
@@ -490,6 +493,15 @@ public class RTextPreferences extends GUIApplicationPreferences
 			props.spellCheckingColor	= new Color(
 				prefs.getInt("spellCheckingColor", props.spellCheckingColor.getRGB()));
 			props.spellingDictionary	= prefs.get("spellingDictionary", props.spellingDictionary);
+			String tempVal = prefs.get("userDictionary", null);
+			if (tempVal!=null) { // No previous value => use default already set
+				if (tempVal.length()==0) { // Empty string => no user dictioanry
+					props.userDictionary = null;
+				}
+				else {
+					props.userDictionary = new File(tempVal);
+				}
+			}
 			props.maxSpellingErrors		= prefs.getInt("maxSpellingErrors", props.maxSpellingErrors);
 
 			// Get all properties associated with the RTextMenuBar class.
@@ -648,6 +660,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs.putBoolean("spellCheckingEnabled",		spellCheckingEnabled);
 		prefs.putInt("spellCheckingColor",				spellCheckingColor.getRGB());
 		prefs.put("spellingDictionary", 				spellingDictionary);
+		prefs.put("userDictionary",						userDictionary==null ? "" : userDictionary.getAbsolutePath());
 		prefs.putInt("maxSpellingErrors",				maxSpellingErrors);
 
 		// Save all properties related to the RTextMenuBar class.
@@ -752,6 +765,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 		spellCheckingEnabled = false;
 		spellCheckingColor   = new Color(192,192,255);
 		spellingDictionary   = AbstractMainView.DICTIONARIES[1];
+		userDictionary       = new File(RTextUtilities.getPreferencesDirectory(),
+										"userDictionary.txt");
 		maxSpellingErrors    = 30;
 
 		accelerators = new HashMap();

@@ -94,8 +94,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	private SpecialValueComboBox smoothTextCombo;
 	private JCheckBox fractionalMetricsCheckBox;
 
-	private RButton restoreDefaultsButton;
-
 	private boolean isSettingStyle;
 
 	private static final String BRACKET_MATCHING_PROPERTY		= "RSTAOpts.bracketMatchCheckBox";
@@ -302,10 +300,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		JPanel rdPanel = new JPanel();
 		rdPanel.setLayout(new BoxLayout(rdPanel, BoxLayout.LINE_AXIS));
-		restoreDefaultsButton = new RButton(msg.getString("RestoreDefaults"));
-		restoreDefaultsButton.setActionCommand("RestoreDefaults");
-		restoreDefaultsButton.addActionListener(this);
-		rdPanel.add(restoreDefaultsButton);
+		RButton rdButton = new RButton(msg.getString("RestoreDefaults"));
+		rdButton.setActionCommand("RestoreDefaults");
+		rdButton.addActionListener(this);
+		rdPanel.add(rdButton);
 		rdPanel.add(Box.createHorizontalGlue());
 
 		// Create a panel containing all "Advanced" stuff.
@@ -548,7 +546,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 * @return This method always returns <code>null</code> as the user cannot
 	 *         mess up input in this panel.
 	 */
-	public OptionsPanelCheckResult ensureValidInputs() {
+	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
 

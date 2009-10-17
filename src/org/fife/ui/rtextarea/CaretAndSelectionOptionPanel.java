@@ -388,7 +388,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 * @return <code>null</code> always, as the user cannot enter invalid
 	 *         data into this panel.
 	 */
-	public OptionsPanelCheckResult ensureValidInputs() {
+	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
 

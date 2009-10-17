@@ -25,14 +25,18 @@
 package org.fife.ui.rsyntaxtextarea;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.ResourceBundle;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -47,11 +51,16 @@ import javax.swing.text.AbstractDocument;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.NumberDocumentFilter;
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextUtilities;
+import org.fife.ui.FSATextField;
 import org.fife.ui.OptionsDialogPanel;
+import org.fife.ui.RButton;
 import org.fife.ui.RColorButton;
 import org.fife.ui.RColorSwatchesButton;
+import org.fife.ui.SelectableLabel;
 import org.fife.ui.SpecialValueComboBox;
 import org.fife.ui.UIUtil;
+import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
 
 /**
@@ -65,6 +74,11 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	private JCheckBox enabledCB;
 	private JLabel dictLabel;
 	private SpecialValueComboBox dictCombo;
+	private JLabel userDictLabel;
+	private FSATextField userDictField;
+	private SelectableLabel userDictDescField;
+	private RButton userDictBrowse;
+	private RTextFileChooser chooser;
 	private JLabel colorLabel;
 	private RColorSwatchesButton spellingColorButton;
 	private JLabel errorsPerFileLabel;
@@ -118,6 +132,20 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		dictComboPanel.add(dictCombo, BorderLayout.LINE_START);
 		dictLabel.setLabelFor(dictCombo);
 
+		userDictLabel = new JLabel(msg.getString("UserDictionary"));
+		userDictField = new FSATextField();
+		userDictField.getDocument().addDocumentListener(listener);
+		userDictBrowse = new RButton(msg.getString("Browse"));
+		userDictBrowse.setActionCommand("BrowseUserDictionary");
+		userDictBrowse.addActionListener(listener);
+		JPanel userDictFieldPanel = new JPanel(new BorderLayout());
+		userDictFieldPanel.add(userDictField);
+		JPanel buttonPanel = new JPanel(new BorderLayout());
+		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+		buttonPanel.add(userDictBrowse);
+		userDictFieldPanel.add(buttonPanel, BorderLayout.LINE_END);
+		userDictDescField = new SelectableLabel(msg.getString("UserDictionaryDesc"));
+
 		colorLabel = new JLabel(msg.getString("Color"));
 		spellingColorButton = new RColorSwatchesButton();
 		spellingColorButton.addPropertyChangeListener(
@@ -136,16 +164,29 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		JPanel temp2 = new JPanel(new SpringLayout());
 		if (orientation.isLeftToRight()) {
 			temp2.add(dictLabel);			temp2.add(dictComboPanel);
+			temp2.add(userDictLabel);		temp2.add(userDictFieldPanel);
+			temp2.add(Box.createRigidArea(new Dimension(1,1))); temp2.add(userDictDescField);
 			temp2.add(colorLabel);			temp2.add(colorButtonPanel);
 			temp2.add(errorsPerFileLabel);	temp2.add(maxErrorsPanel);
 		}
 		else {
 			temp2.add(dictComboPanel);			temp2.add(dictLabel);
+			temp2.add(userDictFieldPanel);		temp2.add(userDictLabel);
+			temp2.add(userDictDescField);		temp2.add(Box.createRigidArea(new Dimension(1,1)));
 			temp2.add(colorButtonPanel);		temp2.add(colorLabel);
 			temp2.add(maxErrorsPanel);			temp2.add(errorsPerFileLabel);
 		}
-		UIUtil.makeSpringCompactGrid(temp2, 3, 2, 5, 5, 5, 5);
+		UIUtil.makeSpringCompactGrid(temp2, 5, 2, 5, 5, 5, 5);
 		temp.add(temp2);
+		temp.add(Box.createVerticalStrut(5));
+
+		Box rdPanel = Box.createHorizontalBox();
+		RButton rdButton = new RButton(msg.getString("RestoreDefaults"));
+		rdButton.setActionCommand("RestoreDefaults");
+		rdButton.addActionListener(listener);
+		rdPanel.add(rdButton);
+		rdPanel.add(Box.createHorizontalGlue());
+		temp.add(rdPanel);
 		temp.add(Box.createVerticalStrut(5));
 
 		temp.add(Box.createVerticalGlue());
@@ -171,6 +212,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		AbstractMainView mainView = rtext.getMainView();
 		mainView.setSpellCheckingEnabled(enabledCB.isSelected());
 		mainView.setSpellingDictionary(dictCombo.getSelectedSpecialItem());
+		mainView.setUserDictionary(getUserDictionary());
 		mainView.setSpellCheckingColor(spellingColorButton.getColor());
 		mainView.setMaxSpellingErrors(getMaxSpellingErrors());
 	}
@@ -179,10 +221,11 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
-	public OptionsPanelCheckResult ensureValidInputs() {
+	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 
 		OptionsPanelCheckResult res = null;
 
+		// Check maximum error count
 		String maxErrors = maxErrorsField.getText();
 		try {
 			int max = Integer.parseInt(maxErrors);
@@ -192,6 +235,28 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		} catch (NumberFormatException nfe) {
 			String desc = msg.getString("Error.InvalidMaxErrors.txt");
 			res = new OptionsPanelCheckResult(this, maxErrorsField, desc);
+		}
+
+		if (res==null) {
+
+			// Check user dictionary file.  It's okay if it doesn't exist yet,
+			// just verify that its parent directory exists, and that it itself
+			// isn't a directory.
+			File userDict = getUserDictionary();
+			if (userDict!=null) {
+				if (userDict.isDirectory()) {
+					String desc = msg.getString("Error.UserDictionaryIsDirectory.txt");
+					res = new OptionsPanelCheckResult(this, userDictField, desc);
+				}
+				else {
+					File parent = userDict.getParentFile();
+					if (parent==null || !parent.exists()) {
+						String desc = msg.getString("Error.CannotCreateUserDictionary.txt");
+						res = new OptionsPanelCheckResult(this, userDictField, desc);
+					}
+				}
+			}
+
 		}
 
 		return res;
@@ -216,6 +281,15 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	}
 
 
+	private File getUserDictionary() {
+		String temp = userDictField.getText();
+		if (temp.trim().length()==0) {
+			return null;
+		}
+		return new File(temp).getAbsoluteFile();
+	}
+
+
 	/**
 	 * Toggles whether relevant widgets are enabled based on whether spell
 	 * checking is currently enabled.
@@ -226,6 +300,10 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		enabledCB.setSelected(enabled);
 		dictLabel.setEnabled(enabled);
 		dictCombo.setEnabled(enabled);
+		userDictLabel.setEnabled(enabled);
+		userDictField.setEnabled(enabled);
+		userDictBrowse.setEnabled(enabled);
+		userDictDescField.setEnabled(enabled);
 		colorLabel.setEnabled(enabled);
 		spellingColorButton.setEnabled(enabled);
 		errorsPerFileLabel.setEnabled(enabled);
@@ -242,6 +320,10 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		boolean enabled = mainView.isSpellCheckingEnabled();
 		setSpellCheckingEnabled(enabled);
 		dictCombo.setSelectedSpecialItem(mainView.getSpellingDictionary());
+		userDictField.setFileSystemAware(false);
+		File temp = mainView.getUserDictionary();
+		userDictField.setText(temp==null ? "" : temp.getAbsolutePath());
+		userDictField.setFileSystemAware(true);
 		spellingColorButton.setColor(mainView.getSpellCheckingColor());
 		maxErrorsField.setText(Integer.toString(
 									mainView.getMaxSpellingErrors()));
@@ -268,6 +350,50 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 			else if ("Dictionary".equals(command)) {
 				hasUnsavedChanges = true;
 				firePropertyChange(MISC_PROPERTY, null, null);
+			}
+
+			else if ("BrowseUserDictionary".equals(command)) {
+				if (chooser==null) {
+					chooser = new RTextFileChooser();
+				}
+				int rc = chooser.showOpenDialog(null);
+				if (rc==RTextFileChooser.APPROVE_OPTION) {
+					File file = chooser.getSelectedFile();
+					userDictField.setFileSystemAware(false);
+					userDictField.setText(file.getAbsolutePath());
+					userDictField.setFileSystemAware(true);
+					hasUnsavedChanges = true;
+					firePropertyChange(MISC_PROPERTY, null, null);
+				}
+			}
+
+			else if ("RestoreDefaults".equals(command)) {
+
+				File userDictFile = new File(
+						RTextUtilities.getPreferencesDirectory(),
+						"userDictionary.txt");
+				String userDictFileName = userDictFile.getAbsolutePath();
+				Color defaultColor = new Color(192,192,255);
+				String defaultMaxErrors = "30";
+
+				if (enabledCB.isSelected() ||
+						dictCombo.getSelectedIndex()!=1 ||
+						!userDictField.getText().equals(userDictFileName) ||
+						!spellingColorButton.getColor().equals(defaultColor) ||
+						!defaultMaxErrors.equals(maxErrorsField.getText())) {
+
+					setSpellCheckingEnabled(false);
+					dictCombo.setSelectedIndex(1);
+					userDictField.setFileSystemAware(false);
+					userDictField.setText(userDictFileName);
+					userDictField.setFileSystemAware(true);
+					spellingColorButton.setColor(defaultColor);
+					maxErrorsField.setText(defaultMaxErrors);
+
+					hasUnsavedChanges = true;
+					firePropertyChange(MISC_PROPERTY, null, null);
+
+				}
 			}
 
 		}

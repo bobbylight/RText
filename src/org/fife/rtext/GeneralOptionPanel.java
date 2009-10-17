@@ -296,7 +296,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 * 
 	 * @return <code>null</code> always.
 	 */
-	public OptionsPanelCheckResult ensureValidInputs() {
+	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		float maxFileSize = getMaxFileSize();
 		if (maxFileSize<0) {
 			return new OptionsPanelCheckResult(this,sizeField,fileSizeError);

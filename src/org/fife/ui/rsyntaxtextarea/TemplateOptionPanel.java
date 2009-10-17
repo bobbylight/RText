@@ -142,7 +142,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	 * @return This method always returns <code>null</code> as the user cannot
 	 *         mess up input in this panel.
 	 */
-	public OptionsPanelCheckResult ensureValidInputs() {
+	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
 

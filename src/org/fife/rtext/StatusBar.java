@@ -295,11 +295,10 @@ class StatusBar extends org.fife.ui.StatusBar
 		}
 
 		// If they opened a file...
-		else if (property.equals(AbstractMainView.NEW_FILE_ADDED_PROPERTY) ||
-			property.equals(AbstractMainView.OLD_FILE_ADDED_PROPERTY)) {
-			String fileName = (String)e.getNewValue();
+		else if (property.equals(AbstractMainView.TEXT_AREA_ADDED_PROPERTY)) {
+			RTextEditorPane textArea = (RTextEditorPane)e.getNewValue();
 			setStatusMessage(MessageFormat.format(openedFileText,
-										new Object[] { fileName }));
+									new Object[] { textArea.getFileName() }));
 		}
 
 		// If they saved a read-only file with a different filename (hence it

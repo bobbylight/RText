@@ -115,10 +115,10 @@ public abstract class AbstractMainView extends JPanel
 	public static final String MARK_OCCURRENCES_COLOR_PROPERTY	= "MainView.markOccurrencesColor";
 	public static final String MARK_OCCURRENCES_PROPERTY		= "MainView.markOccurrences";
 	public static final String MAX_FILE_SIZE_PROPERTY			= "MainView.maxFileSize";
-	public static final String NEW_FILE_ADDED_PROPERTY		= "MainView.newTextFileAdded";
-	public static final String OLD_FILE_ADDED_PROPERTY		= "MainView.oldTextFileAdded";
 	public static final String ROUNDED_SELECTION_PROPERTY		= "MainView.roundedSelection";
 	public static final String SMOOTH_TEXT_PROPERTY			= "MainView.smoothText";
+	public static final String TEXT_AREA_ADDED_PROPERTY		= "MainView.textAreaAdded";
+	public static final String TEXT_AREA_REMOVED_PROPERTY	= "MainView.textAreaRemoved";
 
 	public static final String[] DICTIONARIES	= {
 		"BritishEnglish",
@@ -223,6 +223,7 @@ public abstract class AbstractMainView extends JPanel
 	private boolean spellCheckingEnabled;
 	private Color spellCheckingColor;
 	private String spellingDictionary;
+	private File userDictionary;
 	private int maxSpellingErrors;
 
 	/**
@@ -407,8 +408,7 @@ public abstract class AbstractMainView extends JPanel
 								currentTextArea.getFileFullPath());
 
 		// Let anybody who cares know we've opened this file.
-		firePropertyChange(NEW_FILE_ADDED_PROPERTY, null,
-							currentTextArea.getFileFullPath());
+		firePropertyChange(TEXT_AREA_ADDED_PROPERTY, null, currentTextArea);
 
 	}
 
@@ -448,8 +448,7 @@ public abstract class AbstractMainView extends JPanel
 		// addTextAreaImpl() above!!
 
 		// Let anybody who cares know we've opened this file.
-		firePropertyChange(OLD_FILE_ADDED_PROPERTY,
-						null, currentTextArea.getFileFullPath());
+		firePropertyChange(TEXT_AREA_ADDED_PROPERTY, null, currentTextArea);
 		moveToTopOfCurrentDocument();
 
 	}
@@ -609,8 +608,13 @@ public abstract class AbstractMainView extends JPanel
 	 *         what the user does.
 	 */
 	public final int closeCurrentDocument() {
-		currentTextArea.clearParsers();
-		return closeCurrentDocumentImpl();
+		RTextEditorPane old = currentTextArea;
+		int rc = closeCurrentDocumentImpl();
+		if (rc==JOptionPane.YES_OPTION) {
+			old.clearParsers();
+			firePropertyChange(TEXT_AREA_REMOVED_PROPERTY, null, old);
+		}
+		return rc;
 	}
 
 
@@ -1738,6 +1742,17 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns the spelling parser.  Note that this may be <code>null</code>
+	 * if spell checking has not yet been enabled.
+	 *
+	 * @return The spelling parser.
+	 */
+	SpellingParser getSpellingParser() {
+		return spellingParser;
+	}
+
+
+	/**
 	 * Returns the syntax filters being used to open documents (i.e., to decide
 	 * what syntax highlighting color scheme, if any, to use when opening
 	 * documents).
@@ -1863,6 +1878,18 @@ public abstract class AbstractMainView extends JPanel
 
 		return buffer;
 
+	}
+
+
+	/**
+	 * Returns the dictionary that "added words" are added to.
+	 *
+	 * @return The user dictionary, or <code>null</code> if none has been
+	 *         set.
+	 * @see #setUserDictionary(File)
+	 */
+	public File getUserDictionary() {
+		return userDictionary;
 	}
 
 
@@ -2140,7 +2167,8 @@ public abstract class AbstractMainView extends JPanel
 		setSpellCheckingColor(prefs.spellCheckingColor);
 		setSpellingDictionary(prefs.spellingDictionary);
 		setMaxSpellingErrors(prefs.maxSpellingErrors);
-
+		setUserDictionary(prefs.userDictionary);
+System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 		// Start us out with whatever files they passed in.
 		if (filesToOpen==null) {
 			addNewEmptyUntitledFile();
@@ -3616,6 +3644,27 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Sets the currently active text area.
+	 *
+	 * @param textArea The text area to make active.
+	 * @return Whether the text area was made active.  This will be
+	 *         <code>false</code> if the text area is not contained in this
+	 *         view.
+	 * @see #setSelectedIndex(int)
+	 */
+	public boolean setSelectedTextArea(RTextEditorPane textArea) {
+		for (int i=0; i<getNumDocuments(); i++) {
+			RTextEditorPane ta2 = getRTextEditorPaneAt(i);
+			if (ta2!=null && ta2==textArea) {
+				setSelectedIndex(i);
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	/**
 	 * Sets the color of selections in all text areas in this tabbed pane.
 	 *
 	 * @param color The color to use for the selections.  If <code>null</code>
@@ -3676,13 +3725,26 @@ public abstract class AbstractMainView extends JPanel
 												getMaxSpellingErrors());
 							spellingParser.setAllowAdd(true);
 							spellingParser.setAllowIgnore(true);
+							try {
+								spellingParser.setUserDictionary(userDictionary);
+							} catch (IOException ioe) {
+								String desc = owner.getString(
+									"Error.LoadingUserDictionary.txt",
+									userDictionary==null ? "null" :
+										userDictionary.getAbsolutePath(),
+										ioe.getMessage());
+								owner.displayException(ioe, desc);
+							}
+							//spellingParser.setAllowAdd(userDictionary!=null);
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									toggleSpellingParserInstalled();
 								}
 							});
-						} catch (IOException ioe) { // Never happens
-							owner.displayException(ioe);
+						} catch (IOException ioe) {
+							String desc = owner.getString(
+									"Error.LoadingSpellingParser.txt");
+							owner.displayException(ioe, desc);
 						}
 					}
 				}).start();
@@ -3970,6 +4032,25 @@ public abstract class AbstractMainView extends JPanel
 			}
 		}
 
+	}
+
+
+	/**
+	 * Sets the dictionary that "added words" are added to.
+	 *
+	 * @param dict The new user dictionary.  If this is <code>null</code>, then
+	 *        there will be no user dictionary.
+	 * @see #getUserDictionary()
+	 */
+	public void setUserDictionary(File dict) {
+		userDictionary = dict;
+		if (spellingParser!=null) {
+			try {
+				spellingParser.setUserDictionary(userDictionary);
+			} catch (IOException ioe) {
+				owner.displayException(ioe);
+			}
+		}
 	}
 
 

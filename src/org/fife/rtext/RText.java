@@ -53,6 +53,7 @@ import org.fife.ui.app.ExtendedLookAndFeelInfo;
 import org.fife.ui.app.GUIApplicationPreferences;
 import org.fife.ui.app.Plugin;
 import org.fife.ui.app.ThirdPartyLookAndFeelManager;
+import org.fife.ui.dockablewindows.DockableWindowPanel;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
@@ -1015,6 +1016,12 @@ public class RText extends AbstractPluggableGUIApplication
 
 		long start = System.currentTimeMillis();
 
+		// Some stuff down the line may assume this directory exists!
+		File prefsDir = RTextUtilities.getPreferencesDirectory();
+		if (!prefsDir.isDirectory()) {
+			prefsDir.mkdirs();
+		}
+
 		// Install any plugins.
 		super.preDisplayInit(prefs, splashScreen);
 
@@ -1045,6 +1052,14 @@ public class RText extends AbstractPluggableGUIApplication
 		}
 
 setSearchWindowOpacity(0.5f);
+
+		// Display the spelling error window.
+		SpellingErrorWindow sew = new SpellingErrorWindow(this);
+		DockableWindowPanel dwp = (DockableWindowPanel)mainContentPanel;
+		dwp.addDockableWindow(sew);
+
+TaskWindow tw = new TaskWindow(this);
+dwp.addDockableWindow(tw);
 
 		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
 			System.err.println("preDisplayInit: " + (System.currentTimeMillis()-start));

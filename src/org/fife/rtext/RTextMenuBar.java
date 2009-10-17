@@ -852,11 +852,11 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 */
 	public void propertyChange(PropertyChangeEvent e) {
 
-		String propertyName = e.getPropertyName();
+		String prop = e.getPropertyName();
 
-		if (propertyName.equals(AbstractMainView.NEW_FILE_ADDED_PROPERTY) ||
-			propertyName.equals(AbstractMainView.OLD_FILE_ADDED_PROPERTY)) {
-			addFileToFileHistory((String)e.getNewValue());
+		if (prop.equals(AbstractMainView.TEXT_AREA_ADDED_PROPERTY)) {
+			RTextEditorPane textArea = (RTextEditorPane)e.getNewValue();
+			addFileToFileHistory(textArea.getFileFullPath());
 		}
 
 	}

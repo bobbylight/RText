@@ -470,7 +470,7 @@ public class RTextUtilities {
 	 *
 	 * @return The directory.
 	 */
-	private static File getPreferencesDirectory() {
+	public static File getPreferencesDirectory() {
 		return new File(System.getProperty("user.home"), ".rtext");
 	}
 
