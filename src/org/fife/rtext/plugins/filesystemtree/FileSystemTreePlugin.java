@@ -34,6 +34,7 @@ import javax.swing.*;
 import org.fife.rtext.*;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.app.*;
+import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 
 
 /**
@@ -80,7 +81,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		setLayout(new BorderLayout());
 
 		tree = new Tree(this);
-		RScrollPane scrollPane = new RScrollPane(tree);
+		RScrollPane scrollPane = new DockableWindowScrollPane(tree);
 		add(scrollPane);
 
 		// Set any preferences saved from the last time this plugin was used.

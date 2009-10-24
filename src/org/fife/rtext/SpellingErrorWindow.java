@@ -36,6 +36,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
 import org.fife.ui.RScrollPane;
+import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 
@@ -63,7 +64,7 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 
 		model = new SpellingTableModel("Word"); // TODO
 		JTable table = createTable(model);
-		RScrollPane sp = new RScrollPane(table);
+		RScrollPane sp = new DockableWindowScrollPane(table);
 
 		setLayout(new BorderLayout());
 		add(sp);

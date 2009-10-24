@@ -36,6 +36,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
 import org.fife.ui.RScrollPane;
+import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rsyntaxtextarea.parser.TaskTagParser;
@@ -66,7 +67,7 @@ mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, 
 
 		model = new TaskNoticeTableModel("Task"); // TODO
 		table = createTable(model);
-		RScrollPane sp = new RScrollPane(table);
+		RScrollPane sp = new DockableWindowScrollPane(table);
 
 		setLayout(new BorderLayout());
 		add(sp);

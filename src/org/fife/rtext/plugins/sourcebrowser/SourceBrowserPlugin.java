@@ -42,6 +42,7 @@ import org.fife.ui.RScrollPane;
 import org.fife.ui.RTreeSelectionModel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.*;
+import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Token;
@@ -134,7 +135,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 		sourceTree.addMouseMotionListener(this);
 		sourceTree.addMouseListener(this);
 
-		scrollPane = new RScrollPane(sourceTree);
+		scrollPane = new DockableWindowScrollPane(sourceTree);
 		//scrollPane.setViewportBorder(
 		//					BorderFactory.createEmptyBorder(3,3,3,3));
 		add(scrollPane);

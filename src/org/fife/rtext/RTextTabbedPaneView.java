@@ -371,10 +371,12 @@ inCloseCurrentDocument = false;
 
 		if (highlightModifiedDocumentDisplayNames()==true) {
 			for (int i=0; i<numDocuments; i++) {
-				if (getRTextEditorPaneAt(i).isDirty()==true)
+				if (getRTextEditorPaneAt(i).isDirty()==true) {
 					tabbedPane.setForegroundAt(i, modifiedColor);
-				else
+				}
+				else {
 					tabbedPane.setForegroundAt(i, defaultForeground);
+				}
 			}
 		}
 		else {
