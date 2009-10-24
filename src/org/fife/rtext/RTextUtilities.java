@@ -163,6 +163,7 @@ public class RTextUtilities {
 					new String[] { "c", "cpp", "cxx", "h" });
 			addFilter(chooser, msg, "CSharp",	"cs");
 			addFilter(chooser, msg, "CSS", "css");
+			addFilter(chooser, msg, "Delphi", "pas");
 			addFilter(chooser, msg, "Fortran",
 					new String[] { "f", "for", "fort", "f77", "f90" });
 			addFilter(chooser, msg, "Groovy",
@@ -185,6 +186,7 @@ public class RTextUtilities {
 			addFilter(chooser, msg, "Python", "py");
 			addFilter(chooser, msg, "Ruby", "rb");
 			addFilter(chooser, msg, "SAS", "sas");
+			addFilter(chooser, msg, "Scala", "scala");
 			addFilter(chooser, msg, "SQL", "sql");
 			addFilter(chooser, msg, "PlainText", "txt");
 			addFilter(chooser, msg, "Tcl", "tcl");
@@ -210,6 +212,7 @@ public class RTextUtilities {
 						"c", "cpp", "cxx", "h",
 						"cs",
 						"css",
+						"pas",
 						"f", "for", "fort", "f77", "f90",
 						"groovy", "grv",
 						"htm", "html",
@@ -225,6 +228,7 @@ public class RTextUtilities {
 						"py",
 						"rb",
 						"sas",
+						"scala",
 						"sql",
 						"tcl",
 						"txt",

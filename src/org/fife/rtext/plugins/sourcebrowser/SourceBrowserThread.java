@@ -75,6 +75,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 		tagTypesMap.put(SYNTAX_STYLE_CPLUSPLUS,			"cdfgmnstv");
 		tagTypesMap.put(SYNTAX_STYLE_CSHARP,			"cdEfgimnpqst");
 		tagTypesMap.put(SYNTAX_STYLE_CSS,				"");
+		tagTypesMap.put(SYNTAX_STYLE_DELPHI,			"fp");
 		tagTypesMap.put(SYNTAX_STYLE_FORTRAN,			"bcefklmnpstv");
 		tagTypesMap.put(SYNTAX_STYLE_GROOVY,			"");
 		tagTypesMap.put(SYNTAX_STYLE_HTML,				"af");
@@ -90,6 +91,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 		tagTypesMap.put(SYNTAX_STYLE_PYTHON,			"cfm");
 		tagTypesMap.put(SYNTAX_STYLE_RUBY,				"cfmF");
 		tagTypesMap.put(SYNTAX_STYLE_SAS,				"");
+		tagTypesMap.put(SYNTAX_STYLE_SCALA,				"");
 		tagTypesMap.put(SYNTAX_STYLE_SQL,				"cfFLPprstTv");
 		tagTypesMap.put(SYNTAX_STYLE_TCL,				"cmp");
 		tagTypesMap.put(SYNTAX_STYLE_UNIX_SHELL,		"f");
@@ -300,6 +302,10 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 			addTagTypeNode(root, "Properties", map.get("p"));
 			addTagTypeNode(root, "Structs", map.get("s"));
 			addTagTypeNode(root, "Typedefs", map.get("t"));
+		}
+		else if (SYNTAX_STYLE_DELPHI.equals(style)) {
+			addTagTypeNode(root, "Functions", map.get("f"));
+			addTagTypeNode(root, "Procedures", map.get("p"));
 		}
 		else if (SYNTAX_STYLE_FORTRAN.equals(style)) {
 			addTagTypeNode(root, "Block Data", map.get("b"));

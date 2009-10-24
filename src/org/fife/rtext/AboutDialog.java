@@ -31,6 +31,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import org.fife.ui.RScrollPane;
+import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.Plugin;
@@ -151,29 +152,21 @@ panel.add(editor);
 	}
 
 
-	private static class InfoPane extends JEditorPane
+	private static class InfoPane extends SelectableLabel
 									implements HyperlinkListener {
 
 		private RText rtext;
 
 		public InfoPane(RText rtext) {
-			setEditable(false);
-			setContentType("text/html");
 			this.rtext = rtext;
 			setText(getContentText());
 			addHyperlinkListener(this);
 		}
 
 		public String getContentText() {
-			Font font = UIManager.getFont("Label.font");
-			String fontName = font.getFamily();
-			int size = font.getSize();
 			String version = rtext==null ? "firstTime" :
-							rtext.getVersionString();
+											rtext.getVersionString();
 			String text = "<html><body><center>" +
-							"<font style=\"font-family: " + fontName +
-							",verdana,arial,helvetica; font-size: "
-							+ size + "pt; \">" +
 				"Version " + version + "<br>" +
 				"Copyright (c) 2003-2009 Robert Futrell<br>" +
 				"<a href=\"http://rtext.fifesoft.com\">http://rtext.fifesoft.com</a>" +
@@ -189,10 +182,6 @@ panel.add(editor);
 
 		public void updateUI() {
 			super.updateUI();
-			// Override the values for these properties in the new UI.
-			setBorder(null);
-			setOpaque(false);
-			setBackground(new Color(0, 0, 0, 0)); // Needed for Nimbus
 			// Label font has been updated so we must update our HTML.
 			setText(getContentText());
 		}

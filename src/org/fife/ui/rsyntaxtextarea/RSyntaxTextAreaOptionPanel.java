@@ -53,7 +53,7 @@ import org.fife.ui.rtextarea.RTextAreaOptionPanel;
  *    <li>Syntax highlighting colors</li>
  *    <li>Bracket matching and color</li>
  *    <li>Toggle whitespace (spaces and tabs) visibility</li>
- *    <li>Toggle anti-aliasing and fractional fontmetrics</li>
+ *    <li>Toggle anti-aliasing and fractional font metrics</li>
  * </ul>
  * It also gives the user a button to restore the default color scheme.
  *
@@ -158,6 +158,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		syntaxListModel.addElement(msg.getString("Style.Separator"));
 		syntaxListModel.addElement(msg.getString("Style.Operator"));
 		syntaxListModel.addElement(msg.getString("Style.Preprocessor"));
+		syntaxListModel.addElement(msg.getString("Style.MarkupTag.Delimiter"));
+		syntaxListModel.addElement(msg.getString("Style.MarkupTag.TagName"));
+		syntaxListModel.addElement(msg.getString("Style.MarkupTag.Attribute"));
 		syntaxListModel.addElement(msg.getString("Style.Error.Identifier"));
 		syntaxListModel.addElement(msg.getString("Style.Error.Number"));
 		syntaxListModel.addElement(msg.getString("Style.Error.String"));
@@ -461,7 +464,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			}
 		}
 
-		// The combo box for selecting the text antialiasing scheme.
+		// The combo box for selecting the text anti-aliasing scheme.
 		else if (actionCommand.equals("SmoothTextCombo")) {
 			Object value = smoothTextCombo.getSelectedItem();
 			hasUnsavedChanges = true;
@@ -469,7 +472,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			firePropertyChange(SMOOTH_TEXT_PROPERTY, old, value);
 		}
 
-		// Toggle the fractional fontmetrics property.
+		// Toggle the fractional font metrics property.
 		else if (actionCommand.equals("FracFM")) {
 			boolean frac = fractionalMetricsCheckBox.isSelected();
 			hasUnsavedChanges = true;
@@ -598,7 +601,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Returns the text antialiasing hint the user specified.
+	 * Returns the text anti-aliasing hint the user specified.
 	 *
 	 * @return The name of the rendering hint to use, or <code>null</code>
 	 *         if no text AA is to be done.
@@ -650,9 +653,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Returns whether the user selected to use fractional fontmetrics.
+	 * Returns whether the user selected to use fractional font metrics.
 	 *
-	 * @return Whether the user wants fractional fontmetrics enabled.
+	 * @return Whether the user wants fractional font metrics enabled.
 	 * @see #setFractionalFontMetricsEnabled
 	 */
 	public boolean isFractionalFontMetricsEnabled() {
@@ -822,9 +825,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets whether fractional fontmetrics is selected.
+	 * Sets whether fractional font metrics is selected.
 	 *
-	 * @param enabled Whether fractional fontmetrics is enabled.
+	 * @param enabled Whether fractional font metrics is enabled.
 	 * @see #isFractionalFontMetricsEnabled
 	 */
 	public void setFractionalFontMetricsEnabled(boolean enabled) {
@@ -833,7 +836,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets the text antialiasing rendering hint to display.
+	 * Sets the text anti-aliasing rendering hint to display.
 	 *
 	 * @param hint The name of the rendering hint to display,
 	 *        or <code>null</code> if no text AA is to be done.  This value

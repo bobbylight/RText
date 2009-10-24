@@ -276,6 +276,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_CPLUSPLUS,		createValue(new String[] { "*.cpp", "*.cxx", "*.h" }));
 		filters.put(SYNTAX_STYLE_CSHARP,			createValue(new String[] { "*.cs" }));
 		filters.put(SYNTAX_STYLE_CSS,				createValue(new String[] { "*.css" }));
+		filters.put(SYNTAX_STYLE_DELPHI,				createValue(new String[] { "*.pas" }));
 		filters.put(SYNTAX_STYLE_FORTRAN,			createValue(new String[] { "*.f", "*.for", "*.fort", "*.f77", "*.f90" }));
 		filters.put(SYNTAX_STYLE_GROOVY,			createValue(new String[] { "*.groovy", "*.grv" }));
 		filters.put(SYNTAX_STYLE_HTML,			createValue(new String[] { "*.htm", "*.html" }));
@@ -291,6 +292,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_PYTHON,			createValue(new String[] { "*.py" }));
 		filters.put(SYNTAX_STYLE_RUBY,			createValue(new String[] { "*.rb" }));
 		filters.put(SYNTAX_STYLE_SAS,				createValue(new String[] { "*.sas" }));
+		filters.put(SYNTAX_STYLE_SCALA,				createValue(new String[] { "*.scala" }));
 		filters.put(SYNTAX_STYLE_SQL,				createValue(new String[] { "*.sql" }));
 		filters.put(SYNTAX_STYLE_TCL,				createValue(new String[] { "*.tcl", "*.tk" }));
 		filters.put(SYNTAX_STYLE_UNIX_SHELL,		createValue(new String[] { "*.sh", "*.?sh" }));

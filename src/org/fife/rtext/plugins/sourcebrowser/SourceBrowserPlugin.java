@@ -374,6 +374,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_CSHARP)) {
 			language = "C#";
 		}
+		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_DELPHI)) {
+			language = "Pascal";
+		}
 		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_FORTRAN)) {
 			language = "Fortran";
 		}
