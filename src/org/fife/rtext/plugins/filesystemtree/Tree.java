@@ -79,17 +79,20 @@ class Tree extends FileSystemTree {
 	 * @see #displayPopupMenu
 	 */
 	protected JPopupMenu createPopupMenu() {
-		ResourceBundle msg = ResourceBundle.getBundle(MSG);
+
 		JPopupMenu popup = super.createPopupMenu();
+
+		ResourceBundle msg = ResourceBundle.getBundle(MSG);
 		openAction = new OpenAction(msg.getString("Open"), false);
 		popup.insert(new JMenuItem(openAction), 0);
 		openInNewWindowAction = new OpenAction(
 						msg.getString("OpenInNewWindow"), true);
 		popup.insert(new JMenuItem(openInNewWindowAction), 1);
-		popup.insert(new JPopupMenu.Separator(), 2);
+
 		// Re-do this to set orientation for new menu items.
 		popup.applyComponentOrientation(getComponentOrientation());
 		return popup;
+
 	}
 
 
