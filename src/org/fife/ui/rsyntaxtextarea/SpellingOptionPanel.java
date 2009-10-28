@@ -51,6 +51,7 @@ import javax.swing.text.AbstractDocument;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.NumberDocumentFilter;
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextPreferences;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.FSATextField;
 import org.fife.ui.OptionsDialogPanel;
@@ -268,7 +269,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		try {
 			return Integer.parseInt(maxErrorsField.getText().trim());
 		} catch (NumberFormatException nfe) { // Shouldn't happen
-			return 30; // Default value
+			return RTextPreferences.DEFAULT_MAX_SPELLING_ERRORS; // Default value
 		}
 	}
 
@@ -373,8 +374,9 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 						RTextUtilities.getPreferencesDirectory(),
 						"userDictionary.txt");
 				String userDictFileName = userDictFile.getAbsolutePath();
-				Color defaultColor = new Color(192,192,255);
-				String defaultMaxErrors = "30";
+				Color defaultColor = RTextPreferences.DEFAULT_SPELLING_ERROR_COLOR;
+				String defaultMaxErrors = Integer.toString(RTextPreferences.
+												DEFAULT_MAX_SPELLING_ERRORS);
 
 				if (enabledCB.isSelected() ||
 						dictCombo.getSelectedIndex()!=1 ||

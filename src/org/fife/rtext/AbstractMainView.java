@@ -48,10 +48,14 @@ import javax.swing.text.Caret;
 import org.fife.io.UnicodeWriter;
 import org.fife.ui.UIUtil;
 //import org.fife.ui.autocomplete.*;
+import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
+import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rsyntaxtextarea.spell.SpellingParser;
+import org.fife.ui.rsyntaxtextarea.spell.event.SpellingParserEvent;
+import org.fife.ui.rsyntaxtextarea.spell.event.SpellingParserListener;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.IconGroup;
 import org.fife.ui.rtextarea.Macro;
@@ -80,7 +84,7 @@ import org.fife.ui.search.*;
  */
 public abstract class AbstractMainView extends JPanel
 		implements PropertyChangeListener, ActionListener,
-				FindInFilesListener, HyperlinkListener {
+				FindInFilesListener, HyperlinkListener, SpellingParserListener {
 
 	public static final int DOCUMENT_SELECT_TOP		= JTabbedPane.TOP;
 	public static final int DOCUMENT_SELECT_LEFT		= JTabbedPane.LEFT;
@@ -864,6 +868,14 @@ public abstract class AbstractMainView extends JPanel
 
 	}
 
+
+	protected ErrorStrip createErrorStrip(RTextEditorPane textArea) {
+		ErrorStrip strip = new ErrorStrip(textArea);
+		strip.setLevelThreshold(ParserNotice.WARNING);
+		return strip;
+	}
+
+
 	/**
 	 * Returns an editor pane to add to this main view.
 	 *
@@ -1003,6 +1015,33 @@ public abstract class AbstractMainView extends JPanel
 		// Always visible, makes life easier
 		scrollPane.setIconRowHeaderEnabled(true);
 		return scrollPane;
+	}
+
+
+	/**
+	 * Creates a spelling parser using the current spelling preferences set
+	 * in this view, and assigns {@link #spellingParser} to it.
+	 *
+	 * @throws IOException If an IO error occurs.
+	 */
+	private void createSpellingParser() throws IOException {
+		File file = new File("english_dic.zip").getAbsoluteFile();
+		boolean american = DICTIONARIES[1].equals(spellingDictionary);
+		spellingParser = SpellingParser.
+					createEnglishSpellingParser(file, american);
+		spellingParser.setSquiggleUnderlineColor(getSpellCheckingColor());
+		spellingParser.setMaxErrorCount(getMaxSpellingErrors());
+		spellingParser.setAllowAdd(true);//userDictionary!=null);
+		spellingParser.setAllowIgnore(true);
+		spellingParser.addSpellingParserListener(this);
+		try {
+			spellingParser.setUserDictionary(userDictionary);
+		} catch (IOException ioe) {
+			String desc = owner.getString("Error.LoadingUserDictionary.txt",
+				userDictionary==null ? "null" :userDictionary.getAbsolutePath(),
+				ioe.getMessage());
+			owner.displayException(ioe, desc);
+		}
 	}
 
 
@@ -2554,6 +2593,22 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 
 
 	/**
+	 * Forces all opened documents to be re-spell checked.
+	 */
+	private void recheckSpelling() {
+		for (int i=0; i<getNumDocuments(); i++) {
+			RTextEditorPane textArea = getRTextEditorPaneAt(i);
+			for (int j=0; j<textArea.getParserCount(); j++) {
+				if (textArea.getParser(j)==spellingParser) {
+					textArea.forceReparsing(j);
+					break;
+				}
+			}
+		}
+	}
+
+
+	/**
 	 * Repaints the display names for open documents.
 	 */
 	public abstract void refreshDisplayNames();
@@ -3560,8 +3615,9 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 	public void setMaxSpellingErrors(int max) {
 		if (max>=0 && max!=maxSpellingErrors) {
 			maxSpellingErrors = max;
-			if (spellingParser!=null) {
+			if (spellingParser!=null && isSpellCheckingEnabled()) {
 				spellingParser.setMaxErrorCount(maxSpellingErrors);
+				recheckSpelling();
 			}
 		}
 	}
@@ -3692,6 +3748,7 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 			spellCheckingColor = color;
 			if (spellingParser!=null) {
 				spellingParser.setSquiggleUnderlineColor(spellCheckingColor);
+				repaint(); // Change all squiggles' colors
 			}
 		}
 	}
@@ -3713,29 +3770,8 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 			if (enabled && spellingParser==null) {
 				new Thread(new Runnable() {
 					public void run() {
-						File file = new File("english_dic.zip").getAbsoluteFile();
 						try {
-							boolean british = DICTIONARIES[0].
-												equals(spellingDictionary);
-							spellingParser = SpellingParser.
-									createEnglishSpellingParser(file, !british);
-							spellingParser.setSquiggleUnderlineColor(
-									getSpellCheckingColor());
-							spellingParser.setMaxErrorCount(
-												getMaxSpellingErrors());
-							spellingParser.setAllowAdd(true);
-							spellingParser.setAllowIgnore(true);
-							try {
-								spellingParser.setUserDictionary(userDictionary);
-							} catch (IOException ioe) {
-								String desc = owner.getString(
-									"Error.LoadingUserDictionary.txt",
-									userDictionary==null ? "null" :
-										userDictionary.getAbsolutePath(),
-										ioe.getMessage());
-								owner.displayException(ioe, desc);
-							}
-							//spellingParser.setAllowAdd(userDictionary!=null);
+							createSpellingParser();
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									toggleSpellingParserInstalled();
@@ -3766,16 +3802,54 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 	 * @see #getSpellingDictionary()
 	 */
 	public void setSpellingDictionary(String dict) {
+
 		if (dict!=null && !dict.equals(spellingDictionary)) {
+
+			// Set the dictionary file, ensuring it is valid.
+			boolean valid = false;
+			for (int i=0; i<DICTIONARIES.length; i++) {
+				if (DICTIONARIES[i].equals(dict)) {
+					valid = true;
+					break;
+				}
+			}
+			if (!valid) {
+				dict = DICTIONARIES[1]; // Default to American English
+			}
 			spellingDictionary = dict;
-			if (!DICTIONARIES[0].equals(spellingDictionary)) { // British
-				// If it was invalid, default to American English
-				spellingDictionary = DICTIONARIES[1];
+
+			// Remove the old spelling parser, if necessary.
+			if (spellingParser!=null && isSpellCheckingEnabled()) {
+				for (int i=0; i<getNumDocuments(); i++) {
+					RTextEditorPane textArea = getRTextEditorPaneAt(i);
+					textArea.removeParser(spellingParser);
+				}
 			}
-			if (spellingParser!=null) {
-				//xxx
+
+			// Create the new spelling parser, if necessary (if it doesn't
+			// exist yet, spell checking hasn't been enabled yet, thus no need
+			// to create it).
+			if (spellingParser!=null) { // spell checking may be disabled
+				try {
+					createSpellingParser();
+				} catch (IOException ioe) {
+					String desc = owner.getString(
+							"Error.LoadingSpellingParser.txt");
+					owner.displayException(ioe, desc);
+					return;
+				}
 			}
+
+			// Add the new spelling parser to all text areas, if necessary.
+			if (isSpellCheckingEnabled()) {
+				for (int i=0; i<getNumDocuments(); i++) {
+					RTextEditorPane textArea = getRTextEditorPaneAt(i);
+					textArea.addParser(spellingParser);
+				}
+			}
+
 		}
+
 	}
 
 
@@ -3835,7 +3909,7 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 
 	/**
 	 * Sets the syntax style on a text area, guessing it based on its content
-	 * if necessasry.
+	 * if necessary.
 	 *
 	 * @param pane The text area.
 	 * @param style The style for the text area.
@@ -3897,7 +3971,7 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 
 
 	/**
-	 * Sets the rendering hint to use when antialiasing text in the text
+	 * Sets the rendering hint to use when anti-aliasing text in the text
 	 * editors.  This method fires a property change of type
 	 * <code>SMOOTH_TEXT_PROPERTY</code>.
 	 *
@@ -3906,7 +3980,7 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 	 *        used so that, if new values are added in the future, they can
 	 *        be used.  Invalid/unsupported values default to
 	 *        <code>null</code>.  A <code>null</code> value indicates that
-	 *        no text antialiasing should be done.
+	 *        no text anti-aliasing should be done.
 	 * @see #getTextAAHintName()
 	 */
 	public void setTextAAHintName(String aaHintFieldName) {
@@ -4043,12 +4117,16 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 	 * @see #getUserDictionary()
 	 */
 	public void setUserDictionary(File dict) {
-		userDictionary = dict;
-		if (spellingParser!=null) {
-			try {
-				spellingParser.setUserDictionary(userDictionary);
-			} catch (IOException ioe) {
-				owner.displayException(ioe);
+		if ((dict==null && userDictionary!=null) ||
+				(dict!=null && !dict.equals(userDictionary))) {
+			userDictionary = dict;
+			if (spellingParser!=null) {
+				try {
+					spellingParser.setUserDictionary(userDictionary);
+					recheckSpelling();
+				} catch (IOException ioe) {
+					owner.displayException(ioe);
+				}
 			}
 		}
 	}
@@ -4084,15 +4162,48 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 
 
 	/**
+	 * Called when the user adds a word to their user dictionary, or chooses
+	 * to ignore a word.
+	 *
+	 * @param e The event.
+	 */
+	public void spellingParserEvent(SpellingParserEvent e) {
+
+		int type = e.getType();
+
+		if (SpellingParserEvent.WORD_ADDED==type ||
+				SpellingParserEvent.WORD_IGNORED==type) {
+
+			// Re-spell check opened files.
+			for (int i=0; i<getNumDocuments(); i++) {
+				RTextEditorPane textArea = getRTextEditorPaneAt(i);
+				// currentTextArea already done by the SpellingParser itself
+				if (textArea!=getCurrentTextArea()) {
+					for (int j=0; j<textArea.getParserCount(); j++) {
+						// Should be in the list somewhere...
+						if (textArea.getParser(j)==spellingParser) {
+							textArea.forceReparsing(j);
+							break;
+						}
+					}
+				}
+			}
+
+		}
+
+	}
+
+
+	/**
 	 * Toggles whether the spelling parser is installed on all currently
 	 * visible text areas.  This should only be called on the EDT.
 	 */
 	private void toggleSpellingParserInstalled() {
 		if (spellingParser!=null) { // Should always be true.
-			boolean installed = isSpellCheckingEnabled();
+			//spellCheckingEnabled = !spellCheckingEnabled; // Already done
 			for (int i=0; i<getNumDocuments(); i++) {
 				RTextEditorPane textArea = getRTextEditorPaneAt(i);
-				if (installed) {
+				if (spellCheckingEnabled) {
 					textArea.addParser(spellingParser);
 				}
 				else {

@@ -276,7 +276,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 
 		public FilterTableModel(String fileTypeHeader, String filterHeader) {
 			super(new Object[] { fileTypeHeader, filterHeader }, 0);
-			styles = new String[25];
+			styles = new String[27];
 			addRow(new Object[] { "Assembler (x86)",	null }); styles[0]  = SYNTAX_STYLE_ASSEMBLER_X86;
 			addRow(new Object[] { "C",					null }); styles[1]  = SYNTAX_STYLE_C;
 			addRow(new Object[] { "C++",				null }); styles[2]  = SYNTAX_STYLE_CPLUSPLUS;

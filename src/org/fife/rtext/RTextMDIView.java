@@ -107,7 +107,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		temp.add(component);
 		RTextScrollPane sp = (RTextScrollPane)component;
 		RTextEditorPane textArea = (RTextEditorPane)sp.getTextArea();
-		ErrorStrip es = new ErrorStrip(textArea);
+		ErrorStrip es = createErrorStrip(textArea);
 		temp.add(es, BorderLayout.LINE_END);
 
 		// "Physically" add the frame.

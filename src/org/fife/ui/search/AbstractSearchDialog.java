@@ -402,7 +402,7 @@ public class AbstractSearchDialog extends EscapableDialog
 	/**
 	 * This method allows us to check if the current JRE is 1.4 or 1.5.
 	 * This is used to workaround some Java bugs, for example, pre 1.6,
-	 * JComboBoxes would "swallow" enter keypresses in them when their
+	 * JComboBoxes would "swallow" enter key presses in them when their
 	 * content changed.  This causes the user to have to press Enter twice
 	 * when entering text to search for in a "Find" dialog, so instead we
 	 * detect if a JRE is old enough to have this behavior and, if so,

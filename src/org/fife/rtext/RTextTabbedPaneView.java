@@ -49,7 +49,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
@@ -60,7 +59,6 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.TabbedPaneUI;
 
 import org.fife.ui.DrawDnDIndicatorTabbedPane;
-import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 
@@ -156,7 +154,7 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 		temp.add(component);
 		RTextScrollPane sp = (RTextScrollPane)component;
 		RTextEditorPane textArea = (RTextEditorPane)sp.getTextArea();
-		temp.add(new ErrorStrip(textArea), BorderLayout.LINE_END);
+		temp.add(createErrorStrip(textArea), BorderLayout.LINE_END);
 		tabbedPane.addTab(title, getIconFor(sp), temp);
 
 		// Loop through all tabs (documents) except the last (the one just added).
@@ -586,7 +584,7 @@ inCloseCurrentDocument = false;
 								RTextTabbedPaneView.CLOSE_ALL_ACTION));
 				item.setToolTipText(null);
 				popup.add(item);
-				popup.add(new JSeparator());
+				popup.add(new JPopupMenu.Separator());
 				title = msg.getString("CopyPathToClipboard");
 				item = new JMenuItem(
 					new TabbedPaneCopyPathAction(title));

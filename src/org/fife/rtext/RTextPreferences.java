@@ -63,6 +63,17 @@ import org.fife.ui.rtextarea.RTextArea;
 public class RTextPreferences extends GUIApplicationPreferences
 							implements RTextActionInfo {
 
+	/**
+	 * The default maximum number of spelling errors to display for a single
+	 * file.
+	 */
+	public static final int DEFAULT_MAX_SPELLING_ERRORS = 30;
+
+	/**
+	 * The default color used to underline spelling errors.
+	 */
+	public static final Color DEFAULT_SPELLING_ERROR_COLOR = new Color(255,128,64);
+
 	private static final String[] mainViewAcceleratorKeys = {
 		"findActionAccelerator",
 		"findNextActionAccelerator",
@@ -763,11 +774,11 @@ public class RTextPreferences extends GUIApplicationPreferences
 		lineNumberColor	= Color.GRAY;
 		gutterBorderColor	= new Color(221, 221, 221);
 		spellCheckingEnabled = false;
-		spellCheckingColor   = new Color(192,192,255);
+		spellCheckingColor   = DEFAULT_SPELLING_ERROR_COLOR;
 		spellingDictionary   = AbstractMainView.DICTIONARIES[1];
 		userDictionary       = new File(RTextUtilities.getPreferencesDirectory(),
 										"userDictionary.txt");
-		maxSpellingErrors    = 30;
+		maxSpellingErrors    = DEFAULT_MAX_SPELLING_ERRORS;
 
 		accelerators = new HashMap();
 		for (int i=0; i<RText.actionNames.length; i++) {

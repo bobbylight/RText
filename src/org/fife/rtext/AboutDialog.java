@@ -76,12 +76,23 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 					new String[] { msg.getString("Column.Plugin"),
 								msg.getString("Column.Version"),
 								msg.getString("Column.Author") }) {
-				public Dimension getPreferredScrollableViewportSize() {
-					return new Dimension(50, 50); //Will be bigger.
-				};
-				public boolean isCellEditable(int row, int column) {
-					return false;
-				}
+			public Dimension getPreferredScrollableViewportSize() {
+				return new Dimension(50, 50); //Will be bigger.
+			};
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+			/**
+			 * Overridden to ensure the table completely fills the JViewport
+			 * it is sitting in.  Note in Java 6 this could be taken care of
+			 * by the method JTable#setFillsViewportHeight(boolean).
+			 * 1.5: Change me to method call instead.
+			 */
+			public boolean getScrollableTracksViewportHeight() {
+				Component parent = getParent();
+				return parent instanceof JViewport ?
+					parent.getHeight()>getPreferredSize().height : false;
+			}
 		};
 		UIUtil.fixJTableRendererOrientations(pluginTable);
 		temp.add(new RScrollPane(pluginTable));
