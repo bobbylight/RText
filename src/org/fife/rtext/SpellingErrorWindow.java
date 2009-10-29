@@ -62,7 +62,7 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 		mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_ADDED_PROPERTY, this);
 		mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
 
-		model = new SpellingTableModel("Word"); // TODO
+		model = new SpellingTableModel(rtext.getString("SpellingErrorList.Word"));
 		JTable table = createTable(model);
 		RScrollPane sp = new DockableWindowScrollPane(table);
 
@@ -71,10 +71,19 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 
 		setPosition(BOTTOM);
 		setActive(true);
-		setDockableWindowName("Spelling"); // TODO
+		setDockableWindowName(rtext.getString("SpellingErrorList.Spelling"));
 
 		URL url = getClass().getResource("graphics/spellcheck.png");
 		icon = new ImageIcon(url);
+
+		// Start listening to any already-opened files.
+		for (int i=0; i<mainView.getNumDocuments(); i++) {
+			RTextEditorPane textArea = mainView.getRTextEditorPaneAt(i);
+			List notices = textArea.getParserNotices();
+			model.update(textArea, notices);
+			textArea.addPropertyChangeListener(
+						RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
+		}
 
 	}
 
@@ -123,8 +132,8 @@ System.out.println("Stopping listening to: " + textArea.getFileFullPath());
 				for (Iterator i=notices.iterator(); i.hasNext(); ) {
 					ParserNotice notice = (ParserNotice)i.next();
 					Object[] data = { getIcon(), textArea,
-							// Integer.intValue(notice.getValue()) // TODO: 1.5
-							new Integer(notice.getLine()),
+							// Integer.intValue(notice.getValue()+1) // TODO: 1.5
+							new Integer(notice.getLine()+1),
 							notice.getMessage() };
 					addRow(data);
 				}

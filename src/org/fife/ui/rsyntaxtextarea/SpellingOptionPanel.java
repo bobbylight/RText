@@ -48,11 +48,11 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
 
-import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.NumberDocumentFilter;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextPreferences;
 import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.SpellingSupport;
 import org.fife.ui.FSATextField;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RButton;
@@ -84,13 +84,14 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	private RColorSwatchesButton spellingColorButton;
 	private JLabel errorsPerFileLabel;
 	private JTextField maxErrorsField;
+	private JCheckBox viewSpellingWindowCB;
 
 	private Listener listener;
 	private ResourceBundle msg;
 
 	private static final String[][] DICTIONARIES = {
-		{ "English (United Kingdom)", AbstractMainView.DICTIONARIES[0] },
-		{ "English (United States)", AbstractMainView.DICTIONARIES[1] },
+		{ "English (United Kingdom)", SpellingSupport.DICTIONARIES[0] },
+		{ "English (United States)", SpellingSupport.DICTIONARIES[1] },
 	};
 
 	private static final String MISC_PROPERTY			= "Miscellaneous";
@@ -118,7 +119,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		enabledCB = new JCheckBox(msg.getString("Enabled"));
 		enabledCB.setActionCommand("Enabled");
 		enabledCB.addActionListener(listener);
-		addLeftAlignedComponent(temp, enabledCB, orientation);
+		addLeftAlignedComponent(temp, enabledCB);
 		temp.add(Box.createVerticalStrut(5));
 
 		dictLabel = new JLabel(msg.getString("Dictionary"));
@@ -134,7 +135,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		dictLabel.setLabelFor(dictCombo);
 
 		userDictLabel = new JLabel(msg.getString("UserDictionary"));
-		userDictField = new FSATextField();
+		userDictField = new FSATextField(40);
 		userDictField.getDocument().addDocumentListener(listener);
 		userDictBrowse = new RButton(msg.getString("Browse"));
 		userDictBrowse.setActionCommand("BrowseUserDictionary");
@@ -163,12 +164,13 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		maxErrorsPanel.add(maxErrorsField, BorderLayout.LINE_START);
 
 		JPanel temp2 = new JPanel(new SpringLayout());
+		temp2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20)); // "Indent"
 		if (orientation.isLeftToRight()) {
-			temp2.add(dictLabel);			temp2.add(dictComboPanel);
-			temp2.add(userDictLabel);		temp2.add(userDictFieldPanel);
+			temp2.add(dictLabel);				temp2.add(dictComboPanel);
+			temp2.add(userDictLabel);			temp2.add(userDictFieldPanel);
 			temp2.add(Box.createRigidArea(new Dimension(1,1))); temp2.add(userDictDescField);
-			temp2.add(colorLabel);			temp2.add(colorButtonPanel);
-			temp2.add(errorsPerFileLabel);	temp2.add(maxErrorsPanel);
+			temp2.add(colorLabel);				temp2.add(colorButtonPanel);
+			temp2.add(errorsPerFileLabel);		temp2.add(maxErrorsPanel);
 		}
 		else {
 			temp2.add(dictComboPanel);			temp2.add(dictLabel);
@@ -178,16 +180,19 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 			temp2.add(maxErrorsPanel);			temp2.add(errorsPerFileLabel);
 		}
 		UIUtil.makeSpringCompactGrid(temp2, 5, 2, 5, 5, 5, 5);
-		temp.add(temp2);
+		addLeftAlignedComponent(temp, temp2);
 		temp.add(Box.createVerticalStrut(5));
 
-		Box rdPanel = Box.createHorizontalBox();
+		viewSpellingWindowCB = new JCheckBox(msg.getString("ViewSpellingErrorWindow"));
+		viewSpellingWindowCB.setActionCommand("ViewSpellingWindow");
+		viewSpellingWindowCB.addActionListener(listener);
+		addLeftAlignedComponent(temp, viewSpellingWindowCB);
+		temp.add(Box.createVerticalStrut(5));
+
 		RButton rdButton = new RButton(msg.getString("RestoreDefaults"));
 		rdButton.setActionCommand("RestoreDefaults");
 		rdButton.addActionListener(listener);
-		rdPanel.add(rdButton);
-		rdPanel.add(Box.createHorizontalGlue());
-		temp.add(rdPanel);
+		addLeftAlignedComponent(temp, rdButton);
 		temp.add(Box.createVerticalStrut(5));
 
 		temp.add(Box.createVerticalGlue());
@@ -197,8 +202,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	}
 
 
-	private void addLeftAlignedComponent(Container addToMe, JComponent toAdd,
-										ComponentOrientation orientation) {
+	private void addLeftAlignedComponent(Container addToMe, JComponent toAdd) {
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(toAdd, BorderLayout.LINE_START);
 		addToMe.add(temp);
@@ -210,12 +214,13 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	 */
 	protected void doApplyImpl(Frame owner) {
 		RText rtext = (RText)owner;
-		AbstractMainView mainView = rtext.getMainView();
-		mainView.setSpellCheckingEnabled(enabledCB.isSelected());
-		mainView.setSpellingDictionary(dictCombo.getSelectedSpecialItem());
-		mainView.setUserDictionary(getUserDictionary());
-		mainView.setSpellCheckingColor(spellingColorButton.getColor());
-		mainView.setMaxSpellingErrors(getMaxSpellingErrors());
+		SpellingSupport support = rtext.getMainView().getSpellingSupport();
+		support.setSpellCheckingEnabled(enabledCB.isSelected());
+		support.setSpellingDictionary(dictCombo.getSelectedSpecialItem());
+		support.setUserDictionary(getUserDictionary());
+		support.setSpellCheckingColor(spellingColorButton.getColor());
+		support.setMaxSpellingErrors(getMaxSpellingErrors());
+		rtext.setSpellingWindowVisible(viewSpellingWindowCB.isSelected());
 	}
 
 
@@ -309,6 +314,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		spellingColorButton.setEnabled(enabled);
 		errorsPerFileLabel.setEnabled(enabled);
 		maxErrorsField.setEnabled(enabled);
+		//viewSpellingWindowCB.setEnabled(enabled);
 	}
 
 
@@ -317,17 +323,18 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	 */
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
-		AbstractMainView mainView = rtext.getMainView();
-		boolean enabled = mainView.isSpellCheckingEnabled();
+		SpellingSupport support = rtext.getMainView().getSpellingSupport();
+		boolean enabled = support.isSpellCheckingEnabled();
 		setSpellCheckingEnabled(enabled);
-		dictCombo.setSelectedSpecialItem(mainView.getSpellingDictionary());
+		dictCombo.setSelectedSpecialItem(support.getSpellingDictionary());
 		userDictField.setFileSystemAware(false);
-		File temp = mainView.getUserDictionary();
+		File temp = support.getUserDictionary();
 		userDictField.setText(temp==null ? "" : temp.getAbsolutePath());
 		userDictField.setFileSystemAware(true);
-		spellingColorButton.setColor(mainView.getSpellCheckingColor());
+		spellingColorButton.setColor(support.getSpellCheckingColor());
 		maxErrorsField.setText(Integer.toString(
-									mainView.getMaxSpellingErrors()));
+				support.getMaxSpellingErrors()));
+		viewSpellingWindowCB.setSelected(rtext.isSpellingWindowVisible());
 	}
 
 
@@ -368,6 +375,11 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 				}
 			}
 
+			else if ("ViewSpellingWindow".equals(command)) {
+				hasUnsavedChanges = true;
+				firePropertyChange(MISC_PROPERTY, null, null);
+			}
+
 			else if ("RestoreDefaults".equals(command)) {
 
 				File userDictFile = new File(
@@ -382,7 +394,8 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 						dictCombo.getSelectedIndex()!=1 ||
 						!userDictField.getText().equals(userDictFileName) ||
 						!spellingColorButton.getColor().equals(defaultColor) ||
-						!defaultMaxErrors.equals(maxErrorsField.getText())) {
+						!defaultMaxErrors.equals(maxErrorsField.getText()) ||
+						viewSpellingWindowCB.isSelected()) {
 
 					setSpellCheckingEnabled(false);
 					dictCombo.setSelectedIndex(1);
@@ -391,6 +404,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 					userDictField.setFileSystemAware(true);
 					spellingColorButton.setColor(defaultColor);
 					maxErrorsField.setText(defaultMaxErrors);
+					viewSpellingWindowCB.setSelected(false);
 
 					hasUnsavedChanges = true;
 					firePropertyChange(MISC_PROPERTY, null, null);

@@ -100,6 +100,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 
 	}
 
+
 	/**
 	 * Constructor.
 	 *
@@ -114,6 +115,146 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 		arrayListBuffer = new ArrayList[MAX_NUM_HASH_MAPS];
 		for (int i=0; i<MAX_NUM_HASH_MAPS; i++) {
 			arrayListBuffer[i] = new ArrayList();
+		}
+
+	}
+
+
+	/**
+	 * Adds the proper children to <code>root</code> for a syntax style.
+	 *
+	 * @param root The root node to add children to.
+	 * @param style The syntax style.
+	 */
+	private void addChildNodesForStyle(DefaultMutableTreeNode root, String style) {
+
+		if (SYNTAX_STYLE_C.equals(style) || 
+				SYNTAX_STYLE_CPLUSPLUS.equals(style)) {
+			addTagTypeNode(root, "Classes", map.get("c"));
+			addTagTypeNode(root, "Macros", map.get("d"));
+			addTagTypeNode(root, "Functions", map.get("f"));
+			addTagTypeNode(root, "Enumerations", map.get("g"));
+			addTagTypeNode(root, "Class/Struct/Union members", map.get("m"));
+			addTagTypeNode(root, "Namespaces", map.get("n"));
+			addTagTypeNode(root, "Structs", map.get("s"));
+			addTagTypeNode(root, "Typedefs", map.get("t"));
+			addTagTypeNode(root, "Variables", map.get("v"));
+		}
+
+		else if (SYNTAX_STYLE_CSHARP.equals(style)) {
+			addTagTypeNode(root, "Classes", map.get("c"));
+			addTagTypeNode(root, "Macros", map.get("d"));
+			addTagTypeNode(root, "Events", map.get("E"));
+			addTagTypeNode(root, "Fields", map.get("f"));
+			addTagTypeNode(root, "Enumerations", map.get("g"));
+			addTagTypeNode(root, "Interfaces", map.get("i"));
+			addTagTypeNode(root, "Methods", map.get("m"));
+			addTagTypeNode(root, "Namespaces", map.get("n"));
+			addTagTypeNode(root, "Properties", map.get("p"));
+			addTagTypeNode(root, "Structs", map.get("s"));
+			addTagTypeNode(root, "Typedefs", map.get("t"));
+		}
+
+		else if (SYNTAX_STYLE_DELPHI.equals(style)) {
+			addTagTypeNode(root, "Functions", map.get("f"));
+			addTagTypeNode(root, "Procedures", map.get("p"));
+		}
+
+		else if (SYNTAX_STYLE_FORTRAN.equals(style)) {
+			addTagTypeNode(root, "Block Data", map.get("b"));
+			addTagTypeNode(root, "Common Blocks", map.get("c"));
+			addTagTypeNode(root, "Entry Points", map.get("e"));
+			addTagTypeNode(root, "Functions", map.get("f"));
+			addTagTypeNode(root, "Type and Structure Components", map.get("k"));
+			addTagTypeNode(root, "Labels", map.get("l"));
+			addTagTypeNode(root, "Modules", map.get("m"));
+			addTagTypeNode(root, "Namelists", map.get("n"));
+			addTagTypeNode(root, "Programs", map.get("p"));
+			addTagTypeNode(root, "Subroutines", map.get("s"));
+			addTagTypeNode(root, "Derived Types/Structures", map.get("t"));
+			addTagTypeNode(root, "Global and Module Variables", map.get("v"));
+		}
+
+		else if (SYNTAX_STYLE_HTML.equals(style)) {
+			addTagTypeNode(root, "Named Anchors", map.get("a"));
+			addTagTypeNode(root, "JavaScript functions", map.get("f"));
+		}
+
+		else if (SYNTAX_STYLE_JAVA.equals(style)) {
+			addTagTypeNode(root, "Classes", map.get("c"));
+			addTagTypeNode(root, "Fields", map.get("f"));
+			addTagTypeNode(root, "Interfaces", map.get("i"));
+			addTagTypeNode(root, "Methods", map.get("m"));
+			addTagTypeNode(root, "Packages", map.get("p"));
+		}
+
+		else if (SYNTAX_STYLE_JAVASCRIPT.equals(style)) {
+			addTagTypeNode(root, "Functions", map.get("f"));
+		}
+
+		else if (SYNTAX_STYLE_LISP.equals(style)) {
+			addTagTypeNode(root, "Functions", map.get("f"));
+		}
+
+		else if (SYNTAX_STYLE_LUA.equals(style)) {
+			addTagTypeNode(root, "Functions", map.get("f"));
+		}
+
+		else if (SYNTAX_STYLE_MAKEFILE.equals(style)) {
+			addTagTypeNode(root, "Macros", map.get("m"));
+		}
+
+		else if (SYNTAX_STYLE_PERL.equals(style)) {
+			addTagTypeNode(root, "Classes", map.get("c"));
+			addTagTypeNode(root, "Labels", map.get("l"));
+			addTagTypeNode(root, "Subroutines", map.get("s"));
+		}
+
+		else if (SYNTAX_STYLE_PHP.equals(style)) {
+			addTagTypeNode(root, "Classes", map.get("c"));
+			addTagTypeNode(root, "Interfaces", map.get("i"));
+			addTagTypeNode(root, "Constants", map.get("d"));
+			addTagTypeNode(root, "Functions", map.get("f"));
+			addTagTypeNode(root, "Variables", map.get("v"));
+			addTagTypeNode(root, "JavaScript Functions", map.get("j"));
+		}
+
+		else if (SYNTAX_STYLE_PYTHON.equals(style)) {
+			addTagTypeNode(root, "Classes", map.get("c"));
+			addTagTypeNode(root, "Functions", map.get("f"));
+			addTagTypeNode(root, "Class Members", map.get("m"));
+		}
+
+		else if (SYNTAX_STYLE_RUBY.equals(style)) {
+			addTagTypeNode(root, "Classes", map.get("c"));
+			addTagTypeNode(root, "Methods", map.get("f"));
+			addTagTypeNode(root, "Modules", map.get("m"));
+			addTagTypeNode(root, "Singleton Methods", map.get("F"));
+		}
+
+		else if (SYNTAX_STYLE_SQL.equals(style)) {
+			addTagTypeNode(root, "Cursors", map.get("c"));
+			addTagTypeNode(root, "Functions", map.get("f"));
+			addTagTypeNode(root, "Record Fields", map.get("F"));
+			addTagTypeNode(root, "Block Label", map.get("L"));
+			addTagTypeNode(root, "Packages", map.get("P"));
+			addTagTypeNode(root, "Procedures", map.get("p"));
+			addTagTypeNode(root, "Records", map.get("r"));
+			addTagTypeNode(root, "Subtypes", map.get("s"));
+			addTagTypeNode(root, "Tables", map.get("t"));
+			addTagTypeNode(root, "Triggers", map.get("T"));
+			addTagTypeNode(root, "Variables", map.get("V"));
+		}
+
+		else if (SYNTAX_STYLE_TCL.equals(style)) {
+			addTagTypeNode(root, "Classes", map.get("c"));
+			addTagTypeNode(root, "Methods", map.get("m"));
+			addTagTypeNode(root, "Procedures", map.get("p"));
+		}
+
+		else if (SYNTAX_STYLE_UNIX_SHELL.equals(style)) {
+			language = "Sh";
+			addTagTypeNode(root, "Functions", map.get("f"));
 		}
 
 	}
@@ -184,24 +325,10 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 		}
 
 		// Create a command line to run ctags.
-		String sourceFile = textArea.getFileFullPath();
 		boolean exuberant = plugin.getCTagsType().equals(
 							SourceBrowserPlugin.CTAGS_TYPE_EXUBERANT);
 		//System.out.println("DEBUG: Exuberant: " + exuberant);
-		String[] commandLine = null;
-		if (exuberant) {
-			commandLine = new String[5];
-			commandLine[0] = plugin.getCTagsExecutableLocation();
-			commandLine[1] = "-f";
-			commandLine[2] = "-";
-			commandLine[3] = "--language-force=" + language;
-			commandLine[4] = sourceFile;
-		}
-		else { // standard
-			commandLine = new String[2];
-			commandLine[0] = plugin.getCTagsExecutableLocation();
-			commandLine[1] = sourceFile;
-		}
+		String[] commandLine = createCommandLine(exuberant);
 
 		// Run the process and collect its output in a separate thread.
 		// If the thread does not complete in maxTime milliseconds, we'll
@@ -278,120 +405,39 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 		// Sets the tree stuff.
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode(
 										textArea.getFileName());
-		if (SYNTAX_STYLE_C.equals(style) || 
-				SYNTAX_STYLE_CPLUSPLUS.equals(style)) {
-			addTagTypeNode(root, "Classes", map.get("c"));
-			addTagTypeNode(root, "Macros", map.get("d"));
-			addTagTypeNode(root, "Functions", map.get("f"));
-			addTagTypeNode(root, "Enumerations", map.get("g"));
-			addTagTypeNode(root, "Class/Struct/Union members", map.get("m"));
-			addTagTypeNode(root, "Namespaces", map.get("n"));
-			addTagTypeNode(root, "Structs", map.get("s"));
-			addTagTypeNode(root, "Typedefs", map.get("t"));
-			addTagTypeNode(root, "Variables", map.get("v"));
-		}
-		else if (SYNTAX_STYLE_CSHARP.equals(style)) {
-			addTagTypeNode(root, "Classes", map.get("c"));
-			addTagTypeNode(root, "Macros", map.get("d"));
-			addTagTypeNode(root, "Events", map.get("E"));
-			addTagTypeNode(root, "Fields", map.get("f"));
-			addTagTypeNode(root, "Enumerations", map.get("g"));
-			addTagTypeNode(root, "Interfaces", map.get("i"));
-			addTagTypeNode(root, "Methods", map.get("m"));
-			addTagTypeNode(root, "Namespaces", map.get("n"));
-			addTagTypeNode(root, "Properties", map.get("p"));
-			addTagTypeNode(root, "Structs", map.get("s"));
-			addTagTypeNode(root, "Typedefs", map.get("t"));
-		}
-		else if (SYNTAX_STYLE_DELPHI.equals(style)) {
-			addTagTypeNode(root, "Functions", map.get("f"));
-			addTagTypeNode(root, "Procedures", map.get("p"));
-		}
-		else if (SYNTAX_STYLE_FORTRAN.equals(style)) {
-			addTagTypeNode(root, "Block Data", map.get("b"));
-			addTagTypeNode(root, "Common Blocks", map.get("c"));
-			addTagTypeNode(root, "Entry Points", map.get("e"));
-			addTagTypeNode(root, "Functions", map.get("f"));
-			addTagTypeNode(root, "Type and Structure Components", map.get("k"));
-			addTagTypeNode(root, "Labels", map.get("l"));
-			addTagTypeNode(root, "Modules", map.get("m"));
-			addTagTypeNode(root, "Namelists", map.get("n"));
-			addTagTypeNode(root, "Programs", map.get("p"));
-			addTagTypeNode(root, "Subroutines", map.get("s"));
-			addTagTypeNode(root, "Derived Types/Structures", map.get("t"));
-			addTagTypeNode(root, "Global and Module Variables", map.get("v"));
-		}
-		else if (SYNTAX_STYLE_HTML.equals(style)) {
-			addTagTypeNode(root, "Named Anchors", map.get("a"));
-			addTagTypeNode(root, "JavaScript functions", map.get("f"));
-		}
-		else if (SYNTAX_STYLE_JAVA.equals(style)) {
-			addTagTypeNode(root, "Classes", map.get("c"));
-			addTagTypeNode(root, "Fields", map.get("f"));
-			addTagTypeNode(root, "Interfaces", map.get("i"));
-			addTagTypeNode(root, "Methods", map.get("m"));
-			addTagTypeNode(root, "Packages", map.get("p"));
-		}
-		else if (SYNTAX_STYLE_JAVASCRIPT.equals(style)) {
-			addTagTypeNode(root, "Functions", map.get("f"));
-		}
-		else if (SYNTAX_STYLE_LISP.equals(style)) {
-			addTagTypeNode(root, "Functions", map.get("f"));
-		}
-		else if (SYNTAX_STYLE_LUA.equals(style)) {
-			addTagTypeNode(root, "Functions", map.get("f"));
-		}
-		else if (SYNTAX_STYLE_MAKEFILE.equals(style)) {
-			addTagTypeNode(root, "Macros", map.get("m"));
-		}
-		else if (SYNTAX_STYLE_PERL.equals(style)) {
-			addTagTypeNode(root, "Classes", map.get("c"));
-			addTagTypeNode(root, "Labels", map.get("l"));
-			addTagTypeNode(root, "Subroutines", map.get("s"));
-		}
-		else if (SYNTAX_STYLE_PHP.equals(style)) {
-			addTagTypeNode(root, "Classes", map.get("c"));
-			addTagTypeNode(root, "Interfaces", map.get("i"));
-			addTagTypeNode(root, "Constants", map.get("d"));
-			addTagTypeNode(root, "Functions", map.get("f"));
-			addTagTypeNode(root, "Variables", map.get("v"));
-			addTagTypeNode(root, "JavaScript Functions", map.get("j"));
-		}
-		else if (SYNTAX_STYLE_PYTHON.equals(style)) {
-			addTagTypeNode(root, "Classes", map.get("c"));
-			addTagTypeNode(root, "Functions", map.get("f"));
-			addTagTypeNode(root, "Class Members", map.get("m"));
-		}
-		else if (SYNTAX_STYLE_RUBY.equals(style)) {
-			addTagTypeNode(root, "Classes", map.get("c"));
-			addTagTypeNode(root, "Methods", map.get("f"));
-			addTagTypeNode(root, "Modules", map.get("m"));
-			addTagTypeNode(root, "Singleton Methods", map.get("F"));
-		}
-		else if (SYNTAX_STYLE_SQL.equals(style)) {
-			addTagTypeNode(root, "Cursors", map.get("c"));
-			addTagTypeNode(root, "Functions", map.get("f"));
-			addTagTypeNode(root, "Record Fields", map.get("F"));
-			addTagTypeNode(root, "Block Label", map.get("L"));
-			addTagTypeNode(root, "Packages", map.get("P"));
-			addTagTypeNode(root, "Procedures", map.get("p"));
-			addTagTypeNode(root, "Records", map.get("r"));
-			addTagTypeNode(root, "Subtypes", map.get("s"));
-			addTagTypeNode(root, "Tables", map.get("t"));
-			addTagTypeNode(root, "Triggers", map.get("T"));
-			addTagTypeNode(root, "Variables", map.get("V"));
-		}
-		else if (SYNTAX_STYLE_TCL.equals(style)) {
-			addTagTypeNode(root, "Classes", map.get("c"));
-			addTagTypeNode(root, "Methods", map.get("m"));
-			addTagTypeNode(root, "Procedures", map.get("p"));
-		}
-		else if (SYNTAX_STYLE_UNIX_SHELL.equals(style)) {
-			language = "Sh";
-			addTagTypeNode(root, "Functions", map.get("f"));
-		}
+		addChildNodesForStyle(root, style);
 
 		return root;
+
+	}
+
+
+	/**
+	 * Creates the command line to use to launch ctags.
+	 *
+	 * @param exuberant Whether we're using Exuberant ctags or standard ctags.
+	 * @return The command line.
+	 */
+	private String[] createCommandLine(boolean exuberant) {
+
+		String sourceFile = textArea.getFileFullPath();
+		String[] commandLine = null;
+
+		if (exuberant) {
+			commandLine = new String[5];
+			commandLine[0] = plugin.getCTagsExecutableLocation();
+			commandLine[1] = "-f";
+			commandLine[2] = "-";
+			commandLine[3] = "--language-force=" + language;
+			commandLine[4] = sourceFile;
+		}
+		else { // standard
+			commandLine = new String[2];
+			commandLine[0] = plugin.getCTagsExecutableLocation();
+			commandLine[1] = sourceFile;
+		}
+
+		return commandLine;
 
 	}
 

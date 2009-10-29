@@ -259,21 +259,21 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		visibleWhitespaceCheckBox = new JCheckBox(msg.getString("VisibleWhitespace"));
 		visibleWhitespaceCheckBox.setActionCommand("VisibleWhitespace");
 		visibleWhitespaceCheckBox.addActionListener(this);
-		addLeftAlignedComponent(temp, visibleWhitespaceCheckBox, orientation);
+		addLeftAlignedComponent(temp, visibleWhitespaceCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
 /*
 		autoIndentCheckBox = new JCheckBox(msg.getString("AutoIndent"));
 		autoIndentCheckBox.setActionCommand("AutoIndent");
 		autoIndentCheckBox.addActionListener(this);
-		addLeftAlignedComponent(temp, autoIndentCheckBox, orientation);
+		addLeftAlignedComponent(temp, autoIndentCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
 
 		remWhitespaceLinesCheckBox = new JCheckBox(msg.getString("RemWhitespaceLines"));
 		remWhitespaceLinesCheckBox.setActionCommand("RemWhitespaceLines");
 		remWhitespaceLinesCheckBox.addActionListener(this);
-		addLeftAlignedComponent(temp, remWhitespaceLinesCheckBox, orientation);
+		addLeftAlignedComponent(temp, remWhitespaceLinesCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
 */
@@ -290,14 +290,14 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		temp2.add(Box.createHorizontalStrut(5));
 		temp2.add(smoothTextCombo);
 		temp2.add(Box.createHorizontalGlue());
-		addLeftAlignedComponent(temp, temp2, orientation);
+		addLeftAlignedComponent(temp, temp2);
 
 		temp.add(Box.createVerticalStrut(3));
 
 		fractionalMetricsCheckBox = new JCheckBox(msg.getString("FracFM"));
 		fractionalMetricsCheckBox.setActionCommand("FracFM");
 		fractionalMetricsCheckBox.addActionListener(this);
-		addLeftAlignedComponent(temp, fractionalMetricsCheckBox, orientation);
+		addLeftAlignedComponent(temp, fractionalMetricsCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
 
@@ -352,8 +352,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	private void addLeftAlignedComponent(JPanel addToMe, JComponent toAdd,
-									ComponentOrientation orientation) {
+	private void addLeftAlignedComponent(JPanel addToMe, JComponent toAdd) {
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(toAdd, BorderLayout.LINE_START);
 		addToMe.add(temp);

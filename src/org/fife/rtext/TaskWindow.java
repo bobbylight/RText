@@ -154,8 +154,8 @@ System.out.println("Stopping listening to: " + textArea.getFileFullPath());
 				ParserNotice notice = (ParserNotice)i.next();
 				if (notice.getParser()==taskParser) {
 					Object[] data = {	getIcon(), textArea,
-								// Integer.intValue(notice.getValue()) // TODO: 1.5
-								new Integer(notice.getLine()),
+								// Integer.intValue(notice.getValue()+1) // TODO: 1.5
+								new Integer(notice.getLine()+1),
 								notice.getMessage() };
 					addRow(data);
 				}

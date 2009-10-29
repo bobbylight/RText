@@ -42,7 +42,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
@@ -55,6 +54,7 @@ import org.fife.io.UnicodeReader;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.RListSelectionModel;
+import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplication;
 
@@ -113,7 +113,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 		languagePanel.setLayout(new BorderLayout());
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
-		JLabel label = new JLabel(msg.getString("OptLaDesc"));
+		SelectableLabel label = new SelectableLabel(msg.getString("OptLaDesc"));
 		temp.add(label, BorderLayout.LINE_START);
 		languagePanel.add(temp, BorderLayout.NORTH);
 

@@ -183,6 +183,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public String spellingDictionary;
 	public File userDictionary;
 	public int maxSpellingErrors;
+	public boolean viewSpellingList;
 
 	public KeyStroke[] mainViewActionAccelerators;
 
@@ -205,6 +206,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public static GUIApplicationPreferences generatePreferences(RText rtext) {
 
 		AbstractMainView mainView = rtext.getMainView();
+		SpellingSupport spelling = mainView.getSpellingSupport();
 		RTextMenuBar menuBar = (RTextMenuBar)rtext.getJMenuBar();
 
 		String lnfString = UIManager.getLookAndFeel().getClass().getName();
@@ -279,11 +281,12 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.lineNumberFont			= mainView.getLineNumberFont();
 		props.lineNumberColor			= mainView.getLineNumberColor();
 		props.gutterBorderColor			= mainView.getGutterBorderColor();
-		props.spellCheckingEnabled		= mainView.isSpellCheckingEnabled();
-		props.spellCheckingColor		= mainView.getSpellCheckingColor();
-		props.spellingDictionary		= mainView.getSpellingDictionary();
-		props.userDictionary			= mainView.getUserDictionary();
-		props.maxSpellingErrors			= mainView.getMaxSpellingErrors();
+		props.spellCheckingEnabled		= spelling.isSpellCheckingEnabled();
+		props.spellCheckingColor		= spelling.getSpellCheckingColor();
+		props.spellingDictionary		= spelling.getSpellingDictionary();
+		props.userDictionary			= spelling.getUserDictionary();
+		props.maxSpellingErrors			= spelling.getMaxSpellingErrors();
+		props.viewSpellingList			= rtext.isSpellingWindowVisible();
 
 		// Save the actions owned by RText.
 		props.accelerators = new HashMap();
@@ -514,6 +517,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 				}
 			}
 			props.maxSpellingErrors		= prefs.getInt("maxSpellingErrors", props.maxSpellingErrors);
+			props.viewSpellingList	= prefs.getBoolean("viewSpellingList", props.viewSpellingList);
 
 			// Get all properties associated with the RTextMenuBar class.
 			prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -673,6 +677,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs.put("spellingDictionary", 				spellingDictionary);
 		prefs.put("userDictionary",						userDictionary==null ? "" : userDictionary.getAbsolutePath());
 		prefs.putInt("maxSpellingErrors",				maxSpellingErrors);
+		prefs.putBoolean("viewSpellingList",			viewSpellingList);
 
 		// Save all properties related to the RTextMenuBar class.
 		prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -775,10 +780,11 @@ public class RTextPreferences extends GUIApplicationPreferences
 		gutterBorderColor	= new Color(221, 221, 221);
 		spellCheckingEnabled = false;
 		spellCheckingColor   = DEFAULT_SPELLING_ERROR_COLOR;
-		spellingDictionary   = AbstractMainView.DICTIONARIES[1];
+		spellingDictionary   = SpellingSupport.DICTIONARIES[1];
 		userDictionary       = new File(RTextUtilities.getPreferencesDirectory(),
 										"userDictionary.txt");
 		maxSpellingErrors    = DEFAULT_MAX_SPELLING_ERRORS;
+		viewSpellingList   = false;
 
 		accelerators = new HashMap();
 		for (int i=0; i<RText.actionNames.length; i++) {

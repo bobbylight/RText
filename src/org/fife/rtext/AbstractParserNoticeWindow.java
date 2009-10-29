@@ -185,7 +185,11 @@ abstract class AbstractParserNoticeWindow extends DockableWindow {
 	protected abstract class ParserNoticeTableModel extends DefaultTableModel {
 
 		public ParserNoticeTableModel(String lastColHeader) {
-			String[] colHeaders = new String[] { "", "File", "Line", lastColHeader, }; // TODO
+			String[] colHeaders = new String[] {
+					"",
+					rtext.getString("ParserNoticeList.File"),
+					rtext.getString("ParserNoticeList.Line"),
+					lastColHeader, };
 			setColumnIdentifiers(colHeaders);
 		}
 
@@ -281,7 +285,7 @@ abstract class AbstractParserNoticeWindow extends DockableWindow {
 					AbstractMainView mainView = rtext.getMainView();
 					if (mainView.setSelectedTextArea(textArea)) {
 						Integer i = (Integer)table.getValueAt(row, 2);
-						int line = i.intValue();
+						int line = i.intValue() - 1; // 0-based
 						try {
 							textArea.setCaretPosition(
 								textArea.getLineStartOffset(line));

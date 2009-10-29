@@ -121,6 +121,8 @@ public class RText extends AbstractPluggableGUIApplication
 
 	private HelpDialog helpDialog;
 
+	private SpellingErrorWindow spellingWindow;
+
 	private boolean aboutDialogCreated;
 
 	private SyntaxScheme colorScheme;
@@ -909,6 +911,17 @@ public class RText extends AbstractPluggableGUIApplication
 
 
 	/**
+	 * Returns whether the spelling window is visible.
+	 *
+	 * @return Whether the spelling window is visible.
+	 * @see #setSpellingWindowVisible(boolean)
+	 */
+	public boolean isSpellingWindowVisible() {
+		return spellingWindow!=null && spellingWindow.isActive();
+	}
+
+
+	/**
 	 * Called whenever the user presses a key in the current text area.
 	 *
 	 * @param e The key event.
@@ -1053,13 +1066,8 @@ public class RText extends AbstractPluggableGUIApplication
 
 setSearchWindowOpacity(0.5f);
 
-		// Display the spelling error window.
-		SpellingErrorWindow sew = new SpellingErrorWindow(this);
-		DockableWindowPanel dwp = (DockableWindowPanel)mainContentPanel;
-		dwp.addDockableWindow(sew);
-
 TaskWindow tw = new TaskWindow(this);
-dwp.addDockableWindow(tw);
+((DockableWindowPanel)mainContentPanel).addDockableWindow(tw);
 
 		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
 			System.err.println("preDisplayInit: " + (System.currentTimeMillis()-start));
@@ -1088,6 +1096,9 @@ dwp.addDockableWindow(tw);
 		setSplitPaneDividerLocation(LEFT, rtp.dividerLocations[LEFT]);
 		setSplitPaneDividerLocation(BOTTOM, rtp.dividerLocations[BOTTOM]);
 		setSplitPaneDividerLocation(RIGHT, rtp.dividerLocations[RIGHT]);
+
+		// Show any docked windows
+		setSpellingWindowVisible(rtp.viewSpellingList);
 
 		setShowHostName(rtp.showHostName);
 
@@ -1591,6 +1602,31 @@ w.addComponentListener(searchWindowOpacityListener);
 	 */
 	public void setSearchWindowOpacityRule(int rule) {
 		searchWindowOpacityRule = rule;
+	}
+
+
+	/**
+	 * Toggles whether the spelling error window is visible.
+	 *
+	 * @param visible Whether the spelling error window is visible.
+	 * @see #isSpellingWindowVisible()
+	 */
+	public void setSpellingWindowVisible(boolean visible) {
+		if (visible) {
+			if (spellingWindow==null) {
+				spellingWindow = new SpellingErrorWindow(this);
+				DockableWindowPanel dwp = (DockableWindowPanel)mainContentPanel;
+				dwp.addDockableWindow(spellingWindow);
+			}
+			else {
+				spellingWindow.setActive(true);
+			}
+		}
+		else {
+			if (spellingWindow!=null) {
+				spellingWindow.setActive(false);
+			}
+		}
 	}
 
 

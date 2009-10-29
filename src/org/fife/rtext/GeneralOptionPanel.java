@@ -80,7 +80,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 * @param rtext The owning RText instance.
 	 * @param msg The resource bundle to use.
 	 */
-	public GeneralOptionPanel(final RText rtext, final ResourceBundle msg) {
+	public GeneralOptionPanel(RText rtext, ResourceBundle msg) {
 
 		super(msg.getString("OptGenName"));
 		fileSizeError = msg.getString("OptGenFileSizeError");
@@ -269,10 +269,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Applies the settings entered into this dialog on the specified
-	 * application.
-	 *
-	 * @param owner The application.
+	 * {@inheritDoc}
 	 */
 	protected void doApplyImpl(Frame owner) {
 		RText rtext = (RText)owner;
@@ -287,14 +284,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Checks whether or not all input the user specified on this panel is
-	 * valid.  This should be overridden to check, for example, whether
-	 * text fields have valid values, etc.  This method will be called
-	 * whenever the user clicks "OK" or "Apply" on the options dialog to
-	 * ensure all input is valid.  If it isn't, the component with invalid
-	 * data will be given focus and the user will be prompted to fix it.<br>
-	 * 
-	 * @return <code>null</code> always.
+	 * {@inheritDoc}
 	 */
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		float maxFileSize = getMaxFileSize();
@@ -354,8 +344,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Returns the <code>JComponent</code> at the "top" of this Options
-	 * panel.
+	 * {@inheritDoc}
 	 */
 	public JComponent getTopJComponent() {
 		return dirBrowseButton;
@@ -482,11 +471,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets the values displayed by this panel to reflect those in the
-	 * application.  Child panels are not handled.
-	 *
-	 * @param owner The parent application.
-	 * @see #setValues(Frame)
+	 * {@inheritDoc}
 	 */
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;

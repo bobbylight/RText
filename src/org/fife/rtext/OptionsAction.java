@@ -104,16 +104,16 @@ class OptionsAction extends StandardAction {
 			rtext.optionsDialog = new OptionsDialog(rtext);
 			ResourceBundle msg = ResourceBundle.getBundle(
 									"org.fife.rtext.OptionsDialog");
-			ClassLoader cl = getClass().getClassLoader();
-			String prefix = "org/fife/rtext/graphics/options_";
 
 			OptionsDialogPanel[] optionsPanels = new OptionsDialogPanel[8];
 			optionsPanels[0] = new GeneralOptionPanel(rtext, msg);
-			optionsPanels[0].setIcon(new ImageIcon(cl.getResource(prefix + "general.png")));
+			setIcon(optionsPanels[0], "general.png");
 			optionsPanels[1] = new UIOptionPanel(rtext, msg);
-			optionsPanels[1].setIcon(new ImageIcon(cl.getResource(prefix + "ui.png")));
+			setIcon(optionsPanels[1], "ui.png");
+optionsPanels[1].addChildPanel(new LanguageOptionPanel(rtext, msg));
+setIcon(optionsPanels[1].getChildPanel(0), "language.png");
 			optionsPanels[2] = new RTextAreaOptionPanel();
-			optionsPanels[2].setIcon(new ImageIcon(cl.getResource(prefix + "textarea.png")));
+			setIcon(optionsPanels[2], "textarea.png");
 			optionsPanels[2].addChildPanel(new CaretAndSelectionOptionPanel());
 			optionsPanels[2].addChildPanel(new RSyntaxTextAreaOptionPanel());
 			optionsPanels[2].addChildPanel(new GutterOptionPanel());
@@ -121,17 +121,18 @@ class OptionsAction extends StandardAction {
 			optionsPanels[2].addChildPanel(new TemplateOptionPanel());
 			optionsPanels[2].addChildPanel(new MacroOptionPanel(rtext, msg));
 			optionsPanels[3] = new RTextFileChooserOptionPanel();
-			optionsPanels[3].setIcon(new ImageIcon(cl.getResource(prefix + "file_chooser.png")));
+			setIcon(optionsPanels[3], "file_chooser.png");
 			optionsPanels[3].addChildPanel(new FileChooserFavoritesOptionPanel());
 			optionsPanels[4] = new PrintingOptionPanel(rtext, msg);
-			optionsPanels[4].setIcon(new ImageIcon(cl.getResource(prefix + "printing.png")));
-			optionsPanels[5] = new LanguageOptionPanel(rtext, msg);
-			optionsPanels[5].setIcon(new ImageIcon(cl.getResource(prefix + "language.png")));
-			optionsPanels[6] = new FileFilterOptionPanel(rtext, msg);
-			optionsPanels[6].setIcon(new ImageIcon(cl.getResource(prefix + "file_filters.png")));
-			optionsPanels[7] = new ShortcutOptionPanel(rtext, msg);
-			optionsPanels[7].setIcon(new ImageIcon(cl.getResource(prefix + "shortcuts.png")));
-
+			setIcon(optionsPanels[4], "printing.png");
+//			optionsPanels[5] = new LanguageOptionPanel(rtext, msg);
+//			setIcon(optionsPanels[5], "language.png");
+			optionsPanels[5] = new FileFilterOptionPanel(rtext, msg);
+			setIcon(optionsPanels[5], "file_filters.png");
+			optionsPanels[6] = new ShortcutOptionPanel(rtext, msg);
+			setIcon(optionsPanels[6], "shortcuts.png");
+optionsPanels[7] = new XmlOptionPanel(rtext, msg);
+setIcon(optionsPanels[7], "xml.png");
 			msg = null;
 
 			OptionsDialog od = rtext.optionsDialog;
@@ -142,6 +143,13 @@ class OptionsAction extends StandardAction {
 
 		return rtext.optionsDialog;
 
+	}
+
+
+	private void setIcon(OptionsDialogPanel panel, String iconSuffix) {
+		ClassLoader cl = getClass().getClassLoader();
+		String prefix = "org/fife/rtext/graphics/options_";
+		panel.setIcon(new ImageIcon(cl.getResource(prefix + iconSuffix)));
 	}
 
 

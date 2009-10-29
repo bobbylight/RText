@@ -654,59 +654,67 @@ public class SourceBrowserPlugin extends GUIPlugin
 		// that this should always be a TagEntry, but we're just being
 		// safe by checking here.
 		else if (object instanceof TagEntry) {
-
 			ExtendedTagEntry entry = (ExtendedTagEntry)object;
-
-			// If we've already generated the (probably HTML) tooltip text,
-			// use it.
-			if (entry.cachedToolTipText!=null) {
-				text = entry.cachedToolTipText;
-			}
-
-			// Create the tooltip text (HTML, or just text if only a line
-			// number was found (such as #defines for C/C++).
-			else {
-
-				text = entry.getPlainTextPattern();
-
-				// If we have a pattern, try to create an HTML tooltip.
-				if (text!=null) {
-
-					// To trim off the "regular expression" parts.
-					text = text.substring(2, text.length()-2);
-
-					if (getUseHTMLToolTips()) {
-						// FIXME: Fix me to look line by line (as it's
-						// guaranteed to be just a a line!).
-						RTextEditorPane textArea = owner.getMainView().
-													getCurrentTextArea();
-						int pos = SearchEngine.getNextMatchPos(text,
-								textArea.getText(), true, true, false);
-						if (pos>-1) {
-							try {
-								int line = textArea.getLineOfOffset(pos);
-								text = getHTMLForLine(line);
-								entry.cachedToolTipText = text;
-							} catch (BadLocationException ble) {
-								owner.displayException(ble);
-							}
-						}
-					}
-
-				}
-
-				// If all we have is a line number, use the tag's element's
-				// name as the tooltip.
-				else {
-					text = entry.name.replaceAll("\t", " ");
-				}
-
-			} // End of else.
-
-		} // End of else if (object instanceof TagEntry).
+			text = mouseMovedTagEntry(entry);
+		}
 
 		// Set the tooltip text.
 		treeRenderer.setToolTipText(text);
+
+	}
+
+
+	private String mouseMovedTagEntry(ExtendedTagEntry entry) {
+
+		String text = null;
+
+		// If we've already generated the (probably HTML) tooltip text,
+		// use it.
+		if (entry.cachedToolTipText!=null) {
+			text = entry.cachedToolTipText;
+		}
+
+		// Create the tooltip text (HTML, or just text if only a line
+		// number was found (such as #defines for C/C++).
+		else {
+
+			text = entry.getPlainTextPattern();
+
+			// If we have a pattern, try to create an HTML tooltip.
+			if (text!=null) {
+
+				// To trim off the "regular expression" parts.
+				text = text.substring(2, text.length()-2);
+
+				if (getUseHTMLToolTips()) {
+					// FIXME: Fix me to look line by line (as it's
+					// guaranteed to be just a a line!).
+					RTextEditorPane textArea = owner.getMainView().
+												getCurrentTextArea();
+					int pos = SearchEngine.getNextMatchPos(text,
+							textArea.getText(), true, true, false);
+					if (pos>-1) {
+						try {
+							int line = textArea.getLineOfOffset(pos);
+							text = getHTMLForLine(line);
+							entry.cachedToolTipText = text;
+						} catch (BadLocationException ble) {
+							owner.displayException(ble);
+						}
+					}
+				}
+
+			}
+
+			// If all we have is a line number, use the tag's element's
+			// name as the tooltip.
+			else {
+				text = entry.name.replaceAll("\t", " ");
+			}
+
+		}
+
+		return text;
 
 	}
 

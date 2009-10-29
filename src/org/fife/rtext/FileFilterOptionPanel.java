@@ -33,7 +33,6 @@ import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -41,6 +40,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RButton;
+import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.modifiabletable.*;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -85,7 +85,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 					new OptionPanelBorder(msg.getString("OptFFLabel")));
 		add(contentPane);
 
-		JLabel desc = new JLabel(msg.getString("OptFFDesc"));
+		SelectableLabel desc = new SelectableLabel(msg.getString("OptFFDesc"));
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
 		temp.add(desc, BorderLayout.LINE_START);

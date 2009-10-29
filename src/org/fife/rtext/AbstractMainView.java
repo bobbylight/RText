@@ -53,9 +53,6 @@ import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
-import org.fife.ui.rsyntaxtextarea.spell.SpellingParser;
-import org.fife.ui.rsyntaxtextarea.spell.event.SpellingParserEvent;
-import org.fife.ui.rsyntaxtextarea.spell.event.SpellingParserListener;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.IconGroup;
 import org.fife.ui.rtextarea.Macro;
@@ -84,7 +81,7 @@ import org.fife.ui.search.*;
  */
 public abstract class AbstractMainView extends JPanel
 		implements PropertyChangeListener, ActionListener,
-				FindInFilesListener, HyperlinkListener, SpellingParserListener {
+				FindInFilesListener, HyperlinkListener {
 
 	public static final int DOCUMENT_SELECT_TOP		= JTabbedPane.TOP;
 	public static final int DOCUMENT_SELECT_LEFT		= JTabbedPane.LEFT;
@@ -123,11 +120,6 @@ public abstract class AbstractMainView extends JPanel
 	public static final String SMOOTH_TEXT_PROPERTY			= "MainView.smoothText";
 	public static final String TEXT_AREA_ADDED_PROPERTY		= "MainView.textAreaAdded";
 	public static final String TEXT_AREA_REMOVED_PROPERTY	= "MainView.textAreaRemoved";
-
-	public static final String[] DICTIONARIES	= {
-		"BritishEnglish",
-		"AmericanEnglish",
-	};
 
 	private RTextEditorPane currentTextArea;			// Currently active text area.
 
@@ -219,16 +211,7 @@ public abstract class AbstractMainView extends JPanel
 	private Color lineNumberColor;
 	private Color gutterBorderColor;
 
-	/**
-	 * TODO: Move me to a plugin.
-	 */
-	private SpellingParser spellingParser;
-
-	private boolean spellCheckingEnabled;
-	private Color spellCheckingColor;
-	private String spellingDictionary;
-	private File userDictionary;
-	private int maxSpellingErrors;
+	private SpellingSupport spellingSupport;
 
 	/**
 	 * The cursor used when recording a macro.
@@ -286,69 +269,8 @@ public abstract class AbstractMainView extends JPanel
 
 		// If a file was found to be modified outside of the editor...
 		else if (command.startsWith("FileModified. ")) {
-
-			StringTokenizer tokenizer = new StringTokenizer(
-					command.substring(command.indexOf(' ')));
-
-			// Loop while there are still documents to prompt for.
-			while (tokenizer.hasMoreTokens()) {
-
-				// Should be the number of the next modified document.
-				String token = tokenizer.nextToken();
-
-				int docNumber = 0;
-				try {
-					docNumber = Integer.parseInt(token);
-				} catch (NumberFormatException nfe) { // Should never happen
-					continue;
-				}
-				setSelectedIndex(docNumber);
-
-				// We must get it as a regular expression because
-				// replaceFirst expects one.
-				int rc = JOptionPane.NO_OPTION;
-				String temp = owner.getString("DocModifiedMessage",
-									currentTextArea.getFileName());
-				rc = JOptionPane.showConfirmDialog(owner, temp,
-								owner.getString("ConfDialogTitle"),
-								JOptionPane.YES_NO_OPTION,
-								JOptionPane.QUESTION_MESSAGE);
-
-				// If they want to, reload the file.
-				if (rc==JOptionPane.YES_OPTION) {
-
-					try {
-						File f = new File(currentTextArea.getFileFullPath());
-						if (f.isFile()) { // Should always be true.
-							currentTextArea.reload();
-							moveToTopOfCurrentDocument();
-						}
-						else {
-							JOptionPane.showMessageDialog(owner,
-								owner.getString("ErrorReloadFNF"),
-								owner.getString("ErrorDialogTitle"),
-								JOptionPane.ERROR_MESSAGE);
-						}
-					} catch (Exception ioe) {
-						JOptionPane.showMessageDialog(owner,
-							owner.getString("ErrorReadingFile") + ioe,
-							owner.getString("ErrorDialogTitle"),
-							JOptionPane.ERROR_MESSAGE);
-					}
-
-				} // End of if (rc==JOptionPane.YES_OPTION)
-
-				// Whether or not we reload, we need to update the "last
-				// modified" time for this document, so we don't keep
-				// bugging them about the same outside modification.
-				currentTextArea.syncLastSaveOrLoadTimeToActualFile();
-
-			} // End of while (token != null).
-
-			// It's okay to start checking for modifications again.
-			checkForModification = true;
-
-		} // End of else if (command.equals("FileModified. ")).
+			handleFileModifiedEvent(command);
+		}
 
 	}
 
@@ -727,7 +649,7 @@ public abstract class AbstractMainView extends JPanel
 		renumberDisplayNames();	// In case the same document is opened multiple times.
 		setSelectedIndex(fromSelectedIndex);
 
-		spellingParser = fromPanel.spellingParser;
+		spellingSupport = fromPanel.spellingSupport;
 
 		// "Move over" all current text area listeners.
 		// Remember "listeners" is guaranteed to be non-null.
@@ -986,8 +908,8 @@ public abstract class AbstractMainView extends JPanel
 //ac.install(pane);
 
 		// Add any parsers.
-		if (isSpellCheckingEnabled()) {
-			pane.addParser(spellingParser);
+		if (spellingSupport.isSpellCheckingEnabled()) {
+			pane.addParser(spellingSupport.getSpellingParser());
 		}
 
 		// Return him.
@@ -1015,33 +937,6 @@ public abstract class AbstractMainView extends JPanel
 		// Always visible, makes life easier
 		scrollPane.setIconRowHeaderEnabled(true);
 		return scrollPane;
-	}
-
-
-	/**
-	 * Creates a spelling parser using the current spelling preferences set
-	 * in this view, and assigns {@link #spellingParser} to it.
-	 *
-	 * @throws IOException If an IO error occurs.
-	 */
-	private void createSpellingParser() throws IOException {
-		File file = new File("english_dic.zip").getAbsoluteFile();
-		boolean american = DICTIONARIES[1].equals(spellingDictionary);
-		spellingParser = SpellingParser.
-					createEnglishSpellingParser(file, american);
-		spellingParser.setSquiggleUnderlineColor(getSpellCheckingColor());
-		spellingParser.setMaxErrorCount(getMaxSpellingErrors());
-		spellingParser.setAllowAdd(true);//userDictionary!=null);
-		spellingParser.setAllowIgnore(true);
-		spellingParser.addSpellingParserListener(this);
-		try {
-			spellingParser.setUserDictionary(userDictionary);
-		} catch (IOException ioe) {
-			String desc = owner.getString("Error.LoadingUserDictionary.txt",
-				userDictionary==null ? "null" :userDictionary.getAbsolutePath(),
-				ioe.getMessage());
-			owner.displayException(ioe, desc);
-		}
 	}
 
 
@@ -1626,17 +1521,6 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns the maximum number of spelling errors to report for a file.
-	 *
-	 * @return The maximum number of spelling errors.
-	 * @see #setMaxSpellingErrors(int)
-	 */
-	public int getMaxSpellingErrors() {
-		return maxSpellingErrors;
-	}
-
-
-	/**
 	 * Gets the color used to highlight modified documents' display names.
 	 *
 	 * @return color The color used.
@@ -1759,35 +1643,12 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Sets the color to use when squiggle underlining spelling errors.
+	 * Returns the spell checking support for RText.
 	 *
-	 * @return The color to use.
-	 * @see #setSpellCheckingColor(Color)
+	 * @return The spell checking support.
 	 */
-	public Color getSpellCheckingColor() {
-		return spellCheckingColor;
-	}
-
-
-	/**
-	 * Returns the spelling dictionary to use.
-	 *
-	 * @return The spelling dictionary.
-	 * @see #setSpellingDictionary(String)
-	 */
-	public String getSpellingDictionary() {
-		return spellingDictionary;
-	}
-
-
-	/**
-	 * Returns the spelling parser.  Note that this may be <code>null</code>
-	 * if spell checking has not yet been enabled.
-	 *
-	 * @return The spelling parser.
-	 */
-	SpellingParser getSpellingParser() {
-		return spellingParser;
+	public SpellingSupport getSpellingSupport() {
+		return spellingSupport;
 	}
 
 
@@ -1917,18 +1778,6 @@ public abstract class AbstractMainView extends JPanel
 
 		return buffer;
 
-	}
-
-
-	/**
-	 * Returns the dictionary that "added words" are added to.
-	 *
-	 * @return The user dictionary, or <code>null</code> if none has been
-	 *         set.
-	 * @see #setUserDictionary(File)
-	 */
-	public File getUserDictionary() {
-		return userDictionary;
 	}
 
 
@@ -2074,6 +1923,72 @@ public abstract class AbstractMainView extends JPanel
 	}
 
 
+	private void handleFileModifiedEvent(String text) {
+
+		StringTokenizer tokenizer = new StringTokenizer(
+				text.substring(text.indexOf(' ')));
+
+		// Loop while there are still documents to prompt for.
+		while (tokenizer.hasMoreTokens()) {
+
+			// Should be the number of the next modified document.
+			String token = tokenizer.nextToken();
+
+			int docNumber = 0;
+			try {
+				docNumber = Integer.parseInt(token);
+			} catch (NumberFormatException nfe) { // Should never happen
+				continue;
+			}
+			setSelectedIndex(docNumber);
+
+			// We must get it as a regular expression because
+			// replaceFirst expects one.
+			int rc = JOptionPane.NO_OPTION;
+			String temp = owner.getString("DocModifiedMessage",
+								currentTextArea.getFileName());
+			rc = JOptionPane.showConfirmDialog(owner, temp,
+							owner.getString("ConfDialogTitle"),
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE);
+
+			// If they want to, reload the file.
+			if (rc==JOptionPane.YES_OPTION) {
+
+				try {
+					File f = new File(currentTextArea.getFileFullPath());
+					if (f.isFile()) { // Should always be true.
+						currentTextArea.reload();
+						moveToTopOfCurrentDocument();
+					}
+					else {
+						JOptionPane.showMessageDialog(owner,
+							owner.getString("ErrorReloadFNF"),
+							owner.getString("ErrorDialogTitle"),
+							JOptionPane.ERROR_MESSAGE);
+					}
+				} catch (Exception ioe) {
+					JOptionPane.showMessageDialog(owner,
+						owner.getString("ErrorReadingFile") + ioe,
+						owner.getString("ErrorDialogTitle"),
+						JOptionPane.ERROR_MESSAGE);
+				}
+
+			} // End of if (rc==JOptionPane.YES_OPTION)
+
+			// Whether or not we reload, we need to update the "last
+			// modified" time for this document, so we don't keep
+			// bugging them about the same outside modification.
+			currentTextArea.syncLastSaveOrLoadTimeToActualFile();
+
+		} // End of while (token != null).
+
+		// It's okay to start checking for modifications again.
+		checkForModification = true;
+
+	}
+
+
 	/**
 	 * Returns whether this panel is highlighting modified documents' display
 	 * names with a different color.
@@ -2202,12 +2117,9 @@ public abstract class AbstractMainView extends JPanel
 		setLineNumberFont(prefs.lineNumberFont);
 		setLineNumberColor(prefs.lineNumberColor);
 		setGutterBorderColor(prefs.gutterBorderColor);
-		setSpellCheckingEnabled(prefs.spellCheckingEnabled);
-		setSpellCheckingColor(prefs.spellCheckingColor);
-		setSpellingDictionary(prefs.spellingDictionary);
-		setMaxSpellingErrors(prefs.maxSpellingErrors);
-		setUserDictionary(prefs.userDictionary);
-System.out.println("Setting user dictionary to: " + prefs.userDictionary);
+		spellingSupport = new SpellingSupport(owner);
+		spellingSupport.configure(prefs); // Do this BEFORE opening any files!
+
 		// Start us out with whatever files they passed in.
 		if (filesToOpen==null) {
 			addNewEmptyUntitledFile();
@@ -2270,17 +2182,6 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 	 */
 	public boolean isMarginLineEnabled() {
 		return marginLineEnabled;
-	}
-
-
-	/**
-	 * Returns whether spell checking is enabled.
-	 *
-	 * @return Whether spell checking is enabled.
-	 * @see #setSpellCheckingEnabled(boolean)
-	 */
-	public boolean isSpellCheckingEnabled() {
-		return spellCheckingEnabled;
 	}
 
 
@@ -2589,22 +2490,6 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 			searchStrings = (Vector)e.getNewValue();
 		}
 
-	}
-
-
-	/**
-	 * Forces all opened documents to be re-spell checked.
-	 */
-	private void recheckSpelling() {
-		for (int i=0; i<getNumDocuments(); i++) {
-			RTextEditorPane textArea = getRTextEditorPaneAt(i);
-			for (int j=0; j<textArea.getParserCount(); j++) {
-				if (textArea.getParser(j)==spellingParser) {
-					textArea.forceReparsing(j);
-					break;
-				}
-			}
-		}
 	}
 
 
@@ -3607,23 +3492,6 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 
 
 	/**
-	 * Changes the maximum number of spelling errors reported for a file.
-	 *
-	 * @param max The maximum number of spelling errors.
-	 * @see #getMaxSpellingErrors()
-	 */
-	public void setMaxSpellingErrors(int max) {
-		if (max>=0 && max!=maxSpellingErrors) {
-			maxSpellingErrors = max;
-			if (spellingParser!=null && isSpellCheckingEnabled()) {
-				spellingParser.setMaxErrorCount(maxSpellingErrors);
-				recheckSpelling();
-			}
-		}
-	}
-
-
-	/**
 	 * Sets the color used to highlight modified documents' display names.
 	 *
 	 * @param color The color to use.
@@ -3734,122 +3602,6 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 			for (int i=0; i<numDocuments; i++)
 				getRTextEditorPaneAt(i).setSelectionColor(color);
 		}
-	}
-
-
-	/**
-	 * Toggles the color used for squiggle underlining spelling errors.
-	 *
-	 * @param color The new color to use.
-	 * @see #getSpellCheckingColor()
-	 */
-	public void setSpellCheckingColor(Color color) {
-		if (color!=null && color!=spellCheckingColor) {
-			spellCheckingColor = color;
-			if (spellingParser!=null) {
-				spellingParser.setSquiggleUnderlineColor(spellCheckingColor);
-				repaint(); // Change all squiggles' colors
-			}
-		}
-	}
-
-
-	/**
-	 * Toggles whether spell checking is enabled.
-	 *
-	 * @param enabled Whether spell checking is enabled.
-	 * @see #isSpellCheckingEnabled()
-	 */
-	public void setSpellCheckingEnabled(boolean enabled) {
-
-		if (enabled!=spellCheckingEnabled) {
-
-			spellCheckingEnabled = enabled;
-
-			// Lazily create the spelling parser.
-			if (enabled && spellingParser==null) {
-				new Thread(new Runnable() {
-					public void run() {
-						try {
-							createSpellingParser();
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-									toggleSpellingParserInstalled();
-								}
-							});
-						} catch (IOException ioe) {
-							String desc = owner.getString(
-									"Error.LoadingSpellingParser.txt");
-							owner.displayException(ioe, desc);
-						}
-					}
-				}).start();
-			}
-			else {
-				toggleSpellingParserInstalled(); // Already created
-			}
-
-		}
-
-	}
-
-
-	/**
-	 * Sets the spelling dictionary to use.
-	 *
-	 * @param dict The dictionary.  If this is unknown, American English is
-	 *        used.
-	 * @see #getSpellingDictionary()
-	 */
-	public void setSpellingDictionary(String dict) {
-
-		if (dict!=null && !dict.equals(spellingDictionary)) {
-
-			// Set the dictionary file, ensuring it is valid.
-			boolean valid = false;
-			for (int i=0; i<DICTIONARIES.length; i++) {
-				if (DICTIONARIES[i].equals(dict)) {
-					valid = true;
-					break;
-				}
-			}
-			if (!valid) {
-				dict = DICTIONARIES[1]; // Default to American English
-			}
-			spellingDictionary = dict;
-
-			// Remove the old spelling parser, if necessary.
-			if (spellingParser!=null && isSpellCheckingEnabled()) {
-				for (int i=0; i<getNumDocuments(); i++) {
-					RTextEditorPane textArea = getRTextEditorPaneAt(i);
-					textArea.removeParser(spellingParser);
-				}
-			}
-
-			// Create the new spelling parser, if necessary (if it doesn't
-			// exist yet, spell checking hasn't been enabled yet, thus no need
-			// to create it).
-			if (spellingParser!=null) { // spell checking may be disabled
-				try {
-					createSpellingParser();
-				} catch (IOException ioe) {
-					String desc = owner.getString(
-							"Error.LoadingSpellingParser.txt");
-					owner.displayException(ioe, desc);
-					return;
-				}
-			}
-
-			// Add the new spelling parser to all text areas, if necessary.
-			if (isSpellCheckingEnabled()) {
-				for (int i=0; i<getNumDocuments(); i++) {
-					RTextEditorPane textArea = getRTextEditorPaneAt(i);
-					textArea.addParser(spellingParser);
-				}
-			}
-
-		}
-
 	}
 
 
@@ -4110,29 +3862,6 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 
 
 	/**
-	 * Sets the dictionary that "added words" are added to.
-	 *
-	 * @param dict The new user dictionary.  If this is <code>null</code>, then
-	 *        there will be no user dictionary.
-	 * @see #getUserDictionary()
-	 */
-	public void setUserDictionary(File dict) {
-		if ((dict==null && userDictionary!=null) ||
-				(dict!=null && !dict.equals(userDictionary))) {
-			userDictionary = dict;
-			if (spellingParser!=null) {
-				try {
-					spellingParser.setUserDictionary(userDictionary);
-					recheckSpelling();
-				} catch (IOException ioe) {
-					owner.displayException(ioe);
-				}
-			}
-		}
-	}
-
-
-	/**
 	 * Sets whether whitespace is visible in all open text areas.<p>
 	 * This method will not change anything if the value of
 	 * <code>visible</code> is already the whitespace-visibility state.
@@ -4158,63 +3887,6 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 	public void setWriteBOMInUtf8Files(boolean write) {
 		System.setProperty(UnicodeWriter.PROPERTY_WRITE_UTF8_BOM,
 						Boolean.toString(write));
-	}
-
-
-	/**
-	 * Called when the user adds a word to their user dictionary, or chooses
-	 * to ignore a word.
-	 *
-	 * @param e The event.
-	 */
-	public void spellingParserEvent(SpellingParserEvent e) {
-
-		int type = e.getType();
-
-		if (SpellingParserEvent.WORD_ADDED==type ||
-				SpellingParserEvent.WORD_IGNORED==type) {
-
-			// Re-spell check opened files.
-			for (int i=0; i<getNumDocuments(); i++) {
-				RTextEditorPane textArea = getRTextEditorPaneAt(i);
-				// currentTextArea already done by the SpellingParser itself
-				if (textArea!=getCurrentTextArea()) {
-					for (int j=0; j<textArea.getParserCount(); j++) {
-						// Should be in the list somewhere...
-						if (textArea.getParser(j)==spellingParser) {
-							textArea.forceReparsing(j);
-							break;
-						}
-					}
-				}
-			}
-
-		}
-
-	}
-
-
-	/**
-	 * Toggles whether the spelling parser is installed on all currently
-	 * visible text areas.  This should only be called on the EDT.
-	 */
-	private void toggleSpellingParserInstalled() {
-		if (spellingParser!=null) { // Should always be true.
-			//spellCheckingEnabled = !spellCheckingEnabled; // Already done
-			for (int i=0; i<getNumDocuments(); i++) {
-				RTextEditorPane textArea = getRTextEditorPaneAt(i);
-				if (spellCheckingEnabled) {
-					textArea.addParser(spellingParser);
-				}
-				else {
-					textArea.removeParser(spellingParser);
-				}
-			}
-		}
-		else {
-			Exception e = new Exception("Internal error: Spelling parser is null!");
-			owner.displayException(e);
-		}
 	}
 
 
