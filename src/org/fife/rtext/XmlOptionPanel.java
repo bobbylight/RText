@@ -30,7 +30,6 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
-
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -38,6 +37,7 @@ import javax.swing.JPanel;
 
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.UIUtil;
+import org.fife.ui.rsyntaxtextarea.modes.XMLTokenMaker;
 
 
 /**
@@ -98,6 +98,8 @@ class XmlOptionPanel extends OptionsDialogPanel implements ActionListener {
 	 * {@inheritDoc}
 	 */
 	protected void doApplyImpl(Frame owner) {
+		boolean closeClosingTags = autoCompleteClosingTagsCB.isSelected();
+		XMLTokenMaker.setCompleteCloseTags(closeClosingTags);
 	}
 
 
@@ -121,6 +123,8 @@ class XmlOptionPanel extends OptionsDialogPanel implements ActionListener {
 	 * {@inheritDoc}
 	 */
 	protected void setValuesImpl(Frame owner) {
+		boolean close = XMLTokenMaker.getCompleteCloseMarkupTags();
+		autoCompleteClosingTagsCB.setSelected(close);
 	}
 
 

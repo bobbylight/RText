@@ -2,6 +2,20 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+1.0.0
+---------------------
+   - Added Scala syntax highlighting.
+   - Added Delphi syntax highlighting and Source Browser support.
+   - ??? When editing XML, closing tags are auto-completed.  This can be
+     toggled via the Options dialog. ???
+   - The file chooser now uses a "breadcrumb bar" component, similar to the
+     file chooser in Windows Vista.
+   - Removed a couple of unnecessary borders in the main application's
+     interface.
+   - Fixed a silent NPE when doing a "replace all" with regex enabled, and the
+     replacement text was the empty string.
+
+
 0.9.9.9 (07/22/2009):
 ---------------------
    - If you edit a file with no extension, RText now guesses the file content

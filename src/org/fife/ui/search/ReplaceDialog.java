@@ -337,7 +337,11 @@ contentPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(5,5,0,5));
 	 *         the text to find with.
 	 */
 	public String getReplaceString() {
-		return (String)replaceWithCombo.getSelectedItem();
+		String text = (String)replaceWithCombo.getSelectedItem();
+		if (text==null) { // possible from JComboBox
+			text = "";
+		}
+		return text;
 	}
 
 

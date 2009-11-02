@@ -46,6 +46,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 
 import org.fife.io.UnicodeWriter;
+import org.fife.rtext.lang.LanguageSupport;
+import org.fife.rtext.lang.LanguageSupportFactory;
 import org.fife.ui.UIUtil;
 //import org.fife.ui.autocomplete.*;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
@@ -534,13 +536,27 @@ public abstract class AbstractMainView extends JPanel
 	 *         what the user does.
 	 */
 	public final int closeCurrentDocument() {
+
 		RTextEditorPane old = currentTextArea;
 		int rc = closeCurrentDocumentImpl();
+
 		if (rc==JOptionPane.YES_OPTION) {
+
 			old.clearParsers();
+
+			// Remove the old language support.
+			LanguageSupportFactory lsf = LanguageSupportFactory.get();
+			LanguageSupport support = lsf.getSupport(old.getSyntaxEditingStyle());
+			if (support!=null) {
+				support.uninstall(old);
+			}
+
 			firePropertyChange(TEXT_AREA_REMOVED_PROPERTY, null, old);
+
 		}
+
 		return rc;
+
 	}
 
 
@@ -3667,6 +3683,14 @@ public abstract class AbstractMainView extends JPanel
 	 * @param style The style for the text area.
 	 */
 	private void setSyntaxStyle(RTextEditorPane pane, String style) {
+
+		// Remove the old language support.
+		LanguageSupportFactory lsf = LanguageSupportFactory.get();
+		LanguageSupport support = lsf.getSupport(pane.getSyntaxEditingStyle());
+		if (support!=null) {
+			support.uninstall(pane);
+		}
+
 		// If there was no extension on the file name, guess the content
 		// type for highlighting (but don't override content type if already
 		// assigned, e.g. "makefile" does this).
@@ -3675,10 +3699,18 @@ public abstract class AbstractMainView extends JPanel
 				SyntaxConstants.SYNTAX_STYLE_NONE.equals(style)) {
 			guessContentType(pane);
 		}
+
 		else {
 			// Doesn't change style if it's already being used.
 			pane.setSyntaxEditingStyle(style);
 		}
+
+		// Add the new support.
+		support = lsf.getSupport(pane.getSyntaxEditingStyle());
+		if (support!=null) {
+			support.install(pane);
+		}
+
 	}
 
 

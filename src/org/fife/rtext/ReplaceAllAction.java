@@ -85,7 +85,6 @@ class ReplaceAllAction extends StandardAction {
 		// Do the replacement.
 		int count = 0;
 		try {
-
 			count = SearchEngine.replaceAll(textArea, searchString,
 							mainView.replaceDialog.getReplaceString(),
 							matchCase, wholeWord, regex);
