@@ -1,7 +1,7 @@
 /*
  * 11/14/2003
  *
- * ReplaceAllAction.java - Action to replace all occurances of a given string
+ * ReplaceAllAction.java - Action to replace all occurences of a given string
  * with a new string in RText.
  * Copyright (C) 2003 Robert Futrell
  * robert_futrell at users.sourceforge.net
@@ -26,10 +26,10 @@
 package org.fife.rtext;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
 
 import org.fife.ui.app.StandardAction;
 import org.fife.ui.rtextarea.SearchEngine;
@@ -46,19 +46,15 @@ class ReplaceAllAction extends StandardAction {
 
 
 	/**
-	 * Creates a new <code>ReplaceAllAction</code>.
+	 * Constructor.
 	 *
-	 * @param rtext The <code>RText</code> that owns the
-	 *        <code>ReplaceDialog</code>.
-	 * @param text The text associated with the action.
+	 * @param owner The parent RText instance.
+	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
-	 * @param desc The description of the action.
-	 * @param mnemonic The mnemonic for the action.
-	 * @param accelerator The accelerator key for the action.
 	 */
-	public ReplaceAllAction(RText rtext, String text, Icon icon, String desc,
-						int mnemonic, KeyStroke accelerator) {
-		super(rtext, text, icon, desc, mnemonic, accelerator);
+	public ReplaceAllAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, "ReplaceAllAction");
+		setIcon(icon);
 	}
 
 

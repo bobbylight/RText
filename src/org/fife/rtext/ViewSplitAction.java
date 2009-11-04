@@ -25,8 +25,8 @@
 package org.fife.rtext;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 import javax.swing.Icon;
-import javax.swing.KeyStroke;
 
 import org.fife.ui.app.StandardAction;
 
@@ -43,22 +43,21 @@ class ViewSplitAction extends StandardAction {
 
 
 	/**
-	 * Creates a new <code>ViewSplitAction</code>.
+	 * Constructor.
 	 *
-	 * @param owner the main window of this rtext instance.
-	 * @param text The text associated with the action.
+	 * @param owner The parent RText instance.
+	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
-	 * @param desc The description of the action.
-	 * @param mnemonic The mnemonic for the action.
-	 * @param accelerator The accelerator key for the action.
+	 * @param nameKey The localization key for the name.
 	 * @param splitType One of
 	 *        <code>AbstractMainView.VIEW_SPLIT_HORIZ_ACTION</code>,
 	 *        <code>AbstractMainView.VIEW_SPLIT_NONE_ACTION</code>, or
 	 *        <code>AbstractMainView.VIEW_SPLIT_VERT_ACTION</code>.
 	 */
-	 public ViewSplitAction(RText owner, String text, Icon icon, String desc,
-	 			int mnemonic, KeyStroke accelerator, int splitType) {
-		super(owner, text, icon, desc, mnemonic, accelerator);
+	public ViewSplitAction(RText owner, ResourceBundle msg, Icon icon,
+							String nameKey, int splitType) {
+		super(owner, msg, nameKey);
+		setIcon(icon);
 		//this.splitType = splitType;
 	}
 

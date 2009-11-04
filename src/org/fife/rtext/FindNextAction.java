@@ -25,10 +25,10 @@
 package org.fife.rtext;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
 
 import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.search.FindDialog;
@@ -45,19 +45,14 @@ class FindNextAction extends FindAction {
 
 
 	/**
-	 * Creates a new <code>FindNextAction</code>.
+	 * Constructor.
 	 *
-	 * @param rtext The <code>RText</code> that owns the
-	 *        <code>FindDialog</code>.
-	 * @param text The text associated with the action.
+	 * @param owner The parent RText instance.
+	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
-	 * @param desc The description of the action.
-	 * @param mnemonic The mnemonic for the action.
-	 * @param accelerator The accelerator key for the action.
 	 */
-	public FindNextAction(RText rtext, String text, Icon icon,
-				String desc, int mnemonic, KeyStroke accelerator) {
-		super(rtext, text, icon, desc, mnemonic, accelerator);
+	public FindNextAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, icon, "FindNextAction");
 	}
 
 

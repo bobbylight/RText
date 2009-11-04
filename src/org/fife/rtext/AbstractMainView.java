@@ -50,6 +50,7 @@ import org.fife.rtext.lang.LanguageSupport;
 import org.fife.rtext.lang.LanguageSupportFactory;
 import org.fife.ui.UIUtil;
 //import org.fife.ui.autocomplete.*;
+import org.fife.ui.app.StandardAction;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -686,9 +687,9 @@ public abstract class AbstractMainView extends JPanel
 	/**
 	 * Creates the array of actions used by this RText.
 	 *
-	 * @param properties The RText properties for this RText instance.
+	 * @param prefs The RText properties for this RText instance.
 	 */
-	private void createActions(RTextPreferences properties) {
+	private void createActions(RTextPreferences prefs) {
 
 		ResourceBundle msg = ResourceBundle.getBundle(
 								"org.fife.rtext.MainPanelActions");
@@ -697,110 +698,78 @@ public abstract class AbstractMainView extends JPanel
 		ClassLoader cl = this.getClass().getClassLoader();
 		actions = new Action[NUM_ACTIONS];
 
-		String temp = msg.getString("CloseActionName");
-		actions[CLOSE_ACTION] = new CloseAction(owner, temp, null,
-				owner.getString("DescClose"),
-				msg.getString("CloseActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[CLOSE_ACTION]);
+		StandardAction a = new CloseAction(owner, msg, null);
+		a.setAccelerator(prefs.mainViewActionAccelerators[CLOSE_ACTION]);
+		actions[CLOSE_ACTION] = a;
 
-		temp = msg.getString("FindActionName");
-		actions[FIND_ACTION] = new FindAction(owner, temp, null,
-				owner.getString("DescFind"),
-				msg.getString("FindActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[FIND_ACTION]);
+		a = new CloseAllAction(owner, msg, null);
+		a.setAccelerator(prefs.mainViewActionAccelerators[CLOSE_ALL_ACTION]);
+		actions[CLOSE_ALL_ACTION] = a;
 
-		temp = msg.getString("FNActionName");
-		actions[FIND_NEXT_ACTION] = new FindNextAction(owner, temp, null,
-				owner.getString("DescFindNext"),
-				msg.getString("FNActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[FIND_NEXT_ACTION]);
+		a = new FindAction(owner, msg, null);
+		a.setAccelerator(prefs.mainViewActionAccelerators[FIND_ACTION]);
+		actions[FIND_ACTION] = a;
 
-		temp = msg.getString("RepActionName");
-		actions[REPLACE_ACTION] = new ReplaceAction(owner, temp, null,
-				owner.getString("DescReplace"),
-				msg.getString("RepActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[REPLACE_ACTION]);
+		a = new FindNextAction(owner, msg, null);
+		a.setAccelerator(prefs.mainViewActionAccelerators[FIND_NEXT_ACTION]);
+		actions[FIND_NEXT_ACTION] = a;
 
-		temp = msg.getString("RNActionName");
-		actions[REPLACE_NEXT_ACTION] = new ReplaceNextAction(owner, temp, null,
-				owner.getString("DescReplaceNext"),
-				msg.getString("RNActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[REPLACE_NEXT_ACTION]);
+		a = new ReplaceAction(owner, msg, null);
+		a.setAccelerator(prefs.mainViewActionAccelerators[REPLACE_ACTION]);
+		actions[REPLACE_ACTION] = a;
 
-		temp = msg.getString("RAActionName");
-		actions[REPLACE_ALL_ACTION] = new ReplaceAllAction(owner, temp, null,
-				null,  msg.getString("RAActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[REPLACE_ALL_ACTION]);
+		a = new ReplaceNextAction(owner, msg, null);
+		a.setAccelerator(prefs.mainViewActionAccelerators[REPLACE_NEXT_ACTION]);
+		actions[REPLACE_NEXT_ACTION] = a;
 
-		temp = msg.getString("FIFActionName");
-		actions[FIND_IN_FILES_ACTION] = new FindInFilesAction(owner, temp, null,
-				owner.getString("DescFindInFiles"),
-				msg.getString("FIFActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[FIND_IN_FILES_ACTION]);
+		a = new ReplaceAllAction(owner, msg, null);
+		a.setAccelerator(prefs.mainViewActionAccelerators[REPLACE_ALL_ACTION]);
+		actions[REPLACE_ALL_ACTION] = a;
 
-		temp = msg.getString("RAFActionName");
-		actions[REPLACE_IN_FILES_ACTION] = new ReplaceInFilesAction(owner, temp, null,
-				owner.getString("DescReplaceInFiles"),
-				msg.getString("RAFActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[REPLACE_IN_FILES_ACTION]);
+		a = new FindInFilesAction(owner, msg, null);
+		a.setAccelerator(prefs.mainViewActionAccelerators[FIND_IN_FILES_ACTION]);
+		actions[FIND_IN_FILES_ACTION] = a;
 
-		temp = msg.getString("PrintActionName");
-		actions[PRINT_ACTION] = new PrintAction(owner, temp, null,
-				owner.getString("DescPrint"),
-				msg.getString("PrintActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[PRINT_ACTION]);
+		a = new ReplaceInFilesAction(owner, msg, null);
+		a.setAccelerator(prefs.mainViewActionAccelerators[REPLACE_IN_FILES_ACTION]);
+		actions[REPLACE_IN_FILES_ACTION] = a;
 
-		temp = msg.getString("PPActionName");
-		actions[PRINT_PREVIEW_ACTION] = new PrintPreviewAction(owner, temp, null,
-				owner.getString("DescPrintPreview"),
-				-1, properties.mainViewActionAccelerators[PRINT_PREVIEW_ACTION]);
+		a = new PrintAction(owner, msg, null);
+		a.setAccelerator(prefs.mainViewActionAccelerators[PRINT_ACTION]);
+		actions[PRINT_ACTION] = a;
 
-		temp = msg.getString("GoToActionName");
-		actions[GOTO_ACTION] = new GoToAction(owner, temp,
-				new ImageIcon(cl.getResource(commonIconPath+"goto16.gif")),
-				owner.getString("DescGoTo"),
-				msg.getString("GoToActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[GOTO_ACTION]);
+		a = new PrintPreviewAction(owner, msg, null);
+		a.setAccelerator(prefs.mainViewActionAccelerators[PRINT_PREVIEW_ACTION]);
+		actions[PRINT_PREVIEW_ACTION] = a;
 
-		temp = msg.getString("LTRActionName");
-		actions[LTR_ACTION] = new TextAreaOrientationAction(owner, temp,
-				null, temp,
-				msg.getString("LTRActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[LTR_ACTION],
+		a = new GoToAction(owner, msg, new ImageIcon(cl.getResource(commonIconPath+"goto16.gif")));
+		a.setAccelerator(prefs.mainViewActionAccelerators[GOTO_ACTION]);
+		actions[GOTO_ACTION] = a;
+
+		a = new TextAreaOrientationAction(owner, msg, "LeftToRightAction", null,
 				ComponentOrientation.LEFT_TO_RIGHT);
+		a.setAccelerator(prefs.mainViewActionAccelerators[LTR_ACTION]);
+		actions[LTR_ACTION] = a;
 
-		temp = msg.getString("RTLActionName");
-		actions[RTL_ACTION] = new TextAreaOrientationAction(owner, temp,
-				null, temp,
-				msg.getString("RTLActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[RTL_ACTION],
+		a = new TextAreaOrientationAction(owner, msg, "RightToLeftAction", null,
 				ComponentOrientation.RIGHT_TO_LEFT);
+		a.setAccelerator(prefs.mainViewActionAccelerators[RTL_ACTION]);
+		actions[RTL_ACTION] = a;
 
-		temp = msg.getString("SplitHorizontallyActionName");
-		actions[VIEW_SPLIT_HORIZ_ACTION] = new ViewSplitAction(owner, temp,
-				null, temp,
-				msg.getString("SplitHorizontallyActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[VIEW_SPLIT_HORIZ_ACTION],
-				VIEW_SPLIT_HORIZ_ACTION);
+		a = new ViewSplitAction(owner, msg, null, "SplitHorizontallyAction",
+								VIEW_SPLIT_HORIZ_ACTION);
+		a.setAccelerator(prefs.mainViewActionAccelerators[VIEW_SPLIT_HORIZ_ACTION]);
+		actions[VIEW_SPLIT_HORIZ_ACTION] = a;
 
-		temp = msg.getString("SplitNoneActionName");
-		actions[VIEW_SPLIT_NONE_ACTION] = new ViewSplitAction(owner, temp,
-				null, temp,
-				msg.getString("SplitNoneActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[VIEW_SPLIT_NONE_ACTION],
-				VIEW_SPLIT_NONE_ACTION);
+		a = new ViewSplitAction(owner, msg, null, "SplitNoneAction",
+								VIEW_SPLIT_NONE_ACTION);
+		a.setAccelerator(prefs.mainViewActionAccelerators[VIEW_SPLIT_NONE_ACTION]);
+		actions[VIEW_SPLIT_NONE_ACTION] = a;
 
-		temp = msg.getString("SplitVerticallyActionName");
-		actions[VIEW_SPLIT_VERT_ACTION] = new ViewSplitAction(owner, temp,
-				null, temp,
-				msg.getString("SplitVerticallyActionMnemonic").charAt(0),
-				properties.mainViewActionAccelerators[VIEW_SPLIT_VERT_ACTION],
-				VIEW_SPLIT_VERT_ACTION);
-
-		temp = msg.getString("CAActionName");
-		actions[CLOSE_ALL_ACTION] = new CloseAllAction(owner, temp, null,
-				owner.getString("DescCloseAll"),
-				-1, properties.mainViewActionAccelerators[CLOSE_ALL_ACTION]);
+		a = new ViewSplitAction(owner, msg, null, "SplitVerticallyAction",
+								VIEW_SPLIT_VERT_ACTION);
+		a.setAccelerator(prefs.mainViewActionAccelerators[VIEW_SPLIT_VERT_ACTION]);
+		actions[VIEW_SPLIT_VERT_ACTION] = a;
 
 		msg = null; // May help with GC.
 
@@ -3060,7 +3029,7 @@ public abstract class AbstractMainView extends JPanel
 	/**
 	 * Sets the default encoding of new text files to the specified value.
 	 * This method fires a property change event of type
-	 * <code>DEFAULT_ENCODING_PROPERTY</code>.
+	 * {@link #DEFAULT_ENCODING_PROPERTY}.
 	 *
 	 * @param encoding The new default encoding.  A value of <code>null</code>
 	 *        means to use the system default encoding.
@@ -3102,7 +3071,7 @@ public abstract class AbstractMainView extends JPanel
 	/**
 	 * Sets whether a file's size is checked before it is opened.  This
 	 * method fires a property change event of type
-	 * <code>FILE_SIZE_CHECK_PROPERTY</code>.
+	 * {@link #FILE_SIZE_CHECK_PROPERTY}.
 	 *
 	 * @param doCheck Whether to check a file's size.
 	 * @see #getDoFileSizeCheck()
@@ -3116,9 +3085,8 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Sets whether fractional fontmetrics is enabled.
-	 * This method fires a property change of type
-	 * <code>FRACTIONAL_METRICS_PROPERTY</code>.
+	 * Sets whether fractional fontmetrics is enabled. This method fires a
+	 * property change of type {@link #FRACTIONAL_METRICS_PROPERTY}.
 	 *
 	 * @param enabled Whether fractional fontmetrics should be enabled.
 	 * @see #isFractionalFontMetricsEnabled
@@ -3391,7 +3359,7 @@ public abstract class AbstractMainView extends JPanel
 
 	/**
 	 * Sets the color selected for "mark all."  This method fires a property
-	 * change of type <code>MARK_ALL_COLOR_PROPERTY</code>.
+	 * change of type {@link #MARK_ALL_COLOR_PROPERTY}.
 	 *
 	 * @param color The color to have selected.
 	 * @see #getMarkAllHighlightColor
@@ -3491,7 +3459,7 @@ public abstract class AbstractMainView extends JPanel
 	 * If file size checking is enabled, this is the maximum size a file
 	 * can be before the user is prompted before opening it.  This
 	 * method fires a property change event of type
-	 * <code>MAX_FILE_SIZE_PROPERTY</code>.
+	 * {@link #MAX_FILE_SIZE_PROPERTY}.
 	 *
 	 * @param size The new maximum size for a file before the user is
 	 *        prompted before opening it.
@@ -3757,7 +3725,7 @@ public abstract class AbstractMainView extends JPanel
 	/**
 	 * Sets the rendering hint to use when anti-aliasing text in the text
 	 * editors.  This method fires a property change of type
-	 * <code>SMOOTH_TEXT_PROPERTY</code>.
+	 * {@link #SMOOTH_TEXT_PROPERTY}.
 	 *
 	 * @param aaHintFieldName The name of a field in
 	 *        <code>java.awt.RenderingHints</code>.  The name of the hint is

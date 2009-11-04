@@ -27,8 +27,8 @@ package org.fife.rtext;
 
 import java.awt.ComponentOrientation;
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 import javax.swing.Icon;
-import javax.swing.KeyStroke;
 
 import org.fife.ui.app.StandardAction;
 
@@ -46,20 +46,18 @@ class TextAreaOrientationAction extends StandardAction {
 
 
 	/**
-	 * Creates a new <code>TextAreaOrientationAction</code>.
+	 * Constructor.
 	 *
-	 * @param rtext The parent application.
-	 * @param text The text associated with the action.
+	 * @param owner The parent RText instance.
+	 * @param msg The resource bundle to use for localization.
+	 * @param nameKey The localization key for the name (RTL or LTR).
 	 * @param icon The icon associated with the action.
-	 * @param desc The description of the action.
-	 * @param mnemonic The mnemonic for the action.
-	 * @param accelerator The accelerator key for the action.
-	 * @param o The component orientation.
+	 * @param o The orientation to give text areas.
 	 */
-	public TextAreaOrientationAction(RText rtext, String text, Icon icon,
-				String desc, int mnemonic, KeyStroke accelerator,
-				ComponentOrientation o) {
-		super(rtext, text, icon, desc, mnemonic, accelerator);
+	public TextAreaOrientationAction(RText owner, ResourceBundle msg,
+						String nameKey, Icon icon, ComponentOrientation o) {
+		super(owner, msg, nameKey);
+		setIcon(icon);
 		this.orientation = o;
 	}
 

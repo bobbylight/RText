@@ -25,8 +25,8 @@
 package org.fife.rtext;
 
 import java.awt.event.ActionEvent;
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
+import java.util.ResourceBundle;
+import javax.swing.Icon;
 
 import org.fife.ui.app.StandardAction;
 
@@ -42,18 +42,15 @@ class CloseAction extends StandardAction {
 
 
 	/**
-	 * Creates a new <code>CloseAction</code>.
+	 * Constructor.
 	 *
-	 * @param owner The <code>RText</code> that owns this action.
-	 * @param text The text associated with the action.
+	 * @param owner The parent RText instance.
+	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
-	 * @param desc The description of the action.
-	 * @param mnemonic The mnemonic for the action.
-	 * @param accelerator The accelerator key for the action.
 	 */
-	public CloseAction(RText owner, String text, ImageIcon icon, String desc,
-					int mnemonic, KeyStroke accelerator) {
-		super(owner, text, icon, desc, mnemonic, accelerator);
+	public CloseAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, "CloseAction");
+		setIcon(icon);
 	}
 
 
