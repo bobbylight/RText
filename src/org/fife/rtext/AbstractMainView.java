@@ -70,8 +70,8 @@ import org.fife.ui.search.*;
  * everything except the "view" parts).<p>
  *
  * An implementation of this class must fire a property change event of type
- * <code>CURRENT_DOCUMENT_PROPERTY</code> whenever the currently-active
- * document changes so that other pieces of RText can function properly.<p>
+ * {@link #CURRENT_DOCUMENT_PROPERTY} whenever the currently-active document
+ * changes so that other pieces of RText can function properly.<p>
  *
  * RText plugins may wish to register to be
  * <code>CurrentTextAreaListener</code>s if they want to be notified whenever

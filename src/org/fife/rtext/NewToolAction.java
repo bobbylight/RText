@@ -1,8 +1,8 @@
 /*
- * 11/14/2003
+ * 11/3/2009
  *
- * SaveAllAction.java - Action to save all open documents in RText.
- * Copyright (C) 2003 Robert Futrell
+ * NewToolAction.java - Action that creates a new user tool
+ * Copyright (C) 2009 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
  *
@@ -32,13 +32,12 @@ import org.fife.ui.app.StandardAction;
 
 
 /**
- * Action used by an <code>RTextTabbedPane</code> to save all currently
- * open documents.
+ * Action that creates a new user tool.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class SaveAllAction extends StandardAction {
+public class NewToolAction extends StandardAction {
 
 
 	/**
@@ -48,19 +47,19 @@ class SaveAllAction extends StandardAction {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public SaveAllAction(RText owner, ResourceBundle msg, Icon icon) {
-		super(owner, msg, "SaveAllAction");
+	public NewToolAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, "NewToolAction");
 		setIcon(icon);
 	}
 
 
 	/**
-	 * Called when this action is performed.
-	 *
-	 * @param e The event.
+	 * {@inheritDoc}
 	 */
 	public void actionPerformed(ActionEvent e) {
-		((RText)getApplication()).getMainView().saveAllFiles();
+
+//		RText owner = (RText)getApplication();
+
 	}
 
 

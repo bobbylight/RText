@@ -25,8 +25,8 @@
 package org.fife.rtext;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 import javax.swing.Icon;
-import javax.swing.KeyStroke;
 
 import org.fife.ui.app.StandardAction;
 
@@ -42,18 +42,15 @@ class LineNumberAction extends StandardAction {
 
 
 	/**
-	 * Creates a new <code>LineNumberAction</code>.
+	 * Constructor.
 	 *
-	 * @param owner The rtext window that owns this action.
-	 * @param text The text associated with the action.
+	 * @param owner The parent RText instance.
+	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
-	 * @param desc The description of the action.
-	 * @param mnemonic The mnemonic for the action.
-	 * @param accelerator The accelerator key for the action.
 	 */
-	public LineNumberAction(RText owner, String text, Icon icon,
-				String desc, int mnemonic, KeyStroke accelerator) {
-		super(owner, text, icon, desc, mnemonic, accelerator);
+	public LineNumberAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, "LineNumberAction");
+		setIcon(icon);
 	}
 
 

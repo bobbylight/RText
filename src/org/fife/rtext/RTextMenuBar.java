@@ -504,6 +504,12 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		UIUtil.setDescription(menuItem, menuMsg, "DocPropertiesDesc");
 		viewMenu.add(menuItem);
 
+		// Tools menu
+		menu = createMenu(menuMsg, "MenuTools");
+		add(menu);
+
+		menu.add(createMenuItem(rtext.getAction(RTextActionInfo.NEW_TOOL_ACTION)));
+
 		// Macros menu.
 		menu = createMenu(menuMsg, "MenuMacros");
 		add(menu);

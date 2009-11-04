@@ -52,6 +52,7 @@ import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.ExtendedLookAndFeelInfo;
 import org.fife.ui.app.GUIApplicationPreferences;
 import org.fife.ui.app.Plugin;
+import org.fife.ui.app.StandardAction;
 import org.fife.ui.app.ThirdPartyLookAndFeelManager;
 import org.fife.ui.dockablewindows.DockableWindowPanel;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
@@ -314,101 +315,79 @@ public class RText extends AbstractPluggableGUIApplication
 			ioe.printStackTrace();
 		}
 
-		String temp = msg.getString("NewActionName");
-		addAction(NEW_ACTION, new NewAction(this, temp, null, 
-			getString("DescNew"),
-			msg.getString("NewActionMnemonic").charAt(0),
-			prefs.getAccelerator(NEW_ACTION)));
+		StandardAction action = new NewAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(NEW_ACTION));
+		addAction(NEW_ACTION, action);
 
-		temp = msg.getString("OpenActionName");
-		addAction(OPEN_ACTION, new OpenAction(this, temp, null,
-			getString("DescOpen"),
-			msg.getString("OpenActionMnemonic").charAt(0),
-			prefs.getAccelerator(OPEN_ACTION)));
+		action = new OpenAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(OPEN_ACTION));
+		addAction(OPEN_ACTION, action);
 
-		temp = msg.getString("ONWActionName");
-		addAction(OPEN_NEWWIN_ACTION, new OpenInNewWindowAction(this, temp,
-			null, getString("DescOpenInNewWindow"),
-			msg.getString("ONWActionMnemonic").charAt(0),
-			prefs.getAccelerator(OPEN_NEWWIN_ACTION)));
+		action = new OpenInNewWindowAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(OPEN_NEWWIN_ACTION));
+		addAction(OPEN_NEWWIN_ACTION, action);
 
-		temp = msg.getString("OpenRemoteActionName");
-		addAction(OPEN_REMOTE_ACTION, new OpenRemoteAction(this, temp, null,
-			getString("DescOpenRemote"),
-			msg.getString("OpenRemoteActionMnemonic").charAt(0),null));
+		action = new OpenRemoteAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(OPEN_REMOTE_ACTION));
+		addAction(OPEN_REMOTE_ACTION, action);
 
-		temp = msg.getString("SaveActionName");
-		addAction(SAVE_ACTION, new SaveAction(this, temp, null, 
-			getString("DescSave"),
-			msg.getString("SaveActionMnemonic").charAt(0),
-			prefs.getAccelerator(SAVE_ACTION)));
+		action = new SaveAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(SAVE_ACTION));
+		addAction(SAVE_ACTION, action);
 
-		temp = msg.getString("SaveAsActionName");
-		addAction(SAVE_AS_ACTION, new SaveAsAction(this, temp, null,
-			getString("DescSaveAs"),
-			msg.getString("SaveAsActionMnemonic").charAt(0),
-			prefs.getAccelerator(SAVE_AS_ACTION)));
+		action = new SaveAsAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(SAVE_AS_ACTION));
+		addAction(SAVE_AS_ACTION, action);
 
-		temp = msg.getString("SaveAsRemoteActionName");
-		addAction(SAVE_AS_REMOTE_ACTION, new SaveAsRemoteAction(this, temp, null,
-			getString("DescSaveAsRemote"),
-			msg.getString("SaveAsRemoteActionMnemonic").charAt(0),
-			prefs.getAccelerator(SAVE_AS_REMOTE_ACTION)));
+		action = new SaveAsRemoteAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(SAVE_AS_REMOTE_ACTION));
+		addAction(SAVE_AS_REMOTE_ACTION, action);
 
-		temp = msg.getString("SAWPActionName");
-		addAction(SAVE_WEBPAGE_ACTION, new SaveAsWebPageAction(this, temp, null,
-			getString("DescSaveAsWebPage"),
-			msg.getString("SAWPActionMnemonic").charAt(0),
-			prefs.getAccelerator(SAVE_WEBPAGE_ACTION)));
+		action = new SaveAsWebPageAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(SAVE_WEBPAGE_ACTION));
+		addAction(SAVE_WEBPAGE_ACTION, action);
 
-		temp = msg.getString("SaveAllActionName");
-		addAction(SAVE_ALL_ACTION, new SaveAllAction(this, temp, null,
-			getString("DescSaveAll"),
-			-1, prefs.getAccelerator(SAVE_ALL_ACTION)));
+		action = new SaveAllAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(SAVE_ALL_ACTION));
+		addAction(SAVE_ALL_ACTION, action);
 
-		temp = msg.getString("CopyAsRtfName");
+		String temp = msg.getString("CopyAsRtfAction");
 		addAction(COPY_AS_RTF_ACTION, new RSyntaxTextAreaEditorKit.CopyAsRtfAction(temp,
 			null,
-			getString("DescCopyAsRtf"),
-			new Integer(msg.getString("CopyAsRtfMnemonic").charAt(0)),
+			msg.getString("CopyAsRtfAction.ShortDesc"),
+			new Integer(msg.getString("CopyAsRtfAction.Mnemonic").charAt(0)),
 			prefs.getAccelerator(COPY_AS_RTF_ACTION)));
 
-		temp = msg.getString("TimeActionName");
+		temp = msg.getString("TimeAction");
 		addAction(TIME_DATE_ACTION, new RTextAreaEditorKit.TimeDateAction(temp,
 			new ImageIcon(cl.getResource(commonIconPath+"timedate16.gif")),
-			getString("DescTimeDate"),
-			new Integer(msg.getString("TimeActionMnemonic").charAt(0)),
+			msg.getString("TimeAction.ShortDesc"),
+			new Integer(msg.getString("TimeAction.Mnemonic").charAt(0)),
 			prefs.getAccelerator(TIME_DATE_ACTION)));
 
-		temp = msg.getString("LNActionName");
-		addAction(LINE_NUMBER_ACTION, new LineNumberAction(this, temp, null,
-			getString("DescLineNumbers"),
-			msg.getString("LNActionMnemonic").charAt(0),
-			prefs.getAccelerator(LINE_NUMBER_ACTION)));
+		action = new LineNumberAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(LINE_NUMBER_ACTION));
+		addAction(LINE_NUMBER_ACTION, action);
 
-		temp = msg.getString("HelpActionName");
-		addAction(HELP_ACTION_KEY, new HelpAction(this, temp, null,
-			getString("DescHelp"),
-			msg.getString("HelpActionMnemonic").charAt(0),
-			prefs.getAccelerator(HELP_ACTION_KEY)));
+		action = new NewToolAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(NEW_TOOL_ACTION));
+		addAction(NEW_TOOL_ACTION, action);
 
-		temp = msg.getString("AboutActionName");
-		addAction(ABOUT_ACTION_KEY, new AboutAction(this, temp, null,
-			getString("DescAbout"),
-			msg.getString("AboutActionMnemonic").charAt(0),
-			prefs.getAccelerator(ABOUT_ACTION_KEY)));
+		action = new HelpAction(this, msg, "HelpAction");
+		action.setAccelerator(prefs.getAccelerator(HELP_ACTION_KEY));
+		addAction(HELP_ACTION_KEY, action);
 
-		temp = msg.getString("OptionsActionName");
-		addAction(OPTIONS_ACTION, new OptionsAction(this, temp, null,
-			getString("DescOptions"),
-			msg.getString("OptionsActionMnemonic").charAt(0),
-			prefs.getAccelerator(OPTIONS_ACTION)));
+		action = new AboutAction(this, msg, "AboutAction");
+		action.setAccelerator(prefs.getAccelerator(ABOUT_ACTION_KEY));
+		addAction(ABOUT_ACTION_KEY, action);
 
-		temp = msg.getString("HomePageActionName");
-		addAction(HOME_PAGE_ACTION, new HomePageAction(this, temp, null,
-			getString("DescHomePage"),
-			msg.getString("HomePageActionMnemonic").charAt(0),
-			prefs.getAccelerator(HOME_PAGE_ACTION)));
+		action = new OptionsAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(OPTIONS_ACTION));
+		addAction(OPTIONS_ACTION, action);
+
+		action = new HomePageAction(this, msg, null);
+		action.setAccelerator(prefs.getAccelerator(HOME_PAGE_ACTION));
+		addAction(HOME_PAGE_ACTION, action);
 
 		msg = null; // May help with GC.
 

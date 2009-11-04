@@ -26,8 +26,8 @@ package org.fife.rtext;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.ResourceBundle;
 import javax.swing.Icon;
-import javax.swing.KeyStroke;
 
 import org.fife.ui.app.StandardAction;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
@@ -44,18 +44,16 @@ public class OpenAction extends StandardAction {
 
 
 	/**
-	 * Creates a new <code>OpenAction</code>.
+	 * Constructor.
 	 *
-	 * @param owner the main window of this rtext instance.
-	 * @param text The text associated with the action.
+	 * @param owner The parent RText instance.
+	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
-	 * @param desc The description of the action.
-	 * @param mnemonic The mnemonic for the action.
-	 * @param accelerator The accelerator key for the action.
 	 */
-	 public OpenAction(RText owner, String text, Icon icon, String desc,
-	 				int mnemonic, KeyStroke accelerator) {
-		super(owner, text, icon, desc, mnemonic, accelerator);
+	public OpenAction(RText owner, ResourceBundle msg, Icon icon) {
+		//super(owner, text, icon, desc, mnemonic, accelerator);
+		super(owner, msg, "OpenAction");
+		setIcon(icon);
 	}
 
 
