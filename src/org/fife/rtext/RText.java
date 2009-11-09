@@ -36,8 +36,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
-import java.util.ResourceBundle;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -45,6 +43,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.text.Element;
 
 import org.fife.help.HelpDialog;
+import org.fife.rtext.actions.ActionFactory;
 import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
@@ -52,15 +51,12 @@ import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.ExtendedLookAndFeelInfo;
 import org.fife.ui.app.GUIApplicationPreferences;
 import org.fife.ui.app.Plugin;
-import org.fife.ui.app.StandardAction;
 import org.fife.ui.app.ThirdPartyLookAndFeelManager;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowPanel;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rtextarea.IconGroup;
-import org.fife.ui.rtextarea.RTextAreaEditorKit;
 import org.fife.ui.rtextfilechooser.FileChooserOwner;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
@@ -228,7 +224,7 @@ public class RText extends AbstractPluggableGUIApplication
 
 
 	// TODO
-	void addDockableWindow(DockableWindow wind) {
+	public void addDockableWindow(DockableWindow wind) {
 		((DockableWindowPanel)mainContentPanel).addDockableWindow(wind);
 	}
 
@@ -307,101 +303,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 */
 	protected void createActions(GUIApplicationPreferences prefs) {
 
-		// We use a different resource bundle so we don't needlessly keep
-		// all of this stuff in memory in the main RText bundle.
-		ResourceBundle msg = ResourceBundle.getBundle(
-									"org.fife.rtext.RTextActions");
-
-		ClassLoader cl = this.getClass().getClassLoader();
-		String commonIconPath = "org/fife/rtext/graphics/common_icons/";
-
-		try {
-			this.setIconImage(ImageIO.read(cl.getResource(
-						"org/fife/rtext/graphics/rtexticon.gif")));
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-
-		StandardAction action = new NewAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(NEW_ACTION));
-		addAction(NEW_ACTION, action);
-
-		action = new OpenAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(OPEN_ACTION));
-		addAction(OPEN_ACTION, action);
-
-		action = new OpenInNewWindowAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(OPEN_NEWWIN_ACTION));
-		addAction(OPEN_NEWWIN_ACTION, action);
-
-		action = new OpenRemoteAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(OPEN_REMOTE_ACTION));
-		addAction(OPEN_REMOTE_ACTION, action);
-
-		action = new SaveAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(SAVE_ACTION));
-		addAction(SAVE_ACTION, action);
-
-		action = new SaveAsAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(SAVE_AS_ACTION));
-		addAction(SAVE_AS_ACTION, action);
-
-		action = new SaveAsRemoteAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(SAVE_AS_REMOTE_ACTION));
-		addAction(SAVE_AS_REMOTE_ACTION, action);
-
-		action = new SaveAsWebPageAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(SAVE_WEBPAGE_ACTION));
-		addAction(SAVE_WEBPAGE_ACTION, action);
-
-		action = new SaveAllAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(SAVE_ALL_ACTION));
-		addAction(SAVE_ALL_ACTION, action);
-
-		String temp = msg.getString("CopyAsRtfAction");
-		addAction(COPY_AS_RTF_ACTION, new RSyntaxTextAreaEditorKit.CopyAsRtfAction(temp,
-			null,
-			msg.getString("CopyAsRtfAction.ShortDesc"),
-			new Integer(msg.getString("CopyAsRtfAction.Mnemonic").charAt(0)),
-			prefs.getAccelerator(COPY_AS_RTF_ACTION)));
-
-		temp = msg.getString("TimeAction");
-		addAction(TIME_DATE_ACTION, new RTextAreaEditorKit.TimeDateAction(temp,
-			new ImageIcon(cl.getResource(commonIconPath+"timedate16.gif")),
-			msg.getString("TimeAction.ShortDesc"),
-			new Integer(msg.getString("TimeAction.Mnemonic").charAt(0)),
-			prefs.getAccelerator(TIME_DATE_ACTION)));
-
-		action = new LineNumberAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(LINE_NUMBER_ACTION));
-		addAction(LINE_NUMBER_ACTION, action);
-
-		boolean visible = true;//prefs.tasksWindowVisible;
-		action = new ViewTasksAction(this, msg, null, visible);
-		action.setAccelerator(prefs.getAccelerator(VIEW_TASKS_ACTION));
-		addAction(VIEW_TASKS_ACTION, action);
-
-		action = new NewToolAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(NEW_TOOL_ACTION));
-		addAction(NEW_TOOL_ACTION, action);
-
-		action = new HelpAction(this, msg, "HelpAction");
-		action.setAccelerator(prefs.getAccelerator(HELP_ACTION_KEY));
-		addAction(HELP_ACTION_KEY, action);
-
-		action = new AboutAction(this, msg, "AboutAction");
-		action.setAccelerator(prefs.getAccelerator(ABOUT_ACTION_KEY));
-		addAction(ABOUT_ACTION_KEY, action);
-
-		action = new OptionsAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(OPTIONS_ACTION));
-		addAction(OPTIONS_ACTION, action);
-
-		action = new HomePageAction(this, msg, null);
-		action.setAccelerator(prefs.getAccelerator(HOME_PAGE_ACTION));
-		addAction(HOME_PAGE_ACTION, action);
-
-		msg = null; // May help with GC.
+		ActionFactory.addActions(this, (RTextPreferences)prefs);
 
 	}
 
@@ -652,7 +554,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 *
 	 * @return The icon groups.
 	 */
-	Map getIconGroupMap() {
+	public Map getIconGroupMap() {
 		return iconGroupMap;
 	}
 
@@ -668,7 +570,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 *
 	 * @return An array of URLs for JAR files containing Look and Feels.
 	 */
-	protected ExtendedLookAndFeelInfo[] get3rdPartyLookAndFeelInfo() {
+	public ExtendedLookAndFeelInfo[] get3rdPartyLookAndFeelInfo() {
 		try {
 			return ThirdPartyLookAndFeelManager.get3rdPartyLookAndFeelInfo(
 									this, "lnfs/lookandfeels.xml");
@@ -987,7 +889,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * were created update them.  Thus, we have to do this manually.  This is
 	 * still broken as of 1.5.
 	 */
-	protected void menuItemAcceleratorWorkaround() {
+	public void menuItemAcceleratorWorkaround() {
 		menuBar.menuItemAcceleratorWorkaround();
 	}
 
@@ -1238,7 +1140,7 @@ w.addComponentListener(searchWindowOpacityListener);
 	/**
 	 * Makes all actions use default accelerators.
 	 */
-	void restoreDefaultAccelerators() {
+	public void restoreDefaultAccelerators() {
 
 		int num = defaultActionAccelerators.length;
 		for (int i=0; i<num; i++) {
@@ -1246,8 +1148,7 @@ w.addComponentListener(searchWindowOpacityListener);
 			// Check for a null action because sometimes we have new actions
 			// "declared" but not "defined" (e.g. OpenRemote).
 			if (a!=null) {
-				a.putValue(Action.ACCELERATOR_KEY,
-						defaultActionAccelerators[i]);
+				a.putValue(Action.ACCELERATOR_KEY,defaultActionAccelerators[i]);
 			}
 		}
 

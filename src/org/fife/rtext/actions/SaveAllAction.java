@@ -1,8 +1,8 @@
 /*
- * 08/14/2009
+ * 11/14/2003
  *
- * HomePageAction.java - Action used to open RText's home page.
- * Copyright (C) 2009 Robert Futrell
+ * SaveAllAction.java - Action to save all open documents in RText.
+ * Copyright (C) 2003 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
  *
@@ -22,24 +22,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
-import javax.swing.UIManager;
 
-import org.fife.ui.UIUtil;
+import org.fife.rtext.RText;
 import org.fife.ui.app.StandardAction;
 
 
 /**
- * Action that opens a web browser to RText's home page.
+ * Action used by an <code>RTextTabbedPane</code> to save all currently
+ * open documents.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class HomePageAction extends StandardAction {
+class SaveAllAction extends StandardAction {
 
 
 	/**
@@ -49,17 +49,19 @@ class HomePageAction extends StandardAction {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public HomePageAction(RText owner, ResourceBundle msg, Icon icon) {
-		super(owner, msg, "HomePageAction");
+	public SaveAllAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, "SaveAllAction");
 		setIcon(icon);
 	}
 
 
+	/**
+	 * Called when this action is performed.
+	 *
+	 * @param e The event.
+	 */
 	public void actionPerformed(ActionEvent e) {
-		if (!UIUtil.browse("http://fifesoft.com/rtext")) {
-			RText app = (RText)getApplication();
-			UIManager.getLookAndFeel().provideErrorFeedback(app);
-		}
+		((RText)getApplication()).getMainView().saveAllFiles();
 	}
 
 

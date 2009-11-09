@@ -1,8 +1,8 @@
 /*
- * 11/14/2003
+ * 11/08/2009
  *
- * SaveAllAction.java - Action to save all open documents in RText.
- * Copyright (C) 2003 Robert Futrell
+ * ViewTasksAction - Toggles visibility of the "Tasks" dockable window.
+ * Copyright (C) 2009 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
  *
@@ -22,23 +22,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
+import javax.swing.SwingUtilities;
 
+import org.fife.rtext.RText;
+import org.fife.rtext.TaskWindow;
 import org.fife.ui.app.StandardAction;
 
 
 /**
- * Action used by an <code>RTextTabbedPane</code> to save all currently
- * open documents.
+ * Toggles the display of the "Tasks" dockable window.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class SaveAllAction extends StandardAction {
+class ViewTasksAction extends StandardAction {
+
+	/**
+	 * Dockable window that displays "tasks" ("TODO", "FIXME", etc.) in opened
+	 * files.
+	 */
+	private TaskWindow taskWindow;
 
 
 	/**
@@ -47,10 +55,22 @@ class SaveAllAction extends StandardAction {
 	 * @param owner The parent RText instance.
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
+	 * @param visible Whether the task window should be initially visible.
 	 */
-	public SaveAllAction(RText owner, ResourceBundle msg, Icon icon) {
-		super(owner, msg, "SaveAllAction");
+	public ViewTasksAction(final RText owner, ResourceBundle msg, Icon icon,
+							boolean visible) {
+		super(owner, msg, "ViewTasksAction");
 		setIcon(icon);
+		if (visible) {
+			// Defer task window creation until after entire RText GUI has been
+			// instantiated to prevent NPE's.
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					taskWindow = new TaskWindow(owner);
+					owner.addDockableWindow(taskWindow);
+				}
+			});
+		}
 	}
 
 
@@ -60,7 +80,14 @@ class SaveAllAction extends StandardAction {
 	 * @param e The event.
 	 */
 	public void actionPerformed(ActionEvent e) {
-		((RText)getApplication()).getMainView().saveAllFiles();
+		if (taskWindow==null) { // First time through
+			RText rtext = (RText)getApplication();
+			taskWindow = new TaskWindow(rtext);
+			rtext.addDockableWindow(taskWindow);
+		}
+		else {
+			taskWindow.setActive(!taskWindow.isActive());
+		}
 	}
 
 

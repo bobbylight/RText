@@ -1,7 +1,8 @@
 /*
  * 11/14/2003
  *
- * SaveAction.java - Action to save the current document in RText.
+ * SaveAsAction.java - Action to save the current document with a new file
+ * name in RText.
  * Copyright (C) 2003 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
@@ -22,22 +23,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 
+import org.fife.rtext.RText;
 import org.fife.ui.app.StandardAction;
 
 
 /**
- * Action used by an <code>RTextTabbedPane</code> to save the current document.
+ * Action used by an <code>RText</code> to save the current
+ * document with a new file name.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class SaveAction extends StandardAction {
+class SaveAsAction extends StandardAction {
 
 
 	/**
@@ -47,19 +50,14 @@ class SaveAction extends StandardAction {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public SaveAction(RText owner, ResourceBundle msg, Icon icon) {
-		super(owner, msg, "SaveAction");
+	public SaveAsAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, "SaveAsAction");
 		setIcon(icon);
 	}
 
 
-	/**
-	 * Called when this action is performed.
-	 *
-	 * @param e The event.
-	 */
 	public void actionPerformed(ActionEvent e) {
-		((RText)getApplication()).getMainView().saveCurrentFile();
+		((RText)getApplication()).getMainView().saveCurrentFileAs();
 	}
 
 

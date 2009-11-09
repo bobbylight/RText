@@ -21,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.optionsdialog;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
@@ -39,6 +39,8 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.fife.rtext.RText;
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RButton;
 import org.fife.ui.RListSelectionModel;

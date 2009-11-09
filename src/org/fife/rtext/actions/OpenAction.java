@@ -22,13 +22,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 
+import org.fife.rtext.AbstractMainView;
+import org.fife.rtext.RText;
 import org.fife.ui.app.StandardAction;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
@@ -40,7 +42,7 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  * @author Robert Futrell
  * @version 1.0
  */
-public class OpenAction extends StandardAction {
+class OpenAction extends StandardAction {
 
 
 	/**

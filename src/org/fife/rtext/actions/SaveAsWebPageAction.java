@@ -23,7 +23,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -39,6 +39,9 @@ import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.fife.rtext.RText;
+import org.fife.rtext.RTextEditorPane;
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.StandardAction;
 import org.fife.ui.rtextfilechooser.filters.HTMLFileFilter;

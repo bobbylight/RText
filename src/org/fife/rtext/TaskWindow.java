@@ -48,7 +48,7 @@ import org.fife.ui.rsyntaxtextarea.parser.TaskTagParser;
  * @author Robert Futrell
  * @version 1.0
  */
-class TaskWindow extends AbstractParserNoticeWindow
+public class TaskWindow extends AbstractParserNoticeWindow
 				implements PropertyChangeListener {
 
 	private JTable table;

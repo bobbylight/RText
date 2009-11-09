@@ -42,7 +42,7 @@ import javax.swing.KeyStroke;
  * @author Robert Futrell
  * @version 0.1
  */
-interface RTextActionInfo {
+public interface RTextActionInfo {
 
 	// Constants specifying the available actions (for getAction).
 	public static final String NEW_ACTION			= "newAction";

@@ -1,8 +1,8 @@
 /*
- * 11/14/2003
+ * 08/14/2009
  *
- * LineNumberAction.java - Action to enable/disable line numbers in RText.
- * Copyright (C) 2003 Robert Futrell
+ * HomePageAction.java - Action used to open RText's home page.
+ * Copyright (C) 2009 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
  *
@@ -22,23 +22,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
+import javax.swing.UIManager;
 
+import org.fife.rtext.RText;
+import org.fife.ui.UIUtil;
 import org.fife.ui.app.StandardAction;
 
 
 /**
- * Action used by an <code>AbstractMainView</code> to enable viewing
- * line numbers for the open documents.
+ * Action that opens a web browser to RText's home page.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class LineNumberAction extends StandardAction {
+class HomePageAction extends StandardAction {
 
 
 	/**
@@ -48,16 +50,17 @@ class LineNumberAction extends StandardAction {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public LineNumberAction(RText owner, ResourceBundle msg, Icon icon) {
-		super(owner, msg, "LineNumberAction");
+	public HomePageAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, "HomePageAction");
 		setIcon(icon);
 	}
 
 
 	public void actionPerformed(ActionEvent e) {
-		RText owner = (RText)getApplication();
-		AbstractMainView mainView = owner.getMainView();
-		mainView.setLineNumbersEnabled(!mainView.getLineNumbersEnabled());
+		if (!UIUtil.browse("http://fifesoft.com/rtext")) {
+			RText app = (RText)getApplication();
+			UIManager.getLookAndFeel().provideErrorFeedback(app);
+		}
 	}
 
 

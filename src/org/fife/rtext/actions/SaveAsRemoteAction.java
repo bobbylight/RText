@@ -22,12 +22,14 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 
+import org.fife.rtext.RText;
+import org.fife.rtext.RemoteFileChooser;
 import org.fife.ui.app.StandardAction;
 
 
@@ -38,7 +40,7 @@ import org.fife.ui.app.StandardAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class SaveAsRemoteAction extends StandardAction {
+class SaveAsRemoteAction extends StandardAction {
 
 
 	/**

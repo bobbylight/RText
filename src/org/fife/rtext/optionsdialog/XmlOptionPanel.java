@@ -22,7 +22,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.optionsdialog;
 
 import java.awt.BorderLayout;
 //import java.awt.ComponentOrientation;
@@ -35,6 +35,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.modes.XMLTokenMaker;

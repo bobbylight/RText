@@ -1,8 +1,8 @@
 /*
- * 11/3/2009
+ * 11/14/2003
  *
- * NewToolAction.java - Action that creates a new user tool
- * Copyright (C) 2009 Robert Futrell
+ * LineNumberAction.java - Action to enable/disable line numbers in RText.
+ * Copyright (C) 2003 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
  *
@@ -22,22 +22,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 
+import org.fife.rtext.AbstractMainView;
+import org.fife.rtext.RText;
 import org.fife.ui.app.StandardAction;
 
 
 /**
- * Action that creates a new user tool.
+ * Action used by an <code>AbstractMainView</code> to enable viewing
+ * line numbers for the open documents.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-public class NewToolAction extends StandardAction {
+class LineNumberAction extends StandardAction {
 
 
 	/**
@@ -47,19 +50,16 @@ public class NewToolAction extends StandardAction {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public NewToolAction(RText owner, ResourceBundle msg, Icon icon) {
-		super(owner, msg, "NewToolAction");
+	public LineNumberAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, "LineNumberAction");
 		setIcon(icon);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void actionPerformed(ActionEvent e) {
-
-//		RText owner = (RText)getApplication();
-
+		RText owner = (RText)getApplication();
+		AbstractMainView mainView = owner.getMainView();
+		mainView.setLineNumbersEnabled(!mainView.getLineNumbersEnabled());
 	}
 
 
