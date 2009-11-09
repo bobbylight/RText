@@ -102,6 +102,7 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	private JMenuItem optionsItem;
 	private JCheckBoxMenuItem searchToolbarMenuItem;
 	private JCheckBoxMenuItem lineNumbersItem;
+	private JCheckBoxMenuItem tasksItem;
 	private JMenuItem increaseFontSizesItem;
 	private JMenuItem decreaseFontSizesItem;
 	//private JRadioButtonMenuItem ltrItem, rtlItem;
@@ -443,6 +444,10 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 //		lineNumbersItem.setToolTipText(null);
 //		UIUtil.setDescription(lineNumbersItem, msg, "DescLineNumbers");
 		viewMenu.add(lineNumbersItem);
+
+		tasksItem = new JCheckBoxMenuItem(rtext.getAction(RText.VIEW_TASKS_ACTION));
+		tasksItem.setState(true); // TODO
+		viewMenu.add(tasksItem);
 
 		// Font sizes submenu.
 		JMenu fontSizesMenu = createMenu(menuMsg, "MenuFontSizes");
@@ -846,6 +851,7 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 			updateAction(optionsItem, rtext.getAction(RText.OPTIONS_ACTION));
 		}
 		updateAction(lineNumbersItem, rtext.getAction(RText.LINE_NUMBER_ACTION));
+		updateAction(tasksItem, rtext.getAction(RText.VIEW_TASKS_ACTION));
 		updateAction(helpItem, rtext.getAction(RText.HELP_ACTION_KEY));
 		updateAction(homePageItem, rtext.getAction(RText.HOME_PAGE_ACTION));
 		updateAction(aboutItem, rtext.getAction(RText.ABOUT_ACTION_KEY));

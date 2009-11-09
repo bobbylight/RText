@@ -54,6 +54,7 @@ import org.fife.ui.app.GUIApplicationPreferences;
 import org.fife.ui.app.Plugin;
 import org.fife.ui.app.StandardAction;
 import org.fife.ui.app.ThirdPartyLookAndFeelManager;
+import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowPanel;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
@@ -226,6 +227,12 @@ public class RText extends AbstractPluggableGUIApplication
 	}
 
 
+	// TODO
+	void addDockableWindow(DockableWindow wind) {
+		((DockableWindowPanel)mainContentPanel).addDockableWindow(wind);
+	}
+
+
 	/**
 	 * Returns whether or not tabs are emulated with spaces (i.e. "soft" tabs).
 	 * This simply calls <code>mainView.areTabsEmulated</code>.
@@ -368,6 +375,11 @@ public class RText extends AbstractPluggableGUIApplication
 		action = new LineNumberAction(this, msg, null);
 		action.setAccelerator(prefs.getAccelerator(LINE_NUMBER_ACTION));
 		addAction(LINE_NUMBER_ACTION, action);
+
+		boolean visible = true;//prefs.tasksWindowVisible;
+		action = new ViewTasksAction(this, msg, null, visible);
+		action.setAccelerator(prefs.getAccelerator(VIEW_TASKS_ACTION));
+		addAction(VIEW_TASKS_ACTION, action);
 
 		action = new NewToolAction(this, msg, null);
 		action.setAccelerator(prefs.getAccelerator(NEW_TOOL_ACTION));
@@ -1044,9 +1056,6 @@ public class RText extends AbstractPluggableGUIApplication
 		}
 
 setSearchWindowOpacity(0.5f);
-
-TaskWindow tw = new TaskWindow(this);
-((DockableWindowPanel)mainContentPanel).addDockableWindow(tw);
 
 		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
 			System.err.println("preDisplayInit: " + (System.currentTimeMillis()-start));

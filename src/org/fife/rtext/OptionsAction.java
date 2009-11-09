@@ -100,7 +100,7 @@ class OptionsAction extends StandardAction {
 			ResourceBundle msg = ResourceBundle.getBundle(
 									"org.fife.rtext.OptionsDialog");
 
-			OptionsDialogPanel[] optionsPanels = new OptionsDialogPanel[8];
+			OptionsDialogPanel[] optionsPanels = new OptionsDialogPanel[9];
 			optionsPanels[0] = new GeneralOptionPanel(rtext, msg);
 			setIcon(optionsPanels[0], "general.png");
 			optionsPanels[1] = new UIOptionPanel(rtext, msg);
@@ -128,6 +128,8 @@ setIcon(optionsPanels[1].getChildPanel(0), "language.png");
 			setIcon(optionsPanels[6], "shortcuts.png");
 optionsPanels[7] = new XmlOptionPanel(rtext, msg);
 setIcon(optionsPanels[7], "xml.png");
+optionsPanels[8] = new ToolOptionPanel(rtext);
+setIcon(optionsPanels[8], "tools.png");
 			msg = null;
 
 			OptionsDialog od = rtext.optionsDialog;

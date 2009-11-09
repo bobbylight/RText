@@ -58,6 +58,7 @@ interface RTextActionInfo {
 	public static final String COPY_AS_RTF_ACTION	= "copyAsRtf";
 	public static final String TIME_DATE_ACTION		= "timeDateAction";
 	public static final String LINE_NUMBER_ACTION	= "lineNumberAction";
+	public static final String VIEW_TASKS_ACTION	= "viewTasksAction";
 	public static final String OPTIONS_ACTION		= "optionsAction";
 	public static final String HOME_PAGE_ACTION		= "homePageAction";
 
@@ -80,6 +81,7 @@ interface RTextActionInfo {
 		COPY_AS_RTF_ACTION,
 		TIME_DATE_ACTION,
 		LINE_NUMBER_ACTION,
+		VIEW_TASKS_ACTION,
 		NEW_TOOL_ACTION,
 		RText.HELP_ACTION_KEY,
 		RText.ABOUT_ACTION_KEY,
@@ -109,6 +111,7 @@ interface RTextActionInfo {
 					KeyStroke.getKeyStroke(KeyEvent.VK_C, defaultModifier|shift),
 					KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
 					KeyStroke.getKeyStroke(KeyEvent.VK_1, defaultModifier),
+					null,
 					null,
 					KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0),
 					null,
