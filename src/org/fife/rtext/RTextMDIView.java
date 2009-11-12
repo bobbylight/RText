@@ -406,7 +406,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		// currently active frame.
 		setSelectedIndex(frames.indexOf(e.getInternalFrame()));
 
-		getAction(CLOSE_ACTION).actionPerformed(null);
+		owner.getAction(RText.CLOSE_ACTION).actionPerformed(null);
 
 	}
 

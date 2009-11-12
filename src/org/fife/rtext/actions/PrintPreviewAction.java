@@ -1,7 +1,7 @@
 /*
  * 11/14/2003
  *
- * CloseAction.java - Action to close the current document in RText.
+ * PrintPreviewAction.java - Action to display a print preview in RText.
  * Copyright (C) 2003 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
@@ -22,23 +22,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 
+import org.fife.print.PrintPreviewDialog;
+import org.fife.rtext.RText;
 import org.fife.ui.app.StandardAction;
 
 
 /**
- * Action used by an <code>AbstractMainView</code> to close the current
- * document.
+ * Action used by an <code>RTextTabbedPane</code> to show a print preview.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class CloseAction extends StandardAction {
+class PrintPreviewAction extends StandardAction {
 
 
 	/**
@@ -48,18 +49,24 @@ class CloseAction extends StandardAction {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public CloseAction(RText owner, ResourceBundle msg, Icon icon) {
-		super(owner, msg, "CloseAction");
+	public PrintPreviewAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, "PrintPreviewAction");
 		setIcon(icon);
 	}
 
 
+	/**
+	 * Callback routine called when user uses this component.
+	 *
+	 * @param e The action event.
+	 */
 	public void actionPerformed(ActionEvent e) {
-		RText owner = (RText)getApplication();
-		AbstractMainView mainView = owner.getMainView();
-		mainView.closeCurrentDocument();
-		owner.setStatusBarReadOnlyIndicatorEnabled(mainView.
-									getCurrentTextArea().isReadOnly());
+		RText rtext = (RText)getApplication();
+		PrintPreviewDialog printPreviewDialog =
+				new PrintPreviewDialog(rtext,
+						rtext.getMainView().getCurrentTextArea());
+		printPreviewDialog.setLocationRelativeTo(rtext);
+		printPreviewDialog.setVisible(true);
 	}
 
 

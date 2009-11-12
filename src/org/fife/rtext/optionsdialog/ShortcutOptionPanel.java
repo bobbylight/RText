@@ -40,9 +40,9 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.ui.*;
+import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.modifiabletable.*;
 
 
@@ -118,7 +118,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 
 		if (actionCommand.equals("RestoreDefaults")) {
 			rtext.restoreDefaultAccelerators(); // Does mainView too.
-			setActions(rtext.getActions(), rtext.getMainView().getActions());
+			setActions(rtext);
 		}
 
 	}
@@ -134,7 +134,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 
 		Action[] actions = getActions();
 		int actionsLength = actions.length;
-		Action[] realActions = rtext.getActions();
+		Action[] realActions = ((AbstractGUIApplication)owner).getActions();
 		int j;
 
 		for (int k=0; k<realActions.length; k++) {
@@ -142,21 +142,8 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 			for (j=0; j<actionsLength; j++) {
 				String name2 = (String)actions[j].getValue(Action.NAME);
 				if (name.equals(name2)) {
-					realActions[k].putValue(Action.ACCELERATOR_KEY, actions[j].getValue(Action.ACCELERATOR_KEY));
-					break;
-				}
-			}
-			if (j==actionsLength)
-				System.err.println("err0r!!!!");
-		}
-
-		realActions = rtext.getMainView().getActions();
-		for (int k=0; k<realActions.length; k++) {
-			String name = (String)realActions[k].getValue(Action.NAME);
-			for (j=0; j<actionsLength; j++) {
-				String name2 = (String)actions[j].getValue(Action.NAME);
-				if (name.equals(name2)) {
-					realActions[k].putValue(Action.ACCELERATOR_KEY, actions[j].getValue(Action.ACCELERATOR_KEY));
+					realActions[k].putValue(Action.ACCELERATOR_KEY,
+									actions[j].getValue(Action.ACCELERATOR_KEY));
 					break;
 				}
 			}
@@ -239,21 +226,11 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	/**
 	 * Sets the actions to display as configurable.
 	 *
-	 * @param rtextActions The actions owned by RText.
-	 * @param mainViewActions The actions owned by the main view.
+	 * @param actions The actions of the application.
 	 */
-	private void setActions(Action[] rtextActions, Action[] mainViewActions) {
+	private void setActions(AbstractGUIApplication app) {
 
-		int numRTextActions = rtextActions.length;
-		int numMainViewActions = mainViewActions.length;
-		masterActionList = new Action[numRTextActions + numMainViewActions];
-
-		for (int i=0; i<numRTextActions; i++) {
-			masterActionList[i] = rtextActions[i];
-		}
-		for (int i=0; i<numMainViewActions; i++) {
-			masterActionList[numRTextActions+i] = mainViewActions[i];
-		}
+		masterActionList = (Action[])app.getActions().clone();
 
 		Arrays.sort(masterActionList, new Comparator() {
 			public int compare(Object o1, Object o2) {
@@ -289,9 +266,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	 * @see #setValues(Frame)
 	 */
 	protected void setValuesImpl(Frame owner) {
-		RText rtext = (RText)owner;
-		AbstractMainView mainView = rtext.getMainView();
-		setActions(rtext.getActions(), mainView.getActions());
+		setActions((RText)owner);
 	}
 
 
@@ -483,7 +458,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 
 		public ShortcutTableModel(String fileTypeHead, String filterHead) {
 			super(new Object[] { fileTypeHead, filterHead },
-				RText.actionNames.length + AbstractMainView.NUM_ACTIONS);
+				RText.actionNames.length);
 		}
 
 		public boolean isCellEditable(int row, int column) {

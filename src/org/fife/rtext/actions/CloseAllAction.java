@@ -1,7 +1,7 @@
 /*
  * 11/14/2003
  *
- * PrintPreviewAction.java - Action to display a print preview in RText.
+ * CloseAllAction.java - Action to close all open documents in RText.
  * Copyright (C) 2003 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
@@ -22,23 +22,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 
-import org.fife.print.PrintPreviewDialog;
+import org.fife.rtext.RText;
 import org.fife.ui.app.StandardAction;
 
 
 /**
- * Action used by an <code>RTextTabbedPane</code> to show a print preview.
+ * Action used by an <code>RTextTabbedPane</code> to close all open documents.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class PrintPreviewAction extends StandardAction {
+class CloseAllAction extends StandardAction {
 
 
 	/**
@@ -48,24 +48,14 @@ class PrintPreviewAction extends StandardAction {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public PrintPreviewAction(RText owner, ResourceBundle msg, Icon icon) {
-		super(owner, msg, "PrintPreviewAction");
+	public CloseAllAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, "CloseAllAction");
 		setIcon(icon);
 	}
 
 
-	/**
-	 * Callback routine called when user uses this component.
-	 *
-	 * @param e The action event.
-	 */
 	public void actionPerformed(ActionEvent e) {
-		RText rtext = (RText)getApplication();
-		PrintPreviewDialog printPreviewDialog =
-				new PrintPreviewDialog(rtext,
-						rtext.getMainView().getCurrentTextArea());
-		printPreviewDialog.setLocationRelativeTo(rtext);
-		printPreviewDialog.setVisible(true);
+		((RText)getApplication()).getMainView().closeAllDocuments();
 	}
 
 

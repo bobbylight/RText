@@ -1,7 +1,7 @@
 /*
  * 11/14/2003
  *
- * GoToAction.java - Action to "goto" a specific line number in RText.
+ * FindInFilesAction.java - Action for finding text in a group of files.
  * Copyright (C) 2003 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
@@ -22,25 +22,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
-import javax.swing.JOptionPane;
-import javax.swing.text.BadLocationException;
 
+import org.fife.rtext.AbstractMainView;
+import org.fife.rtext.RText;
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.StandardAction;
+import org.fife.ui.search.FindInFilesDialog;
 
 
 /**
- * Action used by an <code>AbstractMainView</code> to "goto" a specific line
- * number in the current document.
+ * Action used by an <code>AbstractMainView</code> to find text in files.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class GoToAction extends StandardAction {
+class FindInFilesAction extends StandardAction {
 
 
 	/**
@@ -50,8 +51,8 @@ class GoToAction extends StandardAction {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public GoToAction(RText owner, ResourceBundle msg, Icon icon) {
-		super(owner, msg, "GoToAction");
+	public FindInFilesAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, "FindInFilesAction");
 		setIcon(icon);
 	}
 
@@ -61,30 +62,23 @@ class GoToAction extends StandardAction {
 		RText rtext = (RText)getApplication();
 		AbstractMainView mainView = rtext.getMainView();
 
-		// Initializing the dialog now saves on load time when we first bring rtext up.
-		if (mainView.goToDialog==null)
-			mainView.goToDialog = new GoToDialog(rtext, mainView);
-
-		// Prepare and show the GoTo Line dialog.
-		RTextEditorPane editor = mainView.getCurrentTextArea();
-		mainView.goToDialog.setMaxLineNumberAllowed(editor.getLineCount());
-		mainView.goToDialog.setVisible(true);
-
-		// If a real line number is returned, go to that line number.
-		int line = mainView.goToDialog.getLineNumber();
-		if (line>0) {
-
-			try {
-				editor.setCaretPosition(editor.getLineStartOffset(line-1));
-			} catch (BadLocationException ble) {
-				String temp = rtext.getString("InternalErrorILN",
-									Integer.toString(line));
-				JOptionPane.showMessageDialog(rtext, temp,
-									rtext.getString("ErrorDialogTitle"),
-									JOptionPane.ERROR_MESSAGE);
-			}
-
+		// Create the "Find in Files" dialog if it hasn't already been.
+		if (mainView.findInFilesDialog==null) {
+			mainView.findInFilesDialog = new FindInFilesDialog(rtext);
+			RTextUtilities.configureFindInFilesDialog(mainView.findInFilesDialog);
+			mainView.findInFilesDialog.addPropertyChangeListener(mainView);
+			mainView.findInFilesDialog.addFindInFilesListener(mainView);
 		}
+
+		// So we don't have to type so much.
+		FindInFilesDialog findInFilesDialog = mainView.findInFilesDialog;
+
+		// Set the search parameters correctly and display the dialog.
+		findInFilesDialog.setSearchParameters(mainView.searchStrings,
+										mainView.searchMatchCase,
+										mainView.searchWholeWord,
+										mainView.searchRegExpression);
+		findInFilesDialog.setVisible(true);
 
 	}
 

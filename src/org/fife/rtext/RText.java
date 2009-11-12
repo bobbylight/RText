@@ -1120,7 +1120,7 @@ setSearchWindowOpacity(0.5f);
 	}
 
 
-	void registerChildWindowListeners(Window w) {
+	public void registerChildWindowListeners(Window w) {
 
 		if (!windowListenersInited) {
 			windowListenersInited = true;
@@ -1151,8 +1151,6 @@ w.addComponentListener(searchWindowOpacityListener);
 				a.putValue(Action.ACCELERATOR_KEY,defaultActionAccelerators[i]);
 			}
 		}
-
-		mainView.restoreDefaultAccelerators();
 
 		menuItemAcceleratorWorkaround();
 
@@ -1226,9 +1224,25 @@ w.addComponentListener(searchWindowOpacityListener);
 		getAction(HELP_ACTION_KEY).putValue(Action.SMALL_ICON, icon);
 		icon = iconGroup.getIcon("about");
 		getAction(ABOUT_ACTION_KEY).putValue(Action.SMALL_ICON, icon);
+		getAction(CLOSE_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("find");
+		getAction(FIND_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("findnext");
+		getAction(FIND_NEXT_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("replace");
+		getAction(REPLACE_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("replacenext");
+		getAction(REPLACE_NEXT_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("print");
+		getAction(PRINT_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("printpreview");
+		getAction(PRINT_PREVIEW_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("closeall");
+		getAction(CLOSE_ALL_ACTION).putValue(Action.SMALL_ICON, icon);
 
-		// Fix the icons for all actions owned by the tabbed pane.
-		mainView.refreshIcons();
+		// Change all RTextAreas' open documents' icon sets.
+		RTextEditorPane.setIconGroup(iconGroup);
+
 
 		// The toolbar uses the large versions of the icons, if available.
 		// FIXME:  Make this toggle-able.

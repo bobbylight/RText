@@ -154,9 +154,7 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		JMenuItem menuItem;
 		JCheckBoxMenuItem cbMenuItem;
 		ResourceBundle msg = rtext.getResourceBundle();
-		ResourceBundle menuMsg = ResourceBundle.getBundle(
-										"org.fife.rtext.MenuBar");
-		AbstractMainView mainView = rtext.getMainView();
+		ResourceBundle menuMsg = ResourceBundle.getBundle("org.fife.rtext.MenuBar");
 
 		// File submenu.
 		fileMenu = createMenu(menuMsg, "MenuFile");
@@ -175,10 +173,10 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		openRemoteItem = createMenuItem(rtext.getAction(RText.OPEN_REMOTE_ACTION));
 		fileMenu.add(openRemoteItem);
 
-		closeItem = createMenuItem(mainView.getAction(AbstractMainView.CLOSE_ACTION));
+		closeItem = createMenuItem(rtext.getAction(RText.CLOSE_ACTION));
 		fileMenu.add(closeItem);
 
-		closeAllItem = createMenuItem(mainView.getAction(AbstractMainView.CLOSE_ALL_ACTION));
+		closeAllItem = createMenuItem(rtext.getAction(RText.CLOSE_ALL_ACTION));
 		fileMenu.add(closeAllItem);
 
 		fileMenu.addSeparator();
@@ -200,10 +198,10 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		fileMenu.addSeparator();
 
-		printItem = createMenuItem(mainView.getAction(AbstractMainView.PRINT_ACTION));
+		printItem = createMenuItem(rtext.getAction(RText.PRINT_ACTION));
 		fileMenu.add(printItem);
 
-		printPreviewItem = createMenuItem(mainView.getAction(AbstractMainView.PRINT_PREVIEW_ACTION));
+		printPreviewItem = createMenuItem(rtext.getAction(RText.PRINT_PREVIEW_ACTION));
 		fileMenu.add(printPreviewItem);
 
 		fileMenu.addSeparator();
@@ -353,30 +351,30 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		add(menu);
 
 		// Search menu's items.
-		findItem = createMenuItem(mainView.getAction(AbstractMainView.FIND_ACTION));
+		findItem = createMenuItem(rtext.getAction(RText.FIND_ACTION));
 		menu.add(findItem);
 
-		findNextItem = createMenuItem(mainView.getAction(AbstractMainView.FIND_NEXT_ACTION));
+		findNextItem = createMenuItem(rtext.getAction(RText.FIND_NEXT_ACTION));
 		menu.add(findNextItem);
 
-		replaceItem = createMenuItem(mainView.getAction(AbstractMainView.REPLACE_ACTION));
+		replaceItem = createMenuItem(rtext.getAction(RText.REPLACE_ACTION));
 		menu.add(replaceItem);
 
-		replaceNextItem = createMenuItem(mainView.getAction(AbstractMainView.REPLACE_NEXT_ACTION));
+		replaceNextItem = createMenuItem(rtext.getAction(RText.REPLACE_NEXT_ACTION));
 		menu.add(replaceNextItem);
 
 		menu.addSeparator();
 
-		findInFilesItem = createMenuItem(mainView.getAction(AbstractMainView.FIND_IN_FILES_ACTION));
+		findInFilesItem = createMenuItem(rtext.getAction(RText.FIND_IN_FILES_ACTION));
 		menu.add(findInFilesItem);
 
 		replaceInFilesItem = createMenuItem(
-				mainView.getAction(AbstractMainView.REPLACE_IN_FILES_ACTION));
+				rtext.getAction(RText.REPLACE_IN_FILES_ACTION));
 		menu.add(replaceInFilesItem);
 
 		menu.addSeparator();
 
-		goToItem = createMenuItem(mainView.getAction(AbstractMainView.GOTO_ACTION));
+		goToItem = createMenuItem(rtext.getAction(RText.GOTO_ACTION));
 		menu.add(goToItem);
 
 		menuItem = createMenuItem(
@@ -468,11 +466,11 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		// Text orientation submenu
 		JMenu orientMenu = createMenu(menuMsg, "TextOrientation");
 		ltrItem = createRadioButtonMenuItem(
-				mainView.getAction(AbstractMainView.LTR_ACTION),
+				rtext.getAction(RText.LTR_ACTION),
 				null, menuMsg.getString("DescLeftToRight"));
 		orientMenu.add(ltrItem);
 		rtlItem = createRadioButtonMenuItem(
-				mainView.getAction(AbstractMainView.RTL_ACTION),
+				rtext.getAction(RText.RTL_ACTION),
 				null, menuMsg.getString("DescRightToLeft"));
 		orientMenu.add(rtlItem);
 		ButtonGroup bg = new ButtonGroup();
@@ -486,15 +484,15 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		JMenu splitViewMenu = createMenu(menuMsg, "MenuSplitView",
 									"MenuSplitViewMnemonic");
 		splitHorizItem = createRadioButtonMenuItem(
-				mainView.getAction(AbstractMainView.VIEW_SPLIT_HORIZ_ACTION),
+				rtext.getAction(RText.VIEW_SPLIT_HORIZ_ACTION),
 				null, menuMsg.getString("DescSplitViewHoriz"));
 		splitViewMenu.add(splitHorizItem);
 		splitVertItem = createRadioButtonMenuItem(
-				mainView.getAction(AbstractMainView.VIEW_SPLIT_VERT_ACTION),
+				rtext.getAction(RText.VIEW_SPLIT_VERT_ACTION),
 				null, menuMsg.getString("DescSplitViewVert"));
 		splitViewMenu.add(splitVertItem);
 		splitNoneItem = createRadioButtonMenuItem(
-				mainView.getAction(AbstractMainView.VIEW_SPLIT_NONE_ACTION),
+				rtext.getAction(RText.VIEW_SPLIT_NONE_ACTION),
 				null, menuMsg.getString("DescSplitViewNone"));
 		splitViewMenu.add(splitNoneItem);
 		viewMenu.add(splitViewMenu);
@@ -823,28 +821,26 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 */
 	protected void menuItemAcceleratorWorkaround() {
 
-		AbstractMainView mainView = rtext.getMainView();
-
 		updateAction(newItem, rtext.getAction(RText.NEW_ACTION));
 		updateAction(openItem, rtext.getAction(RText.OPEN_ACTION));
 		updateAction(openInNewWindowItem, rtext.getAction(RText.OPEN_NEWWIN_ACTION));
 		updateAction(openRemoteItem, rtext.getAction(RText.OPEN_REMOTE_ACTION));
-		updateAction(closeItem, mainView.getAction(AbstractMainView.CLOSE_ACTION));
-		updateAction(closeAllItem, mainView.getAction(AbstractMainView.CLOSE_ALL_ACTION));
+		updateAction(closeItem, rtext.getAction(RText.CLOSE_ACTION));
+		updateAction(closeAllItem, rtext.getAction(RText.CLOSE_ALL_ACTION));
 		updateAction(saveItem, rtext.getAction(RText.SAVE_ACTION));
 		updateAction(saveAsItem, rtext.getAction(RText.SAVE_AS_ACTION));
 		updateAction(saveAsRemoteItem, rtext.getAction(RText.SAVE_AS_REMOTE_ACTION));
 		updateAction(saveAsWebPageItem, rtext.getAction(RText.SAVE_WEBPAGE_ACTION));
 		updateAction(saveAllItem, rtext.getAction(RText.SAVE_ALL_ACTION));
-		updateAction(printItem, mainView.getAction(AbstractMainView.PRINT_ACTION));
-		updateAction(printPreviewItem, mainView.getAction(AbstractMainView.PRINT_PREVIEW_ACTION));
-		updateAction(findItem, mainView.getAction(AbstractMainView.FIND_ACTION));
-		updateAction(findNextItem, mainView.getAction(AbstractMainView.FIND_NEXT_ACTION));
-		updateAction(replaceItem, mainView.getAction(AbstractMainView.REPLACE_ACTION));
-		updateAction(replaceNextItem, mainView.getAction(AbstractMainView.REPLACE_NEXT_ACTION));
-		updateAction(findInFilesItem, mainView.getAction(AbstractMainView.FIND_IN_FILES_ACTION));
-		updateAction(replaceInFilesItem, mainView.getAction(AbstractMainView.REPLACE_IN_FILES_ACTION));
-		updateAction(goToItem, mainView.getAction(AbstractMainView.GOTO_ACTION));
+		updateAction(printItem, rtext.getAction(RText.PRINT_ACTION));
+		updateAction(printPreviewItem, rtext.getAction(RText.PRINT_PREVIEW_ACTION));
+		updateAction(findItem, rtext.getAction(RText.FIND_ACTION));
+		updateAction(findNextItem, rtext.getAction(RText.FIND_NEXT_ACTION));
+		updateAction(replaceItem, rtext.getAction(RText.REPLACE_ACTION));
+		updateAction(replaceNextItem, rtext.getAction(RText.REPLACE_NEXT_ACTION));
+		updateAction(findInFilesItem, rtext.getAction(RText.FIND_IN_FILES_ACTION));
+		updateAction(replaceInFilesItem, rtext.getAction(RText.REPLACE_IN_FILES_ACTION));
+		updateAction(goToItem, rtext.getAction(RText.GOTO_ACTION));
 		updateAction(copyAsRtfItem, rtext.getAction(RText.COPY_AS_RTF_ACTION));
 		updateAction(timeDateItem, rtext.getAction(RText.TIME_DATE_ACTION));
 		if (rtext.getOS()!=RText.OS_MAC_OSX) {

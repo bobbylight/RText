@@ -20,6 +20,7 @@
  */
 package org.fife.rtext.actions;
 
+import java.awt.ComponentOrientation;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
@@ -151,6 +152,79 @@ public class ActionFactory implements RTextActionInfo {
 		action = new HomePageAction(rtext, msg, null);
 		action.setAccelerator(prefs.getAccelerator(HOME_PAGE_ACTION));
 		rtext.addAction(HOME_PAGE_ACTION, action);
+
+		StandardAction a = new CloseAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(CLOSE_ACTION));
+		rtext.addAction(CLOSE_ACTION, a);
+
+		a = new CloseAllAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(CLOSE_ALL_ACTION));
+		rtext.addAction(CLOSE_ALL_ACTION, a);
+
+		a = new FindAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(FIND_ACTION));
+		rtext.addAction(FIND_ACTION, a);
+
+		a = new FindNextAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(FIND_NEXT_ACTION));
+		rtext.addAction(FIND_NEXT_ACTION, a);
+
+		a = new ReplaceAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(REPLACE_ACTION));
+		rtext.addAction(REPLACE_ACTION, a);
+
+		a = new ReplaceNextAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(REPLACE_NEXT_ACTION));
+		rtext.addAction(REPLACE_NEXT_ACTION, a);
+
+		a = new ReplaceAllAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(REPLACE_ALL_ACTION));
+		rtext.addAction(REPLACE_ALL_ACTION, a);
+
+		a = new FindInFilesAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(FIND_IN_FILES_ACTION));
+		rtext.addAction(FIND_IN_FILES_ACTION, a);
+
+		a = new ReplaceInFilesAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(REPLACE_IN_FILES_ACTION));
+		rtext.addAction(REPLACE_IN_FILES_ACTION, a);
+
+		a = new PrintAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(PRINT_ACTION));
+		rtext.addAction(PRINT_ACTION, a);
+
+		a = new PrintPreviewAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(PRINT_PREVIEW_ACTION));
+		rtext.addAction(PRINT_PREVIEW_ACTION, a);
+
+		a = new GoToAction(rtext, msg, new ImageIcon(cl.getResource(commonIconPath+"goto16.gif")));
+		a.setAccelerator(prefs.getAccelerator(GOTO_ACTION));
+		rtext.addAction(GOTO_ACTION, a);
+
+		a = new TextAreaOrientationAction(rtext, msg, "LeftToRightAction", null,
+				ComponentOrientation.LEFT_TO_RIGHT);
+		a.setAccelerator(prefs.getAccelerator(LTR_ACTION));
+		rtext.addAction(LTR_ACTION, a);
+
+		a = new TextAreaOrientationAction(rtext, msg, "RightToLeftAction", null,
+				ComponentOrientation.RIGHT_TO_LEFT);
+		a.setAccelerator(prefs.getAccelerator(RTL_ACTION));
+		rtext.addAction(RTL_ACTION, a);
+
+		a = new ViewSplitAction(rtext, msg, null, "SplitHorizontallyAction",
+								VIEW_SPLIT_HORIZ_ACTION);
+		a.setAccelerator(prefs.getAccelerator(VIEW_SPLIT_HORIZ_ACTION));
+		rtext.addAction(VIEW_SPLIT_HORIZ_ACTION, a);
+
+		a = new ViewSplitAction(rtext, msg, null, "SplitNoneAction",
+								VIEW_SPLIT_NONE_ACTION);
+		a.setAccelerator(prefs.getAccelerator(VIEW_SPLIT_NONE_ACTION));
+		rtext.addAction(VIEW_SPLIT_NONE_ACTION, a);
+
+		a = new ViewSplitAction(rtext, msg, null, "SplitVerticallyAction",
+								VIEW_SPLIT_VERT_ACTION);
+		a.setAccelerator(prefs.getAccelerator(VIEW_SPLIT_VERT_ACTION));
+		rtext.addAction(VIEW_SPLIT_VERT_ACTION, a);
 
 		msg = null; // May help with GC.
 

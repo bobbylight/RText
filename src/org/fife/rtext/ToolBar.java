@@ -80,7 +80,6 @@ class ToolBar extends CustomizableToolBar {
 		super(title);
 
 		this.owner = rtext;
-		AbstractMainView mainView = owner.getMainView();
 
 		// Add the standard buttons.
 
@@ -103,17 +102,17 @@ class ToolBar extends CustomizableToolBar {
 		configure(saveAllButton, mouseListener);
 		add(saveAllButton);
 
-		closeButton = createButton(mainView.getAction(AbstractMainView.CLOSE_ACTION));
+		closeButton = createButton(rtext.getAction(RText.CLOSE_ACTION));
 		configure(closeButton, mouseListener);
 		add(closeButton);
 
 		addSeparator();
 
-		printButton = createButton(mainView.getAction(AbstractMainView.PRINT_ACTION));
+		printButton = createButton(rtext.getAction(RText.PRINT_ACTION));
 		configure(printButton, mouseListener);
 		add(printButton);
 
-		printPreviewButton = createButton(mainView.getAction(AbstractMainView.PRINT_PREVIEW_ACTION));
+		printPreviewButton = createButton(rtext.getAction(RText.PRINT_PREVIEW_ACTION));
 		configure(printPreviewButton, mouseListener);
 		add(printPreviewButton);
 
@@ -137,19 +136,19 @@ class ToolBar extends CustomizableToolBar {
 
 		addSeparator();
 
-		findButton = createButton(mainView.getAction(AbstractMainView.FIND_ACTION));
+		findButton = createButton(rtext.getAction(RText.FIND_ACTION));
 		configure(findButton, mouseListener);
 		add(findButton);
 
-		findNextButton = createButton(mainView.getAction(AbstractMainView.FIND_NEXT_ACTION));
+		findNextButton = createButton(rtext.getAction(RText.FIND_NEXT_ACTION));
 		configure(findNextButton, mouseListener);
 		add(findNextButton);
 
-		replaceButton = createButton(mainView.getAction(AbstractMainView.REPLACE_ACTION));
+		replaceButton = createButton(rtext.getAction(RText.REPLACE_ACTION));
 		configure(replaceButton, mouseListener);
 		add(replaceButton);
 
-		replaceNextButton = createButton(mainView.getAction(AbstractMainView.REPLACE_NEXT_ACTION));
+		replaceNextButton = createButton(rtext.getAction(RText.REPLACE_NEXT_ACTION));
 		configure(replaceNextButton, mouseListener);
 		add(replaceNextButton);
 

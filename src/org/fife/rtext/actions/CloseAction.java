@@ -1,8 +1,8 @@
 /*
- * 12/10/2006
+ * 11/14/2003
  *
- * ViewSplitAction.java - Action to split the editor view.
- * Copyright (C) 2006 Robert Futrell
+ * CloseAction.java - Action to close the current document in RText.
+ * Copyright (C) 2003 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
  *
@@ -22,24 +22,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 
+import org.fife.rtext.AbstractMainView;
+import org.fife.rtext.RText;
 import org.fife.ui.app.StandardAction;
 
 
 /**
- * Action that splits the editor view either vertically or horizontally.
+ * Action used by an <code>AbstractMainView</code> to close the current
+ * document.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class ViewSplitAction extends StandardAction {
-
-	//private int splitType;
+class CloseAction extends StandardAction {
 
 
 	/**
@@ -48,24 +49,19 @@ class ViewSplitAction extends StandardAction {
 	 * @param owner The parent RText instance.
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
-	 * @param nameKey The localization key for the name.
-	 * @param splitType One of
-	 *        <code>AbstractMainView.VIEW_SPLIT_HORIZ_ACTION</code>,
-	 *        <code>AbstractMainView.VIEW_SPLIT_NONE_ACTION</code>, or
-	 *        <code>AbstractMainView.VIEW_SPLIT_VERT_ACTION</code>.
 	 */
-	public ViewSplitAction(RText owner, ResourceBundle msg, Icon icon,
-							String nameKey, int splitType) {
-		super(owner, msg, nameKey);
+	public CloseAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, "CloseAction");
 		setIcon(icon);
-		//this.splitType = splitType;
 	}
 
 
 	public void actionPerformed(ActionEvent e) {
-		// TODO
-		//owner.setEditorSplitType(splitType);
-		//owner.getMainView().setEditorSplitType(splitType);
+		RText owner = (RText)getApplication();
+		AbstractMainView mainView = owner.getMainView();
+		mainView.closeCurrentDocument();
+		owner.setStatusBarReadOnlyIndicatorEnabled(mainView.
+									getCurrentTextArea().isReadOnly());
 	}
 
 

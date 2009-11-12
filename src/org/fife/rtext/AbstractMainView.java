@@ -50,14 +50,12 @@ import org.fife.rtext.lang.LanguageSupport;
 import org.fife.rtext.lang.LanguageSupportFactory;
 import org.fife.ui.UIUtil;
 //import org.fife.ui.autocomplete.*;
-import org.fife.ui.app.StandardAction;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rtextarea.Gutter;
-import org.fife.ui.rtextarea.IconGroup;
 import org.fife.ui.rtextarea.Macro;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -91,26 +89,6 @@ public abstract class AbstractMainView extends JPanel
 	public static final int DOCUMENT_SELECT_BOTTOM	= JTabbedPane.BOTTOM;
 	public static final int DOCUMENT_SELECT_RIGHT	= JTabbedPane.RIGHT;
 
-	// Actions owned by the main view.
-	public static final int FIND_ACTION			= 0;
-	public static final int FIND_NEXT_ACTION		= 1;
-	public static final int REPLACE_ACTION			= 2;
-	public static final int REPLACE_NEXT_ACTION		= 3;
-	public static final int REPLACE_ALL_ACTION		= 4;
-	public static final int FIND_IN_FILES_ACTION		= 5;
-	public static final int REPLACE_IN_FILES_ACTION	= 6;
-	public static final int PRINT_ACTION			= 7;
-	public static final int PRINT_PREVIEW_ACTION		= 8;
-	public static final int CLOSE_ACTION			= 9;
-	public static final int CLOSE_ALL_ACTION		= 10;
-	public static final int GOTO_ACTION			= 11;
-	public static final int LTR_ACTION				= 12;
-	public static final int RTL_ACTION				= 13;
-	public static final int VIEW_SPLIT_HORIZ_ACTION	= 14;
-	public static final int VIEW_SPLIT_NONE_ACTION	= 15;
-	public static final int VIEW_SPLIT_VERT_ACTION	= 16;
-	public static final int NUM_ACTIONS			= 17;
-
 	public static final String CURRENT_DOCUMENT_PROPERTY		= "MainView.currentDocument";
 	public static final String DEFAULT_ENCODING_PROPERTY		= "MainView.defaultEncoding";
 	public static final String FILE_SIZE_CHECK_PROPERTY		= "MainView.fileSizeCheck";
@@ -125,8 +103,6 @@ public abstract class AbstractMainView extends JPanel
 	public static final String TEXT_AREA_REMOVED_PROPERTY	= "MainView.textAreaRemoved";
 
 	private RTextEditorPane currentTextArea;			// Currently active text area.
-
-	private Action[] actions;
 
 	public FindDialog findDialog;					// The dialog that lets you search for text.
 	public ReplaceDialog replaceDialog;			// The dialog that lets you replace text.
@@ -257,17 +233,17 @@ public abstract class AbstractMainView extends JPanel
 
 		// If they click the "Find" button on the Find/Replace dialog...
 		if (command.equals("FindNext")) {
-			getAction(FIND_NEXT_ACTION).actionPerformed(null);
+			owner.getAction(RText.FIND_NEXT_ACTION).actionPerformed(null);
 		}
 
 		// If they click on the "Replace" button on the Replace dialog...
 		else if (command.equals("Replace")) {
-			getAction(REPLACE_NEXT_ACTION).actionPerformed(null);
+			owner.getAction(RText.REPLACE_NEXT_ACTION).actionPerformed(null);
 		}
 
 		// If they clicked on the "Replace All" button on the Replace dialog...
 		else if (command.equals("ReplaceAll")) {
-			getAction(REPLACE_ALL_ACTION).actionPerformed(null);
+			owner.getAction(RText.REPLACE_ALL_ACTION).actionPerformed(null);
 		}
 
 		// If a file was found to be modified outside of the editor...
@@ -602,9 +578,6 @@ public abstract class AbstractMainView extends JPanel
 
 		currentTextArea = fromPanel.currentTextArea;
 
-		for (int i=0; i<NUM_ACTIONS; i++)
-			actions[i] = fromPanel.getAction(i);
-
 		findDialog		= fromPanel.findDialog;
 		replaceDialog		= fromPanel.replaceDialog;
 		searchStrings		= fromPanel.searchStrings;
@@ -680,98 +653,6 @@ public abstract class AbstractMainView extends JPanel
 				listenerList.add(ctalClass, l);
 			}
 		}
-
-	}
-
-
-	/**
-	 * Creates the array of actions used by this RText.
-	 *
-	 * @param prefs The RText properties for this RText instance.
-	 */
-	private void createActions(RTextPreferences prefs) {
-
-		ResourceBundle msg = ResourceBundle.getBundle(
-								"org.fife.rtext.MainPanelActions");
-
-		String commonIconPath = "org/fife/rtext/graphics/common_icons/";
-		ClassLoader cl = this.getClass().getClassLoader();
-		actions = new Action[NUM_ACTIONS];
-
-		StandardAction a = new CloseAction(owner, msg, null);
-		a.setAccelerator(prefs.mainViewActionAccelerators[CLOSE_ACTION]);
-		actions[CLOSE_ACTION] = a;
-
-		a = new CloseAllAction(owner, msg, null);
-		a.setAccelerator(prefs.mainViewActionAccelerators[CLOSE_ALL_ACTION]);
-		actions[CLOSE_ALL_ACTION] = a;
-
-		a = new FindAction(owner, msg, null);
-		a.setAccelerator(prefs.mainViewActionAccelerators[FIND_ACTION]);
-		actions[FIND_ACTION] = a;
-
-		a = new FindNextAction(owner, msg, null);
-		a.setAccelerator(prefs.mainViewActionAccelerators[FIND_NEXT_ACTION]);
-		actions[FIND_NEXT_ACTION] = a;
-
-		a = new ReplaceAction(owner, msg, null);
-		a.setAccelerator(prefs.mainViewActionAccelerators[REPLACE_ACTION]);
-		actions[REPLACE_ACTION] = a;
-
-		a = new ReplaceNextAction(owner, msg, null);
-		a.setAccelerator(prefs.mainViewActionAccelerators[REPLACE_NEXT_ACTION]);
-		actions[REPLACE_NEXT_ACTION] = a;
-
-		a = new ReplaceAllAction(owner, msg, null);
-		a.setAccelerator(prefs.mainViewActionAccelerators[REPLACE_ALL_ACTION]);
-		actions[REPLACE_ALL_ACTION] = a;
-
-		a = new FindInFilesAction(owner, msg, null);
-		a.setAccelerator(prefs.mainViewActionAccelerators[FIND_IN_FILES_ACTION]);
-		actions[FIND_IN_FILES_ACTION] = a;
-
-		a = new ReplaceInFilesAction(owner, msg, null);
-		a.setAccelerator(prefs.mainViewActionAccelerators[REPLACE_IN_FILES_ACTION]);
-		actions[REPLACE_IN_FILES_ACTION] = a;
-
-		a = new PrintAction(owner, msg, null);
-		a.setAccelerator(prefs.mainViewActionAccelerators[PRINT_ACTION]);
-		actions[PRINT_ACTION] = a;
-
-		a = new PrintPreviewAction(owner, msg, null);
-		a.setAccelerator(prefs.mainViewActionAccelerators[PRINT_PREVIEW_ACTION]);
-		actions[PRINT_PREVIEW_ACTION] = a;
-
-		a = new GoToAction(owner, msg, new ImageIcon(cl.getResource(commonIconPath+"goto16.gif")));
-		a.setAccelerator(prefs.mainViewActionAccelerators[GOTO_ACTION]);
-		actions[GOTO_ACTION] = a;
-
-		a = new TextAreaOrientationAction(owner, msg, "LeftToRightAction", null,
-				ComponentOrientation.LEFT_TO_RIGHT);
-		a.setAccelerator(prefs.mainViewActionAccelerators[LTR_ACTION]);
-		actions[LTR_ACTION] = a;
-
-		a = new TextAreaOrientationAction(owner, msg, "RightToLeftAction", null,
-				ComponentOrientation.RIGHT_TO_LEFT);
-		a.setAccelerator(prefs.mainViewActionAccelerators[RTL_ACTION]);
-		actions[RTL_ACTION] = a;
-
-		a = new ViewSplitAction(owner, msg, null, "SplitHorizontallyAction",
-								VIEW_SPLIT_HORIZ_ACTION);
-		a.setAccelerator(prefs.mainViewActionAccelerators[VIEW_SPLIT_HORIZ_ACTION]);
-		actions[VIEW_SPLIT_HORIZ_ACTION] = a;
-
-		a = new ViewSplitAction(owner, msg, null, "SplitNoneAction",
-								VIEW_SPLIT_NONE_ACTION);
-		a.setAccelerator(prefs.mainViewActionAccelerators[VIEW_SPLIT_NONE_ACTION]);
-		actions[VIEW_SPLIT_NONE_ACTION] = a;
-
-		a = new ViewSplitAction(owner, msg, null, "SplitVerticallyAction",
-								VIEW_SPLIT_VERT_ACTION);
-		a.setAccelerator(prefs.mainViewActionAccelerators[VIEW_SPLIT_VERT_ACTION]);
-		actions[VIEW_SPLIT_VERT_ACTION] = a;
-
-		msg = null; // May help with GC.
 
 	}
 
@@ -1000,29 +881,6 @@ public abstract class AbstractMainView extends JPanel
 											oldValue, newValue));
 			}
 		}
-	}
-
-
-	/**
-	 * Returns the requested action.
-	 *
-	 * @param action The action to fetch, e.g., <code>FIND_ACTION</code> or
-	 *        <code>PRINT_ACTION</code>.
-	 * @see #getActions
-	 */
-	public /*RecordableTextAction*/Action getAction(int action) {
-		return actions[action];
-	}
-
-
-	/**
-	 * Returns all actions owned by this main view.
-	 *
-	 * @return All actions owned by this main view.
-	 * @see #getAction
-	 */
-	public Action[] getActions() {
-		return actions;
 	}
 
 
@@ -2073,9 +1931,6 @@ public abstract class AbstractMainView extends JPanel
 		searchWholeWord = false;	// Default is not whole word.
 		searchMarkAll   = false; // Default is not to mark all.
 
-		// Initialize this main view's actions.
-		createActions(prefs);
-
 		setHighlightModifiedDocumentDisplayNames(prefs.highlightModifiedDocNames);
 		setModifiedDocumentDisplayNamesColor(prefs.modifiedDocumentNamesColor);
 		setWhitespaceVisible(prefs.visibleWhitespace);
@@ -2485,37 +2340,6 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Updates the icons used by actions owned by this panel to be in synch
-	 * with the <code>org.fife.ui.rtextarea.IconGroup</code> used by the
-	 * parent <code>RText</code>.
-	 */
-	public void refreshIcons() {
-
-		IconGroup group = owner.getIconGroup();
-		Icon icon = group.getIcon("close");
-		actions[CLOSE_ACTION].putValue(Action.SMALL_ICON, icon);
-		icon = group.getIcon("find");
-		actions[FIND_ACTION].putValue(Action.SMALL_ICON, icon);
-		icon = group.getIcon("findnext");
-		actions[FIND_NEXT_ACTION].putValue(Action.SMALL_ICON, icon);
-		icon = group.getIcon("replace");
-		actions[REPLACE_ACTION].putValue(Action.SMALL_ICON, icon);
-		icon = group.getIcon("replacenext");
-		actions[REPLACE_NEXT_ACTION].putValue(Action.SMALL_ICON, icon);
-		icon = group.getIcon("print");
-		actions[PRINT_ACTION].putValue(Action.SMALL_ICON, icon);
-		icon = group.getIcon("printpreview");
-		actions[PRINT_PREVIEW_ACTION].putValue(Action.SMALL_ICON, icon);
-		icon = group.getIcon("closeall");
-		actions[CLOSE_ALL_ACTION].putValue(Action.SMALL_ICON, icon);
-
-		// Change all RTextAreas' open documents' icon sets.
-		RTextEditorPane.setIconGroup(group);
-
-	}
-
-
-	/**
 	 * Looks for duplicate open documents (documents opened more than once)
 	 * and adds numbers to the display names for these documents to
 	 * differentiate them.
@@ -2580,17 +2404,6 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public void removeCurrentTextAreaListener(CurrentTextAreaListener l) {
 		listenerList.remove(CurrentTextAreaListener.class, l);
-	}
-
-
-	/**
-	 * Makes all actions use default accelerators.
-	 */
-	void restoreDefaultAccelerators() {
-		int num = RTextPreferences.defaultMainViewActionAccelerators.length;
-		for (int i=0; i<num; i++)
-			actions[i].putValue(Action.ACCELERATOR_KEY,
-				RTextPreferences.defaultMainViewActionAccelerators[i]);
 	}
 
 

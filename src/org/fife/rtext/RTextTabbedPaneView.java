@@ -580,8 +580,7 @@ inCloseCurrentDocument = false;
 				item = new JMenuItem(
 							new TabbedPaneCloseOthersAction(title));
 				popup.add(item);
-				item = new JMenuItem(RTextTabbedPaneView.this.getAction(
-								RTextTabbedPaneView.CLOSE_ALL_ACTION));
+				item = new JMenuItem(owner.getAction(RText.CLOSE_ALL_ACTION));
 				item.setToolTipText(null);
 				popup.add(item);
 				popup.add(new JPopupMenu.Separator());

@@ -69,7 +69,7 @@ import org.fife.ui.rtextarea.SearchEngine;
  * @author Robert Futrell
  * @version 0.5
  */
-class SearchToolBar extends JToolBar {
+public class SearchToolBar extends JToolBar {
 
 	private RText owner;
 

@@ -1,8 +1,8 @@
 /*
- * 11/14/2003
+ * 12/10/2006
  *
- * CloseAllAction.java - Action to close all open documents in RText.
- * Copyright (C) 2003 Robert Futrell
+ * ViewSplitAction.java - Action to split the editor view.
+ * Copyright (C) 2006 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
  *
@@ -22,22 +22,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 
+import org.fife.rtext.RText;
+import org.fife.rtext.RTextActionInfo;
 import org.fife.ui.app.StandardAction;
 
 
 /**
- * Action used by an <code>RTextTabbedPane</code> to close all open documents.
+ * Action that splits the editor view either vertically or horizontally.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class CloseAllAction extends StandardAction {
+class ViewSplitAction extends StandardAction {
+
+	//private String splitType;
 
 
 	/**
@@ -46,15 +50,24 @@ class CloseAllAction extends StandardAction {
 	 * @param owner The parent RText instance.
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
+	 * @param nameKey The localization key for the name.
+	 * @param splitType One of
+	 *        {@link RTextActionInfo#VIEW_SPLIT_HORIZ_ACTION},
+	 *        {@link RTextActionInfo#VIEW_SPLIT_NONE_ACTION}, or
+	 *        {@link RTextActionInfo#VIEW_SPLIT_VERT_ACTION}.
 	 */
-	public CloseAllAction(RText owner, ResourceBundle msg, Icon icon) {
-		super(owner, msg, "CloseAllAction");
+	public ViewSplitAction(RText owner, ResourceBundle msg, Icon icon,
+							String nameKey, String splitType) {
+		super(owner, msg, nameKey);
 		setIcon(icon);
+		//this.splitType = splitType;
 	}
 
 
 	public void actionPerformed(ActionEvent e) {
-		((RText)getApplication()).getMainView().closeAllDocuments();
+		// TODO
+		//owner.setEditorSplitType(splitType);
+		//owner.getMainView().setEditorSplitType(splitType);
 	}
 
 

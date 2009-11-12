@@ -1,7 +1,7 @@
 /*
  * 11/14/2003
  *
- * FindNextAction.java - Action to search for text again in RText.
+ * ReplaceNextAction.java - Action in RText to replace text with new text.
  * Copyright (C) 2003 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
@@ -22,7 +22,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
@@ -30,18 +30,21 @@ import java.util.regex.PatternSyntaxException;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
+import org.fife.rtext.AbstractMainView;
+import org.fife.rtext.RText;
+import org.fife.rtext.RTextEditorPane;
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.rtextarea.SearchEngine;
-import org.fife.ui.search.FindDialog;
 import org.fife.ui.search.ReplaceDialog;
 
 
 /**
- * Action used by an {@link AbstractMainView} to search for text.
+ * Action used by an <code>AbstractMainView</code> to replace text.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class FindNextAction extends FindAction {
+class ReplaceNextAction extends ReplaceAction {
 
 
 	/**
@@ -51,8 +54,8 @@ class FindNextAction extends FindAction {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public FindNextAction(RText owner, ResourceBundle msg, Icon icon) {
-		super(owner, msg, icon, "FindNextAction");
+	public ReplaceNextAction(RText owner, ResourceBundle msg, Icon icon) {
+		super(owner, msg, icon, "ReplaceNextAction");
 	}
 
 
@@ -68,60 +71,46 @@ class FindNextAction extends FindAction {
 		AbstractMainView mainView = rtext.getMainView();
 
 		// Do this just once for performance.
-		FindDialog findDialog = mainView.findDialog;
+		ReplaceDialog replaceDialog = mainView.replaceDialog;
 
-		// If the current text string is nothing (ie, they haven't searched
-		// yet), bring up Find dialog.
-		if (mainView.searchStrings.size()==0 && !findDialog.isVisible() &&
-				!mainView.replaceDialog.isVisible()) {
-			findDialog.setSearchParameters(mainView.searchStrings,
+		// If it's nothing (ie, they haven't searched yet), bring up the
+		// Replace dialog.
+		if (mainView.searchStrings.size()==0 && !replaceDialog.isVisible()
+				&& !mainView.findDialog.isVisible()) {
+			replaceDialog.setSearchParameters(mainView.searchStrings,
 									mainView.searchMatchCase,
 									mainView.searchWholeWord,
 									mainView.searchRegExpression,
 									!mainView.searchingForward,
 									mainView.searchMarkAll);
-			findDialog.setVisible(true);
+			replaceDialog.setVisible(true);
 			return;
 		}
 
-		// Otherwise, repeat the last Find action.
+		// Otherwise, repeat the last Replace action.
 		RTextEditorPane textArea = mainView.getCurrentTextArea();
-		String searchString = null;
+		String searchString = "";
 
-		// Get the text last searched for.
-		if (findDialog.isVisible()) {
-			mainView.searchStrings = findDialog.getSearchStrings();
-			searchString = findDialog.getSearchString();
-		}
-		else if (mainView.replaceDialog.isVisible()) {
-			ReplaceDialog replaceDialog = mainView.replaceDialog;
+		// Get the text to search for.
+		if (replaceDialog.isVisible()) {
 			mainView.searchStrings = replaceDialog.getSearchStrings();
 			searchString = replaceDialog.getSearchString();
 		}
-		// else, mainView.searchStrings should already have a value (see
-		// above), but we still need to give a value to searchString.
+		// Otherwise, mainView.searchStrings already has a value, but we
+		// still need to give a value to searchString.
 		else {
 			searchString = (String)mainView.searchStrings.get(0);
 		}
 
 		try {
 
-			// If "mark all" is selected, first mark all occurances in
-			// the text area, then do the "find" (so that the next
-			// occurance is indeed selected).
-			textArea.clearMarkAllHighlights(); // Always remove old stuff.
-			if (mainView.searchMarkAll) {
-				textArea.markAll(searchString,
-								mainView.searchMatchCase,
-								mainView.searchWholeWord,
-								mainView.searchRegExpression);
-			}
+			boolean found = SearchEngine.replace(textArea, searchString,
+									replaceDialog.getReplaceString(),
+									mainView.searchingForward,
+									mainView.searchMatchCase,
+									mainView.searchWholeWord,
+									mainView.searchRegExpression);
 
-			boolean found = SearchEngine.find(textArea, searchString,
-								mainView.searchingForward,
-								mainView.searchMatchCase,
-								mainView.searchWholeWord,
-								mainView.searchRegExpression);
 			if (!found) {
 				searchString = RTextUtilities.escapeForHTML(searchString, null);
 				String temp = rtext.getString("CannotFindString", searchString);
@@ -132,10 +121,11 @@ class FindNextAction extends FindAction {
 							JOptionPane.INFORMATION_MESSAGE);
 			}
 
-			// If find/replace dialogs aren't up, give text area focus.
-			if (!findDialog.isVisible() &&
-					!mainView.replaceDialog.isVisible())
+			// If find and replace dialogs aren't up, give text area focus.
+			if (!mainView.findDialog.isVisible() &&
+					!replaceDialog.isVisible()) {
 				textArea.requestFocusInWindow();
+			}
 
 		} catch (PatternSyntaxException pse) {
 			// There was a problem with the user's regex search string.
@@ -143,6 +133,13 @@ class FindNextAction extends FindAction {
 			JOptionPane.showMessageDialog(rtext,
 			"Invalid regular expression:\n" + pse.toString() +
 			"\nPlease check your regular expression search string.",
+			"Error", JOptionPane.ERROR_MESSAGE);
+		} catch (IndexOutOfBoundsException ioobe) {
+			// The user's regex replacement string referenced an
+			// invalid group.
+			JOptionPane.showMessageDialog(rtext,
+			"Invalid group reference in replacement string:\n" +
+			ioobe.getMessage(),
 			"Error", JOptionPane.ERROR_MESSAGE);
 		}
 

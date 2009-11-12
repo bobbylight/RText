@@ -62,6 +62,23 @@ public interface RTextActionInfo {
 	public static final String OPTIONS_ACTION		= "optionsAction";
 	public static final String HOME_PAGE_ACTION		= "homePageAction";
 
+	public static final String FIND_ACTION				= "findAction";
+	public static final String FIND_NEXT_ACTION			= "findNextAction";
+	public static final String REPLACE_ACTION			= "replaceAction";
+	public static final String REPLACE_NEXT_ACTION		= "replaceNextAction";
+	public static final String REPLACE_ALL_ACTION		= "replaceAllAction";
+	public static final String FIND_IN_FILES_ACTION		= "findInFilesAction";
+	public static final String REPLACE_IN_FILES_ACTION	= "replaceInFilesAction";
+	public static final String PRINT_ACTION				= "printAction";
+	public static final String PRINT_PREVIEW_ACTION		= "printPreviewAction";
+	public static final String CLOSE_ACTION				= "closeAction";
+	public static final String CLOSE_ALL_ACTION			= "closeAllAction";
+	public static final String GOTO_ACTION				= "gotoAction";
+	public static final String LTR_ACTION				= "leftToRightAction";
+	public static final String RTL_ACTION				= "rightToLeftAction";
+	public static final String VIEW_SPLIT_HORIZ_ACTION	= "viewSplitHorizontallyAction";
+	public static final String VIEW_SPLIT_NONE_ACTION	= "viewSplitNoneAction";
+	public static final String VIEW_SPLIT_VERT_ACTION	= "viewSplitVerticallyAction";
 
 	/**
 	 * The names of all actions in an array.  Note that the order of these
@@ -87,10 +104,30 @@ public interface RTextActionInfo {
 		RText.ABOUT_ACTION_KEY,
 		OPTIONS_ACTION,
 		HOME_PAGE_ACTION,
+
+		FIND_ACTION,
+		FIND_NEXT_ACTION,
+		REPLACE_ACTION,
+		REPLACE_NEXT_ACTION,
+		REPLACE_ALL_ACTION,
+		FIND_IN_FILES_ACTION,
+		REPLACE_IN_FILES_ACTION,
+		PRINT_ACTION,
+		PRINT_PREVIEW_ACTION,
+		CLOSE_ACTION,
+		CLOSE_ALL_ACTION,
+		GOTO_ACTION,
+		LTR_ACTION,
+		RTL_ACTION,
+		VIEW_SPLIT_HORIZ_ACTION,
+		VIEW_SPLIT_NONE_ACTION,
+		VIEW_SPLIT_VERT_ACTION,
+
 	};
 
 	static final int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	static final int shift = InputEvent.SHIFT_MASK;
+	static final int defaultShift    = defaultModifier|shift;
 
 
 	/**
@@ -117,6 +154,25 @@ public interface RTextActionInfo {
 					null,
 					null,
 					null,
-			};
+
+					KeyStroke.getKeyStroke(KeyEvent.VK_F, defaultModifier),
+					KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0),
+					KeyStroke.getKeyStroke(KeyEvent.VK_H, defaultModifier),
+					KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0),
+					null,
+					KeyStroke.getKeyStroke(KeyEvent.VK_F, defaultShift),
+					null,
+					KeyStroke.getKeyStroke(KeyEvent.VK_P, defaultModifier),
+					null,
+					KeyStroke.getKeyStroke(KeyEvent.VK_W, defaultModifier),
+					null,
+					KeyStroke.getKeyStroke(KeyEvent.VK_L, defaultModifier),
+					null,
+					null,
+					null,
+					null,
+					null,
+
+	};
 
 }

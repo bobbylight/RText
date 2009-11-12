@@ -31,9 +31,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.HashMap;
 import java.util.StringTokenizer;
@@ -73,49 +71,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 	 * The default color used to underline spelling errors.
 	 */
 	public static final Color DEFAULT_SPELLING_ERROR_COLOR = new Color(255,128,64);
-
-	private static final String[] mainViewAcceleratorKeys = {
-		"findActionAccelerator",
-		"findNextActionAccelerator",
-		"replaceActionAccelerator",
-		"replaceNextActionAccelerator",
-		"replaceAllActionAccelerator",
-		"findInFilesActionAccelerator",
-		"replaceInFilesActionAccelerator",
-		"printActionAccelerator",
-		"printPreviewActionAccelerator",
-		"closeActionAccelerator",
-		"closeAllActionAccelerator",
-		"gotoActionAccelerator",
-		"ltrActionAccelerator",
-		"rtlActionAccelerator",
-		"splitHorizActionAccelerator",
-		"splitNoneActionAccelerator",
-		"splitVertActionAccelerator",
-	};
-
-	private static final int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-	private static final int defaultShift    = defaultModifier|InputEvent.SHIFT_MASK;
-
-	static final KeyStroke[] defaultMainViewActionAccelerators = {
-					KeyStroke.getKeyStroke(KeyEvent.VK_F, defaultModifier),
-					KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0),
-					KeyStroke.getKeyStroke(KeyEvent.VK_H, defaultModifier),
-					KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0),
-					null,
-					KeyStroke.getKeyStroke(KeyEvent.VK_F, defaultShift),
-					null,
-					KeyStroke.getKeyStroke(KeyEvent.VK_P, defaultModifier),
-					null,
-					KeyStroke.getKeyStroke(KeyEvent.VK_W, defaultModifier),
-					null,
-					KeyStroke.getKeyStroke(KeyEvent.VK_L, defaultModifier),
-					null,
-					null,
-					null,
-					null,
-					null,
-			};
 
 	private static final String NOTHING_STRING = "-";
 
@@ -288,7 +243,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.maxSpellingErrors			= spelling.getMaxSpellingErrors();
 		props.viewSpellingList			= rtext.isSpellingWindowVisible();
 
-		// Save the actions owned by RText.
+		// Save the actions.
 		props.accelerators = new HashMap();
 		for (int i=0; i<RText.actionNames.length; i++) {
 			String actionName = RText.actionNames[i];
@@ -300,13 +255,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 				ks = (KeyStroke)a.getValue(Action.ACCELERATOR_KEY);
 			}
 			props.accelerators.put(actionName, ks);
-		}
-
-		// Save the actions owned by the main view.
-		Action[] mainViewActions = mainView.getActions();
-		for (int i=0; i<AbstractMainView.NUM_ACTIONS; i++) {
-			props.mainViewActionAccelerators[i] =
-				(KeyStroke)mainViewActions[i].getValue(Action.ACCELERATOR_KEY);
 		}
 
 		return props;
@@ -524,7 +472,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 			props.fileHistoryString		= prefs.get("fileHistoryString", props.fileHistoryString);
 			props.maxFileHistorySize		= prefs.getInt("maxFileHistorySize", props.maxFileHistorySize);
 
-			// Get the accelerators for all RText actions.
+			// Get the accelerators for all actions.
 			for (int i=0; i<RText.actionNames.length; i++) {
 				String actionName = RText.actionNames[i];
 				temp = prefs.get(actionName, null);
@@ -532,14 +480,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 					props.accelerators.put(actionName,
 								getKeyStrokeFromString(temp));
 			}
-
-			// Get the accelerators for all AbstractMainView actions.
-			for (int i=0; i<AbstractMainView.NUM_ACTIONS; i++) {
-				temp = prefs.get(mainViewAcceleratorKeys[i], null);
-				if (temp!=null)
-					props.mainViewActionAccelerators[i] = getKeyStrokeFromString(temp);
-			}
-
 
 		// If anything at all goes wrong, just use default property values.
 		} catch (RuntimeException re) {
@@ -684,17 +624,11 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs.put("fileHistoryString",				(fileHistoryString==null ? "-" : fileHistoryString));
 		prefs.putInt("maxFileHistorySize",				maxFileHistorySize);
 
-		// Save all accelerators from RText.
+		// Save all accelerators.
 		for (int i=0; i<RText.actionNames.length; i++) {
 			String actionName = RText.actionNames[i];
 			prefs.put(actionName,
 				getKeyStrokeString(getAccelerator(actionName)));
-		}
-
-		// Save all accelerators from the AbstractMainView.
-		for (int i=0; i<AbstractMainView.NUM_ACTIONS; i++) {
-			prefs.put(mainViewAcceleratorKeys[i],
-					getKeyStrokeString(mainViewActionAccelerators[i]));
 		}
 
 		//prefs.flush();
@@ -787,14 +721,9 @@ public class RTextPreferences extends GUIApplicationPreferences
 		viewSpellingList   = false;
 
 		accelerators = new HashMap();
-		for (int i=0; i<RText.actionNames.length; i++) {
-			String actionName = RText.actionNames[i];
+		for (int i=0; i<actionNames.length; i++) {
+			String actionName = actionNames[i];
 			accelerators.put(actionName, defaultActionAccelerators[i]);
-		}
-
-		mainViewActionAccelerators = new KeyStroke[AbstractMainView.NUM_ACTIONS];
-		for (int i=0; i<AbstractMainView.NUM_ACTIONS; i++) {
-			mainViewActionAccelerators[i] = defaultMainViewActionAccelerators[i];
 		}
 
 	}
