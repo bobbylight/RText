@@ -230,7 +230,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	 */
 	private void setActions(AbstractGUIApplication app) {
 
-		masterActionList = (Action[])app.getActions().clone();
+		masterActionList = (Action[])app.getActions();
 
 		Arrays.sort(masterActionList, new Comparator() {
 			public int compare(Object o1, Object o2) {

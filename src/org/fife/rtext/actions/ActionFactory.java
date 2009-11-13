@@ -74,41 +74,41 @@ public class ActionFactory implements RTextActionInfo {
 			ioe.printStackTrace();
 		}
 
-		StandardAction action = new NewAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(NEW_ACTION));
-		rtext.addAction(NEW_ACTION, action);
+		StandardAction a = new NewAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(NEW_ACTION));
+		rtext.addAction(NEW_ACTION, a);
 
-		action = new OpenAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(OPEN_ACTION));
-		rtext.addAction(OPEN_ACTION, action);
+		a = new OpenAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(OPEN_ACTION));
+		rtext.addAction(OPEN_ACTION, a);
 
-		action = new OpenInNewWindowAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(OPEN_NEWWIN_ACTION));
-		rtext.addAction(OPEN_NEWWIN_ACTION, action);
+		a = new OpenInNewWindowAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(OPEN_NEWWIN_ACTION));
+		rtext.addAction(OPEN_NEWWIN_ACTION, a);
 
-		action = new OpenRemoteAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(OPEN_REMOTE_ACTION));
-		rtext.addAction(OPEN_REMOTE_ACTION, action);
+		a = new OpenRemoteAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(OPEN_REMOTE_ACTION));
+		rtext.addAction(OPEN_REMOTE_ACTION, a);
 
-		action = new SaveAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(SAVE_ACTION));
-		rtext.addAction(SAVE_ACTION, action);
+		a = new SaveAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(SAVE_ACTION));
+		rtext.addAction(SAVE_ACTION, a);
 
-		action = new SaveAsAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(SAVE_AS_ACTION));
-		rtext.addAction(SAVE_AS_ACTION, action);
+		a = new SaveAsAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(SAVE_AS_ACTION));
+		rtext.addAction(SAVE_AS_ACTION, a);
 
-		action = new SaveAsRemoteAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(SAVE_AS_REMOTE_ACTION));
-		rtext.addAction(SAVE_AS_REMOTE_ACTION, action);
+		a = new SaveAsRemoteAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(SAVE_AS_REMOTE_ACTION));
+		rtext.addAction(SAVE_AS_REMOTE_ACTION, a);
 
-		action = new SaveAsWebPageAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(SAVE_WEBPAGE_ACTION));
-		rtext.addAction(SAVE_WEBPAGE_ACTION, action);
+		a = new SaveAsWebPageAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(SAVE_WEBPAGE_ACTION));
+		rtext.addAction(SAVE_WEBPAGE_ACTION, a);
 
-		action = new SaveAllAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(SAVE_ALL_ACTION));
-		rtext.addAction(SAVE_ALL_ACTION, action);
+		a = new SaveAllAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(SAVE_ALL_ACTION));
+		rtext.addAction(SAVE_ALL_ACTION, a);
 
 		String temp = msg.getString("CopyAsRtfAction");
 		rtext.addAction(COPY_AS_RTF_ACTION, new RSyntaxTextAreaEditorKit.CopyAsRtfAction(temp,
@@ -124,36 +124,44 @@ public class ActionFactory implements RTextActionInfo {
 			new Integer(msg.getString("TimeAction.Mnemonic").charAt(0)),
 			prefs.getAccelerator(TIME_DATE_ACTION)));
 
-		action = new LineNumberAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(LINE_NUMBER_ACTION));
-		rtext.addAction(LINE_NUMBER_ACTION, action);
+		a = new RText.ToggleStatusBarAction(rtext, msg, "StatusBarAction");
+		a.setAccelerator(prefs.getAccelerator(STATUS_BAR_ACTION));
+		rtext.addAction(STATUS_BAR_ACTION, a);
 
-		boolean visible = true;//prefs.tasksWindowVisible;
-		action = new ViewTasksAction(rtext, msg, null, visible);
-		action.setAccelerator(prefs.getAccelerator(VIEW_TASKS_ACTION));
-		rtext.addAction(VIEW_TASKS_ACTION, action);
+		a = new LineNumberAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(LINE_NUMBER_ACTION));
+		rtext.addAction(LINE_NUMBER_ACTION, a);
 
-		action = new NewToolAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(NEW_TOOL_ACTION));
-		rtext.addAction(NEW_TOOL_ACTION, action);
+		boolean visible = prefs.viewTaskList;
+		a = new ViewTasksAction(rtext, msg, null, visible);
+		a.setAccelerator(prefs.getAccelerator(VIEW_TASKS_ACTION));
+		rtext.addAction(VIEW_TASKS_ACTION, a);
 
-		action = new HelpAction(rtext, msg, "HelpAction");
-		action.setAccelerator(prefs.getAccelerator(RText.HELP_ACTION_KEY));
-		rtext.addAction(RText.HELP_ACTION_KEY, action);
+		a = new FilePropertiesAction(rtext, msg);
+		a.setAccelerator(prefs.getAccelerator(FILE_PROPERTIES_ACTION));
+		rtext.addAction(FILE_PROPERTIES_ACTION, a);
 
-		action = new AboutAction(rtext, msg, "AboutAction");
-		action.setAccelerator(prefs.getAccelerator(RText.ABOUT_ACTION_KEY));
-		rtext.addAction(RText.ABOUT_ACTION_KEY, action);
+		a = new NewToolAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(NEW_TOOL_ACTION));
+		rtext.addAction(NEW_TOOL_ACTION, a);
 
-		action = new OptionsAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(OPTIONS_ACTION));
-		rtext.addAction(OPTIONS_ACTION, action);
+		a = new HelpAction(rtext, msg, "HelpAction");
+		a.setAccelerator(prefs.getAccelerator(RText.HELP_ACTION_KEY));
+		rtext.addAction(RText.HELP_ACTION_KEY, a);
 
-		action = new HomePageAction(rtext, msg, null);
-		action.setAccelerator(prefs.getAccelerator(HOME_PAGE_ACTION));
-		rtext.addAction(HOME_PAGE_ACTION, action);
+		a = new AboutAction(rtext, msg, "AboutAction");
+		a.setAccelerator(prefs.getAccelerator(RText.ABOUT_ACTION_KEY));
+		rtext.addAction(RText.ABOUT_ACTION_KEY, a);
 
-		StandardAction a = new CloseAction(rtext, msg, null);
+		a = new OptionsAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(OPTIONS_ACTION));
+		rtext.addAction(OPTIONS_ACTION, a);
+
+		a = new HomePageAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(HOME_PAGE_ACTION));
+		rtext.addAction(HOME_PAGE_ACTION, a);
+
+		a = new CloseAction(rtext, msg, null);
 		a.setAccelerator(prefs.getAccelerator(CLOSE_ACTION));
 		rtext.addAction(CLOSE_ACTION, a);
 

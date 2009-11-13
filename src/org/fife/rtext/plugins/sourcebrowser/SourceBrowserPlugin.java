@@ -99,7 +99,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private static final String GREEN_BULLET		=
 				"org/fife/rtext/plugins/sourcebrowser/bullet_green.gif";
 
-	private static final String VERSION_STRING	= "0.9.9.9";
+	private static final String VERSION_STRING	= "1.0.0";
 
 
 	/**

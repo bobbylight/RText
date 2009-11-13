@@ -40,7 +40,7 @@ import org.fife.ui.app.StandardAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class ViewTasksAction extends StandardAction {
+public class ViewTasksAction extends StandardAction {
 
 	/**
 	 * Dockable window that displays "tasks" ("TODO", "FIXME", etc.) in opened
@@ -88,6 +88,16 @@ class ViewTasksAction extends StandardAction {
 		else {
 			taskWindow.setActive(!taskWindow.isActive());
 		}
+	}
+
+
+	/**
+	 * Returns whether the task window is currently visible.
+	 *
+	 * @return Whether the task window is currently visible.
+	 */
+	public boolean isTaskWindowVisible() {
+		return taskWindow!=null && taskWindow.isActive();
 	}
 
 

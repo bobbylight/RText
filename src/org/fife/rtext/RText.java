@@ -89,7 +89,7 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  * status bar.
  *
  * @author Robert Futrell
- * @version 0.9.9.9
+ * @version 1.0.0
  */
 public class RText extends AbstractPluggableGUIApplication
 				implements ActionListener, CaretListener,
@@ -302,9 +302,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param prefs The RText properties for this RText instance.
 	 */
 	protected void createActions(GUIApplicationPreferences prefs) {
-
 		ActionFactory.addActions(this, (RTextPreferences)prefs);
-
 	}
 
 

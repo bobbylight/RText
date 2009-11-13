@@ -45,22 +45,24 @@ import javax.swing.KeyStroke;
 public interface RTextActionInfo {
 
 	// Constants specifying the available actions (for getAction).
-	public static final String NEW_ACTION			= "newAction";
-	public static final String NEW_TOOL_ACTION		= "newToolAction";
-	public static final String OPEN_ACTION			= "openAction";
-	public static final String OPEN_NEWWIN_ACTION	= "openNewWinAction";
-	public static final String OPEN_REMOTE_ACTION	= "openRemoteAction";
-	public static final String SAVE_ACTION			= "saveAction";
-	public static final String SAVE_AS_ACTION		= "saveAsAction";
+	public static final String NEW_ACTION				= "newAction";
+	public static final String NEW_TOOL_ACTION			= "newToolAction";
+	public static final String OPEN_ACTION				= "openAction";
+	public static final String OPEN_NEWWIN_ACTION		= "openNewWinAction";
+	public static final String OPEN_REMOTE_ACTION		= "openRemoteAction";
+	public static final String SAVE_ACTION				= "saveAction";
+	public static final String SAVE_AS_ACTION			= "saveAsAction";
 	public static final String SAVE_AS_REMOTE_ACTION	= "saveAsRemoteAction";
-	public static final String SAVE_WEBPAGE_ACTION	= "saveWebPageAction";
-	public static final String SAVE_ALL_ACTION		= "saveAllAction";
-	public static final String COPY_AS_RTF_ACTION	= "copyAsRtf";
-	public static final String TIME_DATE_ACTION		= "timeDateAction";
-	public static final String LINE_NUMBER_ACTION	= "lineNumberAction";
-	public static final String VIEW_TASKS_ACTION	= "viewTasksAction";
-	public static final String OPTIONS_ACTION		= "optionsAction";
-	public static final String HOME_PAGE_ACTION		= "homePageAction";
+	public static final String SAVE_WEBPAGE_ACTION		= "saveWebPageAction";
+	public static final String SAVE_ALL_ACTION			= "saveAllAction";
+	public static final String COPY_AS_RTF_ACTION		= "copyAsRtf";
+	public static final String TIME_DATE_ACTION			= "timeDateAction";
+	public static final String STATUS_BAR_ACTION		= "statusBarAction";
+	public static final String LINE_NUMBER_ACTION		= "lineNumberAction";
+	public static final String VIEW_TASKS_ACTION		= "viewTasksAction";
+	public static final String FILE_PROPERTIES_ACTION	= "filePropertiesAction";
+	public static final String OPTIONS_ACTION			= "optionsAction";
+	public static final String HOME_PAGE_ACTION			= "homePageAction";
 
 	public static final String FIND_ACTION				= "findAction";
 	public static final String FIND_NEXT_ACTION			= "findNextAction";
@@ -97,8 +99,10 @@ public interface RTextActionInfo {
 		SAVE_ALL_ACTION,
 		COPY_AS_RTF_ACTION,
 		TIME_DATE_ACTION,
+		STATUS_BAR_ACTION,
 		LINE_NUMBER_ACTION,
 		VIEW_TASKS_ACTION,
+		FILE_PROPERTIES_ACTION,
 		NEW_TOOL_ACTION,
 		RText.HELP_ACTION_KEY,
 		RText.ABOUT_ACTION_KEY,
@@ -147,7 +151,9 @@ public interface RTextActionInfo {
 					null,
 					KeyStroke.getKeyStroke(KeyEvent.VK_C, defaultModifier|shift),
 					KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
+					null,
 					KeyStroke.getKeyStroke(KeyEvent.VK_1, defaultModifier),
+					null,
 					null,
 					null,
 					KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0),

@@ -47,6 +47,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.Action;
 
+import org.fife.rtext.actions.ViewTasksAction;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplication;
 import org.fife.ui.app.MenuBar;
@@ -101,6 +102,7 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	private JMenuItem timeDateItem;
 	private JMenuItem optionsItem;
 	private JCheckBoxMenuItem searchToolbarMenuItem;
+	private JCheckBoxMenuItem statusBarItem;
 	private JCheckBoxMenuItem lineNumbersItem;
 	private JCheckBoxMenuItem tasksItem;
 	private JMenuItem increaseFontSizesItem;
@@ -110,6 +112,7 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	private JMenuItem helpItem;
 	private JMenuItem homePageItem;
 	private JMenuItem aboutItem;
+	private JMenuItem filePropItem;
 
 	private JMenu fileMenu;
 	private JMenu viewMenu;
@@ -430,21 +433,25 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		toolbarsMenu.add(searchToolbarMenuItem);
 		viewMenu.add(toolbarsMenu);
 
-		a = new GUIApplication.ToggleStatusBarAction(rtext, "foo");
-		cbMenuItem = new JCheckBoxMenuItem(a);
-		cbMenuItem.setText(msg.getString("StatusBar"));
-		cbMenuItem.setSelected(properties.statusBarVisible);
-		UIUtil.setDescription(cbMenuItem, msg, "DescStatusBar");
-		viewMenu.add(cbMenuItem);
+		statusBarItem = new JCheckBoxMenuItem(rtext.getAction(RText.STATUS_BAR_ACTION));
+		statusBarItem.setSelected(properties.statusBarVisible);
+		viewMenu.add(statusBarItem);
 
 		lineNumbersItem = new JCheckBoxMenuItem(rtext.getAction(RText.LINE_NUMBER_ACTION));
-		lineNumbersItem.setState(properties.lineNumbersVisible);
+		lineNumbersItem.setSelected(properties.lineNumbersVisible);
 //		lineNumbersItem.setToolTipText(null);
 //		UIUtil.setDescription(lineNumbersItem, msg, "DescLineNumbers");
 		viewMenu.add(lineNumbersItem);
 
-		tasksItem = new JCheckBoxMenuItem(rtext.getAction(RText.VIEW_TASKS_ACTION));
-		tasksItem.setState(true); // TODO
+		final ViewTasksAction vta = (ViewTasksAction)rtext.getAction(RText.VIEW_TASKS_ACTION);
+		tasksItem = new JCheckBoxMenuItem(vta);
+		// Unfortunately we must wrap this in an invokeLater, since the action
+		// adds the window in an invokeLater() itself...
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				tasksItem.setState(vta.isTaskWindowVisible());
+			}
+		});
 		viewMenu.add(tasksItem);
 
 		// Font sizes submenu.
@@ -499,13 +506,9 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 */
 		viewMenu.addSeparator();
 
-		menuItem = new JMenuItem(new FilePropertiesAction(
-					rtext, menuMsg.getString("DocProperties"), null,
-					null,
-					menuMsg.getString("DocPropertiesMnemonic").charAt(0),
-					null));
-		UIUtil.setDescription(menuItem, menuMsg, "DocPropertiesDesc");
-		viewMenu.add(menuItem);
+		filePropItem = createMenuItem(rtext.getAction(
+										RText.FILE_PROPERTIES_ACTION));
+		viewMenu.add(filePropItem);
 
 		// Tools menu
 		menu = createMenu(menuMsg, "MenuTools");
@@ -846,8 +849,10 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		if (rtext.getOS()!=RText.OS_MAC_OSX) {
 			updateAction(optionsItem, rtext.getAction(RText.OPTIONS_ACTION));
 		}
+		updateAction(statusBarItem, rtext.getAction(RText.STATUS_BAR_ACTION));
 		updateAction(lineNumbersItem, rtext.getAction(RText.LINE_NUMBER_ACTION));
 		updateAction(tasksItem, rtext.getAction(RText.VIEW_TASKS_ACTION));
+		updateAction(filePropItem, rtext.getAction(RText.FILE_PROPERTIES_ACTION));
 		updateAction(helpItem, rtext.getAction(RText.HELP_ACTION_KEY));
 		updateAction(homePageItem, rtext.getAction(RText.HOME_PAGE_ACTION));
 		updateAction(aboutItem, rtext.getAction(RText.ABOUT_ACTION_KEY));

@@ -23,12 +23,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
-import javax.swing.Icon;
-import javax.swing.KeyStroke;
+import java.util.ResourceBundle;
 
+import org.fife.rtext.RText;
 import org.fife.ui.app.StandardAction;
 import org.fife.ui.rsyntaxtextarea.TextFilePropertiesDialog;
 
@@ -45,16 +45,11 @@ class FilePropertiesAction extends StandardAction {
 	/**
 	 * Creates a new <code>FilePropertiesAction</code>.
 	 *
-	 * @param rtext The <code>RText</code> that is displaying help.
-	 * @param text The text associated with the action.
-	 * @param icon The icon associated with the action.
-	 * @param desc The description of the action.
-	 * @param mnemonic The mnemonic for the action.
-	 * @param accelerator The accelerator key for the action.
+	 * @param rtext The parent application.
+	 * @param msg The resource bundle to use for localization.
 	 */
-	public FilePropertiesAction(RText rtext, String text, Icon icon,
-					String desc, int mnemonic, KeyStroke accelerator) {
-		super(rtext, text, icon, desc, mnemonic, accelerator);
+	public FilePropertiesAction(RText rtext, ResourceBundle msg) {
+		super(rtext, msg, "FilePropertiesAction");
 	}
 
 
@@ -68,7 +63,6 @@ class FilePropertiesAction extends StandardAction {
 		TextFilePropertiesDialog dialog = new TextFilePropertiesDialog(
 							rtext, rtext.getMainView().getCurrentTextArea());
 		dialog.setVisible(true);
-		dialog = null;
 	}
 
 
