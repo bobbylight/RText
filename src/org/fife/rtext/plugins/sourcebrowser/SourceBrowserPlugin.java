@@ -468,10 +468,10 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		JMenu menu = new JMenu(getPluginName());
 		
-		JCheckBoxMenuItem cbMenuItem =
-					new JCheckBoxMenuItem(new ViewAction(msg));
-		cbMenuItem.setSelected(isActive());
-		menu.add(cbMenuItem);
+		JCheckBoxMenuItem item = new JCheckBoxMenuItem(new ViewAction(msg));
+		item.setSelected(isActive());
+		item.setToolTipText(null);
+		menu.add(item);
 
 		return menu;
 
@@ -981,7 +981,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 			putValue(NAME, msg.getString("MenuItem.View"));
 			putValue(MNEMONIC_KEY, new Integer(
 					msg.getString("MenuItem.View.Mnemonic").charAt(0)));
-			putValue(LONG_DESCRIPTION, msg.getString("MenuItem.View.Desc"));
+			putValue(SHORT_DESCRIPTION, msg.getString("MenuItem.View.Desc"));
 		}
 
 		public void actionPerformed(ActionEvent e) {

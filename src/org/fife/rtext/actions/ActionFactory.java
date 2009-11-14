@@ -62,7 +62,7 @@ public class ActionFactory implements RTextActionInfo {
 		// We use a different resource bundle so we don't needlessly keep
 		// all of this stuff in memory in the main RText bundle.
 		ResourceBundle msg = ResourceBundle.getBundle(
-									"org.fife.rtext.actions.RTextActions");
+									"org.fife.rtext.actions.Actions");
 
 		ClassLoader cl = ActionFactory.class.getClassLoader();
 		String commonIconPath = "org/fife/rtext/graphics/common_icons/";
@@ -110,6 +110,10 @@ public class ActionFactory implements RTextActionInfo {
 		a.setAccelerator(prefs.getAccelerator(SAVE_ALL_ACTION));
 		rtext.addAction(SAVE_ALL_ACTION, a);
 
+		a = new RText.ExitAction(rtext, msg, "ExitAction");
+		a.setAccelerator(prefs.getAccelerator(RText.EXIT_ACTION_KEY));
+		rtext.addAction(RText.EXIT_ACTION_KEY, a);
+
 		String temp = msg.getString("CopyAsRtfAction");
 		rtext.addAction(COPY_AS_RTF_ACTION, new RSyntaxTextAreaEditorKit.CopyAsRtfAction(temp,
 			null,
@@ -123,6 +127,10 @@ public class ActionFactory implements RTextActionInfo {
 			msg.getString("TimeAction.ShortDesc"),
 			new Integer(msg.getString("TimeAction.Mnemonic").charAt(0)),
 			prefs.getAccelerator(TIME_DATE_ACTION)));
+
+		a = new RText.ToggleToolBarAction(rtext, msg, "ToolBarAction");
+		a.setAccelerator(prefs.getAccelerator(TOOL_BAR_ACTION));
+		rtext.addAction(TOOL_BAR_ACTION, a);
 
 		a = new RText.ToggleStatusBarAction(rtext, msg, "StatusBarAction");
 		a.setAccelerator(prefs.getAccelerator(STATUS_BAR_ACTION));
