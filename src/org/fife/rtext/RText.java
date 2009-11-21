@@ -1135,6 +1135,12 @@ w.addComponentListener(searchWindowOpacityListener);
 	}
 
 
+	// TODO
+	public void removeDockableWindow(DockableWindow wind) {
+		((DockableWindowPanel)mainContentPanel).removeDockableWindow(wind);
+	}
+
+
 	/**
 	 * Makes all actions use default accelerators.
 	 */
@@ -1265,7 +1271,7 @@ w.addComponentListener(searchWindowOpacityListener);
 
 	/**
 	 * Sets the main view style.  This method fires a property change of type
-	 * <code>MAIN_VIEW_STYLE_PROPERTY</code>.
+	 * {@link #MAIN_VIEW_STYLE_PROPERTY}.
 	 *
 	 * @param viewStyle One of <code>TABBED_VIEW</code>,
 	 *        <code>SPLIT_PANE_VIEW</code>, or <code>MDI_VIEW</code>.  If
@@ -1274,13 +1280,12 @@ w.addComponentListener(searchWindowOpacityListener);
 	 */
 	public void setMainViewStyle(int viewStyle) {
 
-		// Only do the update if viewStyle is different from the current viewStyle.
-		if ((viewStyle==TABBED_VIEW || viewStyle==SPLIT_PANE_VIEW || viewStyle==MDI_VIEW)
-			&& viewStyle!=mainViewStyle) {
+		if ((viewStyle==TABBED_VIEW || viewStyle==SPLIT_PANE_VIEW ||
+				viewStyle==MDI_VIEW) && viewStyle!=mainViewStyle) {
 
 			int oldMainViewStyle = mainViewStyle;
 			mainViewStyle = viewStyle;
-			AbstractMainView fromPanel = mainView;
+			AbstractMainView fromView = mainView;
 
 			RTextPreferences props = (RTextPreferences)RTextPreferences.
 									generatePreferences(this);
@@ -1303,10 +1308,10 @@ w.addComponentListener(searchWindowOpacityListener);
 
 			// Update property change listeners.
 			PropertyChangeListener[] propertyChangeListeners =
-								fromPanel.getPropertyChangeListeners();
+								fromView.getPropertyChangeListeners();
 			int length = propertyChangeListeners.length;
 			for (int i=0; i<length; i++) {
-				fromPanel.removePropertyChangeListener(propertyChangeListeners[i]);
+				fromView.removePropertyChangeListener(propertyChangeListeners[i]);
 				mainView.addPropertyChangeListener(propertyChangeListeners[i]);
 			}
 
@@ -1315,20 +1320,20 @@ w.addComponentListener(searchWindowOpacityListener);
 			// dialogs.
 			// NOTE:  The find and replace dialogs will be moved to mainView
 			// in the copyData method below.
-			if (fromPanel.findDialog!=null) {
+			if (fromView.findDialog!=null) {
 
-				fromPanel.findDialog.changeActionListener(fromPanel, mainView);
-				fromPanel.replaceDialog.changeActionListener(fromPanel, mainView);
+				fromView.findDialog.changeActionListener(fromView, mainView);
+				fromView.replaceDialog.changeActionListener(fromView, mainView);
 
-				fromPanel.findDialog.addPropertyChangeListener(mainView);
-				fromPanel.replaceDialog.addPropertyChangeListener(mainView);
-				fromPanel.findDialog.removePropertyChangeListener(fromPanel);
-				fromPanel.replaceDialog.removePropertyChangeListener(fromPanel);
+				fromView.findDialog.addPropertyChangeListener(mainView);
+				fromView.replaceDialog.addPropertyChangeListener(mainView);
+				fromView.findDialog.removePropertyChangeListener(fromView);
+				fromView.replaceDialog.removePropertyChangeListener(fromView);
 
 			}
 
 			// Make mainView have all the properties of the old panel.
-			mainView.copyData(fromPanel);
+			mainView.copyData(fromView);
 
 			// If we have switched to a tabbed view, artificially
 			// fire stateChanged if the last document is selected,
@@ -1343,9 +1348,10 @@ w.addComponentListener(searchWindowOpacityListener);
 			// because center collapses if changed to MDI otherwise.
 			Dimension size = getSize();
 			Container contentPane = getContentPane();
-			contentPane.remove(fromPanel);
+			contentPane.remove(fromView);
 			contentPane.add(mainView);
-			fromPanel = null;
+			fromView.dispose();
+			fromView = null;
 			//contentPane.add(mainView, BorderLayout.CENTER);
 			pack();
 			setSize(size);

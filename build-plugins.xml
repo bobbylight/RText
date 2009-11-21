@@ -78,6 +78,7 @@
 			</fileset>
 			<fileset dir="${source-dir}">
 				<include name="org/fife/rtext/plugins/sourcebrowser/**/*.gif"/>
+				<include name="org/fife/rtext/plugins/sourcebrowser/**/*.png"/>
 			</fileset>
 			<fileset dir="i18n">
 				<include name="org/fife/rtext/plugins/sourcebrowser/**"/>

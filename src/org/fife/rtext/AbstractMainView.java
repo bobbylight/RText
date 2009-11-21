@@ -807,6 +807,15 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Disposes of this view.  This is called when the user changes the main
+	 * view style.  The default implementation does nothing; subclasses can
+	 * override to dispose of anything they want.
+	 */
+	public void dispose() {
+	}
+
+
+	/**
 	 * Ensures at least 1 file is open.
 	 */
 	private void ensureFilesAreOpened() {

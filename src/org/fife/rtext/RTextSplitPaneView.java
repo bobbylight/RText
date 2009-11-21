@@ -30,15 +30,16 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
@@ -47,6 +48,8 @@ import javax.swing.event.ListSelectionListener;
 import org.fife.ui.RListSelectionModel;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.UIUtil;
+import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
@@ -62,19 +65,20 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 class RTextSplitPaneView extends AbstractMainView
 									implements ListSelectionListener {
 
-	private JSplitPane splitPane;				// Divides the view.
+	private DockableWindow listWindow;
 	private JList documentList;
 	private RScrollPane documentListScrollPane;
 	private DefaultListModel listModel;
-	private JPanel viewPanel;				// Where the currently active document is shown.
-	private CardLayout viewPanelLayout;		// The CardLayout used by viewPanel.
+	private CardLayout layout;
 
-	private ArrayList scrollPanes;			// The scroll panes passed in.
+	private ArrayList scrollPanes;	// The scroll panes passed in.
 
 	private int selectedIndex;
-	private int documentSelectionPlacement;		// Should doc list should be on top, left, bottom, or right.
+	private int listWindowPosition;	// Location of file list window
 
-	
+	private static final String IMAGE_FILE = "graphics/page_white_stack.png";
+
+
 	/**
 	 * Creates a new <code>RTextSplitPaneView</code>.
 	 *
@@ -82,11 +86,11 @@ class RTextSplitPaneView extends AbstractMainView
 	 * @param filesToOpen Array of strings representing files to open.  If
 	 *        this parameter is null, a single file with a default name is
 	 *        is opened.
-	 * @param properties A properties object used to initialize some fields on
+	 * @param prefs A properties object used to initialize some fields on
 	 *        this view.
 	 */
 	public RTextSplitPaneView(RText owner, String[] filesToOpen,
-										RTextPreferences properties) {
+										RTextPreferences prefs) {
 
 		setLayout(new GridLayout(1,1));	// So the split pane takes up the whole panel.
 
@@ -98,19 +102,20 @@ class RTextSplitPaneView extends AbstractMainView
 		documentList.setModel(listModel);
 		documentList.setSelectionModel(new RListSelectionModel());
 		documentList.addListSelectionListener(this);
-		documentListScrollPane = new RScrollPane(documentList);
+		documentListScrollPane = new DockableWindowScrollPane(documentList);
+
+		String name = "Files";
+		listWindow = new DockableWindow(name, new BorderLayout());
+		URL res = getClass().getResource(IMAGE_FILE);
+		listWindow.setIcon(new ImageIcon(res));
+		listWindow.add(documentListScrollPane);
+		listWindow.setPosition(DockableWindow.LEFT);
+		listWindow.setActive(true);
+		owner.addDockableWindow(listWindow);
 
 		// Create the view panel.
-		viewPanel = new JPanel();
-		viewPanelLayout = new CardLayout();
-		viewPanel.setLayout(viewPanelLayout);
-
-		// orientation doesn't matter because it will be properly set in initialize.
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-							documentListScrollPane, viewPanel);
-		splitPane.setContinuousLayout(true);
-		splitPane.setOneTouchExpandable(true);
-		add(splitPane);
+		layout = new CardLayout();
+		setLayout(layout);
 
 		// These are initialized when documents are added.
 		selectedIndex = -1;
@@ -122,7 +127,7 @@ class RTextSplitPaneView extends AbstractMainView
 		documentList.setTransferHandler(th);
 
 		// Set everything up.
-		initialize(owner, filesToOpen, properties);
+		initialize(owner, filesToOpen, prefs);
 
 	}
 
@@ -144,7 +149,7 @@ class RTextSplitPaneView extends AbstractMainView
 		int numDocuments = getNumDocuments();
 		listModel.addElement(new DocumentInfo(
 						title, getIconFor((RTextScrollPane)component)));
-		viewPanel.add(temp, new Integer(numDocuments).toString());
+		add(temp, new Integer(numDocuments).toString());
 		scrollPanes.add(component);
 		setSelectedIndex(numDocuments);		// Sets currentTextArea.
 		numDocuments++;					// We just added a document.
@@ -214,6 +219,14 @@ class RTextSplitPaneView extends AbstractMainView
 	
 
 	/**
+	 * Overridden to remove our file list dockable window.
+	 */
+	public void dispose() {
+		owner.removeDockableWindow(listWindow);
+	}
+
+
+	/**
 	 * Returns the name being displayed for the document.  For example, in a
 	 * tabbed pane, this could be the text on the tab for this document.
 	 *
@@ -235,7 +248,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 * @return The location of the document selection area.
 	 */
 	public int getDocumentSelectionPlacement() {
-		return documentSelectionPlacement;
+		return listWindowPosition;
 	}
 
 
@@ -302,9 +315,9 @@ class RTextSplitPaneView extends AbstractMainView
 		if (index>=0 && index<numDocuments) {
 			scrollPanes.remove(index);		// Remove text area from array list.
 			numDocuments--;				// We just removed one.
-			viewPanel.removeAll();			// Remove all documents and ad remaining ones back.
+			removeAll();			// Remove all documents and ad remaining ones back.
 			for (int i=0; i<numDocuments; i++)
-				viewPanel.add((Component)scrollPanes.get(i), new Integer(i).toString());
+				add((Component)scrollPanes.get(i), new Integer(i).toString());
 			int oldSelectedIndex = getSelectedIndex();	// selectedIndex becomes -1 from the statement below.
 			listModel.remove(index);					// Remove document name from list.
 			if (oldSelectedIndex==numDocuments)
@@ -346,54 +359,34 @@ class RTextSplitPaneView extends AbstractMainView
 		if (location==DOCUMENT_SELECT_TOP || location==DOCUMENT_SELECT_LEFT ||
 			location==DOCUMENT_SELECT_BOTTOM || location==DOCUMENT_SELECT_RIGHT) {
 
-				if (location!=documentSelectionPlacement) {
+			if (location!=listWindowPosition) {
 
-					splitPane.remove(documentListScrollPane);
-					splitPane.remove(viewPanel);
-					remove(splitPane);
+				listWindowPosition = location;
+				int pos = 0;
+				switch (listWindowPosition) {
 
-					documentSelectionPlacement = location;
-					switch (documentSelectionPlacement) {
+					case DOCUMENT_SELECT_TOP:
+						pos = DockableWindow.TOP;
+						break;
 
-						case DOCUMENT_SELECT_TOP:
-							splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-									documentListScrollPane, viewPanel);
-							break;
+					case DOCUMENT_SELECT_BOTTOM:
+						pos = DockableWindow.BOTTOM;
+						break;
 
-						case DOCUMENT_SELECT_BOTTOM:
-							splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-									viewPanel, documentListScrollPane);
-							break;
+					case DOCUMENT_SELECT_LEFT:
+						pos = DockableWindow.LEFT;
+						break;
 
-						case DOCUMENT_SELECT_LEFT:
-							splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-									documentListScrollPane, viewPanel);
-							break;
+					case DOCUMENT_SELECT_RIGHT:
+						pos = DockableWindow.RIGHT;
+						break;
 
-						case DOCUMENT_SELECT_RIGHT:
-							splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-									viewPanel, documentListScrollPane);
-							break;
+				}
 
-					} // End of switch (documentSelectionPlacement).
+				listWindow.setPosition(pos);
+//				owner.pack();
 
-					splitPane.setContinuousLayout(true);
-					splitPane.setOneTouchExpandable(true);
-					add(splitPane);
-					owner.pack();
-					// Must do this down here as JSplitPane must be visible on screen.
-					switch (documentSelectionPlacement) {
-						case DOCUMENT_SELECT_TOP:
-						case DOCUMENT_SELECT_LEFT:
-							splitPane.setDividerLocation(0.3);
-							break;
-						case DOCUMENT_SELECT_BOTTOM:
-						case DOCUMENT_SELECT_RIGHT:
-							splitPane.setDividerLocation(0.7);
-							break;
-					}
-
-				} // End of if (location!=documentSelectionPlacement).
+			}
 
 		}
 	}
@@ -430,7 +423,7 @@ class RTextSplitPaneView extends AbstractMainView
 		if (selectedIndex!=-1) {
 
 			String key = new Integer(selectedIndex).toString();
-			viewPanelLayout.show(viewPanel, key);
+			layout.show(this, key);
 			current = getRTextEditorPaneAt(selectedIndex);
 			setCurrentTextArea(current);
 

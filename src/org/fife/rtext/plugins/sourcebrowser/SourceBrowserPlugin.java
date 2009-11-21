@@ -111,12 +111,10 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		this.owner = (RText)app;
 
-		ClassLoader cl = this.getClass().getClassLoader();
-		URL url = cl.getResource("org/fife/rtext/plugins/sourcebrowser/sourcebrowser.gif");
-		if (url!=null)
-			pluginIcon = new ImageIcon(url);
+		URL url = getClass().getResource("source_browser.png");
+		pluginIcon = new ImageIcon(url);
 
-		msg = ResourceBundle.getBundle(BUNDLE_NAME, getLocale(), cl);
+		msg = ResourceBundle.getBundle(BUNDLE_NAME);
 		this.name = msg.getString("Name");
 		this.lineFoundText = msg.getString("StatusBarMsg.FoundLine");
 		this.cantFindLineText = msg.getString("StatusBarMsg.CantFindLine");

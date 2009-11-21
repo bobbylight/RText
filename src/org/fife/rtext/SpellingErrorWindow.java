@@ -31,7 +31,6 @@ import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
@@ -52,7 +51,6 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 							implements PropertyChangeListener {
 
 	private SpellingTableModel model;
-	private Icon icon;
 
 
 	public SpellingErrorWindow(RText rtext) {
@@ -74,7 +72,7 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 		setDockableWindowName(rtext.getString("SpellingErrorList.Spelling"));
 
 		URL url = getClass().getResource("graphics/spellcheck.png");
-		icon = new ImageIcon(url);
+		setIcon(new ImageIcon(url));
 
 		// Start listening to any already-opened files.
 		for (int i=0; i<mainView.getNumDocuments(); i++) {
@@ -85,11 +83,6 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 						RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
 		}
 
-	}
-
-
-	public Icon getIcon() {
-		return icon;
 	}
 
 

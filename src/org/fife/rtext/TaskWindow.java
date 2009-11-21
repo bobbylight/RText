@@ -31,7 +31,6 @@ import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
@@ -53,7 +52,6 @@ public class TaskWindow extends AbstractParserNoticeWindow
 
 	private JTable table;
 	private TaskNoticeTableModel model;
-	private Icon icon;
 	private TaskTagParser taskParser;
 
 
@@ -77,7 +75,7 @@ mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, 
 		setDockableWindowName("Tasks"); // TODO
 
 		URL url = getClass().getResource("graphics/page_white_edit.png");
-		icon = new ImageIcon(url);
+		setIcon(new ImageIcon(url));
 
 		taskParser = new TaskTagParser();
 
@@ -107,11 +105,6 @@ mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, 
 
 	}
 */
-
-	public Icon getIcon() {
-		return icon;
-	}
-
 
 	public void propertyChange(PropertyChangeEvent e) {
 
