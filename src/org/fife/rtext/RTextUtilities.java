@@ -159,6 +159,7 @@ public class RTextUtilities {
 
 			// Add (localized) file filters.
 			addFilter(chooser, msg, "AssemblerX86", "asm");
+			addFilter(chooser, msg, "BBCode", "bbc");
 			addFilter(chooser, msg, "CPlusPlus",
 					new String[] { "c", "cpp", "cxx", "h" });
 			addFilter(chooser, msg, "CSharp",	"cs");
@@ -209,6 +210,7 @@ public class RTextUtilities {
 					msg.getString("AllSupported"),
 					new String[] {
 						"asm",
+						"bbc",
 						"c", "cpp", "cxx", "h",
 						"cs",
 						"css",

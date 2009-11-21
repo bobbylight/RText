@@ -22,7 +22,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.tools;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
@@ -32,20 +32,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ResourceBundle;
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
+import org.fife.rtext.RText;
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.FSATextField;
+import org.fife.ui.MenuButton;
 import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
@@ -70,7 +77,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	private FSATextField programField;
 	private FSATextField dirField;
 
-	private static final String MSG = "org.fife.rtext.NewToolDialog";
+	private static final String MSG = "org.fife.rtext.tools.NewToolDialog";
 	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
 
@@ -131,7 +138,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		ModifiableTable argTable = new ModifiableTable(argModel);
 		argTable.setRowHandler(new ArgTableRowHandler());
 		JPanel temp2 = new JPanel(new BorderLayout());
-		temp2.setBorder(BorderFactory.createTitledBorder(msg.getString("Arguments")));
+		temp2.setBorder(BorderFactory.createTitledBorder(msg.getString("CommandLineArgs")));
 		temp2.add(argTable);
 		temp.add(temp2);
 		tabPane.addTab(msg.getString("Tab.Main"), temp);
@@ -231,9 +238,11 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	 * The dialog that allows the user to add or modify a command line
 	 * argument.
 	 */
-	private class ArgDialog extends EscapableDialog implements ActionListener {
+	private class ArgDialog extends EscapableDialog implements ActionListener,
+									DocumentListener {
 
 		private JTextField argField;
+		private RButton okButton;
 		private String arg;
 
 		public ArgDialog(JDialog parent) {
@@ -247,17 +256,19 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 			JLabel argLabel = new JLabel(msg.getString("ArgumentDialog.Argument"));
 			temp.add(argLabel, BorderLayout.LINE_START);
 			argField = new JTextField(20);
+			argField.getDocument().addDocumentListener(this);
 			JPanel temp2 = new JPanel(new BorderLayout());
 			temp2.setBorder(BorderFactory.createEmptyBorder(0,5,0,5));
 			temp2.add(argField);
 			temp.add(temp2);
-			RButton varButton = new RButton(msg.getString("Variables"));
+			VariableButton varButton = new VariableButton(argField);
 			temp.add(varButton, BorderLayout.LINE_END);
 			cp.add(temp, BorderLayout.NORTH);
 
 			temp = new JPanel();
 			JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,5));
-			RButton okButton = new RButton(msg.getString("OK"));
+			okButton = new RButton(msg.getString("OK"));
+			okButton.setEnabled(false);
 			okButton.setActionCommand("OK");
 			okButton.addActionListener(this);
 			buttonPanel.add(okButton);
@@ -291,9 +302,21 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 
 		}
 
+		public void changedUpdate(DocumentEvent e) {
+		}
+
+		public void insertUpdate(DocumentEvent e) {
+			okButton.setEnabled(true);
+		}
+
+		public void removeUpdate(DocumentEvent e) {
+			okButton.setEnabled(e.getDocument().getLength()>0);
+		}
+
 		public void setArg(String arg) {
 			argField.setText(arg);
 			argField.selectAll();
+			okButton.setEnabled(arg!=null && arg.length()>0);
 		}
 
 	}
@@ -328,10 +351,11 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	 * The dialog that allows the user to add or modify an environment variable.
 	 */
 	private class EnvVarDialog extends EscapableDialog
-								implements ActionListener {
+								implements DocumentListener, ActionListener {
 
 		private JTextField nameField;
 		private JTextField valueField;
+		private RButton okButton;
 		private boolean escaped;
 
 		public EnvVarDialog(JDialog parent) {
@@ -344,9 +368,10 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 
 			JLabel nameLabel = new JLabel(msg.getString("EnvVarDialog.Name"));
 			nameField = new JTextField(20);
+			nameField.getDocument().addDocumentListener(this);
 			JLabel valueLabel = new JLabel(msg.getString("EnvVarDialog.Value"));
 			valueField = new JTextField(20);
-			RButton varButton = new RButton(msg.getString("Variables"));
+			VariableButton varButton = new VariableButton(valueField);
 
 			JPanel temp = new JPanel(new SpringLayout());
 			Dimension dim = new Dimension(1, 1); // MUST have finite width!
@@ -363,7 +388,8 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 
 			temp = new JPanel();
 			JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,5));
-			RButton okButton = new RButton(msg.getString("OK"));
+			okButton = new RButton(msg.getString("OK"));
+			okButton.setEnabled(false);
 			okButton.setActionCommand("OK");
 			okButton.addActionListener(this);
 			buttonPanel.add(okButton);
@@ -397,14 +423,26 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 
 		}
 
+		public void changedUpdate(DocumentEvent e) {
+		}
+
 		public String[] getReturnValue() {
 			return escaped ? null :
 				new String[] { nameField.getText(), valueField.getText() };
 		}
 
+		public void insertUpdate(DocumentEvent e) {
+			okButton.setEnabled(true);
+		}
+
+		public void removeUpdate(DocumentEvent e) {
+			okButton.setEnabled(e.getDocument().getLength()>0);
+		}
+
 		public void setData(String name, String value) {
 			nameField.setText(name);
 			valueField.setText(value);
+			okButton.setEnabled(name!=null && name.length()>0);
 		}
 
 	}
@@ -446,6 +484,52 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		}
 
 		public void updateUI() {
+		}
+
+	}
+
+
+	/**
+	 * An action that inserts text into a text field.
+	 */
+	private static class VariableAction extends AbstractAction {
+
+		private JTextField field;
+		private String replacement;
+
+		public VariableAction(String nameKey, String replacement,
+								JTextField field) {
+			putValue(NAME, msg.getString(nameKey));
+			this.field = field;
+			this.replacement = replacement;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			field.replaceSelection(replacement);
+			field.requestFocusInWindow();
+		}
+
+	}
+
+
+	/**
+	 * A button with a popup menu allowing the insertion of variables into
+	 * a text field.
+	 */
+	private static class VariableButton extends MenuButton {
+
+		public VariableButton(JTextField field) {
+			super(null);
+			setText(msg.getString("Variables"));
+			setHorizontalTextPosition(SwingConstants.LEADING);
+			addMenuItem(new VariableAction("Variable.FileName", "${file_name}", field));
+			addMenuItem(new VariableAction("Variable.FileNameNoExt", "${file_name_no_ext}", field));
+			addMenuItem(new VariableAction("Variable.FileDir", "${file_dir}", field));
+			addMenuItem(new VariableAction("Variable.FileFullPath", "${file_full_path}", field));
+		}
+
+		public void addMenuItem(VariableAction a) {
+			addMenuItem(new JMenuItem(a));
 		}
 
 	}

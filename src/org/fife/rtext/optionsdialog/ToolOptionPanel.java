@@ -37,8 +37,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import org.fife.rtext.NewToolDialog;
 import org.fife.rtext.RText;
+import org.fife.rtext.tools.NewToolDialog;
 import org.fife.rtext.tools.Tool;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.UIUtil;

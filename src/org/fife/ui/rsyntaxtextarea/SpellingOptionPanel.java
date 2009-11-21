@@ -135,7 +135,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		dictLabel.setLabelFor(dictCombo);
 
 		userDictLabel = new JLabel(msg.getString("UserDictionary"));
-		userDictField = new FSATextField(40);
+		userDictField = new FSATextField(35);
 		userDictField.getDocument().addDocumentListener(listener);
 		userDictBrowse = new RButton(msg.getString("Browse"));
 		userDictBrowse.setActionCommand("BrowseUserDictionary");
