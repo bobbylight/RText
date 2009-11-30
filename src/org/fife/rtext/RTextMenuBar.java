@@ -824,7 +824,9 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		updateAction(openRemoteItem, RText.OPEN_REMOTE_ACTION);
 		updateAction(closeItem, RText.CLOSE_ACTION);
 		updateAction(closeAllItem, RText.CLOSE_ALL_ACTION);
-		updateAction(exitItem, RText.EXIT_ACTION_KEY);
+		if (rtext.getOS()!=RText.OS_MAC_OSX) {
+			updateAction(exitItem, RText.EXIT_ACTION_KEY);
+		}
 		updateAction(saveItem, RText.SAVE_ACTION);
 		updateAction(saveAsItem, RText.SAVE_AS_ACTION);
 		updateAction(saveAsRemoteItem, RText.SAVE_AS_REMOTE_ACTION);
