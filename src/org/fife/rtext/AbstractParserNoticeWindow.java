@@ -129,6 +129,16 @@ abstract class AbstractParserNoticeWindow extends DockableWindow {
 
 
 	/**
+	 * Returns the parent RText application.
+	 *
+	 * @return The parent RText instance.
+	 */
+	protected RText getRText() {
+		return rtext;
+	}
+
+
+	/**
 	 * Overridden to work around Java bug 6429812.  As of Java 6 (!), changing
 	 * LaF from Windows to something else (e.g. Metal) at runtime with a custom
 	 * delegating TableCellRenderer on a JTableHeader can cause NPE's.  Then,

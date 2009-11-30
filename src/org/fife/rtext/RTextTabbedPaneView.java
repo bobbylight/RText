@@ -199,7 +199,7 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected synchronized int closeCurrentDocumentImpl() {
+	protected synchronized boolean closeCurrentDocumentImpl() {
 
 		ResourceBundle msg = owner.getResourceBundle();
 
@@ -207,7 +207,7 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 		// closeAllDocuments().
 		int rc = promptToSaveBeforeClosingIfDirty();
 		if (rc==JOptionPane.CANCEL_OPTION) {
-			return rc;
+			return false;
 		}
 
 inCloseCurrentDocument = true;
@@ -285,8 +285,7 @@ inCloseCurrentDocument = false;
 		else
 			owner.setMessages(currentTextArea.getFileFullPath(), msg.getString("Ready"));
 
-		// Return JOptionPane.YES_OPTION or JOptionPane.NO_OPTION.
-		return rc;
+		return true;
 
 	}
 

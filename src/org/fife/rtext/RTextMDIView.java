@@ -192,7 +192,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected synchronized int closeCurrentDocumentImpl() {
+	protected synchronized boolean closeCurrentDocumentImpl() {
 
 		ResourceBundle msg = owner.getResourceBundle();
 
@@ -200,7 +200,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		// closeAllDocuments().
 		int rc = promptToSaveBeforeClosingIfDirty();
 		if (rc==JOptionPane.CANCEL_OPTION) {
-			return rc;
+			return false;
 		}
 
 		// Remove the document from this tabbed pane.
@@ -232,8 +232,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		else
 			owner.setMessages(editor.getFileFullPath(), msg.getString("Ready"));
 
-		// Return JOptionPane.YES_OPTION or JOptionPane.NO_OPTION.
-		return rc;
+		return true;
 
 	}
 

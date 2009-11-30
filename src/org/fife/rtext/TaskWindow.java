@@ -59,11 +59,10 @@ public class TaskWindow extends AbstractParserNoticeWindow
 
 		super(rtext);
 		AbstractMainView mainView = rtext.getMainView();
-//		mainView.addCurrentTextAreaListener(this);
-mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_ADDED_PROPERTY, this);
-mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
+		mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_ADDED_PROPERTY, this);
+		mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
 
-		model = new TaskNoticeTableModel("Task"); // TODO
+		model = new TaskNoticeTableModel(rtext.getString("TaskList.Task"));
 		table = createTable(model);
 		RScrollPane sp = new DockableWindowScrollPane(table);
 
@@ -72,7 +71,7 @@ mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, 
 
 		setPosition(BOTTOM);
 		setActive(true);
-		setDockableWindowName("Tasks"); // TODO
+		setDockableWindowName(rtext.getString("TaskList.Tasks"));
 
 		URL url = getClass().getResource("graphics/page_white_edit.png");
 		setIcon(new ImageIcon(url));
@@ -111,15 +110,13 @@ mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, 
 		String prop = e.getPropertyName();
 
 		if (RSyntaxTextArea.PARSER_NOTICES_PROPERTY.equals(prop)) {
-System.out.println(e.getSource());
-RTextEditorPane source = (RTextEditorPane)e.getSource();
+			RTextEditorPane source = (RTextEditorPane)e.getSource();
 			List notices = source.getParserNotices();//(List)e.getNewValue();
 			model.update(source, notices);
 		}
 
 		if (AbstractMainView.TEXT_AREA_ADDED_PROPERTY.equals(prop)) {
 			RTextEditorPane textArea = (RTextEditorPane)e.getNewValue();
-System.out.println("Starting listening to: " + textArea.getFileFullPath());
 			textArea.addPropertyChangeListener(
 							RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
 			textArea.addParser(taskParser);
@@ -127,7 +124,6 @@ System.out.println("Starting listening to: " + textArea.getFileFullPath());
 
 		else if (AbstractMainView.TEXT_AREA_REMOVED_PROPERTY.equals(prop)) {
 			RTextEditorPane textArea = (RTextEditorPane)e.getNewValue();
-System.out.println("Stopping listening to: " + textArea.getFileFullPath());
 			textArea.removeParser(taskParser);
 			textArea.removePropertyChangeListener(
 							RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
@@ -147,9 +143,9 @@ System.out.println("Stopping listening to: " + textArea.getFileFullPath());
 				ParserNotice notice = (ParserNotice)i.next();
 				if (notice.getParser()==taskParser) {
 					Object[] data = {	getIcon(), textArea,
-								// Integer.intValue(notice.getValue()+1) // TODO: 1.5
-								new Integer(notice.getLine()+1),
-								notice.getMessage() };
+							// Integer.intValue(notice.getValue()+1) // TODO: 1.5
+							new Integer(notice.getLine()+1),
+							notice.getMessage() };
 					addRow(data);
 				}
 			}

@@ -484,10 +484,10 @@ public abstract class AbstractMainView extends JPanel
 			else {
 
 				// Try to close the document.
-				int rc = closeCurrentDocument();
+				boolean closed = closeCurrentDocument();
 
 				// If the user cancels out of it, quit the whole schibang.
-				if (rc == JOptionPane.CANCEL_OPTION) {
+				if (!closed) {
 					// If the newly-active file is read-only, say so in the status bar.
 					owner.setStatusBarReadOnlyIndicatorEnabled(
 						currentTextArea==null ? false
@@ -509,15 +509,16 @@ public abstract class AbstractMainView extends JPanel
 	/**
 	 * Attempts to close the current document.
 	 *
-	 * @return JOptionPane.YES_OPTION/NO_OPTION/CANCEL_OPTION, depending on
-	 *         what the user does.
+	 * @return Whether the file was closed (e.g. the user didn't cancel the
+	 *         operation).  This will also return <code>false</code> if an
+	 *         IO error occurs saving the file, if the user chooses to do so.
 	 */
-	public final int closeCurrentDocument() {
+	public final boolean closeCurrentDocument() {
 
 		RTextEditorPane old = currentTextArea;
-		int rc = closeCurrentDocumentImpl();
+		boolean closed = closeCurrentDocumentImpl();
 
-		if (rc==JOptionPane.YES_OPTION) {
+		if (closed) {
 
 			old.clearParsers();
 
@@ -532,7 +533,7 @@ public abstract class AbstractMainView extends JPanel
 
 		}
 
-		return rc;
+		return closed;
 
 	}
 
@@ -542,10 +543,10 @@ public abstract class AbstractMainView extends JPanel
 	 * method <i>must be synchronized</i> so it doesn't interfere with the
 	 * thread checking for files being modified outside of the editor.
 	 *
-	 * @return JOptionPane.YES_OPTION/NO_OPTION/CANCEL_OPTION, depending on
-	 *         what the user does.
+	 * @return Whether the document was closed (e.g. the user didn't cancel the
+	 *         operation).
 	 */
-	protected abstract int closeCurrentDocumentImpl();
+	protected abstract boolean closeCurrentDocumentImpl();
 
 
 	/**

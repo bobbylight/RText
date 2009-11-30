@@ -181,7 +181,7 @@ class RTextSplitPaneView extends AbstractMainView
 	/**
 	 * {@inheritDoc}
 	 */
-	protected synchronized int closeCurrentDocumentImpl() {
+	protected synchronized boolean closeCurrentDocumentImpl() {
 
 		ResourceBundle msg = owner.getResourceBundle();
 
@@ -189,7 +189,7 @@ class RTextSplitPaneView extends AbstractMainView
 		// closeAllDocuments().
 		int rc = promptToSaveBeforeClosingIfDirty();
 		if (rc==JOptionPane.CANCEL_OPTION) {
-			return rc;
+			return false;
 		}
 
 		// Remove the document from this container.
@@ -213,7 +213,7 @@ class RTextSplitPaneView extends AbstractMainView
 			owner.setMessages(editor.getFileFullPath(), msg.getString("Ready"));
 
 		// Return JOptionPane.YES_OPTION or JOptionPane.NO_OPTION.
-		return rc;
+		return true;
 
 	}
 	

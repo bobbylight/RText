@@ -38,6 +38,7 @@ import org.fife.ui.RScrollPane;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
+import org.fife.ui.rsyntaxtextarea.spell.SpellingParser;
 
 
 /**
@@ -91,22 +92,19 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 		String prop = e.getPropertyName();
 
 		if (RSyntaxTextArea.PARSER_NOTICES_PROPERTY.equals(prop)) {
-System.out.println(e.getSource());
-RTextEditorPane source = (RTextEditorPane)e.getSource();
+			RTextEditorPane source = (RTextEditorPane)e.getSource();
 			List notices = source.getParserNotices();//(List)e.getNewValue();
 			model.update(source, notices);
 		}
 
 		if (AbstractMainView.TEXT_AREA_ADDED_PROPERTY.equals(prop)) {
 			RTextEditorPane textArea = (RTextEditorPane)e.getNewValue();
-System.out.println("Starting listening to: " + textArea.getFileFullPath());
 			textArea.addPropertyChangeListener(
 							RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
 		}
 
 		else if (AbstractMainView.TEXT_AREA_REMOVED_PROPERTY.equals(prop)) {
 			RTextEditorPane textArea = (RTextEditorPane)e.getNewValue();
-System.out.println("Stopping listening to: " + textArea.getFileFullPath());
 			textArea.removePropertyChangeListener(
 							RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
 		}
@@ -121,13 +119,15 @@ System.out.println("Stopping listening to: " + textArea.getFileFullPath());
 		}
 
 		protected void addNoticesImpl(RTextEditorPane textArea, List notices) {
-			if (notices!=null) {
-				for (Iterator i=notices.iterator(); i.hasNext(); ) {
-					ParserNotice notice = (ParserNotice)i.next();
+			AbstractMainView view = getRText().getMainView();
+			SpellingParser parser = view.getSpellingSupport().getSpellingParser();
+			for (Iterator i=notices.iterator(); i.hasNext(); ) {
+				ParserNotice notice = (ParserNotice)i.next();
+				if (notice.getParser()==parser) {
 					Object[] data = { getIcon(), textArea,
-							// Integer.intValue(notice.getValue()+1) // TODO: 1.5
-							new Integer(notice.getLine()+1),
-							notice.getMessage() };
+						// Integer.intValue(notice.getValue()+1) // TODO: 1.5
+						new Integer(notice.getLine()+1),
+						notice.getMessage() };
 					addRow(data);
 				}
 			}

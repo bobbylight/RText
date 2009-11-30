@@ -503,11 +503,11 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		filePropItem = createMenuItem(rtext.getAction(
 										RText.FILE_PROPERTIES_ACTION));
 		viewMenu.add(filePropItem);
-
+/* TODO: 1.1
 		// Tools menu
 		menu = createMenu(menuMsg, "MenuTools");
 		add(menu);
-
+*/
 		menu.add(createMenuItem(rtext.getAction(RTextActionInfo.NEW_TOOL_ACTION)));
 
 		// Macros menu.
