@@ -30,6 +30,10 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -38,8 +42,10 @@ import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
@@ -102,6 +108,7 @@ class RTextSplitPaneView extends AbstractMainView
 		documentList.setModel(listModel);
 		documentList.setSelectionModel(new RListSelectionModel());
 		documentList.addListSelectionListener(this);
+		documentList.addMouseListener(new ListListener());
 		documentListScrollPane = new DockableWindowScrollPane(documentList);
 
 		String name = "Files";
@@ -315,9 +322,23 @@ class RTextSplitPaneView extends AbstractMainView
 		if (index>=0 && index<numDocuments) {
 			scrollPanes.remove(index);		// Remove text area from array list.
 			numDocuments--;				// We just removed one.
+			Component[] comps = getComponents();
 			removeAll();			// Remove all documents and ad remaining ones back.
-			for (int i=0; i<numDocuments; i++)
-				add((Component)scrollPanes.get(i), new Integer(i).toString());
+			for (int i=0; i<numDocuments; i++) {
+				RTextScrollPane sp = (RTextScrollPane)scrollPanes.get(i);
+				boolean reAdded = false;
+				for (int j=0; j<comps.length; j++) {
+					RTextScrollPane sp2 = (RTextScrollPane)((JPanel)comps[j]).getComponent(0);
+					if (sp==sp2) {
+						add(comps[j], new Integer(i).toString());
+						reAdded = true;
+						break;
+					}
+				}
+				if (!reAdded) {
+					new Exception("Scroll pane " + i + " not re-added!").printStackTrace();
+				}
+			}
 			int oldSelectedIndex = getSelectedIndex();	// selectedIndex becomes -1 from the statement below.
 			listModel.remove(index);					// Remove document name from list.
 			if (oldSelectedIndex==numDocuments)
@@ -516,6 +537,61 @@ class RTextSplitPaneView extends AbstractMainView
 
 			return this;
 
+		}
+
+	}
+
+
+	/**
+	 * Listens for mouse events in the document list.
+	 */
+	private class ListListener extends MouseAdapter {
+
+		private JMenuItem createItem(String actionName) {
+			JMenuItem item = new JMenuItem(owner.getAction(actionName));
+			item.setToolTipText(null);
+			return item;
+		}
+
+		private JPopupMenu createPopupMenu() {
+			JPopupMenu popup = new JPopupMenu();
+			popup.add(createItem(RText.SAVE_ACTION));
+			popup.add(createItem(RText.SAVE_AS_ACTION));
+			popup.add(createItem(RText.CLOSE_ACTION));
+			popup.addSeparator();
+			popup.add(createItem(RText.FILE_PROPERTIES_ACTION));
+			return popup;
+		}
+
+		private void handleMouseEvent(MouseEvent e) {
+
+			if (e.isPopupTrigger()) {
+
+				Point p = e.getPoint();
+				int index = documentList.locationToIndex(p);
+				if (index>-1) { // Should always be true
+					// Ensure the mouse is actually inside of the item
+					Rectangle r = documentList.getCellBounds(index, index);
+					if (r.contains(p)) {
+						documentList.setSelectedIndex(index);
+						JPopupMenu popup = createPopupMenu();
+						popup.show(documentList, p.x, p.y);
+					}
+				}
+			}
+
+		}
+
+		public void mouseClicked(MouseEvent e) {
+			handleMouseEvent(e);
+		}
+
+		public void mousePressed(MouseEvent e) {
+			handleMouseEvent(e);
+		}
+
+		public void mouseReleased(MouseEvent e) {
+			handleMouseEvent(e);
 		}
 
 	}

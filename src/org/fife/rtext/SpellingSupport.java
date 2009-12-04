@@ -91,7 +91,11 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 	 * @throws IOException If an IO error occurs.
 	 */
 	private void createSpellingParser() throws IOException {
-		File file = new File("english_dic.zip").getAbsoluteFile();
+		String fileName = "english_dic.zip";
+		if (rtext.getOS()==RText.OS_MAC_OSX) {
+			fileName = "RText.app/Contents/Resources/Java/" + fileName;
+		}
+		File file = new File(fileName).getAbsoluteFile();
 		boolean american = DICTIONARIES[1].equals(spellingDictionary);
 		spellingParser = SpellingParser.
 					createEnglishSpellingParser(file, american);

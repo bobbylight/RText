@@ -43,6 +43,7 @@ import org.fife.ui.rsyntaxtextarea.parser.TaskTagParser;
 
 /**
  * A window that displays the "todo" and "fixme" items in all open files.
+ * Parsing for tasks is only done if this window is visible.
  *
  * @author Robert Futrell
  * @version 1.0
@@ -58,9 +59,6 @@ public class TaskWindow extends AbstractParserNoticeWindow
 	public TaskWindow(RText rtext) {
 
 		super(rtext);
-		AbstractMainView mainView = rtext.getMainView();
-		mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_ADDED_PROPERTY, this);
-		mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
 
 		model = new TaskNoticeTableModel(rtext.getString("TaskList.Task"));
 		table = createTable(model);
@@ -80,35 +78,49 @@ public class TaskWindow extends AbstractParserNoticeWindow
 
 	}
 
+	/**
+	 * Overridden to add parsing listeners when this window is visible.
+	 */
+	public void addNotify() {
 
-/*
-	public void currentTextAreaPropertyChanged(CurrentTextAreaEvent e) {
+		super.addNotify();
 
-		if (e.getType()==CurrentTextAreaEvent.TEXT_AREA_CHANGED) {
-
-			if (textArea!=null) {
-				textArea.removePropertyChangeListener(
-							RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
-			}
-
-			textArea = (RTextEditorPane)e.getNewValue();
-
-			if (textArea!=null) {
-				textArea.addPropertyChangeListener(
-						RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
-				List notices = textArea.getParserNotices();
-				model.update(notices);
-			}
-
+		RText rtext = getRText();
+		AbstractMainView mainView = rtext.getMainView();
+		mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_ADDED_PROPERTY, this);
+		mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
+		for (int i=0; i<mainView.getNumDocuments(); i++) {
+			RTextEditorPane textArea = mainView.getRTextEditorPaneAt(i);
+			addTaskParser(textArea);
 		}
 
 	}
-*/
 
+
+	/**
+	 * Adds listeners to start parsing a text area for tasks.
+	 *
+	 * @param textArea The text area to start parsing for tasks.
+	 * @see #removeTaskParser(RTextEditorPane)
+	 */
+	private void addTaskParser(RTextEditorPane textArea) {
+		textArea.addPropertyChangeListener(
+				RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
+		textArea.addParser(taskParser);
+	}
+
+
+	/**
+	 * Notified when a text area is parsed, or when a text area is added or
+	 * removed (so listeners can be added/removed as appropriate).
+	 *
+	 * @param e The event.
+	 */
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String prop = e.getPropertyName();
 
+		// A text area has been re-parsed for tasks.
 		if (RSyntaxTextArea.PARSER_NOTICES_PROPERTY.equals(prop)) {
 			RTextEditorPane source = (RTextEditorPane)e.getSource();
 			List notices = source.getParserNotices();//(List)e.getNewValue();
@@ -117,9 +129,7 @@ public class TaskWindow extends AbstractParserNoticeWindow
 
 		if (AbstractMainView.TEXT_AREA_ADDED_PROPERTY.equals(prop)) {
 			RTextEditorPane textArea = (RTextEditorPane)e.getNewValue();
-			textArea.addPropertyChangeListener(
-							RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
-			textArea.addParser(taskParser);
+			addTaskParser(textArea);
 		}
 
 		else if (AbstractMainView.TEXT_AREA_REMOVED_PROPERTY.equals(prop)) {
@@ -129,6 +139,40 @@ public class TaskWindow extends AbstractParserNoticeWindow
 							RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
 		}
 
+	}
+
+
+	/**
+	 * Overridden to remove all parsing listeners when this window is not
+	 * visible.
+	 */
+	public void removeNotify() {
+
+		super.removeNotify();
+
+		RText rtext = getRText();
+		AbstractMainView mainView = rtext.getMainView();
+		mainView.removePropertyChangeListener(AbstractMainView.TEXT_AREA_ADDED_PROPERTY, this);
+		mainView.removePropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
+		for (int i=0; i<mainView.getNumDocuments(); i++) {
+			RTextEditorPane textArea = mainView.getRTextEditorPaneAt(i);
+			removeTaskParser(textArea);
+		}
+		model.setRowCount(0);
+
+	}
+
+
+	/**
+	 * Removes the listeners that parse a text area for tasks.
+	 *
+	 * @param textArea The text area to stop parsing for tasks.
+	 * @see #addTaskParser(RTextEditorPane)
+	 */
+	private void removeTaskParser(RTextEditorPane textArea) {
+		textArea.removePropertyChangeListener(
+				RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
+		textArea.removeParser(taskParser);
 	}
 
 

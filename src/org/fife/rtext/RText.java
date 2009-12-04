@@ -173,7 +173,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 */
 	public static final String PROPERTY_PRINT_START_TIMES = "printStartTimes";
 
-	private static final String VERSION_STRING		= "1.0.0.????????-beta";
+	private static final String VERSION_STRING		= "1.0.0.20091203";
 
 
 	/**
@@ -1228,6 +1228,7 @@ w.addComponentListener(searchWindowOpacityListener);
 		getAction(HELP_ACTION_KEY).putValue(Action.SMALL_ICON, icon);
 		icon = iconGroup.getIcon("about");
 		getAction(ABOUT_ACTION_KEY).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("close");
 		getAction(CLOSE_ACTION).putValue(Action.SMALL_ICON, icon);
 		icon = iconGroup.getIcon("find");
 		getAction(FIND_ACTION).putValue(Action.SMALL_ICON, icon);

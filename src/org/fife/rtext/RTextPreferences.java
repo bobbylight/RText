@@ -718,7 +718,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		lineNumberFont		= new Font("Monospaced", Font.PLAIN, 12);
 		lineNumberColor	= Color.GRAY;
 		gutterBorderColor	= new Color(221, 221, 221);
-		spellCheckingEnabled = false;
+		spellCheckingEnabled = File.separatorChar=='\\';
 		spellCheckingColor   = DEFAULT_SPELLING_ERROR_COLOR;
 		spellingDictionary   = SpellingSupport.DICTIONARIES[1];
 		userDictionary       = new File(RTextUtilities.getPreferencesDirectory(),

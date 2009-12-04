@@ -44,6 +44,7 @@ import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.StandardAction;
+import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.ui.rtextfilechooser.filters.HTMLFileFilter;
 import org.fife.ui.rsyntaxtextarea.Token;
 
@@ -79,10 +80,10 @@ class SaveAsWebPageAction extends StandardAction {
 
 		RText owner = (RText)getApplication();
 
-		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle(owner.getString("SaveAsWebPage"));
+		RTextFileChooser chooser = new RTextFileChooser();
+		chooser.setCustomTitle(owner.getString("SaveAsWebPage"));
 		chooser.addChoosableFileFilter(new HTMLFileFilter());
-		chooser.removeChoosableFileFilter(chooser.getChoosableFileFilters()[0]);
+		chooser.setEncoding("UTF-8");
 
 		RTextEditorPane editor = owner.getMainView().getCurrentTextArea();
 		String htmlFileName = editor.getFileFullPath();
@@ -95,7 +96,6 @@ class SaveAsWebPageAction extends StandardAction {
 		}
 		chooser.setSelectedFile(new File(htmlFileName));
 		chooser.setComponentOrientation(owner.getComponentOrientation());
-		chooser.setDragEnabled(true);
 
 		if (chooser.showSaveDialog(owner)==JFileChooser.APPROVE_OPTION) {
 

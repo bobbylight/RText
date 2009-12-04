@@ -2,16 +2,32 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
-1.0.0
----------------------
+1.0.0 (12/03/2009):
+-------------------
+   - Added a spelling checker.  This long-requested feature works much like it
+     does in Eclipse.  A misspelled word is squiggle underlined.  Hovering the
+     mouse over the spelling error yields a focusable tool tip, from which the
+     user can correct the misspelling, add the word to a user dictionary, or
+     ignore the word for the rest of the RText session.
+   - Added a "Tasks" dockable window.  Like the one found in Eclipse, this
+     window lists all items marked as "TODO" and "FIXME" in source code
+     comments in all opened files.
    - Added Scala syntax highlighting.
    - Added Delphi syntax highlighting and Source Browser support.
-   - ??? When editing XML, closing tags are auto-completed.  This can be
-     toggled via the Options dialog. ???
+   - Added BBCode syntax highlighting.
+   - When editing XML, closing tags are auto-completed.  This can be
+     toggled via the Options dialog.
+   - The file chooser and File System Tree both now allow you to open files in
+     the system default viewer or editor.  This feature requires Java 6.
    - The file chooser now uses a "breadcrumb bar" component, similar to the
      file chooser in Windows Vista.
-   - Removed a couple of unnecessary borders in the main application's
-     interface.
+   - When using the "Split View," the file list is now displayed in a real
+     dockable window, making for much better integration with the rest of the
+     UI.
+   - In the "Split View," the file list now has a context menu when a file is
+     right-clicked.
+   - The "Document Properties" dialog now includes the word count of the file.
+   - Cleaned up the main application's interface.
    - Fixed a silent NPE when doing a "replace all" with regex enabled, and the
      replacement text was the empty string.
 
