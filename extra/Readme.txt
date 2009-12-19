@@ -96,21 +96,22 @@ robert_futrell@users.sourceforge.net
 
 7. Contributors
 ---------------
-- linostar:         Arabic Translation
-- sonyichi:         Simplified Chinese Translation
-- liou xiao         Traditional Chinese Translation
-- sebastiaan:       Dutch Translation
-- pivwan:           French Translation
-- bikerpete:        German Translation
-- flatron:          Hungarian Translation
-- sonny, gri3fon:   Indonesian Translation
-- Luca, stepagweb:  Italian Translation
-- tomoM:            Japanese Translation
-- leandro:          Portuguese Translation, Linux distributions
-- sbrownii:         Korean Translation
-- vladimir:         Russian Translation
-- phrodo:           Spanish Translation
-- burak:            Turkish Translation
+- linostar:            Arabic Translation
+- sonyichi:            Simplified Chinese Translation
+- liou xiao            Traditional Chinese Translation
+- roel, sebastiaan:    Dutch Translation
+- pivwan:              French Translation
+- bikerpete:           German Translation
+- flatron:             Hungarian Translation
+- sonny, gri3fon:      Indonesian Translation
+- Luca, stepagweb:     Italian Translation
+- tomoM:               Japanese Translation
+- Maciej:              Polish Translation
+- Marcos, leandro:     Portuguese Translation
+- sbrownii:            Korean Translation
+- vladimir:            Russian Translation
+- phrodo:              Spanish Translation
+- burak:               Turkish Translation
 
 
 8. Special Thanks

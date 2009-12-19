@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!--
     This file contains all localizations that will appear in RText's
@@ -26,6 +26,7 @@
    <language name="Italiano"                  id="it"/>
    <language name="Korean"                    id="ko"/>
    <language name="Japanese"                  id="ja"/>
+   <language name="Polish"                    id="pl"/>
    <language name="Portugu&#234;s (Brasil)"   id="pt_BR"/>
    <language name="&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;" id="ru"/>
    <language name="Turkish"                   id="tr"/>

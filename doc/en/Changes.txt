@@ -2,6 +2,13 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+1.1
+-------------------
+   - Updated translations:  Turkish (Burak), Dutch (Roel), Brazilian Portuguese
+     (Marcos),
+   - Added Polish translation (thanks Maciej!).
+
+
 1.0.0 (12/03/2009):
 -------------------
    - Added a spelling checker.  This long-requested feature works much like it

@@ -89,7 +89,7 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  * status bar.
  *
  * @author Robert Futrell
- * @version 1.0.0
+ * @version 1.1.0
  */
 public class RText extends AbstractPluggableGUIApplication
 				implements ActionListener, CaretListener,
@@ -173,7 +173,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 */
 	public static final String PROPERTY_PRINT_START_TIMES = "printStartTimes";
 
-	private static final String VERSION_STRING		= "1.0.0.20091203";
+	private static final String VERSION_STRING		= "1.1.????????-BETA";
 
 
 	/**
