@@ -374,7 +374,6 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		// currentTextArea.requestFocusInWindow();
 
 		current.addCaretListener(owner);
-		current.addKeyListener(owner);
 
 		// Trick the parent RText into updating the row/column indicator.
 		// Null because caretUpdate doesn't actually use the caret event.
@@ -415,7 +414,6 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 */
 	public void internalFrameDeactivated(InternalFrameEvent e) {
 		getCurrentTextArea().removeCaretListener(owner);
-		getCurrentTextArea().removeKeyListener(owner);
 	}
 
 

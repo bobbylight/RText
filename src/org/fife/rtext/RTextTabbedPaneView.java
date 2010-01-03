@@ -218,7 +218,6 @@ inCloseCurrentDocument = true;
 //		boolean removingLastDocument = (getSelectedIndex()==getNumDocuments()-1);
 //		if (removingLastDocument==false) {
 			oldTextArea.removeCaretListener(owner);
-			oldTextArea.removeKeyListener(owner);
 //		}
 
 		// Remove the document from this tabbed pane.
@@ -266,7 +265,6 @@ inCloseCurrentDocument = true;
 		// the listeners.
 //		if (removingLastDocument==false) {
 			currentTextArea.addCaretListener(owner);
-			currentTextArea.addKeyListener(owner);
 //		}
 
 inCloseCurrentDocument = false;
@@ -494,7 +492,6 @@ inCloseCurrentDocument = false;
 		RTextEditorPane oldTextArea = getCurrentTextArea();
 		if (oldTextArea!=null) {
 			oldTextArea.removeCaretListener(owner);
-			oldTextArea.removeKeyListener(owner);
 		}
 
 		// The new currentTextArea will only be null when we're closing the
@@ -526,7 +523,6 @@ inCloseCurrentDocument = false;
 
 			// Update RText actions associated with the current currentTextArea.
 			currentTextArea.addCaretListener(owner);
-			currentTextArea.addKeyListener(owner);
 			
 			// Trick the parent RText into updating the row/column indicator.
 			// We have to check mainView for null because this is called in

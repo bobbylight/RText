@@ -436,7 +436,6 @@ class RTextSplitPaneView extends AbstractMainView
 		RTextEditorPane current = getCurrentTextArea();
 		if (current!=null) {
 			current.removeCaretListener(owner);
-			current.removeKeyListener(owner);
 		}
 
 		// We must check for this in case they removed the last document.
@@ -456,7 +455,6 @@ class RTextSplitPaneView extends AbstractMainView
 
 			// Add back listeners.
 			current.addCaretListener(owner);
-			current.addKeyListener(owner);
 
 			// Trick the parent RText into updating the row/column indicator.
 			// We have to check mainView for null because this is called in

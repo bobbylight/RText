@@ -460,8 +460,7 @@ public class RemoteFileChooser extends EscapableDialog
 						(String)encodingCombo.getSelectedItem() : null;
 
 		if (mode==OPEN_MODE) {
-			if (mainView.openFile(FileLocation.create(url),
-									encoding, null, false)) {
+			if (mainView.openFile(FileLocation.create(url), encoding, false)) {
 				setVisible(false); // Otherwise, keep dialog up
 			}
 		}

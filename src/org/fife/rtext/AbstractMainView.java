@@ -30,6 +30,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -46,10 +47,11 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 
 import org.fife.io.UnicodeWriter;
+import org.fife.rtext.actions.CapsLockAction;
+import org.fife.rtext.actions.ToggleTextModeAction;
 import org.fife.rtext.lang.LanguageSupport;
 import org.fife.rtext.lang.LanguageSupportFactory;
 import org.fife.ui.UIUtil;
-//import org.fife.ui.autocomplete.*;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -58,6 +60,7 @@ import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.Macro;
 import org.fife.ui.rtextarea.RTextArea;
+import org.fife.ui.rtextarea.RTextAreaEditorKit;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.ui.search.*;
@@ -192,6 +195,10 @@ public abstract class AbstractMainView extends JPanel
 
 	private SpellingSupport spellingSupport;
 
+	private ToggleTextModeAction toggleTextModeAction;
+	private CapsLockAction capsLockAction;
+
+
 	/**
 	 * The cursor used when recording a macro.
 	 */
@@ -298,8 +305,7 @@ public abstract class AbstractMainView extends JPanel
 
 		// Set pointers for easy reference to new document.
 		try {
-			currentTextArea = createRTextEditorPane(fileNameAndPath,
-										encoding, null);
+			currentTextArea = createRTextEditorPane(fileNameAndPath, encoding);
 		} catch (IOException ioe) {
 			owner.displayException(ioe);
 			ensureFilesAreOpened();
@@ -670,17 +676,12 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @param fileName The name of the file to add.
 	 * @param encoding The encoding of the file.
-	 * @param delegate If this value is non-null, it will be used to actually
-	 *        create the editor pane.  Callers can pass in a delegate here
-	 *        if they want to use enhanced text areas, for example.
 	 * @return An editor pane.
 	 * @throws IOException If an IO error occurs reading the file to load.
 	 */
 	private RTextEditorPane createRTextEditorPane(String fileName,
-				String encoding, EditorPaneCreatorDelegate delegate)
-				throws IOException {
-		return createRTextEditorPane(FileLocation.create(fileName),
-								encoding, delegate);
+				String encoding) throws IOException {
+		return createRTextEditorPane(FileLocation.create(fileName), encoding);
 	}
 
 
@@ -689,65 +690,52 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @param loc The location of the file to add.
 	 * @param encoding The encoding of the file.
-	 * @param delegate If this value is non-null, it will be used to actually
-	 *        create the editor pane.  Callers can pass in a delegate here
-	 *        if they want to use enhanced text areas, for example.
 	 * @return An editor pane.
 	 * @throws IOException If an IO error occurs reading the file to load.
 	 */
 	private RTextEditorPane createRTextEditorPane(FileLocation loc,
-				String encoding, EditorPaneCreatorDelegate delegate)
-				throws IOException {
+				String encoding) throws IOException {
 
 		String style = syntaxFilters.getSyntaxStyleForFile(loc.getFileName());
-
-		// Actually create the pane.
-		RTextEditorPane pane = null;
-		if (delegate!=null) {
-			pane = delegate.createRTextEditorPane(owner, lineWrapEnabled,
-										textMode, loc, encoding);
-		}
-		else {
-			pane = new RTextEditorPane(owner, lineWrapEnabled,
-									textMode, loc, encoding);
-		}
+		RTextEditorPane pane = new RTextEditorPane(owner, lineWrapEnabled,
+												textMode, loc, encoding);
 
 		// Set some properties.
-		pane.setFont(textAreaFont);
+		pane.setFont(getTextAreaFont());
 		//pane.setUnderline(textAreaUnderline);
-		pane.setForeground(textAreaForeground);
-		pane.setBackgroundObject(backgroundObject);
-		pane.setTabSize(tabSize);
+		pane.setForeground(getTextAreaForeground());
+		pane.setBackgroundObject(getBackgroundObject());
+		pane.setTabSize(getTabSize());
 		pane.setHighlightCurrentLine(highlightCurrentLine);
-		pane.setCurrentLineHighlightColor(currentLineColor);
+		pane.setCurrentLineHighlightColor(getCurrentLineHighlightColor());
 		pane.setMarginLineEnabled(marginLineEnabled);
-		pane.setMarginLinePosition(marginLinePosition);
-		pane.setMarginLineColor(marginLineColor);
-		pane.setMarkAllHighlightColor(markAllHighlightColor);
-		pane.setMarkOccurrences(markOccurrences);
-		pane.setMarkOccurrencesColor(markOccurrencesColor);
+		pane.setMarginLinePosition(getMarginLinePosition());
+		pane.setMarginLineColor(getMarginLineColor());
+		pane.setMarkAllHighlightColor(getMarkAllHighlightColor());
+		pane.setMarkOccurrences(getMarkOccurrences());
+		pane.setMarkOccurrencesColor(getMarkOccurrencesColor());
 		setSyntaxStyle(pane, style);
-		pane.setBracketMatchingEnabled(bracketMatchingEnabled);
-		pane.setMatchedBracketBGColor(matchedBracketBGColor);
-		pane.setMatchedBracketBorderColor(matchedBracketBorderColor);
+		pane.setBracketMatchingEnabled(isBracketMatchingEnabled());
+		pane.setMatchedBracketBGColor(getMatchedBracketBGColor());
+		pane.setMatchedBracketBorderColor(getMatchedBracketBorderColor());
 		if (defaultLineTerminator!=null &&
 				pane.getDocument().getLength()==0) {
 			// Empty (or new) file => use default line terminator.
 			pane.setLineSeparator(defaultLineTerminator, false);
 		}
-		pane.setWhitespaceVisible(whitespaceVisible);
-		pane.setCaretColor(caretColor);
-		pane.setSelectionColor(selectionColor);
+		pane.setWhitespaceVisible(isWhitespaceVisible());
+		pane.setCaretColor(getCaretColor());
+		pane.setSelectionColor(getSelectionColor());
 		pane.setSyntaxScheme(owner.getSyntaxScheme());
-		pane.setHyperlinksEnabled(hyperlinksEnabled);
-		pane.setHyperlinkForeground(hyperlinkColor);
-		pane.setLinkScanningMask(hyperlinkModifierKey);
-		pane.setRoundedSelectionEdges(roundedSelectionEdges);
+		pane.setHyperlinksEnabled(getHyperlinksEnabled());
+		pane.setHyperlinkForeground(getHyperlinkColor());
+		pane.setLinkScanningMask(getHyperlinkModifierKey());
+		pane.setRoundedSelectionEdges(getRoundedSelectionEdges());
 		pane.setCaretStyle(RTextEditorPane.INSERT_MODE,
 							carets[RTextEditorPane.INSERT_MODE]);
 		pane.setCaretStyle(RTextEditorPane.OVERWRITE_MODE,
 							carets[RTextEditorPane.OVERWRITE_MODE]);
-		pane.getCaret().setBlinkRate(caretBlinkRate);
+		pane.getCaret().setBlinkRate(getCaretBlinkRate());
 		//pane.setFadeCurrentLineHighlight(fadeCurrentLineHighlight);
 
 		// If we're in the middle of recording a macro, make the cursor
@@ -778,6 +766,14 @@ public abstract class AbstractMainView extends JPanel
 		if (spellingSupport.isSpellCheckingEnabled()) {
 			pane.addParser(spellingSupport.getSpellingParser());
 		}
+
+		// Override the default Insert key action to one that toggles the text
+		// mode for all text editors.
+		InputMap im = pane.getInputMap();
+		ActionMap am = pane.getActionMap();
+		am.put(RTextAreaEditorKit.rtaToggleTextModeAction, toggleTextModeAction);
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_CAPS_LOCK, 0), "OnCapsLock");
+		am.put("OnCapsLock", capsLockAction);
 
 		// Return him.
 		return pane;
@@ -1970,6 +1966,9 @@ public abstract class AbstractMainView extends JPanel
 		spellingSupport = new SpellingSupport(owner);
 		spellingSupport.configure(prefs); // Do this BEFORE opening any files!
 
+		toggleTextModeAction = new ToggleTextModeAction(owner);
+		capsLockAction = new CapsLockAction(owner);
+
 		// Start us out with whatever files they passed in.
 		if (filesToOpen==null) {
 			addNewEmptyUntitledFile();
@@ -2081,8 +2080,6 @@ public abstract class AbstractMainView extends JPanel
 	 *        If this value is <code>null</code>, the file is checked for
 	 *        Unicode; if it is Unicode, it is opened properly.  If it is not
 	 *        Unicode, a system default encoding is used.
-	 * @param delegate If non-null, this object will be used to create the
-	 *        new text area.
 	 * @param reuse If the file is already open, whether to simply switch
 	 *        focus to that old copy (vs. opening a new copy).
 	 * @return <code>true</code> if the file was opened (or switched to),
@@ -2091,8 +2088,7 @@ public abstract class AbstractMainView extends JPanel
 	 * @throws InvalidCharSetException If the specified character set is
 	 *         invalid.
 	 */
-	public boolean openFile(FileLocation loc, String charSet,
-					EditorPaneCreatorDelegate delegate, boolean reuse) {
+	public boolean openFile(FileLocation loc, String charSet, boolean reuse) {
 
 		// If the only document open is untitled and empty, remove
 		// (and thus replace) replace it.
@@ -2128,7 +2124,7 @@ public abstract class AbstractMainView extends JPanel
 
 			try {
 				RTextEditorPane tempTextArea = createRTextEditorPane(
-								loc, charSet, delegate);
+								loc, charSet);
 				addTextArea(tempTextArea);
 			} catch (IOException ioe) {
 				handleAddTextFileIOException(loc, ioe, true);
@@ -2177,7 +2173,7 @@ public abstract class AbstractMainView extends JPanel
 	 *         invalid.
 	 */
 	public boolean openFile(String fileNameAndPath, String charSet) {
-		return openFile(fileNameAndPath, charSet, null);
+		return openFile(fileNameAndPath, charSet, false);
 	}
 
 
@@ -2202,32 +2198,7 @@ public abstract class AbstractMainView extends JPanel
 	public boolean openFile(String fileNameAndPath, String charSet,
 								boolean reuse) {
 		return openFile(FileLocation.create(fileNameAndPath),
-							charSet, null, reuse);
-	}
-
-
-	/**
-	 * Adds an already-created text file to this tabbed pane.  This method is
-	 * synchronized so it doesn't interfere with the thread checking for files
-	 * being modified outside of the editor.
-	 *
-	 * @param fileNameAndPath The full path and name of the file to add.
-	 * @param charSet The encoding to use when reading/writing this file.
-	 *        If this value is <code>null</code>, the file is checked for
-	 *        Unicode; if it is Unicode, it is opened properly.  If it is not
-	 *        Unicode, a system default encoding is used.
-	 * @param delegate If non-null, this object will be used to create the
-	 *        new text area.
-	 * @return <code>true</code> if the file was opened (or switched to),
-	 *         <code>false</code> otherwise (if the file does not exist and
-	 *         the user chose NOT to create it, for example).
-	 * @throws InvalidCharSetException If the specified character set is
-	 *         invalid.
-	 */
-	public boolean openFile(String fileNameAndPath, String charSet,
-							EditorPaneCreatorDelegate delegate) {
-		return openFile(FileLocation.create(fileNameAndPath),
-							charSet, delegate, false);
+							charSet, reuse);
 	}
 
 
@@ -3664,7 +3635,7 @@ public abstract class AbstractMainView extends JPanel
 	 * @param mode Either <code>RTextEditorPane.INSERT_MODE</code> or
 	 *        <code>RTextEditorPane.OVERWRITE_MODE</code>.
 	 * @throws IllegalArgumentException If <code>mode</code> is invalid.
-	 * @see #getTextMode
+	 * @see #getTextMode()
 	 */
 	public void setTextMode(int mode) {
 		if (mode!=RTextEditorPane.INSERT_MODE &&
@@ -3672,13 +3643,8 @@ public abstract class AbstractMainView extends JPanel
 			throw new IllegalArgumentException("Invalid mode: " + mode);
 		}
 		textMode = mode;
-		int numDocuments = getNumDocuments();
-		int selectedIndex = getSelectedIndex();
-		for (int i=0; i<numDocuments; i++) {
-			// Skip the current text area as it updates its own text mode.
-			if (i!=selectedIndex) {
-				getRTextEditorPaneAt(i).setTextMode(mode);
-			}
+		for (int i=0; i<getNumDocuments(); i++) {
+			getRTextEditorPaneAt(i).setTextMode(mode);
 		}
 
 	}

@@ -27,8 +27,6 @@ package org.fife.rtext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -92,9 +90,8 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  * @version 1.1.0
  */
 public class RText extends AbstractPluggableGUIApplication
-				implements ActionListener, CaretListener,
-					KeyListener, PropertyChangeListener, RTextActionInfo,
-					FileChooserOwner {
+			implements ActionListener, CaretListener, PropertyChangeListener,
+						RTextActionInfo, FileChooserOwner {
 
 	// Constants specifying the current view style.
 	public static final int TABBED_VIEW				= 0;
@@ -582,8 +579,8 @@ public class RText extends AbstractPluggableGUIApplication
 	 * Returns the actual main view.
 	 *
 	 * @return The main view.
-	 * @see #getMainViewStyle
-	 * @see #setMainViewStyle
+	 * @see #getMainViewStyle()
+	 * @see #setMainViewStyle(int)
 	 */
 	public AbstractMainView getMainView() {
 		return mainView;
@@ -593,10 +590,10 @@ public class RText extends AbstractPluggableGUIApplication
 	/**
 	 * Returns the main view style.
 	 *
-	 * @return The main view style, one of <code>TABBED_VIEW</code>,
-	 *         <code>SPLIT_PANE_VIEW</code>, or <code>MDI_VIEW</code>.
-	 * @see #setMainViewStyle
-	 * @see #getMainView
+	 * @return The main view style, one of {@link #TABBED_VIEW},
+	 *         {@link #SPLIT_PANE_VIEW} or {@link #MDI_VIEW}.
+	 * @see #setMainViewStyle(int)
+	 * @see #getMainView()
 	 */
 	public int getMainViewStyle() {
 		return mainViewStyle;
@@ -709,7 +706,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * Returns the tab size (in spaces) currently being used.
 	 *
 	 * @return The tab size (in spaces) currently being used.
-	 * @see #setTabSize
+	 * @see #setTabSize(int)
 	 */
 	public int getTabSize() {
 		return mainView.getTabSize();
@@ -809,66 +806,6 @@ public class RText extends AbstractPluggableGUIApplication
 	 */
 	public boolean isSpellingWindowVisible() {
 		return spellingWindow!=null && spellingWindow.isActive();
-	}
-
-
-	/**
-	 * Called whenever the user presses a key in the current text area.
-	 *
-	 * @param e The key event.
-	 */
-	public void keyPressed(KeyEvent e) {
-
-		int keyCode = e.getKeyCode();
-
-		switch (keyCode) {
-
-			// If they're releasing the Insert key, toggle between
-			// insert/overwrite mode for all editors OTHER THAN the one in
-			// which the key was pressed (it is done for that one already).
-			case KeyEvent.VK_INSERT:
-				StatusBar statusBar = (StatusBar)getStatusBar();
-				boolean isInsertMode = mainView.getTextMode()==
-									RTextEditorPane.INSERT_MODE;
-				statusBar.setOverwriteModeIndicatorEnabled(isInsertMode);
-				// Toggle all of the other text areas.
-				mainView.setTextMode(isInsertMode ?
-									RTextEditorPane.OVERWRITE_MODE :
-									RTextEditorPane.INSERT_MODE);
-				break;
-
-			// If they're releasing the Caps Lock key, toggle caps lock
-			// in the status bar to reflect the actual state.
-			case KeyEvent.VK_CAPS_LOCK:
-				if (getOS()!=OS_MAC_OSX) {
-					try {
-						boolean state = Toolkit.getDefaultToolkit().
-							getLockingKeyState(KeyEvent.VK_CAPS_LOCK);
-						statusBar = (StatusBar)getStatusBar();
-						statusBar.setCapsLockIndicatorEnabled(state);
-					} catch (UnsupportedOperationException uoe) {
-						// Swallow; some OS's (OSX, some Linux) just
-						// don't support this.
-					}
-				}
-				break;
-
-			default:
-				// You cannot modify a read-only document.
-				if (mainView.getCurrentTextArea().isReadOnly()) {
-					getStatusBar().setStatusMessage(
-										"Document is read only!");
-				}
-
-		} // End of switch (keyCode).
-
-	}
-
-	public void keyReleased(KeyEvent e) {
-	}
-
-
-	public void keyTyped(KeyEvent e) {
 	}
 
 
@@ -1274,10 +1211,9 @@ w.addComponentListener(searchWindowOpacityListener);
 	 * Sets the main view style.  This method fires a property change of type
 	 * {@link #MAIN_VIEW_STYLE_PROPERTY}.
 	 *
-	 * @param viewStyle One of <code>TABBED_VIEW</code>,
-	 *        <code>SPLIT_PANE_VIEW</code>, or <code>MDI_VIEW</code>.  If
-	 *        this value is invalid, nothing happens.
-	 * @see #getMainViewStyle
+	 * @param viewStyle One of {@link #TABBED_VIEW}, {@link #SPLIT_PANE_VIEW}
+	 *        or {@link #MDI_VIEW}.  If this value is invalid, nothing happens.
+	 * @see #getMainViewStyle()
 	 */
 	public void setMainViewStyle(int viewStyle) {
 
@@ -1462,7 +1398,7 @@ w.addComponentListener(searchWindowOpacityListener);
 	 * Sets the tab size to be used on all documents.
 	 *
 	 * @param newSize The tab size to use.
-	 * @see #getTabSize
+	 * @see #getTabSize()
 	 */
 	public void setTabSize(int newSize) {
 		mainView.setTabSize(newSize);

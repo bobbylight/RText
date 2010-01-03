@@ -39,7 +39,7 @@ import java.util.Map;
  * NOTE: In 1.5, most of these fields could be replaced with a single
  * ProcessBuilder instance.
  */
-public class Tool {
+public class Tool implements Comparable {
 
 	private String name;
 	private File dir;
@@ -56,6 +56,34 @@ public class Tool {
 	 */
 	public Tool(String name) {
 		this.name = name;
+	}
+
+
+	/**
+	 * Compares this tool to another by name, lexicographically.
+	 *
+	 * @param o The other tool.
+	 * @return The sort order of this tool, compared to another.
+	 */
+	public int compareTo(Object o) {
+		int val = -1;
+		if (o==this) {
+			val = 0;
+		}
+		else if (o instanceof Tool) {
+			val = getName().compareTo(((Tool)o).getName());
+		}
+		return val;
+	}
+
+
+	/**
+	 * Returns whether this tool and another have the same name.
+	 *
+	 * @return Whether this tool and another have the same name.
+	 */
+	public boolean equals(Object o) {
+		return compareTo(o)==0;
 	}
 
 
@@ -88,6 +116,16 @@ public class Tool {
 	 */
 	public File getDirectory() {
 		return dir;
+	}
+
+
+	/**
+	 * Returns the hash code of this tool.
+	 *
+	 * @return This tool's hash code.
+	 */
+	public int hashCode() {
+		return getName().hashCode();
 	}
 
 

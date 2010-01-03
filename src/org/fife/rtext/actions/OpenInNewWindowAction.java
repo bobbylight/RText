@@ -114,7 +114,6 @@ class OpenInNewWindowAction extends StandardAction {
 				// First, remove old listeners.
 				if (newCurrentTextArea != null) {
 					newCurrentTextArea.removeCaretListener(newWindow);
-					newCurrentTextArea.removeKeyListener(newWindow);
 				}
 
 				// If the only document open is untitled and empty, remove

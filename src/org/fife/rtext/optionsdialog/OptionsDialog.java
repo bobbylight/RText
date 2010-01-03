@@ -58,7 +58,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		ResourceBundle msg = ResourceBundle.getBundle(
 				"org.fife.rtext.OptionsDialog");
 
-		OptionsDialogPanel[] optionsPanels = new OptionsDialogPanel[8];
+		OptionsDialogPanel[] optionsPanels = new OptionsDialogPanel[9];
 		optionsPanels[0] = new GeneralOptionPanel(rtext, msg);
 		setIcon(optionsPanels[0], "general.png");
 		optionsPanels[1] = new UIOptionPanel(rtext, msg);
@@ -86,10 +86,9 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		setIcon(optionsPanels[6], "shortcuts.png");
 		optionsPanels[7] = new XmlOptionPanel(rtext, msg);
 		setIcon(optionsPanels[7], "xml.png");
-/* TODO: 1.1
 		optionsPanels[8] = new ToolOptionPanel(rtext);
 		setIcon(optionsPanels[8], "tools.png");
-*/
+
 
 		setOptionsPanels(optionsPanels); // Calls pack().
 

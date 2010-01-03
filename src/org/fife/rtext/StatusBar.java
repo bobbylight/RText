@@ -53,7 +53,7 @@ import org.fife.ui.StatusBarPanel;
  * @author Robert Futrell
  * @version 1.0
  */
-class StatusBar extends org.fife.ui.StatusBar
+public class StatusBar extends org.fife.ui.StatusBar
 					implements PropertyChangeListener {
 
 	private JLabel rowAndColumnIndicator;
