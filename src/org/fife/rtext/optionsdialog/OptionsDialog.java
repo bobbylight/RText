@@ -22,11 +22,14 @@
  */
 package org.fife.rtext.optionsdialog;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.ImageIcon;
 
 import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
+import org.fife.ui.app.Plugin;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaOptionPanel;
 import org.fife.ui.rsyntaxtextarea.SpellingOptionPanel;
 import org.fife.ui.rsyntaxtextarea.TemplateOptionPanel;
@@ -56,41 +59,74 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		super(rtext);
 
 		ResourceBundle msg = ResourceBundle.getBundle(
-				"org.fife.rtext.OptionsDialog");
+								"org.fife.rtext.OptionsDialog");
 
-		OptionsDialogPanel[] optionsPanels = new OptionsDialogPanel[9];
-		optionsPanels[0] = new GeneralOptionPanel(rtext, msg);
-		setIcon(optionsPanels[0], "general.png");
-		optionsPanels[1] = new UIOptionPanel(rtext, msg);
-		setIcon(optionsPanels[1], "ui.png");
-		optionsPanels[1].addChildPanel(new LanguageOptionPanel(rtext, msg));
-		setIcon(optionsPanels[1].getChildPanel(0), "language.png");
-		optionsPanels[2] = new RTextAreaOptionPanel();
-		setIcon(optionsPanels[2], "textarea.png");
-		optionsPanels[2].addChildPanel(new CaretAndSelectionOptionPanel());
-		optionsPanels[2].addChildPanel(new RSyntaxTextAreaOptionPanel());
-		optionsPanels[2].addChildPanel(new GutterOptionPanel());
-		optionsPanels[2].addChildPanel(new SpellingOptionPanel());
-		optionsPanels[2].addChildPanel(new TemplateOptionPanel());
-		optionsPanels[2].addChildPanel(new MacroOptionPanel(rtext, msg));
-		optionsPanels[3] = new RTextFileChooserOptionPanel();
-		setIcon(optionsPanels[3], "file_chooser.png");
-		optionsPanels[3].addChildPanel(new FileChooserFavoritesOptionPanel());
-		optionsPanels[4] = new PrintingOptionPanel(rtext, msg);
-		setIcon(optionsPanels[4], "printing.png");
-		//optionsPanels[5] = new LanguageOptionPanel(rtext, msg);
-		//setIcon(optionsPanels[5], "language.png");
-		optionsPanels[5] = new FileFilterOptionPanel(rtext, msg);
-		setIcon(optionsPanels[5], "file_filters.png");
-		optionsPanels[6] = new ShortcutOptionPanel(rtext, msg);
-		setIcon(optionsPanels[6], "shortcuts.png");
-		optionsPanels[7] = new XmlOptionPanel(rtext, msg);
-		setIcon(optionsPanels[7], "xml.png");
-		optionsPanels[8] = new ToolOptionPanel(rtext);
-		setIcon(optionsPanels[8], "tools.png");
+		List panels = new ArrayList();
+
+		OptionsDialogPanel panel = new GeneralOptionPanel(rtext, msg);
+		setIcon(panel, "general.png");
+		panels.add(panel);
+
+		panel = new UIOptionPanel(rtext, msg);
+		setIcon(panel, "ui.png");
+		panels.add(panel);
+
+		OptionsDialogPanel panel2 = new LanguageOptionPanel(rtext, msg);
+		setIcon(panel2, "language.png");
+		panel.addChildPanel(panel2);
+
+		panel = new RTextAreaOptionPanel();
+		setIcon(panel, "textarea.png");
+		panels.add(panel);
+
+		panel.addChildPanel(new CaretAndSelectionOptionPanel());
+		panel.addChildPanel(new RSyntaxTextAreaOptionPanel());
+		panel.addChildPanel(new GutterOptionPanel());
+		panel.addChildPanel(new SpellingOptionPanel());
+		panel.addChildPanel(new TemplateOptionPanel());
+		panel.addChildPanel(new MacroOptionPanel(rtext, msg));
+
+		panel = new RTextFileChooserOptionPanel();
+		setIcon(panel, "file_chooser.png");
+		panels.add(panel);
+
+		panel.addChildPanel(new FileChooserFavoritesOptionPanel());
+
+		panel = new PrintingOptionPanel(rtext, msg);
+		setIcon(panel, "printing.png");
+		panels.add(panel);
+
+		//panel = new LanguageOptionPanel(rtext, msg);
+		//setIcon(panel, "language.png");
+		//optionsPanels.add(panel);
+
+		panel = new FileFilterOptionPanel(rtext, msg);
+		setIcon(panel, "file_filters.png");
+		panels.add(panel);
+
+		panel = new ShortcutOptionPanel(rtext, msg);
+		setIcon(panel, "shortcuts.png");
+		panels.add(panel);
+
+		panel = new XmlOptionPanel(rtext, msg);
+		setIcon(panel, "xml.png");
+		panels.add(panel);
+
+		Plugin[] plugins = rtext.getPlugins();
+		for (int i=0; i<plugins.length; i++) {
+			Plugin plugin = plugins[i];
+			panel = plugin.getOptionsDialogPanel();
+			if (panel!=null) {
+				panels.add(panel);
+			}
+		}
+//		panel = new ToolOptionPanel(rtext);
+//		setIcon(panel, "tools.png");
 
 
-		setOptionsPanels(optionsPanels); // Calls pack().
+		OptionsDialogPanel[] array = new OptionsDialogPanel[panels.size()];
+		array = (OptionsDialogPanel[])panels.toArray(array);
+		setOptionsPanels(array); // Calls pack().
 
 	}
 

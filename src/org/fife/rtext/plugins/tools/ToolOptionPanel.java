@@ -22,7 +22,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext.optionsdialog;
+package org.fife.rtext.plugins.tools;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -37,11 +37,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import org.fife.rtext.RText;
-import org.fife.rtext.tools.NewToolDialog;
-import org.fife.rtext.tools.Tool;
-import org.fife.ui.OptionsDialogPanel;
+import org.fife.rtext.plugins.tools.NewToolDialog;
+import org.fife.rtext.plugins.tools.Tool;
 import org.fife.ui.UIUtil;
+import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.modifiabletable.ModifiableTable;
 import org.fife.ui.modifiabletable.ModifiableTableChangeEvent;
 import org.fife.ui.modifiabletable.ModifiableTableListener;
@@ -54,12 +53,11 @@ import org.fife.ui.modifiabletable.RowHandler;
  * @author Robert Futrell
  * @version 1.0
  */
-class ToolOptionPanel extends OptionsDialogPanel
+class ToolOptionPanel extends PluginOptionsDialogPanel
 						implements ModifiableTableListener {
 
-	private static final String MSG = "org.fife.rtext.ToolOptionPanel";
+	private static final String MSG = "org.fife.rtext.plugins.tools.OptionPanel";
 
-	private RText rtext;
 	private ToolTableModel model;
 	private ModifiableTable toolTable;
 
@@ -69,12 +67,12 @@ class ToolOptionPanel extends OptionsDialogPanel
 	/**
 	 * Constructor.
 	 *
-	 * @param rtext The owner of the options dialog in which this panel
-	 *        appears.
+	 * @param plugin The plugin.
 	 */
-	public ToolOptionPanel(RText rtext) {
+	public ToolOptionPanel(ToolPlugin plugin) {
 
-		this.rtext = rtext;
+		super(plugin);
+
 		ResourceBundle msg = ResourceBundle.getBundle(MSG);
 		setName(msg.getString("Title"));
 
@@ -92,8 +90,8 @@ class ToolOptionPanel extends OptionsDialogPanel
 				msg.getString("TableHeader.Shortcut"),
 				msg.getString("TableHeader.Description")
 		});
-Tool tool = new Tool("MyTool");
-model.addRow(new Object[] { tool, null, "Description goes here" });
+Tool tool = new Tool("MyTool", "Something really cool");
+model.addRow(new Object[] { tool, null, tool.getDescription() });
 		toolTable = new ModifiableTable(model, ModifiableTable.BOTTOM,
 										ModifiableTable.ADD_REMOVE_MODIFY);
 		toolTable.addModifiableTableListener(this);
@@ -188,7 +186,7 @@ model.addRow(new Object[] { tool, null, "Description goes here" });
 //			KeyStroke keyStroke = (KeyStroke)oldData[1];
 //			String action = (String)oldData[0];
 			if (toolDialog==null) {
-				toolDialog = new NewToolDialog(getOptionsDialog(), rtext);
+				toolDialog = new NewToolDialog(getOptionsDialog());
 			}
 			toolDialog.setLocationRelativeTo(ToolOptionPanel.this);
 			toolDialog.setVisible(true);

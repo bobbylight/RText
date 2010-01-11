@@ -1,17 +1,38 @@
-package org.fife.rtext.tools;
+/*
+ * 01/06/2010
+ *
+ * ToolManager.java - Manages external tools.
+ * Copyright (C) 2010 Robert Futrell
+ * robert_futrell at users.sourceforge.net
+ * http://rtext.fifesoft.com
+ *
+ * This file is a part of RText.
+ *
+ * RText is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * RText is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+package org.fife.rtext.plugins.tools;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ResourceBundle;
-
 import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextActionInfo;
 
 
 /**
@@ -22,6 +43,7 @@ import org.fife.rtext.RTextActionInfo;
  */
 public class ToolManager {
 
+	private boolean inited;
 	private List tools;
 	private JMenu toolsMenu;
 
@@ -100,8 +122,11 @@ public class ToolManager {
 	 * @param rtext The parent application.
 	 */
 	public void init(RText rtext) {
-		Action a = rtext.getAction(RTextActionInfo.NEW_TOOL_ACTION);
-		toolsMenu.add(new JMenuItem(a));//createMenuItem(a));
+		if (!inited) {
+			Action a = rtext.getAction(ToolPlugin.NEW_TOOL_ACTION);
+			toolsMenu.add(new JMenuItem(a));//createMenuItem(a));
+			inited = true;
+		}
 	}
 
 

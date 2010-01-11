@@ -18,7 +18,7 @@
 
 	<!-- Set global properties for this build. -->
 	<property name="app-name-small" value="rtext_standard_plugins"/>
-	<property name="version"        value="1.0.0"/>
+	<property name="version"        value="1.1.0"/>
 	<property name="source-dir"     location="src"/>
 	<property name="class-dir"      location="ant-classes"/>
 	<property name="dist-dir"       location="dist"/>
@@ -120,6 +120,21 @@
 			</manifest>
 		</jar>
 
+		<!-- Tool support plugin. -->
+		<jar destfile="${dist-dir}/plugins/ToolSupport.jar">
+			<fileset dir="${class-dir}">
+				<include name="org/fife/rtext/plugins/tools/**"/>
+			</fileset>
+			<fileset dir="${source-dir}">
+				<include name="org/fife/rtext/plugins/tools/*.png"/>
+			</fileset>
+			<fileset dir="i18n">
+				<include name="org/fife/rtext/plugins/tools/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="${compiler}"/>
+			</manifest>
+		</jar>
 	</target>
 
 

@@ -478,6 +478,19 @@ public class RText extends AbstractPluggableGUIApplication
 
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public OptionsDialog getOptionsDialog() {
+		if (optionsDialog==null) {
+			optionsDialog = new org.fife.rtext.optionsdialog.
+												OptionsDialog(this);
+			optionsDialog.setLocationRelativeTo(this);
+		}
+		return optionsDialog;
+	}
+
+
+	/**
 	 * Returns the file chooser being used by this RText instance.
 	 *
 	 * @return The file chooser.

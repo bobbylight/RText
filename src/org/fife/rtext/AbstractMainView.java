@@ -162,7 +162,8 @@ public abstract class AbstractMainView extends JPanel
 	private Color hyperlinkColor;
 	private int hyperlinkModifierKey;
 
-	private boolean whitespaceVisible;			// Whether whitespace is visible in the text areas.
+	private boolean whitespaceVisible;
+	private boolean showEOLMarkers;
 
 	private String aaHintFieldName;			// Whether text is anti-aliased.
 	private boolean fractionalMetricsEnabled;	// Whether fractional fontmetrics are used.
@@ -724,6 +725,7 @@ public abstract class AbstractMainView extends JPanel
 			pane.setLineSeparator(defaultLineTerminator, false);
 		}
 		pane.setWhitespaceVisible(isWhitespaceVisible());
+		pane.setEOLMarkersVisible(getShowEOLMarkers());
 		pane.setCaretColor(getCaretColor());
 		pane.setSelectionColor(getSelectionColor());
 		pane.setSyntaxScheme(owner.getSyntaxScheme());
@@ -1492,6 +1494,18 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns whether EOL markers are visible in the text areas.
+	 *
+	 * @return Whether EOL markers are visible.
+	 * @see #setShowEOLMarkers(boolean)
+	 * @see #isWhitespaceVisible()
+	 */
+	public boolean getShowEOLMarkers() {
+		return showEOLMarkers;
+	}
+
+
+	/**
 	 * Returns the spell checking support for RText.
 	 *
 	 * @return The spell checking support.
@@ -1940,6 +1954,7 @@ public abstract class AbstractMainView extends JPanel
 		setHighlightModifiedDocumentDisplayNames(prefs.highlightModifiedDocNames);
 		setModifiedDocumentDisplayNamesColor(prefs.modifiedDocumentNamesColor);
 		setWhitespaceVisible(prefs.visibleWhitespace);
+		setShowEOLMarkers(prefs.showEOLMarkers);
 		setTextAAHintName(prefs.textAAHintFieldName);
 		setFractionalFontMetricsEnabled(prefs.fractionalMetricsEnabled);
 		setMarkAllHighlightColor(prefs.markAllHighlightColor);
@@ -3373,12 +3388,29 @@ public abstract class AbstractMainView extends JPanel
 	 *        is passed in, there is no change to the selection color being
 	 *        used.
 	 */
-	public void setSelectionColor(final Color color) {
+	public void setSelectionColor(Color color) {
 		if (color!=null && color!=selectionColor) {
 			selectionColor = color;
 			int numDocuments = getNumDocuments();
 			for (int i=0; i<numDocuments; i++)
 				getRTextEditorPaneAt(i).setSelectionColor(color);
+		}
+	}
+
+
+	/**
+	 * Toggles whether EOL markers are visible in the text areas.
+	 *
+	 * @param show Whether EOL markers should be shown.
+	 * @see #setWhitespaceVisible(boolean)
+	 * @see #getShowEOLMarkers()
+	 */
+	public void setShowEOLMarkers(boolean show) {
+		if (show!=showEOLMarkers) {
+			showEOLMarkers = show;
+			for (int i=0; i<getNumDocuments(); i++) {
+				getRTextEditorPaneAt(i).setEOLMarkersVisible(showEOLMarkers);
+			}
 		}
 	}
 

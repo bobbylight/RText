@@ -48,7 +48,6 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.Action;
 
 import org.fife.rtext.actions.ViewTasksAction;
-import org.fife.rtext.tools.ToolManager;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginMenu;
@@ -504,11 +503,6 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		filePropItem = createMenuItem(rtext.getAction(
 										RText.FILE_PROPERTIES_ACTION));
 		viewMenu.add(filePropItem);
-
-		// Tools menu
-		ToolManager tm = ToolManager.get();
-		tm.init(rtext);
-		add(tm.getToolsMenu());
 
 		// Macros menu.
 		menu = createMenu(menuMsg, "MenuMacros");

@@ -250,6 +250,10 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 			}
 		});
 
+		// Action count may change from initial value as plugins might
+		// add Actions to application.
+		model.setRowCount(masterActionList.length);
+
 		for (int i=0; i<masterActionList.length; i++) {
 			model.setValueAt(masterActionList[i].getValue(Action.NAME), i,0);
 			model.setValueAt(masterActionList[i].getValue(Action.ACCELERATOR_KEY), i,1);

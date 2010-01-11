@@ -22,9 +22,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext.tools;
+package org.fife.rtext.plugins.tools;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +44,7 @@ import java.util.Map;
 public class Tool implements Comparable {
 
 	private String name;
+	private String desc;
 	private File dir;
 	private String program;
 	private List args;
@@ -53,9 +56,26 @@ public class Tool implements Comparable {
 	 * Constructor.
 	 *
 	 * @param name The name of this tool.
+	 * @param desc A description of this tool.  This may be <code>null</code>.
 	 */
-	public Tool(String name) {
+	public Tool(String name, String desc) {
 		this.name = name;
+		setDescription(desc);
+		args = new ArrayList(3);
+		env = new HashMap();
+	}
+
+
+	/**
+	 * Clears the environment variables associated with this tool.
+	 * Note that if this tool is appending its environment to RText's
+	 * environment, this does not clear the RText environment that is
+	 * appended to; it only clears the environment variables to add.
+	 *
+	 * @see #putEnvVar(String, String)
+	 */
+	public void clearEnvVars() {
+		env.clear();
 	}
 
 
@@ -84,6 +104,32 @@ public class Tool implements Comparable {
 	 */
 	public boolean equals(Object o) {
 		return compareTo(o)==0;
+	}
+
+
+	/**
+	 * Returns whether this tool should append any environment variables
+	 * it defines to RText's current environment.
+	 *
+	 * @return Whether to append the environment variables defined.  If this
+	 *         value is <code>false</code>, RText's environment is not
+	 *         appended.
+	 * @see #setAppendEnvironmentVars(boolean)
+	 */
+	public boolean getAppendEnvironmentVars() {
+		return appendEnv;
+	}
+
+
+	/**
+	 * Returns a description of this tool.
+	 *
+	 * @return A description of this tool, or <code>null</code> if none
+	 *         is defined.
+	 * @see #setDescription(String)
+	 */
+	public String getDescription() {
+		return desc;
 	}
 
 
@@ -126,6 +172,50 @@ public class Tool implements Comparable {
 	 */
 	public int hashCode() {
 		return getName().hashCode();
+	}
+
+
+	/**
+	 * Sets an environment variable for this tool.
+	 *
+	 * @param name The name of the environment variable.
+	 * @param value The value of the variable.  If this is <code>null</code>,
+	 *        then this variable will not be set with a special value.
+	 * @see #clearEnvVars()
+	 */
+	public void putEnvVar(String name, String value) {
+		// env.put(name, null) will store a null value into a HashMap
+		if (value!=null) {
+			env.put(name, value);
+		}
+		else {
+			env.remove(name);
+		}
+	}
+
+
+	/**
+	 * Sets whether this tool should append any environment variables
+	 * it defines to RText's current environment.
+	 *
+	 * @param append Whether to append the environment variables defined.  If
+	 *        this value is <code>false</code>, RText's environment is not
+	 *        appended.
+	 * @see #getAppendEnvironmentVars()
+	 */
+	public void setAppendEnvironmentVars(boolean append) {
+		this.appendEnv = append;
+	}
+
+
+	/**
+	 * Sets a description of this tool.
+	 *
+	 * @param desc A description of this tool.  This may be <code>null</code>.
+	 * @see #getDescription()
+	 */
+	public void setDescription(String desc) {
+		this.desc = desc;
 	}
 
 

@@ -46,7 +46,6 @@ public interface RTextActionInfo {
 
 	// Constants specifying the available actions (for getAction).
 	public static final String NEW_ACTION				= "newAction";
-	public static final String NEW_TOOL_ACTION			= "newToolAction";
 	public static final String OPEN_ACTION				= "openAction";
 	public static final String OPEN_NEWWIN_ACTION		= "openNewWinAction";
 	public static final String OPEN_REMOTE_ACTION		= "openRemoteAction";
@@ -106,7 +105,6 @@ public interface RTextActionInfo {
 		LINE_NUMBER_ACTION,
 		VIEW_TASKS_ACTION,
 		FILE_PROPERTIES_ACTION,
-		NEW_TOOL_ACTION,
 		RText.HELP_ACTION_KEY,
 		RText.ABOUT_ACTION_KEY,
 		OPTIONS_ACTION,
@@ -158,7 +156,6 @@ public interface RTextActionInfo {
 		null,
 		null,
 		KeyStroke.getKeyStroke(KeyEvent.VK_1, defaultModifier),
-		null,
 		null,
 		null,
 		KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0),

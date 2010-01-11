@@ -2,7 +2,7 @@
  * 11/05/2009
  *
  * NewToolDialog.java - A dialog used for editing external tools.
- * Copyright (C) 2009 Robert Futrell
+ * Copyright (C) 2010 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
  *
@@ -22,10 +22,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext.tools;
+package org.fife.rtext.plugins.tools;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -37,6 +38,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -49,7 +51,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
-import org.fife.rtext.RText;
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.FSATextField;
 import org.fife.ui.MenuButton;
@@ -74,10 +75,15 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	private RTextFileChooser chooser;
 	private RDirectoryChooser dirChooser;
 
+	private JTextField nameField;
+	private JTextField descField;
 	private FSATextField programField;
 	private FSATextField dirField;
+	private EnvVarsTableModel envModel;
 
-	private static final String MSG = "org.fife.rtext.tools.NewToolDialog";
+	private Tool tool;
+
+	private static final String MSG = "org.fife.rtext.plugins.tools.NewToolDialog";
 	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
 
@@ -85,11 +91,105 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	 * Constructor.
 	 *
 	 * @param parent The parent window.
-	 * @param rtext The parent application.
 	 */
-	public NewToolDialog(JDialog parent, RText rtext) {
-
+	public NewToolDialog(JDialog parent) {
 		super(parent);
+		createGUI();
+	}
+
+
+	/**
+	 * Constructor.
+	 *
+	 * @param parent The parent window.
+	 */
+	public NewToolDialog(JFrame parent) {
+		super(parent);
+		createGUI();
+	}
+
+
+	/**
+	 * Called when an event occurs in this dialog.
+	 *
+	 * @param e The event.
+	 */
+	public void actionPerformed(ActionEvent e) {
+
+		String command = e.getActionCommand();
+
+		if ("BrowseProgram".equals(command)) {
+			if (chooser==null) {
+				chooser = new RTextFileChooser(false);
+			}
+			int rc = chooser.showOpenDialog(this);
+			if (rc==RTextFileChooser.APPROVE_OPTION) {
+				File file = chooser.getSelectedFile();
+				programField.setFileSystemAware(false);
+				programField.setText(file.getAbsolutePath());
+				programField.setFileSystemAware(true);
+			}
+		}
+
+		else if ("BrowseDir".equals(command)) {
+			if (dirChooser==null) {
+				dirChooser = new RDirectoryChooser(this);
+			}
+			dirChooser.setVisible(true);
+			String dir = dirChooser.getChosenDirectory();
+			if (dir!=null) {
+				dirField.setFileSystemAware(false);
+				dirField.setText(dir);
+				dirField.setFileSystemAware(true);
+			}
+		}
+
+		else if ("OK".equals(command)) {
+			tool = checkInputs();
+			if (tool!=null) {
+				escapePressed();
+			}
+		}
+
+		else if ("Cancel".equals(command)) {
+			escapePressed();
+		}
+
+	}
+
+
+	/**
+	 * Returns the tool definition input by the user.
+	 *
+	 * @return The tool, or <code>null</code> if there was a problem
+	 *         with their input.  In the latter case, a notice has been
+	 *         displayed to the user about the problem.
+	 */
+	private Tool checkInputs() {
+
+		String name = nameField.getText();
+		String desc = descField.getText();
+		String program = programField.getText();
+		String dir = dirField.getText();
+
+		Tool tool = new Tool(name, desc);
+		tool.setProgram(program);
+		tool.setDirectory(new File(dir));
+
+		for (int i=0; i<envModel.getRowCount(); i++) {
+			String varName = (String)envModel.getValueAt(i, 0);
+			String varValue = (String)envModel.getValueAt(i, 1);
+			tool.putEnvVar(varName, varValue);
+		}
+
+		return tool;
+
+	}
+
+
+	private void createGUI() {
+
+		Container parent = getParent();
 		ComponentOrientation o = parent.getComponentOrientation();
 
 		JPanel cp = new ResizableFrameContentPane(new BorderLayout());
@@ -101,9 +201,9 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		JPanel springPanel = new JPanel(new SpringLayout());
 		springPanel.setBorder(UIUtil.getEmpty5Border());
 		JLabel nameLabel = new JLabel(msg.getString("Name"));
-		JTextField nameField = new JTextField(40);
+		nameField = new JTextField(40);
 		JLabel descLabel = new JLabel(msg.getString("Description"));
-		JTextField descField = new JTextField(40);
+		descField = new JTextField(40);
 		JLabel programLabel = new JLabel(msg.getString("Program"));
 		programField = new FSATextField();
 		RButton programBrowseButton = new RButton(msg.getString("Browse"));
@@ -157,7 +257,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		temp2.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
 		temp2.add(temp, BorderLayout.LINE_START);
 		envPanel.add(temp2, BorderLayout.NORTH);
-		EnvVarsTableModel envModel = new EnvVarsTableModel(
+		envModel = new EnvVarsTableModel(
 								msg.getString("VariableName"),
 								msg.getString("VariableValue"));
 		ModifiableTable envTable = new ModifiableTable(envModel);
@@ -183,54 +283,19 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		setTitle(msg.getString("Title"));
 		setModal(true);
 		pack();
-		setLocationRelativeTo(rtext);
+		setLocationRelativeTo(parent);
 
 	}
 
 
 	/**
-	 * Called when an event occurs in this dialog.
+	 * Returns the tool created by the user.
 	 *
-	 * @param e The event.
+	 * @return The tool, or <code>null</code> if the user cancelled
+	 *         the dialog.
 	 */
-	public void actionPerformed(ActionEvent e) {
-
-		String command = e.getActionCommand();
-
-		if ("BrowseProgram".equals(command)) {
-			if (chooser==null) {
-				chooser = new RTextFileChooser(false);
-			}
-			int rc = chooser.showOpenDialog(this);
-			if (rc==RTextFileChooser.APPROVE_OPTION) {
-				File file = chooser.getSelectedFile();
-				programField.setFileSystemAware(false);
-				programField.setText(file.getAbsolutePath());
-				programField.setFileSystemAware(true);
-			}
-		}
-
-		else if ("BrowseDir".equals(command)) {
-			if (dirChooser==null) {
-				dirChooser = new RDirectoryChooser(this);
-			}
-			dirChooser.setVisible(true);
-			String dir = dirChooser.getChosenDirectory();
-			if (dir!=null) {
-				dirField.setFileSystemAware(false);
-				dirField.setText(dir);
-				dirField.setFileSystemAware(true);
-			}
-		}
-
-		else if ("OK".equals(command)) {
-			
-		}
-
-		else if ("Cancel".equals(command)) {
-			escapePressed();
-		}
-
+	public Tool getTool() {
+		return tool;
 	}
 
 

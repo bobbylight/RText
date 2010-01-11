@@ -149,10 +149,6 @@ public class ActionFactory implements RTextActionInfo {
 		a.setAccelerator(prefs.getAccelerator(FILE_PROPERTIES_ACTION));
 		rtext.addAction(FILE_PROPERTIES_ACTION, a);
 
-		a = new NewToolAction(rtext, msg, null);
-		a.setAccelerator(prefs.getAccelerator(NEW_TOOL_ACTION));
-		rtext.addAction(NEW_TOOL_ACTION, a);
-
 		a = new HelpAction(rtext, msg, "HelpAction");
 		a.setAccelerator(prefs.getAccelerator(RText.HELP_ACTION_KEY));
 		rtext.addAction(RText.HELP_ACTION_KEY, a);
