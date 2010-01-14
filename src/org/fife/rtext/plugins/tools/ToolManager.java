@@ -57,12 +57,7 @@ public class ToolManager {
 	 * Private constructor to prevent instantiation.
 	 */
 	private ToolManager() {
-
 		tools = new ArrayList();
-
-		toolsMenu = new JMenu("Tools");//msg.getString("Menu.Name"));
-		toolsMenu.addSeparator();
-
 	}
 
 
@@ -123,6 +118,8 @@ public class ToolManager {
 	 */
 	public void init(RText rtext) {
 		if (!inited) {
+			toolsMenu = new JMenu("Tools");//msg.getString("Menu.Name"));
+			toolsMenu.addSeparator();
 			Action a = rtext.getAction(ToolPlugin.NEW_TOOL_ACTION);
 			toolsMenu.add(new JMenuItem(a));//createMenuItem(a));
 			inited = true;
@@ -132,7 +129,7 @@ public class ToolManager {
 
 	private void refreshToolMenu() {
 
-		while (toolsMenu.getItemCount()>2) {
+		while (toolsMenu.getMenuComponentCount()>2) {
 			toolsMenu.remove(0);
 		}
 
@@ -141,7 +138,7 @@ public class ToolManager {
 				Tool tool = (Tool)i.next();
 				JMenuItem item = new JMenuItem(tool.getName());
 				//item.setAccelerator(tool.getAccelerator());
-				toolsMenu.add(item, toolsMenu.getComponentCount()-2);
+				toolsMenu.add(item, toolsMenu.getMenuComponentCount()-2);
 			}
 		}
 		else {

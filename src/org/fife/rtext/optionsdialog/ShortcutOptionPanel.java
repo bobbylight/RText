@@ -30,7 +30,6 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -288,115 +287,6 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Dialog returning a shortcut.
-	 */
-	class GetKeyStrokeDialog extends JDialog implements ActionListener {
-
-		private KeyStroke stroke;
-		private JTextField textField;
-		private boolean canceled;
-
-		GetKeyStrokeDialog(KeyStroke initial) {
-			super(rtext, rtext.getResourceBundle().getString("KeyStrokeDialogTitle"));
-			ComponentOrientation orientation = ComponentOrientation.
-									getOrientation(getLocale());
-			ResourceBundle msg = rtext.getResourceBundle();
-			JPanel contentPane = new JPanel();
-			contentPane.setBorder(UIUtil.getEmpty5Border());
-			contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
-			JPanel temp = new JPanel(new BorderLayout());
-			JLabel prompt = new JLabel(msg.getString("KeyStrokePrompt"));
-			temp.add(prompt, BorderLayout.LINE_START);
-			contentPane.add(temp);
-			contentPane.add(Box.createVerticalStrut(8));
-			JLabel charLabel = new JLabel(msg.getString("KeyStrokeKey"));
-			textField = new JTextField(20) {
-				protected void processKeyEvent(KeyEvent e) {
-					int keyCode = e.getKeyCode();
-					if (e.getID()==KeyEvent.KEY_PRESSED &&
-						keyCode!=KeyEvent.VK_ENTER &&
-						keyCode!=KeyEvent.VK_BACK_SPACE) {
-						int modifiers = e.getModifiers();
-						stroke = KeyStroke.getKeyStroke(
-								keyCode, modifiers);
-						setText(getPrettyStringFor(stroke));
-						return;
-					}
-					else if (keyCode==KeyEvent.VK_BACK_SPACE) {
-						stroke = null; // Not necessary; sanity check.
-						setText(null);
-					}
-				}
-			};
-			charLabel.setLabelFor(textField);
-			temp = new JPanel(new BorderLayout());
-			temp.add(charLabel, BorderLayout.LINE_START);
-			temp.add(textField);
-			contentPane.add(temp);
-			temp = new JPanel(new GridLayout(1,2, 5,5));
-			RButton ok = new RButton(msg.getString("OKButtonLabel"));
-			ok.setActionCommand("OK");
-			ok.addActionListener(this);
-			temp.add(ok);
-			RButton cancel = new RButton(msg.getString("Cancel"));
-			cancel.setActionCommand("Cancel");
-			cancel.addActionListener(this);
-			temp.add(cancel);
-			JPanel buttonPanel = new JPanel();
-			buttonPanel.add(temp);
-			JPanel realCP = new ResizableFrameContentPane(new BorderLayout());
-			realCP.add(contentPane, BorderLayout.NORTH);
-			realCP.add(buttonPanel, BorderLayout.SOUTH);
-			setContentPane(realCP);
-			setKeyStroke(initial);
-			setModal(true);
-			setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-			applyComponentOrientation(orientation);
-			pack();
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			String command = e.getActionCommand();
-			if (command.equals("OK")) {
-				canceled = false;
-				setVisible(false);
-			}
-			else if (command.equals("Cancel")) {
-				stroke = null;
-				setVisible(false);
-			}
-		}
-
-		public boolean getCancelled() {
-			return canceled;
-		}
-
-		public KeyStroke getKeyStroke() {
-			return stroke;
-		}
-
-		public void setKeyStroke(KeyStroke stroke) {
-			this.stroke = stroke;
-			textField.setText(getPrettyStringFor(stroke));
-		}
-
-		public void setVisible(boolean visible) {
-			if (visible) {
-				canceled = true; // Default to cancelled.
-				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						textField.requestFocusInWindow();
-						textField.selectAll();
-					}
-				});
-			}
-			super.setVisible(visible);
-		}
-
-	}
-
-
-	/**
 	 * Handles modification of shortcut table values.
 	 */
 	private class ShortcutTableRowHandler implements RowHandler {
@@ -406,8 +296,9 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 		public Object[] getNewRowInfo(Object[] oldData) {
 			KeyStroke keyStroke = (KeyStroke)oldData[1];
 			String action = (String)oldData[0];
-			if (ksDialog==null)
-				ksDialog = new GetKeyStrokeDialog(null);
+			if (ksDialog==null) {
+				ksDialog = new GetKeyStrokeDialog(rtext, null);
+			}
 			ksDialog.setKeyStroke(keyStroke);
 			ksDialog.setLocationRelativeTo(ShortcutOptionPanel.this);
 			ksDialog.setVisible(true);

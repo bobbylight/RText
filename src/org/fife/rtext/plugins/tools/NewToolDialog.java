@@ -32,15 +32,18 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
@@ -50,7 +53,10 @@ import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.JTextComponent;
 
+import org.fife.rtext.optionsdialog.GetKeyStrokeDialog;
+import org.fife.rtext.optionsdialog.GetKeyStrokeDialog.KeyStrokeField;
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.FSATextField;
 import org.fife.ui.MenuButton;
@@ -79,6 +85,8 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	private JTextField descField;
 	private FSATextField programField;
 	private FSATextField dirField;
+	private KeyStrokeField shortcutField;
+	private ArgTableModel argModel;
 	private EnvVarsTableModel envModel;
 
 	private Tool tool;
@@ -167,14 +175,31 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	 */
 	private Tool checkInputs() {
 
+		// The name of the tool
 		String name = nameField.getText();
+		if (!isValidName(name)) {
+			showError(nameField, "Error.InvalidName", name);
+			return null;
+		}
+
+		// A description of the tool
 		String desc = descField.getText();
+
+		// The program to launch
 		String program = programField.getText();
+
+		// The directory to run in
 		String dir = dirField.getText();
 
+		// If we get here, all the parameters are valid, so create the tool!
 		Tool tool = new Tool(name, desc);
 		tool.setProgram(program);
 		tool.setDirectory(new File(dir));
+
+		for (int i=0; i<argModel.getRowCount(); i++) {
+			String arg = (String)argModel.getValueAt(i, 0);
+			tool.addArg(arg);
+		}
 
 		for (int i=0; i<envModel.getRowCount(); i++) {
 			String varName = (String)envModel.getValueAt(i, 0);
@@ -215,6 +240,8 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		RButton dirBrowseButton = UIUtil.createTabbedPaneButton(msg.getString("Browse"));
 		dirBrowseButton.setActionCommand("BrowseDir");
 		dirBrowseButton.addActionListener(this);
+		JLabel shortcutLabel = new JLabel(msg.getString("Shortcut"));
+		shortcutField = new GetKeyStrokeDialog.KeyStrokeField();
 
 		Dimension dim = new Dimension(1, 1); // MUST have finite width!
 		if (o.isLeftToRight()) {
@@ -222,20 +249,23 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 			springPanel.add(descLabel);		springPanel.add(descField); springPanel.add(Box.createRigidArea(dim));
 			springPanel.add(programLabel);	springPanel.add(programField); springPanel.add(programBrowseButton);
 			springPanel.add(dirLabel);		springPanel.add(dirField); springPanel.add(dirBrowseButton);
+			springPanel.add(shortcutLabel); springPanel.add(shortcutField); springPanel.add(Box.createRigidArea(dim));
 		}
 		else {
 			springPanel.add(Box.createRigidArea(dim));	springPanel.add(nameField);		springPanel.add(nameLabel);
 			springPanel.add(Box.createRigidArea(dim));	springPanel.add(descField);		springPanel.add(descLabel);
 			springPanel.add(programBrowseButton);		springPanel.add(programField);	springPanel.add(programLabel);
 			springPanel.add(dirBrowseButton);			springPanel.add(dirField);		springPanel.add(dirLabel);
+			springPanel.add(Box.createRigidArea(dim));  springPanel.add(shortcutField); springPanel.add(shortcutLabel);
 		}
 
-		UIUtil.makeSpringCompactGrid(springPanel, 4, 3, 5, 5, 5, 5);
+		UIUtil.makeSpringCompactGrid(springPanel, 5, 3, 5, 5, 5, 5);
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(springPanel, BorderLayout.NORTH);
 
-		DefaultTableModel argModel = new DefaultTableModel();
+		argModel = new ArgTableModel();
 		ModifiableTable argTable = new ModifiableTable(argModel);
+		argTable.getTable().setTableHeader(null);
 		argTable.setRowHandler(new ArgTableRowHandler());
 		JPanel temp2 = new JPanel(new BorderLayout());
 		temp2.setBorder(BorderFactory.createTitledBorder(msg.getString("CommandLineArgs")));
@@ -291,11 +321,60 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	/**
 	 * Returns the tool created by the user.
 	 *
-	 * @return The tool, or <code>null</code> if the user cancelled
+	 * @return The tool, or <code>null</code> if the user canceled
 	 *         the dialog.
 	 */
 	public Tool getTool() {
 		return tool;
+	}
+
+
+	/**
+	 * Returns whether an identifier is a valid tool name.
+	 *
+	 * @param name The identifier to check.
+	 * @return Whether the identifier is a valid tool name.
+	 */
+	private boolean isValidName(String name) {
+
+		boolean valid = false;
+
+		if (name.length()>0) {
+			valid = true;
+			for (int i=0; i<name.length(); i++) {
+				char ch = name.charAt(i);
+				if (!Character.isJavaIdentifierPart(ch)) {
+					valid = false;
+					break;
+				}
+			}
+		}
+
+		return valid;
+
+	}
+
+
+	/**
+	 * Displays an error message.
+	 *
+	 * @param comp The component with invalid input.
+	 * @param key A key into the resource bundle for the error.
+	 * @param param An optional parameter for the localized error.  This may
+	 *        be <code>null</code>.
+	 */
+	private void showError(JComponent comp, String key, String param) {
+		String desc = msg.getString(key);
+		if (param!=null) {
+			desc = MessageFormat.format(desc, new Object[] { param });
+		}
+		String title = msg.getString("Error.Title");
+		JOptionPane.showMessageDialog(this, desc, title,
+									JOptionPane.ERROR_MESSAGE);
+		comp.requestFocusInWindow();
+		if (comp instanceof JTextComponent) {
+			((JTextComponent) comp).selectAll();
+		}
 	}
 
 
@@ -388,6 +467,23 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 
 
 	/**
+	 * Table model used for the environment variable table.
+	 */
+	private static class ArgTableModel extends DefaultTableModel {
+
+		public ArgTableModel() {
+			//setColumnIdentifiers("");
+			setColumnCount(1);
+		}
+
+		public boolean isCellEditable(int row, int col) {
+			return false;
+		}
+
+	}
+
+
+	/**
 	 * Row handler for the command line arguments table.
 	 */
 	private class ArgTableRowHandler implements RowHandler {
@@ -415,7 +511,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	/**
 	 * The dialog that allows the user to add or modify an environment variable.
 	 */
-	private class EnvVarDialog extends EscapableDialog
+	private static class EnvVarDialog extends EscapableDialog
 								implements DocumentListener, ActionListener {
 
 		private JTextField nameField;
@@ -516,7 +612,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	/**
 	 * Table model used for the environment variable table.
 	 */
-	private class EnvVarsTableModel extends DefaultTableModel {
+	private static class EnvVarsTableModel extends DefaultTableModel {
 
 		public EnvVarsTableModel(String var, String value) {
 			setColumnIdentifiers(new String[] { var, value });

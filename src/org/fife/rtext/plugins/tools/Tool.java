@@ -67,6 +67,31 @@ public class Tool implements Comparable {
 
 
 	/**
+	 * Adds a command line argument for this tool.
+	 *
+	 * @param arg The argument.  This cannot be <code>null</code>.
+	 * @see #clearArgs()
+	 * @see #setProgram(String)
+	 */
+	public void addArg(String arg) {
+		if (arg==null) {
+			throw new IllegalArgumentException("arg cannot be null");
+		}
+		args.add(arg);
+	}
+
+
+	/**
+	 * Clears the command line arguments.
+	 *
+	 * @see #addArg(String)
+	 */
+	public void clearArgs() {
+		args.clear();
+	}
+
+
+	/**
 	 * Clears the environment variables associated with this tool.
 	 * Note that if this tool is appending its environment to RText's
 	 * environment, this does not clear the RText environment that is
@@ -238,6 +263,7 @@ public class Tool implements Comparable {
 	 *
 	 * @param program The program.  This cannot be <code>null</code>.
 	 * @see #getProgram()
+	 * @see #addArg(String)
 	 */
 	public void setProgram(String program) {
 		if (program==null) {
