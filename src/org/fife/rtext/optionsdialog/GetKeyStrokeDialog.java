@@ -213,15 +213,18 @@ public class GetKeyStrokeDialog extends JDialog implements ActionListener {
 				keyCode!=KeyEvent.VK_ENTER &&
 				keyCode!=KeyEvent.VK_BACK_SPACE) {
 				int modifiers = e.getModifiers();
-				stroke = KeyStroke.getKeyStroke(
-						keyCode, modifiers);
-				setText(ShortcutOptionPanel.getPrettyStringFor(stroke));
+				setKeyStroke(KeyStroke.getKeyStroke(keyCode, modifiers));
 				return;
 			}
 			else if (keyCode==KeyEvent.VK_BACK_SPACE) {
 				stroke = null; // Not necessary; sanity check.
 				setText(null);
 			}
+		}
+
+		public void setKeyStroke(KeyStroke ks) {
+			stroke = ks;
+			setText(ShortcutOptionPanel.getPrettyStringFor(stroke));
 		}
 
 		private class FocusHandler extends FocusAdapter {

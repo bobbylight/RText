@@ -33,6 +33,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.MessageFormat;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -48,6 +50,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
@@ -88,6 +91,8 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	private KeyStrokeField shortcutField;
 	private ArgTableModel argModel;
 	private EnvVarsTableModel envModel;
+	private JRadioButton appendRB;
+	private JRadioButton replaceRB;
 
 	private Tool tool;
 
@@ -186,20 +191,32 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		String desc = descField.getText();
 
 		// The program to launch
-		String program = programField.getText();
+		String program = programField.getText().trim();
+		if (program.length()==0) {
+			showError(programField, "Error.NoProgramSpecified", null);
+			return null;
+		}
 
 		// The directory to run in
-		String dir = dirField.getText();
+		String dir = dirField.getText().trim();
+		if (dir.length()==0) {
+			dir = System.getProperty("user.dir");
+		}
 
+		KeyStroke accelerator = shortcutField.getKeyStroke();
+		
 		// If we get here, all the parameters are valid, so create the tool!
 		Tool tool = new Tool(name, desc);
 		tool.setProgram(program);
-		tool.setDirectory(new File(dir));
+		tool.setDirectory(dir);
+		tool.setAccelerator(accelerator.toString());
 
 		for (int i=0; i<argModel.getRowCount(); i++) {
 			String arg = (String)argModel.getValueAt(i, 0);
 			tool.addArg(arg);
 		}
+
+		tool.setAppendEnvironmentVars(appendRB.isSelected());
 
 		for (int i=0; i<envModel.getRowCount(); i++) {
 			String varName = (String)envModel.getValueAt(i, 0);
@@ -266,6 +283,9 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		argModel = new ArgTableModel();
 		ModifiableTable argTable = new ModifiableTable(argModel);
 		argTable.getTable().setTableHeader(null);
+		Dimension s = argTable.getTable().getPreferredScrollableViewportSize();
+		s.height = 200; // JTable default is 400!
+		argTable.getTable().setPreferredScrollableViewportSize(s);
 		argTable.setRowHandler(new ArgTableRowHandler());
 		JPanel temp2 = new JPanel(new BorderLayout());
 		temp2.setBorder(BorderFactory.createTitledBorder(msg.getString("CommandLineArgs")));
@@ -276,10 +296,11 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		JPanel envPanel = new JPanel(new BorderLayout());
 		envPanel.setBorder(UIUtil.getEmpty5Border());
 		ButtonGroup bg = new ButtonGroup();
-		JRadioButton appendRB = new JRadioButton(msg.getString("AppendEnvVars"));
+		appendRB = new JRadioButton(msg.getString("AppendEnvVars"));
 		bg.add(appendRB);
-		JRadioButton replaceRB = new JRadioButton(msg.getString("ReplaceEnvVars"));
+		replaceRB = new JRadioButton(msg.getString("ReplaceEnvVars"));
 		bg.add(replaceRB);
+		appendRB.setSelected(true); // Default to "append".
 		temp = new JPanel(new GridLayout(2,1, 5,0));
 		temp.add(appendRB);
 		temp.add(replaceRB);
@@ -291,6 +312,9 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 								msg.getString("VariableName"),
 								msg.getString("VariableValue"));
 		ModifiableTable envTable = new ModifiableTable(envModel);
+		s = envTable.getTable().getPreferredScrollableViewportSize();
+		s.height = 200; // JTable default is 400!
+		envTable.getTable().setPreferredScrollableViewportSize(s);
 		envTable.setRowHandler(new EnvVarTableRowHandler());
 		envPanel.add(envTable);
 		tabPane.addTab(msg.getString("Tab.Environment"), envPanel);
@@ -323,6 +347,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	 *
 	 * @return The tool, or <code>null</code> if the user canceled
 	 *         the dialog.
+	 * @see #setTool(Tool)
 	 */
 	public Tool getTool() {
 		return tool;
@@ -351,6 +376,44 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		}
 
 		return valid;
+
+	}
+
+
+	/**
+	 * Sets the tool being displayed by this dialog.
+	 *
+	 * @param tool The tool.
+	 * @see #getTool()
+	 */
+	public void setTool(Tool tool) {
+
+		nameField.setText(tool.getName());
+		descField.setText(tool.getDescription());
+		programField.setText(tool.getProgram());
+		dirField.setText(tool.getDirectory());
+		shortcutField.setKeyStroke(KeyStroke.getKeyStroke(
+										tool.getAccelerator()));
+
+		argModel.setRowCount(0);
+		String[] args = tool.getArgs();
+		for (int i=0; i<args.length; i++) {
+			argModel.addRow(new String[] { args[i] });
+		}
+
+		if (tool.getAppendEnvironmentVars()) {
+			appendRB.setSelected(true);
+		}
+		else {
+			replaceRB.setSelected(true);
+		}
+
+		envModel.setRowCount(0);
+		Map envVars = tool.getEnvVars();
+		for (Iterator i=envVars.entrySet().iterator(); i.hasNext(); ) {
+			Map.Entry entry = (Map.Entry)i.next();
+			envModel.addRow(new Object[] { entry.getKey(), entry.getValue() });
+		}
 
 	}
 
@@ -472,7 +535,6 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	private static class ArgTableModel extends DefaultTableModel {
 
 		public ArgTableModel() {
-			//setColumnIdentifiers("");
 			setColumnCount(1);
 		}
 

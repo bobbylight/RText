@@ -30,6 +30,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.fife.io.ProcessRunner;
+import org.fife.io.ProcessRunnerOutputListener;
+
 
 /**
  * An "external tool."
@@ -45,11 +48,22 @@ public class Tool implements Comparable {
 
 	private String name;
 	private String desc;
-	private File dir;
+	private String dir; // Not File, to ease serialization.
 	private String program;
 	private List args;
 	private Map env;
 	private boolean appendEnv;
+	private String accelerator; // String to ease serialization
+
+
+	/**
+	 * Constructor.  This is really only here to make this class a JavaBean
+	 * to facilitate easy serializing; the {@link #Tool(String, String)}
+	 * constructor is preferred over this one.
+	 */
+	public Tool() {
+		init();
+	}
 
 
 	/**
@@ -59,10 +73,9 @@ public class Tool implements Comparable {
 	 * @param desc A description of this tool.  This may be <code>null</code>.
 	 */
 	public Tool(String name, String desc) {
-		this.name = name;
+		setName(name);
 		setDescription(desc);
-		args = new ArrayList(3);
-		env = new HashMap();
+		init();
 	}
 
 
@@ -133,6 +146,45 @@ public class Tool implements Comparable {
 
 
 	/**
+	 * Runs this tool in a separate thread.
+	 *
+	 * @param l Listens for events as this tool runs.
+	 */
+	public void execute(final ProcessRunnerOutputListener l) {
+
+		final String[] cmd = new String[1 + args.size()];
+		cmd[0] = program;
+		for (int i=0; i<args.size(); i++) {
+			cmd[i+1] = (String)args.get(i);
+		}
+
+		Thread t = new Thread() {
+			public void run() {
+				ProcessRunner pr = new ProcessRunner(cmd);
+				pr.setDirectory(new File(getDirectory()));
+				pr.setEnvironmentVars(env, appendEnv);
+				pr.setOutputListener(l);
+				pr.run();
+			}
+		};
+
+		t.start();
+
+	}
+
+
+	/**
+	 * Returns the accelerator to use to activate this tool in a menu.
+	 *
+	 * @return The accelerator, or <code>null</code> if there is none.
+	 * @see #setAccelerator(String)
+	 */
+	public String getAccelerator() {
+		return accelerator;
+	}
+
+
+	/**
 	 * Returns whether this tool should append any environment variables
 	 * it defines to RText's current environment.
 	 *
@@ -143,6 +195,19 @@ public class Tool implements Comparable {
 	 */
 	public boolean getAppendEnvironmentVars() {
 		return appendEnv;
+	}
+
+
+	/**
+	 * Returns the command line arguments for this Tool, as an array.
+	 *
+	 * @return An array of command line arguments, or an empty array if there
+	 *         are none.
+	 * @see #setArgs(String[])
+	 */
+	public String[] getArgs() {
+		String[] args = new String[this.args.size()];
+		return (String[])this.args.toArray(args);
 	}
 
 
@@ -159,9 +224,24 @@ public class Tool implements Comparable {
 
 
 	/**
+	 * Returns a copy of the environment variable map for this tool.
+	 *
+	 * @return The environment variables.  This is a <code>Map</code> with both
+	 *         keys and values as Strings.
+	 * @see #setEnvVars(Map)
+	 */
+	public Map getEnvVars() {
+		HashMap vars = new HashMap();
+		vars.putAll(env);
+		return vars;
+	}
+
+
+	/**
 	 * Returns the name of this tool.
 	 *
 	 * @return The name of this tool.
+	 * @see #setName(String)
 	 */
 	public String getName() {
 		return name;
@@ -183,9 +263,9 @@ public class Tool implements Comparable {
 	 * Returns the directory the tool will run in.
 	 *
 	 * @return The directory.
-	 * @see #setDirectory(File)
+	 * @see #setDirectory(String)
 	 */
-	public File getDirectory() {
+	public String getDirectory() {
 		return dir;
 	}
 
@@ -197,6 +277,15 @@ public class Tool implements Comparable {
 	 */
 	public int hashCode() {
 		return getName().hashCode();
+	}
+
+
+	/**
+	 * Initializes this tool.
+	 */
+	private void init() {
+		args = new ArrayList(3);
+		env = new HashMap();
 	}
 
 
@@ -220,6 +309,18 @@ public class Tool implements Comparable {
 
 
 	/**
+	 * Sets the accelerator to use to activate this tool in a menu.
+	 *
+	 * @param accelerator The accelerator to use, or <code>null</code> for
+	 *        none.
+	 * @see #getAccelerator()
+	 */
+	public void setAccelerator(String accelerator) {
+		this.accelerator = accelerator;
+	}
+
+
+	/**
 	 * Sets whether this tool should append any environment variables
 	 * it defines to RText's current environment.
 	 *
@@ -230,6 +331,23 @@ public class Tool implements Comparable {
 	 */
 	public void setAppendEnvironmentVars(boolean append) {
 		this.appendEnv = append;
+	}
+
+
+	/**
+	 * Sets the command line arguments to this tool.  Old command line arguments
+	 * are discarded.
+	 *
+	 * @param args The new command line arguments.
+	 * @see #getArgs()
+	 */
+	public void setArgs(String[] args) {
+		clearArgs();
+		if (args!=null) {
+			for (int i=0; i<args.length; i++) {
+				addArg(args[i]);
+			}
+		}
 	}
 
 
@@ -250,11 +368,34 @@ public class Tool implements Comparable {
 	 * @param dir The directory.  This cannot be <code>null</code>.
 	 * @see #getDirectory()
 	 */
-	public void setDirectory(File dir) {
+	public void setDirectory(String dir) {
 		if (dir==null) {
 			throw new IllegalArgumentException("dir cannot be null");
 		}
 		this.dir = dir;
+	}
+
+
+	/**
+	 * Sets the environment variables for this tool.
+	 *
+	 * @param vars A String-to-String mapping of environment variables.
+	 * @see #getEnvVars()
+	 */
+	public void setEnvVars(Map vars) {
+		env.clear();
+		env.putAll(vars);
+	}
+
+
+	/**
+	 * Sets the name of this tool.
+	 *
+	 * @param name The name of this tool.
+	 * @see #getName()
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 
 
@@ -273,4 +414,13 @@ public class Tool implements Comparable {
 	}
 
 
+	public static void main(String[] args) {
+		Tool tool = new Tool("Name", "Desc");
+		tool.setProgram("C:/temp/test.bat");
+		tool.execute(new ProcessRunnerOutputListener() {
+			public void outputWritten(String output, boolean stdout) {
+				System.out.println(output);
+			}
+		});
+	}
 }

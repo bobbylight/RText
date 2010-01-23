@@ -29,10 +29,12 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -90,8 +92,15 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 				msg.getString("TableHeader.Shortcut"),
 				msg.getString("TableHeader.Description")
 		});
-Tool tool = new Tool("MyTool", "Something really cool");
-model.addRow(new Object[] { tool, null, tool.getDescription() });
+
+		ToolManager tm = ToolManager.get();
+		for (Iterator i=tm.getToolIterator(); i.hasNext(); ) {
+			Tool tool = (Tool)i.next();
+			model.addRow(new Object[] { tool,
+								KeyStroke.getKeyStroke(tool.getAccelerator()),
+								tool.getDescription() });
+		}
+
 		toolTable = new ModifiableTable(model, ModifiableTable.BOTTOM,
 										ModifiableTable.ADD_REMOVE_MODIFY);
 		toolTable.addModifiableTableListener(this);
@@ -183,20 +192,22 @@ model.addRow(new Object[] { tool, null, tool.getDescription() });
 		private NewToolDialog toolDialog;
 
 		public Object[] getNewRowInfo(Object[] oldData) {
-//			KeyStroke keyStroke = (KeyStroke)oldData[1];
-//			String action = (String)oldData[0];
 			if (toolDialog==null) {
 				toolDialog = new NewToolDialog(getOptionsDialog());
 			}
+			Tool old = null;
+			if (oldData!=null) {
+				old = (Tool)oldData[0];
+				toolDialog.setTool(old);
+			}
 			toolDialog.setLocationRelativeTo(ToolOptionPanel.this);
 			toolDialog.setVisible(true);
-//			if (!ksDialog.getCancelled()) {
-//				KeyStroke temp = ksDialog.getKeyStroke();
-//				if ((temp==null && keyStroke!=null) ||
-//						(temp!=null && !temp.equals(keyStroke))) {
-//					return new Object[] { action, temp };
-//				}
-//			}
+			Tool tool = toolDialog.getTool();
+			if (tool!=null) {
+				return new Object[] { tool,
+						KeyStroke.getKeyStroke(tool.getAccelerator()),
+						tool.getDescription() };
+			}
 			return null;
 		}
 
