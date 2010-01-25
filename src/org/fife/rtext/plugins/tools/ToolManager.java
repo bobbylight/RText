@@ -105,6 +105,16 @@ public class ToolManager {
 
 
 	/**
+	 * Removes all tools from this manager.  This fires a property change
+	 * event of type {@link #PROPERTY_TOOLS}.
+	 */
+	public void clearTools() {
+		tools.clear();
+		support.firePropertyChange(PROPERTY_TOOLS, null, null);
+	}
+
+
+	/**
 	 * Returns whether a tool with a given name is already defined.
 	 *
 	 * @param name The name of the tool.

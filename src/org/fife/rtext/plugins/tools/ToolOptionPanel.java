@@ -58,12 +58,13 @@ import org.fife.ui.modifiabletable.RowHandler;
 class ToolOptionPanel extends PluginOptionsDialogPanel
 						implements ModifiableTableListener {
 
-	private static final String MSG = "org.fife.rtext.plugins.tools.OptionPanel";
+	static final String MSG = "org.fife.rtext.plugins.tools.OptionPanel";
 
 	private ToolTableModel model;
 	private ModifiableTable toolTable;
 
 	private static final String PROPERTY		= "property";
+	static final String TITLE_KEY				= "Title";
 
 
 	/**
@@ -76,7 +77,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 		super(plugin);
 
 		ResourceBundle msg = ResourceBundle.getBundle(MSG);
-		setName(msg.getString("Title"));
+		setName(msg.getString(TITLE_KEY));
 
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
@@ -93,14 +94,6 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 				msg.getString("TableHeader.Description")
 		});
 
-		ToolManager tm = ToolManager.get();
-		for (Iterator i=tm.getToolIterator(); i.hasNext(); ) {
-			Tool tool = (Tool)i.next();
-			model.addRow(new Object[] { tool,
-								KeyStroke.getKeyStroke(tool.getAccelerator()),
-								tool.getDescription() });
-		}
-
 		toolTable = new ModifiableTable(model, ModifiableTable.BOTTOM,
 										ModifiableTable.ADD_REMOVE_MODIFY);
 		toolTable.addModifiableTableListener(this);
@@ -115,14 +108,23 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	protected void doApplyImpl(Frame owner) {
-		// TODO Auto-generated method stub
-
+		ToolManager tm = ToolManager.get();
+		tm.clearTools();
+		for (int i=0; i<model.getRowCount(); i++) {
+			Tool tool = (Tool)model.getValueAt(i, 0);
+			tm.addTool(tool);
+		}
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -144,9 +146,17 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	protected void setValuesImpl(Frame owner) {
-		// TODO Auto-generated method stub
-
+		ToolManager tm = ToolManager.get();
+		for (Iterator i=tm.getToolIterator(); i.hasNext(); ) {
+			Tool tool = (Tool)i.next();
+			model.addRow(new Object[] { tool,
+								KeyStroke.getKeyStroke(tool.getAccelerator()),
+								tool.getDescription() });
+		}
 	}
 
 

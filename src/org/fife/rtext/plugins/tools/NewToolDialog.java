@@ -419,6 +419,19 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 
 
 	/**
+	 * Overridden to ensure that the first tab is always the selected one.
+	 */
+	public void setVisible(boolean visible) {
+		if (visible) {
+			tabPane.setSelectedIndex(0);
+			nameField.selectAll();
+			nameField.requestFocusInWindow();
+		}
+		super.setVisible(visible);
+	}
+
+
+	/**
 	 * Displays an error message.
 	 *
 	 * @param comp The component with invalid input.

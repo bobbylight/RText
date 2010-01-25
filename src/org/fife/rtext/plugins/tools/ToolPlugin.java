@@ -45,6 +45,7 @@ import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.Plugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
+import org.fife.ui.app.StandardAction;
 
 
 /**
@@ -65,7 +66,8 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 	private static final String MSG = "org.fife.rtext.plugins.tools.ToolPlugin";
 	protected static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
-	static final String NEW_TOOL_ACTION		= "newToolAction";
+	private static final String EDIT_TOOLS_ACTION	= "editToolsAction";
+	private static final String NEW_TOOL_ACTION		= "newToolAction";
 
 
 	/**
@@ -86,9 +88,13 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 
 		RText rtext = (RText)app;
 		this.app = rtext;
-		NewToolAction a = new NewToolAction(rtext, msg, null);
+		StandardAction a = new NewToolAction(rtext, msg, null);
 //		a.setAccelerator(prefs.getAccelerator(NEW_TOOL_ACTION));
 		rtext.addAction(NEW_TOOL_ACTION, a);
+
+		a = new EditToolsAction(rtext, msg, null);
+//		a.setAccelerator(prefs.getAccelerator(EDIT_TOOLS_ACTION));
+		rtext.addAction(EDIT_TOOLS_ACTION, a);
 
 	}
 
@@ -184,6 +190,8 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 		toolsMenu.addSeparator();
 		Action a = rtext.getAction(ToolPlugin.NEW_TOOL_ACTION);
 		toolsMenu.add(new JMenuItem(a));//createMenuItem(a));
+		a = rtext.getAction(ToolPlugin.EDIT_TOOLS_ACTION);
+		toolsMenu.add(new JMenuItem(a));//createMenuItem(a));
 		mb.addExtraMenu(toolsMenu);
 		mb.revalidate();
 
@@ -238,7 +246,7 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 
 	private void refreshToolMenu() {
 
-		while (toolsMenu.getMenuComponentCount()>2) {
+		while (toolsMenu.getMenuComponentCount()>3) {
 			toolsMenu.remove(0);
 		}
 
@@ -247,7 +255,7 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 				Tool tool = (Tool)i.next();
 				RunToolAction a = new RunToolAction(app, tool, window);
 				JMenuItem item = new JMenuItem(a);
-				toolsMenu.add(item, toolsMenu.getMenuComponentCount()-2);
+				toolsMenu.add(item, toolsMenu.getMenuComponentCount()-3);
 			}
 		}
 		else {
