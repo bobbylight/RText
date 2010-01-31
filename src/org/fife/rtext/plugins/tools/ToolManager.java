@@ -35,10 +35,9 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 /**
@@ -54,7 +53,7 @@ public class ToolManager {
 	 */
 	public static final String PROPERTY_TOOLS			= "tools";
 
-	private List tools;
+	private SortedSet tools;
 	private PropertyChangeSupport support;
 
 	/**
@@ -72,7 +71,7 @@ public class ToolManager {
 	 * Private constructor to prevent instantiation.
 	 */
 	private ToolManager() {
-		tools = new ArrayList();
+		tools = new TreeSet();
 		support = new PropertyChangeSupport(this);
 	}
 
@@ -86,7 +85,6 @@ public class ToolManager {
 	 */
 	public void addTool(Tool tool) {
 		tools.add(tool);
-		Collections.sort(tools);
 		support.firePropertyChange(PROPERTY_TOOLS, null, null);
 	}
 

@@ -55,6 +55,7 @@ class RunToolAction extends StandardAction {
 	public RunToolAction(RText app, Tool tool, ToolDockableWindow l) {
 		super(app, tool.getName());
 		setAccelerator(KeyStroke.getKeyStroke(tool.getAccelerator()));
+		setShortDescription(tool.getDescription());
 		this.tool = tool;
 		this.window = l;
 	}

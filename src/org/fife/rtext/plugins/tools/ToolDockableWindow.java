@@ -26,12 +26,9 @@
 package org.fife.rtext.plugins.tools;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.util.ResourceBundle;
-import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import org.fife.io.ProcessRunnerOutputListener;
@@ -51,7 +48,7 @@ public class ToolDockableWindow extends DockableWindow
 	private static final String MSG = "org.fife.rtext.plugins.tools.DockableWindow";
 	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
-	private JTextPane textArea;
+	private OutputTextPane textArea;
 
 
 	/**
@@ -66,43 +63,25 @@ public class ToolDockableWindow extends DockableWindow
 		setActive(true);
 		setPosition(BOTTOM);
 
-		textArea = createTextArea();
+		textArea = new OutputTextPane();
 		RScrollPane sp = new RScrollPane(textArea);
 		add(sp);
 
 	}
 
 
-	/**
-	 * Creates the text area, with default styles for stdout and stderr text.
-	 */
-	private JTextPane createTextArea() {
-
-		JTextPane textArea = new JTextPane();
-
-		Style stdout = textArea.addStyle("stdout", null);
-		StyleConstants.setForeground(stdout, Color.blue);
-
-		Style stderr = textArea.addStyle("stderr", null);
-		StyleConstants.setForeground(stderr, Color.red);
-
-		return textArea;
-
-	}
-
-
 	public void outputWritten(String output, boolean stdout) {
 
-		Style style = textArea.getStyle(stdout ? "stdout" : "stderr");
+		Style style = textArea.getStyle(stdout ?
+				OutputTextPane.STYLE_STDOUT : OutputTextPane.STYLE_STDERR);
 
 		// The user can move the caret and type (stdin) so always append
 		// to the end of the document.
 		StyledDocument doc = (StyledDocument)textArea.getDocument();
 		int end = doc.getLength();
 		try {
-			doc.insertString(end, output + "\n", null);
-			doc.setLogicalStyle(doc.getLength()-1, style);
-System.out.println("Jigga man");
+			doc.insertString(end, output + "\n", style);
+			//doc.setLogicalStyle(doc.getLength()-1, style);
 		} catch (BadLocationException ble) {
 			ble.printStackTrace();
 		}

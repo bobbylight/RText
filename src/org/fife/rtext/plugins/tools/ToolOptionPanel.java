@@ -35,7 +35,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -151,6 +150,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	 */
 	protected void setValuesImpl(Frame owner) {
 		ToolManager tm = ToolManager.get();
+		model.setRowCount(0);
 		for (Iterator i=tm.getToolIterator(); i.hasNext(); ) {
 			Tool tool = (Tool)i.next();
 			model.addRow(new Object[] { tool,
@@ -199,12 +199,8 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	 */
 	private class ToolTableRowHandler implements RowHandler {
 
-		private NewToolDialog toolDialog;
-
 		public Object[] getNewRowInfo(Object[] oldData) {
-			if (toolDialog==null) {
-				toolDialog = new NewToolDialog(getOptionsDialog());
-			}
+			NewToolDialog toolDialog = new NewToolDialog(getOptionsDialog());
 			Tool old = null;
 			if (oldData!=null) {
 				old = (Tool)oldData[0];
@@ -229,9 +225,6 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 		 * Not an override.  Implements <code>RowHandler#updateUI()</code>.
 		 */
 		public void updateUI() {
-			if (toolDialog!=null) {
-				SwingUtilities.updateComponentTreeUI(toolDialog);
-			}
 		}
 
 	}

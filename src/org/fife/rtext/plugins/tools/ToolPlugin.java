@@ -244,6 +244,10 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 	}
 
 
+	/**
+	 * Refreshes the elements in the Tools menu to be in sync with the tools
+	 * the user has defined.
+	 */
 	private void refreshToolMenu() {
 
 		while (toolsMenu.getMenuComponentCount()>3) {
@@ -259,11 +263,10 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 			}
 		}
 		else {
-			// TODO: Localize me!
 			String text = ToolPlugin.msg.getString("NoToolsDefined");
 			JMenuItem item = new JMenuItem(text);
 			item.setEnabled(false);
-			toolsMenu.add(item);
+			toolsMenu.add(item, toolsMenu.getMenuComponentCount()-3);
 		}
 
 	}

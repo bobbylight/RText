@@ -1791,6 +1791,8 @@ public abstract class AbstractMainView extends JPanel
 		StringTokenizer tokenizer = new StringTokenizer(
 				text.substring(text.indexOf(' ')));
 
+		int origTab = getSelectedIndex();
+
 		// Loop while there are still documents to prompt for.
 		while (tokenizer.hasMoreTokens()) {
 
@@ -1821,8 +1823,13 @@ public abstract class AbstractMainView extends JPanel
 				try {
 					File f = new File(currentTextArea.getFileFullPath());
 					if (f.isFile()) { // Should always be true.
+						int line = currentTextArea.getLineOfOffset(
+								currentTextArea.getCaretPosition());
 						currentTextArea.reload();
-						moveToTopOfCurrentDocument();
+						int lineCount = currentTextArea.getLineCount();
+						line = Math.min(line, lineCount-1);
+						int offs = currentTextArea.getLineStartOffset(line);
+						currentTextArea.setCaretPosition(offs);
 					}
 					else {
 						JOptionPane.showMessageDialog(owner,
@@ -1848,6 +1855,9 @@ public abstract class AbstractMainView extends JPanel
 
 		// It's okay to start checking for modifications again.
 		checkForModification = true;
+
+		// Switch back to the tab that was being edited originally.
+		setSelectedIndex(origTab);
 
 	}
 

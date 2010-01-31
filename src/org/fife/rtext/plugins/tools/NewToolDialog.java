@@ -96,6 +96,12 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 
 	private Tool tool;
 
+	/**
+	 * The original name of the tool being edited, or <code>null</code> if
+	 * the user is creating a new tool.
+	 */
+	private String origName;
+
 	private static final String MSG = "org.fife.rtext.plugins.tools.NewToolDialog";
 	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
@@ -186,6 +192,11 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 			showError(nameField, "Error.InvalidName", name);
 			return null;
 		}
+		if (!name.equals(origName) &&
+				ToolManager.get().containsToolWithName(name)) {
+			showError(nameField, "Error.ToolAlreadyExists", name);
+			return null;
+		}
 
 		// A description of the tool
 		String desc = descField.getText();
@@ -209,7 +220,9 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		Tool tool = new Tool(name, desc);
 		tool.setProgram(program);
 		tool.setDirectory(dir);
-		tool.setAccelerator(accelerator.toString());
+		if (accelerator!=null) {
+			tool.setAccelerator(accelerator.toString());
+		}
 
 		for (int i=0; i<argModel.getRowCount(); i++) {
 			String arg = (String)argModel.getValueAt(i, 0);
@@ -388,7 +401,8 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	 */
 	public void setTool(Tool tool) {
 
-		nameField.setText(tool.getName());
+		origName = tool.getName();
+		nameField.setText(origName);
 		descField.setText(tool.getDescription());
 		programField.setText(tool.getProgram());
 		dirField.setText(tool.getDirectory());
