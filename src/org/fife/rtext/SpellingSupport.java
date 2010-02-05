@@ -80,7 +80,6 @@ public class SpellingSupport implements SpellingParserListener {
 		setSpellingDictionary(prefs.spellingDictionary);
 		setMaxSpellingErrors(prefs.maxSpellingErrors);
 		setUserDictionary(prefs.userDictionary);
-System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 	}
 
 
@@ -120,7 +119,7 @@ System.out.println("Setting user dictionary to: " + prefs.userDictionary);
 	 *
 	 * @param textArea The text area.
 	 */
-	private void forceSpellCheck(RTextEditorPane textArea) {
+	public void forceSpellCheck(RTextEditorPane textArea) {
 		for (int i=0; i<textArea.getParserCount(); i++) {
 			// Should be in the list somewhere...
 			if (textArea.getParser(i)==spellingParser) {

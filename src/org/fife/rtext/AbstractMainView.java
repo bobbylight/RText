@@ -3509,6 +3509,10 @@ public abstract class AbstractMainView extends JPanel
 			pane.setSyntaxEditingStyle(style);
 		}
 
+		// If the syntax style changed, what text is a "comment" also changed,
+		// so we need to re-do the spell check.
+		spellingSupport.forceSpellCheck(pane);
+
 		// Add the new support.
 		support = lsf.getSupport(pane.getSyntaxEditingStyle());
 		if (support!=null) {
