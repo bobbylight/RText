@@ -68,7 +68,11 @@ class RunToolAction extends StandardAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 		showButDontFocus(window);
-		tool.execute(window);
+		// Call startingTool() before tool.execute() so threading doesn't
+		// cuase the window's title to get hosed.
+		if (window.startingTool(tool)) {
+			tool.execute(window);
+		}
 	}
 
 

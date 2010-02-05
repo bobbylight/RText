@@ -57,7 +57,7 @@ class OutputTextPane extends JTextPane {
 	static final String STYLE_STDIN				= "stdin";
 	static final String STYLE_STDOUT			= "stdout";
 	static final String STYLE_STDERR			= "stderr";
-
+	static final String STYLE_EXCEPTION			= "exception";
 
 	/**
 	 * Constructor.
@@ -115,6 +115,9 @@ class OutputTextPane extends JTextPane {
 
 		Style stderr = addStyle(STYLE_STDERR, null);
 		StyleConstants.setForeground(stderr, Color.red);
+
+		Style exception = addStyle(STYLE_EXCEPTION, null);
+		StyleConstants.setForeground(exception, new Color(111, 49, 152));
 
 	}
 

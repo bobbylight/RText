@@ -418,8 +418,17 @@ public class Tool implements Comparable {
 		Tool tool = new Tool("Name", "Desc");
 		tool.setProgram("C:/temp/test.bat");
 		tool.execute(new ProcessRunnerOutputListener() {
-			public void outputWritten(String output, boolean stdout) {
+			public void outputWritten(Process p, String output, boolean stdout){
 				System.out.println(output);
+			}
+			public void processCompleted(Process p, int rc, Throwable e) {
+				if (e!=null) {
+					System.out.println("Error completing process:");
+					e.printStackTrace();
+				}
+				else {
+					System.out.println("Completed, rc=" + rc);
+				}
 			}
 		});
 	}
