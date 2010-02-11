@@ -100,16 +100,6 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 
 
 	/**
-	 * This plugin doesn't add anything to the plugin menu.
-	 *
-	 * @return <code>false</code> always.
-	 */
-	public boolean getAddToPluginMenu() {
-		return false;
-	}
-
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
@@ -136,14 +126,6 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
-	public JMenu getPluginMenu() {
-		return null;
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public String getPluginName() {
 		return "Tools";
 	}
@@ -163,16 +145,6 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 	 */
 	public File getToolDir() {
 		return new File(RTextUtilities.getPreferencesDirectory(), "tools");
-	}
-
-
-	/**
-	 * Returns the menu displaying the user tools.
-	 *
-	 * @return The tools menu.
-	 */
-	public JMenu getToolsMenu() {
-		return toolsMenu;
 	}
 
 

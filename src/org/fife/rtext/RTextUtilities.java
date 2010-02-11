@@ -26,6 +26,7 @@ package org.fife.rtext;
 
 import java.awt.Cursor;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +37,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
@@ -478,6 +480,30 @@ public class RTextUtilities {
 	 */
 	public static File getPreferencesDirectory() {
 		return new File(System.getProperty("user.home"), ".rtext");
+	}
+
+
+	/**
+	 * Returns a pretty string value for a KeyStroke, suitable for display as
+	 * the keystroke's value in a GUI.
+	 *
+	 * @param keyStroke The keystroke.
+	 * @return The string value of the keystroke.
+	 */
+	public static String getPrettyStringFor(KeyStroke keyStroke) {
+
+		if (keyStroke==null)
+			return "";
+
+		String string = KeyEvent.getKeyModifiersText(keyStroke.getModifiers());
+		if (string!=null && string.length()>0)
+			string += "+";
+		int keyCode = keyStroke.getKeyCode();
+		if (keyCode!=KeyEvent.VK_SHIFT && keyCode!=KeyEvent.VK_CONTROL &&
+			keyCode!=KeyEvent.VK_ALT && keyCode!=KeyEvent.VK_META)
+			string += KeyEvent.getKeyText(keyCode);
+		return  string;
+
 	}
 
 

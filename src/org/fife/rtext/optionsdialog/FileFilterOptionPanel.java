@@ -310,10 +310,6 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 			addRow(new Object[] { "XML",				null }); styles[27] = SYNTAX_STYLE_XML;
 		}
 
-		public boolean isCellEditable(int row, int column) {
-			return false;
-		}
-
 	}
 
 

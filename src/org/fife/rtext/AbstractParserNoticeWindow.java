@@ -54,7 +54,7 @@ import org.fife.ui.dockablewindows.DockableWindow;
  * @author Robert Futrell
  * @version 1.0
  */
-abstract class AbstractParserNoticeWindow extends DockableWindow {
+public abstract class AbstractParserNoticeWindow extends DockableWindow {
 
 	private RText rtext;
 	private JTable table;

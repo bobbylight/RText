@@ -89,8 +89,8 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	private FSATextField programField;
 	private FSATextField dirField;
 	private KeyStrokeField shortcutField;
-	private ArgTableModel argModel;
-	private EnvVarsTableModel envModel;
+	private DefaultTableModel argModel;
+	private DefaultTableModel envModel;
 	private JRadioButton appendRB;
 	private JRadioButton replaceRB;
 
@@ -293,7 +293,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(springPanel, BorderLayout.NORTH);
 
-		argModel = new ArgTableModel();
+		argModel = new DefaultTableModel(0, 1);
 		ModifiableTable argTable = new ModifiableTable(argModel);
 		argTable.getTable().setTableHeader(null);
 		Dimension s = argTable.getTable().getPreferredScrollableViewportSize();
@@ -321,9 +321,9 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		temp2.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
 		temp2.add(temp, BorderLayout.LINE_START);
 		envPanel.add(temp2, BorderLayout.NORTH);
-		envModel = new EnvVarsTableModel(
-								msg.getString("VariableName"),
-								msg.getString("VariableValue"));
+		envModel = new DefaultTableModel(
+				new Object[] { msg.getString("VariableName"),
+								msg.getString("VariableValue") }, 0);
 		ModifiableTable envTable = new ModifiableTable(envModel);
 		s = envTable.getTable().getPreferredScrollableViewportSize();
 		s.height = 200; // JTable default is 400!
@@ -557,22 +557,6 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 
 
 	/**
-	 * Table model used for the environment variable table.
-	 */
-	private static class ArgTableModel extends DefaultTableModel {
-
-		public ArgTableModel() {
-			setColumnCount(1);
-		}
-
-		public boolean isCellEditable(int row, int col) {
-			return false;
-		}
-
-	}
-
-
-	/**
 	 * Row handler for the command line arguments table.
 	 */
 	private class ArgTableRowHandler implements RowHandler {
@@ -693,22 +677,6 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 			nameField.setText(name);
 			valueField.setText(value);
 			okButton.setEnabled(name!=null && name.length()>0);
-		}
-
-	}
-
-
-	/**
-	 * Table model used for the environment variable table.
-	 */
-	private static class EnvVarsTableModel extends DefaultTableModel {
-
-		public EnvVarsTableModel(String var, String value) {
-			setColumnIdentifiers(new String[] { var, value });
-		}
-
-		public boolean isCellEditable(int row, int col) {
-			return false;
 		}
 
 	}

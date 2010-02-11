@@ -43,16 +43,12 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import javax.swing.text.DocumentFilter;
 
 import org.fife.ui.*;
 import org.fife.ui.modifiabletable.*;
@@ -75,7 +71,7 @@ import org.fife.ui.rtextarea.RTextArea;
 public class TemplateOptionPanel extends OptionsDialogPanel {
 
 	private ModifiableTable templateTable;
-	private TemplateTableModel tableModel;
+	private DefaultTableModel tableModel;
 	private ResourceBundle msg;
 
 	private static final String TEMPLATE_PROPERTY	= "template";
@@ -100,8 +96,8 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 		contentPane.setBorder(new OptionPanelBorder(msg.getString("Templates")));
 		add(contentPane);
 
-		tableModel = new TemplateTableModel(msg.getString("Template"),
-									msg.getString("Expansion"));
+		tableModel = new DefaultTableModel(new Object[] {
+					msg.getString("Template"), msg.getString("Expansion") }, 0);
 		templateTable = new ModifiableTable(tableModel);
 		JTable table = templateTable.getTable();
 		table.getColumn(msg.getString("Expansion")).
@@ -160,6 +156,24 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 
 
 	/**
+	 * Sets the table's contents to be the templates known by the specified
+	 * template manager.
+	 */
+	public void setTemplates(CodeTemplateManager manager) {
+		tableModel.setRowCount(0);
+		if (manager!=null) {
+			CodeTemplate[] templates = manager.getTemplates();
+			int count = templates.length;
+			for (int i=0; i<count; i++) {
+				tableModel.addRow(new Object[] {
+					new String(templates[i].getID()),
+					// Deep copy.
+					templates[i].clone()
+				});
+			}
+		}
+	}
+	/**
 	 * Sets the values displayed by this panel to reflect those in the
 	 * application.  Child panels are not handled.
 	 *
@@ -169,7 +183,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	protected void setValuesImpl(Frame owner) {
 		// Remove all old templates and load the new ones.
 		CodeTemplateManager ctm = RSyntaxTextArea.getCodeTemplateManager();
-		tableModel.setTemplates(ctm);
+		setTemplates(ctm);
 	}
 
 
@@ -443,98 +457,20 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	 * A document filter that only allows letters, numbers, and
 	 * '_' to go through.
 	 */
-	private static class TemplateNameDocumentFilter extends DocumentFilter {
+	private static class TemplateNameDocumentFilter extends PickyDocumentFilter{
 
-		private final String cleanse(String text) {
-			boolean beep = false;
-			if (text!=null) {
-				int length = text.length();
-				for (int i=0; i<length; i++) {
-					if (!RSyntaxUtilities.
-						isLetterOrDigit(text.charAt(i)) &&
-							text.charAt(i)!='_') {
-						text = text.substring(0,i) + text.substring(i+1);
-						i--;
-						length--;
-						beep = true;
-					}
+		protected String cleanseImpl(String text) {
+			int length = text.length();
+			for (int i=0; i<length; i++) {
+				if (!RSyntaxUtilities.
+					isLetterOrDigit(text.charAt(i)) &&
+						text.charAt(i)!='_') {
+					text = text.substring(0,i) + text.substring(i+1);
+					i--;
+					length--;
 				}
 			}
-			if (beep)
-				UIManager.getLookAndFeel().provideErrorFeedback(null);
 			return text;
-		}
-
-		public void insertString(DocumentFilter.FilterBypass fb,
-					int offset, String text, AttributeSet attr)
-						throws BadLocationException {
-			fb.insertString(offset, cleanse(text), attr);
-		}
-
-		public void remove(DocumentFilter.FilterBypass fb,
-					int offset, int length)
-						throws BadLocationException {
-			fb.remove(offset, length);
-		}
-
-		public void replace(DocumentFilter.FilterBypass fb,
-				int offset, int length, String text, AttributeSet attr)
-						throws BadLocationException {
-			fb.replace(offset, length, cleanse(text), attr);
-		}
-
-	}
-
-
-	/**
-	 * Table data for the "templates" table.
-	 */
-	class TemplateTableModel extends DefaultTableModel {
-
-		public String[] columnNames;
-
-		public TemplateTableModel(String templateHeader,
-						String expansionHeader) {
-			columnNames = new String[2];
-			columnNames[0] = templateHeader;
-			columnNames[1] = expansionHeader;
-		}
-
-		public int getColumnCount() {
-			return columnNames.length;
-		}
-
-		public String getColumnName(int column) {
-			return columnNames[column];
-		}
-
-		/**
-		 * Always returns false; modifications are made via the buttons
-		 * on the panel.
-		 *
-		 * @return <code>false</code> always.
-		 */
-		public boolean isCellEditable(int row, int column) {
-			return false;
-		}
-
-		/**
-		 * Sets this table's contents to be the templates known by the
-		 * specified template manager.
-		 */
-		public void setTemplates(CodeTemplateManager manager) {
-			setRowCount(0);
-			if (manager!=null) {
-				CodeTemplate[] templates = manager.getTemplates();
-				int count = templates.length;
-				for (int i=0; i<count; i++) {
-					tableModel.addRow(new Object[] {
-							new String(templates[i].getID()),
-							// Deep copy.
-							templates[i].clone()
-						});
-				}
-			}
 		}
 
 	}

@@ -146,25 +146,6 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 
 	/**
-	 * Returns the menu items for this plugin.
-	 *
-	 * @return The menu for this plugin.
-	 */
-	public JMenu getPluginMenu() {
-
-		JMenu menu = new JMenu(getPluginName());
-		
-		JCheckBoxMenuItem item = new JCheckBoxMenuItem(viewAction);
-		item.setSelected(isActive());
-		item.setToolTipText(null);
-		menu.add(item);
-
-		return menu;
-
-	}
-
-
-	/**
 	 * Returns the name of this <code>GUIPlugin</code>.
 	 *
 	 * @return This plugin's name.

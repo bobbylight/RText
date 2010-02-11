@@ -59,7 +59,6 @@ public interface RTextActionInfo {
 	public static final String TOOL_BAR_ACTION			= "toolBarAction";
 	public static final String STATUS_BAR_ACTION		= "statusBarAction";
 	public static final String LINE_NUMBER_ACTION		= "lineNumberAction";
-	public static final String VIEW_TASKS_ACTION		= "viewTasksAction";
 	public static final String FILE_PROPERTIES_ACTION	= "filePropertiesAction";
 	public static final String OPTIONS_ACTION			= "optionsAction";
 	public static final String HOME_PAGE_ACTION			= "homePageAction";
@@ -103,7 +102,6 @@ public interface RTextActionInfo {
 		TOOL_BAR_ACTION,
 		STATUS_BAR_ACTION,
 		LINE_NUMBER_ACTION,
-		VIEW_TASKS_ACTION,
 		FILE_PROPERTIES_ACTION,
 		RText.HELP_ACTION_KEY,
 		RText.ABOUT_ACTION_KEY,
@@ -156,7 +154,6 @@ public interface RTextActionInfo {
 		null,
 		null,
 		KeyStroke.getKeyStroke(KeyEvent.VK_1, defaultModifier),
-		null,
 		null,
 		KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0),
 		null,

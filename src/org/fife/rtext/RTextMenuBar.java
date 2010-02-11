@@ -47,10 +47,8 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.Action;
 
-import org.fife.rtext.actions.ViewTasksAction;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.MenuBar;
-import org.fife.ui.app.PluginMenu;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextAreaEditorKit;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
@@ -64,8 +62,38 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
  * @author Robert Futrell
  * @version 0.5
  */
-class RTextMenuBar extends MenuBar implements PropertyChangeListener,
+public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 									PopupMenuListener {
+
+	/**
+	 * A key to get the File menu via {@link #getMenuByName(String)}.
+	 */
+	public static final String MENU_FILE		= "File";
+
+	/**
+	 * A key to get the Edit menu via {@link #getMenuByName(String)}.
+	 */
+	public static final String MENU_EDIT		= "Edit";
+
+	/**
+	 * A key to get the Search menu via {@link #getMenuByName(String)}.
+	 */
+	public static final String MENU_SEARCH		= "Search";
+
+	/**
+	 * A key to get the View menu via {@link #getMenuByName(String)}.
+	 */
+	public static final String MENU_VIEW		= "View";
+
+	/**
+	 * A key to get the Macros menu via {@link #getMenuByName(String)}.
+	 */
+	public static final String MENU_MACROS		= "Macros";
+
+	/**
+	 * A key to get the Help menu via {@link #getMenuByName(String)}.
+	 */
+	public static final String MENU_HELP		= "Help";
 
 	// These items correspond to actions belonging to RTextEditorPanes, and are
 	// changed in disableEditorActions() below, so we need to remember them.
@@ -104,7 +132,6 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	private JCheckBoxMenuItem searchToolbarMenuItem;
 	private JCheckBoxMenuItem statusBarItem;
 	private JCheckBoxMenuItem lineNumbersItem;
-	private JCheckBoxMenuItem tasksItem;
 	private JMenuItem increaseFontSizesItem;
 	private JMenuItem decreaseFontSizesItem;
 	//private JRadioButtonMenuItem ltrItem, rtlItem;
@@ -116,7 +143,6 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 	private JMenu fileMenu;
 	private JMenu viewMenu;
-	private JMenu pluginMenu;
 	private JMenu windowMenu;
 	private JMenu recentFilesMenu;
 	private JMenu savedMacroMenu;
@@ -160,6 +186,7 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		// File submenu.
 		fileMenu = createMenu(menuMsg, "MenuFile");
+		registerMenuByName(MENU_FILE, fileMenu);
 		add(fileMenu);
 
 		// File submenu's items.
@@ -235,6 +262,7 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		// Edit submenu.
 		menu = createMenu(menuMsg, "MenuEdit");
+		registerMenuByName(MENU_EDIT, menu);
 		add(menu);
 
 		// Edit submenu's items.
@@ -344,6 +372,7 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		// Search menu.
 		menu = createMenu(menuMsg, "MenuSearch");
+		registerMenuByName(MENU_SEARCH, menu);
 		add(menu);
 
 		// Search menu's items.
@@ -407,6 +436,7 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		// View submenu.
 		viewMenu = createMenu(menuMsg, "MenuView");
+		registerMenuByName(MENU_VIEW, viewMenu);
 		viewMenu.getPopupMenu().addPopupMenuListener(this);
 		add(viewMenu);
 
@@ -424,29 +454,6 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		UIUtil.setDescription(searchToolbarMenuItem, menuMsg,"DescQuickSearch");
 		toolbarsMenu.add(searchToolbarMenuItem);
 		viewMenu.add(toolbarsMenu);
-
-		statusBarItem = new JCheckBoxMenuItem(rtext.getAction(RText.STATUS_BAR_ACTION));
-		statusBarItem.setToolTipText(null);
-		statusBarItem.setSelected(properties.statusBarVisible);
-		viewMenu.add(statusBarItem);
-
-		lineNumbersItem = new JCheckBoxMenuItem(rtext.getAction(RText.LINE_NUMBER_ACTION));
-		lineNumbersItem.setSelected(properties.lineNumbersVisible);
-		lineNumbersItem.setToolTipText(null);
-//		UIUtil.setDescription(lineNumbersItem, msg, "DescLineNumbers");
-		viewMenu.add(lineNumbersItem);
-
-		final ViewTasksAction vta = (ViewTasksAction)rtext.getAction(RText.VIEW_TASKS_ACTION);
-		tasksItem = new JCheckBoxMenuItem(vta);
-		tasksItem.setToolTipText(null);
-		// Unfortunately we must wrap this in an invokeLater, since the action
-		// adds the window in an invokeLater() itself...
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				tasksItem.setState(vta.isTaskWindowVisible());
-			}
-		});
-		viewMenu.add(tasksItem);
 
 		// Font sizes submenu.
 		JMenu fontSizesMenu = createMenu(menuMsg, "MenuFontSizes");
@@ -498,6 +505,17 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		splitViewMenu.add(splitNoneItem);
 		viewMenu.add(splitViewMenu);
 */
+		statusBarItem = new JCheckBoxMenuItem(rtext.getAction(RText.STATUS_BAR_ACTION));
+		statusBarItem.setToolTipText(null);
+		statusBarItem.setSelected(properties.statusBarVisible);
+		viewMenu.add(statusBarItem);
+
+		lineNumbersItem = new JCheckBoxMenuItem(rtext.getAction(RText.LINE_NUMBER_ACTION));
+		lineNumbersItem.setSelected(properties.lineNumbersVisible);
+		lineNumbersItem.setToolTipText(null);
+//		UIUtil.setDescription(lineNumbersItem, msg, "DescLineNumbers");
+		viewMenu.add(lineNumbersItem);
+
 		viewMenu.addSeparator();
 
 		filePropItem = createMenuItem(rtext.getAction(
@@ -506,6 +524,7 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		// Macros menu.
 		menu = createMenu(menuMsg, "MenuMacros");
+		registerMenuByName(MENU_MACROS, menu);
 		add(menu);
 
 		int ctrlshift = InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK;
@@ -589,13 +608,9 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		// Add listener that will create open document list.
 		windowMenu.getPopupMenu().addPopupMenuListener(this);
 
-		// Plugin menu.
-		pluginMenu = new PluginMenu(rtext, true);
-		//createMenu(menuMsg, "MenuPlugins");
-		add(pluginMenu);
-
 		// Help submenu.
 		menu = createMenu(menuMsg, "MenuHelp");
+		registerMenuByName(MENU_HELP, menu);
 		add(menu);
 
 		// Help submenu's items.
@@ -843,7 +858,6 @@ class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		updateAction(toolbarItem, RText.TOOL_BAR_ACTION);
 		updateAction(statusBarItem, RText.STATUS_BAR_ACTION);
 		updateAction(lineNumbersItem, RText.LINE_NUMBER_ACTION);
-		updateAction(tasksItem, RText.VIEW_TASKS_ACTION);
 		updateAction(filePropItem, RText.FILE_PROPERTIES_ACTION);
 		updateAction(helpItem, RText.HELP_ACTION_KEY);
 		updateAction(homePageItem, RText.HOME_PAGE_ACTION);

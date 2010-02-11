@@ -140,11 +140,6 @@ public class ActionFactory implements RTextActionInfo {
 		a.setAccelerator(prefs.getAccelerator(LINE_NUMBER_ACTION));
 		rtext.addAction(LINE_NUMBER_ACTION, a);
 
-		boolean visible = prefs.viewTaskList;
-		a = new ViewTasksAction(rtext, msg, null, visible);
-		a.setAccelerator(prefs.getAccelerator(VIEW_TASKS_ACTION));
-		rtext.addAction(VIEW_TASKS_ACTION, a);
-
 		a = new FilePropertiesAction(rtext, msg);
 		a.setAccelerator(prefs.getAccelerator(FILE_PROPERTIES_ACTION));
 		rtext.addAction(FILE_PROPERTIES_ACTION, a);

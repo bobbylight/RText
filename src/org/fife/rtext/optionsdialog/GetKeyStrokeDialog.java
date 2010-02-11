@@ -44,6 +44,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
@@ -159,7 +160,7 @@ public class GetKeyStrokeDialog extends JDialog implements ActionListener {
 	 */
 	public void setKeyStroke(KeyStroke stroke) {
 		this.stroke = stroke;
-		textField.setText(ShortcutOptionPanel.getPrettyStringFor(stroke));
+		textField.setText(RTextUtilities.getPrettyStringFor(stroke));
 	}
 
 
@@ -224,7 +225,7 @@ public class GetKeyStrokeDialog extends JDialog implements ActionListener {
 
 		public void setKeyStroke(KeyStroke ks) {
 			stroke = ks;
-			setText(ShortcutOptionPanel.getPrettyStringFor(stroke));
+			setText(RTextUtilities.getPrettyStringFor(stroke));
 		}
 
 		private class FocusHandler extends FocusAdapter {

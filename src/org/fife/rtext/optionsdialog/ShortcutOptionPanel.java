@@ -32,7 +32,6 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.ResourceBundle;
@@ -40,6 +39,8 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextActionInfo;
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.*;
 import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.modifiabletable.*;
@@ -84,8 +85,9 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 					new OptionPanelBorder(msg.getString("OptSCLabel")));
 		add(contentPane);
 
-		model = new ShortcutTableModel(
-				msg.getString("OptSCCol1"), msg.getString("OptSCCol2"));
+		model = new DefaultTableModel(new Object[] {
+				msg.getString("OptSCCol1"), msg.getString("OptSCCol2")},
+				RTextActionInfo.actionNames.length);
 		shortcutTable = new ModifiableTable(model, ModifiableTable.BOTTOM,
 										ModifiableTable.MODIFY);
 		shortcutTable.addModifiableTableListener(this);
@@ -164,30 +166,6 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	 */
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
-	}
-
-
-	/**
-	 * Returns a pretty string value for a KeyStroke, suitable for display as
-	 * the keystroke's value in a GUI.
-	 *
-	 * @param keyStroke The keystroke.
-	 * @return The string value of the keystroke.
-	 */
-	public static String getPrettyStringFor(KeyStroke keyStroke) {
-
-		if (keyStroke==null)
-			return "";
-
-		String string = KeyEvent.getKeyModifiersText(keyStroke.getModifiers());
-		if (string!=null && string.length()>0)
-			string += "+";
-		int keyCode = keyStroke.getKeyCode();
-		if (keyCode!=KeyEvent.VK_SHIFT && keyCode!=KeyEvent.VK_CONTROL &&
-			keyCode!=KeyEvent.VK_ALT && keyCode!=KeyEvent.VK_META)
-			string += KeyEvent.getKeyText(keyCode);
-		return  string;
-
 	}
 
 
@@ -338,26 +316,9 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 								boolean hasFocus, int row, int column) {
 			super.getTableCellRendererComponent(table, value, isSelected,
 										 hasFocus, row, column);
-			setText(getPrettyStringFor((KeyStroke)value));
+			setText(RTextUtilities.getPrettyStringFor((KeyStroke)value));
 			setComponentOrientation(table.getComponentOrientation());
 			return this;
-		}
-
-	}
-
-
-	/**
-	 * Table data for the "Shortcut" table.
-	 */
-	static class ShortcutTableModel extends DefaultTableModel {
-
-		public ShortcutTableModel(String fileTypeHead, String filterHead) {
-			super(new Object[] { fileTypeHead, filterHead },
-				RText.actionNames.length);
-		}
-
-		public boolean isCellEditable(int row, int column) {
-			return false;
 		}
 
 	}

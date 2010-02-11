@@ -37,7 +37,9 @@ import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
+import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.tools.NewToolDialog;
 import org.fife.rtext.plugins.tools.Tool;
 import org.fife.ui.UIUtil;
@@ -59,7 +61,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 
 	static final String MSG = "org.fife.rtext.plugins.tools.OptionPanel";
 
-	private ToolTableModel model;
+	private DefaultTableModel model;
 	private ModifiableTable toolTable;
 
 	private static final String PROPERTY		= "property";
@@ -87,18 +89,19 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 		cp.setBorder(new OptionPanelBorder(msg.getString("Tools")));
 		add(cp);
 
-		model = new ToolTableModel(new String[] {
+		model = new DefaultTableModel(new String[] {
 				msg.getString("TableHeader.Tool"),
 				msg.getString("TableHeader.Shortcut"),
-				msg.getString("TableHeader.Description")
-		});
+				msg.getString("TableHeader.Description") }, 0);
 
 		toolTable = new ModifiableTable(model, ModifiableTable.BOTTOM,
 										ModifiableTable.ADD_REMOVE_MODIFY);
 		toolTable.addModifiableTableListener(this);
 		toolTable.setRowHandler(new ToolTableRowHandler());
 		JTable table = toolTable.getTable();
-		table.getColumnModel().getColumn(0).setCellRenderer(new ToolCellRenderer());
+		TableColumnModel tcm = table.getColumnModel();
+		tcm.getColumn(0).setCellRenderer(new ToolCellRenderer());
+		tcm.getColumn(1).setCellRenderer(new KeyStrokeCellRenderer());
 		table.setPreferredScrollableViewportSize(new Dimension(300,300));
 		cp.add(toolTable);
 
@@ -161,6 +164,25 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 
 
 	/**
+	 * Renderer for KeyStrokes in the JTable.
+	 */
+	private static class KeyStrokeCellRenderer extends DefaultTableCellRenderer{
+
+		public Component getTableCellRendererComponent(JTable table,
+								Object value, boolean isSelected,
+								boolean hasFocus, int row, int column) {
+			super.getTableCellRendererComponent(table, value, isSelected,
+										 hasFocus, row, column);
+			KeyStroke ks = (KeyStroke)value;
+			setText(RTextUtilities.getPrettyStringFor(ks));
+			setComponentOrientation(table.getComponentOrientation());
+			return this;
+		}
+
+	}
+
+
+	/**
 	 * Renderer for tools in the JTable.
 	 */
 	private static class ToolCellRenderer extends DefaultTableCellRenderer {
@@ -173,22 +195,6 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 			setText(((Tool)value).getName());
 			setComponentOrientation(table.getComponentOrientation());
 			return this;
-		}
-
-	}
-
-
-	/**
-	 * Table data for the tool table.
-	 */
-	private static class ToolTableModel extends DefaultTableModel {
-
-		public ToolTableModel(String[] headers) {
-			super(headers, 0);
-		}
-
-		public boolean isCellEditable(int row, int column) {
-			return false;
 		}
 
 	}

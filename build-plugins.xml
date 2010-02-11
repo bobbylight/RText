@@ -120,6 +120,22 @@
 			</manifest>
 		</jar>
 
+		<!-- Tasks support plugin. -->
+		<jar destfile="${dist-dir}/plugins/TaskList.jar">
+			<fileset dir="${class-dir}">
+				<include name="org/fife/rtext/plugins/tasks/**"/>
+			</fileset>
+			<fileset dir="${source-dir}">
+				<include name="org/fife/rtext/plugins/tasks/*.png"/>
+			</fileset>
+			<fileset dir="i18n">
+				<include name="org/fife/rtext/plugins/tasks/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Built-By" value="${compiler}"/>
+			</manifest>
+		</jar>
+
 		<!-- Tool support plugin. -->
 		<jar destfile="${dist-dir}/plugins/ToolSupport.jar">
 			<fileset dir="${class-dir}">
@@ -135,6 +151,7 @@
 				<attribute name="Built-By" value="${compiler}"/>
 			</manifest>
 		</jar>
+
 	</target>
 
 

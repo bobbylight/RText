@@ -23,7 +23,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext;
+package org.fife.rtext.plugins.tasks;
 
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
@@ -34,9 +34,14 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
+import org.fife.rtext.AbstractMainView;
+import org.fife.rtext.AbstractParserNoticeWindow;
+import org.fife.rtext.RText;
+import org.fife.rtext.RTextEditorPane;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.parser.Parser;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rsyntaxtextarea.parser.TaskTagParser;
 
@@ -48,17 +53,19 @@ import org.fife.ui.rsyntaxtextarea.parser.TaskTagParser;
  * @author Robert Futrell
  * @version 1.0
  */
-public class TaskWindow extends AbstractParserNoticeWindow
+class TaskWindow extends AbstractParserNoticeWindow
 				implements PropertyChangeListener {
 
 	private JTable table;
 	private TaskNoticeTableModel model;
 	private TaskTagParser taskParser;
+	private boolean installed;
 
 
-	public TaskWindow(RText rtext) {
+	public TaskWindow(RText rtext, String taskIdentifiers) {
 
 		super(rtext);
+		installed = false;
 
 		model = new TaskNoticeTableModel(rtext.getString("TaskList.Task"));
 		table = createTable(model);
@@ -71,10 +78,11 @@ public class TaskWindow extends AbstractParserNoticeWindow
 		setActive(true);
 		setDockableWindowName(rtext.getString("TaskList.Tasks"));
 
-		URL url = getClass().getResource("graphics/page_white_edit.png");
+		URL url = getClass().getResource("page_white_edit.png");
 		setIcon(new ImageIcon(url));
 
 		taskParser = new TaskTagParser();
+		setTaskIdentifiers(taskIdentifiers);
 
 	}
 
@@ -82,18 +90,8 @@ public class TaskWindow extends AbstractParserNoticeWindow
 	 * Overridden to add parsing listeners when this window is visible.
 	 */
 	public void addNotify() {
-
 		super.addNotify();
-
-		RText rtext = getRText();
-		AbstractMainView mainView = rtext.getMainView();
-		mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_ADDED_PROPERTY, this);
-		mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
-		for (int i=0; i<mainView.getNumDocuments(); i++) {
-			RTextEditorPane textArea = mainView.getRTextEditorPaneAt(i);
-			addTaskParser(textArea);
-		}
-
+		installParser();
 	}
 
 
@@ -107,6 +105,56 @@ public class TaskWindow extends AbstractParserNoticeWindow
 		textArea.addPropertyChangeListener(
 				RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
 		textArea.addParser(taskParser);
+	}
+
+
+	/**
+	 * Returns the identifiers scanned for to identify "tasks" (e.g.
+	 * "<code>TODO</code>", "<code>FIXME</code>", "<code>IDEA</code>", etc.).
+	 *
+	 * @return The identifiers.  This will always return a value, even it task
+	 *         parsing is disabled.  If there are no identifiers, an empty
+	 *         string is returned.
+	 * @see #setTaskIdentifiers(String)
+	 */
+	public String getTaskIdentifiers() {
+		String pattern = taskParser.getTaskPattern();
+		if (pattern!=null) {
+			pattern = pattern.replaceAll("\\\\\\?", "?");
+		}
+		else {
+			pattern = "";
+		}
+		return pattern;
+	}
+
+
+	/**
+	 * @see #uninstallParser()
+	 */
+	private void installParser() {
+		if (!installed) {
+			RText rtext = getRText();
+			AbstractMainView mainView = rtext.getMainView();
+			mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_ADDED_PROPERTY, this);
+			mainView.addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
+			for (int i=0; i<mainView.getNumDocuments(); i++) {
+				RTextEditorPane textArea = mainView.getRTextEditorPaneAt(i);
+				addTaskParser(textArea);
+			}
+			installed = true;
+		}
+	}
+
+
+	/**
+	 * Returns whether a parser is the task parser.
+	 *
+	 * @param parser The parser to check.
+	 * @return Whether the parser is the task parser.
+	 */
+	public boolean isTaskParser(Parser parser) {
+		return parser==taskParser;
 	}
 
 
@@ -147,19 +195,8 @@ public class TaskWindow extends AbstractParserNoticeWindow
 	 * visible.
 	 */
 	public void removeNotify() {
-
 		super.removeNotify();
-
-		RText rtext = getRText();
-		AbstractMainView mainView = rtext.getMainView();
-		mainView.removePropertyChangeListener(AbstractMainView.TEXT_AREA_ADDED_PROPERTY, this);
-		mainView.removePropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
-		for (int i=0; i<mainView.getNumDocuments(); i++) {
-			RTextEditorPane textArea = mainView.getRTextEditorPaneAt(i);
-			removeTaskParser(textArea);
-		}
-		model.setRowCount(0);
-
+		uninstallParser();
 	}
 
 
@@ -173,6 +210,64 @@ public class TaskWindow extends AbstractParserNoticeWindow
 		textArea.removePropertyChangeListener(
 				RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
 		textArea.removeParser(taskParser);
+	}
+
+
+	/**
+	 * Overridden to disable the task parser when the task window isn't active
+	 * (visible).
+	 *
+	 * @param active Whether the task window should be active.
+	 */
+	public void setActive(boolean active) {
+		if (active!=isActive()) {
+			super.setActive(active);
+			if (active && !installed) {
+				installParser();
+			}
+			else if (!active && installed) {
+				uninstallParser();
+			}
+		}
+	}
+
+
+	/**
+	 * Sets the identifiers scanned for when locating tasks.
+	 *
+	 * @param identifiers The identifiers, separated by the '<code>|</code>'
+	 *        character.
+	 * @return Whether the task pattern was actually modified.  This will be
+	 *         <code>false</code> if <code>identifiers</code> is the same as
+	 *         the current value.
+	 * @see #getTaskIdentifiers()
+	 */
+	public boolean setTaskIdentifiers(String identifiers) {
+		if (!identifiers.equals(getTaskIdentifiers())) {
+			identifiers = identifiers.replaceAll("\\?", "\\\\\\?");
+			taskParser.setTaskPattern(identifiers);
+			return true;
+		}
+		return false;
+	}
+
+
+	/**
+	 * @see #installParser()
+	 */
+	private void uninstallParser() {
+		if (installed) {
+			RText rtext = getRText();
+			AbstractMainView mainView = rtext.getMainView();
+			mainView.removePropertyChangeListener(AbstractMainView.TEXT_AREA_ADDED_PROPERTY, this);
+			mainView.removePropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
+			for (int i=0; i<mainView.getNumDocuments(); i++) {
+				RTextEditorPane textArea = mainView.getRTextEditorPaneAt(i);
+				removeTaskParser(textArea);
+			}
+			model.setRowCount(0);
+			installed = false;
+		}
 	}
 
 

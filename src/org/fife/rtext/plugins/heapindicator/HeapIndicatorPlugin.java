@@ -34,7 +34,6 @@ import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.ToolTipManager;
@@ -172,9 +171,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 
 
 	/**
-	 * Returns the author of the plugin.
-	 *
-	 * @return The author.
+	 * {@inheritDoc}
 	 */
 	public String getPluginAuthor() {
 		return "Robert Futrell";
@@ -182,11 +179,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 
 
 	/**
-	 * Returns the icon to display beside the name of this plugin in the
-	 * application's interface.
-	 *
-	 * @return The icon for this plugin.  This value may be <code>null</code>
-	 *         to represent no icon.
+	 * {@inheritDoc}
 	 */
 	public Icon getPluginIcon() {
 		return null;
@@ -194,19 +187,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 
 
 	/**
-	 * Returns the menu for this plugin.
-	 *
-	 * @return The menu for this plugin.
-	 */
-	public JMenu getPluginMenu() {
-		return null;
-	}
-
-
-	/**
-	 * Returns the name of the plugin.
-	 *
-	 * @return The plugin name.
+	 * {@inheritDoc}
 	 */
 	public String getPluginName() {
 		return msg.getString("Plugin.Name");
@@ -214,9 +195,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 
 
 	/**
-	 * Returns the version of the plugin.
-	 *
-	 * @return The version number of this plugin.
+	 * {@inheritDoc}
 	 */
 	public String getPluginVersion() {
 		return VERSION;

@@ -41,7 +41,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
-import org.fife.rtext.actions.ViewTasksAction;
 import org.fife.ui.StatusBar;
 import org.fife.ui.app.GUIApplicationPreferences;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -141,7 +140,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public File userDictionary;
 	public int maxSpellingErrors;
 	public boolean viewSpellingList;
-	public boolean viewTaskList;
 
 	public KeyStroke[] mainViewActionAccelerators;
 
@@ -168,7 +166,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 		RTextMenuBar menuBar = (RTextMenuBar)rtext.getJMenuBar();
 
 		String lnfString = UIManager.getLookAndFeel().getClass().getName();
-		ViewTasksAction vta = (ViewTasksAction)rtext.getAction(RText.VIEW_TASKS_ACTION);
 
 		RTextPreferences props = new RTextPreferences();
 		props.location				= rtext.getLocation();
@@ -247,7 +244,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.userDictionary			= spelling.getUserDictionary();
 		props.maxSpellingErrors			= spelling.getMaxSpellingErrors();
 		props.viewSpellingList			= rtext.isSpellingWindowVisible();
-		props.viewTaskList				= vta.isTaskWindowVisible();
 
 		// Save the actions.
 		props.accelerators = new HashMap();
@@ -473,7 +469,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 			}
 			props.maxSpellingErrors		= prefs.getInt("maxSpellingErrors", props.maxSpellingErrors);
 			props.viewSpellingList	= prefs.getBoolean("viewSpellingList", props.viewSpellingList);
-			props.viewTaskList		= prefs.getBoolean("viewTaskList", props.viewTaskList);
 
 			// Get all properties associated with the RTextMenuBar class.
 			prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -627,7 +622,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs.put("userDictionary",						userDictionary==null ? "" : userDictionary.getAbsolutePath());
 		prefs.putInt("maxSpellingErrors",				maxSpellingErrors);
 		prefs.putBoolean("viewSpellingList",			viewSpellingList);
-		prefs.putBoolean("viewTaskList",				viewTaskList);
 
 		// Save all properties related to the RTextMenuBar class.
 		prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -730,7 +724,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 										"userDictionary.txt");
 		maxSpellingErrors    = DEFAULT_MAX_SPELLING_ERRORS;
 		viewSpellingList   = false;
-		viewTaskList = false;
 
 		accelerators = new HashMap();
 		for (int i=0; i<actionNames.length; i++) {
