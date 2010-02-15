@@ -43,9 +43,9 @@ import org.fife.ui.RButton;
 import org.fife.ui.RFileChooser;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplicationConstants;
-import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.Plugin;
+import org.fife.ui.dockablewindows.DockableWindow;
 
 
 /**
@@ -295,7 +295,8 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 */
 	protected void doApplyImpl(Frame frame) {
 		SourceBrowserPlugin p = (SourceBrowserPlugin)getPlugin();
-		p.setPosition(locationCombo.getSelectedIndex());//getSourceBrowserPlacement());
+		DockableWindow wind = p.getDockableWindow(p.getPluginName());
+		wind.setPosition(locationCombo.getSelectedIndex());//getSourceBrowserPlacement());
 		p.setCTagsExecutableLocation(ctagsExecutableTextField.getText());
 		p.setCTagsType(getCTagsType());
 		p.setUseHTMLToolTips(getUseHTMLToolTips());
@@ -421,7 +422,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 * @see #getSourceBrowserPlacement
 	 */
 	private void setSourceBrowserPlacement(int placement) {
-		if (!GUIPlugin.isValidPosition(placement))
+		if (!DockableWindow.isValidPosition(placement))
 			placement = LEFT;
 		locationCombo.setSelectedIndex(placement);
 	}
@@ -470,7 +471,8 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 */
 	protected void setValuesImpl(Frame frame) {
 		SourceBrowserPlugin p = (SourceBrowserPlugin)getPlugin();
-		setSourceBrowserPlacement(p.getPosition());
+		DockableWindow wind = p.getDockableWindow(p.getPluginName());
+		setSourceBrowserPlacement(wind.getPosition());
 		setCTagsExecutableLocation(p.getCTagsExecutableLocation());
 		setCTagsType(p.getCTagsType());
 		setUseHTMLToolTips(p.getUseHTMLToolTips());

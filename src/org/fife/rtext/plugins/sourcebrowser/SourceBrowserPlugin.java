@@ -28,7 +28,9 @@ package org.fife.rtext.plugins.sourcebrowser;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -42,6 +44,7 @@ import org.fife.ui.RScrollPane;
 import org.fife.ui.RTreeSelectionModel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.*;
+import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -119,7 +122,52 @@ public class SourceBrowserPlugin extends GUIPlugin
 		this.lineFoundText = msg.getString("StatusBarMsg.FoundLine");
 		this.cantFindLineText = msg.getString("StatusBarMsg.CantFindLine");
 
-		setLayout(new BorderLayout());
+		// Set any preferences saved from the last time this plugin was used.
+		SourceBrowserPrefs sbp = loadPrefs();
+		DockableWindow wind = createDockableWindow(sbp);
+		putDockableWindow(getPluginName(), wind);
+		setCTagsExecutableLocation(sbp.ctagsExecutable);
+		setCTagsType(sbp.ctagsType);
+		setUseHTMLToolTips(sbp.useHTMLToolTips);
+
+		sourceBrowserThread = new SourceBrowserThread(this);
+		workingRoot = new DefaultMutableTreeNode(msg.getString("Working"));
+
+	}
+
+
+	/**
+	 * Listens for actions in this component.
+	 */
+	public void actionPerformed(ActionEvent e) {
+
+		String command = e.getActionCommand();
+		int row = sourceTree.getClosestRowForLocation(mouseX, mouseY);
+
+		// Go to the tag's location in the current file.
+		if (command.equals("JumpToTag")) {
+			sourceTree.setSelectionRow(row);
+		}
+
+		// Insert the tag at the current caret position.
+		else if (command.equals("InsertAtCaret")) {
+			RTextEditorPane editor = owner.getMainView().getCurrentTextArea();
+			editor.replaceSelection(getTagTextForRow(row));
+			editor.requestFocusInWindow();
+		}
+
+	}
+
+
+	/**
+	 * Creates the single dockable window used by this plugin.
+	 *
+	 * @param sbp Preferences for this plugin.
+	 * @return The dockable window.
+	 */
+	private DockableWindow createDockableWindow(SourceBrowserPrefs sbp) {
+
+		DockableWindow wind = new DockableWindow(this.name, new BorderLayout());
 
 		sourceTree = new JTree();
 		sourceTree.setToggleClickCount(1);
@@ -136,62 +184,16 @@ public class SourceBrowserPlugin extends GUIPlugin
 		scrollPane = new DockableWindowScrollPane(sourceTree);
 		//scrollPane.setViewportBorder(
 		//					BorderFactory.createEmptyBorder(3,3,3,3));
-		add(scrollPane);
+		wind.add(scrollPane);
 
-		// Set any preferences saved from the last time this plugin was used.
-		SourceBrowserPreferences sbp = (SourceBrowserPreferences)
-									SourceBrowserPreferences.load();
-		setActive(sbp.active);
-		setPosition(sbp.position);
-		setCTagsExecutableLocation(sbp.ctagsExecutable);
-		setCTagsType(sbp.ctagsType);
-		setUseHTMLToolTips(sbp.useHTMLToolTips);
-
-		sourceBrowserThread = new SourceBrowserThread(this);
-		workingRoot = new DefaultMutableTreeNode(msg.getString("Working"));
-
+		wind.setActive(sbp.active);
+		wind.setPosition(sbp.position);
 		ComponentOrientation o = ComponentOrientation.
-									getOrientation(getLocale());
-		applyComponentOrientation(o);
+									getOrientation(Locale.getDefault());
+		wind.applyComponentOrientation(o);
 
-	}
+		return wind;
 
-
-	/**
-	 * Listens for actions in this component.
-	 */
-	public void actionPerformed(ActionEvent e) {
-
-		String actionCommand = e.getActionCommand();
-		int row = sourceTree.getClosestRowForLocation(mouseX, mouseY);
-
-		// Go to the tag's location in the current file.
-		if (actionCommand.equals("JumpToTag")) {
-			sourceTree.setSelectionRow(row);
-		}
-
-		// Insert the tag at the current caret position.
-		else if (actionCommand.equals("InsertAtCaret")) {
-			RTextEditorPane editor = owner.getMainView().getCurrentTextArea();
-			editor.replaceSelection(getTagTextForRow(row));
-			editor.requestFocusInWindow();
-		}
-
-	}
-
-
-	/**
-	 * Creates a preferences instance for this GUI plugin based on its
-	 * current properties.  Your GUI plugin should create a subclass of
-	 * <code>GUIPluginPreferences</code> that loads and saves properties
-	 * specific to your plugin, and return it from this method.
-	 *
-	 * @return A preferences instance.
-	 * @see org.fife.ui.app.GUIPluginPreferences
-	 */
-	protected GUIPluginPreferences createPreferences() {
-		return (GUIPluginPreferences)SourceBrowserPreferences.
-										generatePreferences(this);
 	}
 
 
@@ -216,7 +218,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 		menuItem.addActionListener(this);
 		rightClickMenu.add(menuItem);
 
-		rightClickMenu.applyComponentOrientation(getComponentOrientation());
+		ComponentOrientation o = ComponentOrientation.
+										getOrientation(Locale.getDefault());
+		rightClickMenu.applyComponentOrientation(o);
 
 	}
 
@@ -229,7 +233,8 @@ public class SourceBrowserPlugin extends GUIPlugin
 	public void currentTextAreaPropertyChanged(CurrentTextAreaEvent e) {
 
 		// Don't worry about it if we're not visible.
-		if (!isActive()/* || !isShowing()*/)
+		DockableWindow wind = getDockableWindow(getPluginName());
+		if (!wind.isActive()/* || !wind.isShowing()*/)
 			return;
 
 		int type = e.getType();
@@ -476,6 +481,17 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 
 	/**
+	 * Returns the file preferences for this plugin are saved in.
+	 *
+	 * @return The file.
+	 */
+	private File getPrefsFile() {
+		return new File(RTextUtilities.getPreferencesDirectory(),
+						"sourceBrowser.properties");
+	}
+
+
+	/**
 	 * Returns the text being displayed for the specified row in the ctags
 	 * tree.
 	 *
@@ -513,6 +529,27 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 */
 	public void install(AbstractPluggableGUIApplication app) {
 		owner.getMainView().addCurrentTextAreaListener(this);
+	}
+
+
+	/**
+	 * Loads saved preferences into the <code>prefs</code> member.  If this
+	 * is the first time through, default values will be returned.
+	 *
+	 * @return The preferences.
+	 */
+	private SourceBrowserPrefs loadPrefs() {
+		SourceBrowserPrefs prefs = new SourceBrowserPrefs();
+		File prefsFile = getPrefsFile();
+		if (prefsFile.isFile()) {
+			try {
+				prefs.load(prefsFile);
+			} catch (IOException ioe) {
+				owner.displayException(ioe);
+				// (Some) defaults will be used
+			}
+		}
+		return prefs;
 	}
 
 
@@ -728,6 +765,25 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public void savePreferences() {
+		SourceBrowserPrefs prefs = new SourceBrowserPrefs();
+		prefs.active = getDockableWindow(name).isActive();
+		prefs.position = getDockableWindow(name).getPosition();
+		prefs.ctagsExecutable = getCTagsExecutableLocation();
+		prefs.ctagsType = getCTagsType();
+		prefs.useHTMLToolTips = getUseHTMLToolTips();
+		File prefsFile = getPrefsFile();
+		try {
+			prefs.save(prefsFile);
+		} catch (IOException ioe) {
+			owner.displayException(ioe);
+		}
+	}
+
+
+	/**
 	 * Sets the path used to run the ctags executable.
 	 *
 	 * @param location The path to use.
@@ -810,13 +866,15 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * click popup menu are updated.
 	 */
 	public void updateUI() {
-		super.updateUI();
+		DockableWindow wind = getDockableWindow(getPluginName());
+		SwingUtilities.updateComponentTreeUI(wind);
 		if (sourceTree!=null) {
 			treeRenderer = new SourceTreeCellRenderer();
 			sourceTree.setCellRenderer(treeRenderer); // So it picks up new LnF's colors??
 		}
-		if (rightClickMenu!=null)
+		if (rightClickMenu!=null) {
 			SwingUtilities.updateComponentTreeUI(rightClickMenu);
+		}
 	}
 
 
@@ -849,8 +907,8 @@ public class SourceBrowserPlugin extends GUIPlugin
 						owner.setMessages(null, lineFoundText);
 					}
 					else {
-						UIManager.getLookAndFeel().
-									provideErrorFeedback(this);
+						DockableWindow wind = getDockableWindow(getPluginName());
+						UIManager.getLookAndFeel().provideErrorFeedback(wind);
 						owner.setMessages(null, cantFindLineText);
 					}
 
@@ -964,7 +1022,8 @@ public class SourceBrowserPlugin extends GUIPlugin
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			setActive(!isActive());
+			DockableWindow wind = getDockableWindow(getPluginName());
+			wind.setActive(!wind.isActive());
 		}
 
 	}

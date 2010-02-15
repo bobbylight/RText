@@ -24,16 +24,10 @@
  */
 package org.fife.rtext.plugins.tasks;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.regex.Pattern;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -70,6 +64,11 @@ public class TasksPlugin implements Plugin {
 	private TaskWindow window;
 
 	/**
+	 * The location of the task window.
+	 */
+	private int windowPosition;
+
+	/**
 	 * The plugin's icon.
 	 */
 	private Icon icon;
@@ -85,12 +84,6 @@ public class TasksPlugin implements Plugin {
 	private static final String MSG = "org.fife.rtext.plugins.tasks.TasksPlugin";
 	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
-	private static final Pattern TASK_IDENTIFIERS_PATTERN =
-			Pattern.compile("^$|^[\\p{Alpha}\\?]+(?:\\|[\\p{Alpha}\\?]+)*$");
-
-	static final String DEFAULT_TASK_IDS				= "FIXME|TODO|HACK";
-	private static final String PREF_TASK_IDS			= "taskIdentifiers";
-	private static final String PREF_TASK_LIST_VISIBLE	= "taskListVisible";
 	private static final String VERSION					= "1.1.0";
 	private static final String VIEW_TASKS_ACTION		= "viewTasksAction";
 
@@ -102,8 +95,9 @@ public class TasksPlugin implements Plugin {
 	 */
 	public TasksPlugin(AbstractPluggableGUIApplication app) {
 
-		Properties prefs = loadPreferences();
-		taskIdentifiers = prefs.getProperty(PREF_TASK_IDS);
+		TasksPrefs prefs = loadPrefs();
+		taskIdentifiers = prefs.taskIdentifiers;
+		windowPosition = prefs.windowPosition;
 
 		URL url = getClass().getResource("page_white_edit.png");
 		if (url!=null) { // Should always be true
@@ -117,9 +111,7 @@ public class TasksPlugin implements Plugin {
 //		a.setAccelerator(prefs.getAccelerator(VIEW_TASKS_ACTION));
 		rtext.addAction(VIEW_TASKS_ACTION, a);
 
-		boolean visible = Boolean.valueOf(
-				prefs.getProperty(PREF_TASK_LIST_VISIBLE)).booleanValue();
-		if (visible) {
+		if (prefs.windowVisible) {
 			toggleTaskWindowVisible(); // Will create and add task window.
 		}
 
@@ -163,6 +155,17 @@ public class TasksPlugin implements Plugin {
 	 */
 	public String getPluginVersion() {
 		return VERSION;
+	}
+
+
+	/**
+	 * Returns the file preferences for this plugin are saved in.
+	 *
+	 * @return The file.
+	 */
+	private File getPrefsFile() {
+		return new File(RTextUtilities.getPreferencesDirectory(),
+						"tasks.properties");
 	}
 
 
@@ -229,40 +232,23 @@ public class TasksPlugin implements Plugin {
 
 
 	/**
-	 * Loads preferences for this plugin.
+	 * Loads saved preferences into the <code>prefs</code> member.  If this
+	 * is the first time through, default values will be returned.
 	 *
-	 * @return This plugin's preferences.
+	 * @return The preferences.
 	 */
-	private Properties loadPreferences() {
-
-		// Load default preferences
-		Properties prefs = new Properties();
-		prefs.setProperty(PREF_TASK_LIST_VISIBLE, Boolean.TRUE.toString());
-		prefs.setProperty(PREF_TASK_IDS, DEFAULT_TASK_IDS);
-
-		// Load saved preferences, if any.
-		File file = new File(RTextUtilities.getPreferencesDirectory(),
-									"tasks.properties");
-		if (file.isFile()) {
+	private TasksPrefs loadPrefs() {
+		TasksPrefs prefs = new TasksPrefs();
+		File prefsFile = getPrefsFile();
+		if (prefsFile.isFile()) {
 			try {
-				BufferedInputStream bin = new BufferedInputStream(
-												new FileInputStream(file));
-				prefs.load(bin);
-				bin.close();
+				prefs.load(prefsFile);
 			} catch (IOException ioe) {
 				app.displayException(ioe);
+				// (Some) defaults will be used
 			}
 		}
-
-		// Ensure task ID's is proper format - "letter+(|letter+)*"
-		String ids = prefs.getProperty(PREF_TASK_IDS);
-		if (!TASK_IDENTIFIERS_PATTERN.matcher(ids).matches()) {
-			System.out.println("Invalid identifiers: " + ids);
-			prefs.setProperty(PREF_TASK_IDS, DEFAULT_TASK_IDS);
-		}
-
 		return prefs;
-
 	}
 
 
@@ -289,24 +275,15 @@ public class TasksPlugin implements Plugin {
 	 * {@inheritDoc}
 	 */
 	public void savePreferences() {
-
-		// Create preferences for this plugin.
-		Properties prefs = new Properties();
-		prefs.setProperty(PREF_TASK_LIST_VISIBLE, Boolean.valueOf(
-									isTaskWindowVisible()).toString());
-		prefs.setProperty(PREF_TASK_IDS, taskIdentifiers);
-
-		File file = new File(RTextUtilities.getPreferencesDirectory(),
-									"tasks.properties");
+		TasksPrefs prefs = new TasksPrefs();
+		prefs.taskIdentifiers = taskIdentifiers;
+		prefs.windowVisible = isTaskWindowVisible();
+		File prefsFile = getPrefsFile();
 		try {
-			BufferedOutputStream bout = new BufferedOutputStream(
-					new FileOutputStream(file));
-			prefs.store(bout, "Preferences for the Tasks plugin");
-			bout.close();
+			prefs.save(prefsFile);
 		} catch (IOException ioe) {
 			app.displayException(ioe);
 		}
-
 	}
 
 
@@ -329,6 +306,7 @@ public class TasksPlugin implements Plugin {
 	void toggleTaskWindowVisible() {
 		if (window==null) { // First time through
 			window = new TaskWindow(app, taskIdentifiers);
+			window.setPosition(windowPosition);
 			app.addDockableWindow(window);
 		}
 		else {

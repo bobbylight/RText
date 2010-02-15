@@ -46,7 +46,38 @@ import java.util.Map;
 class ChildWindowListener extends ComponentAdapter
 							implements WindowFocusListener {
 
+	/**
+	 * Constant indicating that the child windows should never be
+	 * translucent.
+	 */
+	public static final int TRANSLUCENT_NEVER					= 0;
+
+	/**
+	 * Indicates that the child windows should be translucent when they
+	 * are not focused.
+	 */
+	public static final int TRANSLUCENT_WHEN_NOT_FOCUSED		= 1;
+
+	/**
+	 * Indicates that the child windows should be translucent when they
+	 * are overlapping the main application window.
+	 */
+	public static final int TRANSLUCENT_WHEN_OVERLAPPING_APP	= 2;
+
+	/**
+	 * Indicates that the child windows should always be translucent.
+	 */
+	public static final int TRANSLUCENT_ALWAYS					= 3;
+
+	/**
+	 * The parent application.
+	 */
 	private RText app;
+
+	/**
+	 * When the child windows should be made translucent.
+	 */
+	private int whenTranslucent;
 
 	private Map/*<Window, Boolean>*/ translucentMap;
 
@@ -88,23 +119,23 @@ class ChildWindowListener extends ComponentAdapter
 	public static boolean isTranslucencySupported() {
 
 		boolean supported = false;
-/*
-		try {
-			Class enumClazz = Class.forName("com.sun.awt.AWTUtilities$Translucency");
-			Field[] fields = enumClazz.getDeclaredFields();
-			for (int i=0; i<fields.length; i++) {
-				System.out.println(fields[i].getName());
-				if ("TRANSLUCENT".equals(fields[i].getName())) {
-System.out.println("yay");
-					supported = true;
-				}
-			}
-		} catch (RuntimeException re) {
-			throw re;
-		} catch (Exception e) {
-			supported = false; // FindBugs - non-empty catch block
-		}
-*/
+
+//		try {
+//			Class enumClazz = Class.forName("com.sun.awt.AWTUtilities$Translucency");
+//			Field[] fields = enumClazz.getDeclaredFields();
+//			for (int i=0; i<fields.length; i++) {
+//				System.out.println(fields[i].getName());
+//				if ("TRANSLUCENT".equals(fields[i].getName())) {
+//System.out.println("yay");
+//					supported = true;
+//				}
+//			}
+//		} catch (RuntimeException re) {
+//			throw re;
+//		} catch (Exception e) {
+//			supported = false; // FindBugs - non-empty catch block
+//		}
+
 		return supported;
 
 	}
@@ -129,7 +160,7 @@ System.out.println("yay");
 	 * @param e The event.
 	 */
 	public void windowGainedFocus(WindowEvent e) {
-//		setTranslucent(false);
+		setTranslucent(e.getWindow(), false);
 	}
 
 
@@ -139,7 +170,7 @@ System.out.println("yay");
 	 * @param e The event.
 	 */
 	public void windowLostFocus(WindowEvent e) {
-//		setTranslucent(true);
+		setTranslucent(e.getWindow(), true);
 	}
 
 

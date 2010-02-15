@@ -27,13 +27,17 @@ package org.fife.rtext.plugins.filesystemtree;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.*;
 
 import org.fife.rtext.*;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.app.*;
+import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 
 
@@ -73,42 +77,40 @@ public class FileSystemTreePlugin extends GUIPlugin {
 			pluginIcon = new ImageIcon(url);
 
 		ResourceBundle msg = ResourceBundle.getBundle(BUNDLE_NAME,
-											getLocale(), cl);
+											Locale.getDefault(), cl);
 		this.name = msg.getString("Name");
 
 		viewAction = new ViewAction(msg);
 
-		setLayout(new BorderLayout());
-
-		tree = new Tree(this);
-		RScrollPane scrollPane = new DockableWindowScrollPane(tree);
-		add(scrollPane);
-
-		// Set any preferences saved from the last time this plugin was used.
-		FileSystemTreePreferences sbp = (FileSystemTreePreferences)
-									FileSystemTreePreferences.load();
-		setActive(sbp.active);
-		setPosition(sbp.position);
-
-		ComponentOrientation o = ComponentOrientation.
-									getOrientation(getLocale());
-		applyComponentOrientation(o);
+		DockableWindow wind = createDockableWindow();
+		putDockableWindow(name, wind);
 
 	}
 
 
 	/**
-	 * Creates a preferences instance for this GUI plugin based on its
-	 * current properties.  Your GUI plugin should create a subclass of
-	 * <code>GUIPluginPreferences</code> that loads and saves properties
-	 * specific to your plugin, and return it from this method.
+	 * Creates the single dockable window used by this plugin.
 	 *
-	 * @return A preferences instance.
-	 * @see org.fife.ui.app.GUIPluginPreferences
+	 * @return The dockable window.
 	 */
-	protected GUIPluginPreferences createPreferences() {
-		return (GUIPluginPreferences)FileSystemTreePreferences.
-										generatePreferences(this);
+	private DockableWindow createDockableWindow() {
+
+		DockableWindow wind = new DockableWindow(name, new BorderLayout());
+
+		tree = new Tree(this);
+		RScrollPane scrollPane = new DockableWindowScrollPane(tree);
+		wind.add(scrollPane);
+
+		FileSystemTreePrefs prefs = loadPrefs();
+		wind.setActive(prefs.active);
+		wind.setPosition(prefs.position);
+
+		ComponentOrientation o = ComponentOrientation.
+									getOrientation(Locale.getDefault());
+		wind.applyComponentOrientation(o);
+
+		return wind;
+
 	}
 
 
@@ -164,6 +166,17 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 
 	/**
+	 * Returns the file preferences for this plugin are saved in.
+	 *
+	 * @return The file.
+	 */
+	private File getPrefsFile() {
+		return new File(RTextUtilities.getPreferencesDirectory(),
+						"fileSystemTree.properties");
+	}
+
+
+	/**
 	 * Returns the parent RText instance.
 	 *
 	 * @return The parent RText instance.
@@ -180,6 +193,43 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 * @see #uninstall
 	 */
 	public void install(AbstractPluggableGUIApplication app) {
+	}
+
+
+	/**
+	 * Loads saved preferences into the <code>prefs</code> member.  If this
+	 * is the first time through, default values will be returned.
+	 *
+	 * @return The preferences.
+	 */
+	private FileSystemTreePrefs loadPrefs() {
+		FileSystemTreePrefs prefs = new FileSystemTreePrefs();
+		File prefsFile = getPrefsFile();
+		if (prefsFile.isFile()) {
+			try {
+				prefs.load(prefsFile);
+			} catch (IOException ioe) {
+				getRText().displayException(ioe);
+				// (Some) defaults will be used
+			}
+		}
+		return prefs;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void savePreferences() {
+		FileSystemTreePrefs prefs = new FileSystemTreePrefs();
+		prefs.active = getDockableWindow(name).isActive();
+		prefs.position = getDockableWindow(name).getPosition();
+		File prefsFile = getPrefsFile();
+		try {
+			prefs.save(prefsFile);
+		} catch (IOException ioe) {
+			getRText().displayException(ioe);
+		}
 	}
 
 
@@ -207,7 +257,8 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			setActive(!isActive());
+			DockableWindow wind = getDockableWindow(getPluginName());
+			wind.setActive(!wind.isActive());
 		}
 
 	}

@@ -29,6 +29,8 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
@@ -39,6 +41,7 @@ import javax.swing.Timer;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.StatusBarPlugin;
@@ -81,8 +84,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 
 		msg = ResourceBundle.getBundle(BUNDLE_NAME);
 
-		HeapIndicatorPreferences prefs = (HeapIndicatorPreferences)
-									HeapIndicatorPreferences.load();
+		HeapIndicatorPrefs prefs = loadPrefs();
 
 		this.app = app;
 		heapIcon = new HeapIcon(this);
@@ -203,6 +205,17 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 
 
 	/**
+	 * Returns the file preferences for this plugin are saved in.
+	 *
+	 * @return The file.
+	 */
+	private File getPrefsFile() {
+		return new File(RTextUtilities.getPreferencesDirectory(),
+						"heapIndicator.properties");
+	}
+
+
+	/**
 	 * Returns the refresh interval of the heap indicator.
 	 *
 	 * @return The refresh interval, in milliseconds.
@@ -287,6 +300,27 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	}
 
 
+	/**
+	 * Loads saved preferences into the <code>prefs</code> member.  If this
+	 * is the first time through, default values will be returned.
+	 *
+	 * @return The preferences.
+	 */
+	private HeapIndicatorPrefs loadPrefs() {
+		HeapIndicatorPrefs prefs = new HeapIndicatorPrefs();
+		File prefsFile = getPrefsFile();
+		if (prefsFile.isFile()) {
+			try {
+				prefs.load(prefsFile);
+			} catch (IOException ioe) {
+				app.displayException(ioe);
+				// (Some) defaults will be used
+			}
+		}
+		return prefs;
+	}
+
+
 	protected void processMouseEvent(MouseEvent e) {
 		switch (e.getID()) {
 			case MouseEvent.MOUSE_CLICKED:
@@ -315,14 +349,21 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 
 
 	/**
-	 * Called when the GUI application is shutting down.  When this method is
-	 * called, the <code>Plugin</code> should save any properties via the
-	 * Java Preferences API.
-	 *
-	 * @see org.fife.ui.app.PluginPreferences
+	 * {@inheritDoc}
 	 */
 	public void savePreferences() {
-		HeapIndicatorPreferences.generatePreferences(this).save();
+		HeapIndicatorPrefs prefs = new HeapIndicatorPrefs();
+		prefs.visible         = isVisible();
+		prefs.refreshInterval = getRefreshInterval();
+		prefs.useSystemColors = getUseSystemColors();
+		prefs.iconForeground  = getIconForeground();
+		prefs.iconBorderColor = getIconBorderColor();
+		File prefsFile = getPrefsFile();
+		try {
+			prefs.save(prefsFile);
+		} catch (IOException ioe) {
+			app.displayException(ioe);
+		}
 	}
 
 
@@ -403,7 +444,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	/**
 	 * Timer event that gets fired.  This refreshes the GC icon.
 	 */
-	class TimerEvent implements ActionListener {
+	private class TimerEvent implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			getData();

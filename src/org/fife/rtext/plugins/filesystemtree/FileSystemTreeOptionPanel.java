@@ -42,9 +42,9 @@ import javax.swing.border.Border;
 import org.fife.rtext.*;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplicationConstants;
-import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.Plugin;
+import org.fife.ui.dockablewindows.DockableWindow;
 
 
 /**
@@ -118,12 +118,11 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * Updates the file system tree plugin's parameters to reflect those in
 	 * this options panel.
-	 *
-	 * @see #updateGUI
 	 */
 	protected void doApplyImpl(Frame owner) {
 		FileSystemTreePlugin p = (FileSystemTreePlugin)getPlugin();
-		p.setPosition(getFileSystemTreePlacement());
+		DockableWindow wind = p.getDockableWindow(p.getPluginName());
+		wind.setPosition(getFileSystemTreePlacement());
 	}
 
 
@@ -183,7 +182,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	 * @see #getFileSystemTreePlacement
 	 */
 	private void setFileSystemTreePlacement(int placement) {
-		if (!GUIPlugin.isValidPosition(placement))
+		if (!DockableWindow.isValidPosition(placement))
 			placement = LEFT;
 		locationCombo.setSelectedIndex(placement);
 	}
@@ -195,7 +194,8 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	 */
 	protected void setValuesImpl(Frame frame) {
 		FileSystemTreePlugin p = (FileSystemTreePlugin)getPlugin();
-		setFileSystemTreePlacement(p.getPosition());
+		DockableWindow wind = p.getDockableWindow(p.getPluginName());
+		setFileSystemTreePlacement(wind.getPosition());
 	}
 
 

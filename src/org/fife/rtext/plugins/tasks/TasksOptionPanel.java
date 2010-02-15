@@ -126,8 +126,8 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 
 			String taskIds = plugin.getTaskIdentifiers();
 
-			if (!taskIds.equals(TasksPlugin.DEFAULT_TASK_IDS)) {
-				setDisplayedTaskIds(TasksPlugin.DEFAULT_TASK_IDS);
+			if (!taskIds.equals(TasksPrefs.DEFAULT_TASK_IDS)) {
+				setDisplayedTaskIds(TasksPrefs.DEFAULT_TASK_IDS);
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
 			}
