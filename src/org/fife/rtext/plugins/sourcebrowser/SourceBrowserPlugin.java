@@ -92,17 +92,18 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private int mouseX;
 	private int mouseY;					// Where mouse was right-clicked.
 
+	private ViewAction viewAction;
 	private SourceBrowserOptionPanel optionPanel;
 
 	static final String BUNDLE_NAME		=
 					"org.fife.rtext.plugins.sourcebrowser.SourceBrowser";
 
-	private static final String YELLOW_BULLET	=
-				"org/fife/rtext/plugins/sourcebrowser/bullet_blue.gif";
-	private static final String GREEN_BULLET		=
-				"org/fife/rtext/plugins/sourcebrowser/bullet_green.gif";
+	private static final String YELLOW_BULLET	= "bullet_blue.gif";
+	private static final String GREEN_BULLET	= "bullet_green.gif";
 
-	private static final String VERSION_STRING	= "1.0.0";
+	private static final String VERSION_STRING	= "1.1.0";
+
+	private static final String VIEW_SB_ACTION	= "ViewSourceBrowserAction";
 
 
 	/**
@@ -121,6 +122,8 @@ public class SourceBrowserPlugin extends GUIPlugin
 		this.name = msg.getString("Name");
 		this.lineFoundText = msg.getString("StatusBarMsg.FoundLine");
 		this.cantFindLineText = msg.getString("StatusBarMsg.CantFindLine");
+
+		viewAction = new ViewAction(msg);
 
 		// Set any preferences saved from the last time this plugin was used.
 		SourceBrowserPrefs sbp = loadPrefs();
@@ -188,6 +191,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		wind.setActive(sbp.active);
 		wind.setPosition(sbp.position);
+		wind.setIcon(getPluginIcon());
 		ComponentOrientation o = ComponentOrientation.
 									getOrientation(Locale.getDefault());
 		wind.applyComponentOrientation(o);
@@ -528,7 +532,29 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * @see #uninstall
 	 */
 	public void install(AbstractPluggableGUIApplication app) {
+
 		owner.getMainView().addCurrentTextAreaListener(this);
+
+		// Add a menu item to toggle the visibility of the dockable window
+		owner.addAction(VIEW_SB_ACTION, viewAction);
+		RTextMenuBar mb = (RTextMenuBar)owner.getJMenuBar();
+		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(viewAction);
+		item.setSelected(getDockableWindow(getPluginName()).isActive());
+		JMenu viewMenu = mb.getMenuByName(RTextMenuBar.MENU_VIEW);
+		viewMenu.insert(item, viewMenu.getMenuComponentCount()-2);
+		JPopupMenu popup = viewMenu.getPopupMenu();
+		popup.pack();
+		// Only needed for pre-1.6 support
+		popup.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				item.setSelected(getDockableWindow(getPluginName()).isActive());
+			}
+		});
+
 	}
 
 
@@ -948,10 +974,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 		private Icon greenBullet;
 
 		public SourceTreeCellRenderer() {
-			PluginClassLoader cl = (PluginClassLoader)this.getClass().
-												getClassLoader();
-			yellowBullet = new ImageIcon(cl.getResource(YELLOW_BULLET));
-			greenBullet = new ImageIcon(cl.getResource(GREEN_BULLET));
+			Class clazz = getClass();
+			yellowBullet = new ImageIcon(clazz.getResource(YELLOW_BULLET));
+			greenBullet = new ImageIcon(clazz.getResource(GREEN_BULLET));
 		}
 
 		public Component getTreeCellRendererComponent(JTree tree,

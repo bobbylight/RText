@@ -27,12 +27,15 @@ package org.fife.rtext.plugins.filesystemtree;
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -54,11 +57,12 @@ import org.fife.ui.dockablewindows.DockableWindow;
  * @version 1.0
  */
 class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
-					implements ItemListener, GUIApplicationConstants {
+			implements ActionListener, ItemListener, GUIApplicationConstants {
 
+	private JCheckBox visibleCB;
 	private JComboBox locationCombo;
 
-	private static final String LOCATION_PROPERTY = "LocationPanelProperty";
+	private static final String PROPERTY = "Property";
 
 
 	/**
@@ -85,10 +89,17 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 		setLayout(new BorderLayout());
 
 		// A panel to contain everything that will go into our "top" area.
-		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+		Box topPanel = Box.createVerticalBox();
 
-		// A panel in which to select the file system tree placement.
+		// A check box toggling the plugin's visibility.
+		JPanel temp = new JPanel(new BorderLayout());
+		visibleCB = new JCheckBox(gpb.getString("Visible"));
+		visibleCB.addActionListener(this);
+		temp.add(visibleCB, BorderLayout.LINE_START);
+		topPanel.add(temp);
+		topPanel.add(Box.createVerticalStrut(5));
+
+		// A combo in which to select the dockable window's placement.
 		JPanel locationPanel = new JPanel();
 		locationPanel.setLayout(new BoxLayout(locationPanel,
 										BoxLayout.LINE_AXIS));
@@ -116,12 +127,29 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public void actionPerformed(ActionEvent e) {
+
+		Object source = e.getSource();
+
+		if (visibleCB==source) {
+			hasUnsavedChanges = true;
+			boolean visible = visibleCB.isSelected();
+			firePropertyChange(PROPERTY, !visible, visible);
+		}
+
+	}
+
+
+	/**
 	 * Updates the file system tree plugin's parameters to reflect those in
 	 * this options panel.
 	 */
 	protected void doApplyImpl(Frame owner) {
 		FileSystemTreePlugin p = (FileSystemTreePlugin)getPlugin();
 		DockableWindow wind = p.getDockableWindow(p.getPluginName());
+		wind.setActive(visibleCB.isSelected());
 		wind.setPosition(getFileSystemTreePlacement());
 	}
 
@@ -168,7 +196,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 				e.getStateChange()==ItemEvent.SELECTED) {
 			hasUnsavedChanges = true;
 			int placement = getFileSystemTreePlacement();
-			firePropertyChange(LOCATION_PROPERTY, -1, placement);
+			firePropertyChange(PROPERTY, -1, placement);
 		}
 	}
 
@@ -195,6 +223,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	protected void setValuesImpl(Frame frame) {
 		FileSystemTreePlugin p = (FileSystemTreePlugin)getPlugin();
 		DockableWindow wind = p.getDockableWindow(p.getPluginName());
+		visibleCB.setSelected(wind.isActive());
 		setFileSystemTreePlacement(wind.getPosition());
 	}
 

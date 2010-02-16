@@ -65,8 +65,8 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 						implements ActionListener, DocumentListener,
 								ItemListener, GUIApplicationConstants {
 
+	private JCheckBox visibleCB;
 	private JComboBox locationCombo;
-
 	private JLabel ctagsExecutableLocationLabel;
 	private JRadioButton exubCtagsRB;
 	private JRadioButton standardCtagsRB;
@@ -80,6 +80,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	private static final String CTAGS_LOCATION_PROPERTY = "CTagsLocation";
 	private static final String CTAGS_TYPE_PROPERTY = "CTagsType";
 	private static final String HTML_TOOLTIPS_PROPERTY = "HTMLToolTips";
+	private static final String PROPERTY				= "Property";
 	private static final String SB_LOCATION_PROPERTY = "SBLoc";
 
 	private static final String CTAGS_HOME_PAGE	= "http://ctags.sourceforge.net";
@@ -105,13 +106,20 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 		setLayout(new BorderLayout());
 
 		// A panel to contain everything that will go into our "top" area.
-		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+		Box topPanel = Box.createVerticalBox();
 		topPanel.setBorder(
 				new OptionPanelBorder(sbb.getString("OptionPanel.Title")));
 
+		// A check box toggling the plugin's visibility.
+		JPanel temp = new JPanel(new BorderLayout());
+		visibleCB = new JCheckBox(gpb.getString("Visible"));
+		visibleCB.addActionListener(this);
+		temp.add(visibleCB, BorderLayout.LINE_START);
+		topPanel.add(temp);
+		topPanel.add(Box.createVerticalStrut(5));
+
 		// A combo in which to select the file system tree placement.
-		JPanel temp = new JPanel(new SpringLayout());
+		temp = new JPanel(new SpringLayout());
 		locationCombo = new JComboBox();
 		UIUtil.fixComboOrientation(locationCombo);
 		locationCombo.addItem(gpb.getString("Location.top"));
@@ -235,9 +243,15 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		String actionCommand = e.getActionCommand();
+		String command = e.getActionCommand();
 
-		if (actionCommand.equals("Browse")) {
+		if (visibleCB==e.getSource()) {
+			hasUnsavedChanges = true;
+			boolean visible = visibleCB.isSelected();
+			firePropertyChange(PROPERTY, !visible, visible);
+		}
+
+		else if ("Browse".equals(command)) {
 			if (exeFileChooser==null) {
 				exeFileChooser = new RFileChooser();
 				//exeFileChooser.setFileFilter(new ExecutableFileFilter());
@@ -254,7 +268,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 			}
 		}
 
-		else if (actionCommand.equals("ExuberantCtags")) {
+		else if ("ExuberantCtags".equals(command)) {
 			if (lastSelectedCtagsRB!=exubCtagsRB) {
 				lastSelectedCtagsRB = exubCtagsRB;
 				hasUnsavedChanges = true;
@@ -263,13 +277,13 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 			}
 		}
 
-		else if (actionCommand.equals("HTMLToolTips")) {
+		else if ("HTMLToolTips".equals(command)) {
 			hasUnsavedChanges = true;
 			boolean value = htmlToolTipCheckBox.isSelected();
 			firePropertyChange(HTML_TOOLTIPS_PROPERTY, !value, value);
 		}
 
-		else if (actionCommand.equals("StandardCtags")) {
+		else if ("StandardCtags".equals(command)) {
 			if (lastSelectedCtagsRB!=standardCtagsRB) {
 				lastSelectedCtagsRB = standardCtagsRB;
 				hasUnsavedChanges = true;
@@ -296,6 +310,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	protected void doApplyImpl(Frame frame) {
 		SourceBrowserPlugin p = (SourceBrowserPlugin)getPlugin();
 		DockableWindow wind = p.getDockableWindow(p.getPluginName());
+		wind.setActive(visibleCB.isSelected());
 		wind.setPosition(locationCombo.getSelectedIndex());//getSourceBrowserPlacement());
 		p.setCTagsExecutableLocation(ctagsExecutableTextField.getText());
 		p.setCTagsType(getCTagsType());
@@ -472,6 +487,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	protected void setValuesImpl(Frame frame) {
 		SourceBrowserPlugin p = (SourceBrowserPlugin)getPlugin();
 		DockableWindow wind = p.getDockableWindow(p.getPluginName());
+		visibleCB.setSelected(wind.isActive());
 		setSourceBrowserPlacement(wind.getPosition());
 		setCTagsExecutableLocation(p.getCTagsExecutableLocation());
 		setCTagsType(p.getCTagsType());

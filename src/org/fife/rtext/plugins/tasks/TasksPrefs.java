@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Pattern;
 
+import javax.swing.KeyStroke;
+
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.Prefs;
 
@@ -49,6 +51,11 @@ public class TasksPrefs extends Prefs {
 	 * The location of the dockable tasks window.
 	 */
 	public int windowPosition;
+
+	/**
+	 * Key stroke that toggles the task window's visibility.
+	 */
+	public KeyStroke windowVisibilityAccelerator;
 
 	/**
 	 * The task identifiers.
@@ -80,6 +87,7 @@ public class TasksPrefs extends Prefs {
 	public void setDefaults() {
 		windowVisible = true;
 		windowPosition = GUIPlugin.BOTTOM;
+		windowVisibilityAccelerator = null;
 		taskIdentifiers = DEFAULT_TASK_IDS;
 	}
 

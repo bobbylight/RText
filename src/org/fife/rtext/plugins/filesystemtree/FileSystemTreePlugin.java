@@ -33,6 +33,8 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import org.fife.rtext.*;
 import org.fife.ui.RScrollPane;
@@ -59,7 +61,9 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 	static final String BUNDLE_NAME			=
 					"org/fife/rtext/plugins/filesystemtree/FileSystemTree";
-	private static final String VERSION_STRING	= "1.0.0";
+	private static final String VERSION_STRING	= "1.1.0";
+
+	private static final String VIEW_FST_ACTION	= "ViewFileSystemTreeAction";
 
 
 	/**
@@ -71,13 +75,11 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 		this.owner = (RText)app;
 
-		ClassLoader cl = this.getClass().getClassLoader();
-		URL url = cl.getResource("org/fife/rtext/plugins/filesystemtree/filesystemtree.gif");
+		URL url = this.getClass().getResource("filesystemtree.gif");
 		if (url!=null)
 			pluginIcon = new ImageIcon(url);
 
-		ResourceBundle msg = ResourceBundle.getBundle(BUNDLE_NAME,
-											Locale.getDefault(), cl);
+		ResourceBundle msg = ResourceBundle.getBundle(BUNDLE_NAME);
 		this.name = msg.getString("Name");
 
 		viewAction = new ViewAction(msg);
@@ -104,6 +106,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		FileSystemTreePrefs prefs = loadPrefs();
 		wind.setActive(prefs.active);
 		wind.setPosition(prefs.position);
+		wind.setIcon(getPluginIcon());
 
 		ComponentOrientation o = ComponentOrientation.
 									getOrientation(Locale.getDefault());
@@ -187,12 +190,30 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 
 	/**
-	 * Called just after a plugin is added to a GUI application.
-	 *
-	 * @param app The application to which this plugin was just added.
-	 * @see #uninstall
+	 * {@inheritDoc}
 	 */
 	public void install(AbstractPluggableGUIApplication app) {
+
+		// Add a menu item to toggle the visibility of the dockable window
+		owner.addAction(VIEW_FST_ACTION, viewAction);
+		RTextMenuBar mb = (RTextMenuBar)owner.getJMenuBar();
+		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(viewAction);
+		item.setSelected(getDockableWindow(getPluginName()).isActive());
+		JMenu viewMenu = mb.getMenuByName(RTextMenuBar.MENU_VIEW);
+		viewMenu.insert(item, viewMenu.getMenuComponentCount()-2);
+		JPopupMenu popup = viewMenu.getPopupMenu();
+		popup.pack();
+		// Only needed for pre-1.6 support
+		popup.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				item.setSelected(getDockableWindow(getPluginName()).isActive());
+			}
+		});
+
 	}
 
 

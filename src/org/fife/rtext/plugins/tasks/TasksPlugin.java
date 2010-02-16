@@ -32,6 +32,9 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
@@ -108,7 +111,7 @@ public class TasksPlugin implements Plugin {
 		this.app = rtext;
 
 		ViewTasksAction a = new ViewTasksAction(rtext, msg, this);
-//		a.setAccelerator(prefs.getAccelerator(VIEW_TASKS_ACTION));
+		a.setAccelerator(prefs.windowVisibilityAccelerator);
 		rtext.addAction(VIEW_TASKS_ACTION, a);
 
 		if (prefs.windowVisible) {
@@ -208,15 +211,26 @@ public class TasksPlugin implements Plugin {
 
 		RText rtext = (RText)app;
 
-		final ViewTasksAction vta = (ViewTasksAction)rtext.getAction(VIEW_TASKS_ACTION);
-		final JCheckBoxMenuItem tasksItem = new JCheckBoxMenuItem(vta);
-		tasksItem.setToolTipText(null);
-		tasksItem.setState(isTaskWindowVisible());
+		ViewTasksAction vta = (ViewTasksAction)rtext.getAction(VIEW_TASKS_ACTION);
+		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(vta);
+		item.setToolTipText(null);
+		item.setSelected(isTaskWindowVisible());
 
 		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
-		JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_VIEW);
-		menu.insert(tasksItem, menu.getItemCount()-2);
-
+		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_VIEW);
+		menu.insert(item, menu.getItemCount()-2);
+		JPopupMenu popup = menu.getPopupMenu();
+		popup.pack();
+		// Only needed for pre-1.6 support
+		popup.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				item.setSelected(isTaskWindowVisible());
+			}
+		});
 
 	}
 
