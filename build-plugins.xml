@@ -22,7 +22,6 @@
 	<property name="source-dir"     location="src"/>
 	<property name="class-dir"      location="ant-classes"/>
 	<property name="dist-dir"       location="dist"/>
-	<property name="compiler"       value="Robert Futrell"/>
 	<property name="debug"          value="true"/>
 	<property name="debuglevel"     value="lines,var,source"/>
 	<property name="java-level"     value="1.4"/>
@@ -66,7 +65,7 @@
 				<include name="org/fife/rtext/plugins/ant/**"/>
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="${compiler}"/>
+				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.ant.AntPlugin"/>
 			</manifest>
 		</jar>
 -->
@@ -84,7 +83,7 @@
 				<include name="org/fife/rtext/plugins/sourcebrowser/**"/>
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="${compiler}"/>
+				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.sourcebrowser.SourceBrowserPlugin"/>
 			</manifest>
 		</jar>
 
@@ -100,7 +99,7 @@
 				<include name="org/fife/rtext/plugins/filesystemtree/**"/>
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="${compiler}"/>
+				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.filesystemtree.FileSystemTreePlugin"/>
 			</manifest>
 		</jar>
 
@@ -116,7 +115,7 @@
 				<include name="org/fife/rtext/plugins/heapindicator/**"/>
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="${compiler}"/>
+				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.heapindicator.HeapIndicatorPlugin"/>
 			</manifest>
 		</jar>
 
@@ -132,7 +131,7 @@
 				<include name="org/fife/rtext/plugins/tasks/**"/>
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="${compiler}"/>
+				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.tasks.TasksPlugin"/>
 			</manifest>
 		</jar>
 
@@ -148,7 +147,7 @@
 				<include name="org/fife/rtext/plugins/tools/**"/>
 			</fileset>
 			<manifest>
-				<attribute name="Built-By" value="${compiler}"/>
+				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.tools.ToolPlugin"/>
 			</manifest>
 		</jar>
 

@@ -82,9 +82,11 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		ResourceBundle msg = ResourceBundle.getBundle(BUNDLE_NAME);
 		this.name = msg.getString("Name");
 
-		viewAction = new ViewAction(msg);
+		FileSystemTreePrefs prefs = loadPrefs();
+		viewAction = new ViewAction(owner, msg);
+		viewAction.setAccelerator(prefs.windowVisibilityAccelerator);
 
-		DockableWindow wind = createDockableWindow();
+		DockableWindow wind = createDockableWindow(prefs);
 		putDockableWindow(name, wind);
 
 	}
@@ -93,9 +95,10 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	/**
 	 * Creates the single dockable window used by this plugin.
 	 *
+	 * @param prefs Preferences for this plugin.
 	 * @return The dockable window.
 	 */
-	private DockableWindow createDockableWindow() {
+	private DockableWindow createDockableWindow(FileSystemTreePrefs prefs) {
 
 		DockableWindow wind = new DockableWindow(name, new BorderLayout());
 
@@ -103,7 +106,6 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		RScrollPane scrollPane = new DockableWindowScrollPane(tree);
 		wind.add(scrollPane);
 
-		FileSystemTreePrefs prefs = loadPrefs();
 		wind.setActive(prefs.active);
 		wind.setPosition(prefs.position);
 		wind.setIcon(getPluginIcon());
@@ -245,6 +247,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		FileSystemTreePrefs prefs = new FileSystemTreePrefs();
 		prefs.active = getDockableWindow(name).isActive();
 		prefs.position = getDockableWindow(name).getPosition();
+		prefs.windowVisibilityAccelerator = viewAction.getAccelerator();
 		File prefsFile = getPrefsFile();
 		try {
 			prefs.save(prefsFile);
@@ -268,13 +271,10 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	/**
 	 * Toggles the visibility of this file system tree.
 	 */
-	private class ViewAction extends AbstractAction {
+	private class ViewAction extends StandardAction {
 
-		public ViewAction(ResourceBundle msg) {
-			putValue(NAME, msg.getString("MenuItem.View"));
-			putValue(MNEMONIC_KEY, new Integer(
-					msg.getString("MenuItem.View.Mnemonic").charAt(0)));
-			putValue(SHORT_DESCRIPTION, msg.getString("MenuItem.View.Desc"));
+		public ViewAction(RText app, ResourceBundle msg) {
+			super(app, msg, "MenuItem.View");
 		}
 
 		public void actionPerformed(ActionEvent e) {

@@ -24,6 +24,8 @@
  */
 package org.fife.rtext.plugins.sourcebrowser;
 
+import javax.swing.KeyStroke;
+
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.Prefs;
 
@@ -47,6 +49,11 @@ public class SourceBrowserPrefs extends Prefs {
 	public int position;
 
 	/**
+	 * Key stroke that toggles the dockable window's visibility.
+	 */
+	public KeyStroke windowVisibilityAccelerator;
+
+	/**
 	 * The filename of the Exuberant CTags executable.
 	 */
 	public String ctagsExecutable;
@@ -68,6 +75,7 @@ public class SourceBrowserPrefs extends Prefs {
 	public void setDefaults() {
 		active = true;
 		position = GUIPlugin.LEFT;
+		windowVisibilityAccelerator = null;
 		ctagsExecutable = "/usr/contrib/bin/ctags";
 		ctagsType = SourceBrowserPlugin.CTAGS_TYPE_EXUBERANT;
 		useHTMLToolTips = true;

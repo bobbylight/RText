@@ -47,8 +47,12 @@ import org.fife.ui.rsyntaxtextarea.parser.TaskTagParser;
 
 
 /**
- * A window that displays the "todo" and "fixme" items in all open files.
- * Parsing for tasks is only done if this window is visible.
+ * A window that displays text flagged in source code comments that have
+ * been designated as "tasks."  Tasks are identified by configurable
+ * identifiers, such as "<code>FIXME</code>", "<code>TODO</code>" and
+ * "<code>HACK</code>".<p>
+ *
+ * Parsing for tasks is only done if the tasks window is visible.
  *
  * @author Robert Futrell
  * @version 1.0
@@ -74,8 +78,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 		setLayout(new BorderLayout());
 		add(sp);
 
-		setPosition(BOTTOM);
-		setActive(true);
+		// active and position are set by caller, from TasksPrefs
 		setDockableWindowName(rtext.getString("TaskList.Tasks"));
 
 		URL url = getClass().getResource("page_white_edit.png");
@@ -84,14 +87,6 @@ class TaskWindow extends AbstractParserNoticeWindow
 		taskParser = new TaskTagParser();
 		setTaskIdentifiers(taskIdentifiers);
 
-	}
-
-	/**
-	 * Overridden to add parsing listeners when this window is visible.
-	 */
-	public void addNotify() {
-		super.addNotify();
-		installParser();
 	}
 
 
@@ -187,16 +182,6 @@ class TaskWindow extends AbstractParserNoticeWindow
 							RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
 		}
 
-	}
-
-
-	/**
-	 * Overridden to remove all parsing listeners when this window is not
-	 * visible.
-	 */
-	public void removeNotify() {
-		super.removeNotify();
-		uninstallParser();
 	}
 
 

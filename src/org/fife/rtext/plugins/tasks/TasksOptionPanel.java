@@ -201,8 +201,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	 * {@inheritDoc}
 	 */
 	protected void setValuesImpl(Frame owner) {
-		TaskWindow window = plugin.getTasksWindow();
-		setDisplayedTaskIds(window.getTaskIdentifiers());
+		setDisplayedTaskIds(plugin.getTaskIdentifiers());
 	}
 
 

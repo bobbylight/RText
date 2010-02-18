@@ -290,11 +290,13 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 			if (e.getButton()==MouseEvent.BUTTON1 && e.getClickCount()==2) {
 				int row = table.rowAtPoint(e.getPoint());
 				if (row>-1) {
+					// Get values from model since columns are re-orderable.
+					TableModel model = (TableModel)table.getModel();
 					RTextEditorPane textArea =
-						(RTextEditorPane)table.getValueAt(row, 1);
+						(RTextEditorPane)model.getValueAt(row, 1);
 					AbstractMainView mainView = rtext.getMainView();
 					if (mainView.setSelectedTextArea(textArea)) {
-						Integer i = (Integer)table.getValueAt(row, 2);
+						Integer i = (Integer)model.getValueAt(row, 2);
 						int line = i.intValue() - 1; // 0-based
 						try {
 							textArea.setCaretPosition(

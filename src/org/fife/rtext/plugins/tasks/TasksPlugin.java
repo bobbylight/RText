@@ -292,6 +292,8 @@ public class TasksPlugin implements Plugin {
 		TasksPrefs prefs = new TasksPrefs();
 		prefs.taskIdentifiers = taskIdentifiers;
 		prefs.windowVisible = isTaskWindowVisible();
+		ViewTasksAction vta = (ViewTasksAction)app.getAction(VIEW_TASKS_ACTION);
+		prefs.windowVisibilityAccelerator = vta.getAccelerator();
 		File prefsFile = getPrefsFile();
 		try {
 			prefs.save(prefsFile);
@@ -307,9 +309,14 @@ public class TasksPlugin implements Plugin {
 	 * @param identifiers The identifiers.
 	 */
 	void setTaskIdentifiers(String identifiers) {
-		if (window.setTaskIdentifiers(identifiers)) { // If it was modified
-			taskIdentifiers = window.getTaskIdentifiers(); // In case invalid
-			reparseForTasks();
+		if (window!=null) {
+			if (window.setTaskIdentifiers(identifiers)) { // If it was modified
+				taskIdentifiers = window.getTaskIdentifiers(); // In case invalid
+				reparseForTasks();
+			}
+		}
+		else {
+			taskIdentifiers = identifiers;
 		}
 	}
 
@@ -321,6 +328,7 @@ public class TasksPlugin implements Plugin {
 		if (window==null) { // First time through
 			window = new TaskWindow(app, taskIdentifiers);
 			window.setPosition(windowPosition);
+			window.setActive(true);
 			app.addDockableWindow(window);
 		}
 		else {

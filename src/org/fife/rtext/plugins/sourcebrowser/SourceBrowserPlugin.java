@@ -40,6 +40,7 @@ import javax.swing.tree.*;
 
 import org.fife.ctags.TagEntry;
 import org.fife.rtext.*;
+import org.fife.rtext.optionsdialog.OptionsDialog;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.RTreeSelectionModel;
 import org.fife.ui.UIUtil;
@@ -88,9 +89,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private File ctagsFile;				// Just for speed.
 	private String ctagsType;
 
-	private JPopupMenu rightClickMenu;		// For the user right-clicking a node.
 	private int mouseX;
-	private int mouseY;					// Where mouse was right-clicked.
+	private int mouseY;
+	private boolean ignoreTreeSelections;
 
 	private ViewAction viewAction;
 	private SourceBrowserOptionPanel optionPanel;
@@ -123,10 +124,12 @@ public class SourceBrowserPlugin extends GUIPlugin
 		this.lineFoundText = msg.getString("StatusBarMsg.FoundLine");
 		this.cantFindLineText = msg.getString("StatusBarMsg.CantFindLine");
 
-		viewAction = new ViewAction(msg);
+		SourceBrowserPrefs sbp = loadPrefs();
+
+		viewAction = new ViewAction(owner, msg);
+		viewAction.setAccelerator(sbp.windowVisibilityAccelerator);
 
 		// Set any preferences saved from the last time this plugin was used.
-		SourceBrowserPrefs sbp = loadPrefs();
 		DockableWindow wind = createDockableWindow(sbp);
 		putDockableWindow(getPluginName(), wind);
 		setCTagsExecutableLocation(sbp.ctagsExecutable);
@@ -197,34 +200,6 @@ public class SourceBrowserPlugin extends GUIPlugin
 		wind.applyComponentOrientation(o);
 
 		return wind;
-
-	}
-
-
-	/**
-	 * Creates the right-click menu.  This menu contains options for things
-	 * such as going to the specified tag, inserting the tag at the current
-	 * caret position, etc.
-	 */
-	private void createRightClickMenu() {
-
-		rightClickMenu = new JPopupMenu();
-
-		// Create an item for inserting the tag at the caret location.
-		JMenuItem menuItem = new JMenuItem("foo");
-		menuItem.setActionCommand("InsertAtCaret");
-		menuItem.addActionListener(this);
-		rightClickMenu.add(menuItem);
-
-		// Create a menu item for jumping to a tag's location.
-		menuItem = new JMenuItem("bar");
-		menuItem.setActionCommand("JumpToTag");
-		menuItem.addActionListener(this);
-		rightClickMenu.add(menuItem);
-
-		ComponentOrientation o = ComponentOrientation.
-										getOrientation(Locale.getDefault());
-		rightClickMenu.applyComponentOrientation(o);
 
 	}
 
@@ -588,43 +563,59 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		if (e.isPopupTrigger()) {
 
+			JPopupMenu popup = new JPopupMenu();
+
 			mouseX = e.getX();
 			mouseY = e.getY();
 			int row = sourceTree.getClosestRowForLocation(mouseX, mouseY);
-			if (row==-1)
-				return; // If tree isn't visible (e.g. plain text file).
 
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode)sourceTree.
-							getPathForRow(row).getLastPathComponent();
+			// The tree may not be visible (we're editing a plain text file)
+			if (row>-1) {
 
-			String tagText = node.toString();
+				DefaultMutableTreeNode node =
+					(DefaultMutableTreeNode)sourceTree.getPathForRow(row).
+										getLastPathComponent();
 
-			// Ignore the expandable "tag type" nodes. Special care must be
-			// taken here because empty tag-type nodes are considered
-			// "leaves."  Also display no menu if "<ctags not found>" message
-			// is displayed.
-			if (!sourceTree.getModel().isLeaf(node) ||
-					tagText.indexOf("(0)")>-1 || tagText.startsWith("<")) {
-				return;
+				// If we're clicking on a node representing a tag...
+				String tagText = node.toString();
+				if (sourceTree.getModel().isLeaf(node) &&
+						tagText!=null &&
+						tagText.indexOf("(0)")==-1 &&
+						!tagText.startsWith("<")) {
+
+					ignoreTreeSelections = true;
+					// Don't bother selecting if it's a category
+					sourceTree.setSelectionRow(row);
+					ignoreTreeSelections = false;
+
+					// Add an "Insert tag" menu item.
+					JMenuItem item = new JMenuItem(msg.getString("InsertTag") + tagText);
+					item.setMnemonic(
+							msg.getString("InsertTagMnemonic").charAt(0));
+					item.setActionCommand("InsertAtCaret");
+					item.addActionListener(this);
+					popup.add(item);
+
+					// Add an "Jump to tag" menu item.
+					item = new JMenuItem(msg.getString("JumpToTag") + tagText);
+					item.setMnemonic(
+							msg.getString("JumpToTagMnemonic").charAt(0));
+					item.setActionCommand("JumpToTag");
+					item.addActionListener(this);
+					popup.add(item);
+
+				}
+
 			}
 
-			// Create the right-click menu if it isn't already done.
-			if (rightClickMenu==null) {
-				createRightClickMenu();
+			if (popup.getComponentCount()>0) {
+				popup.addSeparator();
 			}
 
-			// Prepare the "Insert tag" menu item.
-			JMenuItem menuItem = (JMenuItem)rightClickMenu.getComponent(0);
-			menuItem.setText(msg.getString("InsertTag") + tagText);
-			menuItem.setMnemonic(
-						msg.getString("InsertTagMnemonic").charAt(0));
+			JMenuItem item = new JMenuItem(new ConfigureAction());
+			popup.add(item);
 
-			// Prepare the "Jump to tag" menu item.
-			menuItem = (JMenuItem)rightClickMenu.getComponent(1);
-			menuItem.setText(msg.getString("JumpToTag") + tagText);
-			menuItem.setMnemonic(
-						msg.getString("JumpToTagMnemonic").charAt(0));
-			rightClickMenu.show(sourceTree, mouseX, mouseY);
+			popup.show(sourceTree, mouseX, mouseY);
 
 		}
 
@@ -635,7 +626,23 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * Called when the user clicks in the ctags tree.
 	 */
 	public void mouseClicked(MouseEvent e) {
+
+		// Double-clicking on "<ctags executable not configured" brings up the
+		// options dialog.
+		if (e.getClickCount()==2 && e.getButton()==MouseEvent.BUTTON1) {
+			TreePath path = sourceTree.getSelectionPath();
+			if (path!=null) {
+				DefaultMutableTreeNode node =
+					(DefaultMutableTreeNode)path.getLastPathComponent();
+				if (node.toString().startsWith("<")) {
+					showOptions();
+					return;
+				}
+			}
+		}
+
 		maybeShowPopup(e);
+
 	}
 
 
@@ -797,6 +804,8 @@ public class SourceBrowserPlugin extends GUIPlugin
 		SourceBrowserPrefs prefs = new SourceBrowserPrefs();
 		prefs.active = getDockableWindow(name).isActive();
 		prefs.position = getDockableWindow(name).getPosition();
+		ViewAction a = (ViewAction)owner.getAction(VIEW_SB_ACTION);
+		prefs.windowVisibilityAccelerator = a.getAccelerator();
 		prefs.ctagsExecutable = getCTagsExecutableLocation();
 		prefs.ctagsType = getCTagsType();
 		prefs.useHTMLToolTips = getUseHTMLToolTips();
@@ -876,6 +885,17 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 
 	/**
+	 * Shows this plugin's options in the Options dialog.
+	 */
+	private void showOptions() {
+		OptionsDialog od = (OptionsDialog)owner.getOptionsDialog();
+		od.initialize();
+		od.setSelectedOptionsPanel(msg.getString("Name"));
+		od.setVisible(true);
+	}
+
+
+	/**
 	 * Called just before this <code>Plugin</code> is removed from an
 	 * RText instance.  Here we uninstall any listeners we registered.
 	 *
@@ -898,9 +918,6 @@ public class SourceBrowserPlugin extends GUIPlugin
 			treeRenderer = new SourceTreeCellRenderer();
 			sourceTree.setCellRenderer(treeRenderer); // So it picks up new LnF's colors??
 		}
-		if (rightClickMenu!=null) {
-			SwingUtilities.updateComponentTreeUI(rightClickMenu);
-		}
 	}
 
 
@@ -913,6 +930,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * @param e The tree selection event.
 	 */
 	public void valueChanged(TreeSelectionEvent e) {
+		if (ignoreTreeSelections) {
+			return;
+		}
 		TreePath path = sourceTree.getSelectionPath();
 		// Must check for null, otherwise we get an exception on shutdown.
 		if (path!=null) {
@@ -948,6 +968,22 @@ public class SourceBrowserPlugin extends GUIPlugin
 				editor.requestFocusInWindow();	// So we can see the highlighted line.
 			}
 		}
+	}
+
+
+	/**
+	 * Displays the options for this plugin in the Options dialog.
+	 */
+	private class ConfigureAction extends StandardAction {
+
+		public ConfigureAction() {
+			super(owner, msg, "MenuItem.Configure");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			showOptions();
+		}
+
 	}
 
 
@@ -1037,13 +1073,10 @@ public class SourceBrowserPlugin extends GUIPlugin
 	/**
 	 * Toggles the visibility of this source browser.
 	 */
-	private class ViewAction extends AbstractAction {
+	private class ViewAction extends StandardAction {
 
-		public ViewAction(ResourceBundle msg) {
-			putValue(NAME, msg.getString("MenuItem.View"));
-			putValue(MNEMONIC_KEY, new Integer(
-					msg.getString("MenuItem.View.Mnemonic").charAt(0)));
-			putValue(SHORT_DESCRIPTION, msg.getString("MenuItem.View.Desc"));
+		public ViewAction(RText app, ResourceBundle msg) {
+			super(app, msg, "MenuItem.View");
 		}
 
 		public void actionPerformed(ActionEvent e) {

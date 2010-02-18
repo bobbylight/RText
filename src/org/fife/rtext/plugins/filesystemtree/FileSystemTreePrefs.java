@@ -24,6 +24,8 @@
  */
 package org.fife.rtext.plugins.filesystemtree;
 
+import javax.swing.KeyStroke;
+
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.Prefs;
 
@@ -47,6 +49,11 @@ public class FileSystemTreePrefs extends Prefs {
 	 */
 	public int position;
 
+	/**
+	 * Key stroke that toggles the task window's visibility.
+	 */
+	public KeyStroke windowVisibilityAccelerator;
+
 
 	/**
 	 * {@inheritDoc}
@@ -54,6 +61,7 @@ public class FileSystemTreePrefs extends Prefs {
 	public void setDefaults() {
 		active = true;
 		position = GUIPlugin.LEFT;
+		windowVisibilityAccelerator = null;
 	}
 
 
