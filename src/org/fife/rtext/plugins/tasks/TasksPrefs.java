@@ -27,11 +27,10 @@ package org.fife.rtext.plugins.tasks;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Pattern;
-
 import javax.swing.KeyStroke;
 
-import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.Prefs;
+import org.fife.ui.dockablewindows.DockableWindow;
 
 
 /**
@@ -72,12 +71,20 @@ public class TasksPrefs extends Prefs {
 	 * Overridden to validate the task identifiers value.
 	 */
 	public void load(InputStream in) throws IOException {
+
 		super.load(in);
+
 		// Ensure task ID's is proper format - "letter+(|letter+)*"
 		if (!TASK_IDENTIFIERS_PATTERN.matcher(taskIdentifiers).matches()) {
 			System.out.println("Invalid task identifiers: " + taskIdentifiers);
 			taskIdentifiers = DEFAULT_TASK_IDS;
 		}
+
+		// Ensure window position is valid.
+		if (!DockableWindow.isValidPosition(windowPosition)) {
+			windowPosition = DockableWindow.BOTTOM;
+		}
+
 	}
 
 
@@ -86,7 +93,7 @@ public class TasksPrefs extends Prefs {
 	 */
 	public void setDefaults() {
 		windowVisible = true;
-		windowPosition = GUIPlugin.BOTTOM;
+		windowPosition = DockableWindow.BOTTOM;
 		windowVisibilityAccelerator = null;
 		taskIdentifiers = DEFAULT_TASK_IDS;
 	}

@@ -25,6 +25,7 @@
 package org.fife.rtext.plugins.tools;
 
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -95,6 +96,45 @@ public class Tool implements Comparable {
 
 
 	/**
+	 * Does basic checking to ensure that this program can run (the program
+	 * exists, the directory to run in exists, etc.).  Applications can call
+	 * this method before running this tool as a sanity check, and to give
+	 * nice error messages for common failure cases.
+	 *
+	 * @return A localized error message, or <code>null</code> if the program
+	 *         should be able to run.
+	 * @see #execute(ProcessRunnerOutputListener)
+	 */
+	public String checkForErrors() {
+
+		String error = null;
+
+		// Ensure the program to run exists.
+		File file = new File(program);
+		if (!file.isFile()) {
+			error = ToolPlugin.msg.getString("Error.ProgramNotFound");
+			error = MessageFormat.format(error,
+							new String[] { file.getAbsolutePath() });
+		}
+
+		else {
+
+			// Ensure the directory to run in exists
+			File dir = new File(getDirectory());
+			if (!dir.isDirectory()) {
+				error = ToolPlugin.msg.getString("Error.NoSuchDirectory");
+				error = MessageFormat.format(error,
+									new String[] { dir.getAbsolutePath() });
+			}
+
+		}
+
+		return error;
+
+	}
+
+
+	/**
 	 * Clears the command line arguments.
 	 *
 	 * @see #addArg(String)
@@ -148,7 +188,9 @@ public class Tool implements Comparable {
 	/**
 	 * Runs this tool in a separate thread.
 	 *
-	 * @param l Listens for events as this tool runs.
+	 * @param l Listens for events as this tool runs.  This may be
+	 *        <code>null</code>.
+	 * @see #checkForErrors()
 	 */
 	public void execute(final ProcessRunnerOutputListener l) {
 

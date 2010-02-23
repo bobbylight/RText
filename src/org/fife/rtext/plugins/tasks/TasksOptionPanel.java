@@ -30,8 +30,14 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -63,9 +69,11 @@ import org.fife.ui.modifiabletable.RowHandler;
  * @version 1.0
  */
 class TasksOptionPanel extends PluginOptionsDialogPanel
-						implements ActionListener, ModifiableTableListener {
+		implements ActionListener, ItemListener, ModifiableTableListener {
 
 	private TasksPlugin plugin;
+	private JCheckBox visibleCB;
+	private JComboBox locationCombo;
 	private DefaultTableModel model;
 	private ModifiableTable table;
 
@@ -81,11 +89,50 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	public TasksOptionPanel(RText rtext, TasksPlugin plugin) {
 
 		super(plugin.getPluginName(), plugin);
+
+		ResourceBundle gpb = ResourceBundle.getBundle(
+									"org.fife.ui.app.GUIPlugin");
+
 		setIcon(plugin.getPluginIcon());
 		this.plugin = plugin;
 		ComponentOrientation o = ComponentOrientation.getOrientation(getLocale());
 		setLayout(new BorderLayout());
 		setBorder(UIUtil.getEmpty5Border());
+
+		// A panel to contain everything that will go into our "top" area.
+		Box topPanel = Box.createVerticalBox();
+		topPanel.setBorder(new OptionPanelBorder(
+				plugin.getString("Options.TaskWindow")));
+
+		// A check box toggling the plugin's visibility.
+		JPanel temp = new JPanel(new BorderLayout());
+		visibleCB = new JCheckBox(gpb.getString("Visible"));
+		visibleCB.addActionListener(this);
+		temp.add(visibleCB, BorderLayout.LINE_START);
+		topPanel.add(temp);
+		topPanel.add(Box.createVerticalStrut(10));
+
+		// A combo in which to select the dockable window's placement.
+		JPanel locationPanel = new JPanel();
+		locationPanel.setLayout(new BoxLayout(locationPanel,
+										BoxLayout.LINE_AXIS));
+		locationCombo = new JComboBox();
+		UIUtil.fixComboOrientation(locationCombo);
+		locationCombo.addItem(gpb.getString("Location.top"));
+		locationCombo.addItem(gpb.getString("Location.left"));
+		locationCombo.addItem(gpb.getString("Location.bottom"));
+		locationCombo.addItem(gpb.getString("Location.right"));
+		locationCombo.addItem(gpb.getString("Location.floating"));
+		locationCombo.addItemListener(this);
+		JLabel locLabel = new JLabel(gpb.getString("Location.title"));
+		locLabel.setLabelFor(locationCombo);
+		locationPanel.add(locLabel);
+		locationPanel.add(Box.createHorizontalStrut(5));
+		locationPanel.add(locationCombo);
+		locationPanel.add(Box.createHorizontalGlue());
+		topPanel.add(locationPanel);
+		topPanel.add(Box.createVerticalStrut(5));
+		add(topPanel, BorderLayout.NORTH);
 
 		JPanel contentPane = new JPanel(new BorderLayout());
 		contentPane.setBorder(new OptionPanelBorder(
@@ -103,7 +150,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 								plugin.getString("Options.RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
-		JPanel temp = new JPanel(new BorderLayout());
+		temp = new JPanel(new BorderLayout());
 		temp.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 		temp.add(defaultsButton, BorderLayout.LINE_START);
 		add(temp, BorderLayout.SOUTH);
@@ -122,11 +169,20 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 
 		String command = e.getActionCommand();
 
-		if ("RestoreDefaults".equals(command)) {
+		if (visibleCB==e.getSource()) {
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, null, null);
+		}
+
+		else if ("RestoreDefaults".equals(command)) {
 
 			String taskIds = plugin.getTaskIdentifiers();
 
-			if (!taskIds.equals(TasksPrefs.DEFAULT_TASK_IDS)) {
+			if (!visibleCB.isSelected() ||
+					locationCombo.getSelectedIndex()!=2 ||
+					!taskIds.equals(TasksPrefs.DEFAULT_TASK_IDS)) {
+				visibleCB.setSelected(true);
+				locationCombo.setSelectedIndex(2);
 				setDisplayedTaskIds(TasksPrefs.DEFAULT_TASK_IDS);
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
@@ -141,6 +197,9 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	 * {@inheritDoc}
 	 */
 	protected void doApplyImpl(Frame owner) {
+
+		plugin.setTaskWindowVisible(visibleCB.isSelected());
+		plugin.setTaskWindowPosition(locationCombo.getSelectedIndex());
 
 		StringBuffer sb = new StringBuffer();
 		for (int i=0; i<model.getRowCount(); i++) {
@@ -168,6 +227,21 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	 */
 	public JComponent getTopJComponent() {
 		return table;
+	}
+
+
+	/**
+	 * Gets notified when the user selects an item in the location combo box.
+	 *
+	 * @param e The event.
+	 */
+	public void itemStateChanged(ItemEvent e) {
+		if (e.getSource()==locationCombo &&
+				e.getStateChange()==ItemEvent.SELECTED) {
+			hasUnsavedChanges = true;
+			int placement = locationCombo.getSelectedIndex();
+			firePropertyChange(PROPERTY, -1, placement);
+		}
 	}
 
 
@@ -201,6 +275,8 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	 * {@inheritDoc}
 	 */
 	protected void setValuesImpl(Frame owner) {
+		visibleCB.setSelected(plugin.isTaskWindowVisible());
+		locationCombo.setSelectedIndex(plugin.getTaskWindowPosition());
 		setDisplayedTaskIds(plugin.getTaskIdentifiers());
 	}
 

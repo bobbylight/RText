@@ -45,6 +45,7 @@ import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.Plugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
+import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.rsyntaxtextarea.parser.Parser;
 
 
@@ -67,14 +68,14 @@ public class TasksPlugin implements Plugin {
 	private TaskWindow window;
 
 	/**
-	 * The location of the task window.
-	 */
-	private int windowPosition;
-
-	/**
 	 * The plugin's icon.
 	 */
 	private Icon icon;
+
+	/**
+	 * The location of the task window.
+	 */
+	private int windowPosition;
 
 	/**
 	 * List of task identifiers, such as <code>TODO</code> and
@@ -194,13 +195,15 @@ public class TasksPlugin implements Plugin {
 
 
 	/**
-	 * Returns the window that displays tasks.
+	 * Returns the position of the tasks dockable window.  If the dockable
+	 * window is not yet visible, this is the position it will be placed in
+	 * when it is made visible.
 	 *
-	 * @return The window.  This may be <code>null</code> if tasks have not
-	 *         yet been enabled at least once in the application.
+	 * @return The position.
+	 * @see #setTaskWindowPosition(int)
 	 */
-	public TaskWindow getTasksWindow() {
-		return window;
+	int getTaskWindowPosition() {
+		return windowPosition;
 	}
 
 
@@ -292,6 +295,7 @@ public class TasksPlugin implements Plugin {
 		TasksPrefs prefs = new TasksPrefs();
 		prefs.taskIdentifiers = taskIdentifiers;
 		prefs.windowVisible = isTaskWindowVisible();
+		prefs.windowPosition = windowPosition;
 		ViewTasksAction vta = (ViewTasksAction)app.getAction(VIEW_TASKS_ACTION);
 		prefs.windowVisibilityAccelerator = vta.getAccelerator();
 		File prefsFile = getPrefsFile();
@@ -322,7 +326,42 @@ public class TasksPlugin implements Plugin {
 
 
 	/**
+	 * Sets the position of the dockable window.  This method does nothing if
+	 * the position specified by <code>pos</code> is invalid or is the same
+	 * as the current position.
+	 *
+	 * @param pos The new position.
+	 * @see #getTaskWindowPosition()
+	 */
+	void setTaskWindowPosition(int pos) {
+		if (pos!=windowPosition && DockableWindow.isValidPosition(pos)) {
+			if (window!=null) {
+				window.setPosition(pos);
+			}
+			windowPosition = pos;
+		}
+	}
+
+
+	/**
+	 * Sets whether the tasks window is visible.  This method does nothing if
+	 * the visibility of the tasks window already matches what is specified
+	 * by <code>visible</code>.
+	 *
+	 * @param visible Whether the tasks window should be visible.
+	 * @see #toggleTaskWindowVisible()
+	 */
+	void setTaskWindowVisible(boolean visible) {
+		if (visible!=isTaskWindowVisible()) {
+			toggleTaskWindowVisible();
+		}
+	}
+
+
+	/**
 	 * Toggles visibility of the task window.
+	 *
+	 * @see #setTaskWindowVisible(boolean)
 	 */
 	void toggleTaskWindowVisible() {
 		if (window==null) { // First time through

@@ -27,6 +27,7 @@ package org.fife.rtext.plugins.tools;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
@@ -67,12 +68,24 @@ class RunToolAction extends StandardAction {
 	 * @param e The action event.
 	 */
 	public void actionPerformed(ActionEvent e) {
+
+		// Make sure the program and working directory exist.
+		String errorDesc = tool.checkForErrors();
+		if (errorDesc!=null) {
+			RText app = (RText)getApplication();
+			String title = app.getString("ErrorDialogTitle");
+			JOptionPane.showMessageDialog(app, errorDesc, title,
+										JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
 		showButDontFocus(window);
 		// Call startingTool() before tool.execute() so threading doesn't
-		// cuase the window's title to get hosed.
+		// cause the window's title to get hosed.
 		if (window.startingTool(tool)) {
 			tool.execute(window);
 		}
+
 	}
 
 
