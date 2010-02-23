@@ -127,7 +127,7 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 	 * {@inheritDoc}
 	 */
 	public String getPluginName() {
-		return "Tools";
+		return msg.getString("Plugin.Name");
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 
 		RText rtext = (RText)app;
 		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
-		toolsMenu = new JMenu(msg.getString("Menu.Name"));
+		toolsMenu = new JMenu(msg.getString("Plugin.Name"));
 		toolsMenu.addSeparator();
 		Action a = rtext.getAction(ToolPlugin.NEW_TOOL_ACTION);
 		toolsMenu.add(new JMenuItem(a));//createMenuItem(a));
