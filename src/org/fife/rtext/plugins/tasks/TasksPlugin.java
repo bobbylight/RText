@@ -99,6 +99,9 @@ public class TasksPlugin implements Plugin {
 	 */
 	public TasksPlugin(AbstractPluggableGUIApplication app) {
 
+		RText rtext = (RText)app;
+		this.app = rtext;
+
 		TasksPrefs prefs = loadPrefs();
 		taskIdentifiers = prefs.taskIdentifiers;
 		windowPosition = prefs.windowPosition;
@@ -107,9 +110,6 @@ public class TasksPlugin implements Plugin {
 		if (url!=null) { // Should always be true
 			icon = new ImageIcon(url);
 		}
-
-		RText rtext = (RText)app;
-		this.app = rtext;
 
 		ViewTasksAction a = new ViewTasksAction(rtext, msg, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);

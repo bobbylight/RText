@@ -36,10 +36,15 @@ import javax.imageio.ImageIO;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.MenuBar;
@@ -66,8 +71,9 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 	private static final String MSG = "org.fife.rtext.plugins.tools.ToolPlugin";
 	protected static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
-	private static final String EDIT_TOOLS_ACTION	= "editToolsAction";
-	private static final String NEW_TOOL_ACTION		= "newToolAction";
+	private static final String EDIT_TOOLS_ACTION		= "editToolsAction";
+	private static final String NEW_TOOL_ACTION			= "newToolAction";
+	private static final String VIEW_TOOL_OUTPUT_ACTION	= "viewToolOutputAction";
 
 
 	/**
@@ -86,15 +92,27 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 			}
 		}
 
+		ToolsPrefs prefs = loadPrefs();
+
 		RText rtext = (RText)app;
 		this.app = rtext;
 		StandardAction a = new NewToolAction(rtext, msg, null);
-//		a.setAccelerator(prefs.getAccelerator(NEW_TOOL_ACTION));
+		a.setAccelerator(prefs.newToolAccelerator);
 		rtext.addAction(NEW_TOOL_ACTION, a);
 
 		a = new EditToolsAction(rtext, msg, null);
-//		a.setAccelerator(prefs.getAccelerator(EDIT_TOOLS_ACTION));
+		a.setAccelerator(prefs.editToolsAccelerator);
 		rtext.addAction(EDIT_TOOLS_ACTION, a);
+
+		a = new ViewToolOutputAction(rtext, msg, this);
+		a.setAccelerator(prefs.windowVisibilityAccelerator);
+		rtext.addAction(VIEW_TOOL_OUTPUT_ACTION, a);
+
+		// Current design forces the dockable window to always be created,
+		// even if it isn't initially visible
+		window = new ToolDockableWindow(this);
+		window.setPosition(prefs.windowPosition);
+		window.setActive(prefs.windowVisible);
 
 	}
 
@@ -139,6 +157,17 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 
 
 	/**
+	 * Returns the file preferences for this plugin are saved in.
+	 *
+	 * @return The file.
+	 */
+	private File getPrefsFile() {
+		return new File(RTextUtilities.getPreferencesDirectory(),
+						"tools.properties");
+	}
+
+
+	/**
 	 * Returns the directory that tool definitions are saved to.
 	 *
 	 * @return The directory.
@@ -156,6 +185,7 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 		ToolManager.get().addPropertyChangeListener(ToolManager.PROPERTY_TOOLS,
 													this);
 
+		// Add a new menu for selecting tools
 		RText rtext = (RText)app;
 		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
 		toolsMenu = new JMenu(msg.getString("Plugin.Name"));
@@ -167,11 +197,60 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 		mb.addExtraMenu(toolsMenu);
 		mb.revalidate();
 
-		window = new ToolDockableWindow(this);
+		// Add an item to the "View" menu to toggle tool output visibility
+		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_VIEW);
+		a = rtext.getAction(VIEW_TOOL_OUTPUT_ACTION);
+		final JCheckBoxMenuItem item= new JCheckBoxMenuItem(a);
+		menu.insert(item, menu.getItemCount()-2);
+		JPopupMenu popup = menu.getPopupMenu();
+		popup.pack();
+		// Only needed for pre-1.6 support
+		popup.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				item.setSelected(isToolOutputWindowVisible());
+			}
+		});
+
 		rtext.addDockableWindow(window);
 
 		loadTools(); // Do after menu has been added
 
+	}
+
+
+	/**
+	 * Returns whether the tool output window is visible.
+	 *
+	 * @return Whether the tool output window is visible.
+	 * @see #setToolOutputWindowVisible(boolean)
+	 */
+	boolean isToolOutputWindowVisible() {
+		return window!=null && window.isActive();
+	}
+
+
+	/**
+	 * Loads saved preferences into the <code>prefs</code> member.  If this
+	 * is the first time through, default values will be returned.
+	 *
+	 * @return The preferences.
+	 */
+	private ToolsPrefs loadPrefs() {
+		ToolsPrefs prefs = new ToolsPrefs();
+		File prefsFile = getPrefsFile();
+		if (prefsFile.isFile()) {
+			try {
+				prefs.load(prefsFile);
+			} catch (IOException ioe) {
+				app.displayException(ioe);
+				// (Some) defaults will be used
+			}
+		}
+		return prefs;
 	}
 
 
@@ -248,7 +327,28 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 	 * {@inheritDoc}
 	 */
 	public void savePreferences() {
+
 		saveTools();
+
+		ToolsPrefs prefs = new ToolsPrefs();
+		prefs.windowPosition = window.getPosition();
+		StandardAction a = (StandardAction)app.
+										getAction(VIEW_TOOL_OUTPUT_ACTION);
+		prefs.windowVisibilityAccelerator = a.getAccelerator();
+		prefs.windowVisible = window.isActive();
+
+		a = (StandardAction)app.getAction(NEW_TOOL_ACTION);
+		prefs.newToolAccelerator = a.getAccelerator();
+		a = (StandardAction)app.getAction(EDIT_TOOLS_ACTION);
+		prefs.editToolsAccelerator = a.getAccelerator();
+
+		File prefsFile = getPrefsFile();
+		try {
+			prefs.save(prefsFile);
+		} catch (IOException ioe) {
+			app.displayException(ioe);
+		}
+
 	}
 
 
@@ -268,6 +368,23 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 			String desc = msg.getString("Error.SavingTools");
 			desc = MessageFormat.format(desc, new Object[] { text });
 			app.displayException(ioe, desc);
+		}
+	}
+
+
+	/**
+	 * Sets the visibility of the tool output window.
+	 *
+	 * @param visible Whether the window should be visible.
+	 * @see #isToolOutputWindowVisible()
+	 */
+	void setToolOutputWindowVisible(boolean visible) {
+		if (visible!=isToolOutputWindowVisible()) {
+			if (visible && window==null) {
+				window = new ToolDockableWindow(this);
+				app.addDockableWindow(window);
+			}
+			window.setActive(visible);
 		}
 	}
 

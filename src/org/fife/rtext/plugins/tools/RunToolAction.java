@@ -79,6 +79,10 @@ class RunToolAction extends StandardAction {
 			return;
 		}
 
+		// Make visible if hidden but a tool starts running.
+		if (!window.isActive()) {
+			window.setActive(true);
+		}
 		showButDontFocus(window);
 		// Call startingTool() before tool.execute() so threading doesn't
 		// cause the window's title to get hosed.

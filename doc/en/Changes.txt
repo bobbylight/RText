@@ -7,12 +7,9 @@ http://rtext.sourceforge.net
    - BUG: Error strip keeps Task markers even when tasks window is hidden.
      ... should tasks be like spelling parser - dockable window is separate
      from enabled?
-   - BUG: Opening options dialog too fast (say from unconfigured source browser)
-     will cause it to not have any options panels for plugins not yet loaded.
-   - BUG: X-ing out dockable window's floating window doesn't change its
-     "active" status to "false."
    - Updated translations:  Turkish (Burak), Dutch (Roel), Brazilian Portuguese
-     (Marcos),
+     (Marcos), Spanish (Rafael), Arabic (Linostar), Simplified Chinese
+     (Sunquan), 
    - Added Polish translation (thanks Maciej!).
 
 

@@ -165,6 +165,12 @@ public class RText extends AbstractPluggableGUIApplication
 	private String hostName;
 
 	/**
+	 * Used as a "hack" to re-load the Options dialog if the user opens it
+	 * too early, before all plugins have added their options to it.
+	 */
+	private int lastPluginCount;
+
+	/**
 	 * System property that, if set, causes RText to print timing information
 	 * while it is starting up.
 	 */
@@ -481,12 +487,21 @@ public class RText extends AbstractPluggableGUIApplication
 	 * {@inheritDoc}
 	 */
 	public OptionsDialog getOptionsDialog() {
-		if (optionsDialog==null) {
+
+		int pluginCount = getPlugins().length;
+
+		// Check plugin count and re-create dialog if it has changed.  This
+		// is because the user can be quick and open the Options dialog before
+		// all plugins have loaded.  A real solution is to have some sort of
+		// options manager that plugins can add options panels to.
+		if (optionsDialog==null || pluginCount!=lastPluginCount) {
 			optionsDialog = new org.fife.rtext.optionsdialog.
 												OptionsDialog(this);
 			optionsDialog.setLocationRelativeTo(this);
 		}
+
 		return optionsDialog;
+
 	}
 
 
@@ -793,6 +808,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param filesToOpen Any files to open.  This can be <code>null</code>.
 	 */
 	private void init(String[] filesToOpen) {
+		lastPluginCount = -1;
 		openFiles(filesToOpen);
 	}
 

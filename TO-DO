@@ -1,4 +1,4 @@
-Last updated 12/3/2009
+Last updated 02/26/2010
 
 
 UI Features
@@ -44,3 +44,5 @@ Probably won't happen
 2.  WW: Make tokens with whitespace break at whitespace boundaries too
     (e.g. MLC's)!
 3.  Make plugins have their own help that gets added dynamically to RText's.
+4.  Make plugins add options to options dialog dynamically.  This and (3) are
+    tough because the user can open Help/Options before all plugins have loaded.
