@@ -86,6 +86,11 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	public static final String MENU_VIEW		= "View";
 
 	/**
+	 * A key to get the "Docked Windows" menu via {@link #getMenuByName(String)}.
+	 */
+	public static final String MENU_DOCKED_WINDOWS	= "DockedWindows";
+
+	/**
 	 * A key to get the Macros menu via {@link #getMenuByName(String)}.
 	 */
 	public static final String MENU_MACROS		= "Macros";
@@ -505,6 +510,11 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		splitViewMenu.add(splitNoneItem);
 		viewMenu.add(splitViewMenu);
 */
+
+		JMenu dwMenu = createMenu(menuMsg, "MenuDockedWindows");
+		registerMenuByName(MENU_DOCKED_WINDOWS, dwMenu);
+		viewMenu.add(dwMenu);
+
 		statusBarItem = new JCheckBoxMenuItem(rtext.getAction(RText.STATUS_BAR_ACTION));
 		statusBarItem.setToolTipText(null);
 		statusBarItem.setSelected(properties.statusBarVisible);

@@ -25,7 +25,10 @@
 package org.fife.rtext.plugins.heapindicator;
 
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Graphics;
+import java.util.Locale;
+
 import javax.swing.Icon;
 
 
@@ -68,7 +71,11 @@ class HeapIcon implements Icon {
 		long totalMem = plugin.getTotalMemory();
 		int x2 = (int)(width*((float)usedMem/(float)totalMem));
 		x++;
-		if (c.getComponentOrientation().isLeftToRight()) {
+		// Not sure why panel's orientation doesn't change, do JPanels not
+		// set orientations??
+		//if (c.getComponentOrientation().isLeftToRight()) {
+		if (ComponentOrientation.getOrientation(Locale.getDefault()).
+														isLeftToRight()) {
 			g.fillRect(x,y+1, x2-x,height-1);
 		}
 		else {
