@@ -87,6 +87,8 @@ class TaskWindow extends AbstractParserNoticeWindow
 		taskParser = new TaskTagParser();
 		setTaskIdentifiers(taskIdentifiers);
 
+		applyComponentOrientation(rtext.getComponentOrientation());
+
 	}
 
 

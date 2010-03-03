@@ -25,10 +25,17 @@
 package org.fife.rtext;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
+import org.fife.ui.app.StandardAction;
 import org.fife.ui.rsyntaxtextarea.spell.SpellingParser;
 import org.fife.ui.rsyntaxtextarea.spell.event.SpellingParserEvent;
 import org.fife.ui.rsyntaxtextarea.spell.event.SpellingParserListener;
@@ -57,6 +64,10 @@ public class SpellingSupport implements SpellingParserListener {
 	private String spellingDictionary;
 	private File userDictionary;
 	private int maxSpellingErrors;
+	private ViewSpellingErrorWindowAction vsewAction;
+
+	private static final String VIEW_SPELLING_ERROR_WINDOW
+									= "viewSpellingErrorWindowAction";
 
 
 	/**
@@ -70,16 +81,56 @@ public class SpellingSupport implements SpellingParserListener {
 
 
 	/**
+	 * Adds a menu item that toggles whether the spelling error window is
+	 * visible.
+	 */
+	private void addViewErrorWindowMenuItem() {
+
+		vsewAction = new ViewSpellingErrorWindowAction(rtext);
+
+		// Add a menu item to toggle the visibility of the dockable window
+		rtext.addAction(VIEW_SPELLING_ERROR_WINDOW, vsewAction);
+		RTextMenuBar mb = (RTextMenuBar)rtext.getJMenuBar();
+		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(vsewAction);
+		item.applyComponentOrientation(rtext.getComponentOrientation());
+		JMenu viewMenu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
+		viewMenu.add(item);
+		JPopupMenu popup = viewMenu.getPopupMenu();
+		popup.pack();
+		// Only needed for pre-1.6 support
+		popup.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent e) {
+			}
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+			}
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				item.setSelected(rtext.isSpellingWindowVisible());
+			}
+		});
+
+	}
+
+
+	/**
 	 * Configures the spelling support.
 	 *
 	 * @param prefs The application preferences.
 	 */
 	void configure(RTextPreferences prefs) {
+
 		setSpellCheckingEnabled(prefs.spellCheckingEnabled);
 		setSpellCheckingColor(prefs.spellCheckingColor);
 		setSpellingDictionary(prefs.spellingDictionary);
 		setMaxSpellingErrors(prefs.maxSpellingErrors);
 		setUserDictionary(prefs.userDictionary);
+
+		// Add menu item later since menu bar not yet created(!)
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				addViewErrorWindowMenuItem();
+			}
+		});
+
 	}
 
 
@@ -440,6 +491,22 @@ public class SpellingSupport implements SpellingParserListener {
 					}
 				});
 			}
+		}
+
+	}
+
+
+	/**
+	 * Toggles the visibility of the spelling error window.
+	 */
+	private class ViewSpellingErrorWindowAction extends StandardAction {
+
+		public ViewSpellingErrorWindowAction(RText app) {
+			super(app, app.getResourceBundle(), "SpellingErrorList.MenuItem");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			rtext.setSpellingWindowVisible(!rtext.isSpellingWindowVisible());
 		}
 
 	}

@@ -218,10 +218,11 @@ public class TasksPlugin implements Plugin {
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(vta);
 		item.setToolTipText(null);
 		item.setSelected(isTaskWindowVisible());
+		item.applyComponentOrientation(app.getComponentOrientation());
 
 		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
-		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_VIEW);
-		menu.insert(item, menu.getItemCount()-2);
+		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
+		menu.add(item);
 		JPopupMenu popup = menu.getPopupMenu();
 		popup.pack();
 		// Only needed for pre-1.6 support

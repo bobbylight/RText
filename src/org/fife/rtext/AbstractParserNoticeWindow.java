@@ -24,6 +24,8 @@
 package org.fife.rtext;
 
 import java.awt.Component;
+import java.awt.ComponentOrientation;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Comparator;
@@ -44,6 +46,7 @@ import javax.swing.table.TableModel;
 import javax.swing.text.BadLocationException;
 
 import org.fife.ui.FileExplorerTableModel;
+import org.fife.ui.UIUtil;
 import org.fife.ui.FileExplorerTableModel.SortableHeaderRenderer;
 import org.fife.ui.dockablewindows.DockableWindow;
 
@@ -81,6 +84,10 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 		};
 		fixTableModel(model);
 		table.addMouseListener(new TableMouseListener());
+		Dimension size = table.getPreferredScrollableViewportSize();
+		size.height = 200;
+		table.setPreferredScrollableViewportSize(size);
+		UIUtil.fixJTableRendererOrientations(table);
 		return table;
 	}
 
@@ -109,9 +116,14 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 			}
 		});
 
-		table.setDefaultRenderer(Icon.class, new IconTableCellRenderer());
-		table.setDefaultRenderer(RTextEditorPane.class,
-								new TextAreaTableCellRenderer());
+		IconTableCellRenderer itcr = new IconTableCellRenderer();
+		ComponentOrientation o = ComponentOrientation.getOrientation(getLocale());
+		itcr.applyComponentOrientation(o);
+		table.setDefaultRenderer(Icon.class, itcr);
+
+		TextAreaTableCellRenderer tatcr = new TextAreaTableCellRenderer();
+		tatcr.applyComponentOrientation(o);
+		table.setDefaultRenderer(RTextEditorPane.class, tatcr);
 
 		table.setModel(model2);
 

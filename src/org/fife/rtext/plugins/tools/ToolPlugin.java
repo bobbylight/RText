@@ -198,10 +198,12 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 		mb.revalidate();
 
 		// Add an item to the "View" menu to toggle tool output visibility
-		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_VIEW);
+		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
 		a = rtext.getAction(VIEW_TOOL_OUTPUT_ACTION);
-		final JCheckBoxMenuItem item= new JCheckBoxMenuItem(a);
-		menu.insert(item, menu.getItemCount()-2);
+		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(a);
+		item.setToolTipText(null);
+		item.applyComponentOrientation(app.getComponentOrientation());
+		menu.add(item);
 		JPopupMenu popup = menu.getPopupMenu();
 		popup.pack();
 		// Only needed for pre-1.6 support

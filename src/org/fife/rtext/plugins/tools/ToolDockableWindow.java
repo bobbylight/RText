@@ -26,6 +26,7 @@
 package org.fife.rtext.plugins.tools;
 
 import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.MessageFormat;
@@ -88,6 +89,9 @@ public class ToolDockableWindow extends DockableWindow
 		textArea = new OutputTextPane();
 		RScrollPane sp = new RScrollPane(textArea);
 		add(sp);
+
+		ComponentOrientation o = ComponentOrientation.getOrientation(getLocale());
+		applyComponentOrientation(o);
 
 	}
 

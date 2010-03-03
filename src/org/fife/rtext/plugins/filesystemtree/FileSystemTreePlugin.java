@@ -201,8 +201,9 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		RTextMenuBar mb = (RTextMenuBar)owner.getJMenuBar();
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(viewAction);
 		item.setSelected(getDockableWindow(getPluginName()).isActive());
-		JMenu viewMenu = mb.getMenuByName(RTextMenuBar.MENU_VIEW);
-		viewMenu.insert(item, viewMenu.getMenuComponentCount()-2);
+		item.applyComponentOrientation(app.getComponentOrientation());
+		JMenu viewMenu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
+		viewMenu.add(item);
 		JPopupMenu popup = viewMenu.getPopupMenu();
 		popup.pack();
 		// Only needed for pre-1.6 support

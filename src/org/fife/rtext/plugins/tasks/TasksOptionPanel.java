@@ -364,6 +364,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 			setModal(true);
 			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			getRootPane().setDefaultButton(okButton);
+			applyComponentOrientation(o);
 			pack();
 			setLocationRelativeTo(parent);
 			accepted = false;

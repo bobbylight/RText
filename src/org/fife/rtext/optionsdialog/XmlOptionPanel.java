@@ -25,7 +25,7 @@
 package org.fife.rtext.optionsdialog;
 
 import java.awt.BorderLayout;
-//import java.awt.ComponentOrientation;
+import java.awt.ComponentOrientation;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -64,8 +64,8 @@ class XmlOptionPanel extends OptionsDialogPanel implements ActionListener {
 
 		super(msg.getString("Options.Xml.Name"));
 
-//		ComponentOrientation o = ComponentOrientation.
-//										getOrientation(getLocale());
+		ComponentOrientation o = ComponentOrientation.
+										getOrientation(getLocale());
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
 
@@ -79,6 +79,8 @@ class XmlOptionPanel extends OptionsDialogPanel implements ActionListener {
 		autoCompleteClosingTagsCB.addActionListener(this);
 		topPanel.add(autoCompleteClosingTagsCB, BorderLayout.LINE_START);
 		add(topPanel, BorderLayout.NORTH);
+
+		applyComponentOrientation(o);
 
 	}
 

@@ -349,6 +349,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		getRootPane().setDefaultButton(okButton);
 		setTitle(msg.getString("Title"));
 		setModal(true);
+		applyComponentOrientation(o);
 		pack();
 		setLocationRelativeTo(parent);
 
@@ -516,6 +517,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 			setTitle(msg.getString("ArgumentDialog.Title"));
 			getRootPane().setDefaultButton(okButton);
 			setContentPane(cp);
+			applyComponentOrientation(parent.getComponentOrientation());
 			pack();
 			setLocationRelativeTo(parent);
 
@@ -609,7 +611,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 
 			JPanel temp = new JPanel(new SpringLayout());
 			Dimension dim = new Dimension(1, 1); // MUST have finite width!
-			if (getComponentOrientation().isLeftToRight()) {
+			if (parent.getComponentOrientation().isLeftToRight()) {
 				temp.add(nameLabel); temp.add(nameField); temp.add(Box.createRigidArea(dim));
 				temp.add(valueLabel); temp.add(valueField); temp.add(varButton);
 			}
@@ -637,6 +639,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 			setTitle(msg.getString("EnvVarDialog.Title"));
 			getRootPane().setDefaultButton(okButton);
 			setContentPane(cp);
+			applyComponentOrientation(parent.getComponentOrientation());
 			pack();
 			setLocationRelativeTo(parent);
 
