@@ -31,10 +31,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -63,6 +66,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	private long totalMem;
 	private ResourceBundle msg;
 	private HeapIndicatorOptionPanel optionPanel;
+	private Icon pluginIcon;
 
 	private boolean useSystemColors;
 	private Color iconForeground;
@@ -101,6 +105,13 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 		setRefreshInterval(prefs.refreshInterval); // Must be called!
 
 		ToolTipManager.sharedInstance().registerComponent(this);
+
+		try {
+			URL res = getClass().getResource("indicator.png");
+			pluginIcon = new ImageIcon(ImageIO.read(res));
+		} catch (IOException ioe) { // Never happens
+			app.displayException(ioe);
+		}
 
 	}
 
@@ -184,7 +195,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 * {@inheritDoc}
 	 */
 	public Icon getPluginIcon() {
-		return null;
+		return pluginIcon;
 	}
 
 

@@ -42,6 +42,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -95,8 +96,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 		setBorder(empty5Border);
 
 		// A panel to contain everything that will go into our "top" area.
-		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+		Box topPanel = Box.createVerticalBox();
 		JPanel topPanel2 = new JPanel();
 		topPanel2.setLayout(new BoxLayout(topPanel2, BoxLayout.Y_AXIS));
 		topPanel2.setBorder(BorderFactory.createCompoundBorder(
@@ -152,43 +152,36 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 		topPanel2.add(temp);
 		topPanel2.add(Box.createVerticalStrut(5));
 
-		// Panel for the indicator's foreground color.
-		temp = new JPanel(new BorderLayout());
-		Border indentBorder = BorderFactory.createEmptyBorder(0,20,0,0);
+		// Panel for the indicator's foreground and border colors.
+		temp = new JPanel(new SpringLayout());
+		Border indentBorder = orientation.isLeftToRight() ?
+				BorderFactory.createEmptyBorder(0,20,0,0) :
+				BorderFactory.createEmptyBorder(0,0,0,20);
 		temp.setBorder(indentBorder);
-		temp2 = new JPanel();
-		temp2.setLayout(new BoxLayout(temp2, BoxLayout.LINE_AXIS));
 		foregroundLabel = UIUtil.createLabel(msg,
-						"Plugin.OptionPanel.ForegroundColor.text",
-						"Plugin.OptionPanel.ForegroundColor.mnemonic");
+				"Plugin.OptionPanel.ForegroundColor.text",
+				"Plugin.OptionPanel.ForegroundColor.mnemonic");
 		foregroundButton = new RColorSwatchesButton();
 		foregroundButton.addPropertyChangeListener(this);
 		foregroundLabel.setLabelFor(foregroundButton);
-		temp2.add(foregroundLabel);
-		temp2.add(Box.createHorizontalStrut(5));
-		temp2.add(foregroundButton);
-		temp2.add(Box.createHorizontalGlue());
-		temp.add(temp2, BorderLayout.LINE_START);
-		topPanel2.add(temp);
-		topPanel2.add(Box.createVerticalStrut(5));
-
-		// Panel for the indicator's border color.
-		temp = new JPanel(new BorderLayout());
-		temp.setBorder(indentBorder);
-		temp2 = new JPanel();
-		temp2.setLayout(new BoxLayout(temp2, BoxLayout.LINE_AXIS));
 		borderLabel = UIUtil.createLabel(msg,
-						"Plugin.OptionPanel.BorderColor.text",
-						"Plugin.OptionPanel.BorderColor.mnemonic");
+				"Plugin.OptionPanel.BorderColor.text",
+				"Plugin.OptionPanel.BorderColor.mnemonic");
 		borderButton = new RColorSwatchesButton();
 		borderButton.addPropertyChangeListener(this);
 		borderLabel.setLabelFor(borderButton);
-		temp2.add(borderLabel);
-		temp2.add(Box.createHorizontalStrut(5));
-		temp2.add(borderButton);
-		temp2.add(Box.createHorizontalGlue());
-		temp.add(temp2, BorderLayout.LINE_START);
-		topPanel2.add(temp);
+		if (orientation.isLeftToRight()) {
+			temp.add(foregroundLabel);   temp.add(foregroundButton);
+			temp.add(borderLabel);       temp.add(borderButton);
+		}
+		else {
+			temp.add(foregroundButton);  temp.add(foregroundLabel);
+			temp.add(borderButton);      temp.add(borderLabel);
+		}
+		UIUtil.makeSpringCompactGrid(temp, 2,2, 5,5, 5,5);
+		temp2 = new JPanel(new BorderLayout());
+		temp2.add(temp, BorderLayout.LINE_START);
+		topPanel2.add(temp2);
 
 		topPanel.add(topPanel2);
 

@@ -4,9 +4,9 @@
 
 	This is the Ant build script for all standard RText plugins.
 
-	Author:	Robert Futrell
-	Version:	1.0
-	Date:	20jan2006
+	Author:   Robert Futrell
+	Version:  1.0
+	Date:     20jan2006
 
 -->
 
@@ -109,7 +109,7 @@
 				<include name="org/fife/rtext/plugins/heapindicator/**"/>
 			</fileset>
 			<fileset dir="${source-dir}">
-				<include name="org/fife/rtext/plugins/heapindicator/*.gif"/>
+				<include name="org/fife/rtext/plugins/heapindicator/*.png"/>
 			</fileset>
 			<fileset dir="i18n">
 				<include name="org/fife/rtext/plugins/heapindicator/**"/>
