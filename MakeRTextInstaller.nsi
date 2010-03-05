@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "RText"
-!define PRODUCT_VERSION "1.0.0"
+!define PRODUCT_VERSION "1.1.0"
 !define PRODUCT_WEB_SITE "http://fifesoft.com/rtext/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RText.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -152,6 +152,8 @@ Section "MainSection" SEC01
   File "dist\plugins\FileSystemTree.jar"
   File "dist\plugins\HeapIndicator.jar"
   File "dist\plugins\SourceBrowser.jar"
+  File "dist\plugins\TaskList.jar"
+  File "dist\plugins\ToolSupport.jar"
   SetOutPath "$INSTDIR"
   File "dist\autocomplete.jar"
   File "dist\rsta_spellchecker.jar"
@@ -213,6 +215,8 @@ Section Uninstall
   Delete "$INSTDIR\english_dic.zip"
   Delete "$INSTDIR\rsta_spellchecker.jar"
   Delete "$INSTDIR\autocomplete.jar"
+  Delete "$INSTDIR\plugins\ToolSupport.jar"
+  Delete "$INSTDIR\plugins\TaskList.jar"
   Delete "$INSTDIR\plugins\SourceBrowser.jar"
   Delete "$INSTDIR\plugins\RTextL10nGen.jar"
   Delete "$INSTDIR\plugins\HeapIndicator.jar"

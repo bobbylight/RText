@@ -84,6 +84,7 @@
 			</fileset>
 			<manifest>
 				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.sourcebrowser.SourceBrowserPlugin"/>
+				<attribute name="Fife-Plugin-Load-Priority" value="high"/>
 			</manifest>
 		</jar>
 
@@ -100,6 +101,7 @@
 			</fileset>
 			<manifest>
 				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.filesystemtree.FileSystemTreePlugin"/>
+				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
 			</manifest>
 		</jar>
 
@@ -116,6 +118,7 @@
 			</fileset>
 			<manifest>
 				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.heapindicator.HeapIndicatorPlugin"/>
+				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
 			</manifest>
 		</jar>
 
@@ -132,6 +135,7 @@
 			</fileset>
 			<manifest>
 				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.tasks.TasksPlugin"/>
+				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
 			</manifest>
 		</jar>
 
@@ -148,6 +152,7 @@
 			</fileset>
 			<manifest>
 				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.tools.ToolPlugin"/>
+				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
 			</manifest>
 		</jar>
 

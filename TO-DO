@@ -14,10 +14,7 @@ Functionality
 3.  Add VB syntax highlighting.
 4.  Add drag-and-drop support to list view (rearranging files, opening).
 4.  Make OptionsDialogPanels lazy-initialize on first display.
-5.  If Source Browser isn't configured for ctags location, make context menu
-    contain a single item "Configure ctags...".  Requires Options dialog API
-    to display a specific option panel.
-6.  Provide Exuberant ctags with Windows install.
+5.  Provide Exuberant ctags with Windows install.
 
 
 Miscellaney
