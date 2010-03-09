@@ -2,11 +2,18 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
-1.1
+1.1.0
 -------------------
-   - BUG: Error strip keeps Task markers even when tasks window is hidden.
-     ... should tasks be like spelling parser - dockable window is separate
-     from enabled?
+   - Added "external tool" support.  Similar to Eclipse, this allows you to
+     define and run external processes, and get their output in a docked window.
+   - Improved "Tasks" support.  The user can now define what words denote
+     "tasks" in the options menu.
+   - Improved ctrl+arrow key navigation in the text editor (now works like
+     Eclipse) as well as word selection when double-clicking with the mouse.
+   - Added an option to show EOL markers in the editor.
+   - Fixed exception thrown when spell-checking plain text.
+   - Code cleanup and simplification, especially of "plugin" architecture.
+   - Fixed a handful of smaller bugs.
    - Updated translations:  Turkish (Burak), Dutch (Roel), Brazilian Portuguese
      (Marcos), Spanish (Rafael), Arabic (Linostar), Simplified Chinese
      (Sunquan), 
