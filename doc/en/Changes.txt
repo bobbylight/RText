@@ -2,7 +2,7 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
-1.1.0
+1.1.0 (03/15/2010):
 -------------------
    - Added "external tool" support.  Similar to Eclipse, this allows you to
      define and run external processes, and get their output in a docked window.
@@ -16,7 +16,7 @@ http://rtext.sourceforge.net
    - Fixed a handful of smaller bugs.
    - Updated translations:  Turkish (Burak), Dutch (Roel), Brazilian Portuguese
      (Marcos), Spanish (Rafael), Arabic (Linostar), Simplified Chinese
-     (Sunquan), 
+     (Sunquan).
    - Added Polish translation (thanks Maciej!).
 
 

@@ -776,7 +776,6 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 * @return A <code>String</code> representing all files in the file
 	 *         history, separated by '<' characters.  If no files are in the
 	 *         file history, then <code>null</code> is returned.
-	 * @see #addFileToFileHistory
 	 */
 	public String getFileHistoryString() {
 		String retVal = null;

@@ -87,6 +87,7 @@ class RunToolAction extends StandardAction {
 		// Call startingTool() before tool.execute() so threading doesn't
 		// cause the window's title to get hosed.
 		if (window.startingTool(tool)) {
+			tool.setRText((RText)getApplication());
 			tool.execute(window);
 		}
 

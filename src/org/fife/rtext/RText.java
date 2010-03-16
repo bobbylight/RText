@@ -64,7 +64,7 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  * text editor with the following features:
  *
  * <ul>
- *   <li>Syntax highlighting for 15+ languages.
+ *   <li>Syntax highlighting for 25+ languages.
  *   <li>Edit multiple documents simultaneously.
  *   <li>Auto-indent.
  *   <li>Find/Replace/Find in Files, with regular expression functionality.
@@ -176,7 +176,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 */
 	public static final String PROPERTY_PRINT_START_TIMES = "printStartTimes";
 
-	private static final String VERSION_STRING		= "1.1.????????-BETA";
+	private static final String VERSION_STRING		= "1.1.20100315";
 
 
 	/**

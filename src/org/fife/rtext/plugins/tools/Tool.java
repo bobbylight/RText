@@ -28,11 +28,16 @@ import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.fife.io.ProcessRunner;
 import org.fife.io.ProcessRunnerOutputListener;
+import org.fife.rtext.RText;
+import org.fife.rtext.RTextEditorPane;
 
 
 /**
@@ -55,6 +60,10 @@ public class Tool implements Comparable {
 	private Map env;
 	private boolean appendEnv;
 	private String accelerator; // String to ease serialization
+	private transient RText rtext;
+
+	private static final Pattern VAR_PATTERN =
+			Pattern.compile("\\$\\{file_(?:name|name_no_ext|dir|full_path)\\}");
 
 
 	/**
@@ -194,22 +203,33 @@ public class Tool implements Comparable {
 	 */
 	public void execute(final ProcessRunnerOutputListener l) {
 
+		// Replace any ${file_XXX} "variables" in the command line.
 		final String[] cmd = new String[1 + args.size()];
 		cmd[0] = program;
 		for (int i=0; i<args.size(); i++) {
-			cmd[i+1] = (String)args.get(i);
+			cmd[i+1] = varSubstitute((String)args.get(i));
 		}
 
+		// Replace any ${file_XXX} "variables" in the environment.
+		final Map env2 = env==null ? null : new HashMap(env);
+		if (env2!=null) {
+			for (Iterator i=env2.keySet().iterator(); i.hasNext(); ) {
+				Object key = i.next();
+				String value = (String)env2.get(key);
+				env2.put(key, varSubstitute(value));
+			}
+		}
+
+		// Run this tool in a separate thread.
 		Thread t = new Thread() {
 			public void run() {
 				ProcessRunner pr = new ProcessRunner(cmd);
 				pr.setDirectory(new File(getDirectory()));
-				pr.setEnvironmentVars(env, appendEnv);
+				pr.setEnvironmentVars(env2, appendEnv);
 				pr.setOutputListener(l);
 				pr.run();
 			}
 		};
-
 		t.start();
 
 	}
@@ -351,6 +371,35 @@ public class Tool implements Comparable {
 
 
 	/**
+	 * Copied from 1.5's Matcher.quoteReplacement() method, since we work in
+	 * 1.4.
+	 *
+	 * @param s The string to be used in a Matcher.appendReplacement() call.
+	 * @return The string, with slashes ('<tt>\</tt>') and dollar signs
+	 * ('<tt>$</tt>') quoted.
+	 */
+	// TODO: When we drop 1.4 support, remove this method.
+	private static String quoteReplacement(String s) {
+		if ((s.indexOf('\\') == -1) && (s.indexOf('$') == -1))
+			return s;
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c == '\\') {
+				sb.append('\\');
+				sb.append('\\');
+			} else if (c == '$') {
+				sb.append('\\');
+				sb.append('$');
+			} else {
+				sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
+
+
+	/**
 	 * Sets the accelerator to use to activate this tool in a menu.
 	 *
 	 * @param accelerator The accelerator to use, or <code>null</code> for
@@ -456,6 +505,66 @@ public class Tool implements Comparable {
 	}
 
 
+	/**
+	 * Sets the parent application that handles "variable" substitution in
+	 * arguments and environment variables before execution.
+	 *
+	 * @param rtext The parent application.
+	 */
+	void setRText(RText rtext) {
+		this.rtext = rtext;
+	}
+
+
+	/**
+	 * Replaces any "variables" having to do with the current text area
+	 * in the specified string.
+	 *
+	 * @param str The string.
+	 * @return The same string, with any variables replaced with their values.
+	 */
+	private String varSubstitute(String str) {
+
+		// Bail early if on (likely) variables
+		if (str.indexOf("${file_")==-1) {
+			return str;
+		}
+
+		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
+		Matcher m = VAR_PATTERN.matcher(str);
+		StringBuffer sb = new StringBuffer();
+
+		while (m.find()) {
+			String var = m.group(0);
+			String temp = null;
+			if ("${file_name}".equals(var)) {
+				temp = textArea.getFileName();
+			}
+			else if ("${file_name_no_ext}".equals(var)) {
+				temp = textArea.getFileName();
+				int dot = temp.lastIndexOf('.');
+				if (dot>-1) {
+					temp = temp.substring(0, dot);
+				}
+			}
+			else if ("${file_dir}".equals(var)) {
+				temp = textArea.getFileFullPath();
+				int slash = temp.lastIndexOf('/');
+				slash = Math.max(slash, temp.lastIndexOf('\\'));
+				temp = temp.substring(0, slash);
+			}
+			else if ("${file_full_path}".equals(var)) {
+				temp = textArea.getFileFullPath();
+			}
+			m.appendReplacement(sb, quoteReplacement(temp));
+		}
+
+		m.appendTail(sb);
+		return sb.toString();
+
+	}
+
+
 	public static void main(String[] args) {
 		Tool tool = new Tool("Name", "Desc");
 		tool.setProgram("C:/temp/test.bat");
@@ -474,4 +583,6 @@ public class Tool implements Comparable {
 			}
 		});
 	}
+
+
 }
