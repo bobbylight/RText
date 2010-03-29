@@ -40,6 +40,7 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -53,11 +54,14 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 
+import org.fife.rtext.AssistanceIconPanel;
+import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.optionsdialog.GetKeyStrokeDialog;
 import org.fife.rtext.optionsdialog.GetKeyStrokeDialog.KeyStrokeField;
 import org.fife.ui.EscapableDialog;
@@ -66,10 +70,15 @@ import org.fife.ui.MenuButton;
 import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
+import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.BasicCompletion;
+import org.fife.ui.autocomplete.CompletionProvider;
+import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.modifiabletable.ModifiableTable;
 import org.fife.ui.modifiabletable.RowHandler;
 import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
+import org.fife.ui.search.AbstractSearchDialog;
 
 
 /**
@@ -178,6 +187,27 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 
 
 	/**
+	 * Adds a completion for a tool-related variable.
+	 *
+	 * @param p The completion provider to add to.
+	 * @param key The key for the localized tool variable.
+	 */
+	private void addToolVarCompletion(DefaultCompletionProvider p, String key) {
+		String temp = msg.getString(key);
+		int split = temp.indexOf(" - ");
+		if (split>-1) { // Always true
+			String input = temp.substring(0, split);
+			String desc = temp.substring(split+3);
+			BasicCompletion comp = new BasicCompletion(p, input, desc);
+			p.addCompletion(comp);
+		}
+		else {
+			System.err.println("Warning - split not found for: " + key);
+		}
+	}
+
+
+	/**
 	 * Returns the tool definition input by the user.
 	 *
 	 * @return The tool, or <code>null</code> if there was a problem
@@ -257,36 +287,48 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		springPanel.setBorder(UIUtil.getEmpty5Border());
 		JLabel nameLabel = new JLabel(msg.getString("Name"));
 		nameField = new JTextField(40);
+		JPanel nameFieldPanel = RTextUtilities.createAssistancePanel(nameField, null);
 		JLabel descLabel = new JLabel(msg.getString("Description"));
 		descField = new JTextField(40);
+		JPanel descFieldPanel = RTextUtilities.createAssistancePanel(descField, null);
 		JLabel programLabel = new JLabel(msg.getString("Program"));
 		programField = new FSATextField();
+		JPanel programFieldPanel = RTextUtilities.createAssistancePanel(programField, null);
 		RButton programBrowseButton = new RButton(msg.getString("Browse"));
 		programBrowseButton.setActionCommand("BrowseProgram");
 		programBrowseButton.addActionListener(this);
 		JLabel dirLabel = new JLabel(msg.getString("Directory"));
 		dirField = new FSATextField();
+DefaultCompletionProvider provider = new DefaultCompletionProvider();
+provider.addCompletion(new BasicCompletion(provider, "${file_dir}", "Directory of the current file"));
+AutoCompletion ac = new AutoCompletion(provider);
+ac.setAutoCompleteSingleChoices(false);
+ac.install(dirField);
 		dirField.setDirectoriesOnly(true);
+		AssistanceIconPanel aip = new AssistanceIconPanel(dirField);
+		aip.setAssistanceEnabled(AbstractSearchDialog.getContentAssistImage());
+		JPanel dirFieldPanel = RTextUtilities.createAssistancePanel(dirField, aip);
 		RButton dirBrowseButton = UIUtil.createTabbedPaneButton(msg.getString("Browse"));
 		dirBrowseButton.setActionCommand("BrowseDir");
 		dirBrowseButton.addActionListener(this);
 		JLabel shortcutLabel = new JLabel(msg.getString("Shortcut"));
 		shortcutField = new GetKeyStrokeDialog.KeyStrokeField();
+		JPanel shortcutFieldPanel = RTextUtilities.createAssistancePanel(shortcutField, null);
 
 		Dimension dim = new Dimension(1, 1); // MUST have finite width!
 		if (o.isLeftToRight()) {
-			springPanel.add(nameLabel);		springPanel.add(nameField); springPanel.add(Box.createRigidArea(dim));
-			springPanel.add(descLabel);		springPanel.add(descField); springPanel.add(Box.createRigidArea(dim));
-			springPanel.add(programLabel);	springPanel.add(programField); springPanel.add(programBrowseButton);
-			springPanel.add(dirLabel);		springPanel.add(dirField); springPanel.add(dirBrowseButton);
-			springPanel.add(shortcutLabel); springPanel.add(shortcutField); springPanel.add(Box.createRigidArea(dim));
+			springPanel.add(nameLabel);		springPanel.add(nameFieldPanel);     springPanel.add(Box.createRigidArea(dim));
+			springPanel.add(descLabel);		springPanel.add(descFieldPanel);     springPanel.add(Box.createRigidArea(dim));
+			springPanel.add(programLabel);	springPanel.add(programFieldPanel);  springPanel.add(programBrowseButton);
+			springPanel.add(dirLabel);		springPanel.add(dirFieldPanel);      springPanel.add(dirBrowseButton);
+			springPanel.add(shortcutLabel); springPanel.add(shortcutFieldPanel); springPanel.add(Box.createRigidArea(dim));
 		}
 		else {
-			springPanel.add(Box.createRigidArea(dim));	springPanel.add(nameField);		springPanel.add(nameLabel);
-			springPanel.add(Box.createRigidArea(dim));	springPanel.add(descField);		springPanel.add(descLabel);
-			springPanel.add(programBrowseButton);		springPanel.add(programField);	springPanel.add(programLabel);
-			springPanel.add(dirBrowseButton);			springPanel.add(dirField);		springPanel.add(dirLabel);
-			springPanel.add(Box.createRigidArea(dim));  springPanel.add(shortcutField); springPanel.add(shortcutLabel);
+			springPanel.add(Box.createRigidArea(dim));	springPanel.add(nameFieldPanel);     springPanel.add(nameLabel);
+			springPanel.add(Box.createRigidArea(dim));	springPanel.add(descFieldPanel);     springPanel.add(descLabel);
+			springPanel.add(programBrowseButton);		springPanel.add(programFieldPanel);  springPanel.add(programLabel);
+			springPanel.add(dirBrowseButton);			springPanel.add(dirFieldPanel);      springPanel.add(dirLabel);
+			springPanel.add(Box.createRigidArea(dim));  springPanel.add(shortcutFieldPanel); springPanel.add(shortcutLabel);
 		}
 
 		UIUtil.makeSpringCompactGrid(springPanel, 5, 3, 5, 5, 5, 5);
@@ -353,6 +395,21 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		pack();
 		setLocationRelativeTo(parent);
 
+	}
+
+
+	/**
+	 * Creates a completion provider for tool variable completions.
+	 *
+	 * @return The completion provider.
+	 */
+	private CompletionProvider createToolVarCompletionProvider() {
+		DefaultCompletionProvider p = new DefaultCompletionProvider();
+		addToolVarCompletion(p, "Variable.FileName");
+		addToolVarCompletion(p, "Variable.FileNameNoExt");
+		addToolVarCompletion(p, "Variable.FileDir");
+		addToolVarCompletion(p, "Variable.FileFullPath");
+		return p;
 	}
 
 
@@ -483,6 +540,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		public ArgDialog(JDialog parent) {
 
 			super(parent);
+			ComponentOrientation o = parent.getComponentOrientation();
 
 			JPanel cp = new ResizableFrameContentPane(new BorderLayout());
 			cp.setBorder(UIUtil.getEmpty5Border());
@@ -491,13 +549,35 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 			JLabel argLabel = new JLabel(msg.getString("ArgumentDialog.Argument"));
 			temp.add(argLabel, BorderLayout.LINE_START);
 			argField = new JTextField(20);
+			CompletionProvider provider = createToolVarCompletionProvider();
+			AutoCompletion ac = new AutoCompletion(provider);
+			ac.setAutoCompleteSingleChoices(false);
+			ac.install(argField);
+			AssistanceIconPanel aip = new AssistanceIconPanel(argField);
+			aip.setAssistanceEnabled(AbstractSearchDialog.getContentAssistImage());
+			JPanel argFieldPanel = RTextUtilities.createAssistancePanel(argField, aip);
 			argField.getDocument().addDocumentListener(this);
 			JPanel temp2 = new JPanel(new BorderLayout());
 			temp2.setBorder(BorderFactory.createEmptyBorder(0,5,0,5));
-			temp2.add(argField);
+			temp2.add(argFieldPanel);
 			temp.add(temp2);
 			VariableButton varButton = new VariableButton(argField);
 			temp.add(varButton, BorderLayout.LINE_END);
+
+			// Add OptionPane icon if one is defined.
+			Icon icon = UIManager.getIcon("OptionPane.questionIcon");
+			if (icon!=null) {
+				temp2 = new JPanel(new BorderLayout());
+				JLabel iconLabel = new JLabel(icon);
+				iconLabel.setBorder(o.isLeftToRight() ?
+						BorderFactory.createEmptyBorder(0, 0, 0, 8) :
+							BorderFactory.createEmptyBorder(0, 8, 0, 0));
+				temp2.add(iconLabel, BorderLayout.LINE_START);
+				JPanel temp3 = new JPanel(new BorderLayout());
+				temp3.add(temp, BorderLayout.NORTH);
+				temp2.add(temp3);
+				temp = temp2;
+			}
 			cp.add(temp, BorderLayout.NORTH);
 
 			temp = new JPanel();
@@ -517,7 +597,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 			setTitle(msg.getString("ArgumentDialog.Title"));
 			getRootPane().setDefaultButton(okButton);
 			setContentPane(cp);
-			applyComponentOrientation(parent.getComponentOrientation());
+			applyComponentOrientation(o);
 			pack();
 			setLocationRelativeTo(parent);
 
@@ -586,7 +666,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	/**
 	 * The dialog that allows the user to add or modify an environment variable.
 	 */
-	private static class EnvVarDialog extends EscapableDialog
+	private class EnvVarDialog extends EscapableDialog
 								implements DocumentListener, ActionListener {
 
 		private JTextField nameField;
@@ -597,6 +677,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		public EnvVarDialog(JDialog parent) {
 
 			super(parent);
+			ComponentOrientation o = parent.getComponentOrientation();
 			escaped = true;
 
 			JPanel cp = new ResizableFrameContentPane(new BorderLayout());
@@ -605,21 +686,46 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 			JLabel nameLabel = new JLabel(msg.getString("EnvVarDialog.Name"));
 			nameField = new JTextField(20);
 			nameField.getDocument().addDocumentListener(this);
+			JPanel nameFieldPanel = RTextUtilities.createAssistancePanel(nameField, null);
 			JLabel valueLabel = new JLabel(msg.getString("EnvVarDialog.Value"));
 			valueField = new JTextField(20);
+			CompletionProvider provider = createToolVarCompletionProvider();
+			AutoCompletion ac = new AutoCompletion(provider);
+			ac.setAutoCompleteSingleChoices(false);
+			ac.install(valueField);
+			AssistanceIconPanel aip = new AssistanceIconPanel(valueField);
+			aip.setAssistanceEnabled(AbstractSearchDialog.getContentAssistImage());
+			JPanel valueFieldPanel = RTextUtilities.createAssistancePanel(valueField, aip);
 			VariableButton varButton = new VariableButton(valueField);
 
 			JPanel temp = new JPanel(new SpringLayout());
 			Dimension dim = new Dimension(1, 1); // MUST have finite width!
 			if (parent.getComponentOrientation().isLeftToRight()) {
-				temp.add(nameLabel); temp.add(nameField); temp.add(Box.createRigidArea(dim));
-				temp.add(valueLabel); temp.add(valueField); temp.add(varButton);
+				temp.add(nameLabel); temp.add(nameFieldPanel); temp.add(Box.createRigidArea(dim));
+				temp.add(valueLabel); temp.add(valueFieldPanel); temp.add(varButton);
 			}
 			else {
-				temp.add(Box.createRigidArea(dim)); temp.add(nameField); temp.add(nameLabel);
-				temp.add(varButton); temp.add(valueField); temp.add(valueLabel);
+				temp.add(Box.createRigidArea(dim)); temp.add(nameFieldPanel); temp.add(nameLabel);
+				temp.add(varButton); temp.add(valueFieldPanel); temp.add(valueLabel);
 			}
 			UIUtil.makeSpringCompactGrid(temp, 2, 3, 5, 5, 5, 5);
+
+			// Add OptionPane icon if one is defined.
+			Icon icon = UIManager.getIcon("OptionPane.questionIcon");
+			if (icon!=null) {
+				JPanel temp2 = new JPanel(new BorderLayout());
+				JLabel iconLabel = new JLabel(icon);
+				iconLabel.setBorder(o.isLeftToRight() ?
+						BorderFactory.createEmptyBorder(0, 0, 0, 8) :
+							BorderFactory.createEmptyBorder(0, 8, 0, 0));
+				JPanel temp3 = new JPanel(new BorderLayout());
+				temp3.add(iconLabel, BorderLayout.NORTH);
+				temp2.add(temp3, BorderLayout.LINE_START);
+				temp3 = new JPanel(new BorderLayout());
+				temp3.add(temp, BorderLayout.NORTH);
+				temp2.add(temp3);
+				temp = temp2;
+			}
 			cp.add(temp, BorderLayout.NORTH);
 
 			temp = new JPanel();
@@ -639,7 +745,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 			setTitle(msg.getString("EnvVarDialog.Title"));
 			getRootPane().setDefaultButton(okButton);
 			setContentPane(cp);
-			applyComponentOrientation(parent.getComponentOrientation());
+			applyComponentOrientation(o);
 			pack();
 			setLocationRelativeTo(parent);
 

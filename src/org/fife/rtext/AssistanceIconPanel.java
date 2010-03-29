@@ -23,7 +23,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.ui.search;
+package org.fife.rtext;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -34,8 +34,6 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ResourceBundle;
-
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -52,7 +50,7 @@ import javax.swing.text.JTextComponent;
  * @author Robert Futrell
  * @version 1.0
  */
-class AssistanceIconPanel extends JPanel
+public class AssistanceIconPanel extends JPanel
 						implements FocusListener, PropertyChangeListener {
 
 	/**
@@ -71,33 +69,42 @@ class AssistanceIconPanel extends JPanel
 	 */
 	private static String ASSISTANCE_AVAILABLE;
 
+	private static final EmptyIcon EMPTY_ICON = new EmptyIcon(WIDTH, WIDTH);
+
 
 	/**
 	 * Constructor.
 	 *
-	 * @param combo The combo box to listen to.
+	 * @param comp The component to listen to.  This can be <code>null</code>
+	 *        to create a "filler" icon panel for alignment purposes.  
 	 */
 	public AssistanceIconPanel(JComponent comp) {
 
 		setLayout(new BorderLayout());
-		iconLabel = new JLabel(EmptyIcon.INSTANCE);
+		iconLabel = new JLabel(EMPTY_ICON);
 		iconLabel.setVerticalAlignment(SwingConstants.TOP);
 		add(iconLabel, BorderLayout.NORTH);
 
-		if (comp instanceof JComboBox) {
-			JComboBox combo = (JComboBox)comp;
-			Component c = combo.getEditor().getEditorComponent();
-			if (c instanceof JTextComponent) { // Always true
-				JTextComponent tc = (JTextComponent)c;
-				tc.addFocusListener(this);
-			}
-		}
-		else { // Usually a JTextComponent
-			comp.addFocusListener(this);
-		}
+		// null can be passed to make a "filler" icon panel for alignment
+		// purposes.
+		if (comp!=null) {
 
-		comp.addPropertyChangeListener(
-			ContentAssistable.ASSISTANCE_IMAGE, this);
+			if (comp instanceof JComboBox) {
+				JComboBox combo = (JComboBox)comp;
+				Component c = combo.getEditor().getEditorComponent();
+				if (c instanceof JTextComponent) { // Always true
+					JTextComponent tc = (JTextComponent)c;
+					tc.addFocusListener(this);
+				}
+			}
+			else { // Usually a JTextComponent
+				comp.addFocusListener(this);
+			}
+
+			comp.addPropertyChangeListener(
+				ContentAssistable.ASSISTANCE_IMAGE, this);
+
+		}
 
 	}
 
@@ -161,35 +168,26 @@ class AssistanceIconPanel extends JPanel
 	 */
 	public void propertyChange(PropertyChangeEvent e) {
 		Image img = (Image)e.getNewValue();
-		if (img==null && iconLabel.getIcon()!=EmptyIcon.INSTANCE) {
-			iconLabel.setIcon(EmptyIcon.INSTANCE);
+		setAssistanceEnabled(img);
+	}
+
+
+	/**
+	 * A hook for applications to initialize this panel, if the component
+	 * we're listening to already has content assist enabled.
+	 *
+	 * @param img The image to display, or <code>null</code> if content assist
+	 *        is not currently available.
+	 */
+	public void setAssistanceEnabled(Image img) {
+		if (img==null && iconLabel.getIcon()!=EMPTY_ICON) {
+			iconLabel.setIcon(EMPTY_ICON);
 			iconLabel.setToolTipText(null);
 		}
 		else {
 			iconLabel.setIcon(new ImageIcon(img));
 			iconLabel.setToolTipText(getAssistanceAvailableText());
 		}
-	}
-
-
-	/**
-	 * An empty icon.
-	 */
-	private static class EmptyIcon implements Icon {
-
-		private static final EmptyIcon INSTANCE = new EmptyIcon();
-
-		public int getIconHeight() {
-			return WIDTH;
-		}
-
-		public int getIconWidth() {
-			return WIDTH;
-		}
-
-		public void paintIcon(Component c, Graphics g, int x, int y) {
-		}
-		
 	}
 
 

@@ -27,7 +27,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Frame;
-import java.awt.Graphics;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,6 +50,7 @@ import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 
 import org.fife.io.UnicodeReader;
+import org.fife.rtext.EmptyIcon;
 import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RScrollPane;
@@ -80,10 +80,9 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	private static final String ROOT_ELEMENT		= "RText-languages";
 	private static final String LANGUAGE			= "language";
 	private static final String NAME				= "name";
-	private static final String ID				= "id";
+	private static final String ID					= "id";
 
-	private static final int EMPTY_ICON_WIDTH		= 16;
-	private static final int EMPTY_ICON_HEIGHT		= 11;
+	private static final EmptyIcon EMPTY_ICON		= new EmptyIcon(16, 11);
 
 	private static final String FILE_NAME			= "localizations.xml";
 
@@ -177,11 +176,11 @@ class LanguageOptionPanel extends OptionsDialogPanel
 				icon = new ImageIcon(ImageIO.read(url));
 			} catch (IOException ioe) {
 				app.displayException(ioe);
-				icon = EmptyIcon.getInstance();
+				icon = EMPTY_ICON;
 			}
 		}
 		else {
-			icon = EmptyIcon.getInstance();
+			icon = EMPTY_ICON;
 		}
 		return icon;
 	}
@@ -421,34 +420,6 @@ class LanguageOptionPanel extends OptionsDialogPanel
 			setIcon(iti.getIcon());
 			setText(iti.getText());
 			return this;
-		}
-
-	}
-
-
-	/**
-	 * An empty icon.
-	 */
-	static class EmptyIcon implements Icon {
-
-		private static EmptyIcon instance;
-
-		public int getIconHeight() {
-			return EMPTY_ICON_HEIGHT;
-		}
-
-		public int getIconWidth() {
-			return EMPTY_ICON_WIDTH;
-		}
-
-		public static EmptyIcon getInstance() {
-			if (instance==null)
-				instance = new EmptyIcon();
-			return instance;
-		}
-
-		public void paintIcon(Component c, Graphics g, int x, int y) {
-			// Do nothing.
 		}
 
 	}

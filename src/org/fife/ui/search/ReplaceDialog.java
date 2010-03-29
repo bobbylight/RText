@@ -42,6 +42,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
+import org.fife.rtext.AssistanceIconPanel;
 import org.fife.ui.MaxWidthComboBox;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;

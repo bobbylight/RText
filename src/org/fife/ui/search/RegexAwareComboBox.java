@@ -26,12 +26,12 @@
 package org.fife.ui.search;
 
 import java.awt.Component;
-
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.text.JTextComponent;
 
+import org.fife.rtext.ContentAssistable;
 import org.fife.ui.MaxWidthComboBox;
 import org.fife.ui.RComboBoxModel;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -46,7 +46,7 @@ import org.fife.ui.autocomplete.DefaultCompletionProvider;
  * @author Robert Futrell
  * @version 1.0
  */
-class RegexAwareComboBox extends MaxWidthComboBox {
+class RegexAwareComboBox extends MaxWidthComboBox implements ContentAssistable {
 
 	private boolean enabled;
 	private boolean replace;

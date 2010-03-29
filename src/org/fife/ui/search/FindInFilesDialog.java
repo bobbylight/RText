@@ -35,6 +35,7 @@ import javax.swing.border.Border;
 import javax.swing.event.*;
 import javax.swing.text.JTextComponent;
 
+import org.fife.rtext.AssistanceIconPanel;
 import org.fife.ui.FSATextField;
 import org.fife.ui.RButton;
 import org.fife.ui.RComboBoxModel;

@@ -23,7 +23,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.ui.search;
+package org.fife.rtext;
 
 
 /**
@@ -34,7 +34,7 @@ package org.fife.ui.search;
  * @author Robert Futrell
  * @version 1.0
  */
-interface ContentAssistable {
+public interface ContentAssistable {
 
 	/**
 	 * Property event fired when the image to use when the component is focused

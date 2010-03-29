@@ -250,7 +250,7 @@ public class AbstractSearchDialog extends EscapableDialog
 	 *
 	 * @return The image to use.
 	 */
-	static Image getContentAssistImage() {
+	public static Image getContentAssistImage() {
 		if (contentAssistImage==null) {
 			ClassLoader cl = AbstractSearchDialog.class.getClassLoader();
 			URL url = cl.getResource("org/fife/rtext/graphics/common_icons/lightbulb.png");

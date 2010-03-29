@@ -49,8 +49,6 @@ import javax.swing.text.Caret;
 import org.fife.io.UnicodeWriter;
 import org.fife.rtext.actions.CapsLockAction;
 import org.fife.rtext.actions.ToggleTextModeAction;
-import org.fife.rtext.lang.LanguageSupport;
-import org.fife.rtext.lang.LanguageSupportFactory;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
@@ -526,18 +524,8 @@ public abstract class AbstractMainView extends JPanel
 		boolean closed = closeCurrentDocumentImpl();
 
 		if (closed) {
-
 			old.clearParsers();
-
-			// Remove the old language support.
-			LanguageSupportFactory lsf = LanguageSupportFactory.get();
-			LanguageSupport support = lsf.getSupport(old.getSyntaxEditingStyle());
-			if (support!=null) {
-				support.uninstall(old);
-			}
-
 			firePropertyChange(TEXT_AREA_REMOVED_PROPERTY, null, old);
-
 		}
 
 		return closed;
@@ -3488,13 +3476,6 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	private void setSyntaxStyle(RTextEditorPane pane, String style) {
 
-		// Remove the old language support.
-		LanguageSupportFactory lsf = LanguageSupportFactory.get();
-		LanguageSupport support = lsf.getSupport(pane.getSyntaxEditingStyle());
-		if (support!=null) {
-			support.uninstall(pane);
-		}
-
 		// If there was no extension on the file name, guess the content
 		// type for highlighting (but don't override content type if already
 		// assigned, e.g. "makefile" does this).
@@ -3512,12 +3493,6 @@ public abstract class AbstractMainView extends JPanel
 		// If the syntax style changed, what text is a "comment" also changed,
 		// so we need to re-do the spell check.
 		spellingSupport.forceSpellCheck(pane);
-
-		// Add the new support.
-		support = lsf.getSupport(pane.getSyntaxEditingStyle());
-		if (support!=null) {
-			support.install(pane);
-		}
 
 	}
 

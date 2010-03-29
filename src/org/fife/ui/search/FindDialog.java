@@ -43,6 +43,7 @@ import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.fife.rtext.AssistanceIconPanel;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
 

@@ -24,6 +24,7 @@
  */
 package org.fife.rtext;
 
+import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -36,7 +37,9 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import javax.imageio.ImageIO;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
@@ -137,6 +140,27 @@ public class RTextUtilities {
 		fnfd.addInFilesComboBoxFilter("*.py");
 		fnfd.addInFilesComboBoxFilter("*.sh *.bsh *.csh *.ksh");
 		fnfd.addInFilesComboBoxFilter("*.txt");
+	}
+
+
+	/**
+	 * Creates a panel containing the specified component and an (optional)
+	 * assistance icon panel.
+	 *
+	 * @param comp The component.
+	 * @param aip The assistance icon panel.  If this is <code>null</code>,
+	 *        then a spacer is used.
+	 * @return The panel.
+	 */
+	public static JPanel createAssistancePanel(JComponent comp,
+											AssistanceIconPanel aip) {
+		if (aip==null) {
+			aip = new AssistanceIconPanel(null);
+		}
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(aip, BorderLayout.LINE_START);
+		panel.add(comp);
+		return panel;
 	}
 
 

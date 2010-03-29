@@ -33,10 +33,16 @@
 	<target name="compile-plugin-classes"
 			description="Compile the source without deleting classes dir.">
 		<javac srcdir="${source-dir}" destdir="${class-dir}" deprecation="yes"
-				classpath="${class-dir};${dist-dir}/rsyntaxtextarea.jar;lib/rsta_spellchecker.jar;${dist-dir}/fife.common.jar"
 				debug="${debug}" debuglevel="${debuglevel}"
 				source="${java-level}" target="${java-level}">
 			<include name="org/fife/rtext/plugins/**"/>
+			<classpath>
+				<fileset dir="${class-dir}"/>
+				<fileset dir="lib">
+					<include name="**/*.jar"/>
+				</fileset>
+				<fileset file="${dist-dir}/fife.common.jar"/>
+			</classpath>
 		</javac>
 	</target>
 
@@ -139,6 +145,26 @@
 			</manifest>
 		</jar>
 
+		<!-- Tidy plugin. -->
+		<jar destfile="${dist-dir}/plugins/tidy.jar">
+			<fileset dir="${class-dir}">
+				<include name="org/fife/rtext/plugins/tidy/**"/>
+			</fileset>
+			<fileset dir="${source-dir}">
+				<include name="org/fife/rtext/plugins/tidy/*.png"/>
+			</fileset>
+			<fileset dir="i18n">
+				<include name="org/fife/rtext/plugins/tidy/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Class-Path" value="plugins/jtidy-r938.jar"/>
+				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.tidy.Plugin"/>
+				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
+			</manifest>
+		</jar>
+		<!-- Needed by tidy plugin -->
+		<copy file="lib/jtidy-r938.jar" todir="${dist-dir}/plugins"/>
+
 		<!-- Tool support plugin. -->
 		<jar destfile="${dist-dir}/plugins/ToolSupport.jar">
 			<fileset dir="${class-dir}">
@@ -155,6 +181,26 @@
 				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
 			</manifest>
 		</jar>
+
+		<!-- Language support plugin. -->
+		<jar destfile="${dist-dir}/plugins/RTextLanguageSupport.jar">
+			<fileset dir="${class-dir}">
+				<include name="org/fife/rtext/plugins/langsupport/**"/>
+			</fileset>
+			<fileset dir="${source-dir}">
+				<include name="org/fife/rtext/plugins/langsupport/*.png"/>
+			</fileset>
+			<fileset dir="i18n">
+				<include name="org/fife/rtext/plugins/langsupport/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Class-Path" value="plugins/language_support.jar"/>
+				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.langsupport.Plugin"/>
+				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
+			</manifest>
+		</jar>
+		<!-- Needed by RTextLanguageSupport -->
+		<copy file="lib/language_support.jar" todir="${dist-dir}/plugins"/>
 
 	</target>
 
