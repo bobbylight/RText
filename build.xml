@@ -121,7 +121,11 @@
 		<!-- Copy "extra stuff." -->
 		<copy todir="${dist-dir}">
 			<fileset dir="extra"/>
-			<fileset dir="lib"/>
+			<fileset dir="lib">
+				<!-- Skip those put into lib/plugins -->
+				<exclude name="language_support.jar"/>
+				<exclude name="jtidy*"/>
+			</fileset>
 			<fileset dir="${common-dir}/dist"/>
 			<fileset dir="${common-dir}/native"/>
 		</copy>

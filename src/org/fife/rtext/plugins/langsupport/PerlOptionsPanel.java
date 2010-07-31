@@ -1,0 +1,423 @@
+/*
+ * 05/20/2010
+ *
+ * PerlOptionsPanel.java - Options for Perl language support.
+ * Copyright (C) 2010 Robert Futrell
+ * robert_futrell at users.sourceforge.net
+ * http://rtext.fifesoft.com
+ *
+ * This file is a part of RText.
+ * 
+ * RText is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * RText is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+package org.fife.rtext.plugins.langsupport;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ResourceBundle;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import org.fife.rsta.ac.LanguageSupport;
+import org.fife.rsta.ac.LanguageSupportFactory;
+import org.fife.rsta.ac.perl.PerlLanguageSupport;
+import org.fife.rtext.AbstractMainView;
+import org.fife.rtext.RText;
+import org.fife.rtext.RTextEditorPane;
+import org.fife.ui.FSATextField;
+import org.fife.ui.OptionsDialogPanel;
+import org.fife.ui.RButton;
+import org.fife.ui.UIUtil;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextfilechooser.RDirectoryChooser;
+
+
+/**
+ * The options panel for Perl-specific language support options.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
+class PerlOptionsPanel extends OptionsDialogPanel {
+
+	private Listener listener;
+	private JCheckBox enabledCB;
+	private JCheckBox paramAssistanceCB;
+	private JCheckBox showDescWindowCB;
+	private JCheckBox useParensCB;
+	private JCheckBox compileCB;
+	private JLabel installLocLabel;
+	private FSATextField installLocField;
+	private RButton installBrowseButton;
+	private JCheckBox warningsCB;
+	private JCheckBox taintModeCB;
+	private RButton rdButton;
+
+	private static final String PROPERTY		= "Property";
+
+
+	/**
+	 * Constructor.
+	 */
+	public PerlOptionsPanel() {
+
+		ResourceBundle msg = Plugin.msg;
+		setName(msg.getString("Options.Perl.Name"));
+		listener = new Listener();
+		setIcon(new ImageIcon(getClass().getResource("epic.gif")));
+
+		ComponentOrientation o = ComponentOrientation.
+											getOrientation(getLocale());
+
+		setLayout(new BorderLayout());
+		setBorder(UIUtil.getEmpty5Border());
+
+		Box cp = Box.createVerticalBox();
+		cp.setBorder(null);
+		add(cp, BorderLayout.NORTH);
+
+		Box box = Box.createVerticalBox();
+		box.setBorder(new OptionPanelBorder(msg.
+				getString("Options.Perl.Section.CodeCompletion")));
+		cp.add(box);
+		cp.add(Box.createVerticalStrut(5));
+
+		enabledCB = createCB("Options.General.EnableCodeCompletion");
+		addLeftAligned(box, enabledCB);
+
+		Box box2 = Box.createVerticalBox();
+		if (o.isLeftToRight()) {
+			box2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+		}
+		else {
+			box2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
+		}
+		box.add(box2);
+
+		showDescWindowCB = createCB("Options.General.ShowDescWindow");
+		addLeftAligned(box2, showDescWindowCB);
+
+		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
+		addLeftAligned(box2, paramAssistanceCB);
+
+		useParensCB = createCB("UseParensInCodeCompletion");
+		addLeftAligned(box2, useParensCB);
+
+		box2.add(Box.createVerticalGlue());
+
+		box = Box.createVerticalBox();
+		box.setBorder(new OptionPanelBorder(msg.
+				getString("Options.Perl.Section.SyntaxChecking")));
+		cp.add(box);
+
+		compileCB = createCB("Options.General.UnderlineErrors");
+		addLeftAligned(box, compileCB);
+
+		box2 = Box.createVerticalBox();
+		if (o.isLeftToRight()) {
+			box2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+		}
+		else {
+			box2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
+		}
+		box.add(box2);
+
+		installLocLabel = new JLabel(msg.getString("Options.Perl.InstallLoc"));
+		installLocField = new FSATextField(true, "");
+		installLocField.getDocument().addDocumentListener(listener);
+		installLocLabel.setLabelFor(installLocField);
+		installBrowseButton = new RButton(msg.getString("Browse"));
+		installBrowseButton.addActionListener(listener);
+		JPanel temp = new JPanel(new BorderLayout());
+		temp.add(installLocLabel, BorderLayout.LINE_START);
+		temp.add(installLocField);
+		JPanel temp2 = new JPanel(new BorderLayout());
+		temp2.add(installBrowseButton);
+		temp.add(temp2, BorderLayout.LINE_END);
+		if (o.isLeftToRight()) {
+			installLocLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
+			temp2.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+		}
+		else {
+			installLocLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+			temp2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
+		}
+		box2.add(temp);
+		box2.add(Box.createVerticalStrut(5));
+		warningsCB = createCB("Warnings");
+		addLeftAligned(box2, warningsCB);
+		taintModeCB = createCB("TaintMode");
+		addLeftAligned(box2, taintModeCB);
+		box2.add(Box.createVerticalGlue());
+
+		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton.addActionListener(listener);
+		addLeftAligned(cp, rdButton);
+
+		cp.add(Box.createVerticalGlue());
+
+		applyComponentOrientation(o);
+
+	}
+
+
+	private void addLeftAligned(Box to, Component c) {
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(c, BorderLayout.LINE_START);
+		to.add(panel);
+		to.add(Box.createVerticalStrut(5));
+	}
+
+
+	private JCheckBox createCB(String key) {
+		if (key.indexOf('.')==-1) {
+			key = "Options.Perl." + key;
+		}
+		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		cb.addActionListener(listener);
+		return cb;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected void doApplyImpl(Frame owner) {
+
+		RText app = (RText)owner;
+		AbstractMainView view = app.getMainView();
+
+		LanguageSupportFactory lsf = LanguageSupportFactory.get();
+		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PERL);
+		PerlLanguageSupport pls = (PerlLanguageSupport)ls;
+
+		// Options dealing with code completion.
+		pls.setAutoCompleteEnabled(enabledCB.isSelected());
+		pls.setParameterAssistanceEnabled(paramAssistanceCB.isSelected());
+		pls.setShowDescWindow(showDescWindowCB.isSelected());
+		pls.setUseParensWithFunctions(useParensCB.isSelected());
+
+		// Options dealing with runtime syntax checking.
+		boolean old = pls.isParsingEnabled();
+		pls.setParsingEnabled(compileCB.isSelected());
+		boolean reunderline = old!=pls.isParsingEnabled();
+		File oldLoc = PerlLanguageSupport.getPerlInstallLocation();
+		File newLoc = new File(installLocField.getText());
+		PerlLanguageSupport.setPerlInstallLocation(newLoc);
+		reunderline |= !oldLoc.equals(newLoc);
+		old = pls.getWarningsEnabled();
+		pls.setWarningsEnabled(warningsCB.isSelected());
+		reunderline |= old!=pls.getWarningsEnabled();
+		old = pls.isTaintModeEnabled();
+		pls.setTaintModeEnabled(taintModeCB.isSelected());
+		reunderline |= old!=pls.isTaintModeEnabled();
+
+		// Something in the way we compile the Perl code changed
+		if (reunderline) {
+			for (int i=0; i<view.getNumDocuments(); i++) {
+				RTextEditorPane textArea = view.getRTextEditorPaneAt(i);
+				textArea.forceReparsing(pls.getParser(textArea));
+			}
+		}
+
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected OptionsPanelCheckResult ensureValidInputsImpl() {
+
+		OptionsPanelCheckResult res = null;
+
+		File file = new File(installLocField.getText());
+		if (!file.isDirectory()) {
+			res = new OptionsPanelCheckResult(this, installLocField, 
+					Plugin.msg.getString("Options.Perl.Error.InvalidPerlHome"));
+		}
+
+		return res;
+
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public JComponent getTopJComponent() {
+		return useParensCB;
+	}
+
+
+	private void setCompileCBSelected(boolean selected) {
+		compileCB.setSelected(selected);
+		installLocLabel.setEnabled(selected);
+		installLocField.setEnabled(selected);
+		installBrowseButton.setEnabled(selected);
+		warningsCB.setEnabled(selected);
+		taintModeCB.setEnabled(selected);
+	}
+
+
+	private void setEnabledCBSelected(boolean selected) {
+		enabledCB.setSelected(selected);
+		paramAssistanceCB.setEnabled(selected);
+		showDescWindowCB.setEnabled(selected);
+		useParensCB.setEnabled(selected);
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected void setValuesImpl(Frame owner) {
+
+		LanguageSupportFactory lsf = LanguageSupportFactory.get();
+		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PERL);
+		PerlLanguageSupport pls = (PerlLanguageSupport)ls;
+
+		// Options dealing with code completion
+		setEnabledCBSelected(pls.isAutoCompleteEnabled());
+		paramAssistanceCB.setSelected(pls.isParameterAssistanceEnabled());
+		showDescWindowCB.setSelected(pls.getShowDescWindow());
+		useParensCB.setSelected(pls.getUseParensWithFunctions());
+
+		// Options dealing with runtime syntax checking
+		setCompileCBSelected(pls.isParsingEnabled());
+		installLocField.setFileSystemAware(false);
+		installLocField.setText(PerlLanguageSupport.getPerlInstallLocation().
+													getAbsolutePath());
+		installLocField.setFileSystemAware(true);
+		warningsCB.setSelected(pls.getWarningsEnabled());
+		taintModeCB.setSelected(pls.isTaintModeEnabled());
+
+	}
+
+
+	/**
+	 * Listens for events in this options panel.
+	 */
+	private class Listener implements ActionListener, DocumentListener {
+
+		public void actionPerformed(ActionEvent e) {
+
+			Object source = e.getSource();
+
+			if (enabledCB==source) {
+				// Trick related components to toggle enabled states
+				setEnabledCBSelected(enabledCB.isSelected());
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
+			else if (paramAssistanceCB==source ||
+					showDescWindowCB==source ||
+					useParensCB==source ||
+					warningsCB==source ||
+					taintModeCB==source) {
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
+			else if (compileCB==source) {
+				// Trick related components to toggle enabled states
+				setCompileCBSelected(compileCB.isSelected());
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
+			else if (installBrowseButton==source) {
+				RDirectoryChooser chooser = new RDirectoryChooser(
+														getOptionsDialog());
+				chooser.setVisible(true);
+				String dir = chooser.getChosenDirectory();
+				if (dir!=null && !dir.equals(installLocField.getText())) {
+					installLocField.setFileSystemAware(false);
+					installLocField.setText(dir);
+					installLocField.setFileSystemAware(true);
+					hasUnsavedChanges = true;
+					firePropertyChange(PROPERTY, null, null);
+				}
+			}
+
+			else if (rdButton==source) {
+
+				File locFile = PerlLanguageSupport.
+											getDefaultPerlInstallLocation();
+				String origInstallLoc = locFile==null ? "" :
+										locFile.getAbsolutePath();
+				String installFieldText = installLocField.getText();
+				boolean installLocFieldModified =
+					!origInstallLoc.equals(installFieldText);
+
+				if (!compileCB.isSelected() ||
+						!enabledCB.isSelected() ||
+						installLocFieldModified ||
+						!paramAssistanceCB.isSelected() ||
+						!showDescWindowCB.isSelected() ||
+						taintModeCB.isSelected() ||
+						!useParensCB.isSelected() ||
+						!warningsCB.isSelected()) {
+					setCompileCBSelected(true);
+					setEnabledCBSelected(true);
+					installLocField.setFileSystemAware(false);
+					installLocField.setText(origInstallLoc);
+					installLocField.setFileSystemAware(true);
+					paramAssistanceCB.setSelected(true);
+					showDescWindowCB.setSelected(true);
+					taintModeCB.setSelected(false);
+					useParensCB.setSelected(true);
+					warningsCB.setSelected(true);
+					hasUnsavedChanges = true;
+					firePropertyChange(PROPERTY, null, null);
+				}
+
+			}
+
+		}
+
+		public void changedUpdate(DocumentEvent e) {
+			handleDocumentEvent(e);
+		}
+
+		private void handleDocumentEvent(DocumentEvent e) {
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, null, null);
+		}
+
+		public void insertUpdate(DocumentEvent e) {
+			handleDocumentEvent(e);
+		}
+
+		public void removeUpdate(DocumentEvent e) {
+			handleDocumentEvent(e);
+		}
+
+	}
+
+
+}

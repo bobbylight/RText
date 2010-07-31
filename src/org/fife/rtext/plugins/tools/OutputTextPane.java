@@ -27,22 +27,31 @@ package org.fife.rtext.plugins.tools;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.TabSet;
+import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
 
 
@@ -59,12 +68,21 @@ class OutputTextPane extends JTextPane {
 	static final String STYLE_STDERR			= "stderr";
 	static final String STYLE_EXCEPTION			= "exception";
 
+	private ToolPlugin plugin;
+	private JPopupMenu popup;
+	private Listener listener;
+
+
 	/**
 	 * Constructor.
 	 */
-	public OutputTextPane() {
+	public OutputTextPane(ToolPlugin plugin) {
+		this.plugin = plugin;
 		installStyles();
+		setTabSize(4); // Do after installStyles()
 		fixKeyboardShortcuts();
+		listener = new Listener();
+		addMouseListener(listener);
 	}
 
 
@@ -184,6 +202,100 @@ class OutputTextPane extends JTextPane {
 
 
 	/**
+	 * Sets the tab size in this text pane.
+	 *
+	 * @param tabSize The new tab size, in characters.
+	 */
+	public void setTabSize(int tabSize) {
+
+		FontMetrics fm = getFontMetrics(getFont());
+		int charWidth = fm.charWidth('m');
+		int tabWidth = charWidth * tabSize;
+
+		// NOTE: Array length is arbitrary, represents the maximum number of
+		// tabs handled on a single line.
+		TabStop[] tabs = new TabStop[50];
+		for (int j=0; j<tabs.length; j++) {
+			tabs[j] = new TabStop((j+1)*tabWidth);
+		}
+
+		TabSet tabSet = new TabSet(tabs);
+		SimpleAttributeSet attributes = new SimpleAttributeSet();
+		StyleConstants.setTabSet(attributes, tabSet);
+
+		int length = getDocument().getLength();
+		getStyledDocument().setParagraphAttributes(0, length, attributes, true);
+
+	}
+
+
+	/**
+	 * Displays this text area's popup menu.
+	 *
+	 * @param e The location at which to display the popup.
+	 */
+	private void showPopupMenu(MouseEvent e) {
+
+		if (popup==null) {
+			popup = new JPopupMenu();
+			popup.add(new JMenuItem(new CopyAllAction()));
+			popup.addSeparator();
+			popup.add(new JMenuItem(new ClearAllAction()));
+		}
+
+		popup.show(this, e.getX(), e.getY());
+
+	}
+
+
+	/**
+	 * Overridden to also update the UI of the popup menu.
+	 */
+	public void updateUI() {
+		super.updateUI();
+		if (popup!=null) {
+			SwingUtilities.updateComponentTreeUI(popup);
+		}
+	}
+
+
+	/**
+	 * Clears all text from this text area.
+	 */
+	private class ClearAllAction extends AbstractAction {
+
+		public ClearAllAction() {
+			putValue(NAME, plugin.getString("Action.ClearAll"));
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			setText(null);
+		}
+	}
+
+
+	/**
+	 * Copies all text from this text area.
+	 */
+	private class CopyAllAction extends AbstractAction {
+
+		public CopyAllAction() {
+			putValue(NAME, plugin.getString("Action.CopyAll"));
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			int dot = getSelectionStart();
+			int mark = getSelectionEnd();
+			setSelectionStart(0);
+			setSelectionEnd(getDocument().getLength());
+			copy();
+			setSelectionStart(dot);
+			setSelectionEnd(mark);
+		}
+	}
+
+
+	/**
 	 * Action performed when backspace is pressed.
 	 */
 	private class BackspaceAction extends TextAction {
@@ -240,6 +352,32 @@ class OutputTextPane extends JTextPane {
 			else {
 				delegate.actionPerformed(e);
 			}
+		}
+
+	}
+
+
+	/**
+	 * Listens for events in this text area.
+	 */
+	private class Listener extends MouseAdapter {
+
+		private void handleMouseEvent(MouseEvent e) {
+			if (e.isPopupTrigger()) {
+				showPopupMenu(e);
+			}
+		}
+
+		public void mouseClicked(MouseEvent e) {
+			handleMouseEvent(e);
+		}
+
+		public void mousePressed(MouseEvent e) {
+			handleMouseEvent(e);
+		}
+
+		public void mouseReleased(MouseEvent e) {
+			handleMouseEvent(e);
 		}
 
 	}

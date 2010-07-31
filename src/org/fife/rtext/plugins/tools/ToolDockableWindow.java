@@ -86,7 +86,7 @@ public class ToolDockableWindow extends DockableWindow
 		//setActive(true);
 		//setPosition(BOTTOM);
 
-		textArea = new OutputTextPane();
+		textArea = new OutputTextPane(plugin);
 		RScrollPane sp = new RScrollPane(textArea);
 		add(sp);
 

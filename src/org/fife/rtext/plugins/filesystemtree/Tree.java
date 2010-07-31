@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 
 import org.fife.rtext.*;
+import org.fife.ui.app.StandardAction;
 import org.fife.ui.rtextfilechooser.FileSystemTree;
 
 
@@ -23,6 +24,7 @@ class Tree extends FileSystemTree {
 	private FileSystemTreePlugin plugin;
 	private OpenAction openAction;
 	private OpenAction openInNewWindowAction;
+	private GoIntoAction goIntoAction;
 
 	private static final String MSG =
 			"org.fife.rtext.plugins.filesystemtree.PopupMenu";
@@ -50,23 +52,28 @@ class Tree extends FileSystemTree {
 			}
 		});
 
+		// Add a needed extra bit of space at the top.
+		setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createEmptyBorder(3, 0, 0, 0),
+				getBorder()));
+
 	}
 
 
 	/**
-	 * Called right before the popup menu is displayed.  This method
-	 * gives subclasses a chance to configure any extra actions or menu
-	 * items they have added to the popup menu, so they are tailored to
-	 * the selected item.  <code>popup</code> has been created before this
-	 * method is called.  Subclasses should call the super implementation
-	 * when overriding this method.
+	 * {@inheritDoc}
 	 */
 	protected void configurePopupMenuActions() {
+
 		super.configurePopupMenuActions();
 		File selected = getSelectedFile();
+
 		boolean enable = selected!=null && selected.isFile();
 		openAction.setEnabled(enable);
 		openInNewWindowAction.setEnabled(enable);
+
+		goIntoAction.setEnabled(selected!=null && selected.isDirectory());
+
 	}
 
 
@@ -76,7 +83,6 @@ class Tree extends FileSystemTree {
 	 * popup menu.
 	 *
 	 * @return The popup menu for this file system tree.
-	 * @see #displayPopupMenu
 	 */
 	protected JPopupMenu createPopupMenu() {
 
@@ -88,6 +94,10 @@ class Tree extends FileSystemTree {
 		openInNewWindowAction = new OpenAction(
 						msg.getString("OpenInNewWindow"), true);
 		popup.insert(new JMenuItem(openInNewWindowAction), 1);
+
+		goIntoAction = new GoIntoAction(plugin.getRText(), msg);
+		popup.insert(new JMenuItem(goIntoAction), 4);
+		popup.insert(new JPopupMenu.Separator(), 5);
 
 		// Re-do this to set orientation for new menu items.
 		popup.applyComponentOrientation(getComponentOrientation());
@@ -111,6 +121,28 @@ class Tree extends FileSystemTree {
 				mainView.openFile(file.getAbsolutePath(), null);
 			}
 		}
+	}
+
+
+	/**
+	 * Makes this tree drill down into the selected folder.
+	 */
+	private class GoIntoAction extends StandardAction {
+
+		public GoIntoAction(RText app, ResourceBundle msg) {
+			super(app, msg, "Action.GoInto");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			File file = getSelectedFile();
+			if (file!=null && file.isDirectory()) {
+				plugin.goInto(file);
+			}
+			else { // Should never happen
+				UIManager.getLookAndFeel().provideErrorFeedback(Tree.this);
+			}
+		}
+
 	}
 
 

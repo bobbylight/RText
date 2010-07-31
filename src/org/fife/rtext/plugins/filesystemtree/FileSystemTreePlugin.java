@@ -30,9 +30,12 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.*;
+import javax.swing.border.AbstractBorder;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
@@ -58,6 +61,12 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	private FileSystemTreeOptionPanel optionPanel;
 	private Icon pluginIcon;
 	private ViewAction viewAction;
+
+	private JLabel dirLabel;
+	private BackAction backAction;
+	private ForwardAction forwardAction;
+	private List rootHistory;
+	private int rootHistoryOffs;
 
 	static final String BUNDLE_NAME			=
 					"org/fife/rtext/plugins/filesystemtree/FileSystemTree";
@@ -89,6 +98,10 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		DockableWindow wind = createDockableWindow(prefs);
 		putDockableWindow(name, wind);
 
+		rootHistory = new ArrayList();
+		rootHistory.add(null);
+		rootHistoryOffs = 0;
+
 	}
 
 
@@ -101,6 +114,28 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	private DockableWindow createDockableWindow(FileSystemTreePrefs prefs) {
 
 		DockableWindow wind = new DockableWindow(name, new BorderLayout());
+
+		JToolBar tb = new JToolBar();
+		tb.setFloatable(false);
+		wind.add(tb, BorderLayout.NORTH);
+
+		ResourceBundle msg = ResourceBundle.getBundle(BUNDLE_NAME);
+		backAction = new BackAction(getRText(), msg);
+		forwardAction = new ForwardAction(getRText(), msg);
+
+		tb.add(Box.createHorizontalStrut(3));
+		dirLabel = new JLabel();
+		// Allow label to be resized very small so it doesn't hog space
+		dirLabel.setMinimumSize(new Dimension(8, 8));
+		tb.add(dirLabel);
+		tb.setMinimumSize(new Dimension(8, 8)); // ditto
+		tb.setBorder(new BottomLineBorder());
+
+		tb.add(Box.createHorizontalGlue());
+		JButton b = new JButton(backAction);
+		tb.add(b);
+		b = new JButton(forwardAction);
+		tb.add(b);
 
 		tree = new Tree(this);
 		RScrollPane scrollPane = new DockableWindowScrollPane(tree);
@@ -192,6 +227,41 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 
 	/**
+	 * Drills into a directory.
+	 *
+	 * @param dir The directory to drill into.
+	 */
+	public void goInto(File dir) {
+		if (dir!=null && dir.isDirectory()) { // Should always be true
+			try {
+
+				tree.setRoot(dir);
+
+				if (rootHistoryOffs==rootHistory.size()-1) {
+					rootHistory.add(dir);
+					rootHistoryOffs++;
+				}
+				else {
+					rootHistory.add(++rootHistoryOffs, dir);
+					int i = rootHistory.size() - 1;
+					while (i>rootHistoryOffs) {
+						rootHistory.remove(i);
+						i--;
+					}
+				}
+
+				dirLabel.setText(dir.getName());
+				backAction.setEnabled(true);
+				forwardAction.setEnabled(false);
+
+			} catch (IllegalArgumentException iae) { // Just paranoid
+				iae.printStackTrace();
+			}
+		}
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public void install(AbstractPluggableGUIApplication app) {
@@ -266,6 +336,110 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 */
 	public boolean uninstall() {
 		return true;
+	}
+
+
+	/**
+	 * Changes the tree view's root to the previous one.
+	 */
+	private class BackAction extends StandardAction {
+
+		public BackAction(RText app, ResourceBundle msg) {
+			super(app, msg, "Action.Back");
+			URL url = getClass().getResource("arrow_left.png");
+			setName(null); // We're only a toolbar icon
+			setIcon(new ImageIcon(url));
+			setEnabled(false);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			if (rootHistoryOffs>0) {
+				Object obj = rootHistory.get(--rootHistoryOffs);
+				if (obj instanceof File) {
+					File dir = (File)obj;
+					if (!dir.isDirectory()) {
+						UIManager.getLookAndFeel().provideErrorFeedback(null);
+						rootHistory.clear();
+						rootHistory.add(null);
+						rootHistoryOffs = 0;
+						obj = null; // Default to showing the file system roots
+					}
+				}
+				tree.setRoot((File)obj);
+				dirLabel.setText(obj instanceof File ?
+									((File)obj).getName() : null);
+				setEnabled(rootHistoryOffs>0);
+				forwardAction.setEnabled(rootHistoryOffs<rootHistory.size()-1);
+			}
+		}
+
+	}
+
+
+	/**
+	 * A border that draws a single 1-pixel line across the bottom of the
+	 * component.
+	 */
+	private static class BottomLineBorder extends AbstractBorder {
+
+		public BottomLineBorder() {
+		}
+
+		public Insets getBorderInsets(Component c) {
+			return getBorderInsets(c, new Insets(0, 0, 0, 0));
+		}
+
+		public Insets getBorderInsets(Component c, Insets insets) {
+			insets.top = insets.right = insets.left = 0;
+			insets.bottom = 1;
+			return insets;
+		}
+
+		public void paintBorder(Component c, Graphics g, int x, int y,
+								int width, int height) {
+			g.setColor(UIManager.getColor("controlDkShadow"));
+			y = y + height - 1;
+			g.drawLine(x,y, x+width-1,y);
+		}
+
+	}
+
+
+	/**
+	 * Changes the tree view's root to the next one (assuming they've gone
+	 * back at least once before).
+	 */
+	private class ForwardAction extends StandardAction {
+
+		public ForwardAction(RText app, ResourceBundle msg) {
+			super(app, msg, "Action.Forward");
+			URL url = getClass().getResource("arrow_right.png");
+			setName(null); // We're only a toolbar icon
+			setIcon(new ImageIcon(url));
+			setEnabled(false);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			if (rootHistoryOffs<rootHistory.size()-1) {
+				Object obj = rootHistory.get(++rootHistoryOffs);
+				if (obj instanceof File) {
+					File dir = (File)obj;
+					if (!dir.isDirectory()) {
+						UIManager.getLookAndFeel().provideErrorFeedback(null);
+						rootHistory.clear();
+						rootHistory.add(null);
+						rootHistoryOffs = 0;
+						obj = null; // Default to showing the file system roots
+					}
+				}
+				tree.setRoot((File)obj);
+				dirLabel.setText(obj instanceof File ?
+						((File)obj).getName() : null);
+				backAction.setEnabled(rootHistoryOffs>0);
+				setEnabled(rootHistoryOffs<rootHistory.size()-1);
+			}
+		}
+
 	}
 
 

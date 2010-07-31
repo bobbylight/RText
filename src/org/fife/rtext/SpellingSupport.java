@@ -171,13 +171,7 @@ public class SpellingSupport implements SpellingParserListener {
 	 * @param textArea The text area.
 	 */
 	public void forceSpellCheck(RTextEditorPane textArea) {
-		for (int i=0; i<textArea.getParserCount(); i++) {
-			// Should be in the list somewhere...
-			if (textArea.getParser(i)==spellingParser) {
-				textArea.forceReparsing(i);
-				break;
-			}
-		}
+		textArea.forceReparsing(spellingParser);
 	}
 
 
@@ -255,12 +249,7 @@ public class SpellingSupport implements SpellingParserListener {
 		AbstractMainView view = rtext.getMainView();
 		for (int i=0; i<view.getNumDocuments(); i++) {
 			RTextEditorPane textArea = view.getRTextEditorPaneAt(i);
-			for (int j=0; j<textArea.getParserCount(); j++) {
-				if (textArea.getParser(j)==spellingParser) {
-					textArea.forceReparsing(j);
-					break;
-				}
-			}
+			textArea.forceReparsing(spellingParser);
 		}
 	}
 

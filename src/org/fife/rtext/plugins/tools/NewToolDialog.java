@@ -336,7 +336,8 @@ ac.install(dirField);
 		temp.add(springPanel, BorderLayout.NORTH);
 
 		argModel = new DefaultTableModel(0, 1);
-		ModifiableTable argTable = new ModifiableTable(argModel);
+		ModifiableTable argTable = new ModifiableTable(argModel,
+				BorderLayout.SOUTH, ModifiableTable.ALL_BUTTONS);
 		argTable.getTable().setTableHeader(null);
 		Dimension s = argTable.getTable().getPreferredScrollableViewportSize();
 		s.height = 200; // JTable default is 400!
@@ -366,7 +367,8 @@ ac.install(dirField);
 		envModel = new DefaultTableModel(
 				new Object[] { msg.getString("VariableName"),
 								msg.getString("VariableValue") }, 0);
-		ModifiableTable envTable = new ModifiableTable(envModel);
+		ModifiableTable envTable = new ModifiableTable(envModel,
+				BorderLayout.SOUTH, ModifiableTable.ALL_BUTTONS);
 		s = envTable.getTable().getPreferredScrollableViewportSize();
 		s.height = 200; // JTable default is 400!
 		envTable.getTable().setPreferredScrollableViewportSize(s);

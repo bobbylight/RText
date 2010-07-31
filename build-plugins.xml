@@ -101,6 +101,7 @@
 			</fileset>
 			<fileset dir="${source-dir}">
 				<include name="org/fife/rtext/plugins/filesystemtree/*.gif"/>
+				<include name="org/fife/rtext/plugins/filesystemtree/*.png"/>
 			</fileset>
 			<fileset dir="i18n">
 				<include name="org/fife/rtext/plugins/filesystemtree/**"/>
@@ -164,6 +165,7 @@
 		</jar>
 		<!-- Needed by tidy plugin -->
 		<copy file="lib/jtidy-r938.jar" todir="${dist-dir}/plugins"/>
+		<copy file="lib/jtidy-r938.LICENSE.txt" todir="${dist-dir}/plugins"/>
 
 		<!-- Tool support plugin. -->
 		<jar destfile="${dist-dir}/plugins/ToolSupport.jar">
@@ -188,6 +190,7 @@
 				<include name="org/fife/rtext/plugins/langsupport/**"/>
 			</fileset>
 			<fileset dir="${source-dir}">
+				<include name="org/fife/rtext/plugins/langsupport/*.gif"/>
 				<include name="org/fife/rtext/plugins/langsupport/*.png"/>
 			</fileset>
 			<fileset dir="i18n">

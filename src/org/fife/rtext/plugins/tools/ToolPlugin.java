@@ -168,6 +168,17 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 
 
 	/**
+	 * Returns localized text for the given key.
+	 *
+	 * @param key The key.
+	 * @return The localized text.
+	 */
+	String getString(String key) {
+		return msg.getString(key);
+	}
+
+
+	/**
 	 * Returns the directory that tool definitions are saved to.
 	 *
 	 * @return The directory.
