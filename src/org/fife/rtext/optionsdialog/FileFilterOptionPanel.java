@@ -24,13 +24,17 @@
 package org.fife.rtext.optionsdialog;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.ComponentOrientation;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -62,6 +66,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	private ModifiableTable filterTable;
 	private FilterTableModel model;
 	private JCheckBox guessTypeCB;
+	private JCheckBox ignoreExtsCB;
 	private RText rtext;
 
 	private static final String DEFAULTS_RESTORED	= "defaultsRestored";
@@ -73,7 +78,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	 * @param rtext The RText instance.
 	 * @param msg The resource bundle to use.
 	 */
-	public FileFilterOptionPanel(final RText rtext, final ResourceBundle msg) {
+	public FileFilterOptionPanel(RText rtext, ResourceBundle msg) {
 
 		super(msg.getString("OptFFName"));
 		this.rtext = rtext;
@@ -106,10 +111,17 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 		guessTypeCB = new JCheckBox(msg.getString("GuessContentType"));
 		guessTypeCB.setActionCommand("GuessContentType");
 		guessTypeCB.addActionListener(this);
-		temp = new JPanel(new BorderLayout());
-		temp.add(guessTypeCB, BorderLayout.LINE_START);
-		temp.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
-		bottomPanel.add(temp, BorderLayout.NORTH);
+
+		ignoreExtsCB = new JCheckBox(msg.getString("IgnoreTheseExtensions"));
+		ignoreExtsCB.setActionCommand("IgnoreTheseExtensions");
+		ignoreExtsCB.addActionListener(this);
+
+		Box box = Box.createVerticalBox();
+		addLeftAligned(box, guessTypeCB);
+		addLeftAligned(box, ignoreExtsCB);
+		box.add(Box.createVerticalStrut(5)); // Distance from "Restore Defaults"
+//		box.add(Box.createVerticalGlue());
+		bottomPanel.add(box, BorderLayout.NORTH);
 		
 		RButton defaultsButton = new RButton(msg.getString("RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
@@ -136,8 +148,11 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 			// Empty constructor returns defaults.
 			SyntaxFilters defaultFilters = new SyntaxFilters();
 			boolean changed = setSyntaxFilters(defaultFilters);
-			if (changed || !guessTypeCB.isSelected()) {
+			if (changed ||
+					!guessTypeCB.isSelected() ||
+					!ignoreExtsCB.isSelected()) {
 				guessTypeCB.setSelected(true);
+				ignoreExtsCB.setSelected(true);
 				hasUnsavedChanges = true;
 				firePropertyChange(DEFAULTS_RESTORED,
 								Boolean.FALSE,Boolean.TRUE);
@@ -149,6 +164,26 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 			firePropertyChange(DEFAULTS_RESTORED, false, true);
 		}
 
+		else if ("IgnoreTheseExtensions".equals(command)) {
+			hasUnsavedChanges = true;
+			firePropertyChange(DEFAULTS_RESTORED, false, true);
+		}
+
+	}
+
+
+	/**
+	 * Adds the specified component to a specified panel left-aligned.
+	 *
+	 * @param parent The panel to which to add the component.
+	 * @param c The component to add.
+	 */
+	private static final void addLeftAligned(Container parent, Component c) {
+		JPanel temp = new JPanel();
+		temp.setLayout(new BoxLayout(temp, BoxLayout.LINE_AXIS));
+		temp.add(c);
+		temp.add(Box.createHorizontalGlue());
+		parent.add(temp);
 	}
 
 
@@ -163,6 +198,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 		AbstractMainView mainView = rtext.getMainView();
 		mainView.setSyntaxFilters(getSyntaxFilters());
 		mainView.setGuessFileContentType(guessTypeCB.isSelected());
+		mainView.setIgnoreBackupExtensions(ignoreExtsCB.isSelected());
 	}
 
 
@@ -265,6 +301,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 		AbstractMainView mainView = rtext.getMainView();
 		setSyntaxFilters(mainView.getSyntaxFilters());
 		guessTypeCB.setSelected(mainView.getGuessFileContentType());
+		ignoreExtsCB.setSelected(mainView.getIgnoreBackupExtensions());
 	}
 
 

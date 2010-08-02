@@ -189,20 +189,20 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * file based on its extension and the current filters.
 	 *
 	 * @param fileName The file to syntax highlight.
+	 * @param ignoreBackupExtensions Whether to ignore ".bak", ".old" and
+	 *        ".orig" extensions, if they exist.
 	 * @return The syntax highlighting scheme to use, for example,
 	 *         <code>SYNTAX_STYLE_JAVA</code> or
 	 *         <code>SYNTAX_STYLE_CPLUSPLUS</code>.
 	 * @see org.fife.ui.rsyntaxtextarea.RSyntaxTextArea
 	 * @see org.fife.ui.rsyntaxtextarea.SyntaxConstants
 	 */
-	public String getSyntaxStyleForFile(String fileName) {
+	public String getSyntaxStyleForFile(String fileName,
+									boolean ignoreBackupExtensions) {
 
 		if (fileName==null) {
 			return SYNTAX_STYLE_NONE;
 		}
-
-		Iterator it;
-		Pattern p;
 
 		// fileName is usually the full path to the file from RText, so
 		// shorten it to make regex faster (and work correctly for things
@@ -211,7 +211,16 @@ public class SyntaxFilters implements SyntaxConstants {
 		if (lastSlash>-1) {
 			fileName = fileName.substring(lastSlash+1);
 		}
-		String fileNameLowerCase = fileName.toLowerCase();
+		fileName = fileName.toLowerCase(); // Ignore casing of extensions
+
+		// Ignore extensions that mean "this is a backup", but don't
+		// denote the actual file type.
+		if (ignoreBackupExtensions) {
+			fileName = RTextUtilities.stripBackupExtensions(fileName);
+		}
+
+		Iterator it;
+		Pattern p;
 
 		for (Iterator i=filters.entrySet().iterator(); i.hasNext(); ) {
 			Map.Entry entry = (Map.Entry)i.next();
@@ -219,7 +228,7 @@ public class SyntaxFilters implements SyntaxConstants {
 			while (it.hasNext()) {
 				p = RTextUtilities.getPatternForFileFilter(
 									(String)it.next(), true);
-				if (p!=null && p.matcher(fileNameLowerCase).matches()) {
+				if (p!=null && p.matcher(fileName).matches()) {
 					return (String)entry.getKey();
 				}
 			}

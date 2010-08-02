@@ -124,6 +124,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public boolean guessFileContentType;
 	public boolean doFileSizeCheck;
 	public float maxFileSize;					// In MB.
+	public boolean ignoreBackupExtensions;
 	public Font textAreaFont;					// Default text area font.
 	public boolean textAreaUnderline;				// Is default font underlined?
 	public Color textAreaForeground;
@@ -228,6 +229,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.guessFileContentType		= mainView.getGuessFileContentType();
 		props.doFileSizeCheck			= mainView.getDoFileSizeCheck();
 		props.maxFileSize				= mainView.getMaxFileSize();
+		props.ignoreBackupExtensions	= mainView.getIgnoreBackupExtensions();
 		props.textAreaFont				= mainView.getTextAreaFont();
 		props.textAreaUnderline			= mainView.getTextAreaUnderline();
 		props.textAreaForeground			= mainView.getTextAreaForeground();
@@ -443,6 +445,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 			props.guessFileContentType	= prefs.getBoolean("guessFileContentType", props.guessFileContentType);
 			props.doFileSizeCheck		= prefs.getBoolean("fileSizeCheck", props.doFileSizeCheck);
 			props.maxFileSize			= prefs.getFloat("maxFileSize", props.maxFileSize);
+			props.ignoreBackupExtensions= prefs.getBoolean("ignoreBackupExtensions", props.ignoreBackupExtensions);
 			temp						= prefs.get("textAreaFont", null);
 			if (temp!=null) {
 				props.textAreaFont = getFontImpl(temp);
@@ -610,6 +613,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs.putBoolean("guessFileContentType",		guessFileContentType);
 		prefs.putBoolean("fileSizeCheck",				doFileSizeCheck);
 		prefs.putFloat("maxFileSize",					maxFileSize);
+		prefs.putBoolean("ignoreBackupExtensions",		ignoreBackupExtensions);
 		prefs.put("textAreaFont",					textAreaFont==null ? "null" : textAreaFont.getName() + ","
 													+ textAreaFont.getSize() + "," + textAreaFont.isBold() +
 													"," + textAreaFont.isItalic());
@@ -707,6 +711,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		guessFileContentType = true;
 		doFileSizeCheck	= false;
 		maxFileSize		= 8.0f;	// MB.
+		ignoreBackupExtensions = true;
 		textAreaFont		= RTextArea.getDefaultFont();
 		textAreaUnderline	= false;
 		textAreaForeground	= RTextArea.getDefaultForeground();

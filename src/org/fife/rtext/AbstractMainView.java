@@ -179,6 +179,8 @@ public abstract class AbstractMainView extends JPanel
 	private boolean doFileSizeCheck;
 	private float maxFileSize;				// In MB.
 
+	private boolean ignoreBackupExtensions;
+
 	private Font textAreaFont;
 	private boolean textAreaUnderline;
 	private Color textAreaForeground;
@@ -685,7 +687,8 @@ public abstract class AbstractMainView extends JPanel
 	private RTextEditorPane createRTextEditorPane(FileLocation loc,
 				String encoding) throws IOException {
 
-		String style = syntaxFilters.getSyntaxStyleForFile(loc.getFileName());
+		String style = syntaxFilters.getSyntaxStyleForFile(loc.getFileName(),
+										getIgnoreBackupExtensions());
 		RTextEditorPane pane = new RTextEditorPane(owner, lineWrapEnabled,
 												textMode, loc, encoding);
 
@@ -1164,6 +1167,18 @@ public abstract class AbstractMainView extends JPanel
 		RTextEditorPane textArea = (RTextEditorPane)scrollPane.
 								getTextArea();
 		return FileTypeIconManager.getInstance().getIconFor(textArea);
+	}
+
+
+	/**
+	 * Returns whether RText ignores extensions like ".bak", ".old", and
+	 * ".orig" when deciding how to open them.
+	 *
+	 * @return Whether those extensions are ignored.
+	 * @see #setIgnoreBackupExtensions(boolean)
+	 */
+	public boolean getIgnoreBackupExtensions() {
+		return ignoreBackupExtensions;
 	}
 
 
@@ -1968,6 +1983,7 @@ public abstract class AbstractMainView extends JPanel
 		setGuessFileContentType(prefs.guessFileContentType);
 		setDoFileSizeCheck(prefs.doFileSizeCheck);
 		setMaxFileSize(prefs.maxFileSize);
+		setIgnoreBackupExtensions(prefs.ignoreBackupExtensions);
 		setTextAreaFont(prefs.textAreaFont, prefs.textAreaUnderline);
 		setTextAreaForeground(prefs.textAreaForeground);
 		setTextAreaOrientation(prefs.textAreaOrientation);
@@ -2590,7 +2606,8 @@ public abstract class AbstractMainView extends JPanel
 		// Decide if we need to update the UI for syntax highlighting
 		// purposes (i.e., if the user saves a .txt file as a .java or a
 		// .c => .cpp, etc.).
-		String newStyle = syntaxFilters.getSyntaxStyleForFile(loc.getFileName());
+		String newStyle = syntaxFilters.getSyntaxStyleForFile(
+							loc.getFileName(), getIgnoreBackupExtensions());
 		setSyntaxStyle(currentTextArea, newStyle);
 
 		// If they had the same file opened twice (i.e., the "foo (1)"
@@ -2892,10 +2909,10 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Sets whether fractional fontmetrics is enabled. This method fires a
+	 * Sets whether fractional font metrics is enabled. This method fires a
 	 * property change of type {@link #FRACTIONAL_METRICS_PROPERTY}.
 	 *
-	 * @param enabled Whether fractional fontmetrics should be enabled.
+	 * @param enabled Whether fractional font metrics should be enabled.
 	 * @see #isFractionalFontMetricsEnabled
 	 */
 	public void setFractionalFontMetricsEnabled(boolean enabled) {
@@ -2926,7 +2943,7 @@ public abstract class AbstractMainView extends JPanel
 			for (int i=0; i<docCount; i++) {
 				RTextEditorPane textArea = getRTextEditorPaneAt(i);
 				String style = syntaxFilters.getSyntaxStyleForFile(
-											textArea.getFileName());
+						textArea.getFileName(), getIgnoreBackupExtensions());
 				setSyntaxStyle(textArea, style);
 			}
 		}
@@ -3028,6 +3045,39 @@ public abstract class AbstractMainView extends JPanel
 				getRTextEditorPaneAt(i).setHyperlinksEnabled(enabled);
 			}
 		}
+	}
+
+
+	/**
+	 * Sets whether RText should ignore extensions like ".bak", ".old", and
+	 * ".orig" when deciding how to open them.
+	 *
+	 * @param ignore Whether to ignore these extensions.
+	 * #see #getIgnoreBackupExtensions()
+	 */
+	public void setIgnoreBackupExtensions(boolean ignore) {
+
+		if (ignore!=ignoreBackupExtensions) {
+
+			ignoreBackupExtensions = ignore;
+
+			// Reset all open files' color schemes if necessary.
+			int numDocuments = getNumDocuments();
+			for (int i=0; i<numDocuments; i++) {
+				RTextEditorPane textArea = getRTextEditorPaneAt(i);
+				String oldStyle = textArea.getSyntaxEditingStyle();
+				String newStyle = syntaxFilters.getSyntaxStyleForFile(
+							textArea.getFileName(), getIgnoreBackupExtensions());
+				if (!oldStyle.equals(newStyle)) {
+					setSyntaxStyle(textArea, newStyle);
+					if (textArea==currentTextArea) {
+						textArea.repaint();
+					}
+				}
+			}
+
+		}
+
 	}
 
 
@@ -3431,7 +3481,7 @@ public abstract class AbstractMainView extends JPanel
 			RTextEditorPane textArea = getRTextEditorPaneAt(i);
 			String oldStyle = textArea.getSyntaxEditingStyle();
 			String newStyle = syntaxFilters.getSyntaxStyleForFile(
-											textArea.getFileName());
+						textArea.getFileName(), getIgnoreBackupExtensions());
 			if (!oldStyle.equals(newStyle)) {
 				setSyntaxStyle(textArea, newStyle);
 				if (textArea==currentTextArea) {
@@ -3476,11 +3526,18 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	private void setSyntaxStyle(RTextEditorPane pane, String style) {
 
+		// Ignore extensions that mean "this is a backup", but don't
+		// denote the actual file type.
+		String fileName = pane.getFileName().toLowerCase();
+		if (getIgnoreBackupExtensions()) {
+			fileName = RTextUtilities.stripBackupExtensions(fileName);
+		}
+
 		// If there was no extension on the file name, guess the content
 		// type for highlighting (but don't override content type if already
 		// assigned, e.g. "makefile" does this).
 		if (getGuessFileContentType() &&
-				pane.getFileName().indexOf('.')==-1 &&
+				fileName.indexOf('.')==-1 &&
 				SyntaxConstants.SYNTAX_STYLE_NONE.equals(style)) {
 			guessContentType(pane);
 		}
