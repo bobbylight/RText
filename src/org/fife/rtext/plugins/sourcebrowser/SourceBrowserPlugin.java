@@ -102,7 +102,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private static final String YELLOW_BULLET	= "bullet_blue.gif";
 	private static final String GREEN_BULLET	= "bullet_green.gif";
 
-	private static final String VERSION_STRING	= "1.1.0";
+	private static final String VERSION_STRING	= "1.2.0";
 
 	private static final String VIEW_SB_ACTION	= "ViewSourceBrowserAction";
 

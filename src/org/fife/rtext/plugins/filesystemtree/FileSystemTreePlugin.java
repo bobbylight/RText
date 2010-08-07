@@ -47,7 +47,7 @@ import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 
 
 /**
- * A panel displaying all files on the local filesystem, allowing for quick
+ * A panel displaying all files on the local file system, allowing for quick
  * and easy opening of files without opening the file chooser.
  *
  * @author Robert Futrell
@@ -70,7 +70,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 	static final String BUNDLE_NAME			=
 					"org/fife/rtext/plugins/filesystemtree/FileSystemTree";
-	private static final String VERSION_STRING	= "1.1.0";
+	private static final String VERSION_STRING	= "1.2.0";
 
 	private static final String VIEW_FST_ACTION	= "ViewFileSystemTreeAction";
 
