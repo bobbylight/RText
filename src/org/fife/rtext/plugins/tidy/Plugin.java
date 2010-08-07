@@ -166,8 +166,18 @@ public class Plugin implements org.fife.ui.app.Plugin, PropertyChangeListener {
 		action.setEnabled(false); // Gets enabled for appropriate files.
 		JMenuItem item = new JMenuItem(action);
 		item.setToolTipText(null);
-		menu.addSeparator();
-		menu.add(item);
+
+		// On OS X, the "Options" menu item is in the application menu, not
+		// in the Edit menu.
+		if (rtext.getOS()==RText.OS_MAC_OSX) {
+			menu.addSeparator();
+			menu.add(item);
+		}
+		else {
+			int index = menu.getMenuComponentCount() - 2;
+			menu.insert(item, index);
+			menu.insertSeparator(index);
+		}
 
 		rtext.getMainView().addPropertyChangeListener(
 							AbstractMainView.CURRENT_DOCUMENT_PROPERTY, this);

@@ -184,6 +184,7 @@ public class RTextUtilities {
 									"org.fife.rtext.FileFilters");
 
 			// Add (localized) file filters.
+			addFilter(chooser, msg, "ActionScript", new String[] { "as", "asc" });
 			addFilter(chooser, msg, "AssemblerX86", "asm");
 			addFilter(chooser, msg, "BBCode", "bbc");
 			addFilter(chooser, msg, "CPlusPlus",
@@ -235,6 +236,7 @@ public class RTextUtilities {
 			chooser.setFileFilter(new ExtensionFileFilter(
 					msg.getString("AllSupported"),
 					new String[] {
+						"as", "asc",
 						"asm",
 						"bbc",
 						"c", "cpp", "cxx", "h",

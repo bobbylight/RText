@@ -89,10 +89,10 @@ public class LangSupportPreferences extends Prefs {
 		html_autoActivation = true;
 		html_autoActivationDelay = AUTO_ACTIVATION_DELAY;
 
-		java_enabled = true;
+		java_enabled = false;
 		java_paramAssistance = true;
 		java_showDescWindow = true;
-		java_autoActivation = true;
+		java_autoActivation = false;
 		java_autoActivationDelay = AUTO_ACTIVATION_DELAY;
 		JarInfo info = JarInfo.getMainJREJarInfo();
 		if (info==null) {

@@ -280,6 +280,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.clear();
 
 		//filters.put(SYNTAX_STYLE_NONE,			createValue());
+		filters.put(SYNTAX_STYLE_ACTIONSCRIPT,		createValue(new String[] { "*.as", "*.asc" }));
 		filters.put(SYNTAX_STYLE_ASSEMBLER_X86,		createValue(new String[] { "*.asm" }));
 		filters.put(SYNTAX_STYLE_BBCODE,			createValue(new String[] { "*.bbc" }));
 		filters.put(SYNTAX_STYLE_C,				createValue(new String[] { "*.c" }));

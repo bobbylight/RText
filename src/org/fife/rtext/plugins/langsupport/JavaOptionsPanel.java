@@ -568,18 +568,18 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 					!((File)model.getValueAt(0, 0)).equals(
 												jreInfo.getJarFile());
 
-				if (!enabledCB.isSelected() ||
+				if (enabledCB.isSelected() ||
 						jreFieldModified ||
 						!paramAssistanceCB.isSelected() ||
 						!showDescWindowCB.isSelected() ||
 						!buildPathModsCB.isSelected() ||
-						!autoActivateCB.isSelected() ||
+						autoActivateCB.isSelected() ||
 						!"300".equals(aaDelayField.getText())) {
-					setEnabledCBSelected(true);
+					setEnabledCBSelected(false);
 					paramAssistanceCB.setSelected(true);
 					showDescWindowCB.setSelected(true);
 					buildPathModsCB.setSelected(true);
-					setAutoActivateCBSelected(true);
+					setAutoActivateCBSelected(false);
 					aaDelayField.setText("300");
 					model.setRowCount(0);
 					String src = jreInfo.getSourceLocation()!=null ?
