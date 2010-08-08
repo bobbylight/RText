@@ -42,6 +42,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ResourceBundle;
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonModel;
 import javax.swing.Icon;
@@ -116,7 +117,9 @@ public class SearchToolBar extends JToolBar {
 			hideButton = new FindButton("x");
 		}
 		hideButton.setBorderPainted(false);
-		hideButton.setMargin(new Insets(0,0,0,0));
+		// Empty border needed especially on OS X, where default button border
+		// seems to have huge insets, even after setMargin(0, 0, 0, 0) call.
+		hideButton.setBorder(BorderFactory.createEmptyBorder());
 		try {
 			icon = new ImageIcon(cl.getResource(
 				"org/fife/rtext/graphics/close_rollover.gif"));
