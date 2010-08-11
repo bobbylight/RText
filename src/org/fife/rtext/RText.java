@@ -1095,7 +1095,7 @@ setSearchWindowOpacity(0.5f);
 
 		if (searchWindowOpacityListener!=null) {
 			w.addWindowFocusListener(searchWindowOpacityListener);
-w.addComponentListener(searchWindowOpacityListener);
+			w.addComponentListener(searchWindowOpacityListener);
 		}
 
 	}

@@ -1615,39 +1615,6 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns a translucent version of a given <code>java.awt.Image</code>.
-	 *
-	 * @param image The <code>java.awt.Image</code> on which to apply the
-	 *        alpha filter.
-	 * @param alpha The alpha value to use when defining how translucent you
-	 *        want the image to be. This should be in the range 0.0f to 1.0f.
-	 */
-	private BufferedImage getTranslucentImage(Image image, float alpha) {
-
-		BufferedImage buffer = null;
-
-		int width = image.getWidth(null);
-		int height = image.getHeight(null);
-		MediaTracker tracker = new MediaTracker(this);
-		buffer = new BufferedImage(width,height, BufferedImage.TYPE_INT_ARGB_PRE);
-		tracker.addImage(buffer, 0);
-		Graphics2D g2d = buffer.createGraphics();
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-		g2d.drawImage(image, 0,0, null);
-		try {
-			tracker.waitForID(0);
-		} catch (InterruptedException e) {
-			owner.displayException(e);
-		}
-		tracker.removeImage(buffer, 0);
-		g2d.dispose();
-
-		return buffer;
-
-	}
-
-
-	/**
 	 * Returns whether BOM's are written for UTF-8 files.
 	 *
 	 * @return Whether BOM's are written for UTF-8 files.
@@ -2672,8 +2639,8 @@ public abstract class AbstractMainView extends JPanel
 			backgroundObject = newBackground;
 		}
 		else if (newBackground instanceof Image) {
-			backgroundObject = getTranslucentImage(
-								(Image)newBackground, imageAlpha);
+			backgroundObject = RTextUtilities.getTranslucentImage(owner,
+										(Image)newBackground, imageAlpha);
 		}
 
 		// If they didn't pass in a valid type...

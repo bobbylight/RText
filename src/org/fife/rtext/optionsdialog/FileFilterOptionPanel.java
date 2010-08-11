@@ -24,9 +24,7 @@
 package org.fife.rtext.optionsdialog;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -34,7 +32,6 @@ import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -169,21 +166,6 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 			firePropertyChange(DEFAULTS_RESTORED, false, true);
 		}
 
-	}
-
-
-	/**
-	 * Adds the specified component to a specified panel left-aligned.
-	 *
-	 * @param parent The panel to which to add the component.
-	 * @param c The component to add.
-	 */
-	private static final void addLeftAligned(Container parent, Component c) {
-		JPanel temp = new JPanel();
-		temp.setLayout(new BoxLayout(temp, BoxLayout.LINE_AXIS));
-		temp.add(c);
-		temp.add(Box.createHorizontalGlue());
-		parent.add(temp);
 	}
 
 

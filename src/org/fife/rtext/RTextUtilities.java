@@ -24,8 +24,11 @@
  */
 package org.fife.rtext;
 
+import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -626,6 +629,42 @@ public class RTextUtilities {
 		// Otherwise, the macro directory couldn't be created for some reason
 		// or it was empty.
 		return new File[0];
+
+	}
+
+
+	/**
+	 * Returns a translucent version of a given <code>java.awt.Image</code>.
+	 *
+	 * @param image The <code>java.awt.Image</code> on which to apply the
+	 *        alpha filter.
+	 * @param alpha The alpha value to use when defining how translucent you
+	 *        want the image to be. This should be in the range 0.0f to 1.0f.
+	 */
+	public static BufferedImage getTranslucentImage(RText rtext, Image image,
+												float alpha) {
+
+		// Ensure valid alpha value
+		alpha = Math.max(0, alpha);
+		alpha = Math.min(alpha, 1);
+
+		// Create fast image
+		BufferedImage bi = null;
+		int w = image.getWidth(null);
+		int h = image.getHeight(null);
+		bi = rtext.getGraphicsConfiguration().createCompatibleImage(w, h);
+		Graphics2D g2d = bi.createGraphics();
+		try {
+			g2d.setColor(Color.white);
+			g2d.fillRect(0, 0, w, h);
+			g2d.setComposite(AlphaComposite.getInstance(
+									AlphaComposite.SRC_OVER, alpha));
+			g2d.drawImage(image, 0,0, null);
+		} finally {
+			g2d.dispose();
+		}
+
+		return bi;
 
 	}
 

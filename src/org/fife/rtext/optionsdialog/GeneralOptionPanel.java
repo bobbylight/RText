@@ -43,6 +43,7 @@ import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RButton;
+import org.fife.ui.SelectableLabel;
 import org.fife.ui.SpecialValueComboBox;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rtextfilechooser.RDirectoryChooser;
@@ -65,6 +66,9 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	private JCheckBox utf8BomCB;
 	private JCheckBox sizeCheckCB;
 	private JFormattedTextField sizeField;
+	private JCheckBox translucentSearchDialogsCB;
+	private SpecialValueComboBox translucencyCombo;
+	private JSlider slider;
 
 	private String fileSizeError;
 
@@ -199,6 +203,41 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		temp2.add(temp, BorderLayout.LINE_START);
 		otherPanel.add(temp2);
 		topPanel.add(otherPanel);
+
+		// A panel for "experimental" options.
+		Box expPanel = Box.createVerticalBox();
+		expPanel.setBorder(new OptionPanelBorder(msg.
+										getString("OptExperimentalTitle")));
+		SelectableLabel label = new SelectableLabel(
+								msg.getString("ExperimentalDisclaimer"));
+		expPanel.add(label);
+		expPanel.add(Box.createVerticalStrut(5));
+		translucentSearchDialogsCB = new JCheckBox(
+								msg.getString("TranslucentSearchBoxes"));
+		addLeftAligned(expPanel, translucentSearchDialogsCB);
+		JLabel ruleLabel = new JLabel(msg.getString("TranslucencyRule"));
+		translucencyCombo = new SpecialValueComboBox();
+		translucencyCombo.addSpecialItem(msg.getString("Translucency.Never"), "0");
+		translucencyCombo.addSpecialItem(msg.getString("Translucency.WhenNotFocused"), "1");
+		translucencyCombo.addSpecialItem(msg.getString("Translucency.WhenOverlappingApp"), "2");
+		translucencyCombo.addSpecialItem(msg.getString("Translucency.Always"), "3");
+		JLabel opacityLabel = new JLabel(msg.getString("Opacity"));
+		slider = new JSlider(0, 100);
+		slider.setMajorTickSpacing(20);
+		slider.setPaintTicks(true);
+		slider.setPaintLabels(true);
+		temp2 = new JPanel(new SpringLayout());
+		if (orientation.isLeftToRight()) {
+			temp2.add(ruleLabel);          temp2.add(translucencyCombo);
+			temp2.add(opacityLabel);       temp2.add(slider);
+		}
+		else {
+			temp2.add(translucencyCombo);  temp2.add(ruleLabel);
+			temp2.add(slider);             temp2.add(opacityLabel);
+		}
+		UIUtil.makeSpringCompactGrid(temp2, 2,2, 5,5, 5,5);
+		addLeftAligned(expPanel, temp2, 5, 20);
+		topPanel.add(expPanel);
 
 		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(orientation);
