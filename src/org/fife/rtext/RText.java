@@ -1463,6 +1463,9 @@ setSearchWindowOpacity(0.5f);
 	 */
 	public void setSearchWindowOpacity(float opacity) {
 		searchWindowOpacity = Math.max(0, Math.min(opacity, 1));
+		if (windowListenersInited) {
+			searchWindowOpacityListener.refreshTranslucencies();
+		}
 	}
 
 
@@ -1474,7 +1477,12 @@ setSearchWindowOpacity(0.5f);
 	 * @see #setSearchWindowOpacity(float)
 	 */
 	public void setSearchWindowOpacityRule(int rule) {
-		searchWindowOpacityRule = rule;
+		if (rule!=searchWindowOpacityRule) {
+			searchWindowOpacityRule = rule;
+			if (windowListenersInited) {
+				searchWindowOpacityListener.setTranslucencyRule(rule);
+			}
+		}
 	}
 
 

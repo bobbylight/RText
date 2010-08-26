@@ -24,21 +24,21 @@
  */
 package org.fife.rtext;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
- * Listens for events in child windows of RText.<p>
- *
- * This class is not currently used.
+ * Listens for events in child windows of RText, and toggles the opacity of
+ * those child windows if desired.  This is done via reflection, since the
+ * features we're using were added in Java 6 but RText supports 1.4+.
  *
  * @author Robert Futrell
  * @version 1.0
@@ -77,9 +77,7 @@ class ChildWindowListener extends ComponentAdapter
 	/**
 	 * When the child windows should be made translucent.
 	 */
-	private int whenTranslucent;
-
-	private Map/*<Window, Boolean>*/ translucentMap;
+	private int translucencyRule;
 
 	/**
 	 * The class that handles window transparency in 6u10.
@@ -94,20 +92,76 @@ class ChildWindowListener extends ComponentAdapter
 	 */
 	public ChildWindowListener(RText app) {
 		this.app = app;
-		translucentMap = new HashMap();
 	}
 
 
+	/**
+	 * Called when one of the child windows is moved.
+	 */
 	public void componentMoved(ComponentEvent e) {
-		System.out.println("Moved!");
+		if (translucencyRule==TRANSLUCENT_WHEN_OVERLAPPING_APP) {
+			Window w = (Window)e.getComponent();
+			if (w==app) {
+				// Main application window - might change overlapping with
+				// children
+				refreshTranslucencies();
+			}
+			else { // One of Find or Replace dialog
+				refreshTranslucency(w);
+			}
+		}
+	}
+
+
+	/**
+	 * Called when one of the child windows is resized.
+	 */
+	public void componentShown(ComponentEvent e) {
+		// Need to do this always, in case the translucency rule changed since
+		// the window was last visible.
 		Window w = (Window)e.getComponent();
-		Rectangle bounds = w.getBounds();
-		if (bounds.intersects(app.getBounds())) {
-			setTranslucent(w, true);
+		if (w!=app) {
+			refreshTranslucency(w);
 		}
-		else {
-			setTranslucent(w, false);
+	}
+
+
+
+	/**
+	 * Called when one of the child windows is resized.
+	 */
+	public void componentResized(ComponentEvent e) {
+		if (translucencyRule==TRANSLUCENT_WHEN_OVERLAPPING_APP) {
+			Window w = (Window)e.getComponent();
+			if (w==app) {
+				// Main application window - might change overlapping with
+				// children
+				refreshTranslucencies();
+			}
+			else { // One of Find or Replace dialog
+				refreshTranslucency(w);
+			}
 		}
+	}
+
+
+	/**
+	 * Returns the opacity of a window.
+	 *
+	 * @param w The window.
+	 * @return The opacity of the window.
+	 */
+	private float getOpacity(Window w) {
+		float opacity = 1;
+		try {
+			Class clazz = Class.forName(CLASS_NAME);
+			Method m = clazz.getDeclaredMethod("getWindowOpacity",
+								new Class[] { Window.class });
+			opacity = ((Float)m.invoke(null, new Object[] { w })).floatValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return opacity;
 	}
 
 
@@ -120,37 +174,130 @@ class ChildWindowListener extends ComponentAdapter
 
 		boolean supported = false;
 
-//		try {
-//			Class enumClazz = Class.forName("com.sun.awt.AWTUtilities$Translucency");
-//			Field[] fields = enumClazz.getDeclaredFields();
-//			for (int i=0; i<fields.length; i++) {
-//				System.out.println(fields[i].getName());
-//				if ("TRANSLUCENT".equals(fields[i].getName())) {
-//System.out.println("yay");
-//					supported = true;
-//				}
-//			}
-//		} catch (RuntimeException re) {
-//			throw re;
-//		} catch (Exception e) {
-//			supported = false; // FindBugs - non-empty catch block
-//		}
+		try {
+
+			Field transField = null;
+
+			Class enumClazz = Class.forName(
+							"com.sun.awt.AWTUtilities$Translucency");
+			Field[] fields = enumClazz.getDeclaredFields();
+			for (int i=0; i<fields.length; i++) {
+				if ("TRANSLUCENT".equals(fields[i].getName())) {
+					transField = fields[i];
+				}
+			}
+
+			if (transField!=null) {
+				Class awtUtilClazz = Class.forName("com.sun.awt.AWTUtilities");
+				Method m = awtUtilClazz.getDeclaredMethod(
+								"isTranslucencySupported",
+								new Class[] { transField.getType() });
+				Boolean res = (Boolean)m.invoke(null, new Object[] {
+											transField.get(null) });
+				supported = res.booleanValue();
+
+			}
+
+		} catch (RuntimeException re) {
+			throw re;
+		} catch (Exception e) {
+			supported = false; // FindBugs - non-empty catch block
+		}
 
 		return supported;
 
 	}
 
 
-	private void setTranslucent(Window w, boolean translucent) {
-		try {
-			Class clazz = Class.forName(CLASS_NAME);
-			Method m = clazz.getDeclaredMethod("setWindowOpacity",
-								new Class[] { Window.class, float.class });
-			float val = translucent ? app.getSearchWindowOpacity():1.0f;
-			m.invoke(null, new Object[] { w, new Float(val) });
-		} catch (Exception ex) {
-			ex.printStackTrace();
+	/**
+	 * Refreshes the opacity of a window based on the current properties
+	 * selected by the user.
+	 *
+	 * @param window The window to refresh.
+	 */
+	private void refreshTranslucency(Window window) {
+
+		switch (translucencyRule) {
+
+			case TRANSLUCENT_ALWAYS:
+				setTranslucent(window, true);
+				break;
+
+			case TRANSLUCENT_NEVER:
+				setTranslucent(window, false);
+				break;
+
+			case TRANSLUCENT_WHEN_NOT_FOCUSED:
+				setTranslucent(window, !window.isFocused());
+				break;
+
+			case TRANSLUCENT_WHEN_OVERLAPPING_APP:
+				// TODO: Convert p1 and p2 appropriately for multi-monitors.
+				Point p1 = window.getLocationOnScreen();
+				Rectangle bounds1 = window.getBounds();
+				bounds1.setLocation(p1);
+				Point p2 = app.getLocationOnScreen();
+				Rectangle bounds2 = app.getBounds();
+				bounds2.setLocation(p2);
+				setTranslucent(window, bounds2.intersects(bounds1));
+				break;
+
 		}
+
+	}
+
+
+	/**
+	 * Refreshes the opacity of all windows being listened to.
+	 */
+	public void refreshTranslucencies() {
+		AbstractMainView view = app.getMainView();
+		// A window must be showing for its bounds to be queried.
+		if (view.findDialog!=null && view.findDialog.isShowing()) {
+			refreshTranslucency(view.findDialog);
+		}
+		if (view.replaceDialog!=null && view.replaceDialog.isShowing()) {
+			refreshTranslucency(view.replaceDialog);
+		}
+	}
+
+
+	public void setTranslucencyRule(int rule) {
+		if (rule>=0 && rule<=3 && rule!=translucencyRule) {
+			this.translucencyRule = rule;
+			if (rule==TRANSLUCENT_WHEN_OVERLAPPING_APP) {
+				app.addComponentListener(this);
+			}
+			else { // OK if not actually added
+				app.removeComponentListener(this);
+			}
+			refreshTranslucencies();
+		}
+	}
+
+
+	/**
+	 * Sets whether a specific window is translucent.
+	 *
+	 * @param w The window.
+	 * @param translucent Whether that window is translucent.
+	 */
+	private void setTranslucent(Window w, boolean translucent) {
+
+		float curOpacity = getOpacity(w);
+		float newOpacity = translucent ? app.getSearchWindowOpacity() : 1;
+
+		if (curOpacity!=newOpacity) {
+			try {
+				Class clazz = Class.forName(CLASS_NAME);
+				Method m = clazz.getDeclaredMethod("setWindowOpacity",
+									new Class[] { Window.class, float.class });
+				m.invoke(null, new Object[] { w, new Float(newOpacity) });
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+
 	}
 
 
@@ -160,7 +307,9 @@ class ChildWindowListener extends ComponentAdapter
 	 * @param e The event.
 	 */
 	public void windowGainedFocus(WindowEvent e) {
-		setTranslucent(e.getWindow(), false);
+		if (translucencyRule==TRANSLUCENT_WHEN_NOT_FOCUSED) {
+			refreshTranslucency(e.getWindow());
+		}
 	}
 
 
@@ -170,7 +319,9 @@ class ChildWindowListener extends ComponentAdapter
 	 * @param e The event.
 	 */
 	public void windowLostFocus(WindowEvent e) {
-		setTranslucent(e.getWindow(), true);
+		if (translucencyRule==TRANSLUCENT_WHEN_NOT_FOCUSED) {
+			refreshTranslucency(e.getWindow());
+		}
 	}
 
 

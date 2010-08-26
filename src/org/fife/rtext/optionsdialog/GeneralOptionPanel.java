@@ -67,7 +67,9 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	private JCheckBox sizeCheckCB;
 	private JFormattedTextField sizeField;
 	private JCheckBox translucentSearchDialogsCB;
+	private JLabel ruleLabel;
 	private SpecialValueComboBox translucencyCombo;
+	private JLabel opacityLabel;
 	private JSlider slider;
 
 	private String fileSizeError;
@@ -214,14 +216,19 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		expPanel.add(Box.createVerticalStrut(5));
 		translucentSearchDialogsCB = new JCheckBox(
 								msg.getString("TranslucentSearchBoxes"));
+		translucentSearchDialogsCB.setActionCommand("TranslucentSearchDialogsCB");
+		translucentSearchDialogsCB.addActionListener(this);
+		if (isPreJava6()) {
+			translucentSearchDialogsCB.setEnabled(false);
+		}
 		addLeftAligned(expPanel, translucentSearchDialogsCB);
-		JLabel ruleLabel = new JLabel(msg.getString("TranslucencyRule"));
+		ruleLabel = new JLabel(msg.getString("TranslucencyRule"));
 		translucencyCombo = new SpecialValueComboBox();
 		translucencyCombo.addSpecialItem(msg.getString("Translucency.Never"), "0");
 		translucencyCombo.addSpecialItem(msg.getString("Translucency.WhenNotFocused"), "1");
 		translucencyCombo.addSpecialItem(msg.getString("Translucency.WhenOverlappingApp"), "2");
 		translucencyCombo.addSpecialItem(msg.getString("Translucency.Always"), "3");
-		JLabel opacityLabel = new JLabel(msg.getString("Opacity"));
+		opacityLabel = new JLabel(msg.getString("Opacity"));
 		slider = new JSlider(0, 100);
 		slider.setMajorTickSpacing(20);
 		slider.setPaintTicks(true);
@@ -299,6 +306,13 @@ class GeneralOptionPanel extends OptionsDialogPanel
 			firePropertyChange(PROPERTY, !sizeCheck, sizeCheck);
 		}
 
+		else if ("TranslucentSearchDialogsCB".equals(command)) {
+			hasUnsavedChanges = true;
+			boolean selected = translucentSearchDialogsCB.isSelected();
+			setTranslucentSearchDialogsSelected(selected);
+			firePropertyChange(PROPERTY, !selected, selected);
+		}
+
 	}
 
 
@@ -313,14 +327,25 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 * {@inheritDoc}
 	 */
 	protected void doApplyImpl(Frame owner) {
+
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
+
 		rtext.setWorkingDirectory(getWorkingDirectory()); // Doesn't update if not necessary.
 		mainView.setLineTerminator(getLineTerminator()); // Ditto.
 		mainView.setDefaultEncoding(getDefaultEncoding()); // Ditto.
 		mainView.setWriteBOMInUtf8Files(getWriteUtf8BOM()); // Ditto.
 		mainView.setDoFileSizeCheck(getDoFileSizeCheck()); // Ditto.
 		mainView.setMaxFileSize(getMaxFileSize());		// Ditto.
+
+		// Experimental options
+		// TODO: translucentSearchDialogsCB.isSelected();
+		int rule = Integer.parseInt(translucencyCombo.getSelectedSpecialItem());
+		rtext.setSearchWindowOpacityRule(rule);
+		float opacity = slider.getValue() / 100f;
+		System.out.println(opacity);
+		rtext.setSearchWindowOpacity(opacity);
+
 	}
 
 
@@ -425,6 +450,17 @@ class GeneralOptionPanel extends OptionsDialogPanel
 
 
 	/**
+	 * Returns whether the Java Runtime that RText is running in is 1.4 or 1.5.
+	 * 
+	 * @return Whether the current JVM is pre-Java 6.
+	 */
+	private static final boolean isPreJava6() {
+		String version = System.getProperty("java.specification.version");
+		return "1.4".equals(version) || "1.5".equals(version);
+	}
+
+
+	/**
 	 * Called when a text field is edited.
 	 *
 	 * @param e The document event.
@@ -511,18 +547,42 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	}
 
 
+	private void setTranslucentSearchDialogsSelected(boolean selected) {
+
+		translucentSearchDialogsCB.setSelected(selected); // Probably already done
+
+		// The sub-options always stay disabled if we're not using Java 6u10+.
+		if (isPreJava6()) {
+			selected = false;
+		}
+
+		ruleLabel.setEnabled(selected);
+		translucencyCombo.setEnabled(selected);
+		opacityLabel.setEnabled(selected);
+		slider.setEnabled(selected);
+
+	}
+
+
 	/**
 	 * {@inheritDoc}
 	 */
 	protected void setValuesImpl(Frame owner) {
+
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
+
 		setWorkingDirectory(getWorkingDirectory());
 		setLineTerminator(mainView.getLineTerminator());
 		setDefaultEncoding(mainView.getDefaultEncoding());
 		setWriteUtf8BOM(mainView.getWriteBOMInUtf8Files());
 		setDoFileSizeCheck(mainView.getDoFileSizeCheck());
 		setMaxFileSize(mainView.getMaxFileSize());
+
+		// Experimental options
+		setTranslucentSearchDialogsSelected(true); // TODO
+		translucencyCombo.setSelectedIndex(rtext.getSearchWindowOpacityRule());
+		slider.setValue((int)(rtext.getSearchWindowOpacity()*100));
 	}
 
 
