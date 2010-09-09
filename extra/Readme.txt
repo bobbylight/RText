@@ -48,12 +48,10 @@ for optimum performance.  You can get the latest JRE for Microsoft Windows
 and other platforms here:  http://www.java.com
 
 Using the Source Browser plugin (which comes standard with RText) requires
-Exhuberant CTags, which is an extension of the classic "ctags" UNIX command
-ported to many platforms.  If you do not have Exhuberant CTags installed,
-RText will still work normally, but the Source Browser will be disabled.
-You can download Exhuberant CTags here:  http://sourceforge.net/projects/ctags
-
-Support for the standard UNIX ctags command will be added in the future.
+either Exuberant Ctags, or the classic "ctags" UNIX command.  If you do not
+have either installed, RText will still work normally, but the Source Browser
+will be disabled.  You can download Exuberant CTags here:
+http://sourceforge.net/projects/ctags
 
 
 3. Usage
@@ -79,6 +77,12 @@ http://sourceforge.net/tracker/?atid=610805&group_id=95266&func=browse
 RText is distributed under the GNU General Public License; please see the
 file named License.txt distributed with this program, or visit
 http://www.gnu.org.
+
+The editor used in RText is RSyntaxTextArea, an open source, syntax
+highlighting text component licensed under the LGPL.  This license is
+included with RText in the file RSyntaxTextArea.License.txt.  For more
+information on RSyntaxTextArea, please visit
+http://fifesoft.com/rsyntaxtextarea.
 
 
 5. Getting Support

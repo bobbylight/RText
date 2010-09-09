@@ -148,6 +148,11 @@ public class RText extends AbstractPluggableGUIApplication
 	private ChildWindowListener searchWindowOpacityListener;
 
 	/**
+	 * Whether the Find and Replace dialogs can have their opacity changed.
+	 */
+	private boolean searchWindowOpacityEnabled;
+
+	/**
 	 * The opacity with which to render unfocused child windows that support
 	 * opacity changes.
 	 */
@@ -828,6 +833,17 @@ public class RText extends AbstractPluggableGUIApplication
 
 
 	/**
+	 * Returns whether search window opacity is enabled.
+	 *
+	 * @return Whether search window opacity is enabled.
+	 * @see #setSearchWindowOpacityEnabled(boolean)
+	 */
+	public boolean isSearchWindowOpacityEnabled() {
+		return searchWindowOpacityEnabled;
+	}
+
+
+	/**
 	 * Returns whether the spelling window is visible.
 	 *
 	 * @return Whether the spelling window is visible.
@@ -921,12 +937,15 @@ public class RText extends AbstractPluggableGUIApplication
 			}
 		}
 
-setSearchWindowOpacity(0.5f);
+		setSearchWindowOpacityEnabled(properties.searchWindowOpacityEnabled);
+		setSearchWindowOpacity(properties.searchWindowOpacity);
+		setSearchWindowOpacityRule(properties.searchWindowOpacityRule);
 
 		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
 			System.err.println("preDisplayInit: " + (System.currentTimeMillis()-start));
 		}
 
+//com.jgoodies.looks.common.ShadowPopupFactory.install();
 	}
 
 
@@ -1088,8 +1107,10 @@ setSearchWindowOpacity(0.5f);
 
 		if (!windowListenersInited) {
 			windowListenersInited = true;
-			if (ChildWindowListener.isTranslucencySupported()) {
+			if (RTextUtilities.isTranslucencySupported(false)) {
 				searchWindowOpacityListener = new ChildWindowListener(this);
+				searchWindowOpacityListener.setTranslucencyRule(
+												searchWindowOpacityRule);
 			}
 		}
 
@@ -1463,8 +1484,28 @@ setSearchWindowOpacity(0.5f);
 	 */
 	public void setSearchWindowOpacity(float opacity) {
 		searchWindowOpacity = Math.max(0, Math.min(opacity, 1));
-		if (windowListenersInited) {
+		if (windowListenersInited && isSearchWindowOpacityEnabled()) {
 			searchWindowOpacityListener.refreshTranslucencies();
+		}
+	}
+
+
+	/**
+	 * Toggles whether search window opacity is enabled.
+	 *
+	 * @param enabled Whether search window opacity should be enabled.
+	 * @see #isSearchWindowOpacityEnabled()
+	 */
+	public void setSearchWindowOpacityEnabled(boolean enabled) {
+		if (enabled!=searchWindowOpacityEnabled) {
+			searchWindowOpacityEnabled = enabled;
+			// Toggled either on or off
+			// Must check searchWindowOpacityListener since in pre 6u10,
+			// we'll be inited, but listener isn't created.
+			if (windowListenersInited &&
+					searchWindowOpacityListener!=null) {
+				searchWindowOpacityListener.refreshTranslucencies();
+			}
 		}
 	}
 
@@ -1472,7 +1513,7 @@ setSearchWindowOpacity(0.5f);
 	/**
 	 * Toggles whether certain child windows should be made translucent.
 	 *
-	 * @param rule The new translucency rule.
+	 * @param rule The new opacity rule.
 	 * @see #getSearchWindowOpacityRule()
 	 * @see #setSearchWindowOpacity(float)
 	 */

@@ -141,6 +141,9 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public File userDictionary;
 	public int maxSpellingErrors;
 	public boolean viewSpellingList;
+	public boolean searchWindowOpacityEnabled;
+	public float searchWindowOpacity;
+	public int searchWindowOpacityRule;
 
 	public KeyStroke[] mainViewActionAccelerators;
 
@@ -246,6 +249,9 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.userDictionary			= spelling.getUserDictionary();
 		props.maxSpellingErrors			= spelling.getMaxSpellingErrors();
 		props.viewSpellingList			= rtext.isSpellingWindowVisible();
+		props.searchWindowOpacityEnabled= rtext.isSearchWindowOpacityEnabled();
+		props.searchWindowOpacity		= rtext.getSearchWindowOpacity();
+		props.searchWindowOpacityRule	= rtext.getSearchWindowOpacityRule();
 
 		// Save the actions.
 		props.accelerators = new HashMap();
@@ -472,6 +478,9 @@ public class RTextPreferences extends GUIApplicationPreferences
 			}
 			props.maxSpellingErrors		= prefs.getInt("maxSpellingErrors", props.maxSpellingErrors);
 			props.viewSpellingList	= prefs.getBoolean("viewSpellingList", props.viewSpellingList);
+			props.searchWindowOpacityEnabled = prefs.getBoolean("searchWindowOpacityEnabled", props.searchWindowOpacityEnabled);
+			props.searchWindowOpacity = prefs.getFloat("searchWindowOpacity", props.searchWindowOpacity);
+			props.searchWindowOpacityRule = prefs.getInt("searchWindowOpacityRule", props.searchWindowOpacityRule);
 
 			// Get all properties associated with the RTextMenuBar class.
 			prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -626,6 +635,9 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs.put("userDictionary",						userDictionary==null ? "" : userDictionary.getAbsolutePath());
 		prefs.putInt("maxSpellingErrors",				maxSpellingErrors);
 		prefs.putBoolean("viewSpellingList",			viewSpellingList);
+		prefs.putBoolean("searchWindowOpacityEnabled",	searchWindowOpacityEnabled);
+		prefs.putFloat("searchWindowOpacity",			searchWindowOpacity);
+		prefs.putInt("searchWindowOpacityRule",			searchWindowOpacityRule);
 
 		// Save all properties related to the RTextMenuBar class.
 		prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -729,6 +741,10 @@ public class RTextPreferences extends GUIApplicationPreferences
 										"userDictionary.txt");
 		maxSpellingErrors    = DEFAULT_MAX_SPELLING_ERRORS;
 		viewSpellingList   = false;
+		searchWindowOpacityEnabled = false;
+		searchWindowOpacity		= 0.6f;
+		searchWindowOpacityRule = ChildWindowListener.
+										TRANSLUCENT_WHEN_OVERLAPPING_APP;
 
 		accelerators = new HashMap();
 		for (int i=0; i<actionNames.length; i++) {

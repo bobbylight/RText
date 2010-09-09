@@ -48,7 +48,7 @@
 	<!-- Set global properties for this build. -->
 	<property name="app-name"         value="RText"/>
 	<property name="app-name-small"   value="rtext"/>
-	<property name="version"          value="1.1.0"/>
+	<property name="version"          value="1.2.0"/>
 	<property name="source-dir"       location="src"/>
 	<property name="common-dir"       location="../common"/>
 	<property name="class-dir"        location="ant-classes"/>
@@ -198,14 +198,16 @@
 	<target name="make-javadoc" depends="compile-main-classes">
 		<javadoc  destdir="${doc-dir}" author="true" version="true"
 			 	breakiterator="yes"
-				classpath="lib/rsyntaxtextarea.jar:lib/autocomplete.jar:lib/rsta_spellchecker.jar:${common-dir}/dist/fife.common.jar">
+				classpath="lib/rsyntaxtextarea.jar:lib/autocomplete.jar:lib/language_support.jar:lib/rsta_spellchecker.jar:lib/jtidy-r938.jar:${common-dir}/dist/fife.common.jar">
 			<packageset dir="${common-dir}/src" defaultexcludes="yes">
 				<include name="org/**"/>
 			</packageset>
 			<packageset dir="${source-dir}" defaultexcludes="yes">
 				<include name="org/**"/>
 			</packageset>
+			<doctitle><![CDATA[<h1>RText Javadoc</h1>]]></doctitle>
 			<link href="http://javadoc.fifesoft.com/rsyntaxtextarea/"/>
+			<link href="http://javadoc.fifesoft.com/autocomplete/"/>
 		</javadoc>
 	</target>
 

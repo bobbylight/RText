@@ -31,7 +31,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 
@@ -101,7 +100,12 @@ class ChildWindowListener extends ComponentAdapter
 	public void componentMoved(ComponentEvent e) {
 		if (translucencyRule==TRANSLUCENT_WHEN_OVERLAPPING_APP) {
 			Window w = (Window)e.getComponent();
-			if (w==app) {
+			if (!w.isShowing()) {
+				// Resized evidently called (as a result of
+				// setLocationRelativeTo() ?) before window is shown.
+				return;
+			}
+			else if (w==app) {
 				// Main application window - might change overlapping with
 				// children
 				refreshTranslucencies();
@@ -133,7 +137,12 @@ class ChildWindowListener extends ComponentAdapter
 	public void componentResized(ComponentEvent e) {
 		if (translucencyRule==TRANSLUCENT_WHEN_OVERLAPPING_APP) {
 			Window w = (Window)e.getComponent();
-			if (w==app) {
+			if (!w.isShowing()) {
+				// Resized evidently called (as a result of pack() ?) before
+				// window is shown.
+				return;
+			}
+			else if (w==app) {
 				// Main application window - might change overlapping with
 				// children
 				refreshTranslucencies();
@@ -166,56 +175,18 @@ class ChildWindowListener extends ComponentAdapter
 
 
 	/**
-	 * Returns whether translucency is supported by this JVM.
-	 *
-	 * @return Whether translucency is supported.
-	 */
-	public static boolean isTranslucencySupported() {
-
-		boolean supported = false;
-
-		try {
-
-			Field transField = null;
-
-			Class enumClazz = Class.forName(
-							"com.sun.awt.AWTUtilities$Translucency");
-			Field[] fields = enumClazz.getDeclaredFields();
-			for (int i=0; i<fields.length; i++) {
-				if ("TRANSLUCENT".equals(fields[i].getName())) {
-					transField = fields[i];
-				}
-			}
-
-			if (transField!=null) {
-				Class awtUtilClazz = Class.forName("com.sun.awt.AWTUtilities");
-				Method m = awtUtilClazz.getDeclaredMethod(
-								"isTranslucencySupported",
-								new Class[] { transField.getType() });
-				Boolean res = (Boolean)m.invoke(null, new Object[] {
-											transField.get(null) });
-				supported = res.booleanValue();
-
-			}
-
-		} catch (RuntimeException re) {
-			throw re;
-		} catch (Exception e) {
-			supported = false; // FindBugs - non-empty catch block
-		}
-
-		return supported;
-
-	}
-
-
-	/**
 	 * Refreshes the opacity of a window based on the current properties
 	 * selected by the user.
 	 *
 	 * @param window The window to refresh.
 	 */
 	private void refreshTranslucency(Window window) {
+
+		// The user has turned off this feature.
+		if (!app.isSearchWindowOpacityEnabled()) {
+			setTranslucent(window, false);
+			return;
+		}
 
 		switch (translucencyRule) {
 
