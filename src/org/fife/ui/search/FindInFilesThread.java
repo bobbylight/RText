@@ -35,14 +35,17 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import javax.swing.JTextArea;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.Segment;
 
 import org.fife.io.UnicodeReader;
+import org.fife.rtext.AbstractMainView;
+import org.fife.rtext.RText;
 import org.fife.ui.GUIWorkerThread;
+import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.Token;
 
 
 /**
@@ -66,7 +69,7 @@ class FindInFilesThread extends GUIWorkerThread {
 	protected String newFilesToExamineString;	
 	protected String occurrencesString;
 
-	private static final Pattern TAB_PATTERN	= Pattern.compile("\\t");
+//	private static final Pattern TAB_PATTERN	= Pattern.compile("\\t");
 
 
 	/**
@@ -110,6 +113,9 @@ class FindInFilesThread extends GUIWorkerThread {
 	 */
 	public Object construct() {
 
+		RText parent = (RText)dialog.getOwner();
+		AbstractMainView view = parent.getMainView();
+
 		// Get the string to search for and filters for the files to search.
 		String searchString = dialog.getSearchString();
 		Pattern[] filterStrings = getFilterStrings();
@@ -136,9 +142,7 @@ class FindInFilesThread extends GUIWorkerThread {
 		if (!useRegex && !matchCase)
 			searchString = searchString.toLowerCase();
 
-		// Use JTextArea as it figures out line numbers for us.
-		JTextArea textArea = new JTextArea();
-
+		RSyntaxTextArea textArea = new RSyntaxTextArea();
 		long startMillis = System.currentTimeMillis();
 
 		// Keep looping while there are more files to search.
@@ -174,9 +178,6 @@ class FindInFilesThread extends GUIWorkerThread {
 				dialog.setStatusText(searchingFile + i + "/" + numFiles +
 								": " + fileFullPath);
 
-				// TODO: Instead of using a JTextArea, should we roll our
-				// own method of reading in the file and divining line
-				// numbers?
 				try {
 					// Use a UnicodeReader to auto-detect whether this
 					// is a Unicode file.
@@ -184,7 +185,13 @@ class FindInFilesThread extends GUIWorkerThread {
 					// encoding, instead of assuming system default,
 					// somehow.
 					Reader r = new BufferedReader(new UnicodeReader(temp));
+					String style = view.getSyntaxFilters().
+								getSyntaxStyleForFile(temp.getName(),
+										view.getIgnoreBackupExtensions());
 					textArea.read(r, null);	// Clears all old text.
+					if (!style.equals(textArea.getSyntaxEditingStyle())) {
+						textArea.setSyntaxEditingStyle(style);
+					}
 					r.close();
 				} catch (IOException ioe) {
 					MatchData data = createErrorMatchData(fileFullPath,
@@ -268,7 +275,7 @@ class FindInFilesThread extends GUIWorkerThread {
 	 * Performs a non-regex "Find in Files" operation on a single file.
 	 */
 	private void doSearchNoRegex(String buffer, String searchString,
-							JTextArea textArea,
+							RSyntaxTextArea textArea,
 							boolean matchCase, boolean wholeWord,
 							boolean matchingLines, String fileFullPath,
 							Segment seg) {
@@ -281,7 +288,7 @@ class FindInFilesThread extends GUIWorkerThread {
 		// Some stuff we'll use below.
 		int bufferLength = buffer.length();
 		String lineText = null;
-		Document doc = textArea.getDocument();
+		RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
 		Element map = doc.getDefaultRootElement();
 		Element elem = null;
 		int lineCount = map.getElementCount();
@@ -301,19 +308,12 @@ class FindInFilesThread extends GUIWorkerThread {
 					int lineEnd = bufferLength-1;
 					line = map.getElementIndex(i);
 					elem = map.getElement(line);
-					int start = elem.getStartOffset();
 					lineEnd = line==lineCount-1 ? elem.getEndOffset()-1 :
 											elem.getEndOffset();
-					try {
-						doc.getText(start, lineEnd-start, seg);
-						// Tabs don't show up in list items.
-						lineText = TAB_PATTERN.matcher(seg.toString()).
-												replaceAll("   ");
-					} catch (BadLocationException ble) { 
-						// Never happens.
-					}
+					Token t = textArea.getTokenListForLine(line);
+					lineText = getHtml(t, textArea);
 					dialog.addMatchData(new MatchData(fileFullPath,
-											""+(line+1), lineText));
+									Integer.toString(line+1), lineText));
 					// Since a single line may have more than one match,
 					// skip to the next line's start.
 					i = lineEnd + 1;
@@ -352,7 +352,7 @@ class FindInFilesThread extends GUIWorkerThread {
 	 * Performs a regex "Find in Files" operation on a single file.
 	 */
 	private void doSearchRegex(String buffer, String searchString,
-							JTextArea textArea, boolean matchCase,
+							RSyntaxTextArea textArea, boolean matchCase,
 							boolean wholeWord, boolean matchingLines,
 							String fileFullPath, Segment seg) {
 
@@ -395,22 +395,18 @@ class FindInFilesThread extends GUIWorkerThread {
 					start = elem.getStartOffset();
 					end = startLine==lineCount-1 ? elem.getEndOffset()-1 :
 											elem.getEndOffset();
-					String text = null;
-					try {
-						doc.getText(start, end-start, seg);
-					} catch (BadLocationException ble) {
-						ble.printStackTrace(); // Never happens.
-					}
-					// No tabs in list items as they don't show up.
-					text = TAB_PATTERN.matcher(seg.toString()).
-												replaceAll("   ");
+					Token t = textArea.getTokenListForLine(startLine);
+					String text = getHtml(t, textArea);
 
 					// Add an item to our results.
 					boolean oneLine = startLine==endLine;
-					String lineStr = oneLine ? ("" + (startLine+1)) :
+					String lineStr = oneLine ? Integer.toString(startLine+1) :
 								((startLine+1) + "-" + (endLine+1));
-					if (!oneLine)
-						text += dialog.getBundle().getString("MultiLineMatch");
+					if (!oneLine) {
+						text += " <em>" +
+								dialog.getBundle().getString("MultiLineMatch") +
+								"</em>";
+					}
 					MatchData data = new MatchData(
 										fileFullPath, lineStr, text);
 					dialog.addMatchData(data);
@@ -481,6 +477,26 @@ class FindInFilesThread extends GUIWorkerThread {
 
 		return filterStrings;
 
+	}
+
+
+	/**
+	 * Gets an HTML string for a token list, stripping off leading whitespace.
+	 *
+	 * @param t
+	 * @param textArea
+	 * @return
+	 */
+	private static final String getHtml(Token t, RSyntaxTextArea textArea) {
+		StringBuffer sb = new StringBuffer("<html>");
+		boolean firstNonWhitespace = false; // Skip leading whitespace
+		while (t!=null && t.isPaintable()) {
+			if (firstNonWhitespace || (firstNonWhitespace |= !t.isWhitespace())) {
+				sb.append(t.getHTMLRepresentation(textArea));
+			}
+			t = t.getNextToken();
+		}
+		return sb.toString();
 	}
 
 

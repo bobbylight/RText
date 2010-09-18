@@ -31,6 +31,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Vector;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -41,6 +42,7 @@ import javax.swing.table.TableColumnModel;
 
 import org.fife.ui.FileExplorerTableModel;
 import org.fife.ui.RListSelectionModel;
+import org.fife.ui.FileExplorerTableModel.SortableHeaderRenderer;
 
 
 /**
@@ -56,7 +58,8 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	private DefaultTableModel tableModel;
 	private ArrayList matchDatas;
 
-	private TableCellRenderer verboseCellRenderer;
+	private StandardCellRenderer defaultRenderer;
+	private VerboseCellRenderer verboseRenderer;
 
 	private static final String MSG = "org.fife.ui.search.FindInFilesTable";
 
@@ -84,6 +87,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 		initColumnWidths();
 
 		matchDatas = new ArrayList();
+		defaultRenderer = new StandardCellRenderer();
 
 	}
 
@@ -132,23 +136,27 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 * @param o The new component orientation.
 	 */
 	public void applyComponentOrientation(ComponentOrientation o) {
+
 		super.applyComponentOrientation(o);
+
+		// Default renderers installed into all tables.
 		TableCellRenderer r = getDefaultRenderer(Object.class);
 		if (r instanceof Component) { // Never null for JTable
 			Component c = (Component)r;
-			c.setComponentOrientation(o);
+			c.applyComponentOrientation(o);
 		}
 		r = getDefaultRenderer(Number.class);
 		if (r instanceof Component) { // Never null for JTable
 			Component c = (Component)r;
-			c.setComponentOrientation(o);
+			c.applyComponentOrientation(o);
 		}
 		r = getDefaultRenderer(Boolean.class);
 		if (r instanceof Component) { // Never null for JTable
 			Component c = (Component)r;
-			c.setComponentOrientation(o);
+			c.applyComponentOrientation(o);
 		}
 
+		// Must get the header too.
 		if (getTableHeader()!=null) {
 			r = getTableHeader().getDefaultRenderer();
 			// Should always be the first one.
@@ -161,6 +169,13 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 				c.applyComponentOrientation(o);
 			}
 		}
+
+		// Get custom renderers to fix them up as well.
+		defaultRenderer.applyComponentOrientation(o);
+		if (verboseRenderer!=null) {
+			verboseRenderer.applyComponentOrientation(o);
+		}
+
 	}
 
 
@@ -217,11 +232,11 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	public TableCellRenderer getCellRenderer(int row, int column) {
 		MatchData data = getMatchDataForRow(row);
 		if (data.isVerboseSearchInfo() || data.isError()) {
-			if (verboseCellRenderer==null)
-				verboseCellRenderer = new VerboseCellRenderer();
-			return verboseCellRenderer;
+			if (verboseRenderer==null)
+				verboseRenderer = new VerboseCellRenderer();
+			return verboseRenderer;
 		}
-		return super.getCellRenderer(row, column);
+		return defaultRenderer;
 	}
 
 
@@ -334,6 +349,88 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 			// Set the size of the column.
 			// NOTE: Why do we need to add a small amount to prevent "..."?
 			column.setPreferredWidth(width + 20);
+
+		}
+
+	}
+
+
+	/**
+	 * Overridden to also update the UI of custom renderers.
+	 */
+	public void updateUI() {
+
+		/*
+		 * NOTE: This is silly, but it's what it took to get a LaF change to
+		 * occur without throwing an NPE because of the JRE bug.  No doubt there
+		 * is a better way to handle this.  What we do is:
+		 *
+		 * 1. Before updating the UI, reset the JTableHeader's default renderer
+		 *    to what it was originally.  This prevents the NPE from the JRE
+		 *    bug, since we're no longer using the renderer with a cached
+		 *    Windows-specific TableCellRenderer (when Windows LaF is enabled).
+		 * 2. Update the UI, like normal.
+		 * 3. After the update, we must explicitly re-set the JTableHeader as
+		 *    the column view in the enclosing JScrollPane.  This is done by
+		 *    default the first time you add a JTable to a JScrollPane, but
+		 *    since we gave the JTable a new header as a workaround for the JRE
+		 *    bug, we must explicitly tell the JScrollPane about it as well.
+		 */
+
+		// Temporarily set the table header's renderer to the default.
+		Container parent = getParent();
+		if (parent!=null) { // First time through, it'll be null
+			TableCellRenderer r = getTableHeader().getDefaultRenderer();
+			if (r instanceof SortableHeaderRenderer) { // Always true
+				SortableHeaderRenderer shr = (SortableHeaderRenderer)r;
+				getTableHeader().setDefaultRenderer(shr.getDelegateRenderer());
+			}
+		}
+
+		super.updateUI();
+
+		// Now set the renderer back to our custom one.
+		if (parent!=null) {
+			JScrollPane sp = (JScrollPane)parent.getParent();
+			sp.setColumnHeaderView(getTableHeader());
+			sp.revalidate();
+			sp.repaint();
+		}
+
+		// Update our custom renderers too.
+		if (defaultRenderer!=null) { // First time through, it's null
+			defaultRenderer.updateUI();
+		}
+		if (verboseRenderer!=null) {
+			verboseRenderer.updateUI();
+		}
+
+	}
+
+
+	/**
+	 * The default renderer for the table.
+	 */
+	private class StandardCellRenderer extends DefaultTableCellRenderer {
+
+		public Component getTableCellRendererComponent(JTable table,
+								Object value, boolean selected,
+								boolean focused, int row, int column) {
+
+			// If it's HTML and selected, don't colorize the HTML, let the
+			// text all be the table's "selected text" color.
+			if (value instanceof String) {
+				String str = (String)value;
+				if (str.startsWith("<html>")) {
+					if (selected) {
+						value = str.replaceAll("color=\"[^\"]+\"", "");
+					}
+				}
+			}
+
+			super.getTableCellRendererComponent(table, value, selected,
+												focused, row, column);
+			return this;
 
 		}
 

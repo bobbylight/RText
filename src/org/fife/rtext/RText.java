@@ -1660,6 +1660,9 @@ public class RText extends AbstractPluggableGUIApplication
 		// other Java implementations.
 		System.setProperty("apple.laf.useScreenMenuBar","true");
 
+		// Catch any uncaught Throwables on the EDT and log them.
+		AWTExceptionHandler.register();
+
 		// 1.5.2004/pwy: Setting this property defines the standard
 		// Application menu name on Apple Mac OS X systems. It is ignored by
 		// all other Java implementations.
