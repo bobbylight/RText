@@ -41,6 +41,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.text.Element;
 
 import org.fife.help.HelpDialog;
+import org.fife.jgoodies.looks.common.ShadowPopupFactory;
 import org.fife.rtext.actions.ActionFactory;
 import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
@@ -57,6 +58,8 @@ import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rtextarea.IconGroup;
 import org.fife.ui.rtextfilechooser.FileChooserOwner;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
+import org.fife.util.TranslucencyUtil;
+
 
 
 /**
@@ -945,7 +948,8 @@ public class RText extends AbstractPluggableGUIApplication
 			System.err.println("preDisplayInit: " + (System.currentTimeMillis()-start));
 		}
 
-//com.jgoodies.looks.common.ShadowPopupFactory.install();
+		ShadowPopupFactory.install();
+
 	}
 
 
@@ -1107,7 +1111,7 @@ public class RText extends AbstractPluggableGUIApplication
 
 		if (!windowListenersInited) {
 			windowListenersInited = true;
-			if (RTextUtilities.isTranslucencySupported(false)) {
+			if (TranslucencyUtil.get().isTranslucencySupported(false)) {
 				searchWindowOpacityListener = new ChildWindowListener(this);
 				searchWindowOpacityListener.setTranslucencyRule(
 												searchWindowOpacityRule);

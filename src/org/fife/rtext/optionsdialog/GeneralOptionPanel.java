@@ -52,6 +52,7 @@ import org.fife.ui.SpecialValueComboBox;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
+import org.fife.util.TranslucencyUtil;
 
 
 /**
@@ -277,7 +278,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 
 		// Do this after everything else is created.
 		if (RTextUtilities.isPreJava6() ||
-				!RTextUtilities.isTranslucencySupported(false)) {
+				TranslucencyUtil.get().isTranslucencySupported(false)) {
 			setTranslucentSearchDialogsSelected(false);
 		}
 
@@ -618,7 +619,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 
 		// The sub-options always stay disabled if we're not using Java 6u10+.
 		if (RTextUtilities.isPreJava6() ||
-				!RTextUtilities.isTranslucencySupported(false)) {
+				!TranslucencyUtil.get().isTranslucencySupported(false)) {
 			translucentSearchDialogsCB.setEnabled(false);
 			selected = false;
 		}

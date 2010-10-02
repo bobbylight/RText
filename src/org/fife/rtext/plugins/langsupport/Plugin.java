@@ -394,6 +394,8 @@ public class Plugin implements org.fife.ui.app.Plugin {
 					try {
 						g.addLineTrackingIcon(line, icon);
 					} catch (BadLocationException ble) { // Never happens
+						System.err.println("*** Error adding notice:\n" +
+								notice + ":");
 						ble.printStackTrace();
 					}
 				}

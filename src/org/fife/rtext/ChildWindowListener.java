@@ -31,7 +31,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import java.lang.reflect.Method;
+
+import org.fife.util.TranslucencyUtil;
 
 
 /**
@@ -77,11 +78,6 @@ class ChildWindowListener extends ComponentAdapter
 	 * When the child windows should be made translucent.
 	 */
 	private int translucencyRule;
-
-	/**
-	 * The class that handles window transparency in 6u10.
-	 */
-	private static final String CLASS_NAME = "com.sun.awt.AWTUtilities";
 
 
 	/**
@@ -151,26 +147,6 @@ class ChildWindowListener extends ComponentAdapter
 				refreshTranslucency(w);
 			}
 		}
-	}
-
-
-	/**
-	 * Returns the opacity of a window.
-	 *
-	 * @param w The window.
-	 * @return The opacity of the window.
-	 */
-	private float getOpacity(Window w) {
-		float opacity = 1;
-		try {
-			Class clazz = Class.forName(CLASS_NAME);
-			Method m = clazz.getDeclaredMethod("getWindowOpacity",
-								new Class[] { Window.class });
-			opacity = ((Float)m.invoke(null, new Object[] { w })).floatValue();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return opacity;
 	}
 
 
@@ -255,18 +231,11 @@ class ChildWindowListener extends ComponentAdapter
 	 */
 	private void setTranslucent(Window w, boolean translucent) {
 
-		float curOpacity = getOpacity(w);
+		float curOpacity = TranslucencyUtil.get().getOpacity(w);
 		float newOpacity = translucent ? app.getSearchWindowOpacity() : 1;
 
 		if (curOpacity!=newOpacity) {
-			try {
-				Class clazz = Class.forName(CLASS_NAME);
-				Method m = clazz.getDeclaredMethod("setWindowOpacity",
-									new Class[] { Window.class, float.class });
-				m.invoke(null, new Object[] { w, new Float(newOpacity) });
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
+			TranslucencyUtil.get().setOpacity(w, newOpacity);
 		}
 
 	}

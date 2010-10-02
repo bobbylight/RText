@@ -34,8 +34,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -679,53 +677,6 @@ public class RTextUtilities {
 	public static final boolean isPreJava6() {
 		String version = System.getProperty("java.specification.version");
 		return "1.4".equals(version) || "1.5".equals(version);
-	}
-
-
-	/**
-	 * Returns whether translucency is supported by this JVM.
-	 *
-	 * @param perPixel Whether to check for per-pixel translucency (vs. just
-	 *        translucency of an entire window, which is cheaper).
-	 * @return Whether translucency is supported.
-	 */
-	public static boolean isTranslucencySupported(boolean perPixel) {
-
-		String fieldName = perPixel ? "PERPIXEL_TRANSLUCENT" : "TRANSLUCENT";
-		boolean supported = false;
-
-		try {
-
-			Field transField = null;
-
-			Class enumClazz = Class.forName(
-							"com.sun.awt.AWTUtilities$Translucency");
-			Field[] fields = enumClazz.getDeclaredFields();
-			for (int i=0; i<fields.length; i++) {
-				if (fieldName.equals(fields[i].getName())) {
-					transField = fields[i];
-				}
-			}
-
-			if (transField!=null) {
-				Class awtUtilClazz = Class.forName("com.sun.awt.AWTUtilities");
-				Method m = awtUtilClazz.getDeclaredMethod(
-								"isTranslucencySupported",
-								new Class[] { transField.getType() });
-				Boolean res = (Boolean)m.invoke(null, new Object[] {
-											transField.get(null) });
-				supported = res.booleanValue();
-
-			}
-
-		} catch (RuntimeException re) {
-			throw re;
-		} catch (Exception e) {
-			supported = false; // FindBugs - non-empty catch block
-		}
-
-		return supported;
-
 	}
 
 

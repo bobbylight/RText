@@ -50,7 +50,7 @@
 	<property name="app-name-small"   value="rtext"/>
 	<property name="version"          value="1.2.0"/>
 	<property name="source-dir"       location="src"/>
-	<property name="common-dir"       location="../common"/>
+	<property name="common-dir"       location="../Common"/>
 	<property name="class-dir"        location="ant-classes"/>
 	<property name="dist-dir"         location="dist"/>
 	<property name="mac-dist-dir"     location="dist-mac"/>
