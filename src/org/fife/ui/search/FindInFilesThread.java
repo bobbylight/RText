@@ -189,6 +189,10 @@ class FindInFilesThread extends GUIWorkerThread {
 								getSyntaxStyleForFile(temp.getName(),
 										view.getIgnoreBackupExtensions());
 					textArea.read(r, null);	// Clears all old text.
+					// Important!  Clear undo history, or RSTA's undo manager
+					// will keep all old text (i.e. copies of ALL previous
+					// files searched)!
+					textArea.discardAllEdits();
 					if (!style.equals(textArea.getSyntaxEditingStyle())) {
 						textArea.setSyntaxEditingStyle(style);
 					}
@@ -316,7 +320,8 @@ class FindInFilesThread extends GUIWorkerThread {
 									Integer.toString(line+1), lineText));
 					// Since a single line may have more than one match,
 					// skip to the next line's start.
-					i = lineEnd + 1;
+					i = lineEnd/* + 1*/;
+
 				}
 				else {
 					i += len;
@@ -488,15 +493,28 @@ class FindInFilesThread extends GUIWorkerThread {
 	 * @return
 	 */
 	private static final String getHtml(Token t, RSyntaxTextArea textArea) {
-		StringBuffer sb = new StringBuffer("<html>");
+
+		// HTML rendering in Swing is very slow, and we've also seen OOME's
+		// from trying render lines that were too long in the Find in Files
+		// table, so we'll limit how much we display.
+		final int maxLen = 1280;
+
+		StringBuffer sb = new StringBuffer("<html><font face=\"Monospaced\">");
 		boolean firstNonWhitespace = false; // Skip leading whitespace
-		while (t!=null && t.isPaintable()) {
+
+		while (t!=null && t.isPaintable() && sb.length()<maxLen) {
 			if (firstNonWhitespace || (firstNonWhitespace |= !t.isWhitespace())) {
-				sb.append(t.getHTMLRepresentation(textArea));
+				t.appendHTMLRepresentation(sb, textArea, false);
 			}
 			t = t.getNextToken();
 		}
+
+		if (sb.length()>=maxLen) {
+			sb.append("...");
+		}
+//System.out.println(sb.toString());
 		return sb.toString();
+
 	}
 
 

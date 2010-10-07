@@ -34,6 +34,7 @@ import java.util.Vector;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JViewport;
+import javax.swing.ToolTipManager;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -88,6 +89,13 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 
 		matchDatas = new ArrayList();
 		defaultRenderer = new StandardCellRenderer();
+
+		// By default, tables are registered to give tool tips.  This causes
+		// Disable this so the renderer isn't asked for each time the mouse
+		// moves, as if styled results are enabled, this can cause some decent
+		// slowdown.
+		ToolTipManager.sharedInstance().unregisterComponent(this);
+		ToolTipManager.sharedInstance().unregisterComponent(getTableHeader());
 
 	}
 
@@ -315,7 +323,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 
 
 	/**
-	 * Resizes the columns of the table to accomodate their data.
+	 * Resizes the columns of the table to accommodate their data.
 	 */
 	private void refreshColumnWidths() {
 
@@ -337,13 +345,21 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 
 			// Loop through all cells in the column to find the longest.
 			for (int i=0; i<rowCount; i++) {
+
 				TableCellRenderer renderer = getCellRenderer(i, j);
+
+				// If we're in the HTML column and there are a lot of results,
+				// we'll get the value of the non-HTML text to speed things up
+				// a little.
+				String value = (String)getValueAt(i, j);
+				if (rowCount>3000 && value.startsWith("<html>")) {
+					value = value.replaceAll("<[^>]+>", "");
+				}
+
 				Component comp = renderer.getTableCellRendererComponent(
-								this, getValueAt(i, j), false, false,
-								i, j);
-				int w = comp.getPreferredSize().width;
-				if (w>width)
-					width = w;
+								this, value, false, false, i, j);
+				width = Math.max(width, comp.getPreferredSize().width);
+
 			}
 
 			// Set the size of the column.
