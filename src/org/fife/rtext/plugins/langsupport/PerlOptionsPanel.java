@@ -27,31 +27,46 @@ package org.fife.rtext.plugins.langsupport;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
+import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
 
+import org.fife.rsta.ac.IOUtil;
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
+import org.fife.ui.EscapableDialog;
 import org.fife.ui.FSATextField;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RButton;
+import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
+import org.fife.ui.modifiabletable.ModifiableTable;
+import org.fife.ui.modifiabletable.ModifiableTableChangeEvent;
+import org.fife.ui.modifiabletable.ModifiableTableListener;
+import org.fife.ui.modifiabletable.RowHandler;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 
@@ -75,8 +90,11 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	private RButton installBrowseButton;
 	private JCheckBox warningsCB;
 	private JCheckBox taintModeCB;
+	private JCheckBox overridePerl5LibCB;
+	private ModifiableTable perl5Table;
 	private RButton rdButton;
 
+	private static final String PERL5LIB		= "PERL5LIB";
 	private static final String PROPERTY		= "Property";
 
 
@@ -169,16 +187,39 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		box2.add(temp);
 		box2.add(Box.createVerticalStrut(5));
 		warningsCB = createCB("Warnings");
-		addLeftAligned(box2, warningsCB);
 		taintModeCB = createCB("TaintMode");
-		addLeftAligned(box2, taintModeCB);
+		Box box3 = Box.createHorizontalBox();
+		box3.add(warningsCB);
+		box3.add(Box.createHorizontalStrut(40));
+		box3.add(taintModeCB);
+		box3.add(Box.createHorizontalGlue());
+		addLeftAligned(box2, box3);
 		box2.add(Box.createVerticalGlue());
+
+		box = Box.createVerticalBox();
+		box.setBorder(new OptionPanelBorder(msg.
+				getString("Options.Perl.Section.Perl5Lib")));
+		cp.add(box);
+		overridePerl5LibCB = createCB("OverridePerl5Lib");
+		addLeftAligned(box, overridePerl5LibCB);
+		DefaultTableModel model = new DefaultTableModel(0, 1);
+		perl5Table = new ModifiableTable(model, ModifiableTable.BOTTOM,
+										ModifiableTable.ALL_BUTTONS);
+		perl5Table.addModifiableTableListener(listener);
+		perl5Table.setRowHandler(new Perl5LibTableRowHandler());
+		perl5Table.getTable().setTableHeader(null);
+		Dimension s = perl5Table.getTable().getPreferredScrollableViewportSize();
+		s.height = 140; // JTable default is 400!
+		perl5Table.getTable().setPreferredScrollableViewportSize(s);
+		box.add(perl5Table);
+
+		cp.add(Box.createVerticalStrut(10));
 
 		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton);
 
-		cp.add(Box.createVerticalGlue());
+//		cp.add(Box.createVerticalGlue());
 
 		applyComponentOrientation(o);
 
@@ -200,6 +241,26 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
 		cb.addActionListener(listener);
 		return cb;
+	}
+
+
+	/**
+	 * Creates a path separator-separated string to use for the
+	 * <code>PERL5LIB</code> environment variable, based on the values entered
+	 * into the table.
+	 *
+	 * @return The new <code>PERL5LIB</code> value.
+	 */
+	private String createPerl5LibFromTable() {
+		StringBuffer sb = new StringBuffer();
+		int rowCount = perl5Table.getTable().getRowCount();
+		for (int row=0; row<rowCount; row++) {
+			sb.append(perl5Table.getTable().getValueAt(row, 0));
+			if (row<rowCount-1) {
+				sb.append(File.pathSeparatorChar);
+			}
+		}
+		return sb.toString();
 	}
 
 
@@ -235,6 +296,21 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		old = pls.isTaintModeEnabled();
 		pls.setTaintModeEnabled(taintModeCB.isSelected());
 		reunderline |= old!=pls.isTaintModeEnabled();
+
+		// Overriding the PERL5LIB environment variable.
+		if (overridePerl5LibCB.isSelected()) {
+			String perl5Lib = createPerl5LibFromTable();
+			if (!perl5Lib.equals(pls.getPerl5LibOverride())) {
+				pls.setPerl5LibOverride(perl5Lib);
+				reunderline = true;
+			}
+		}
+		else {
+			if (pls.getPerl5LibOverride()!=null) {
+				pls.setPerl5LibOverride(null); // => use default
+				reunderline = true;
+			}
+		}
 
 		// Something in the way we compile the Perl code changed
 		if (reunderline) {
@@ -292,6 +368,31 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 
 
 	/**
+	 * Populates the <code>PERL5LIB</code> override table with the value
+	 * specified.
+	 *
+	 * @param contents The new contents.  If this is <code>null</code>, the
+	 *        table will be empty.  Otherwise, this will be split on the
+	 *        system-specific path separator, and the resulting tokens will be
+	 *        added to the table.
+	 */
+	private void setPerl5TableContents(String contents) {
+
+		DefaultTableModel model = (DefaultTableModel)perl5Table.getTable().
+																getModel();
+		model.setRowCount(0);
+
+		if (contents!=null) {
+			String[] items = contents.split(";");
+			for (int i=0; i<items.length; i++) {
+				model.addRow(new Object[] { items[i] });
+			}
+		}
+
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	protected void setValuesImpl(Frame owner) {
@@ -315,13 +416,26 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		warningsCB.setSelected(pls.getWarningsEnabled());
 		taintModeCB.setSelected(pls.isTaintModeEnabled());
 
+		String override = pls.getPerl5LibOverride();
+		if (override==null) {
+			overridePerl5LibCB.setSelected(false);
+			perl5Table.setEnabled(false);
+			setPerl5TableContents(IOUtil.getEnvSafely(PERL5LIB));
+		}
+		else {
+			overridePerl5LibCB.setSelected(true);
+			perl5Table.setEnabled(true);
+			setPerl5TableContents(override);
+		}
+
 	}
 
 
 	/**
 	 * Listens for events in this options panel.
 	 */
-	private class Listener implements ActionListener, DocumentListener {
+	private class Listener implements ActionListener, DocumentListener,
+							ModifiableTableListener {
 
 		public void actionPerformed(ActionEvent e) {
 
@@ -364,6 +478,13 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 				}
 			}
 
+			else if (overridePerl5LibCB==source) {
+				boolean enabled = overridePerl5LibCB.isSelected();
+				perl5Table.setEnabled(enabled);
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
 			else if (rdButton==source) {
 
 				File locFile = PerlLanguageSupport.
@@ -381,7 +502,8 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 						!showDescWindowCB.isSelected() ||
 						taintModeCB.isSelected() ||
 						!useParensCB.isSelected() ||
-						!warningsCB.isSelected()) {
+						!warningsCB.isSelected() ||
+						overridePerl5LibCB.isSelected()) {
 					setCompileCBSelected(true);
 					setEnabledCBSelected(true);
 					installLocField.setFileSystemAware(false);
@@ -392,6 +514,9 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 					taintModeCB.setSelected(false);
 					useParensCB.setSelected(true);
 					warningsCB.setSelected(true);
+					overridePerl5LibCB.setSelected(false);
+					perl5Table.setEnabled(false);
+					setPerl5TableContents(IOUtil.getEnvSafely(PERL5LIB));
 					hasUnsavedChanges = true;
 					firePropertyChange(PROPERTY, null, null);
 				}
@@ -413,8 +538,186 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			handleDocumentEvent(e);
 		}
 
+		public void modifiableTableChanged(ModifiableTableChangeEvent e) {
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, null, null);
+		}
+
 		public void removeUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
+		}
+
+	}
+
+
+	/**
+	 * The row handler for the PERL5LIB table.
+	 */
+	private class Perl5LibTableRowHandler implements RowHandler {
+
+		public Object[] getNewRowInfo(Object[] oldData) {
+			String oldValue = oldData==null ? null : (String)oldData[0];
+			Perl5ItemDialog dialog = new Perl5ItemDialog(getOptionsDialog());
+			dialog.setPath(oldValue);
+			int rc = dialog.showDialog();
+			if (rc==Perl5ItemDialog.OK) {
+				String newValue = (String)dialog.getPath();
+				return new String[] { newValue };
+			}
+			return null;
+		}
+
+		public boolean shouldRemoveRow(int row) {
+			return true;
+		}
+
+		public void updateUI() {
+			// Do nothing, no cached data
+		}
+
+	}
+
+
+	/**
+	 * The dialog that allows the user to add or modify an item to go into
+	 * the PERL5LIB environment variable.
+	 */
+	private static class Perl5ItemDialog extends EscapableDialog
+				implements ActionListener, DocumentListener {
+
+		static final int OK		= 0;
+		static final int CANCEL	= 1;
+
+		private JTextField field;
+		private JButton okButton;
+		private JButton cancelButton;
+		private int rc;
+
+		public Perl5ItemDialog(JDialog owner) {
+
+			super(owner);
+			ComponentOrientation orientation = ComponentOrientation.
+										getOrientation(getLocale());
+			JPanel contentPane = new ResizableFrameContentPane(
+											new BorderLayout());
+			contentPane.setBorder(UIUtil.getEmpty5Border());
+
+			// Panel containing main stuff.
+			JPanel topPanel = new JPanel();
+			topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+			JPanel temp = new JPanel(new BorderLayout());
+			temp.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
+			JLabel label = UIUtil.createLabel(Plugin.msg,
+								"Options.Perl.Perl5LibItem.Text",
+								"Options.Perl.Perl5LibItem.Mnemonic");
+			JPanel temp2 = new JPanel(new BorderLayout());
+			temp2.add(label);
+			if (orientation.isLeftToRight()) { // Space between label and text field.
+				temp2.setBorder(BorderFactory.createEmptyBorder(0,0,0,5));
+			}
+			else {
+				temp2.setBorder(BorderFactory.createEmptyBorder(0,5,0,0));
+			}
+			temp.add(temp2, BorderLayout.LINE_START);
+			field = new JTextField(40);
+			field.getDocument().addDocumentListener(this);
+			label.setLabelFor(field);
+			temp.add(field);
+			JButton browseButton = new JButton(Plugin.msg.getString("Browse"));
+			browseButton.setActionCommand("Browse");
+			browseButton.addActionListener(this);
+			temp2 = new JPanel(new BorderLayout());
+			temp2.add(browseButton);
+			if (orientation.isLeftToRight()) { // Space between text field and button.
+				temp2.setBorder(BorderFactory.createEmptyBorder(0,5,0,0));
+			}
+			else {
+				temp2.setBorder(BorderFactory.createEmptyBorder(0,0,0,5));
+			}
+			temp.add(temp2, BorderLayout.LINE_END);
+			topPanel.add(temp);
+			contentPane.add(topPanel, BorderLayout.NORTH);
+
+			// Panel containing buttons for the bottom.
+			JPanel buttonPanel = new JPanel();
+			buttonPanel.setBorder(BorderFactory.createEmptyBorder(5,5,0,5));
+			temp = new JPanel(new GridLayout(1,2, 5,5));
+			okButton = new RButton(Plugin.msg.getString("Options.General.OK"));
+			okButton.addActionListener(this);
+			temp.add(okButton);
+			cancelButton = new RButton(Plugin.msg.
+										getString("Options.General.Cancel"));
+			cancelButton.addActionListener(this);
+			temp.add(cancelButton);
+			buttonPanel.add(temp);
+			contentPane.add(buttonPanel, BorderLayout.SOUTH);
+
+			// Get ready to go.
+			setTitle(Plugin.msg.
+					getString("Options.Perl.Perl5LibItem.DialogTitle"));
+			setContentPane(contentPane);
+			getRootPane().setDefaultButton(okButton);
+			setModal(true);
+			applyComponentOrientation(orientation);
+			pack();
+
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			Object source = e.getSource();
+			if (source==okButton) {
+				rc = OK;
+				escapePressed();
+			}
+			else if (source==cancelButton) {
+				escapePressed();
+			}
+			else {
+				String command = e.getActionCommand();
+				if ("Browse".equals(command)) {
+					RDirectoryChooser chooser =
+						new RDirectoryChooser((JDialog)getOwner());
+					chooser.setChosenDirectory(new File(getPath()));
+					chooser.setVisible(true);
+					String chosenDir = chooser.getChosenDirectory();
+					if (chosenDir!=null) {
+						field.setText(chosenDir);
+					}
+				}
+			}
+		}
+
+		public void changedUpdate(DocumentEvent e) {
+		}
+
+		public String getPath() {
+			return field.getText();
+		}
+
+		public void insertUpdate(DocumentEvent e) {
+			okButton.setEnabled(true);
+		}
+
+		public void removeUpdate(DocumentEvent e) {
+			okButton.setEnabled(field.getDocument().getLength()>0);
+		}
+
+		public void setPath(String path) {
+			field.setText(path);
+		}
+
+		public int showDialog() {
+			rc = CANCEL; // Set here in case they "X" the dialog out.
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					field.requestFocusInWindow();
+					field.selectAll();
+				}
+			});
+			setLocationRelativeTo(getOwner());
+			okButton.setEnabled(false);
+			setVisible(true);
+			return rc;
 		}
 
 	}

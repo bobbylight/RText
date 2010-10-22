@@ -65,6 +65,8 @@ public class LangSupportPreferences extends Prefs {
 	public File perl_installLoc;
 	public boolean perl_warnings;
 	public boolean perl_taintMode;
+	public boolean perl_override_perl5lib;
+	public String perl_overridden_perl5lib;
 
 	public boolean php_enabled;
 	public boolean php_showDescWindow;
@@ -123,6 +125,8 @@ public class LangSupportPreferences extends Prefs {
 		}
 		perl_warnings = true;
 		perl_taintMode = false;
+		perl_override_perl5lib = false;
+		perl_overridden_perl5lib = null;
 
 		php_enabled = true;
 		php_showDescWindow = true;

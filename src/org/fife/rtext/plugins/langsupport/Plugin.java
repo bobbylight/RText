@@ -250,6 +250,16 @@ public class Plugin implements org.fife.ui.app.Plugin {
 		pls.setTaintModeEnabled(prefs.perl_taintMode);
 		pls.setUseParensWithFunctions(prefs.perl_useParens);
 		pls.setWarningsEnabled(prefs.perl_warnings);
+		if (!prefs.perl_override_perl5lib) {
+			pls.setPerl5LibOverride(null);
+		}
+		else {
+			String override = prefs.perl_overridden_perl5lib;
+			if (override!=null && override.length()==0) {
+				override = null;
+			}
+			pls.setPerl5LibOverride(override);
+		}
 
 		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PHP);
 		ls.setAutoCompleteEnabled(prefs.php_enabled);
@@ -330,6 +340,8 @@ public class Plugin implements org.fife.ui.app.Plugin {
 		prefs.perl_taintMode = pls.isTaintModeEnabled();
 		prefs.perl_useParens = pls.getUseParensWithFunctions();
 		prefs.perl_warnings = pls.getWarningsEnabled();
+		prefs.perl_overridden_perl5lib = pls.getPerl5LibOverride();
+		prefs.perl_override_perl5lib = prefs.perl_overridden_perl5lib!=null;
 
 		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PHP);
 		prefs.php_enabled = ls.isAutoCompleteEnabled();
