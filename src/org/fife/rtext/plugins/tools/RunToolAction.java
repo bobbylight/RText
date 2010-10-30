@@ -70,6 +70,7 @@ class RunToolAction extends StandardAction {
 	public void actionPerformed(ActionEvent e) {
 
 		// Make sure the program and working directory exist.
+		tool.setRText((RText)getApplication());
 		String errorDesc = tool.checkForErrors();
 		if (errorDesc!=null) {
 			RText app = (RText)getApplication();

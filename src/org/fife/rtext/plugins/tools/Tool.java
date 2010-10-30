@@ -119,7 +119,7 @@ public class Tool implements Comparable {
 		String error = null;
 
 		// Ensure the program to run exists.
-		File file = new File(program);
+		File file = new File(varSubstitute(program));
 		if (!file.isFile()) {
 			error = ToolPlugin.msg.getString("Error.ProgramNotFound");
 			error = MessageFormat.format(error,
@@ -129,7 +129,7 @@ public class Tool implements Comparable {
 		else {
 
 			// Ensure the directory to run in exists
-			File dir = new File(getDirectory());
+			File dir = new File(varSubstitute(getDirectory()));
 			if (!dir.isDirectory()) {
 				error = ToolPlugin.msg.getString("Error.NoSuchDirectory");
 				error = MessageFormat.format(error,
@@ -210,6 +210,9 @@ public class Tool implements Comparable {
 			cmd[i+1] = varSubstitute((String)args.get(i));
 		}
 
+		// Replace any ${file_XXX} "variables" in the working directory.
+		final String dir = varSubstitute(getDirectory());
+
 		// Replace any ${file_XXX} "variables" in the environment.
 		final Map env2 = env==null ? null : new HashMap(env);
 		if (env2!=null) {
@@ -224,7 +227,7 @@ public class Tool implements Comparable {
 		Thread t = new Thread() {
 			public void run() {
 				ProcessRunner pr = new ProcessRunner(cmd);
-				pr.setDirectory(new File(getDirectory()));
+				pr.setDirectory(new File(dir));
 				pr.setEnvironmentVars(env2, appendEnv);
 				pr.setOutputListener(l);
 				pr.run();
@@ -512,6 +515,7 @@ public class Tool implements Comparable {
 	 * @param rtext The parent application.
 	 */
 	void setRText(RText rtext) {
+System.out.println("Setting rtext to: " + rtext);
 		this.rtext = rtext;
 	}
 
