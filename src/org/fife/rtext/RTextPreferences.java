@@ -169,7 +169,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 		SpellingSupport spelling = mainView.getSpellingSupport();
 		RTextMenuBar menuBar = (RTextMenuBar)rtext.getJMenuBar();
 
-		String lnfString = UIManager.getLookAndFeel().getClass().getName();
+		//String lnfString = UIManager.getLookAndFeel().getClass().getName();
+		String lnfString = RTextUtilities.getLookAndFeelToSave();
 
 		RTextPreferences props = new RTextPreferences();
 		props.location				= rtext.getLocation();
@@ -328,6 +329,23 @@ public class RTextPreferences extends GUIApplicationPreferences
 			return stroke.getKeyCode() + " " + stroke.getModifiers();
 		}
 		return NOTHING_STRING;
+	}
+
+
+	/**
+	 * Returns just the LookAndFeel saved in the application preferences.
+	 * This is so we can set the LAF before loading the application, to allow
+	 * finnicky LAF's like Substance to work properly (Substance only works if
+	 * it's set before the first JFrame is created).
+	 *
+	 * @return The name of the LookAndFeel to load, or the system default LAF
+	 *         if no LAF is currently saved.
+	 */
+	public static String getLookAndFeelToLoad() {
+		Preferences prefs = Preferences.userNodeForPackage(RText.class);
+		String defaultLAF = UIManager.getSystemLookAndFeelClassName();
+		String laf = prefs.get("lookAndFeel", defaultLAF);
+		return laf;
 	}
 
 

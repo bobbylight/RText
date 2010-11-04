@@ -30,7 +30,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
@@ -46,8 +45,8 @@ import org.fife.rtext.actions.ActionFactory;
 import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
+import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
-import org.fife.ui.app.ExtendedLookAndFeelInfo;
 import org.fife.ui.app.GUIApplicationPreferences;
 import org.fife.ui.app.Plugin;
 import org.fife.ui.app.ThirdPartyLookAndFeelManager;
@@ -587,27 +586,6 @@ public class RText extends AbstractPluggableGUIApplication
 	 */
 	public Map getIconGroupMap() {
 		return iconGroupMap;
-	}
-
-
-	/**
-	 * Returns an array of information on JAR files containing 3rd party Look
-	 * and Feels.  These JAR files will be added to the
-	 * <code>UIManager</code>'s classpath so that these LnFs can be used in
-	 * this GUI application.<p>
-	 *
-	 * RText reads all 3rd party Look and Feels from an XML file, so this stuff
-	 * is done dynamically and can be configured by the user.
-	 *
-	 * @return An array of URLs for JAR files containing Look and Feels.
-	 */
-	public ExtendedLookAndFeelInfo[] get3rdPartyLookAndFeelInfo() {
-		try {
-			return ThirdPartyLookAndFeelManager.get3rdPartyLookAndFeelInfo(
-									this, "lnfs/lookandfeels.xml");
-		} catch (IOException ioe) {
-			return null;
-		}
 	}
 
 
@@ -1679,7 +1657,33 @@ public class RText extends AbstractPluggableGUIApplication
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 
+				// Allow nicer LookAndFeels to paint window titles, etc.
+				JFrame.setDefaultLookAndFeelDecorated(true);
+				JDialog.setDefaultLookAndFeelDecorated(true);
+
+				String rootDir = AbstractGUIApplication.
+											getLocationOfJar("RText.jar");
+				ThirdPartyLookAndFeelManager lafManager =
+					new ThirdPartyLookAndFeelManager(rootDir);
+
+				try {
+					String lafName = RTextPreferences.getLookAndFeelToLoad();
+					ClassLoader cl = lafManager.getLAFClassLoader();
+					// Must set UIManager's ClassLoader before instantiating
+					// the LAF.  Substance is so high-maintenance!
+					UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
+					Class clazz = cl.loadClass(lafName);
+					LookAndFeel laf = (LookAndFeel)clazz.newInstance();
+					UIManager.setLookAndFeel(laf);
+					UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
+				} catch (RuntimeException re) { // FindBugs
+					throw re;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
 				RText rtext = new RText(args);
+				rtext.setLookAndFeelManager(lafManager);
 
 				// For some reason, when using MDI_VIEW, the first window
 				// isn't selected (although it is activated)...

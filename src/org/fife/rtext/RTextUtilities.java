@@ -75,6 +75,13 @@ public class RTextUtilities {
 
 	static final String MACRO_TEMPORARY_PROPERTY		  = "RText.temporaryMacroProperty";
 
+	/**
+	 * The last LookAndFeel (attempted to be) installed.  This may not be
+	 * the actual currently-active LookAndFeel, if the user tries to install
+	 * one with different window decoration properties.
+	 */
+	private static String currentLaF;
+
 
 	/**
 	 * Adds a set of "default" code templates to the text areas.
@@ -464,6 +471,22 @@ public class RTextUtilities {
 
 
 	/**
+	 * Returns the name of the LookAndFeel to load RText with the next time it
+	 * starts up.  This may not be the same thing as the currently active LAF,
+	 * if the user chose a LAF that used custom window decorations, for example.
+	 *
+	 * @return The name of the LookAndFeel to save in the RText preferences.
+	 */
+	public static String getLookAndFeelToSave() {
+		String laf = currentLaF;
+		if (laf==null) {
+			laf = UIManager.getLookAndFeel().getClass().getName();
+		}
+		return laf;
+	}
+
+
+	/**
 	 * Returns the directory in which the user's macros are stored.
 	 *
 	 * @return The macro directory, or <code>null</code> if it cannot be found
@@ -680,6 +703,11 @@ public class RTextUtilities {
 	}
 
 
+	private static boolean isASubstanceLookAndFeel(LookAndFeel laf) {
+		return laf.getClass().getName().indexOf(".Substance")>-1;
+	}
+
+
 	/**
 	 * Opens all files in the specified directory tree in RText.
 	 *
@@ -732,10 +760,18 @@ public class RTextUtilities {
 	 * @param lnfClassName The class name of the Look and Feel to set.
 	 */
 	public static void setLookAndFeel(final RText rtext, String lnfClassName) {
+
 		// Only set the Look and Feel if we're not already using that Look.
+		// Compare against currently active one, not the one we want to change
+		// to on restart, seems more logical to the end-user.
+		//String current = currentLaF;
 		String current = UIManager.getLookAndFeel().getClass().getName();
+
 		if (lnfClassName!=null && !current.equals(lnfClassName)) {
 			try {
+
+				currentLaF = lnfClassName;
+
 				// Use RText's LaF class loader, not a system one, as it
 				// can access any additional 3rd-party LaF jars that
 				// weren't on the classpath when RText started.  Also,
@@ -743,12 +779,32 @@ public class RTextUtilities {
 				// be this class loader, as on Windows if the user changes
 				// the UxTheme the LaF is updated outside of this call,
 				// and the property value is reset to null.
-				ClassLoader cl = rtext.getLookAndFeelClassLoader();
+				ClassLoader cl = rtext.getLookAndFeelManager().
+													getLAFClassLoader();
 				// Load the Look and Feel class.  Note that we cannot
 				// simply use its name for some reason (Exceptions are
 				// thrown).
 				Class c = cl.loadClass(lnfClassName);
 				LookAndFeel lnf = (LookAndFeel)c.newInstance();
+
+				// If we're changing to a LAF that supports window decorations
+				// and our current one doesn't, or vice versa, inform the
+				// user that this change will occur on restart.  Substance
+				// seems to be the only troublemaker here (Metal, for example,
+				// supports window decorations, but works fine without special
+				// logic).
+				boolean curSubstance = isASubstanceLookAndFeel(
+												UIManager.getLookAndFeel());
+				boolean nextSubstance = isASubstanceLookAndFeel(lnf);
+				if (curSubstance!=nextSubstance) {
+					String message = rtext.getString(
+									"Info.LookAndFeel.LoadOnNextRestart");
+					String title = rtext.getString("InfoDialogHeader");
+					JOptionPane.showMessageDialog(rtext, message, title,
+											JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+
 				UIManager.setLookAndFeel(lnf);
 				// Re-save the class loader BEFORE calling
 				// updateLookAndFeels(), as the UIManager.setLookAndFeel()
@@ -759,10 +815,13 @@ public class RTextUtilities {
 				// exceptions will be thrown.
 				UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
 				StoreKeeper.updateLookAndFeels(lnf);
+
 			} catch (Exception e) {
 				rtext.displayException(e);
 			}
+
 		}
+
 	}
 
 

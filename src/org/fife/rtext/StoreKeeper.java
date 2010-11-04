@@ -88,7 +88,7 @@ public class StoreKeeper {
 	 */
 	public static void updateLookAndFeels(final LookAndFeel lnf) {
 
-		final Runnable updateUIRunnable = new Runnable() {
+		Runnable updateUIRunnable = new Runnable() {
 			public void run() {
 				int count = getInstanceCount();
 				for (int i=0; i<count; i++)
