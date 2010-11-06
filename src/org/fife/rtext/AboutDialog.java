@@ -99,6 +99,9 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 		temp.applyComponentOrientation(orientation);
 		addPanel(msg.getString("Tab.Plugins"), temp);
 
+		// Add a panel for libraries used by RText.
+		addPanel(msg.getString("Tab.Libraries"), createLibrariesPanel(msg));
+
 		pack();
 
 	}
@@ -129,6 +132,58 @@ panel.add(editor);
 
 		temp.add(panel, BorderLayout.SOUTH);
 		return temp;
+
+	}
+
+
+	private void appendLibrary(StringBuffer sb, String name, String url,
+								String desc) {
+		sb.append("<b>").append(name).append("</b>&nbsp;&nbsp;&nbsp;<a href=\"");
+		sb.append(url).append("\">").append(url).append("</a><br>");
+		sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\u2022 ").append(desc);
+		sb.append("<br><br>");
+	}
+
+
+	/**
+	 * Creates a panel describing the libraries this application uses.
+	 *
+	 * @param msg The resource bundle.
+	 * @return The panel.
+	 */
+	private JPanel createLibrariesPanel(ResourceBundle msg) {
+
+		JPanel panel = UIUtil.createTabbedPanePanel();
+		panel.setLayout(new BorderLayout());
+		panel.setBorder(UIUtil.getEmpty5Border());
+
+		StringBuffer sb = new StringBuffer("<html>");
+		appendLibrary(sb, "RSyntaxTextArea:",
+				"http://fifesoft.com/rsyntaxtextarea",
+				msg.getString("Desc.RSyntaxTextArea"));
+		appendLibrary(sb, "JTidy:", "http://jtidy.sourceforge.net/",
+				msg.getString("Desc.JTidy"));
+		appendLibrary(sb, "Jazzy:", "http://jazzy.sourceforge.net/",
+				msg.getString("Desc.Jazzy"));
+		appendLibrary(sb, "JGoodies:", "http://jgoodies.com",
+				msg.getString("Desc.JGoodies"));
+		appendLibrary(sb, "Substance LookAndFeel:",
+				"https://substance.dev.java.net/",
+				msg.getString("Desc.Substance"));
+
+		final SelectableLabel label = new SelectableLabel(sb.toString());
+		label.addHyperlinkListener(new HyperlinkListener() {
+			public void hyperlinkUpdate(HyperlinkEvent e) {
+				if (HyperlinkEvent.EventType.ACTIVATED==e.getEventType()) {
+					if (!UIUtil.browse(e.getDescription())) {
+						UIManager.getLookAndFeel().provideErrorFeedback(label);
+					}
+				}
+			}
+		});
+		panel.add(label);
+
+		return panel;
 
 	}
 

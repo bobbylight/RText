@@ -2,6 +2,27 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+1.3.0
+-------------------
+   - ???
+   - Adding drop shadows to menus - thanks to JGoodies (http://jgoodies.com).
+   - Revamped external LookAndFeel support.  Several Substance 6.1 skins are
+     now selectable by default in RText.
+   - Text matches in the "Find in Files" dialog are now syntax highlighted.
+   - Translucent search windows now work on Java 7+, not just Java 6.
+   - Added Copy, Paste, and Delete popup menu items on the File System Tree.
+   - Added PERL5LIB modification support to the Perl parser - see the Perl
+     options panel in the Options dialog.
+   - Added a "Libraries" tab to the About dialog listing all external libraries
+     RText uses.
+   - Fixed a bug with "variables" not working for tool directories (i.e.
+     ${file_dir}).
+   - Logging any uncaught EDT throwables to a log file in user's home directory
+     (AWTExceptionHandler).
+   - Fixed NPE in FindInFilesTable when user switches from WinLAF to another
+     one (workaround for JRE bug 6429812).
+
+
 1.1.0 (03/15/2010):
 -------------------
    - Added "external tool" support.  Similar to Eclipse, this allows you to

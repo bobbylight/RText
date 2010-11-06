@@ -88,7 +88,7 @@ public class TasksPlugin implements Plugin {
 	private static final String MSG = "org.fife.rtext.plugins.tasks.TasksPlugin";
 	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
-	private static final String VERSION					= "1.2.0";
+	private static final String VERSION					= "1.3.0";
 	private static final String VIEW_TASKS_ACTION		= "viewTasksAction";
 
 

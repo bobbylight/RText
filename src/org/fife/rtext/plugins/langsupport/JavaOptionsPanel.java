@@ -435,36 +435,35 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 			JPanel cp = new ResizableFrameContentPane(new BorderLayout());
 			cp.setBorder(UIUtil.getEmpty5Border());
 
-			Box topPanel = Box.createVerticalBox();
+			JPanel topPanel = new JPanel(new SpringLayout());
 
-			JLabel label = new JLabel(getString("Jar"));
+			JLabel jarLabel = new JLabel(getString("Jar"));
 			jarField = new FSATextField(40);
 			if (old!=null) {
 				jarField.setText(((File)old[0]).getAbsolutePath());
 			}
-			label.setLabelFor(jarField);
-			JPanel temp = new JPanel(new BorderLayout());
-			temp.add(label, BorderLayout.LINE_START);
-			temp.add(jarField);
-			topPanel.add(temp);
-			topPanel.add(Box.createVerticalStrut(5));
+			jarLabel.setLabelFor(jarField);
 
-			label = new JLabel(getString("Source"));
+			JLabel sourceLabel = new JLabel(getString("Source"));
 			sourceField = new FSATextField(40);
 			if (old!=null) {
 				sourceField.setText((String)old[1]);
 			}
-			label.setLabelFor(sourceField);
-			temp = new JPanel(new BorderLayout());
-			temp.add(label, BorderLayout.LINE_START);
-			temp.add(sourceField);
-			topPanel.add(temp);
+			sourceLabel.setLabelFor(sourceField);
 
-			topPanel.add(Box.createVerticalGlue());
+			if (getComponentOrientation().isLeftToRight()) {
+				topPanel.add(jarLabel);     topPanel.add(jarField);
+				topPanel.add(sourceLabel);  topPanel.add(sourceField);
+			}
+			else {
+				topPanel.add(jarField);     topPanel.add(jarLabel);
+				topPanel.add(sourceField);  topPanel.add(sourceLabel);
+			}
+			UIUtil.makeSpringCompactGrid(topPanel, 2, 2, 5, 5, 5, 5);
 			cp.add(topPanel, BorderLayout.NORTH);
 
 			JPanel buttonPanel = new JPanel();
-			temp = new JPanel(new GridLayout(1,2, 5,5));
+			JPanel temp = new JPanel(new GridLayout(1,2, 5,5));
 			okButton = new RButton(Plugin.msg.getString("Options.General.OK"));
 			okButton.addActionListener(this);
 			temp.add(okButton);

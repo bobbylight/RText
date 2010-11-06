@@ -515,7 +515,6 @@ public class Tool implements Comparable {
 	 * @param rtext The parent application.
 	 */
 	void setRText(RText rtext) {
-System.out.println("Setting rtext to: " + rtext);
 		this.rtext = rtext;
 	}
 
