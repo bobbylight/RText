@@ -62,6 +62,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	private RTextEditorPane textArea;
 	private String style;
 	private String language;
+	private DefaultSourceTree tree;
 
 	private static final int MAX_NUM_HASH_MAPS = 12;	// Longest string length in tagTypesMap.
 	private static final Map tagTypesMap;
@@ -450,7 +451,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	 * returned from <code>get</code> to prevent deadlock.
 	 */
 	public void finished() {
-		plugin.setTreeRoot((TreeNode)get());
+		tree.setRoot((TreeNode)get());
 	}
 
 
@@ -462,13 +463,15 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	 * @param textArea The text area containing the file we're parsing.
 	 * @param style The programming language to parse the file with.
 	 * @param language The programming language of the file to parse.
+	 * @param tree The tree to modify.
 	 */
 	public void start(int maxTime, RTextEditorPane textArea, String style,
-					String language) {
+					String language, DefaultSourceTree tree) {
 		this.maxTime = maxTime;
 		this.textArea = textArea;
 		this.style = style;
 		this.language = language;
+		this.tree = tree;
 		super.start();
 	}
 

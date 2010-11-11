@@ -183,6 +183,8 @@ public class Plugin implements org.fife.ui.app.Plugin {
 
 		loadPreferences();
 
+		System.setProperty("sbp.customHandler." + RSyntaxTextArea.SYNTAX_STYLE_JAVA,
+				"org.fife.rtext.plugins.langsupport.JavaSourceBrowserTreeConstructor");
 	}
 
 
