@@ -37,11 +37,10 @@
 				source="${java-level}" target="${java-level}">
 			<include name="org/fife/rtext/plugins/**"/>
 			<classpath>
-				<fileset dir="${class-dir}"/>
+				<fileset dir="${dist-dir}" includes="*.jar"/>
 				<fileset dir="lib">
 					<include name="**/*.jar"/>
 				</fileset>
-				<fileset file="${dist-dir}/fife.common.jar"/>
 			</classpath>
 		</javac>
 	</target>

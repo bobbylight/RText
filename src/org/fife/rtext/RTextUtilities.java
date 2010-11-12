@@ -47,6 +47,7 @@ import javax.swing.KeyStroke;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
+import org.fife.ui.SubstanceUtils;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.templates.CodeTemplate;
@@ -703,11 +704,6 @@ public class RTextUtilities {
 	}
 
 
-	private static boolean isASubstanceLookAndFeel(LookAndFeel laf) {
-		return laf.getClass().getName().indexOf(".Substance")>-1;
-	}
-
-
 	/**
 	 * Opens all files in the specified directory tree in RText.
 	 *
@@ -793,9 +789,9 @@ public class RTextUtilities {
 				// seems to be the only troublemaker here (Metal, for example,
 				// supports window decorations, but works fine without special
 				// logic).
-				boolean curSubstance = isASubstanceLookAndFeel(
-												UIManager.getLookAndFeel());
-				boolean nextSubstance = isASubstanceLookAndFeel(lnf);
+				boolean curSubstance = SubstanceUtils.isSubstanceInstalled();
+				boolean nextSubstance = SubstanceUtils.
+											isASubstanceLookAndFeel(lnf);
 				if (curSubstance!=nextSubstance) {
 					String message = rtext.getString(
 									"Info.LookAndFeel.LoadOnNextRestart");

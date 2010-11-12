@@ -138,10 +138,13 @@ panel.add(editor);
 
 	private void appendLibrary(StringBuffer sb, String name, String url,
 								String desc) {
-		sb.append("<b>").append(name).append("</b>&nbsp;&nbsp;&nbsp;<a href=\"");
-		sb.append(url).append("\">").append(url).append("</a><br>");
-		sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\u2022 ").append(desc);
-		sb.append("<br><br>");
+		sb.append("<tr><td><b>").append(name).append("</b></td>");
+		sb.append("<td><a href=\"").append(url).append("\">");
+		sb.append(url).append("</a></td></tr>");
+		sb.append("<tr><td colspan=\"2\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\u2022 ");
+		sb.append(desc).append("</td></tr>");
+		// Add an empty row, just for spacing.
+		sb.append("<tr><td>&nbsp;</td><td>&nbsp;</td></tr>");
 	}
 
 
@@ -157,7 +160,7 @@ panel.add(editor);
 		panel.setLayout(new BorderLayout());
 		panel.setBorder(UIUtil.getEmpty5Border());
 
-		StringBuffer sb = new StringBuffer("<html>");
+		StringBuffer sb = new StringBuffer("<html><table>");
 		appendLibrary(sb, "RSyntaxTextArea:",
 				"http://fifesoft.com/rsyntaxtextarea",
 				msg.getString("Desc.RSyntaxTextArea"));
@@ -167,9 +170,10 @@ panel.add(editor);
 				msg.getString("Desc.Jazzy"));
 		appendLibrary(sb, "JGoodies:", "http://jgoodies.com",
 				msg.getString("Desc.JGoodies"));
-		appendLibrary(sb, "Substance LookAndFeel:",
+		appendLibrary(sb, "Substance:",
 				"https://substance.dev.java.net/",
 				msg.getString("Desc.Substance"));
+		sb.append("</table>");
 
 		final SelectableLabel label = new SelectableLabel(sb.toString());
 		label.addHyperlinkListener(new HyperlinkListener() {

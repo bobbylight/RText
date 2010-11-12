@@ -91,8 +91,9 @@ public class StoreKeeper {
 		Runnable updateUIRunnable = new Runnable() {
 			public void run() {
 				int count = getInstanceCount();
-				for (int i=0; i<count; i++)
+				for (int i=0; i<count; i++) {
 					((RText)rtextInstances.get(i)).updateLookAndFeel(lnf);
+				}
 			}
 		};
 

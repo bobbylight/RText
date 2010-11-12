@@ -45,6 +45,7 @@ import org.fife.rtext.actions.ActionFactory;
 import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
+import org.fife.ui.SubstanceUtils;
 import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.GUIApplicationPreferences;
@@ -1680,6 +1681,16 @@ public class RText extends AbstractPluggableGUIApplication
 					throw re;
 				} catch (Exception e) {
 					e.printStackTrace();
+				}
+
+				// The default speed of Substance animations is too slow
+				// (200ms), looks bad moving through JMenuItems quickly.
+				if (SubstanceUtils.isSubstanceInstalled()) {
+					try {
+						SubstanceUtils.setAnimationSpeed(120);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 
 				RText rtext = new RText(args);
