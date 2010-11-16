@@ -45,6 +45,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.SubstanceUtils;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.StatusBarPlugin;
@@ -141,16 +142,50 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 
 
 	public Color getIconBorderColor() {
-		return getUseSystemColors() ?
-				UIManager.getColor("Label.foreground") :
-				iconBorderColor;
+
+		Color c = iconBorderColor;
+
+		if (getUseSystemColors()) {
+			if (SubstanceUtils.isSubstanceInstalled()) {
+				try {
+					c = SubstanceUtils.getSubstanceColor(
+										SubstanceUtils.ULTRA_DARK_COLOR);
+				} catch (Exception e) {
+					c = UIManager.getColor("Label.foreground");
+					e.printStackTrace();
+				}
+			}
+			else {
+				c = UIManager.getColor("Label.foreground");
+			}
+		}
+
+		return c;
+
 	}
 
 
 	public Color getIconForeground() {
-		return getUseSystemColors() ?
-				UIManager.getColor("ProgressBar.foreground") :
-				iconForeground;
+
+		Color c = iconForeground;
+
+		if (getUseSystemColors()) {
+			if (SubstanceUtils.isSubstanceInstalled()) {
+				try {
+					c = SubstanceUtils.getSubstanceColor(
+										SubstanceUtils.MID_COLOR);
+				} catch (Exception e) {
+					c = UIManager.getColor("ProgressBar.foreground");
+					e.printStackTrace();
+				}
+			}
+			else {
+				c = UIManager.getColor("ProgressBar.foreground");
+			}
+		}
+
+		return c;
+
 	}
 
 
