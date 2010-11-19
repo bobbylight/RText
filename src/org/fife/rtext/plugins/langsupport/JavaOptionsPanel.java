@@ -301,7 +301,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 			File jar = (File)model.getValueAt(i, 0);
 			JarInfo info = new JarInfo(jar);
 			String source = (String)model.getValueAt(i, 1);
-			if (source!=null) {
+			if (source!=null && source.length()>0) {
 				info.setSourceLocation(new File(source));
 			}
 			try {
