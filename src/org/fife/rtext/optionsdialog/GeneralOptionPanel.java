@@ -358,16 +358,16 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		else if ("RestoreDefaults".equals(command)) {
 
 			String defaultEncName = RTextFileChooser.getDefaultEncoding();
-			Charset defaultEnc = Charset.forName(defaultEncName);
+			String defaultEnc = Charset.forName(defaultEncName).name();
 			boolean defaultUtf8BomSelected = false;
-			String defaultSizeFieldText = "8";
+			final String defaultSizeFieldText = "10";
 			int defaultOpacity = 60;
 
 			if (dirField.getDocument().getLength()>0 ||
 					terminatorCombo.getSelectedIndex()!=0 ||
-					!(encCombo.getSelectedItem().equals(defaultEnc)) ||
+					!encCombo.getSelectedItem().equals(defaultEnc) ||
 					utf8BomCB.isSelected()!=defaultUtf8BomSelected ||
-					sizeCheckCB.isSelected() ||
+					!sizeCheckCB.isSelected() ||
 					!defaultSizeFieldText.equals(sizeField.getText()) ||
 					translucentSearchDialogsCB.isSelected() ||
 					ruleCombo.getSelectedIndex()!=2 ||
@@ -375,10 +375,10 @@ class GeneralOptionPanel extends OptionsDialogPanel
 
 				dirField.setText(null);
 				terminatorCombo.setSelectedIndex(0);
+				encCombo.setSelectedItem(defaultEnc);
 				setDefaultEncoding(defaultEncName);
 				utf8BomCB.setSelected(defaultUtf8BomSelected);
-				sizeCheckCB.setSelected(false);
-				setDoFileSizeCheck(false);
+				setDoFileSizeCheck(true);
 				sizeField.setText(defaultSizeFieldText);
 				setTranslucentSearchDialogsSelected(false);
 				ruleCombo.setSelectedIndex(2);

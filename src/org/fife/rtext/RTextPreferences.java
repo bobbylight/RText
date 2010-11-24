@@ -363,11 +363,12 @@ public class RTextPreferences extends GUIApplicationPreferences
 
 		try {
 
-			// Get all properties assiciated with the RText class.
+			// Get all properties associated with the RText class.
 			Preferences prefs = Preferences.userNodeForPackage(RText.class);
 			loadCommonPreferences(props, prefs);
 			props.iconGroupName				= prefs.get("iconGroupName", props.iconGroupName);
 			props.lineNumbersVisible			= prefs.getBoolean("lineNumbersVisible", props.lineNumbersVisible);
+			props.tabSize					= prefs.getInt("tabSize", props.tabSize);
 			props.mainView					= prefs.getInt("mainView", props.mainView);
 			String temp					= prefs.get("colorScheme", null);
 			props.colorScheme				= SyntaxScheme.loadFromString(temp);
@@ -739,8 +740,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 		defaultLineTerminator = null; // Use system default.
 		defaultEncoding = null; // Use system default encoding.
 		guessFileContentType = true;
-		doFileSizeCheck	= false;
-		maxFileSize		= 8.0f;	// MB.
+		doFileSizeCheck	= true;
+		maxFileSize		= 10f;	// MB.
 		ignoreBackupExtensions = true;
 		textAreaFont		= RTextArea.getDefaultFont();
 		textAreaUnderline	= false;

@@ -287,9 +287,11 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		pls.setParsingEnabled(compileCB.isSelected());
 		boolean reunderline = old!=pls.isParsingEnabled();
 		File oldLoc = PerlLanguageSupport.getPerlInstallLocation();
-		File newLoc = new File(installLocField.getText());
+		File newLoc = installLocField.getText().length()>0 ?
+				new File(installLocField.getText()) : null;
 		PerlLanguageSupport.setPerlInstallLocation(newLoc);
-		reunderline |= !oldLoc.equals(newLoc);
+		reunderline |= (oldLoc==null && newLoc!=null) ||
+						(oldLoc!=null && !oldLoc.equals(newLoc));
 		old = pls.getWarningsEnabled();
 		pls.setWarningsEnabled(warningsCB.isSelected());
 		reunderline |= old!=pls.getWarningsEnabled();
@@ -330,10 +332,13 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 
 		OptionsPanelCheckResult res = null;
 
-		File file = new File(installLocField.getText());
-		if (!file.isDirectory()) {
-			res = new OptionsPanelCheckResult(this, installLocField, 
+		String text = installLocField.getText();
+		if (text.length()>0) { // Empty field == okay
+			File file = new File(text);
+			if (!file.isDirectory()) {
+				res = new OptionsPanelCheckResult(this, installLocField, 
 					Plugin.msg.getString("Options.Perl.Error.InvalidPerlHome"));
+			}
 		}
 
 		return res;
@@ -410,8 +415,9 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		// Options dealing with runtime syntax checking
 		setCompileCBSelected(pls.isParsingEnabled());
 		installLocField.setFileSystemAware(false);
-		installLocField.setText(PerlLanguageSupport.getPerlInstallLocation().
-													getAbsolutePath());
+		File installLoc = PerlLanguageSupport.getPerlInstallLocation();
+		String path = installLoc==null ? null : installLoc.getAbsolutePath();
+		installLocField.setText(path);
 		installLocField.setFileSystemAware(true);
 		warningsCB.setSelected(pls.getWarningsEnabled());
 		taintModeCB.setSelected(pls.isTaintModeEnabled());
