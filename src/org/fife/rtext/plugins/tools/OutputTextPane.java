@@ -54,6 +54,8 @@ import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
 
+import org.fife.ui.rtextarea.RTextArea;
+
 
 /**
  * Text component that displays the output of a tool.
@@ -122,8 +124,7 @@ class OutputTextPane extends JTextPane {
 	 */
 	private void installStyles() {
 
-		Font old = getFont();
-		setFont(new Font("Monospaced", old.getStyle(), old.getSize()));
+		setFont(RTextArea.getDefaultFont());
 
 		Style stdin = addStyle(STYLE_STDIN, null);
 		StyleConstants.setForeground(stdin, new Color(0,192,0));

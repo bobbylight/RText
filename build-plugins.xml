@@ -75,6 +75,23 @@
 		</jar>
 -->
 
+		<!-- Console plugin. -->
+		<jar destfile="${dist-dir}/plugins/Console.jar">
+			<fileset dir="${class-dir}">
+				<include name="org/fife/rtext/plugins/console/**"/>
+			</fileset>
+			<fileset dir="${source-dir}">
+				<include name="org/fife/rtext/plugins/console/**/*.png"/>
+			</fileset>
+			<fileset dir="i18n">
+				<include name="org/fife/rtext/plugins/console/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.console.Plugin"/>
+				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
+			</manifest>
+		</jar>
+
 		<!-- Source Browser plugin. -->
 		<jar destfile="${dist-dir}/plugins/SourceBrowser.jar">
 			<fileset dir="${class-dir}">
