@@ -25,7 +25,6 @@
 package org.fife.rtext.plugins.console;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -37,7 +36,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -72,14 +70,21 @@ import org.fife.ui.rtextarea.RTextArea;
  */
 class ConsoleTextArea extends JTextPane {
 
-	static final String STYLE_STDIN				= "stdin";
-	static final String STYLE_STDOUT			= "stdout";
-	static final String STYLE_STDERR			= "stderr";
-	static final String STYLE_EXCEPTION			= "exception";
+	/**
+	 * Property change event fired whenever a process is launched or
+	 * completes.
+	 */
+	public static final String PROPERTY_PROCESS_RUNNING	= "ProcessRunning";
+
+	private static final String STYLE_STDIN				= "stdin";
+	private static final String STYLE_STDOUT			= "stdout";
+	private static final String STYLE_STDERR			= "stderr";
+	private static final String STYLE_EXCEPTION			= "exception";
 
 	private Plugin plugin;
 	private JPopupMenu popup;
 	private Listener listener;
+	private transient Thread activeProcessThread;
 
 
 	/**
@@ -286,6 +291,17 @@ class ConsoleTextArea extends JTextPane {
 
 
 	/**
+	 * Stops the currently running process, if any.
+	 */
+	public void stopCurrentProcess() {
+		if (activeProcessThread!=null && activeProcessThread.isAlive()) {
+			activeProcessThread.interrupt();
+			activeProcessThread = null;
+		}
+	}
+
+
+	/**
 	 * Overridden to also update the UI of the popup menu.
 	 */
 	public void updateUI() {
@@ -427,6 +443,22 @@ class ConsoleTextArea extends JTextPane {
 		}
 
 		public void processCompleted(Process p, int rc, Throwable e) {
+			if (e!=null) {
+				String text = null;
+				if (e instanceof InterruptedException) {
+					text = plugin.getString("ProcessForciblyTerminated");
+				}
+				else {
+					StringWriter sw = new StringWriter();
+					e.printStackTrace(new PrintWriter(sw));
+					text = sw.toString();
+				}
+				append(text, STYLE_EXCEPTION);
+			}
+			// Not really necessary, should allow GC of Process resources
+			activeProcessThread = null;
+			setEditable(true);
+			firePropertyChange(PROPERTY_PROCESS_RUNNING, true, false);
 		}
 
 	}
@@ -470,18 +502,19 @@ class ConsoleTextArea extends JTextPane {
 					return;
 				}
 				cmdList.add(text);
-				String[] cmd = (String[])cmdList.toArray(new String[] {});
+				final String[] cmd = (String[])cmdList.toArray(new String[] {});
 
-				ProcessRunner pr = new ProcessRunner(cmd);
-				pr.setOutputListener(new ProcessOutputListener());
-				pr.run();
-
-				Throwable error = pr.getLastError();
-				if (error!=null) {
-					StringWriter sw = new StringWriter();
-					error.printStackTrace(new PrintWriter(sw));
-					replaceSelection(sw.toString() + "\n");
-				}
+				setEditable(false);
+				activeProcessThread = new Thread() {
+					public void run() {
+						ProcessRunner pr = new ProcessRunner(cmd);
+						pr.setOutputListener(new ProcessOutputListener());
+						pr.run();
+					}
+				};
+				ConsoleTextArea.this.firePropertyChange(
+									PROPERTY_PROCESS_RUNNING, false, true);
+				activeProcessThread.start();
 
 			} catch (BadLocationException ble) {
 				ble.printStackTrace();

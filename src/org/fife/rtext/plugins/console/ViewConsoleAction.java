@@ -1,7 +1,7 @@
 /*
- * 02/26/2010
+ * 12/18/2010
  *
- * ViewToolOutputAction.java - Toggles visibility of the tool output window.
+ * ViewConsoleAction.java - Toggles visibility of the console dockable window.
  * Copyright (C) 2010 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
@@ -22,7 +22,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext.plugins.tools;
+package org.fife.rtext.plugins.console;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
@@ -32,17 +32,17 @@ import org.fife.ui.app.StandardAction;
 
 
 /**
- * Toggles the display of the "Tool Output" dockable window.
+ * Toggles visibility of the console dockable window.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class ViewToolOutputAction extends StandardAction {
+class ViewConsoleAction extends StandardAction {
 
 	/**
-	 * The tools plugin.
+	 * The parent plugin.
 	 */
-	private ToolPlugin plugin;
+	private Plugin plugin;
 
 
 	/**
@@ -50,11 +50,10 @@ class ViewToolOutputAction extends StandardAction {
 	 *
 	 * @param owner The parent RText instance.
 	 * @param msg The resource bundle to use for localization.
-	 * @param plugin The tools plugin.
+	 * @param plugin The parent plugin.
 	 */
-	public ViewToolOutputAction(RText owner, ResourceBundle msg,
-								ToolPlugin plugin) {
-		super(owner, msg, "ViewToolOutputAction");
+	public ViewConsoleAction(RText owner, ResourceBundle msg, Plugin plugin) {
+		super(owner, msg, "Action.ViewConsole");
 		this.plugin = plugin;
 	}
 
@@ -65,7 +64,7 @@ class ViewToolOutputAction extends StandardAction {
 	 * @param e The event.
 	 */
 	public void actionPerformed(ActionEvent e) {
-		plugin.setToolOutputWindowVisible(!plugin.isToolOutputWindowVisible());
+		plugin.setConsoleWindowVisible(!plugin.isConsoleWindowVisible());
 	}
 
 

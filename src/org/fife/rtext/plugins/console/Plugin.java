@@ -24,9 +24,13 @@
  */
 package org.fife.rtext.plugins.console;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ResourceBundle;
-
+import javax.imageio.ImageIO;
+import javax.swing.Action;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
@@ -37,6 +41,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.PluginOptionsDialogPanel;
+import org.fife.ui.app.StandardAction;
 
 
 /**
@@ -56,6 +61,8 @@ public class Plugin implements org.fife.ui.app.Plugin {
 	private static final String MSG = "org.fife.rtext.plugins.console.Plugin";
 	protected static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
+	private static final String VIEW_CONSOLE_ACTION	= "viewConsoleAction";
+
 
 	/**
 	 * Constructor.
@@ -63,6 +70,23 @@ public class Plugin implements org.fife.ui.app.Plugin {
 	 * @param app The parent application.
 	 */
 	public Plugin(AbstractPluggableGUIApplication app) {
+
+		this.app = (RText)app;
+
+		// Load the plugin icon.
+		URL url = getClass().getResource("monitor.png");
+		if (url!=null) { // Should always be true
+			try {
+				icon = new ImageIcon(ImageIO.read(url));
+			} catch (IOException ioe) {
+				app.displayException(ioe);
+			}
+		}
+
+		StandardAction a = new ViewConsoleAction(this.app, msg, this);
+//		a.setAccelerator(prefs.windowVisibilityAccelerator);
+		this.app.addAction(VIEW_CONSOLE_ACTION, a);
+
 	}
 
 
@@ -118,12 +142,11 @@ public class Plugin implements org.fife.ui.app.Plugin {
 	public void install(AbstractPluggableGUIApplication app) {
 
 		RText rtext = (RText)app;
-		this.app = rtext;
 		RTextMenuBar mb = (RTextMenuBar)app.getJMenuBar();
-/*
-		// Add an item to the "View" menu to toggle tool output visibility
+
+		// Add an item to the "View" menu to toggle console visibility
 		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
-		a = rtext.getAction(VIEW_TOOL_OUTPUT_ACTION);
+		Action a = rtext.getAction(VIEW_CONSOLE_ACTION);
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(a);
 		item.setToolTipText(null);
 		item.applyComponentOrientation(app.getComponentOrientation());
@@ -137,21 +160,55 @@ public class Plugin implements org.fife.ui.app.Plugin {
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 			}
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				item.setSelected(isToolOutputWindowVisible());
+				item.setSelected(isConsoleWindowVisible());
 			}
 		});
-*/
 
-		window = new ConsoleWindow(this);
-		window.setActive(true);
-		rtext.addDockableWindow(window);
 
+		setConsoleWindowVisible(true);
+
+	}
+
+
+	/**
+	 * Returns whether the console window is visible.
+	 *
+	 * @return Whether the console window is visible.
+	 * @see #setConsoleWindowVisible(boolean)
+	 */
+	boolean isConsoleWindowVisible() {
+		return window!=null && window.isActive();
 	}
 
 
 	public void savePreferences() {
 		// TODO Auto-generated method stub
 
+	}
+
+
+	/**
+	 * Sets the visibility of the console window.
+	 *
+	 * @param visible Whether the window should be visible.
+	 * @see #isConsoleWindowVisible()
+	 */
+	void setConsoleWindowVisible(boolean visible) {
+		if (visible!=isConsoleWindowVisible()) {
+			if (visible && window==null) {
+				window = new ConsoleWindow(app, this);
+				app.addDockableWindow(window);
+			}
+			window.setActive(visible);
+		}
+	}
+
+
+	/**
+	 * Stops the currently running process, if any.
+	 */
+	public void stopCurrentProcess() {
+		window.stopCurrentProcess();
 	}
 
 

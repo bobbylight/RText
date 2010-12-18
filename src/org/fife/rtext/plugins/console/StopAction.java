@@ -1,7 +1,7 @@
 /*
- * 02/26/2010
+ * 12/17/2010
  *
- * ViewToolOutputAction.java - Toggles visibility of the tool output window.
+ * StopAction.java - Stops the currently running process, if any.
  * Copyright (C) 2010 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
@@ -22,27 +22,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext.plugins.tools;
+package org.fife.rtext.plugins.console;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
+import javax.swing.ImageIcon;
 
 import org.fife.rtext.RText;
 import org.fife.ui.app.StandardAction;
 
 
 /**
- * Toggles the display of the "Tool Output" dockable window.
+ * Stops the currently running process, if any.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class ViewToolOutputAction extends StandardAction {
+public class StopAction extends StandardAction {
 
 	/**
-	 * The tools plugin.
+	 * The parent plugin.
 	 */
-	private ToolPlugin plugin;
+	private Plugin plugin;
 
 
 	/**
@@ -50,11 +51,12 @@ class ViewToolOutputAction extends StandardAction {
 	 *
 	 * @param owner The parent RText instance.
 	 * @param msg The resource bundle to use for localization.
-	 * @param plugin The tools plugin.
+	 * @param plugin The parent plugin.
 	 */
-	public ViewToolOutputAction(RText owner, ResourceBundle msg,
-								ToolPlugin plugin) {
-		super(owner, msg, "ViewToolOutputAction");
+	public StopAction(RText owner, ResourceBundle msg, Plugin plugin) {
+		super(owner, msg, "Action.StopProcess");
+		setIcon(new ImageIcon(getClass().getResource("stop.png")));
+		setEnabled(false);
 		this.plugin = plugin;
 	}
 
@@ -65,7 +67,7 @@ class ViewToolOutputAction extends StandardAction {
 	 * @param e The event.
 	 */
 	public void actionPerformed(ActionEvent e) {
-		plugin.setToolOutputWindowVisible(!plugin.isToolOutputWindowVisible());
+		plugin.stopCurrentProcess();
 	}
 
 

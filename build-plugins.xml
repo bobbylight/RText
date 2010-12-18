@@ -81,7 +81,7 @@
 				<include name="org/fife/rtext/plugins/console/**"/>
 			</fileset>
 			<fileset dir="${source-dir}">
-				<include name="org/fife/rtext/plugins/console/**/*.png"/>
+				<include name="org/fife/rtext/plugins/console/*.png"/>
 			</fileset>
 			<fileset dir="i18n">
 				<include name="org/fife/rtext/plugins/console/**"/>

@@ -25,8 +25,13 @@
 package org.fife.rtext.plugins.console;
 
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import javax.swing.JButton;
 import javax.swing.JScrollPane;
+import javax.swing.JToolBar;
 
+import org.fife.rtext.RText;
 import org.fife.ui.dockablewindows.DockableWindow;
 
 
@@ -36,23 +41,61 @@ import org.fife.ui.dockablewindows.DockableWindow;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ConsoleWindow extends DockableWindow {
+public class ConsoleWindow extends DockableWindow
+							implements PropertyChangeListener {
 
-	private Plugin plugin;
+//	private Plugin plugin;
 	private ConsoleTextArea textArea;
 
+	private JToolBar toolbar;
+	private StopAction stopAction;
 
-	public ConsoleWindow(Plugin plugin) {
 
-		this.plugin = plugin;
+	public ConsoleWindow(RText app, Plugin plugin) {
+
+//		this.plugin = plugin;
 		setDockableWindowName(plugin.getString("DockableWindow.Title"));
+		setIcon(plugin.getPluginIcon());
 		setPosition(DockableWindow.BOTTOM);
 		setLayout(new BorderLayout());
 
+		toolbar = new JToolBar();
+		toolbar.setFloatable(false);
+		stopAction = new StopAction(app, Plugin.msg, plugin);
+		JButton b = new JButton(stopAction);
+		b.setText(null);
+		toolbar.add(b);
+		add(toolbar, BorderLayout.NORTH);
+
 		textArea = new ConsoleTextArea(plugin);
+		textArea.addPropertyChangeListener(
+							ConsoleTextArea.PROPERTY_PROCESS_RUNNING, this);
 		JScrollPane sp = new JScrollPane(textArea);
 		add(sp);
 
+	}
+
+
+	/**
+	 * Called whenever a process starts or completes.
+	 */
+	public void propertyChange(PropertyChangeEvent e) {
+
+		String prop = e.getPropertyName();
+
+		if (ConsoleTextArea.PROPERTY_PROCESS_RUNNING.equals(prop)) {
+			boolean running = ((Boolean)e.getNewValue()).booleanValue();
+			stopAction.setEnabled(running);
+		}
+
+	}
+
+
+	/**
+	 * Stops the currently running process, if any.
+	 */
+	public void stopCurrentProcess() {
+		textArea.stopCurrentProcess();
 	}
 
 

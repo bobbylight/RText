@@ -2,6 +2,16 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+1.4.0
+-------------------
+   - ??? Options dialog bug fix suggested in forum.
+   - ??? Fix bug - new tools aren't always remembered?
+   - ??? Add Clojure syntax highlighting.
+   - ??? Added Console plugin.
+   - ??? Improved Java code completion. ???
+   - ??? Very basic variable code completion for Groovy. ???
+
+
 1.3.1 (11/23/2010):
 -------------------
    - Fixed bug: Options dialog doesn't open if Perl is not installed on the
