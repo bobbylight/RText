@@ -32,10 +32,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -49,7 +52,6 @@ import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
-import javax.swing.text.Element;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -63,7 +65,8 @@ import org.fife.ui.rtextarea.RTextArea;
 
 
 /**
- * Text component that displays the output of a tool.
+ * Text component that displays the output of a tool.  This component tries
+ * to mimic jEdit's "Console" behavior, since that seemed to work pretty well.
  *
  * @author Robert Futrell
  * @version 1.0
@@ -76,6 +79,7 @@ class ConsoleTextArea extends JTextPane {
 	 */
 	public static final String PROPERTY_PROCESS_RUNNING	= "ProcessRunning";
 
+	private static final String STYLE_PROMPT			= "prompt";
 	private static final String STYLE_STDIN				= "stdin";
 	private static final String STYLE_STDOUT			= "stdout";
 	private static final String STYLE_STDERR			= "stderr";
@@ -85,6 +89,11 @@ class ConsoleTextArea extends JTextPane {
 	private JPopupMenu popup;
 	private Listener listener;
 	private transient Thread activeProcessThread;
+	private File pwd;
+	private int inputMinOffs;
+
+	private static final String CD						= "cd";
+	private static final String PWD						= "pwd";
 
 
 	/**
@@ -97,11 +106,13 @@ class ConsoleTextArea extends JTextPane {
 		fixKeyboardShortcuts();
 		listener = new Listener();
 		addMouseListener(listener);
+		pwd = new File(System.getProperty("user.home"));
+		appendPrompt();
 	}
 
 
 	/**
-	 * Appends text in the given style.
+	 * Appends text in the given style.  This method is thread-safe.
 	 *
 	 * @param text The text to append.
 	 * @param style The style to use.
@@ -113,14 +124,49 @@ class ConsoleTextArea extends JTextPane {
 		if (!text.endsWith("\n")) {
 			text += "\n";
 		}
-		Document doc = getDocument();
-		int end = doc.getLength();
-		try {
-			doc.insertString(end, text, getStyle(style));
-		} catch (BadLocationException ble) { // Never happens
-			ble.printStackTrace();
+		appendImpl(text, style);
+	}
+
+
+	/**
+	 * Handles updating of the text component.  This method is thread-safe.
+	 *
+	 * @param text The text to append.
+	 * @param style The style to apply to the appended text.
+	 */
+	private void appendImpl(final String text, final String style) {
+		if (SwingUtilities.isEventDispatchThread()) {
+			Document doc = getDocument();
+			int end = doc.getLength();
+			try {
+				doc.insertString(end, text, getStyle(style));
+			} catch (BadLocationException ble) { // Never happens
+				ble.printStackTrace();
+			}
+			setCaretPosition(doc.getLength());
+			inputMinOffs = getCaretPosition();
 		}
-		setCaretPosition(doc.getLength());
+		else {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					appendImpl(text, style);
+				}
+			});
+		}
+	}
+
+
+	/**
+	 * Appends the prompt to the console, and resets the starting location
+	 * at which the user can input text.  This method is thread-safe.
+	 */
+	private void appendPrompt() {
+		String prompt = pwd.getName();
+		if (prompt.length()==0) { // Root directory
+			prompt = pwd.getAbsolutePath();
+		}
+		prompt += File.separatorChar=='/' ? "$ " : "> ";
+		appendImpl(prompt, STYLE_PROMPT);
 	}
 
 
@@ -161,14 +207,82 @@ class ConsoleTextArea extends JTextPane {
 
 
 	/**
+	 * Handles the built-in "cd" command.
+	 *
+	 * @param text The full command line entered.
+	 */
+	private void handleCd(String text) {
+
+		Pattern p = Pattern.compile("cd\\s+([^\\s]+|\\\".+\\\")$");
+		Matcher m = p.matcher(text);
+		if (!m.matches()) {
+			append(plugin.getString("Error.IncorrectParamCount", CD),
+									STYLE_STDERR);
+			appendPrompt();
+			return;
+		}
+
+		String dir = m.group(1);
+		if (dir.startsWith("\"") && dir.endsWith("\"")) {
+			dir = dir.substring(1, dir.length()-1);
+		}
+		File temp = new File(pwd, dir).getAbsoluteFile();
+		if (temp.isDirectory()) {
+			// Pretty up the directory path, needed for cd's when launching
+			try {
+				pwd = temp.getCanonicalFile();
+			} catch (IOException ioe) {
+				StringWriter sw = new StringWriter();
+				ioe.printStackTrace(new PrintWriter(sw));
+				text = sw.toString();
+				append(text, STYLE_EXCEPTION);
+			}
+		}
+		else if (temp.exists()) {
+			append(plugin.getString("Error.NotADirectory", CD, dir),
+					STYLE_STDERR);
+		}
+		else {
+			append(plugin.getString("Error.DirDoesNotExist", CD, dir),
+					STYLE_STDERR);
+		}
+
+		appendPrompt();
+
+	}
+
+
+	/**
+	 * Handles the built-in "pwd" command.
+	 *
+	 * @param text The full command line entered.
+	 */
+	private void handlePwd(String text) {
+
+		if (!text.equals(PWD)) {
+			append(plugin.getString("Error.IncorrectParamCount", PWD),
+					STYLE_STDERR);
+			appendPrompt();
+			return;
+		}
+
+		append(pwd.getAbsolutePath(), STYLE_STDOUT);
+		appendPrompt();
+
+	}
+
+
+	/**
 	 * Installs the styles used by this text component.
 	 */
 	private void installStyles() {
 
 		setFont(RTextArea.getDefaultFont());
 
-		Style stdin = addStyle(STYLE_STDIN, null);
-		StyleConstants.setForeground(stdin, new Color(0,192,0));
+		Style prompt = addStyle(STYLE_PROMPT, null);
+		StyleConstants.setForeground(prompt, new Color(0,192,0));
+
+		/*Style stdin = */addStyle(STYLE_STDIN, null); // Default text color
 
 		Style stdout = addStyle(STYLE_STDOUT, null);
 		StyleConstants.setForeground(stdout, Color.blue);
@@ -183,36 +297,6 @@ class ConsoleTextArea extends JTextPane {
 
 
 	/**
-	 * Returns whether the specified offset is the beginning of the last line.
-	 *
-	 * @param offs the offset to check.
-	 * @return Whether the offset is the start offset of the last line.
-	 */
-	private boolean isLastLineStartOffs(int offs) {
-		Document doc = getDocument();
-		Element root = doc.getDefaultRootElement();
-		int line = root.getElementIndex(offs);
-		Element elem = root.getElement(line);
-		return line==root.getElementCount()-1 && offs==elem.getStartOffset();
-	}
-
-
-	/**
-	 * Returns whether the specified offset is on the last line of this text
-	 * component.
-	 *
-	 * @param offs The offset.
-	 * @return Whether the offset is on the last line.
-	 */
-	private boolean isOnLastLine(int offs) {
-		Document doc = getDocument();
-		Element root = doc.getDefaultRootElement();
-		int lastLine = root.getElementCount() - 1;
-		return root.getElementIndex(offs)==lastLine;
-	}
-
-
-	/**
 	 * Overridden to only allow the user to edit text they have entered (i.e.
 	 * they can only edit "stdin").
 	 *
@@ -221,11 +305,10 @@ class ConsoleTextArea extends JTextPane {
 	public void replaceSelection(String text) {
 
 		int start = getSelectionStart();
-		int end = getSelectionEnd();
 		Document doc = getDocument();
 
 		// Don't let the user remove any text they haven't typed (stdin).
-		if (!(isOnLastLine(start) && isOnLastLine(end))) {
+		if (start<inputMinOffs) {
 			setCaretPosition(doc.getLength());
 		}
 
@@ -365,9 +448,7 @@ class ConsoleTextArea extends JTextPane {
 
 		public void actionPerformed(ActionEvent e) {
 			int start = getSelectionStart();
-			int end = getSelectionEnd();
-			if ((start==end && isLastLineStartOffs(start)) ||
-					!(isOnLastLine(start) && isOnLastLine(end))) {
+			if (start<=inputMinOffs) {
 				UIManager.getLookAndFeel().
 							provideErrorFeedback(ConsoleTextArea.this);
 				setCaretPosition(getDocument().getLength());
@@ -397,8 +478,7 @@ class ConsoleTextArea extends JTextPane {
 
 		public void actionPerformed(ActionEvent e) {
 			int start = getSelectionStart();
-			int end = getSelectionEnd();
-			if (!(isOnLastLine(start) && isOnLastLine(end))) {
+			if (start<inputMinOffs) {
 				UIManager.getLookAndFeel().
 							provideErrorFeedback(ConsoleTextArea.this);
 			}
@@ -438,27 +518,33 @@ class ConsoleTextArea extends JTextPane {
 
 	private class ProcessOutputListener implements ProcessRunnerOutputListener{
 
-		public void outputWritten(Process p, String output, boolean stdout) {
+		public void outputWritten(Process p, final String output, final boolean stdout) {
 			append(output, stdout ? STYLE_STDOUT : STYLE_STDERR);
 		}
 
-		public void processCompleted(Process p, int rc, Throwable e) {
-			if (e!=null) {
-				String text = null;
-				if (e instanceof InterruptedException) {
-					text = plugin.getString("ProcessForciblyTerminated");
+		public void processCompleted(Process p, int rc, final Throwable e) {
+			// Required because of other Swing calls we make inside
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					if (e!=null) {
+						String text = null;
+						if (e instanceof InterruptedException) {
+							text = plugin.getString("ProcessForciblyTerminated");
+						}
+						else {
+							StringWriter sw = new StringWriter();
+							e.printStackTrace(new PrintWriter(sw));
+							text = sw.toString();
+						}
+						append(text, STYLE_EXCEPTION);
+					}
+					// Not really necessary, should allow GC of Process resources
+					activeProcessThread = null;
+					appendPrompt();
+					setEditable(true);
+					firePropertyChange(PROPERTY_PROCESS_RUNNING, true, false);
 				}
-				else {
-					StringWriter sw = new StringWriter();
-					e.printStackTrace(new PrintWriter(sw));
-					text = sw.toString();
-				}
-				append(text, STYLE_EXCEPTION);
-			}
-			// Not really necessary, should allow GC of Process resources
-			activeProcessThread = null;
-			setEditable(true);
-			firePropertyChange(PROPERTY_PROCESS_RUNNING, true, false);
+			});
 		}
 
 	}
@@ -471,36 +557,64 @@ class ConsoleTextArea extends JTextPane {
 
 		public void actionPerformed(ActionEvent e) {
 
+			int dot = getCaretPosition();
+			if (dot<inputMinOffs) {
+				UIManager.getLookAndFeel().provideErrorFeedback(
+													ConsoleTextArea.this);
+				return;
+			}
+
 			Document doc = getDocument();
-			Element root = doc.getDefaultRootElement();
-			int lastLine = root.getElementCount() - 1;
-			Element elem = root.getElement(lastLine);
-			int startOffs = elem.getStartOffset();
+			int startOffs = inputMinOffs;
 			int len = doc.getLength() - startOffs;
 			ConsoleTextArea.super.replaceSelection("\n");
 
 			// If they didn't enter any text, don't launch a process
-			if (len==/*promptLen*/0) {
+			if (len==0) {
+				return;
+			}
+			String text = null;
+			try {
+				text = getText(startOffs, len).trim();
+			} catch (BadLocationException ble) { // Never happens
+				ble.printStackTrace();
+				return;
+			}
+			if (text.length()==0) {
 				return;
 			}
 
-			List cmdList = new ArrayList();
-			if (File.separatorChar=='/') {
-				cmdList.add("/bin/sh");
-				cmdList.add("-c");
+			// Check for a built-in command first
+			String[] input = text.split("\\s+");
+			if (CD.equals(input[0])) {
+				handleCd(text);
 			}
+			else if (PWD.equals(input[0])) {
+				handlePwd(text);
+			}
+
+			// Not a built-in command - launch an external process in a shell
 			else {
-				cmdList.add("cmd.exe");
-				cmdList.add("/c");
-			}
 
-			try {
-
-				String text = getText(startOffs, len).trim();
-				if (text.length()==0) {
-					// If they only entered whitespace, don't launch a process
+				// Ensure our directory wasn't deleted out from under us.
+				if (!pwd.isDirectory()) {
+					append(plugin.getString("Error.CurrentDirectoryDNE",
+							pwd.getAbsolutePath()), STYLE_STDERR);
+					appendPrompt();
 					return;
 				}
+
+				List cmdList = new ArrayList();
+				if (File.separatorChar=='/') {
+					cmdList.add("/bin/sh");
+					cmdList.add("-c");
+				}
+				else {
+					cmdList.add("cmd.exe");
+					cmdList.add("/c");
+				}
+				text = "cd " + pwd.getAbsolutePath() + " && " + text;
+
 				cmdList.add(text);
 				final String[] cmd = (String[])cmdList.toArray(new String[] {});
 
@@ -508,6 +622,7 @@ class ConsoleTextArea extends JTextPane {
 				activeProcessThread = new Thread() {
 					public void run() {
 						ProcessRunner pr = new ProcessRunner(cmd);
+						pr.setDirectory(pwd);
 						pr.setOutputListener(new ProcessOutputListener());
 						pr.run();
 					}
@@ -516,8 +631,6 @@ class ConsoleTextArea extends JTextPane {
 									PROPERTY_PROCESS_RUNNING, false, true);
 				activeProcessThread.start();
 
-			} catch (BadLocationException ble) {
-				ble.printStackTrace();
 			}
 
 		}

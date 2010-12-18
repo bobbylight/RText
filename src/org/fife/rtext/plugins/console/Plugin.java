@@ -26,6 +26,7 @@ package org.fife.rtext.plugins.console;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.Action;
@@ -133,9 +134,42 @@ public class Plugin implements org.fife.ui.app.Plugin {
 	 *
 	 * @param key The key.
 	 * @return The localized message.
+	 * @see #getString(String, String)
+	 * @see #getString(String, String, String)
 	 */
 	public String getString(String key) {
 		return msg.getString(key);
+	}
+
+
+	/**
+	 * Returns a localized message.
+	 *
+	 * @param key The key.
+	 * @param param A parameter for the localized message.
+	 * @return The localized message.
+	 * @see #getString(String)
+	 * @see #getString(String, String, String)
+	 */
+	public String getString(String key, String param) {
+		String temp = msg.getString(key);
+		return MessageFormat.format(temp, new String[] { param });
+	}
+
+
+	/**
+	 * Returns a localized message.
+	 *
+	 * @param key The key.
+	 * @param param1 A parameter for the localized message.
+	 * @param param2 A parameter for the localized message.
+	 * @return The localized message.
+	 * @see #getString(String)
+	 * @see #getString(String, String)
+	 */
+	public String getString(String key, String param1, String param2) {
+		String temp = msg.getString(key);
+		return MessageFormat.format(temp, new String[] { param1, param2 });
 	}
 
 
