@@ -130,6 +130,16 @@ public class Plugin implements org.fife.ui.app.Plugin {
 
 
 	/**
+	 * Returns the parent application.
+	 *
+	 * @return The parent application.
+	 */
+	public RText getRText() {
+		return app;
+	}
+
+
+	/**
 	 * Returns a localized message.
 	 *
 	 * @param key The key.
