@@ -31,15 +31,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -61,19 +53,17 @@ import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
 
-import org.fife.io.ProcessRunner;
-import org.fife.io.ProcessRunnerOutputListener;
 import org.fife.ui.rtextarea.RTextArea;
 
 
 /**
- * Text component that displays the output of a tool.  This component tries
+ * Text component that displays a console of some type.  This component tries
  * to mimic jEdit's "Console" behavior, since that seemed to work pretty well.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class ConsoleTextArea extends JTextPane {
+abstract class ConsoleTextArea extends JTextPane {
 
 	/**
 	 * Property change event fired whenever a process is launched or
@@ -81,29 +71,18 @@ class ConsoleTextArea extends JTextPane {
 	 */
 	public static final String PROPERTY_PROCESS_RUNNING	= "ProcessRunning";
 
-	private static final String STYLE_PROMPT			= "prompt";
-	private static final String STYLE_STDIN				= "stdin";
-	private static final String STYLE_STDOUT			= "stdout";
-	private static final String STYLE_STDERR			= "stderr";
-	private static final String STYLE_EXCEPTION			= "exception";
+	protected static final String STYLE_PROMPT			= "prompt";
+	protected static final String STYLE_STDIN			= "stdin";
+	protected static final String STYLE_STDOUT			= "stdout";
+	protected static final String STYLE_STDERR			= "stderr";
+	protected static final String STYLE_EXCEPTION		= "exception";
 
-	private Plugin plugin;
+	protected Plugin plugin;
 	private JPopupMenu popup;
 	private Listener listener;
-	private transient Thread activeProcessThread;
-	private File pwd;
-	private File prevDir;
 	private int inputMinOffs;
 	private LinkedList cmdHistory;
 	private int cmdHistoryIndex;
-
-	private static final String CD						= "cd";
-	private static final String CLS						= "cls";
-	private static final String CLEAR					= "clear";
-	private static final String EDIT					= "edit";
-	private static final String LIST_COMMANDS			= "$list";
-	private static final String OPEN					= "open";
-	private static final String PWD						= "pwd";
 
 	/**
 	 * The maximum number of commands the user can recall.
@@ -126,8 +105,7 @@ class ConsoleTextArea extends JTextPane {
 		fixKeyboardShortcuts();
 		listener = new Listener();
 		addMouseListener(listener);
-		pwd = new File(System.getProperty("user.home"));
-		prevDir = pwd;
+		init();
 		clear(); // Appends note about built-in commands and prompt
 		cmdHistory = new LinkedList();
 	}
@@ -156,7 +134,7 @@ class ConsoleTextArea extends JTextPane {
 	 * @param text The text to append.
 	 * @param style The style to apply to the appended text.
 	 */
-	private void appendImpl(final String text, final String style) {
+	protected void appendImpl(final String text, final String style) {
 
 		// Ensure the meat of this method is done on th EDT, to prevent
 		// concurrency errors.
@@ -202,25 +180,18 @@ class ConsoleTextArea extends JTextPane {
 	 * Appends the prompt to the console, and resets the starting location
 	 * at which the user can input text.  This method is thread-safe.
 	 */
-	private void appendPrompt() {
-		String prompt = pwd.getName();
-		if (prompt.length()==0) { // Root directory
-			prompt = pwd.getAbsolutePath();
-		}
-		prompt += File.separatorChar=='/' ? "$ " : "> ";
-		appendImpl(prompt, STYLE_PROMPT);
-	}
+	public abstract void appendPrompt();
 
 
 	/**
 	 * Clears this console.  This should only be called on the EDT.
 	 */
-	private void clear() {
+	public void clear() {
 		Document doc = getDocument();
 		setSelectionStart(0);
 		setSelectionEnd(doc.getLength());
 		super.replaceSelection(null);
-		append(plugin.getString("Usage.Note"), STYLE_STDIN);
+		append(getUsageNote(), STYLE_STDIN);
 		appendPrompt();
 	}
 
@@ -271,179 +242,26 @@ class ConsoleTextArea extends JTextPane {
 
 
 	/**
-	 * Returns the root directory containing the specified file.
+	 * Returns a usage note for this particular shell.
 	 *
-	 * @param file The file.
-	 * @return The file's root directory, or null if we're on Windows and
-	 *         this is an NFS path.
+	 * @return The usage note.
 	 */
-	private File getRootDir(File file) {
-
-		File root = null;
-
-		if (File.separatorChar=='/') {
-			root = new File("/");
-		}
-		else {
-			String temp = file.getAbsolutePath();
-			int colon = temp.indexOf(':');
-			if (colon>-1) { // Should be '1' except for NFS paths
-				root = new File(temp.substring(0, colon+1) + "\\");
-			}
-		}
-
-		return root;
-
-	}
+	protected abstract String getUsageNote();
 
 
 	/**
-	 * Handles the built-in "cd" command.
+	 * Handles the submit of text entered by the user.
 	 *
-	 * @param text The full command line entered.
+	 * @param text The text entered by the user.
 	 */
-	private void handleCd(String text) {
-
-		Pattern p = Pattern.compile("cd\\s+([^\\s]+|\\\".+\\\")$");
-		Matcher m = p.matcher(text);
-		if (!m.matches()) {
-			append(plugin.getString("Error.IncorrectParamCount", CD),
-									STYLE_STDERR);
-			appendPrompt();
-			return;
-		}
-
-		// Get the directory name, stripping off any surrounding quotes
-		String dir = m.group(1);
-		if (dir.startsWith("\"") && dir.endsWith("\"")) {
-			dir = dir.substring(1, dir.length()-1);
-		}
-
-		// Special directories
-		if ("-".equals(dir)) {
-			dir = prevDir.getAbsolutePath();
-		}
-		else if ("~".equals(dir)) {
-			dir = System.getProperty("user.home");
-		}
-		else if ("\\".equals(dir) || "/".equals(dir)) {
-			File temp = getRootDir(pwd);
-			if (temp==null) {
-				append(plugin.getString("Error.CantFindRootDir", CD),
-										STYLE_STDERR);
-				appendPrompt();
-				return;
-			}
-			dir = temp.getAbsolutePath();
-		}
-
-		// If the path entered is not absolute, it should be relative to the
-		// current working directory.
-		File temp = new File(dir);
-		if (!temp.isAbsolute()) {
-			temp = new File(pwd, dir).getAbsoluteFile();
-		}
-
-		if (temp.isDirectory()) {
-			prevDir = pwd;
-			// Pretty up the directory path, needed for cd's when launching
-			try {
-				pwd = temp.getCanonicalFile();
-			} catch (IOException ioe) {
-				StringWriter sw = new StringWriter();
-				ioe.printStackTrace(new PrintWriter(sw));
-				text = sw.toString();
-				append(text, STYLE_EXCEPTION);
-			}
-		}
-		else if (temp.exists()) {
-			append(plugin.getString("Error.NotADirectory", CD, dir),
-					STYLE_STDERR);
-		}
-		else {
-			append(plugin.getString("Error.DirDoesNotExist", CD, dir),
-					STYLE_STDERR);
-		}
-
-		appendPrompt();
-
-	}
+	protected abstract void handleSubmit(String text);
 
 
 	/**
-	 * Handles the built-in "$list" command.
+	 * Allows constructors to do stuff before the initial {@link #clear()}
+	 * call is made.  The default implementation does nothing.
 	 */
-	private void handleListCommands() {
-		append(plugin.getString("Usage.CommandListing"), STYLE_STDOUT);
-		appendPrompt();
-	}
-
-
-	/**
-	 * Handles the built-in "open" and "edit" commands.
-	 *
-	 * @param text The full command line entered.
-	 */
-	private void handleOpen(String text) {
-
-		Pattern p = Pattern.compile("(\\w+)\\s+([^\\s]+|\\\".+\\\")$");
-		Matcher m = p.matcher(text);
-		if (!m.matches()) {
-			append(plugin.getString("Error.IncorrectParamCount", EDIT),
-									STYLE_STDERR);
-			appendPrompt();
-			return;
-		}
-
-		// Get the command, since we allow both "open" and "edit".
-		String cmd = m.group(1);
-
-		// Get the file name, stripping off any surrounding quotes
-		String dir = m.group(2);
-		if (dir.startsWith("\"") && dir.endsWith("\"")) {
-			dir = dir.substring(1, dir.length()-1);
-		}
-
-		// If the path entered is not absolute, it should be relative to the
-		// current working directory.
-		File temp = new File(dir);
-		if (!temp.isAbsolute()) {
-			temp = new File(pwd, dir).getAbsoluteFile();
-		}
-
-		if (temp.isFile()) {
-			(plugin.getRText()).openFile(temp.getAbsolutePath());
-		}
-		else if (temp.exists()) {
-			append(plugin.getString("Error.NotAFile", cmd, dir), STYLE_STDERR);
-		}
-		else {
-			append(plugin.getString("Error.FileDoesNotExist", cmd, dir),
-					STYLE_STDERR);
-		}
-
-		appendPrompt();
-
-	}
-
-
-	/**
-	 * Handles the built-in "pwd" command.
-	 *
-	 * @param text The full command line entered.
-	 */
-	private void handlePwd(String text) {
-
-		if (!text.equals(PWD)) {
-			append(plugin.getString("Error.IncorrectParamCount", PWD),
-					STYLE_STDERR);
-			appendPrompt();
-			return;
-		}
-
-		append(pwd.getAbsolutePath(), STYLE_STDOUT);
-		appendPrompt();
-
+	protected void init() {
 	}
 
 
@@ -559,17 +377,6 @@ class ConsoleTextArea extends JTextPane {
 
 		popup.show(this, e.getX(), e.getY());
 
-	}
-
-
-	/**
-	 * Stops the currently running process, if any.
-	 */
-	public void stopCurrentProcess() {
-		if (activeProcessThread!=null && activeProcessThread.isAlive()) {
-			activeProcessThread.interrupt();
-			activeProcessThread = null;
-		}
 	}
 
 
@@ -729,44 +536,6 @@ class ConsoleTextArea extends JTextPane {
 
 
 	/**
-	 * Listens for output from the currently active process and appends it
-	 * to the console.
-	 */
-	private class ProcessOutputListener implements ProcessRunnerOutputListener{
-
-		public void outputWritten(Process p, String output, boolean stdout) {
-			append(output, stdout ? STYLE_STDOUT : STYLE_STDERR);
-		}
-
-		public void processCompleted(Process p, int rc, final Throwable e) {
-			// Required because of other Swing calls we make inside
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					if (e!=null) {
-						String text = null;
-						if (e instanceof InterruptedException) {
-							text = plugin.getString("ProcessForciblyTerminated");
-						}
-						else {
-							StringWriter sw = new StringWriter();
-							e.printStackTrace(new PrintWriter(sw));
-							text = sw.toString();
-						}
-						append(text, STYLE_EXCEPTION);
-					}
-					// Not really necessary, should allow GC of Process resources
-					activeProcessThread = null;
-					appendPrompt();
-					setEditable(true);
-					firePropertyChange(PROPERTY_PROCESS_RUNNING, true, false);
-				}
-			});
-		}
-
-	}
-
-
-	/**
 	 * Called when the user presses Enter.  Submits the command they entered.
 	 */
 	private class SubmitAction extends AbstractAction {
@@ -802,74 +571,9 @@ class ConsoleTextArea extends JTextPane {
 				return;
 			}
 
-			// Check for a built-in command first
-			String[] input = text.split("\\s+");
-			boolean builtin = false;
-			if (CD.equals(input[0])) {
-				builtin = true;
-				handleCd(text);
-			}
-			else if (CLS.equals(input[0]) || CLEAR.equals(input[0])) {
-				builtin = true;
-				clear();
-			}
-			else if (EDIT.equals(input[0]) || OPEN.equals(input[0])) {
-				builtin = true;
-				handleOpen(text);
-			}
-			else if (LIST_COMMANDS.equals(input[0])) {
-				builtin = true;
-				handleListCommands();
-			}
-			else if (PWD.equals(input[0])) {
-				builtin = true;
-				handlePwd(text);
-			}
-
-			// Not a built-in command - launch an external process in a shell
-			else {
-
-				// Ensure our directory wasn't deleted out from under us.
-				if (!pwd.isDirectory()) {
-					append(plugin.getString("Error.CurrentDirectoryDNE",
-							pwd.getAbsolutePath()), STYLE_STDERR);
-					appendPrompt();
-					return;
-				}
-
-				List cmdList = new ArrayList();
-				if (File.separatorChar=='/') {
-					cmdList.add("/bin/sh");
-					cmdList.add("-c");
-				}
-				else {
-					cmdList.add("cmd.exe");
-					cmdList.add("/c");
-				}
-				text = "cd " + pwd.getAbsolutePath() + " && " + text;
-
-				cmdList.add(text);
-				final String[] cmd = (String[])cmdList.toArray(new String[] {});
-
-				setEditable(false);
-				activeProcessThread = new Thread() {
-					public void run() {
-						ProcessRunner pr = new ProcessRunner(cmd);
-						pr.setDirectory(pwd);
-						pr.setOutputListener(new ProcessOutputListener());
-						pr.run();
-					}
-				};
-				ConsoleTextArea.this.firePropertyChange(
-									PROPERTY_PROCESS_RUNNING, false, true);
-				activeProcessThread.start();
-
-			}
+			handleSubmit(text);
 
 			// Update the command history
-			if (!builtin) {
-				text = text.substring(text.indexOf("&& ")+3); // Strip off "cd"
-			}
 			cmdHistory.add(text);
 			if (cmdHistory.size()>MAX_COMMAND_HISTORY_SIZE) {
 				// We only add one at a time, so only ever have to remove one

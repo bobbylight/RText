@@ -25,9 +25,17 @@
 package org.fife.rtext.plugins.console;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
+import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
@@ -45,9 +53,13 @@ public class ConsoleWindow extends DockableWindow
 							implements PropertyChangeListener {
 
 //	private Plugin plugin;
-	private ConsoleTextArea textArea;
+	private CardLayout cards;
+	private JPanel mainPanel;
+	private SystemShellTextArea shellTextArea;
+	private JavaScriptShellTextArea jsTextArea;
 
 	private JToolBar toolbar;
+	private JComboBox shellCombo;
 	private StopAction stopAction;
 
 
@@ -59,19 +71,47 @@ public class ConsoleWindow extends DockableWindow
 		setPosition(DockableWindow.BOTTOM);
 		setLayout(new BorderLayout());
 
+		Listener listener = new Listener();
+
+		// Create the main panel, containing the shells.
+		cards = new CardLayout();
+		mainPanel = new JPanel(cards);
+		add(mainPanel);
+
+		shellTextArea = new SystemShellTextArea(plugin);
+		shellTextArea.addPropertyChangeListener(
+							ConsoleTextArea.PROPERTY_PROCESS_RUNNING, this);
+		JScrollPane sp = new JScrollPane(shellTextArea);
+		mainPanel.add(sp, "System");
+
+		jsTextArea = new JavaScriptShellTextArea(plugin);
+		sp = new JScrollPane(jsTextArea);
+		mainPanel.add(sp, "JavaScript");
+
+		// Create a "toolbar" for the shells.
 		toolbar = new JToolBar();
 		toolbar.setFloatable(false);
+
+		JLabel label = new JLabel(plugin.getString("Shell"));
+		Box temp = Box.createHorizontalBox();
+		temp.add(label);
+		temp.add(Box.createHorizontalStrut(5));
+		shellCombo = new JComboBox();
+		shellCombo.addItemListener(listener);
+		shellCombo.addItem(plugin.getString("System"));
+		shellCombo.addItem(plugin.getString("JavaScript"));
+		temp.add(shellCombo);
+		temp.add(Box.createHorizontalGlue());
+		JPanel temp2 = new JPanel(new BorderLayout());
+		temp2.add(temp, BorderLayout.LINE_START);
+		toolbar.add(temp2);
+		toolbar.add(Box.createHorizontalGlue());
+
 		stopAction = new StopAction(app, Plugin.msg, plugin);
 		JButton b = new JButton(stopAction);
 		b.setText(null);
 		toolbar.add(b);
 		add(toolbar, BorderLayout.NORTH);
-
-		textArea = new ConsoleTextArea(plugin);
-		textArea.addPropertyChangeListener(
-							ConsoleTextArea.PROPERTY_PROCESS_RUNNING, this);
-		JScrollPane sp = new JScrollPane(textArea);
-		add(sp);
 
 	}
 
@@ -95,7 +135,30 @@ public class ConsoleWindow extends DockableWindow
 	 * Stops the currently running process, if any.
 	 */
 	public void stopCurrentProcess() {
-		textArea.stopCurrentProcess();
+		shellTextArea.stopCurrentProcess();
+	}
+
+
+	/**
+	 * Listens for events in this dockable window.
+	 */
+	private class Listener implements ItemListener {
+
+		public void itemStateChanged(ItemEvent e) {
+
+			JComboBox source = (JComboBox)e.getSource();
+			if (source==shellCombo) {
+				int index = shellCombo.getSelectedIndex();
+				if (index==0) {
+					cards.show(mainPanel, "System");
+				}
+				else {
+					cards.show(mainPanel, "JavaScript");
+				}
+			}
+
+		}
+
 	}
 
 
