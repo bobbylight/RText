@@ -25,8 +25,10 @@
  */
 package org.fife.rtext.plugins.console;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -135,11 +137,13 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 			Class semClazz = Class.forName("javax.script.ScriptEngineManager");
 			Object sem = semClazz.newInstance();
 
+			// Get the Rhino engine.
 			Method m = semClazz.getDeclaredMethod("getEngineByName",
 										new Class[] { String.class });
 			jsEngine = m.invoke(sem, new Object[] { "JavaScript" });
 			seClazz = Class.forName("javax.script.ScriptEngine");
 
+			// Create our bindings and cache them for later.
 			m = seClazz.getDeclaredMethod("createBindings", null);
 			bindings = m.invoke(jsEngine, null);
 			Class bindingsClazz = Class.forName("javax.script.Bindings");
@@ -156,10 +160,60 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 			bindingsPut = bindingsClazz.getDeclaredMethod("put",
 								new Class[] { String.class, Object.class });
 
+			// Write stdout and stderr to this console.  Must wrap these in
+			// PrintWriters for standard print() and println() methods to work.
+			m = seClazz.getDeclaredMethod("getContext", null);
+			Object context = m.invoke(jsEngine, null);
+			m = scriptContextClazz.getDeclaredMethod("setWriter",
+											new Class[] { Writer.class });
+			PrintWriter w = new PrintWriter(new OutputWriter(STYLE_STDOUT));
+			m.invoke(context, new Object[] { w });
+			m = scriptContextClazz.getDeclaredMethod("setErrorWriter",
+					new Class[] { Writer.class });
+			w = new PrintWriter(new OutputWriter(STYLE_STDERR));
+			m.invoke(context, new Object[] { w });
+
+			// Import commonly-used packages.  Do this before stdout and stderr
+			// redirecting so the user won't see it in their console.
+			handleSubmit("importPackage(java.lang)");
+			handleSubmit("importPackage(java.io)");
+			handleSubmit("importPackage(java.util)");
+			handleSubmit("importPackage(java.awt)");
+			handleSubmit("importPackage(javax.swing)");
+			handleSubmit("importPackage(org.fife.rtext)");
+			handleSubmit("importPackage(org.fife.ui.rtextarea)");
+			handleSubmit("importPackage(org.fife.ui.rsyntaxtextarea)");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+	}
+
+
+	/**
+	 * Listens for output from the script and prints it to this console.
+	 */
+	private class OutputWriter extends Writer {
+
+		private String style;
+
+		public OutputWriter(String style) {
+			this.style = style;
+		}
+
+		public void close() throws IOException {
+			// Do nothing
+		}
+
+		public void flush() throws IOException {
+			// Do nothing
+		}
+
+		public void write(char[] buf, int off, int len) {
+			append(new String(buf, off, len), style);
+		}
+		
 	}
 
 

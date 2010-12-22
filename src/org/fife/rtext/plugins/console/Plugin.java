@@ -91,9 +91,21 @@ public class Plugin implements org.fife.ui.app.Plugin {
 	}
 
 
+	/**
+	 * Returns the dockable window containing the consoles.
+	 *
+	 * @return The dockable window.
+	 */
+	public ConsoleWindow getDockableWindow() {
+		return window;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ConsoleOptionPanel(this);
 	}
 
 

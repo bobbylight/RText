@@ -53,6 +53,7 @@ import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
 
+import org.fife.ui.OptionsDialog;
 import org.fife.ui.rtextarea.RTextArea;
 
 
@@ -232,6 +233,17 @@ abstract class ConsoleTextArea extends JTextPane {
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "down");
 		am.put("down", new CommandHistoryAction(1));
 
+		// Home - go to start of input area (right after prompt)
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0), "home");
+		delegate = am.get(DefaultEditorKit.beginLineAction);
+		am.put("home", new HomeAction(delegate, false));
+
+		// Shift+Home - Select to start of input area (right after prompt)
+		int shift = InputEvent.SHIFT_MASK;
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, shift), "shiftHome");
+		delegate = am.get(DefaultEditorKit.selectionBeginLineAction);
+		am.put("shiftHome", new HomeAction(delegate, true));
+
 		// Enter - submit command entered
 		int mod = 0;//InputEvent.CTRL_MASK;
 		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, mod);
@@ -373,6 +385,8 @@ abstract class ConsoleTextArea extends JTextPane {
 			popup.add(new JMenuItem(new CopyAllAction()));
 			popup.addSeparator();
 			popup.add(new JMenuItem(new ClearAllAction()));
+			popup.addSeparator();
+			popup.add(new JMenuItem(new ConfigureAction()));
 		}
 
 		popup.show(this, e.getX(), e.getY());
@@ -403,6 +417,25 @@ abstract class ConsoleTextArea extends JTextPane {
 		public void actionPerformed(ActionEvent e) {
 			setText(null);
 		}
+	}
+
+
+	/**
+	 * Brings up the options dialog panel for this plugin.
+	 */
+	private class ConfigureAction extends AbstractAction {
+
+		public ConfigureAction() {
+			putValue(NAME, plugin.getString("Action.Configure"));
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			OptionsDialog od = plugin.getRText().getOptionsDialog();
+			od.initialize();
+			od.setSelectedOptionsPanel(plugin.getString("Plugin.Name"));
+			od.setVisible(true);
+		}
+
 	}
 
 
@@ -510,6 +543,37 @@ abstract class ConsoleTextArea extends JTextPane {
 
 
 	/**
+	 * Moves the caret to the beginning of the input area.
+	 */
+	private class HomeAction extends AbstractAction {
+
+		private Action delegate;
+		private boolean select;
+
+		public HomeAction(Action delegate, boolean select) {
+			this.delegate = delegate;
+			this.select = select;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			if (select) {
+				int dot = getCaretPosition();
+				if (dot>=inputMinOffs) {
+					moveCaretPosition(inputMinOffs);
+				}
+				else { // Gotta do something - just do default
+					delegate.actionPerformed(e);
+				}
+			}
+			else {
+				setCaretPosition(inputMinOffs);
+			}
+		}
+
+	}
+
+
+	/**
 	 * Listens for events in this text area.
 	 */
 	private class Listener extends MouseAdapter {
@@ -552,6 +616,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			Document doc = getDocument();
 			int startOffs = inputMinOffs;
 			int len = doc.getLength() - startOffs;
+			setCaretPosition(doc.getLength()); // Might be in middle of line
 			ConsoleTextArea.super.replaceSelection("\n");
 
 			// If they didn't enter any text, don't launch a process

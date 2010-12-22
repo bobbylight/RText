@@ -143,8 +143,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 
 
 	/**
-	 * Updates the file system tree plugin's parameters to reflect those in
-	 * this options panel.
+	 * {@inheritDoc}
 	 */
 	protected void doApplyImpl(Frame owner) {
 		FileSystemTreePlugin p = (FileSystemTreePlugin)getPlugin();
