@@ -24,6 +24,7 @@
  */
 package org.fife.rtext.plugins.console;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
@@ -40,6 +41,7 @@ import javax.swing.event.PopupMenuListener;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.StandardAction;
@@ -84,9 +86,20 @@ public class Plugin implements org.fife.ui.app.Plugin {
 			}
 		}
 
+		ConsolePrefs prefs = loadPrefs();
+
 		StandardAction a = new ViewConsoleAction(this.app, msg, this);
-//		a.setAccelerator(prefs.windowVisibilityAccelerator);
+		a.setAccelerator(prefs.windowVisibilityAccelerator);
 		this.app.addAction(VIEW_CONSOLE_ACTION, a);
+
+		window = new ConsoleWindow(this.app, this);
+		window.setPosition(prefs.windowPosition);
+		window.setActive(prefs.windowVisible);
+
+		window.setForeground(ConsoleTextArea.STYLE_EXCEPTION, prefs.exceptionFG);
+		window.setForeground(ConsoleTextArea.STYLE_PROMPT, prefs.promptFG);
+		window.setForeground(ConsoleTextArea.STYLE_STDERR, prefs.stderrFG);
+		window.setForeground(ConsoleTextArea.STYLE_STDOUT, prefs.stdoutFG);
 
 	}
 
@@ -138,6 +151,17 @@ public class Plugin implements org.fife.ui.app.Plugin {
 	 */
 	public String getPluginVersion() {
 		return VERSION;
+	}
+
+
+	/**
+	 * Returns the file preferences for this plugin are saved in.
+	 *
+	 * @return The file.
+	 */
+	private File getPrefsFile() {
+		return new File(RTextUtilities.getPreferencesDirectory(),
+						"console.properties");
 	}
 
 
@@ -221,7 +245,7 @@ public class Plugin implements org.fife.ui.app.Plugin {
 		});
 
 
-		setConsoleWindowVisible(true);
+		rtext.addDockableWindow(window);
 
 	}
 
@@ -237,8 +261,49 @@ public class Plugin implements org.fife.ui.app.Plugin {
 	}
 
 
+	/**
+	 * Loads saved preferences.  If this is the first time through, default
+	 * values will be returned.
+	 *
+	 * @return The preferences.
+	 */
+	private ConsolePrefs loadPrefs() {
+		ConsolePrefs prefs = new ConsolePrefs();
+		File prefsFile = getPrefsFile();
+		if (prefsFile.isFile()) {
+			try {
+				prefs.load(prefsFile);
+			} catch (IOException ioe) {
+				app.displayException(ioe);
+				// (Some) defaults will be used
+			}
+		}
+		return prefs;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public void savePreferences() {
-		// TODO Auto-generated method stub
+
+		ConsolePrefs prefs = new ConsolePrefs();
+		prefs.windowPosition = window.getPosition();
+		StandardAction a = (StandardAction)app.getAction(VIEW_CONSOLE_ACTION);
+		prefs.windowVisibilityAccelerator = a.getAccelerator();
+		prefs.windowVisible = window.isActive();
+
+		prefs.exceptionFG = window.getForeground(ConsoleTextArea.STYLE_EXCEPTION);
+		prefs.promptFG = window.getForeground(ConsoleTextArea.STYLE_PROMPT);
+		prefs.stderrFG = window.getForeground(ConsoleTextArea.STYLE_STDERR);
+		prefs.stdoutFG = window.getForeground(ConsoleTextArea.STYLE_STDOUT);
+
+		File prefsFile = getPrefsFile();
+		try {
+			prefs.save(prefsFile);
+		} catch (IOException ioe) {
+			app.displayException(ioe);
+		}
 
 	}
 

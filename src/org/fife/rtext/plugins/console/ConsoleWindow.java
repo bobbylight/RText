@@ -26,11 +26,11 @@ package org.fife.rtext.plugins.console;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -38,6 +38,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 
 import org.fife.rtext.RText;
 import org.fife.ui.dockablewindows.DockableWindow;
@@ -117,6 +119,27 @@ public class ConsoleWindow extends DockableWindow
 
 
 	/**
+	 * Returns the color used for a given type of text in the consoles.
+	 *
+	 * @param style The style; e.g. {@link ConsoleTextArea#STYLE_STDOUT}.
+	 * @return The color.
+	 * @see #setForeground(String, Color)
+	 */
+	public Color getForeground(String style) {
+
+		Color c = null;
+
+		Style s = jsTextArea.getStyle(style);
+		if (s!=null) {
+			c = StyleConstants.getForeground(s);
+		}
+
+		return c;
+
+	}
+
+
+	/**
 	 * Called whenever a process starts or completes.
 	 */
 	public void propertyChange(PropertyChangeEvent e) {
@@ -128,6 +151,25 @@ public class ConsoleWindow extends DockableWindow
 			stopAction.setEnabled(running);
 		}
 
+	}
+
+
+	/**
+	 * Sets the color used for a given type of text in the consoles.
+	 *
+	 * @param style The style; e.g. {@link ConsoleTextArea#STYLE_STDOUT}.
+	 * @param fg The new foreground color to use.
+	 * @see #getForeground(String)
+	 */
+	public void setForeground(String style, Color fg) {
+		Style s = jsTextArea.getStyle(style);
+		if (s!=null) {
+			StyleConstants.setForeground(s, fg);
+		}
+		s = shellTextArea.getStyle(style);
+		if (s!=null) {
+			StyleConstants.setForeground(s, fg);
+		}
 	}
 
 

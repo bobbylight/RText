@@ -66,6 +66,15 @@ import org.fife.ui.rtextarea.RTextArea;
  */
 abstract class ConsoleTextArea extends JTextPane {
 
+	public static final Color DEFAULT_PROMPT_FG		= new Color(0,192,0);
+
+	public static final Color DEFAULT_STDOUT_FG		= Color.blue;
+
+	public static final Color DEFAULT_STDERR_FG		= Color.red;
+
+	public static final Color DEFAULT_EXCEPTION_FG	= new Color(111, 49, 152);
+
+
 	/**
 	 * Property change event fired whenever a process is launched or
 	 * completes.
@@ -101,7 +110,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	public ConsoleTextArea(Plugin plugin) {
 		this.plugin = plugin;
-		installStyles();
+		installDefaultStyles();
 		setTabSize(4); // Do after installStyles()
 		fixKeyboardShortcuts();
 		listener = new Listener();
@@ -280,23 +289,23 @@ abstract class ConsoleTextArea extends JTextPane {
 	/**
 	 * Installs the styles used by this text component.
 	 */
-	private void installStyles() {
+	public void installDefaultStyles() {
 
 		setFont(RTextArea.getDefaultFont());
 
 		Style prompt = addStyle(STYLE_PROMPT, null);
-		StyleConstants.setForeground(prompt, new Color(0,192,0));
+		StyleConstants.setForeground(prompt, DEFAULT_PROMPT_FG);
 
 		/*Style stdin = */addStyle(STYLE_STDIN, null); // Default text color
 
 		Style stdout = addStyle(STYLE_STDOUT, null);
-		StyleConstants.setForeground(stdout, Color.blue);
+		StyleConstants.setForeground(stdout, DEFAULT_STDOUT_FG);
 
 		Style stderr = addStyle(STYLE_STDERR, null);
-		StyleConstants.setForeground(stderr, Color.red);
+		StyleConstants.setForeground(stderr, DEFAULT_STDERR_FG);
 
 		Style exception = addStyle(STYLE_EXCEPTION, null);
-		StyleConstants.setForeground(exception, new Color(111, 49, 152));
+		StyleConstants.setForeground(exception, DEFAULT_EXCEPTION_FG);
 
 	}
 
@@ -415,7 +424,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			setText(null);
+			clear();
 		}
 	}
 

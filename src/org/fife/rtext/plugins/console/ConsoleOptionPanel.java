@@ -32,14 +32,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ResourceBundle;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SpringLayout;
 
+import org.fife.ui.RButton;
+import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 
@@ -51,10 +57,15 @@ import org.fife.ui.app.PluginOptionsDialogPanel;
  * @version 1.0
  */
 class ConsoleOptionPanel extends PluginOptionsDialogPanel
-							implements ActionListener, ItemListener {
+			implements ActionListener, ItemListener, PropertyChangeListener {
 
 	private JCheckBox visibleCB;
 	private JComboBox locationCombo;
+	private RColorSwatchesButton stdoutButton;
+	private RColorSwatchesButton stderrButton;
+	private RColorSwatchesButton promptButton;
+	private RColorSwatchesButton exceptionsButton;
+	private RButton defaultsButton;
 
 	private static final String PROPERTY = "Property";
 
@@ -82,7 +93,22 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		topPanel.add(generalPanel);
 		topPanel.add(Box.createVerticalStrut(5));
 
+		// Add the "colors" option panel.
+		Container colorsPanel = createColorsPanel();
+		topPanel.add(colorsPanel);
+		topPanel.add(Box.createVerticalStrut(5));
+
+		// Add a "Restore Defaults" button
+		defaultsButton = new RButton(plugin.getString("RestoreDefaults"));
+		defaultsButton.setActionCommand("RestoreDefaults");
+		defaultsButton.addActionListener(this);
+		JPanel temp = new JPanel(new BorderLayout());
+		temp.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
+		temp.add(defaultsButton, BorderLayout.LINE_START);
+		topPanel.add(temp);
+
 		// Put it all together!
+		topPanel.add(Box.createVerticalGlue());
 		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(o);
 
@@ -104,6 +130,74 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 			firePropertyChange(PROPERTY, !visible, visible);
 		}
 
+		else if (defaultsButton==source) {
+			if (notDefaults()) {
+				restoreDefaults();
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, false, true);
+			}
+		}
+
+	}
+
+
+	/**
+	 * Creates the "Colors" section of options for this plugin.
+	 *
+	 * @return A panel with the "color" options.
+	 */
+	private Container createColorsPanel() {
+
+		Box temp = Box.createVerticalBox();
+
+		Plugin plugin = (Plugin)getPlugin();
+		temp.setBorder(new OptionPanelBorder(
+									plugin.getString("Options.Colors")));
+
+		JLabel stdoutLabel = new JLabel(plugin.getString("Color.Stdout"));
+		stdoutButton = createColorSwatchesButton();
+		JLabel stderrLabel = new JLabel(plugin.getString("Color.Stderr"));
+		stderrButton = createColorSwatchesButton();
+		JLabel promptLabel = new JLabel(plugin.getString("Color.Prompts"));
+		promptButton = createColorSwatchesButton();
+		JLabel excLabel = new JLabel(plugin.getString("Color.Exceptions"));
+		exceptionsButton = createColorSwatchesButton();
+
+		JPanel sp = new JPanel(new SpringLayout());
+		if (getComponentOrientation().isLeftToRight()) {
+			sp.add(stdoutLabel); sp.add(stdoutButton);
+			sp.add(stderrLabel); sp.add(stderrButton);
+			sp.add(promptLabel); sp.add(promptButton);
+			sp.add(excLabel);    sp.add(exceptionsButton);
+		}
+		else {
+			sp.add(stdoutButton); sp.add(stdoutLabel);
+			sp.add(stderrButton); sp.add(stderrLabel);
+			sp.add(promptButton); sp.add(promptLabel);
+			sp.add(exceptionsButton); sp.add(excLabel);
+		}
+		UIUtil.makeSpringCompactGrid(sp, 4,2, 5,5, 5,5);
+
+		JPanel temp2 = new JPanel(new BorderLayout());
+		temp2.add(sp, BorderLayout.LINE_START);
+		temp.add(temp2);
+		temp.add(Box.createVerticalGlue());
+
+		return temp;
+
+	}
+
+
+	/**
+	 * Creates a color swatch button we're listening for changes on.
+	 *
+	 * @return The button.
+	 */
+	private RColorSwatchesButton createColorSwatchesButton() {
+		RColorSwatchesButton button = new RColorSwatchesButton();
+		button.addPropertyChangeListener(
+				RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
+		return button;
 	}
 
 
@@ -158,10 +252,17 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	 * {@inheritDoc}
 	 */
 	protected void doApplyImpl(Frame owner) {
+
 		Plugin plugin = (Plugin)getPlugin();
 		ConsoleWindow window = plugin.getDockableWindow();
 		window.setActive(visibleCB.isSelected());
 		window.setPosition(locationCombo.getSelectedIndex());
+
+		window.setForeground(ConsoleTextArea.STYLE_EXCEPTION, exceptionsButton.getColor());
+		window.setForeground(ConsoleTextArea.STYLE_PROMPT, promptButton.getColor());
+		window.setForeground(ConsoleTextArea.STYLE_STDOUT, stdoutButton.getColor());
+		window.setForeground(ConsoleTextArea.STYLE_STDERR, stderrButton.getColor());
+
 	}
 
 
@@ -201,13 +302,63 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 
 
 	/**
+	 * Returns whether something on this panel is NOT set to its default value.
+	 *
+	 * @return Whether some property in this panel is NOT set to its default
+	 * value.
+	 */
+	private boolean notDefaults() {
+		return !visibleCB.isSelected() ||
+			locationCombo.getSelectedIndex()!=2 ||
+			!ConsoleTextArea.DEFAULT_STDOUT_FG.equals(stdoutButton.getColor()) ||
+			!ConsoleTextArea.DEFAULT_STDERR_FG.equals(stderrButton.getColor()) ||
+			!ConsoleTextArea.DEFAULT_PROMPT_FG.equals(promptButton.getColor()) ||
+			!ConsoleTextArea.DEFAULT_EXCEPTION_FG.equals(exceptionsButton.getColor());
+	}
+
+
+	/**
+	 * Called when one of our color swatch buttons is modified.
+	 *
+	 * @param e The event.
+	 */
+	public void propertyChange(PropertyChangeEvent e) {
+		hasUnsavedChanges = true;
+		firePropertyChange(PROPERTY, false, true);
+	}
+
+
+	/**
+	 * Restores all properties on this panel to their default values.
+	 */
+	private void restoreDefaults() {
+
+		visibleCB.setSelected(true);
+		locationCombo.setSelectedIndex(2);
+
+		stdoutButton.setColor(ConsoleTextArea.DEFAULT_STDOUT_FG);
+		stderrButton.setColor(ConsoleTextArea.DEFAULT_STDERR_FG);
+		promptButton.setColor(ConsoleTextArea.DEFAULT_PROMPT_FG);
+		exceptionsButton.setColor(ConsoleTextArea.DEFAULT_EXCEPTION_FG);
+
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	protected void setValuesImpl(Frame owner) {
+
 		Plugin plugin = (Plugin)getPlugin();
 		ConsoleWindow window = plugin.getDockableWindow();
 		visibleCB.setSelected(window.isActive());
 		locationCombo.setSelectedIndex(window.getPosition());
+
+		stdoutButton.setColor(window.getForeground(ConsoleTextArea.STYLE_STDOUT));
+		stderrButton.setColor(window.getForeground(ConsoleTextArea.STYLE_STDERR));
+		promptButton.setColor(window.getForeground(ConsoleTextArea.STYLE_PROMPT));
+		exceptionsButton.setColor(window.getForeground(ConsoleTextArea.STYLE_EXCEPTION));
+
 	}
 
 
