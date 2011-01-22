@@ -144,6 +144,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public boolean searchWindowOpacityEnabled;
 	public float searchWindowOpacity;
 	public int searchWindowOpacityRule;
+	public boolean dropShadowsInEditor;
 
 	public KeyStroke[] mainViewActionAccelerators;
 
@@ -253,6 +254,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.searchWindowOpacityEnabled= rtext.isSearchWindowOpacityEnabled();
 		props.searchWindowOpacity		= rtext.getSearchWindowOpacity();
 		props.searchWindowOpacityRule	= rtext.getSearchWindowOpacityRule();
+		props.dropShadowsInEditor		= RTextUtilities.getDropShadowsEnabledInEditor();
 
 		// Save the actions.
 		props.accelerators = new HashMap();
@@ -270,6 +272,11 @@ public class RTextPreferences extends GUIApplicationPreferences
 
 		return props;
 
+	}
+
+
+	private static boolean getDefaultDropShadowsInEditorValue() {
+		return !RTextUtilities.isPreJava6() && File.separatorChar=='\\';
 	}
 
 
@@ -500,6 +507,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 			props.searchWindowOpacityEnabled = prefs.getBoolean("searchWindowOpacityEnabled", props.searchWindowOpacityEnabled);
 			props.searchWindowOpacity = prefs.getFloat("searchWindowOpacity", props.searchWindowOpacity);
 			props.searchWindowOpacityRule = prefs.getInt("searchWindowOpacityRule", props.searchWindowOpacityRule);
+			props.dropShadowsInEditor = prefs.getBoolean("dropShadowsInEditor", getDefaultDropShadowsInEditorValue());
 
 			// Get all properties associated with the RTextMenuBar class.
 			prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -657,6 +665,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs.putBoolean("searchWindowOpacityEnabled",	searchWindowOpacityEnabled);
 		prefs.putFloat("searchWindowOpacity",			searchWindowOpacity);
 		prefs.putInt("searchWindowOpacityRule",			searchWindowOpacityRule);
+		prefs.putBoolean("dropShadowsInEditor",			dropShadowsInEditor);
 
 		// Save all properties related to the RTextMenuBar class.
 		prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -764,6 +773,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		searchWindowOpacity		= 0.6f;
 		searchWindowOpacityRule = ChildWindowListener.
 										TRANSLUCENT_WHEN_OVERLAPPING_APP;
+		dropShadowsInEditor = getDefaultDropShadowsInEditorValue();
 
 		accelerators = new HashMap();
 		for (int i=0; i<actionNames.length; i++) {

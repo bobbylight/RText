@@ -244,7 +244,7 @@ public class Plugin implements org.fife.ui.app.Plugin {
 			}
 		});
 
-
+		window.clearConsoles(); // Needed to pick up styles
 		rtext.addDockableWindow(window);
 
 	}

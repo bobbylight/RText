@@ -77,6 +77,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	private JLabel opacityLabel;
 	private JSlider slider;
 	private JLabel opacityDisplay;
+	private JCheckBox dropShadowsInEditorCB;
 
 	private String fileSizeError;
 	private DecimalFormat format;
@@ -258,14 +259,19 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		temp2 = new JPanel(new SpringLayout());
 		if (orientation.isLeftToRight()) {
 			temp2.add(ruleLabel);    temp2.add(ruleCombo); temp2.add(filler);
-			temp2.add(opacityLabel); temp2.add(slider);            temp2.add(opacityDisplay);
+			temp2.add(opacityLabel); temp2.add(slider);    temp2.add(opacityDisplay);
 		}
 		else {
 			temp2.add(filler);         temp2.add(ruleCombo); temp2.add(ruleLabel);
-			temp2.add(opacityDisplay); temp2.add(slider);            temp2.add(opacityLabel);
+			temp2.add(opacityDisplay); temp2.add(slider);    temp2.add(opacityLabel);
 		}
 		UIUtil.makeSpringCompactGrid(temp2, 2,3, 5,5, 5,5);
 		addLeftAligned(expPanel, temp2, 5, 20);
+		dropShadowsInEditorCB = new JCheckBox(msg.getString("DropShadowsInEditor"));
+		dropShadowsInEditorCB.setEnabled(!RTextUtilities.isPreJava6());
+		dropShadowsInEditorCB.addActionListener(this);
+		addLeftAligned(expPanel, dropShadowsInEditorCB);
+		expPanel.add(Box.createVerticalGlue());
 		topPanel.add(expPanel);
 
 		RButton defaultsButton = new RButton(msg.getString("RestoreDefaults"));
@@ -355,6 +361,11 @@ class GeneralOptionPanel extends OptionsDialogPanel
 			firePropertyChange(PROPERTY, -1, value);
 		}
 
+		else if (dropShadowsInEditorCB==e.getSource()) {
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, false, true);
+		}
+
 		else if ("RestoreDefaults".equals(command)) {
 
 			String defaultEncName = RTextFileChooser.getDefaultEncoding();
@@ -362,16 +373,21 @@ class GeneralOptionPanel extends OptionsDialogPanel
 			boolean defaultUtf8BomSelected = false;
 			final String defaultSizeFieldText = "10";
 			int defaultOpacity = 60;
+			// Only default to this experimental option if > Java 6 and running
+			// on Windows
+			boolean defaultDropShadowsInEditor =
+				(!RTextUtilities.isPreJava6() && File.separatorChar=='\\');
 
 			if (dirField.getDocument().getLength()>0 ||
-					terminatorCombo.getSelectedIndex()!=0 ||
-					!encCombo.getSelectedItem().equals(defaultEnc) ||
-					utf8BomCB.isSelected()!=defaultUtf8BomSelected ||
-					!sizeCheckCB.isSelected() ||
-					!defaultSizeFieldText.equals(sizeField.getText()) ||
-					translucentSearchDialogsCB.isSelected() ||
-					ruleCombo.getSelectedIndex()!=2 ||
-					slider.getValue()!=defaultOpacity) {
+				terminatorCombo.getSelectedIndex()!=0 ||
+				!encCombo.getSelectedItem().equals(defaultEnc) ||
+				utf8BomCB.isSelected()!=defaultUtf8BomSelected ||
+				!sizeCheckCB.isSelected() ||
+				!defaultSizeFieldText.equals(sizeField.getText()) ||
+				translucentSearchDialogsCB.isSelected() ||
+				ruleCombo.getSelectedIndex()!=2 ||
+				slider.getValue()!=defaultOpacity ||
+				dropShadowsInEditorCB.isSelected()!=defaultDropShadowsInEditor) {
 
 				dirField.setText(null);
 				terminatorCombo.setSelectedIndex(0);
@@ -383,6 +399,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 				setTranslucentSearchDialogsSelected(false);
 				ruleCombo.setSelectedIndex(2);
 				slider.setValue(defaultOpacity);
+				dropShadowsInEditorCB.setSelected(defaultDropShadowsInEditor);
 
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, false, true);
@@ -422,6 +439,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		rtext.setSearchWindowOpacityRule(rule);
 		float opacity = slider.getValue() / 100f;
 		rtext.setSearchWindowOpacity(opacity);
+		RTextUtilities.setDropShadowsEnabledInEditor(dropShadowsInEditorCB.isSelected());
 
 	}
 
@@ -641,7 +659,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
 
-		setWorkingDirectory(getWorkingDirectory());
+		setWorkingDirectory(rtext.getWorkingDirectory());
 		setLineTerminator(mainView.getLineTerminator());
 		setDefaultEncoding(mainView.getDefaultEncoding());
 		setWriteUtf8BOM(mainView.getWriteBOMInUtf8Files());
@@ -654,6 +672,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		int percent = (int)(rtext.getSearchWindowOpacity()*100);
 		slider.setValue(percent);
 		opacityDisplay.setText(format.format(rtext.getSearchWindowOpacity()));
+		dropShadowsInEditorCB.setSelected(RTextUtilities.getDropShadowsEnabledInEditor());
 
 	}
 

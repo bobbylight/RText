@@ -49,6 +49,7 @@ import javax.swing.text.Element;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
@@ -293,18 +294,20 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		setFont(RTextArea.getDefaultFont());
 
-		Style prompt = addStyle(STYLE_PROMPT, null);
+		Style defaultStyle = getStyle(StyleContext.DEFAULT_STYLE);
+
+		Style prompt = addStyle(STYLE_PROMPT, defaultStyle);
 		StyleConstants.setForeground(prompt, DEFAULT_PROMPT_FG);
 
-		/*Style stdin = */addStyle(STYLE_STDIN, null); // Default text color
+		/*Style stdin = */addStyle(STYLE_STDIN, defaultStyle);
 
-		Style stdout = addStyle(STYLE_STDOUT, null);
+		Style stdout = addStyle(STYLE_STDOUT, defaultStyle);
 		StyleConstants.setForeground(stdout, DEFAULT_STDOUT_FG);
 
-		Style stderr = addStyle(STYLE_STDERR, null);
+		Style stderr = addStyle(STYLE_STDERR, defaultStyle);
 		StyleConstants.setForeground(stderr, DEFAULT_STDERR_FG);
 
-		Style exception = addStyle(STYLE_EXCEPTION, null);
+		Style exception = addStyle(STYLE_EXCEPTION, defaultStyle);
 		StyleConstants.setForeground(exception, DEFAULT_EXCEPTION_FG);
 
 	}

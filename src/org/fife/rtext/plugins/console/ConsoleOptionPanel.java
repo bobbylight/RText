@@ -25,6 +25,7 @@
 package org.fife.rtext.plugins.console;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Frame;
@@ -61,6 +62,10 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 
 	private JCheckBox visibleCB;
 	private JComboBox locationCombo;
+	private JCheckBox stdoutCB;
+	private JCheckBox stderrCB;
+	private JCheckBox promptCB;
+	private JCheckBox exceptionsCB;
 	private RColorSwatchesButton stdoutButton;
 	private RColorSwatchesButton stderrButton;
 	private RColorSwatchesButton promptButton;
@@ -130,6 +135,34 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 			firePropertyChange(PROPERTY, !visible, visible);
 		}
 
+		else if (exceptionsCB==source) {
+			boolean selected = exceptionsCB.isSelected();
+			exceptionsButton.setEnabled(selected);
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !selected, selected);
+		}
+
+		else if (promptCB==source) {
+			boolean selected = promptCB.isSelected();
+			promptButton.setEnabled(selected);
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !selected, selected);
+		}
+
+		else if (stderrCB==source) {
+			boolean selected = stderrCB.isSelected();
+			stderrButton.setEnabled(selected);
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !selected, selected);
+		}
+
+		else if (stdoutCB==source) {
+			boolean selected = stdoutCB.isSelected();
+			stdoutButton.setEnabled(selected);
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !selected, selected);
+		}
+
 		else if (defaultsButton==source) {
 			if (notDefaults()) {
 				restoreDefaults();
@@ -154,27 +187,27 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		temp.setBorder(new OptionPanelBorder(
 									plugin.getString("Options.Colors")));
 
-		JLabel stdoutLabel = new JLabel(plugin.getString("Color.Stdout"));
+		stdoutCB = createColorActivateCB(plugin.getString("Color.Stdout"));
 		stdoutButton = createColorSwatchesButton();
-		JLabel stderrLabel = new JLabel(plugin.getString("Color.Stderr"));
+		stderrCB = createColorActivateCB(plugin.getString("Color.Stderr"));
 		stderrButton = createColorSwatchesButton();
-		JLabel promptLabel = new JLabel(plugin.getString("Color.Prompts"));
+		promptCB = createColorActivateCB(plugin.getString("Color.Prompts"));
 		promptButton = createColorSwatchesButton();
-		JLabel excLabel = new JLabel(plugin.getString("Color.Exceptions"));
+		exceptionsCB = createColorActivateCB(plugin.getString("Color.Exceptions"));
 		exceptionsButton = createColorSwatchesButton();
 
 		JPanel sp = new JPanel(new SpringLayout());
 		if (getComponentOrientation().isLeftToRight()) {
-			sp.add(stdoutLabel); sp.add(stdoutButton);
-			sp.add(stderrLabel); sp.add(stderrButton);
-			sp.add(promptLabel); sp.add(promptButton);
-			sp.add(excLabel);    sp.add(exceptionsButton);
+			sp.add(stdoutCB);     sp.add(stdoutButton);
+			sp.add(stderrCB);     sp.add(stderrButton);
+			sp.add(promptCB);     sp.add(promptButton);
+			sp.add(exceptionsCB); sp.add(exceptionsButton);
 		}
 		else {
-			sp.add(stdoutButton); sp.add(stdoutLabel);
-			sp.add(stderrButton); sp.add(stderrLabel);
-			sp.add(promptButton); sp.add(promptLabel);
-			sp.add(exceptionsButton); sp.add(excLabel);
+			sp.add(stdoutButton);     sp.add(stdoutCB);
+			sp.add(stderrButton);     sp.add(stderrCB);
+			sp.add(promptButton);     sp.add(promptCB);
+			sp.add(exceptionsButton); sp.add(exceptionsCB);
 		}
 		UIUtil.makeSpringCompactGrid(sp, 4,2, 5,5, 5,5);
 
@@ -185,6 +218,20 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 
 		return temp;
 
+	}
+
+
+	/**
+	 * Returns a check box used to toggle whether a color in a console uses
+	 * a special color.
+	 *
+	 * @param label The label for the check box.
+	 * @return The check box.
+	 */
+	private JCheckBox createColorActivateCB(String label) {
+		JCheckBox cb = new JCheckBox(label);
+		cb.addActionListener(this);
+		return cb;
 	}
 
 
@@ -258,10 +305,14 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		window.setActive(visibleCB.isSelected());
 		window.setPosition(locationCombo.getSelectedIndex());
 
-		window.setForeground(ConsoleTextArea.STYLE_EXCEPTION, exceptionsButton.getColor());
-		window.setForeground(ConsoleTextArea.STYLE_PROMPT, promptButton.getColor());
-		window.setForeground(ConsoleTextArea.STYLE_STDOUT, stdoutButton.getColor());
-		window.setForeground(ConsoleTextArea.STYLE_STDERR, stderrButton.getColor());
+		Color c = exceptionsCB.isSelected() ? exceptionsButton.getColor() : null;
+		window.setForeground(ConsoleTextArea.STYLE_EXCEPTION, c);
+		c = promptCB.isSelected() ? promptButton.getColor() : null;
+		window.setForeground(ConsoleTextArea.STYLE_PROMPT, c);
+		c = stdoutCB.isSelected() ? stdoutButton.getColor() : null;
+		window.setForeground(ConsoleTextArea.STYLE_STDOUT, c);
+		c = stderrCB.isSelected() ? stderrButton.getColor() : null;
+		window.setForeground(ConsoleTextArea.STYLE_STDERR, c);
 
 	}
 
@@ -336,6 +387,11 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		visibleCB.setSelected(true);
 		locationCombo.setSelectedIndex(2);
 
+		stdoutCB.setSelected(true);
+		stderrCB.setSelected(true);
+		promptCB.setSelected(true);
+		exceptionsCB.setSelected(true);
+
 		stdoutButton.setColor(ConsoleTextArea.DEFAULT_STDOUT_FG);
 		stderrButton.setColor(ConsoleTextArea.DEFAULT_STDERR_FG);
 		promptButton.setColor(ConsoleTextArea.DEFAULT_PROMPT_FG);
@@ -353,6 +409,15 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		ConsoleWindow window = plugin.getDockableWindow();
 		visibleCB.setSelected(window.isActive());
 		locationCombo.setSelectedIndex(window.getPosition());
+
+		stdoutCB.setSelected(window.isStyleUsed(ConsoleTextArea.STYLE_STDOUT));
+		stdoutButton.setEnabled(window.isStyleUsed(ConsoleTextArea.STYLE_STDOUT));
+		stderrCB.setSelected(window.isStyleUsed(ConsoleTextArea.STYLE_STDERR));
+		stderrButton.setEnabled(window.isStyleUsed(ConsoleTextArea.STYLE_STDERR));
+		promptCB.setSelected(window.isStyleUsed(ConsoleTextArea.STYLE_PROMPT));
+		promptButton.setEnabled(window.isStyleUsed(ConsoleTextArea.STYLE_PROMPT));
+		exceptionsCB.setSelected(window.isStyleUsed(ConsoleTextArea.STYLE_EXCEPTION));
+		exceptionsButton.setEnabled(window.isStyleUsed(ConsoleTextArea.STYLE_EXCEPTION));
 
 		stdoutButton.setColor(window.getForeground(ConsoleTextArea.STYLE_STDOUT));
 		stderrButton.setColor(window.getForeground(ConsoleTextArea.STYLE_STDERR));

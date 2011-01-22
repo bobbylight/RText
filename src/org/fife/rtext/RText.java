@@ -893,9 +893,9 @@ public class RText extends AbstractPluggableGUIApplication
 		// Install any plugins.
 		super.preDisplayInit(prefs, splashScreen);
 
-		RTextPreferences properties = (RTextPreferences)prefs;
+		RTextPreferences props = (RTextPreferences)prefs;
 
-		if (properties.searchToolBarVisible) {
+		if (props.searchToolBarVisible) {
 			addToolBar(getSearchToolBar(), BorderLayout.SOUTH);
 			searchBar.setVisible(true);
 		}
@@ -907,7 +907,7 @@ public class RText extends AbstractPluggableGUIApplication
 		addWindowListener( new RTextWindowListener(this) );
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-		mainView.setLineNumbersEnabled(properties.lineNumbersVisible);
+		mainView.setLineNumbersEnabled(props.lineNumbersVisible);
 
 		// Enable templates in text areas.
 		if (RTextUtilities.enableTemplates(this, true)) {
@@ -919,15 +919,16 @@ public class RText extends AbstractPluggableGUIApplication
 			}
 		}
 
-		setSearchWindowOpacityEnabled(properties.searchWindowOpacityEnabled);
-		setSearchWindowOpacity(properties.searchWindowOpacity);
-		setSearchWindowOpacityRule(properties.searchWindowOpacityRule);
+		setSearchWindowOpacityEnabled(props.searchWindowOpacityEnabled);
+		setSearchWindowOpacity(props.searchWindowOpacity);
+		setSearchWindowOpacityRule(props.searchWindowOpacityRule);
 
 		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
 			System.err.println("preDisplayInit: " + (System.currentTimeMillis()-start));
 		}
 
 		ShadowPopupFactory.install();
+		RTextUtilities.setDropShadowsEnabledInEditor(props.dropShadowsInEditor);
 
 	}
 

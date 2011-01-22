@@ -119,23 +119,42 @@ public class ConsoleWindow extends DockableWindow
 
 
 	/**
+	 * Clears any text from all consoles.
+	 */
+	public void clearConsoles() {
+		jsTextArea.clear();
+		shellTextArea.clear();
+	}
+
+
+	/**
 	 * Returns the color used for a given type of text in the consoles.
 	 *
 	 * @param style The style; e.g. {@link ConsoleTextArea#STYLE_STDOUT}.
-	 * @return The color.
+	 * @return The color, or <code>null</code> if the system default color
+	 *         is being used.
 	 * @see #setForeground(String, Color)
 	 */
 	public Color getForeground(String style) {
-
 		Color c = null;
-
 		Style s = jsTextArea.getStyle(style);
 		if (s!=null) {
 			c = StyleConstants.getForeground(s);
 		}
-
 		return c;
+	}
 
+
+	/**
+	 * Returns whether a special style is used for a given type of text in
+	 * the consoles.
+	 *
+	 * @param style The style of text.
+	 * @return Whether a special style is used.
+	 */
+	public boolean isStyleUsed(String style) {
+		return jsTextArea.getStyle(style).isDefined(StyleConstants.Foreground);
+		//return getForeground(style)!=null;
 	}
 
 
@@ -158,17 +177,33 @@ public class ConsoleWindow extends DockableWindow
 	 * Sets the color used for a given type of text in the consoles.
 	 *
 	 * @param style The style; e.g. {@link ConsoleTextArea#STYLE_STDOUT}.
-	 * @param fg The new foreground color to use.
+	 * @param fg The new foreground color to use, or <code>null</code> to
+	 *        use the system default foreground color.
 	 * @see #getForeground(String)
 	 */
 	public void setForeground(String style, Color fg) {
-		Style s = jsTextArea.getStyle(style);
+		setForegroundImpl(style, fg, jsTextArea);
+		setForegroundImpl(style, fg, shellTextArea);
+	}
+
+
+	/**
+	 * Sets a color for a given type of a text in a single console.
+	 *
+	 * @param style
+	 * @param fg
+	 * @param textArea
+	 */
+	private void setForegroundImpl(String style, Color fg,
+									ConsoleTextArea textArea) {
+		Style s = textArea.getStyle(style);
 		if (s!=null) {
-			StyleConstants.setForeground(s, fg);
-		}
-		s = shellTextArea.getStyle(style);
-		if (s!=null) {
-			StyleConstants.setForeground(s, fg);
+			if (fg!=null) {
+				StyleConstants.setForeground(s, fg);
+			}
+			else {
+				s.removeAttribute(StyleConstants.Foreground);
+			}
 		}
 	}
 

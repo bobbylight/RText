@@ -27,6 +27,7 @@ package org.fife.rtext;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -40,15 +41,19 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JWindow;
 import javax.swing.KeyStroke;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
+import org.fife.jgoodies.looks.common.ShadowPopupBorder;
 import org.fife.ui.SubstanceUtils;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
+import org.fife.ui.rsyntaxtextarea.PopupWindowDecorator;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.templates.CodeTemplate;
 import org.fife.ui.rsyntaxtextarea.templates.StaticCodeTemplate;
@@ -57,6 +62,7 @@ import org.fife.ui.rtextfilechooser.Utilities;
 import org.fife.ui.rtextfilechooser.filters.ExtensionFileFilter;
 import org.fife.ui.search.FindInFilesDialog;
 import org.fife.util.DynamicIntArray;
+import org.fife.util.TranslucencyUtil;
 
 
 /**
@@ -82,6 +88,11 @@ public class RTextUtilities {
 	 * one with different window decoration properties.
 	 */
 	private static String currentLaF;
+
+	/**
+	 * Whether the experimental "drop shadows" option is enabled.
+	 */
+	private static boolean dropShadowsEnabledInEditor;
 
 
 	/**
@@ -440,6 +451,17 @@ public class RTextUtilities {
 
 
 	/**
+	 * Returns whether the experimental "drop shadows" option is enabled.
+	 *
+	 * @return Whether drop shadows are enabled.
+	 * @see #setDropShadowsEnabledInEditor(boolean)
+	 */
+	public static boolean getDropShadowsEnabledInEditor() {
+		return dropShadowsEnabledInEditor;
+	}
+
+
+	/**
 	 * Returns the file in which to save file chooser favorite directories.
 	 * This file should have the encoding UTF-8.
 	 *
@@ -745,6 +767,50 @@ public class RTextUtilities {
 		} catch (IOException ioe) {
 			rtext.displayException(ioe);
 		}
+	}
+
+
+	/**
+	 * Toggles whether the experimental "drop shadows" option is enabled.
+	 * Note that this may do nothing if we're running on Java 1.4 or 1.5, or
+	 * the current system does not support translucent windows.
+	 *
+	 * @param enabled Whether the option is enabled.
+	 * @see #getDropShadowsEnabledInEditor()
+	 */
+	public static void setDropShadowsEnabledInEditor(boolean enabled) {
+
+		if (enabled!=dropShadowsEnabledInEditor) {
+
+			dropShadowsEnabledInEditor = enabled;
+
+			if (dropShadowsEnabledInEditor) {
+				TranslucencyUtil util = TranslucencyUtil.get();
+				if (util!=null) {
+					if (util.isTranslucencySupported(true)) {
+						PopupWindowDecorator.set(new PopupWindowDecorator() {
+							public void decorate(JWindow window) {
+								Container cp = window.getContentPane();
+								if (cp instanceof JComponent) {
+									TranslucencyUtil util =
+										TranslucencyUtil.get();
+									util.setOpaque(window, false);
+									((JComponent)cp).setBorder(
+										BorderFactory.createCompoundBorder(
+											ShadowPopupBorder.getInstance(),
+											((JComponent)cp).getBorder()));
+								}
+							}
+						});
+					}
+				}
+			}
+			else { // Not enabled
+				PopupWindowDecorator.set(null);
+			}
+
+		}
+
 	}
 
 
