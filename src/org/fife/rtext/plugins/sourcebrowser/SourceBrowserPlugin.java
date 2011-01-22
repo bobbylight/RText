@@ -304,7 +304,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 
 	/**
-	 * Returns HTML (to use in tooltips) representing the specified line
+	 * Returns HTML (to use in tool tips) representing the specified line
 	 * in the current text area.
 	 *
 	 * @param line The line.
@@ -323,9 +323,12 @@ public class SourceBrowserPlugin extends GUIPlugin
 	}
 
 
-	protected String getLanguageForStyle(String style) {
+	private String getLanguageForStyle(String style) {
 		String language = null;
-		if (style.equals(SyntaxConstants.SYNTAX_STYLE_C)) {
+		if (style.equals(SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT)) {
+			language = "Flex"; // Same as MXML to Exuberant Ctags
+		}
+		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_C)) {
 			language = "C";
 		}
 		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS)) {
@@ -361,6 +364,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_MAKEFILE)) {
 			language = "Make";
 		}
+		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_MXML)) {
+			language = "Flex"; // Same as ActionScript to Exuberant Ctags
+		}
 		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_PERL)) {
 			language = "Perl";
 		}
@@ -381,6 +387,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 		}
 		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL)) {
 			language = "Sh";
+		}
+		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH)) {
+			language = "DosBatch";
 		}
 		return language;
 	}

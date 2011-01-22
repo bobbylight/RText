@@ -71,8 +71,10 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 
 		tagTypesMap = new HashMap();
 		tagTypesMap.put(SYNTAX_STYLE_NONE,				"");
+		tagTypesMap.put(SYNTAX_STYLE_ACTIONSCRIPT,		"fcmpvx");
 		tagTypesMap.put(SYNTAX_STYLE_ASSEMBLER_X86,		"");
 		tagTypesMap.put(SYNTAX_STYLE_C,				"cdfgmnstv");
+		tagTypesMap.put(SYNTAX_STYLE_CLOJURE,			"");
 		tagTypesMap.put(SYNTAX_STYLE_CPLUSPLUS,			"cdfgmnstv");
 		tagTypesMap.put(SYNTAX_STYLE_CSHARP,			"cdEfgimnpqst");
 		tagTypesMap.put(SYNTAX_STYLE_CSS,				"");
@@ -86,6 +88,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 		tagTypesMap.put(SYNTAX_STYLE_LISP,				"f");
 		tagTypesMap.put(SYNTAX_STYLE_LUA,				"f");
 		tagTypesMap.put(SYNTAX_STYLE_MAKEFILE,			"m");
+		tagTypesMap.put(SYNTAX_STYLE_MXML,				"fcmpvx");
 		tagTypesMap.put(SYNTAX_STYLE_PERL,				"cls");
 		tagTypesMap.put(SYNTAX_STYLE_PHP,				"cidfvj");
 		tagTypesMap.put(SYNTAX_STYLE_PROPERTIES_FILE,	"");
@@ -96,7 +99,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 		tagTypesMap.put(SYNTAX_STYLE_SQL,				"cfFLPprstTv");
 		tagTypesMap.put(SYNTAX_STYLE_TCL,				"cmp");
 		tagTypesMap.put(SYNTAX_STYLE_UNIX_SHELL,		"f");
-		tagTypesMap.put(SYNTAX_STYLE_WINDOWS_BATCH,		"");
+		tagTypesMap.put(SYNTAX_STYLE_WINDOWS_BATCH,		"lv");
 		tagTypesMap.put(SYNTAX_STYLE_XML,				"");
 
 	}
@@ -128,6 +131,8 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	 * @param style The syntax style.
 	 */
 	private void addChildNodesForStyle(DefaultMutableTreeNode root, String style) {
+
+		// SYNTAX_STYLE_ACTIONSCRIPT is handled below with MXML
 
 		if (SYNTAX_STYLE_C.equals(style) || 
 				SYNTAX_STYLE_CPLUSPLUS.equals(style)) {
@@ -205,6 +210,16 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 			addTagTypeNode(root, "Macros", map.get("m"));
 		}
 
+		else if (SYNTAX_STYLE_MXML.equals(style) ||
+				SYNTAX_STYLE_ACTIONSCRIPT.equals(style)) {
+			addTagTypeNode(root, "Functions", map.get("f"));
+			addTagTypeNode(root, "Classes", map.get("c"));
+			addTagTypeNode(root, "Methods", map.get("m"));
+			addTagTypeNode(root, "Properties", map.get("p"));
+			addTagTypeNode(root, "Variables", map.get("v"));
+			addTagTypeNode(root, "MX Tags", map.get("x"));
+		}
+
 		else if (SYNTAX_STYLE_PERL.equals(style)) {
 			addTagTypeNode(root, "Classes", map.get("c"));
 			addTagTypeNode(root, "Labels", map.get("l"));
@@ -244,7 +259,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 			addTagTypeNode(root, "Subtypes", map.get("s"));
 			addTagTypeNode(root, "Tables", map.get("t"));
 			addTagTypeNode(root, "Triggers", map.get("T"));
-			addTagTypeNode(root, "Variables", map.get("V"));
+			addTagTypeNode(root, "Variables", map.get("v"));
 		}
 
 		else if (SYNTAX_STYLE_TCL.equals(style)) {
@@ -254,8 +269,12 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 		}
 
 		else if (SYNTAX_STYLE_UNIX_SHELL.equals(style)) {
-			language = "Sh";
 			addTagTypeNode(root, "Functions", map.get("f"));
+		}
+
+		else if (SYNTAX_STYLE_WINDOWS_BATCH.equals(style)) {
+			addTagTypeNode(root, "Labels", map.get("l"));
+			addTagTypeNode(root, "Variables", map.get("v"));
 		}
 
 	}
