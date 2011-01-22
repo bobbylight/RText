@@ -284,6 +284,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_ASSEMBLER_X86,		createValue(new String[] { "*.asm" }));
 		filters.put(SYNTAX_STYLE_BBCODE,			createValue(new String[] { "*.bbc" }));
 		filters.put(SYNTAX_STYLE_C,				createValue(new String[] { "*.c" }));
+		filters.put(SYNTAX_STYLE_CLOJURE,			createValue(new String[] { "*.clj" }));
 		filters.put(SYNTAX_STYLE_CPLUSPLUS,		createValue(new String[] { "*.cpp", "*.cxx", "*.h" }));
 		filters.put(SYNTAX_STYLE_CSHARP,			createValue(new String[] { "*.cs" }));
 		filters.put(SYNTAX_STYLE_CSS,				createValue(new String[] { "*.css" }));
@@ -297,6 +298,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_LISP, 				createValue(new String[] { "*.cl", "*.clisp", "*.el", "*.l", "*.lisp", "*.lsp", "*.ml" }));
 		filters.put(SYNTAX_STYLE_LUA,				createValue(new String[] { "*.lua" }));
 		filters.put(SYNTAX_STYLE_MAKEFILE,			createValue(new String[] { "Makefile", "makefile" }));
+		filters.put(SYNTAX_STYLE_MXML,				createValue(new String[] { "*.mxml" }));
 		filters.put(SYNTAX_STYLE_PERL,			createValue(new String[] { "*.perl", "*.pl", "*.pm" }));
 		filters.put(SYNTAX_STYLE_PHP,				createValue(new String[] { "*.php" }));
 		filters.put(SYNTAX_STYLE_PROPERTIES_FILE,	createValue(new String[] { "*.properties", "*.ini" }));

@@ -1686,6 +1686,10 @@ public abstract class AbstractMainView extends JPanel
 
 		}
 
+		else if (firstLine.startsWith("<?xml") && firstLine.endsWith("?>")) {
+			style = SyntaxConstants.SYNTAX_STYLE_XML;
+		}
+
 		pane.setSyntaxEditingStyle(style);
 
 	}

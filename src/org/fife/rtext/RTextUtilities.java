@@ -211,9 +211,11 @@ public class RTextUtilities {
 			addFilter(chooser, msg, "BBCode", "bbc");
 			addFilter(chooser, msg, "CPlusPlus",
 					new String[] { "c", "cpp", "cxx", "h" });
+			addFilter(chooser, msg, "Clojure", "clj");
 			addFilter(chooser, msg, "CSharp",	"cs");
 			addFilter(chooser, msg, "CSS", "css");
 			addFilter(chooser, msg, "Delphi", "pas");
+			addFilter(chooser, msg, "Flex", "mxml");
 			addFilter(chooser, msg, "Fortran",
 					new String[] { "f", "for", "fort", "f77", "f90" });
 			addFilter(chooser, msg, "Groovy",
@@ -262,9 +264,11 @@ public class RTextUtilities {
 						"asm",
 						"bbc",
 						"c", "cpp", "cxx", "h",
+						"clj",
 						"cs",
 						"css",
 						"pas",
+						"mxml",
 						"f", "for", "fort", "f77", "f90",
 						"groovy", "grv",
 						"htm", "html",
