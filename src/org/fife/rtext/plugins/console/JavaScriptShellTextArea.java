@@ -211,7 +211,10 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 		}
 
 		public void write(char[] buf, int off, int len) {
-			append(new String(buf, off, len), style);
+			// "JavaScriptShellTextArea.this." needed to
+			// compile in Java 5+, but but in Java 1.4.
+			JavaScriptShellTextArea.this.
+							append(new String(buf, off, len), style);
 		}
 		
 	}
