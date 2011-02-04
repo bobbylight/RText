@@ -52,6 +52,7 @@ import javax.swing.UIManager;
 
 import org.fife.jgoodies.looks.common.ShadowPopupBorder;
 import org.fife.ui.SubstanceUtils;
+import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
 import org.fife.ui.rsyntaxtextarea.PopupWindowDecorator;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -880,6 +881,7 @@ public class RTextUtilities {
 				// non-null) to load classes from, and if we don't set it,
 				// exceptions will be thrown.
 				UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
+				UIUtil.installOsSpecificLafTweaks();
 				StoreKeeper.updateLookAndFeels(lnf);
 
 			} catch (Exception e) {

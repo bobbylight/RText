@@ -46,6 +46,7 @@ import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
 import org.fife.ui.SubstanceUtils;
+import org.fife.ui.UIUtil;
 import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.GUIApplicationPreferences;
@@ -1659,9 +1660,17 @@ public class RText extends AbstractPluggableGUIApplication
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 
-				// Allow nicer LookAndFeels to paint window titles, etc.
-				JFrame.setDefaultLookAndFeelDecorated(true);
-				JDialog.setDefaultLookAndFeelDecorated(true);
+				String lafName = RTextPreferences.getLookAndFeelToLoad();
+
+				// Allow Substance to paint window titles, etc.  We don't allow
+				// Metal (for example) to do this, because setting these
+				// properties to "true", then toggling to a LAF that doesn't
+				// support this property, such as Windows, causes the
+				// OS-supplied frame to not appear (as of 6u20).
+				if (SubstanceUtils.isASubstanceLookAndFeel(lafName)) {
+					JFrame.setDefaultLookAndFeelDecorated(true);
+					JDialog.setDefaultLookAndFeelDecorated(true);
+				}
 
 				String rootDir = AbstractGUIApplication.
 											getLocationOfJar("RText.jar");
@@ -1669,7 +1678,6 @@ public class RText extends AbstractPluggableGUIApplication
 					new ThirdPartyLookAndFeelManager(rootDir);
 
 				try {
-					String lafName = RTextPreferences.getLookAndFeelToLoad();
 					ClassLoader cl = lafManager.getLAFClassLoader();
 					// Must set UIManager's ClassLoader before instantiating
 					// the LAF.  Substance is so high-maintenance!
@@ -1678,6 +1686,7 @@ public class RText extends AbstractPluggableGUIApplication
 					LookAndFeel laf = (LookAndFeel)clazz.newInstance();
 					UIManager.setLookAndFeel(laf);
 					UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
+					UIUtil.installOsSpecificLafTweaks();
 				} catch (RuntimeException re) { // FindBugs
 					throw re;
 				} catch (Exception e) {

@@ -55,11 +55,13 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.plaf.basic.BasicGraphicsUtils;
 
 import org.fife.ui.rtextarea.SearchEngine;
 
@@ -314,6 +316,15 @@ public class SearchToolBar extends JToolBar {
 		private boolean isMouseOver;
 		private static boolean someButtonDepressed;
 
+		private static final Border BORDER =
+			BorderFactory.createEmptyBorder(3, 3, 3, 3);
+
+		protected void installDefaults(AbstractButton b) {
+			super.installDefaults(b);
+			b.setBorder(BORDER);
+			b.setOpaque(false);
+		}
+
 		protected void installListeners(AbstractButton b) {
 			super.installListeners(b);
 			mouseInputHandler = new MouseInputHandler(b);
@@ -367,9 +378,11 @@ public class SearchToolBar extends JToolBar {
 		}
 
 		public void paintBackground(Graphics g, AbstractButton b) {
+
 			ButtonModel model = b.getModel();
-			int width = b.getWidth() - 1;
-			int height = b.getHeight() - 1;
+			int width = b.getWidth();
+			int height = b.getHeight();
+
 			// This case is when the button isn't even enabled.
 			if (!model.isEnabled()) {
 				/* Do nothing. */
@@ -378,9 +391,9 @@ public class SearchToolBar extends JToolBar {
 			// still over the button.
 			else if (model.isArmed()) {
 				String text = b.getText();
-				if (text!=null && !text.equals("")) {
-					g.setColor(Color.BLACK);
-					g.drawRect(0,0, width, height);
+				if (text!=null && text.length()>0) {
+					g.setColor(b.getForeground());
+					g.drawRect(0,0, width-1, height-1);
 					textRect.translate(1,1);
 				}
 				iconRect.translate(1,1);
@@ -389,10 +402,31 @@ public class SearchToolBar extends JToolBar {
 			// or they've left-clicked, but moved the mouse off the button.
 			else if (isMouseOver() || isArmed()) {
 				String text = b.getText();
-				if (text!=null && !text.equals("")) {
-					g.setColor(Color.BLACK);
-					g.drawRect(0,0, width, height);
+				if (text!=null && text.length()>0) {
+					g.setColor(b.getForeground());
+					g.drawRect(0,0, width-1, height-1);
 				}
+			}
+		}
+
+		protected void paintText(Graphics g, JComponent c, Rectangle textRect,
+								String text) {
+
+			AbstractButton b = (AbstractButton) c;                       
+			ButtonModel model = b.getModel();
+			FontMetrics fm = g.getFontMetrics();
+			int mnemonicIndex = b.getDisplayedMnemonicIndex();
+
+			if(model.isEnabled()) {
+				g.setColor(b.getForeground());
+				BasicGraphicsUtils.drawStringUnderlineCharAt(g,text,
+						mnemonicIndex, textRect.x + getTextShiftOffset(),
+						textRect.y + fm.getAscent() + getTextShiftOffset());
+			}
+			else {
+				g.setColor(b.getBackground().darker());
+				BasicGraphicsUtils.drawStringUnderlineCharAt(g,text,
+						mnemonicIndex, textRect.x, textRect.y + fm.getAscent());
 			}
 		}
 
