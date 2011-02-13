@@ -223,7 +223,7 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		// Just remove "delete previous word" for now, since DefaultEditorKit
 		// doesn't expose the delegate for us to call into. 
-		int ctrl = InputEvent.CTRL_MASK;
+		int ctrl = getToolkit().getMenuShortcutKeyMask();
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, ctrl), "invalid");
 
 		// delete
@@ -253,6 +253,11 @@ abstract class ConsoleTextArea extends JTextPane {
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, shift), "shiftHome");
 		delegate = am.get(DefaultEditorKit.selectionBeginLineAction);
 		am.put("shiftHome", new HomeAction(delegate, true));
+
+		// Ctrl+A - Select all text entered after the prompt
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, ctrl), "ctrlA");
+		delegate = am.get(DefaultEditorKit.selectAllAction);
+		am.put("ctrlA", new SelectAllAction(delegate));
 
 		// Enter - submit command entered
 		int mod = 0;//InputEvent.CTRL_MASK;
@@ -606,6 +611,35 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		public void mouseReleased(MouseEvent e) {
 			handleMouseEvent(e);
+		}
+
+	}
+
+
+	/**
+	 * Called when the user presses Ctrl+A.
+	 */
+	private class SelectAllAction extends TextAction {
+
+		/**
+		 * DefaultEditorKit's SelectAllAction;
+		 */
+		private Action delegate;
+
+		public SelectAllAction(Action delegate) {
+			super("SelectAll");
+			this.delegate = delegate;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			int start = getSelectionStart();
+			if (start>=inputMinOffs) { // Select current command only
+				setSelectionStart(inputMinOffs);
+				setSelectionEnd(getDocument().getLength());
+			}
+			else { // Not after the prompt - just select everything
+				delegate.actionPerformed(e);
+			}
 		}
 
 	}
