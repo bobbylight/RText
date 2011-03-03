@@ -64,6 +64,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 	public static final String CTAGS_TYPE_EXUBERANT	= "Exuberant";
 	public static final String CTAGS_TYPE_STANDARD	= "Standard";
 
+	public static final String CUSTOM_HANDLER_PREFIX = "sbp.customHandler.";
+
+
 	private RText owner;
 	private String name;
 	private JTree sourceTree;
@@ -118,6 +121,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		sourceBrowserThread = new SourceBrowserThread(this);
 		workingRoot = new DefaultMutableTreeNode(msg.getString("Working"));
+
+		System.setProperty(CUSTOM_HANDLER_PREFIX + SyntaxConstants.SYNTAX_STYLE_XML,
+				"org.fife.rtext.plugins.sourcebrowser.xml.XmlSourceTreeGenerator");
 
 	}
 
@@ -186,7 +192,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 			RTextEditorPane textArea = owner.getMainView().getCurrentTextArea();
 			String style = textArea.getSyntaxEditingStyle();
 			final String customHandlerName = System.getProperty(
-												"sbp.customHandler." + style);
+									CUSTOM_HANDLER_PREFIX + style);
 			if (customHandlerName!=null) {
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {

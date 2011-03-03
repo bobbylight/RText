@@ -47,6 +47,7 @@ import org.fife.rsta.ac.sh.ShellLanguageSupport;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.plugins.sourcebrowser.SourceBrowserPlugin;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.autocomplete.CompletionXMLParser;
@@ -183,8 +184,11 @@ public class Plugin implements org.fife.ui.app.Plugin {
 
 		loadPreferences();
 
-		System.setProperty("sbp.customHandler." + RSyntaxTextArea.SYNTAX_STYLE_JAVA,
+		// Install our custom source browser tree view for Java.
+		System.setProperty(
+				SourceBrowserPlugin.CUSTOM_HANDLER_PREFIX + RSyntaxTextArea.SYNTAX_STYLE_JAVA,
 				"org.fife.rtext.plugins.langsupport.JavaSourceBrowserTreeConstructor");
+
 	}
 
 
