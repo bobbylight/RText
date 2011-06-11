@@ -185,7 +185,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 */
 	public static final String PROPERTY_PRINT_START_TIMES = "printStartTimes";
 
-	private static final String VERSION_STRING		= "1.4.0.BETA-????????";
+	private static final String VERSION_STRING		= "1.4.0.20110529";
 
 
 	/**

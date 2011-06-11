@@ -2,18 +2,16 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
-1.4.0
+1.4.0 (05/29/2011):
 -------------------
    - Added Flex (MXML) syntax highlighting and source browser support.
    - Added Clojure syntax highlighting.
    - Fixed bug: the default directory for new files wasn't persisted when
      modified in the Options dialog.  Thanks pmsl in the forums!
-   - ??? Fix bug - new tools aren't always remembered?
    - Added a Console plugin.  This allows you to run system commands (like a
      shell), as well as interact directly with the RText UI using its API via
      JavaScript (Rhino).
-   - ??? Improved Java code completion. ???
-   - ??? Very basic variable code completion for Groovy. ???
+   - Improved Java code completion.
    - Updated Dutch translation (thanks Rogier), Korean translation (Kwangsub),
      and Traditional Chinese translation (kp200906).
 

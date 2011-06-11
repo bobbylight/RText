@@ -1,4 +1,7 @@
-Last updated 02/26/2010
+Last updated 05/29/2011
+
+- Very basic variable code completion for Groovy.
+- Fix bug - new tools aren't always remembered (? still true?)
 
 
 UI Features
