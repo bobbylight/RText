@@ -26,7 +26,7 @@ it to: Windows, Linux, UNIX, Mac OS X, etc.
 RText currently has many features, including (but not limited to):
 
 1.  Editing multiple documents at once.
-2.  Syntax highlighting for over 15 popular programming languages.
+2.  Syntax highlighting for over 25 popular programming languages.
 3.  Bracket Matching.
 4.  CTags support.
 5.  Macros.
@@ -35,6 +35,7 @@ RText currently has many features, including (but not limited to):
 8.  Undo/Redo.
 9.  Online HTML Help.
 10. Customizable GUI (Look and Feel, icon set, font, background, etc.).
+11. Code completion (certain languages only).
 
 Syntax highlighting can be added for new languages relatively easily, and
 a plugin API is being developed to add new functionality to RText with ease.
@@ -100,22 +101,22 @@ robert_futrell@users.sourceforge.net
 
 7. Contributors
 ---------------
-- linostar:            Arabic Translation
-- sonyichi:            Simplified Chinese Translation
-- liou xiao            Traditional Chinese Translation
-- roel, sebastiaan:    Dutch Translation
-- pivwan:              French Translation
-- bikerpete:           German Translation
-- flatron:             Hungarian Translation
-- sonny, gri3fon:      Indonesian Translation
-- Luca, stepagweb:     Italian Translation
-- tomoM:               Japanese Translation
-- Maciej:              Polish Translation
-- Marcos, leandro:     Portuguese Translation
-- sbrownii:            Korean Translation
-- vladimir:            Russian Translation
-- phrodo:              Spanish Translation
-- burak:               Turkish Translation
+- linostar:                    Arabic Translation
+- sonyichi:                    Simplified Chinese Translation
+- kp200906, liou xiao:         Traditional Chinese Translation
+- Rogier, roel, sebastiaan:    Dutch Translation
+- pivwan:                      French Translation
+- bikerpete:                   German Translation
+- flatron:                     Hungarian Translation
+- sonny, gri3fon:              Indonesian Translation
+- Luca, stepagweb:             Italian Translation
+- tomoM:                       Japanese Translation
+- Kwangsub, sbrownii:          Korean Translation
+- Maciej:                      Polish Translation
+- Marcos, leandro:             Portuguese Translation
+- vladimir:                    Russian Translation
+- phrodo:                      Spanish Translation
+- burak:                       Turkish Translation
 
 
 8. Special Thanks
