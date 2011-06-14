@@ -2,6 +2,17 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+1.5.0
+-------------------
+   - ??? Fix bug - FSATextField doesn't show suggestions if only 1 matching
+     file exists. ???
+   - ??? Make opening a file via Find in Files dialog center the matched line
+     vertically in the editor. ???
+   - ??? Ship with ctags distribution on Windows? ???
+   - ??? Added "New JavaScript macro" menu item to Macros menu. ???
+   - ??? Added "Check for Updates" menu item to Help menu. ???
+
+
 1.4.0 (05/29/2011):
 -------------------
    - Added Flex (MXML) syntax highlighting and source browser support.

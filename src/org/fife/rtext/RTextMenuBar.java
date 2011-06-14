@@ -143,6 +143,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	//private JRadioButtonMenuItem splitHorizItem, splitVertItem, splitNoneItem;
 	private JMenuItem helpItem;
 	private JMenuItem homePageItem;
+	private JMenuItem updatesItem;
 	private JMenuItem aboutItem;
 	private JMenuItem filePropItem;
 
@@ -630,6 +631,9 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		homePageItem = createMenuItem(rtext.getAction(RText.HOME_PAGE_ACTION));
 		menu.add(homePageItem);
 
+		updatesItem = createMenuItem(rtext.getAction(RText.UPDATES_ACTION));
+		menu.add(updatesItem);
+
 		menu.addSeparator();
 
 		aboutItem = createMenuItem(rtext.getAction(RText.ABOUT_ACTION_KEY));
@@ -870,6 +874,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		updateAction(filePropItem, RText.FILE_PROPERTIES_ACTION);
 		updateAction(helpItem, RText.HELP_ACTION_KEY);
 		updateAction(homePageItem, RText.HOME_PAGE_ACTION);
+		updateAction(updatesItem, RText.UPDATES_ACTION);
 		updateAction(aboutItem, RText.ABOUT_ACTION_KEY);
 
 	}

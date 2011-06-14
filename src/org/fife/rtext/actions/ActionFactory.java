@@ -160,6 +160,10 @@ public class ActionFactory implements RTextActionInfo {
 		a.setAccelerator(prefs.getAccelerator(HOME_PAGE_ACTION));
 		rtext.addAction(HOME_PAGE_ACTION, a);
 
+		a = new CheckForUpdatesAction(rtext, msg, null);
+		a.setAccelerator(prefs.getAccelerator(UPDATES_ACTION));
+		rtext.addAction(UPDATES_ACTION, a);
+
 		a = new CloseAction(rtext, msg, null);
 		a.setAccelerator(prefs.getAccelerator(CLOSE_ACTION));
 		rtext.addAction(CLOSE_ACTION, a);

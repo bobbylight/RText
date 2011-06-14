@@ -62,6 +62,7 @@ public interface RTextActionInfo {
 	public static final String FILE_PROPERTIES_ACTION	= "filePropertiesAction";
 	public static final String OPTIONS_ACTION			= "optionsAction";
 	public static final String HOME_PAGE_ACTION			= "homePageAction";
+	public static final String UPDATES_ACTION			= "checkForUpdatesAction";
 
 	public static final String FIND_ACTION				= "findAction";
 	public static final String FIND_NEXT_ACTION			= "findNextAction";
@@ -107,6 +108,7 @@ public interface RTextActionInfo {
 		RText.ABOUT_ACTION_KEY,
 		OPTIONS_ACTION,
 		HOME_PAGE_ACTION,
+		UPDATES_ACTION,
 
 		FIND_ACTION,
 		FIND_NEXT_ACTION,
@@ -156,6 +158,7 @@ public interface RTextActionInfo {
 		KeyStroke.getKeyStroke(KeyEvent.VK_1, defaultModifier),
 		null,
 		KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0),
+		null,
 		null,
 		null,
 		null,

@@ -82,11 +82,11 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	public static final String PROPERTY_PROCESS_RUNNING	= "ProcessRunning";
 
-	protected static final String STYLE_PROMPT			= "prompt";
-	protected static final String STYLE_STDIN			= "stdin";
-	protected static final String STYLE_STDOUT			= "stdout";
-	protected static final String STYLE_STDERR			= "stderr";
-	protected static final String STYLE_EXCEPTION		= "exception";
+	public static final String STYLE_PROMPT			= "prompt";
+	public static final String STYLE_STDIN			= "stdin";
+	public static final String STYLE_STDOUT			= "stdout";
+	public static final String STYLE_STDERR			= "stderr";
+	public static final String STYLE_EXCEPTION		= "exception";
 
 	protected Plugin plugin;
 	private JPopupMenu popup;
