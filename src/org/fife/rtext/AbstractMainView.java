@@ -848,6 +848,13 @@ public abstract class AbstractMainView extends JPanel
 				currentTextArea.moveCaretPosition(start);
 				currentTextArea.getCaret().setSelectionVisible(true);
 
+				// The editor isn't visible initially, must wait to do this
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						RTextUtilities.centerSelectionVertically(currentTextArea);
+					}
+				});
+
 			} catch (Exception exc) {
 				owner.displayException(exc);
 				moveToTopOfCurrentDocument();

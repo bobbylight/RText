@@ -31,6 +31,8 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -49,6 +51,7 @@ import javax.swing.JWindow;
 import javax.swing.KeyStroke;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
+import javax.swing.text.BadLocationException;
 
 import org.fife.jgoodies.looks.common.ShadowPopupBorder;
 import org.fife.ui.SubstanceUtils;
@@ -143,6 +146,54 @@ public class RTextUtilities {
 										(String[])extensions);
 		}
 		chooser.addChoosableFileFilter(filter);
+	}
+
+
+	/**
+	 * Scrolls the selected text of a text area so that it is centered
+	 * vertically.
+	 *
+	 * @param textArea The text area.
+	 */
+	public static void centerSelectionVertically(RSyntaxTextArea textArea) {
+
+		Rectangle visible = textArea.getVisibleRect();
+
+		Rectangle r = null;
+		try {
+			r = textArea.modelToView(textArea.getCaretPosition());
+		} catch (BadLocationException ble) { // Never happens
+			ble.printStackTrace();
+			return;
+		}
+		visible.x = r.x - (visible.width - r.width) / 2;
+		visible.y = r.y - (visible.height - r.height) / 2;
+
+		Rectangle bounds = textArea.getBounds();
+		Insets i = textArea.getInsets();
+		bounds.x = i.left;
+		bounds.y = i.top;
+		bounds.width -= i.left + i.right;
+		bounds.height -= i.top + i.bottom;
+
+		if (visible.x < bounds.x) {
+			visible.x = bounds.x;
+		}
+
+		if (visible.x + visible.width > bounds.x + bounds.width) {
+			visible.x = bounds.x + bounds.width - visible.width;
+		}
+
+		if (visible.y < bounds.y) {
+			visible.y = bounds.y;
+		}
+
+		if (visible.y + visible.height > bounds.y + bounds.height) {
+			visible.y = bounds.y + bounds.height - visible.height;
+		}
+
+		textArea.scrollRectToVisible(visible);
+
 	}
 
 
