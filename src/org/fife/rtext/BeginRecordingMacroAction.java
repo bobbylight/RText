@@ -83,7 +83,7 @@ class BeginRecordingMacroAction
 	 * @param textArea The text area on which the action was performed.
 	 */
 	public void actionPerformedImpl(ActionEvent e, RTextArea textArea) {
-
+/*
 		// We check whether or not a macro is already being recorded so that
 		// we don't re-assign a value to the "temporary macro" property.
 		// The super's implementation does this too, but we don't want the
@@ -96,6 +96,10 @@ class BeginRecordingMacroAction
 			System.setProperty(RTextUtilities.MACRO_TEMPORARY_PROPERTY,
 							isTemporary ? "true" : "false");
 		}
+*/
+
+		NewMacroDialog nmd = new NewMacroDialog(rtext);
+		nmd.setVisible(true);
 
 	}
 

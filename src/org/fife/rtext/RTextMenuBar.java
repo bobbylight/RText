@@ -137,6 +137,8 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	private JCheckBoxMenuItem searchToolbarMenuItem;
 	private JCheckBoxMenuItem statusBarItem;
 	private JCheckBoxMenuItem lineNumbersItem;
+	private JMenuItem nextDocItem;
+	private JMenuItem prevDocItem;
 	private JMenuItem increaseFontSizesItem;
 	private JMenuItem decreaseFontSizesItem;
 	//private JRadioButtonMenuItem ltrItem, rtlItem;
@@ -529,6 +531,13 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		viewMenu.addSeparator();
 
+		nextDocItem = createMenuItem(rtext.getAction(RText.NEXT_DOCUMENT_ACTION));
+		viewMenu.add(nextDocItem);
+		prevDocItem = createMenuItem(rtext.getAction(RText.PREVIOUS_DOCUMENT_ACTION));
+		viewMenu.add(prevDocItem);
+
+		viewMenu.addSeparator();
+
 		filePropItem = createMenuItem(rtext.getAction(
 										RText.FILE_PROPERTIES_ACTION));
 		viewMenu.add(filePropItem);
@@ -871,6 +880,8 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		updateAction(toolbarItem, RText.TOOL_BAR_ACTION);
 		updateAction(statusBarItem, RText.STATUS_BAR_ACTION);
 		updateAction(lineNumbersItem, RText.LINE_NUMBER_ACTION);
+		updateAction(nextDocItem, RText.NEXT_DOCUMENT_ACTION);
+		updateAction(prevDocItem, RText.PREVIOUS_DOCUMENT_ACTION);
 		updateAction(filePropItem, RText.FILE_PROPERTIES_ACTION);
 		updateAction(helpItem, RText.HELP_ACTION_KEY);
 		updateAction(homePageItem, RText.HOME_PAGE_ACTION);

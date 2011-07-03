@@ -792,6 +792,13 @@ public abstract class AbstractMainView extends JPanel
 		gutter.setBorderColor(gutterBorderColor);
 		// Always visible, makes life easier
 		scrollPane.setIconRowHeaderEnabled(true);
+
+		// Remove problematic actions that prevent Ctrl+PageUp/PageDown from
+		// being used for cycling through active documents.
+		InputMap im = scrollPane.getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, InputEvent.CTRL_MASK), "nothing");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, InputEvent.CTRL_MASK), "nothing");
+
 		return scrollPane;
 	}
 

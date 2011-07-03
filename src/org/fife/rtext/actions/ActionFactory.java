@@ -237,6 +237,14 @@ public class ActionFactory implements RTextActionInfo {
 		a.setAccelerator(prefs.getAccelerator(VIEW_SPLIT_VERT_ACTION));
 		rtext.addAction(VIEW_SPLIT_VERT_ACTION, a);
 
+		a = new NextDocumentAction(rtext, msg, true);
+		a.setAccelerator(prefs.getAccelerator(NEXT_DOCUMENT_ACTION));
+		rtext.addAction(NEXT_DOCUMENT_ACTION, a);
+
+		a = new NextDocumentAction(rtext, msg, false);
+		a.setAccelerator(prefs.getAccelerator(PREVIOUS_DOCUMENT_ACTION));
+		rtext.addAction(PREVIOUS_DOCUMENT_ACTION, a);
+
 		msg = null; // May help with GC.
 
 	}
