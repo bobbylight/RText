@@ -457,7 +457,8 @@ class FindInFilesThread extends GUIWorkerThread {
 		// Get the list of regular expressions to apply when deciding
 		// whether or not to look in a file.  If we're on Windows, or OS X,
 		// do case-insensitive regexes.
-		String[] tokens = dialog.getInFilesComboBoxContents().split("\\s+");
+		String[] tokens = dialog.getInFilesComboBoxContents().trim().
+									split("\\s*,?\\s+");
 		if (tokens==null || tokens.length==0) {
 			return null;
 		}
