@@ -271,6 +271,18 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 
 
 	/**
+	 * Overridden to ensure the table completely fills the JViewport it
+	 * is sitting in.  Note in Java 6 this could be taken care of by the
+	 * method JTable#setFillsViewportHeight(boolean).
+	 */
+	public boolean getScrollableTracksViewportHeight() {
+		Component parent = getParent();
+		return parent instanceof JViewport ?
+			parent.getHeight()>getPreferredSize().height : false;
+	}
+
+
+	/**
 	 * Overridden in a "hack" to ensure that the table's contents are
 	 * always at least as large as the enclosing <code>JScrollPane</code>'s
 	 * viewport.
