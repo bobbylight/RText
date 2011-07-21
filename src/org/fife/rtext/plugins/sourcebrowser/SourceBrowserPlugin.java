@@ -81,6 +81,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private File ctagsFile;				// Just for speed.
 	private String ctagsType;
 
+	private SortAction sortAction;
+	private JToggleButton sortButton;
+
 	private ViewAction viewAction;
 	private SourceBrowserOptionPanel optionPanel;
 
@@ -137,6 +140,18 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private DockableWindow createDockableWindow(SourceBrowserPrefs sbp) {
 
 		DockableWindow wind = new DockableWindow(this.name, new BorderLayout());
+
+		JToolBar tb = new JToolBar();
+		tb.setFloatable(false);
+		wind.add(tb, BorderLayout.NORTH);
+
+		tb.add(Box.createHorizontalGlue());
+		sortAction = new SortAction(owner, msg);
+		sortButton = new JToggleButton(sortAction);
+		tb.add(sortButton);
+		// Allow tool bar to be resized very small so we don't hog space
+		tb.setMinimumSize(new Dimension(8, 8));
+		tb.setBorder(new BottomLineBorder(3));
 
 		sourceTree = new DefaultSourceTree(this, owner);
 
@@ -665,6 +680,24 @@ public class SourceBrowserPlugin extends GUIPlugin
 		public ExtendedTagEntry(String line) {
 			super(line);
 		}
+	}
+
+
+	/**
+	 * Toggles whether the source tree is sorted alphabetically.
+	 */
+	private class SortAction extends StandardAction {
+
+		public SortAction(RText app, ResourceBundle msg) {
+			super(app, msg, "Action.Sort");
+			setIcon(new ImageIcon(getClass().getResource("alphab_sort_co.gif")));
+			setName(null); // No text on button
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			// TODO
+		}
+
 	}
 
 

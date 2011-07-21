@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.*;
-import javax.swing.border.AbstractBorder;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
@@ -123,13 +122,13 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		backAction = new BackAction(getRText(), msg);
 		forwardAction = new ForwardAction(getRText(), msg);
 
-		tb.add(Box.createHorizontalStrut(3));
+//		tb.add(Box.createHorizontalStrut(3));
 		dirLabel = new JLabel();
 		// Allow label to be resized very small so it doesn't hog space
 		dirLabel.setMinimumSize(new Dimension(8, 8));
 		tb.add(dirLabel);
 		tb.setMinimumSize(new Dimension(8, 8)); // ditto
-		tb.setBorder(new BottomLineBorder());
+		tb.setBorder(new BottomLineBorder(3));
 
 		tb.add(Box.createHorizontalGlue());
 		JButton b = new JButton(backAction);
@@ -371,35 +370,6 @@ public class FileSystemTreePlugin extends GUIPlugin {
 				setEnabled(rootHistoryOffs>0);
 				forwardAction.setEnabled(rootHistoryOffs<rootHistory.size()-1);
 			}
-		}
-
-	}
-
-
-	/**
-	 * A border that draws a single 1-pixel line across the bottom of the
-	 * component.
-	 */
-	private static class BottomLineBorder extends AbstractBorder {
-
-		public BottomLineBorder() {
-		}
-
-		public Insets getBorderInsets(Component c) {
-			return getBorderInsets(c, new Insets(0, 0, 0, 0));
-		}
-
-		public Insets getBorderInsets(Component c, Insets insets) {
-			insets.top = insets.right = insets.left = 0;
-			insets.bottom = 1;
-			return insets;
-		}
-
-		public void paintBorder(Component c, Graphics g, int x, int y,
-								int width, int height) {
-			g.setColor(UIManager.getColor("controlDkShadow"));
-			y = y + height - 1;
-			g.drawLine(x,y, x+width-1,y);
 		}
 
 	}
