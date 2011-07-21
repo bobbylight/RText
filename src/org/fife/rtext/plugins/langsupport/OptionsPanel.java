@@ -122,6 +122,7 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 		addChildPanel(new COptionsPanel());
 		addChildPanel(new HtmlOptionsPanel());
 		addChildPanel(new JavaOptionsPanel());
+		addChildPanel(new JspOptionsPanel());
 		addChildPanel(new PerlOptionsPanel());
 		addChildPanel(new PhpOptionsPanel());
 		addChildPanel(new ShellOptionsPanel());

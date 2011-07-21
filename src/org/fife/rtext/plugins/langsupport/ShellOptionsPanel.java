@@ -25,7 +25,6 @@
 package org.fife.rtext.plugins.langsupport;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -37,7 +36,6 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import org.fife.rsta.ac.LanguageSupport;
@@ -94,7 +92,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 		cp.add(Box.createVerticalStrut(5));
 
 		enabledCB = createCB("Options.General.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB);
+		addLeftAligned(box, enabledCB, 5);
 
 		Box box2 = Box.createVerticalBox();
 		if (o.isLeftToRight()) {
@@ -106,30 +104,22 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 		box.add(box2);
 
 		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box2, showDescWindowCB);
+		addLeftAligned(box2, showDescWindowCB, 5);
 
 		useSystemManCB = createCB("UseSystemManPages");
-		addLeftAligned(box2, useSystemManCB);
+		addLeftAligned(box2, useSystemManCB, 5);
 
 		box2.add(Box.createVerticalGlue());
 
 		cp.add(Box.createVerticalStrut(5));
 		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton);
+		addLeftAligned(cp, rdButton, 5);
 
 		cp.add(Box.createVerticalGlue());
 
 		applyComponentOrientation(o);
 
-	}
-
-
-	private void addLeftAligned(Box to, Component c) {
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(c, BorderLayout.LINE_START);
-		to.add(panel);
-		to.add(Box.createVerticalStrut(5));
 	}
 
 
