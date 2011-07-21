@@ -22,15 +22,18 @@
 package org.fife.rtext.actions;
 
 import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import org.fife.rtext.RText;
+import org.fife.ui.UIUtil;
 import org.fife.ui.app.StandardAction;
 
 
@@ -46,6 +49,11 @@ public class CheckForUpdatesAction extends StandardAction {
 	 * The URL to contact to see if there is a newer RText release.
 	 */
 	private static final String CHECK_URL = "http://fifesoft.com/rtext/latest.properties";
+
+	/**
+	 * Where the user is directed to download the latest version.
+	 */
+	private static final String DOWNLOAD_URL = "http://sourceforge.net/projects/rtext";
 
 
 	/**
@@ -63,18 +71,52 @@ public class CheckForUpdatesAction extends StandardAction {
 
 
 	public void actionPerformed(ActionEvent e) {
+
 		try {
+
 			URL url = new URL(CHECK_URL);
 			InputStream in = (InputStream)url.getContent();
-			BufferedReader r = new BufferedReader(new InputStreamReader(in));
-			String line = null;
-			while ((line=r.readLine())!=null) {
-				System.out.println(line);
+			BufferedInputStream bin = new BufferedInputStream(in);
+			Properties props = new Properties();
+			props.load(bin);
+			bin.close();
+
+			String fileVersion = props.getProperty("File.Version");
+			if (!"1".equals(fileVersion)) {
+				throw new IOException("Unsupported file version: " + fileVersion);
 			}
-			r.close();
+
+			RText rtext = (RText)getApplication();
+			String current = rtext.getVersionString();
+			String latest = props.getProperty("Latest.RText.Version");
+			String releaseDate = props.getProperty("Latest.Release.Date");
+			
+			if (current.startsWith(latest)) {
+				String msg = rtext.getString("UpdateStatus.UpToDate");
+				String title = rtext.getString("InfoDialogHeader");
+				JOptionPane.showMessageDialog(null, msg, title,
+								JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				String msg = rtext.getString("UpdateStatus.NeedToUpdate",
+												latest, releaseDate);
+				String title = rtext.getString("InfoDialogHeader");
+				int rc = JOptionPane.showConfirmDialog(rtext, msg, title,
+											JOptionPane.YES_NO_OPTION);
+				if (rc==JOptionPane.YES_OPTION) {
+					msg = rtext.getString("UpdateStatus.ShutdownReminder");
+					JOptionPane.showMessageDialog(rtext, msg, title,
+										JOptionPane.WARNING_MESSAGE);
+					if (!UIUtil.browse(DOWNLOAD_URL)) { // Not Java 6
+						UIManager.getLookAndFeel().provideErrorFeedback(rtext);
+					}
+				}
+			}
+
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			getApplication().displayException(ioe);
 		}
+
 	}
 
 
