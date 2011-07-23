@@ -32,7 +32,6 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import javax.imageio.ImageIO;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -85,11 +84,7 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 
 		URL url = getClass().getResource("tools.png");
 		if (url!=null) { // Should always be true
-			try {
-				icon = new ImageIcon(ImageIO.read(url));
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-			}
+			icon = new ImageIcon(url);
 		}
 
 		ToolsPrefs prefs = loadPrefs();
@@ -247,7 +242,7 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 
 
 	/**
-	 * Loads saved preferences into the <code>prefs</code> member.  If this
+	 * Loads saved preferences for this plugin.  If this
 	 * is the first time through, default values will be returned.
 	 *
 	 * @return The preferences.

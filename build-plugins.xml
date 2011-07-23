@@ -200,6 +200,23 @@
 			</manifest>
 		</jar>
 
+		<!-- Macros plugin. -->
+		<jar destfile="${dist-dir}/plugins/MacroSupport.jar">
+			<fileset dir="${class-dir}">
+				<include name="org/fife/rtext/plugins/macros/**"/>
+			</fileset>
+			<fileset dir="${source-dir}">
+				<include name="org/fife/rtext/plugins/macros/*.png"/>
+			</fileset>
+			<fileset dir="i18n">
+				<include name="org/fife/rtext/plugins/macros/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.macros.MacroPlugin"/>
+				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
+			</manifest>
+		</jar>
+
 		<!-- Language support plugin. -->
 		<jar destfile="${dist-dir}/plugins/RTextLanguageSupport.jar">
 			<fileset dir="${class-dir}">
