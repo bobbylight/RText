@@ -27,14 +27,20 @@ package org.fife.rtext.plugins.langsupport;
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 
+import org.fife.rsta.ac.LanguageSupport;
+import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.UIUtil;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
 
@@ -46,6 +52,11 @@ import org.fife.ui.UIUtil;
  */
 public class JspOptionsPanel extends OptionsDialogPanel {
 
+	private Listener listener;
+	private JCheckBox enabledCB;
+
+	private static final String PROPERTY		= "Property";
+
 
 	/**
 	 * Constructor.
@@ -54,7 +65,7 @@ public class JspOptionsPanel extends OptionsDialogPanel {
 
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Jsp.Name"));
-//		listener = new Listener();
+		listener = new Listener();
 		setIcon(new ImageIcon(getClass().getResource("page_white_code_red.png")));
 
 		ComponentOrientation o = ComponentOrientation.
@@ -74,7 +85,8 @@ public class JspOptionsPanel extends OptionsDialogPanel {
 		cp.add(box);
 		cp.add(Box.createVerticalStrut(5));
 
-		// TODO: Add more stuff
+		enabledCB = createCB("Options.General.EnableCodeCompletion");
+		addLeftAligned(box, enabledCB);
 
 		cp.add(Box.createVerticalGlue());
 
@@ -83,14 +95,34 @@ public class JspOptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	protected void doApplyImpl(Frame owner) {
-		// TODO Auto-generated method stub
-
+	private JCheckBox createCB(String key) {
+		if (key.indexOf('.')==-1) {
+			key = "Options.JSP." + key;
+		}
+		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		cb.addActionListener(listener);
+		return cb;
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
+	protected void doApplyImpl(Frame owner) {
+
+		LanguageSupportFactory lsf = LanguageSupportFactory.get();
+		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_JSP);
+/* Only enable when we update RSTA jars
+		// Options dealing with code completion.
+		ls.setAutoCompleteEnabled(enabledCB.isSelected());
+*/
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -101,8 +133,43 @@ public class JspOptionsPanel extends OptionsDialogPanel {
 	}
 
 
+	private void setEnabledCBSelected(boolean selected) {
+		enabledCB.setSelected(selected);
+		// TODO: Toggle enabled state of all other components.
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	protected void setValuesImpl(Frame owner) {
-		// TODO Auto-generated method stub
+
+		LanguageSupportFactory lsf = LanguageSupportFactory.get();
+		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_JSP);
+/* Only enable when we update RSTA jars
+		// Options dealing with code completion
+		setEnabledCBSelected(ls.isAutoCompleteEnabled());
+*/
+	}
+
+
+	/**
+	 * Listens for events in this options panel.
+	 */
+	private class Listener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+
+			Object source = e.getSource();
+
+			if (enabledCB==source) {
+				// Trick related components to toggle enabled states
+				setEnabledCBSelected(enabledCB.isSelected());
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
+		}
 
 	}
 
