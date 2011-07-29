@@ -39,6 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import org.fife.rtext.KeyStrokeField;
 import org.fife.rtext.RText;
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.RButton;
@@ -103,7 +104,7 @@ public class NewMacroDialog extends EscapableDialog {
 		JLabel descLabel = UIUtil.createLabel(msg, "Label.Desc", "Label.Desc.Mnemonic");
 		JTextField descField = new JTextField(40);
 		JLabel shortcutLabel = UIUtil.createLabel(msg, "Label.Shortcut", "Label.Shortcut.Mnemonic");
-		JTextField shortcutField = new JTextField(40);
+		KeyStrokeField shortcutField = new KeyStrokeField();
 		JLabel typeLabel = UIUtil.createLabel(msg, "Label.Type", "Label.Type.Mnemonic");
 		String[] items = { "Rhino (JavaScript)", "Groovy" };
 		typeCombo = new JComboBox(items);

@@ -30,19 +30,16 @@ import java.awt.ComponentOrientation;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyEvent;
 import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import org.fife.rtext.KeyStrokeField;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.RButton;
@@ -178,64 +175,6 @@ public class GetKeyStrokeDialog extends JDialog implements ActionListener {
 			});
 		}
 		super.setVisible(visible);
-	}
-
-
-	/**
-	 * A text field that lets a user enter a <code>KeyStroke</code>.
-	 *
-	 * @author robert Robert Futrell
-	 * @version 1.0
-	 */
-	public static class KeyStrokeField extends JTextField {
-
-		private KeyStroke stroke;
-		private FocusAdapter listener;
-
-		public KeyStrokeField() {
-			super(20);
-			listener = new FocusHandler();
-			addFocusListener(listener);
-		}
-
-		/**
-		 * Returns the key stroke they've entered.
-		 *
-		 * @return The key stroke, or <code>null</code> if nothing is
-		 *         entered.
-		 */
-		public KeyStroke getKeyStroke() {
-			return stroke;
-		}
-
-		protected void processKeyEvent(KeyEvent e) {
-			int keyCode = e.getKeyCode();
-			if (e.getID()==KeyEvent.KEY_PRESSED &&
-				keyCode!=KeyEvent.VK_ENTER &&
-				keyCode!=KeyEvent.VK_BACK_SPACE) {
-				int modifiers = e.getModifiers();
-				setKeyStroke(KeyStroke.getKeyStroke(keyCode, modifiers));
-				return;
-			}
-			else if (keyCode==KeyEvent.VK_BACK_SPACE) {
-				stroke = null; // Not necessary; sanity check.
-				setText(null);
-			}
-		}
-
-		public void setKeyStroke(KeyStroke ks) {
-			stroke = ks;
-			setText(RTextUtilities.getPrettyStringFor(stroke));
-		}
-
-		private class FocusHandler extends FocusAdapter {
-
-			public void focusGained(FocusEvent e) {
-				selectAll();
-			}
-
-		}
-
 	}
 
 

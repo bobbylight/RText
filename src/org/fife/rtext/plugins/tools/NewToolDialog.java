@@ -61,9 +61,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 
 import org.fife.rtext.AssistanceIconPanel;
+import org.fife.rtext.KeyStrokeField;
 import org.fife.rtext.RTextUtilities;
-import org.fife.rtext.optionsdialog.GetKeyStrokeDialog;
-import org.fife.rtext.optionsdialog.GetKeyStrokeDialog.KeyStrokeField;
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.FSATextField;
 import org.fife.ui.MenuButton;
@@ -312,7 +311,7 @@ ac.install(dirField);
 		dirBrowseButton.setActionCommand("BrowseDir");
 		dirBrowseButton.addActionListener(this);
 		JLabel shortcutLabel = new JLabel(msg.getString("Shortcut"));
-		shortcutField = new GetKeyStrokeDialog.KeyStrokeField();
+		shortcutField = new KeyStrokeField();
 		JPanel shortcutFieldPanel = RTextUtilities.createAssistancePanel(shortcutField, null);
 
 		Dimension dim = new Dimension(1, 1); // MUST have finite width!
