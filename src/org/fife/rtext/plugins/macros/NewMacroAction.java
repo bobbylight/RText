@@ -25,6 +25,14 @@
 package org.fife.rtext.plugins.macros;
 
 import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ResourceBundle;
 import javax.swing.ImageIcon;
 
@@ -71,8 +79,59 @@ class NewMacroAction extends StandardAction {
 
 		Macro macro = nmd.getMacro();
 		if (macro!=null) {
+
+			File file = new File(macro.getFile());
+			if (!file.isFile()) { // Should always be true
+				createInitialContentByExtension(file);
+			}
+
+			((RText)getApplication()).openFile(file.getAbsolutePath());
 			MacroManager.get().addMacro(macro);
+
 		}
+
+	}
+
+
+	/**
+	 * Creates a new file with initial content for a macro, based on the
+	 * file's extension.
+	 *
+	 * @param file The file's extension.
+	 */
+	private void createInitialContentByExtension(File file) {
+
+		try {
+			PrintWriter w = new PrintWriter(new BufferedWriter(
+						new FileWriter(file)));
+			String fileName = file.getName();
+			String ext = fileName.substring(fileName.lastIndexOf('.')+1);
+			String content = getInitialContentImpl(ext);
+			w.println(content);
+			w.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+	}
+
+
+	private String getInitialContentImpl(String ext) throws IOException {
+
+		StringBuffer sb = new StringBuffer();
+
+		InputStream in = getClass().getResourceAsStream(ext + ".template.txt");
+		BufferedReader r = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		try {
+			while ((line=r.readLine())!=null) {
+				sb.append(line).append('\n');
+			}
+		} finally {
+			r.close();
+		}
+
+		return sb.toString();
 
 	}
 

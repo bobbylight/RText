@@ -29,7 +29,10 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.io.File;
 import java.util.Iterator;
+import java.util.SortedSet;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -96,7 +99,6 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 		macroTable.setRowHandler(new MacroTableRowHandler());
 		JTable table = macroTable.getTable();
 		TableColumnModel tcm = table.getColumnModel();
-		tcm.getColumn(0).setCellRenderer(new MacroCellRenderer());
 		tcm.getColumn(1).setCellRenderer(new KeyStrokeCellRenderer());
 		table.setPreferredScrollableViewportSize(new Dimension(300,300));
 		cp.add(macroTable);
@@ -110,12 +112,26 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	 * {@inheritDoc}
 	 */
 	protected void doApplyImpl(Frame owner) {
+
+		// Clear previous macros, but remember what they were.  We'll determine
+		// what macros were genuinely "removed" by the user, and delete their
+		// corresponding scripts.
 		MacroManager tm = MacroManager.get();
-		tm.clearMacros();
+		SortedSet oldMacros = tm.clearMacros();
+
 		for (int i=0; i<model.getRowCount(); i++) {
 			Macro macro = (Macro)model.getValueAt(i, 0);
 			tm.addMacro(macro);
+			oldMacros.remove(macro); // This macro was "kept".
 		}
+
+		// Delete scripts for macros that were removed.
+		for (Iterator i=oldMacros.iterator(); i.hasNext(); ) {
+			Macro deleted = (Macro)i.next();
+			System.out.println("Deleting macro: " + deleted);
+			new File(deleted.getFile()).delete();
+		}
+
 	}
 
 
@@ -152,7 +168,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 		model.setRowCount(0);
 		for (Iterator i=tm.getMacroIterator(); i.hasNext(); ) {
 			Macro macro = (Macro)i.next();
-			model.addRow(new Object[] { macro,
+			model.addRow(new Object[] { macro.clone(),
 								KeyStroke.getKeyStroke(macro.getAccelerator()),
 								macro.getDesc() });
 		}
@@ -171,24 +187,6 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 										 hasFocus, row, column);
 			KeyStroke ks = (KeyStroke)value;
 			setText(RTextUtilities.getPrettyStringFor(ks));
-			setComponentOrientation(table.getComponentOrientation());
-			return this;
-		}
-
-	}
-
-
-	/**
-	 * Renderer for macros in the JTable.
-	 */
-	private static class MacroCellRenderer extends DefaultTableCellRenderer {
-
-		public Component getTableCellRendererComponent(JTable table,
-								Object value, boolean isSelected,
-								boolean hasFocus, int row, int column) {
-			super.getTableCellRendererComponent(table, value, isSelected,
-										 hasFocus, row, column);
-			setText(((Macro)value).getName());
 			setComponentOrientation(table.getComponentOrientation());
 			return this;
 		}

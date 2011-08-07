@@ -40,7 +40,7 @@ import org.fife.ui.search.AbstractSearchDialog;
  * @version 1.0
  */
 public abstract class ContentAssistField extends JTextField
-										implements ContentAssistable{
+										implements ContentAssistable {
 
 	/**
 	 * Whether content assist is enabled.

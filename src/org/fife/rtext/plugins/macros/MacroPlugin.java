@@ -1,3 +1,27 @@
+/*
+ * 07/31/2011
+ *
+ * MacroPlugin.java - Plugin adding macro support to RText.
+ * Copyright (C) 2011 Robert Futrell
+ * robert_futrell at users.sourceforge.net
+ * http://rtext.fifesoft.com
+ *
+ * This file is a part of RText.
+ *
+ * RText is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * RText is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package org.fife.rtext.plugins.macros;
 
 import java.beans.PropertyChangeEvent;
@@ -73,6 +97,19 @@ public class MacroPlugin implements Plugin, PropertyChangeListener {
 		a.setAccelerator(prefs.editMacrosAccelerator);
 		rtext.addAction(EDIT_MACROS_ACTION, a);
 
+	}
+
+
+	/**
+	 * Creates a menu item from an action, with no tool tip.
+	 *
+	 * @param a The action.
+	 * @return The menu item.
+	 */
+	private JMenuItem createMenuItem(Action a) {
+		JMenuItem item = new JMenuItem(a);
+		item.setToolTipText(null);
+		return item;
 	}
 
 
@@ -154,6 +191,20 @@ public class MacroPlugin implements Plugin, PropertyChangeListener {
 
 
 	/**
+	 * Returns localized text for the given key.
+	 *
+	 * @param key The key.
+	 * @param param The single parameter for the localized text.
+	 * @return The localized text.
+	 */
+	String getString(String key, String param) {
+		String text = msg.getString(key);
+		text = MessageFormat.format(text, new String[] { param });
+		return text;
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public void install(AbstractPluggableGUIApplication app) {
@@ -166,9 +217,9 @@ public class MacroPlugin implements Plugin, PropertyChangeListener {
 		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
 		macrosMenu = new JMenu(getString("Plugin.Name"));
 		Action a = rtext.getAction(MacroPlugin.NEW_MACRO_ACTION);
-		macrosMenu.add(new JMenuItem(a));//createMenuItem(a));
+		macrosMenu.add(createMenuItem(a));//createMenuItem(a));
 		a = rtext.getAction(MacroPlugin.EDIT_MACROS_ACTION);
-		macrosMenu.add(new JMenuItem(a));//createMenuItem(a));
+		macrosMenu.add(createMenuItem(a));//createMenuItem(a));
 		macrosMenu.addSeparator();
 		mb.addExtraMenu(macrosMenu);
 		mb.revalidate();
@@ -254,8 +305,9 @@ public class MacroPlugin implements Plugin, PropertyChangeListener {
 		if (MacroManager.get().getMacroCount()>0) {
 			for (Iterator i=MacroManager.get().getMacroIterator(); i.hasNext(); ){
 				Macro macro = (Macro)i.next();
-				RunMacroAction a = new RunMacroAction(app, macro);
+				RunMacroAction a = new RunMacroAction(app, this, macro);
 				JMenuItem item = new JMenuItem(a);
+				item.setToolTipText(null); // Remove annoying tool tip
 				macrosMenu.add(item);
 			}
 		}

@@ -28,7 +28,6 @@ import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
@@ -36,6 +35,7 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import org.fife.rtext.RText;
@@ -50,6 +50,11 @@ import org.fife.ui.app.StandardAction;
  * @version 1.0
  */
 public class RunMacroAction extends StandardAction {
+
+	/**
+	 * The macro plugin.
+	 */
+	private MacroPlugin plugin;
 
 	/**
 	 * The macro to run.
@@ -91,18 +96,27 @@ public class RunMacroAction extends StandardAction {
 	 */
 	private Object jsEngine;
 
+	/**
+	 * javax.script.ScriptEngine instance for Groovy.
+	 */
+	private Object groovyEngine;
+
 
 	/**
 	 * Constructor.
 	 *
 	 * @param app The parent application.
+	 * @param plugin The plugin.
 	 * @param tool The tool to run.
 	 */
-	public RunMacroAction(RText app, Macro macro) {
+	public RunMacroAction(RText app, MacroPlugin plugin, Macro macro) {
 		super(app, macro.getName());
-		setAccelerator(KeyStroke.getKeyStroke(macro.getAccelerator()));
+		this.plugin = plugin;
+		String shortcut = macro.getAccelerator();
+		setAccelerator(shortcut==null ? null : KeyStroke.getKeyStroke(shortcut));
 		setShortDescription(macro.getDesc());
 		this.macro = macro;
+		init();
 	}
 
 
@@ -114,8 +128,21 @@ public class RunMacroAction extends StandardAction {
 
 	private void handleSubmit(Macro macro) {
 
-		File file = macro.getFile();
-		
+		// Verify that the file exists before trying to run it.
+		File file = new File(macro.getFile());
+		if (!file.isFile()) {
+			String text = plugin.getString("Error.ScriptDoesNotExist",
+									file.getAbsolutePath());
+			RText app = (RText)getApplication();
+			String title = app.getString("ErrorDialogTitle");
+			int rc = JOptionPane.showConfirmDialog(app, text, title,
+					JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+			if (rc==JOptionPane.YES_OPTION) {
+				MacroManager.get().removeMacro(macro);
+			}
+			return;
+		}
+
 		try {
 			BufferedReader r = new BufferedReader(new FileReader(file));
 			try {
@@ -123,14 +150,15 @@ public class RunMacroAction extends StandardAction {
 			} finally {
 				r.close();
 			}
-		} catch (IOException ioe) {
-			getApplication().displayException(ioe);
+		} catch (Throwable t/*IOException ioe*/) {
+			getApplication().displayException(t/*ioe*/);
 		}
 
 	}
 
 
-	private void handleSubmit(String sourceName, BufferedReader r) {
+	private void handleSubmit(String sourceName, BufferedReader r) throws
+								Throwable {
 
 		RText app = (RText)getApplication();
 
@@ -148,7 +176,10 @@ public class RunMacroAction extends StandardAction {
 			engine = initJavaScriptEngine();
 		}
 		else if (sourceName.endsWith(".groovy")) {
-			engine = null;
+			engine = initGroovyEngine();
+			if (engine==null) { // An error message was already displayed
+				return;
+			}
 		}
 		if (engine==null) {
 			app.displayException(new Exception("Bad macro type: " + sourceName));
@@ -189,7 +220,7 @@ public class RunMacroAction extends StandardAction {
 			if (ex instanceof InvocationTargetException) {
 				ex = ex.getCause();
 			}
-			app.displayException(ex);
+			throw ex;
 		}
 
 	}
@@ -205,6 +236,70 @@ public class RunMacroAction extends StandardAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	/**
+	 * Returns the Groovy engine, lazily creating it if necessary.
+	 *
+	 * @return The script engine, or <code>null</code> if it cannot be created.
+	 */
+	private Object initGroovyEngine() {
+
+		File groovyJar = new File(getApplication().getInstallLocation(),
+				"plugins/groovy-all.jar");
+		if (!groovyJar.isFile()) {
+			String message = plugin.getString("Error.NoGroovyJar",
+								groovyJar.getAbsolutePath());
+			RText app = (RText)getApplication();
+			String title = app.getString("ErrorDialogTitle");
+			JOptionPane.showMessageDialog(app, message, title,
+					JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+
+		if (groovyEngine==null) {
+
+			try {
+
+				Method m = semClazz.getDeclaredMethod("getEngineByName",
+						new Class[] { String.class });
+				groovyEngine = m.invoke(sem, new Object[] { "Groovy" });
+
+				// Write stdout and stderr to this console.  Must wrap these in
+				// PrintWriters for standard print() and println() methods to work.
+				m = seClazz.getDeclaredMethod("getContext", null);
+				Object context = m.invoke(groovyEngine, null);
+				m = scriptContextClazz.getDeclaredMethod("setWriter",
+											new Class[] { Writer.class });
+				PrintWriter w = new PrintWriter(new OutputStreamWriter(System.out));
+				m.invoke(context, new Object[] { w });
+				m = scriptContextClazz.getDeclaredMethod("setErrorWriter",
+					new Class[] { Writer.class });
+				w = new PrintWriter(new OutputStreamWriter(System.err));
+				m.invoke(context, new Object[] { w });
+
+				// Import commonly-used packages.  Do this before stdout and
+				// stderr redirecting so the user won't see it in their console.
+				String imports = "import java.lang;" +
+						"import java.io;" +
+						"import java.util;" +
+						"import java.awt;" +
+						"import javax.swing;" +
+						"import org.fife.rtext;" +
+						"import org.fife.ui.rtextarea;" +
+						"import org.fife.ui.rsyntaxtextarea;";
+				m = seClazz.getDeclaredMethod("eval", new Class[] { String.class });
+				m.invoke(groovyEngine, new Object[] { imports });
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		return groovyEngine;
+
 	}
 
 

@@ -318,6 +318,7 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 				Tool tool = (Tool)i.next();
 				RunToolAction a = new RunToolAction(app, tool, window);
 				JMenuItem item = new JMenuItem(a);
+				item.setToolTipText(null); // Removing annoying tool tip
 				toolsMenu.add(item, toolsMenu.getMenuComponentCount()-3);
 			}
 		}

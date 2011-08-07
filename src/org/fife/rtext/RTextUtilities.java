@@ -219,20 +219,20 @@ public class RTextUtilities {
 
 	/**
 	 * Creates a panel containing the specified component and an (optional)
-	 * assistance icon panel.
+	 * dedorative (or assistance) icon panel.
 	 *
 	 * @param comp The component.
-	 * @param aip The assistance icon panel.  If this is <code>null</code>,
-	 *        then a spacer is used.
+	 * @param iconPanel The icon panel.  If this is <code>null</code>, then a
+	 *        spacer is used.
 	 * @return The panel.
 	 */
 	public static JPanel createAssistancePanel(JComponent comp,
-											AssistanceIconPanel aip) {
-		if (aip==null) {
-			aip = new AssistanceIconPanel(null);
+											DecorativeIconPanel iconPanel) {
+		if (iconPanel==null) {
+			iconPanel = new DecorativeIconPanel();
 		}
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(aip, BorderLayout.LINE_START);
+		panel.add(iconPanel, BorderLayout.LINE_START);
 		panel.add(comp);
 		return panel;
 	}

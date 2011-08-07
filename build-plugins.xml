@@ -207,6 +207,8 @@
 			</fileset>
 			<fileset dir="${source-dir}">
 				<include name="org/fife/rtext/plugins/macros/*.png"/>
+				<include name="org/fife/rtext/plugins/macros/*.gif"/>
+				<include name="org/fife/rtext/plugins/macros/*.txt"/>
 			</fileset>
 			<fileset dir="i18n">
 				<include name="org/fife/rtext/plugins/macros/**"/>

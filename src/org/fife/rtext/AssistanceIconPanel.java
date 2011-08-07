@@ -25,9 +25,7 @@
  */
 package org.fife.rtext;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -37,9 +35,6 @@ import java.util.ResourceBundle;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.text.JTextComponent;
 
 
@@ -50,26 +45,14 @@ import javax.swing.text.JTextComponent;
  * @author Robert Futrell
  * @version 1.0
  */
-public class AssistanceIconPanel extends JPanel
+public class AssistanceIconPanel extends DecorativeIconPanel
 						implements FocusListener, PropertyChangeListener {
-
-	/**
-	 * The width of this icon panel, to help align the components we're
-	 * listening to with other combos or text fields without an
-	 * AssistanceIconPanel.
-	 */
-	public static final int WIDTH		= 8;
-
-	private JLabel iconLabel;
-	private boolean showIcon;
 
 	/**
 	 * The tooltip text for the light bulb icon.  It is assumed that access
 	 * to this field is single-threaded (on the EDT).
 	 */
 	private static String ASSISTANCE_AVAILABLE;
-
-	private static final EmptyIcon EMPTY_ICON = new EmptyIcon(WIDTH, WIDTH);
 
 
 	/**
@@ -79,11 +62,6 @@ public class AssistanceIconPanel extends JPanel
 	 *        to create a "filler" icon panel for alignment purposes.  
 	 */
 	public AssistanceIconPanel(JComponent comp) {
-
-		setLayout(new BorderLayout());
-		iconLabel = new JLabel(EMPTY_ICON);
-		iconLabel.setVerticalAlignment(SwingConstants.TOP);
-		add(iconLabel, BorderLayout.NORTH);
 
 		// null can be passed to make a "filler" icon panel for alignment
 		// purposes.
@@ -115,8 +93,7 @@ public class AssistanceIconPanel extends JPanel
 	 * @param e The focus event.
 	 */
 	public void focusGained(FocusEvent e) {
-		showIcon = true;
-		iconLabel.repaint();
+		setShowIcon(true);
 	}
 
 
@@ -126,8 +103,7 @@ public class AssistanceIconPanel extends JPanel
 	 * @param e The focus event.
 	 */
 	public void focusLost(FocusEvent e) {
-		showIcon = false;
-		iconLabel.repaint();
+		setShowIcon(false);
 	}
 
 
@@ -144,18 +120,6 @@ public class AssistanceIconPanel extends JPanel
 			ASSISTANCE_AVAILABLE = msg.getString("ContentAssistAvailable");
 		}
 		return ASSISTANCE_AVAILABLE;
-	}
-
-
-	/**
-	 * Paints any child components.
-	 *
-	 * @param g The graphics context.
-	 */
-	protected void paintChildren(Graphics g) {
-		if (showIcon) {
-			super.paintChildren(g);
-		}
 	}
 
 
@@ -180,13 +144,13 @@ public class AssistanceIconPanel extends JPanel
 	 *        is not currently available.
 	 */
 	public void setAssistanceEnabled(Image img) {
-		if (img==null && iconLabel.getIcon()!=EMPTY_ICON) {
-			iconLabel.setIcon(EMPTY_ICON);
-			iconLabel.setToolTipText(null);
+		if (img==null && getIcon()!=EMPTY_ICON) {
+			setIcon(EMPTY_ICON);
+			setToolTipText(null);
 		}
 		else {
-			iconLabel.setIcon(new ImageIcon(img));
-			iconLabel.setToolTipText(getAssistanceAvailableText());
+			setIcon(new ImageIcon(img));
+			setToolTipText(getAssistanceAvailableText());
 		}
 	}
 

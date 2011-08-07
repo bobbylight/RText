@@ -254,13 +254,10 @@ public class FindDialog extends AbstractFindReplaceDialog implements ActionListe
 	 */
 	public void setVisible(boolean visible) {
 
-		if (visible==true) {
+		if (visible) {
 
 			String selectedItem = (String)findTextCombo.getSelectedItem();
-			if (selectedItem==null)
-				findNextButton.setEnabled(false);
-			else
-				findNextButton.setEnabled(true);
+			findNextButton.setEnabled(selectedItem!=null);
 
 			// Call JDialog's setVisible.
 			super.setVisible(true);

@@ -1,3 +1,27 @@
+/*
+ * 07/30/2011
+ *
+ * MacroManager.java - Manages all macros.
+ * Copyright (C) 2011 Robert Futrell
+ * robert_futrell at users.sourceforge.net
+ * http://rtext.fifesoft.com
+ *
+ * This file is a part of RText.
+ *
+ * RText is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * RText is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package org.fife.rtext.plugins.macros;
 
 import java.beans.PropertyChangeListener;
@@ -11,8 +35,9 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -34,14 +59,19 @@ public class MacroManager {
 	private PropertyChangeSupport support;
 
 	/**
-	 * The extension all macro files end with.
+	 * The extension all macro files in older versions of RText ended with.
 	 */
-	private static final String MACRO_FILE_EXTENSION		= ".macro";
+	private static final String OLD_MACRO_FILE_EXTENSION	= ".macro";
 
 	/**
 	 * The singleton instance of this class.
 	 */
 	private static final MacroManager INSTANCE = new MacroManager();
+
+	/**
+	 * The name of the file that lists our macro definitions.
+	 */
+	private static final String MACRO_DEFINITION_FILE_NAME = "macroDefinitions.xml";
 
 
 	/**
@@ -61,6 +91,11 @@ public class MacroManager {
 	 * @see #removeMacro(Macro)
 	 */
 	public void addMacro(Macro macro) {
+		// Macros are considered equal if they have the same name.  Since the
+		// user is allowed to "overwrite" an existing macro, we must remove any
+		// previous macro with that name before adding the new one, since Sets
+		// don't add an element if it "already exists."
+		macros.remove(macro);
 		macros.add(macro);
 		support.firePropertyChange(PROPERTY_MACROS, null, null);
 	}
@@ -82,10 +117,34 @@ public class MacroManager {
 	/**
 	 * Removes all macros from this manager.  This fires a property change
 	 * event of type {@link #PROPERTY_MACROS}.
+	 *
+	 * @return The macros that existed before the clear operation.  This may be
+	 *         empty, but will never be <code>null</code>.
 	 */
-	public void clearMacros() {
+	public SortedSet clearMacros() {
+		TreeSet copy = new TreeSet(macros);
 		macros.clear();
 		support.firePropertyChange(PROPERTY_MACROS, null, null);
+		return copy;
+	}
+
+
+	/**
+	 * Returns whether a macro is defined with the specified name.
+	 *
+	 * @param name The name to check for.
+	 * @return Whether a macro is already defined with that name.
+	 */
+	public boolean containsMacroNamed(String name) {
+		boolean found = false;
+		for (Iterator i=getMacroIterator(); i.hasNext(); ) {
+			Macro m = (Macro)i.next();
+			if (m.getName().equalsIgnoreCase(name)) {
+				found = true;
+				break;
+			}
+		}
+		return found;
 	}
 
 
@@ -135,29 +194,14 @@ public class MacroManager {
 		ClassLoader threadCL = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(Macro.class.getClassLoader());
 
-		File[] files = dir.listFiles(new MacroFilenameFilter());
-		boolean delete = false;
-		for (int i=0; i<files.length; i++) {
-
-			delete = false;
+		File file = new File(dir, MACRO_DEFINITION_FILE_NAME);
+		if (file.isFile()) {
 			XMLDecoder d = new XMLDecoder(new BufferedInputStream(
-					new FileInputStream(files[i])));
-
-			try {
-				addMacro((Macro)d.readObject());
-			} catch (NoSuchElementException nsee) {
-				// Thrown when reading the old macro files.
-				delete = true;
-			} finally {
-				d.close();
+					new FileInputStream(file)));
+			List macroList = (List)d.readObject();
+			for (Iterator i=macroList.iterator(); i.hasNext(); ) {
+				addMacro((Macro)i.next());
 			}
-
-			// Just the old macro format; remove these (very rude, but I
-			// don't think anybody was using them).
-			if (delete) {
-				files[i].delete();
-			}
-
 		}
 
 		Thread.currentThread().setContextClassLoader(threadCL);
@@ -206,7 +250,7 @@ public class MacroManager {
 
 		// First, clear out old macros
 		if (dir.isDirectory()) { // Should always already exist.
-			File[] oldFiles = dir.listFiles(new MacroFilenameFilter());
+			File[] oldFiles = dir.listFiles(new OldMacroFilenameFilter());
 			for (int i=0; i<oldFiles.length; i++) {
 				oldFiles[i].delete();
 			}
@@ -222,17 +266,17 @@ public class MacroManager {
 		ClassLoader threadCL = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(Macro.class.getClassLoader());
 
-		// Now save the new ones.
-		for (Iterator i=getMacroIterator(); i.hasNext(); ) {
-			Macro macro = (Macro)i.next();
-			File file = new File(dir, macro.getName() + MACRO_FILE_EXTENSION);
-			XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
-										new FileOutputStream(file)));
-			try {
-				e.writeObject(macro);
-			} finally {
-				e.close();
-			}
+		// Put our macros into a list.
+		List macroList = new ArrayList(macros);
+
+		// Save our list of macros as XML.
+		File file = new File(dir, MACRO_DEFINITION_FILE_NAME);
+		XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
+									new FileOutputStream(file)));
+		try {
+			e.writeObject(macroList);
+		} finally {
+			e.close();
 		}
 
 		Thread.currentThread().setContextClassLoader(threadCL);
@@ -241,12 +285,12 @@ public class MacroManager {
 
 
 	/**
-	 * Filter that locates macro definition files.
+	 * Filter that locates old macro definition files.
 	 */
-	private static class MacroFilenameFilter implements FileFilter {
+	private static class OldMacroFilenameFilter implements FileFilter {
 
 		public boolean accept(File file) {
-			return file.getName().endsWith(MACRO_FILE_EXTENSION);
+			return file.getName().endsWith(OLD_MACRO_FILE_EXTENSION);
 		}
 
 	}
