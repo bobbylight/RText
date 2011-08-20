@@ -33,6 +33,7 @@
 	<target name="compile-plugin-classes"
 			description="Compile the source without deleting classes dir.">
 		<javac srcdir="${source-dir}" destdir="${class-dir}" deprecation="yes"
+				includeantruntime="false"
 				debug="${debug}" debuglevel="${debuglevel}"
 				source="${java-level}" target="${java-level}">
 			<include name="org/fife/rtext/plugins/**"/>

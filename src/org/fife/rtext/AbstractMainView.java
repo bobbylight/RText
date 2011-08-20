@@ -90,6 +90,7 @@ public abstract class AbstractMainView extends JPanel
 	public static final int DOCUMENT_SELECT_BOTTOM	= JTabbedPane.BOTTOM;
 	public static final int DOCUMENT_SELECT_RIGHT	= JTabbedPane.RIGHT;
 
+	public static final String AUTO_INSERT_CLOSING_CURLYS		= "MainView.autoInsertClosingCurlys";
 	public static final String CURRENT_DOCUMENT_PROPERTY		= "MainView.currentDocument";
 	public static final String DEFAULT_ENCODING_PROPERTY		= "MainView.defaultEncoding";
 	public static final String FILE_SIZE_CHECK_PROPERTY		= "MainView.fileSizeCheck";
@@ -98,6 +99,7 @@ public abstract class AbstractMainView extends JPanel
 	public static final String MARK_OCCURRENCES_COLOR_PROPERTY	= "MainView.markOccurrencesColor";
 	public static final String MARK_OCCURRENCES_PROPERTY		= "MainView.markOccurrences";
 	public static final String MAX_FILE_SIZE_PROPERTY			= "MainView.maxFileSize";
+	public static final String REMEMBER_WS_LINES_PROPERTY		= "MainView.rememberWhitespaceLines";
 	public static final String ROUNDED_SELECTION_PROPERTY		= "MainView.roundedSelection";
 	public static final String SMOOTH_TEXT_PROPERTY			= "MainView.smoothText";
 	public static final String TEXT_AREA_ADDED_PROPERTY		= "MainView.textAreaAdded";
@@ -162,6 +164,8 @@ public abstract class AbstractMainView extends JPanel
 
 	private boolean whitespaceVisible;
 	private boolean showEOLMarkers;
+	private boolean rememberWhitespaceLines;
+	private boolean autoInsertClosingCurlys;
 
 	private String aaHintFieldName;			// Whether text is anti-aliased.
 	private boolean fractionalMetricsEnabled;	// Whether fractional fontmetrics are used.
@@ -614,6 +618,74 @@ public abstract class AbstractMainView extends JPanel
 		owner			= fromPanel.owner;
 		syntaxFilters		= fromPanel.syntaxFilters;
 
+		highlightCurrentLine = fromPanel.highlightCurrentLine;
+		currentLineColor = fromPanel.currentLineColor;
+
+		highlightModifiedDocDisplayNames = fromPanel.highlightModifiedDocDisplayNames;
+		modifiedDocumentDisplayNameColor = fromPanel.modifiedDocumentDisplayNameColor;
+
+		checkForModification = fromPanel.checkForModification;
+		modificationCheckDelay = fromPanel.modificationCheckDelay;
+
+		bracketMatchingEnabled = fromPanel.bracketMatchingEnabled;
+		matchedBracketBGColor = fromPanel.matchedBracketBGColor;
+		matchedBracketBorderColor = fromPanel.matchedBracketBorderColor;
+
+		marginLineEnabled = fromPanel.marginLineEnabled;
+		marginLinePosition = fromPanel.marginLinePosition;
+		marginLineColor = fromPanel.marginLineColor;
+
+		hyperlinksEnabled = fromPanel.hyperlinksEnabled;
+		hyperlinkColor = fromPanel.hyperlinkColor;
+		hyperlinkModifierKey = fromPanel.hyperlinkModifierKey;
+
+		whitespaceVisible = fromPanel.whitespaceVisible;
+		showEOLMarkers = fromPanel.showEOLMarkers;
+		rememberWhitespaceLines = fromPanel.rememberWhitespaceLines;
+		autoInsertClosingCurlys = fromPanel.autoInsertClosingCurlys;
+
+		aaHintFieldName = fromPanel.aaHintFieldName;
+		fractionalMetricsEnabled = fromPanel.fractionalMetricsEnabled;
+
+		markAllHighlightColor = fromPanel.markAllHighlightColor;
+
+		markOccurrences = fromPanel.markOccurrences;
+		markOccurrencesColor = fromPanel.markOccurrencesColor;
+
+		roundedSelectionEdges = fromPanel.roundedSelectionEdges;
+		caretBlinkRate = fromPanel.caretBlinkRate;
+
+		carets = (int[])fromPanel.carets.clone();
+
+		doFileSizeCheck = fromPanel.doFileSizeCheck;
+		maxFileSize = fromPanel.maxFileSize;
+
+		ignoreBackupExtensions = fromPanel.ignoreBackupExtensions;
+
+		textAreaFont = fromPanel.textAreaFont;
+		textAreaUnderline = fromPanel.textAreaUnderline;
+		textAreaForeground = fromPanel.textAreaForeground;
+		textAreaOrientation = fromPanel.textAreaOrientation;
+
+		// "Move over" all current text area listeners.
+		// Remember "listeners" is guaranteed to be non-null.
+		Object[] listeners = fromPanel.listenerList.getListenerList();
+		Class ctalClass = CurrentTextAreaListener.class;
+		for (int i=0; i<listeners.length; i+=2) {
+			if (listeners[i]==ctalClass) {
+				CurrentTextAreaListener l =
+						(CurrentTextAreaListener)listeners[i+1];
+				fromPanel.listenerList.remove(ctalClass, l);
+				listenerList.add(ctalClass, l);
+			}
+		}
+
+		bookmarkIcon = fromPanel.bookmarkIcon;
+		bookmarksEnabled = fromPanel.bookmarksEnabled;
+		lineNumberFont = fromPanel.lineNumberFont;
+		lineNumberColor = fromPanel.lineNumberColor;
+		gutterBorderColor = fromPanel.gutterBorderColor;
+
 		setPreferredSize(fromPanel.getPreferredSize());
 
 		int numDocuments = fromPanel.getNumDocuments();
@@ -638,19 +710,6 @@ public abstract class AbstractMainView extends JPanel
 		setSelectedIndex(fromSelectedIndex);
 
 		spellingSupport = fromPanel.spellingSupport;
-
-		// "Move over" all current text area listeners.
-		// Remember "listeners" is guaranteed to be non-null.
-		Object[] listeners = fromPanel.listenerList.getListenerList();
-		Class ctalClass = CurrentTextAreaListener.class;
-		for (int i=0; i<listeners.length; i+=2) {
-			if (listeners[i]==ctalClass) {
-				CurrentTextAreaListener l =
-						(CurrentTextAreaListener)listeners[i+1];
-				fromPanel.listenerList.remove(ctalClass, l);
-				listenerList.add(ctalClass, l);
-			}
-		}
 
 	}
 
@@ -717,6 +776,8 @@ public abstract class AbstractMainView extends JPanel
 		}
 		pane.setWhitespaceVisible(isWhitespaceVisible());
 		pane.setEOLMarkersVisible(getShowEOLMarkers());
+		pane.setClearWhitespaceLinesEnabled(!rememberWhitespaceLines);
+		pane.setCloseCurlyBraces(autoInsertClosingCurlys);
 		pane.setCaretColor(getCaretColor());
 		pane.setSelectionColor(getSelectionColor());
 		pane.setSyntaxScheme(owner.getSyntaxScheme());
@@ -894,6 +955,18 @@ public abstract class AbstractMainView extends JPanel
 											oldValue, newValue));
 			}
 		}
+	}
+
+
+	/**
+	 * Returns whether closing curly braces are auto-inserted in languages
+	 * where it is appropriate.
+	 *
+	 * @return Whether closing curly braces are auto-inserted.
+	 * @see #setAutoInsertClosingCurlys(boolean)
+	 */
+	public boolean getAutoInsertClosingCurlys() {
+		return autoInsertClosingCurlys;
 	}
 
 
@@ -1446,6 +1519,18 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns whether whitespace lines are remembered (as opposed to cleared
+	 * on Enter presses).
+	 *
+	 * @return Whether whitespace lines are remembered.
+	 * @see #setRememberWhitespaceLines(boolean)
+	 */
+	public boolean getRememberWhitespaceLines() {
+		return rememberWhitespaceLines;
+	}
+
+
+	/**
 	 * Returns whether selection edges are rounded in text areas.
 	 *
 	 * @return Whether selection edges are rounded.
@@ -1953,6 +2038,8 @@ public abstract class AbstractMainView extends JPanel
 		setModifiedDocumentDisplayNamesColor(prefs.modifiedDocumentNamesColor);
 		setWhitespaceVisible(prefs.visibleWhitespace);
 		setShowEOLMarkers(prefs.showEOLMarkers);
+		setRememberWhitespaceLines(prefs.rememberWhitespaceLines);
+		setAutoInsertClosingCurlys(prefs.autoInsertClosingCurlys);
 		setTextAAHintName(prefs.textAAHintFieldName);
 		setFractionalFontMetricsEnabled(prefs.fractionalMetricsEnabled);
 		setMarkAllHighlightColor(prefs.markAllHighlightColor);
@@ -2602,6 +2689,27 @@ public abstract class AbstractMainView extends JPanel
 
 		return true;
 
+	}
+
+
+	/**
+	 * Toggles whether closing curly braces are auto-inserted for languages
+	 * where it makes sense.  This method fires a property change event of type
+	 * {@link #AUTO_INSERT_CLOSING_CURLYS}.
+	 *
+	 * @param autoInsert Whether to auto-insert curlys.
+	 * @see #getAutoInsertClosingCurlys()
+	 */
+	public void setAutoInsertClosingCurlys(boolean autoInsert) {
+		if (autoInsert!=autoInsertClosingCurlys) {
+			autoInsertClosingCurlys = autoInsert;
+			for (int i=0; i<getNumDocuments(); i++) {
+				RTextEditorPane textArea = getRTextEditorPaneAt(i);
+				textArea.setCloseCurlyBraces(autoInsert);
+			}
+			firePropertyChange(AUTO_INSERT_CLOSING_CURLYS,
+					!autoInsert, autoInsert);
+		}
 	}
 
 
@@ -3365,7 +3473,29 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Sets whether selection edges are rounded in text areas.
+	 * Toggles whether whitespace lines should be remembered (vs. cleared out
+	 * on Enter presses).  This method fires a property change event of type
+	 * {@link #REMEMBER_WS_LINES_PROPERTY}.
+	 * 
+	 * @param remember Whether to remember whitespace lines.
+	 * @see #getRememberWhitespaceLines()
+	 */
+	public void setRememberWhitespaceLines(boolean remember) {
+		if (remember!=rememberWhitespaceLines) {
+			rememberWhitespaceLines = remember;
+			for (int i=0; i<getNumDocuments(); i++) {
+				RTextEditorPane textArea = getRTextEditorPaneAt(i);
+				textArea.setClearWhitespaceLinesEnabled(!rememberWhitespaceLines);
+			}
+			firePropertyChange(REMEMBER_WS_LINES_PROPERTY, !remember, remember);
+		}
+	}
+
+
+	/**
+	 * Sets whether selection edges are rounded in text areas.  This method
+	 * fires a property change event of type
+	 * {@link #ROUNDED_SELECTION_PROPERTY}.
 	 *
 	 * @param rounded Whether selection edges are to be rounded.
 	 * @see #getRoundedSelectionEdges
@@ -3378,8 +3508,7 @@ public abstract class AbstractMainView extends JPanel
 				RTextEditorPane textArea = getRTextEditorPaneAt(i);
 				textArea.setRoundedSelectionEdges(rounded);
 			}
-			firePropertyChange(ROUNDED_SELECTION_PROPERTY,
-							!rounded, rounded);
+			firePropertyChange(ROUNDED_SELECTION_PROPERTY, !rounded, rounded);
 		}
 	}
 

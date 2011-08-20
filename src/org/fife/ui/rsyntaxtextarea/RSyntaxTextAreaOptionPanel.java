@@ -89,7 +89,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	private JCheckBox visibleEOLCheckBox;
 
 //	private JCheckBox autoIndentCheckBox;
-//	private JCheckBox remWhitespaceLinesCheckBox;
+	private JCheckBox remWhitespaceLinesCheckBox;
+	private JCheckBox autoInsertClosingCurlyCheckBox;
 
 	private JCheckBox smoothTextCheckBox;
 	private SpecialValueComboBox smoothTextCombo;
@@ -271,6 +272,14 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		addLeftAlignedComponent(temp, visibleEOLCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
+
+		autoInsertClosingCurlyCheckBox = new JCheckBox(msg.getString("AutoCloseCurlys"));
+		autoInsertClosingCurlyCheckBox.setActionCommand("AutoCloseCurlys");
+		autoInsertClosingCurlyCheckBox.addActionListener(this);
+		addLeftAlignedComponent(temp, autoInsertClosingCurlyCheckBox);
+
+		temp.add(Box.createVerticalStrut(3));
+
 /*
 		autoIndentCheckBox = new JCheckBox(msg.getString("AutoIndent"));
 		autoIndentCheckBox.setActionCommand("AutoIndent");
@@ -278,14 +287,14 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		addLeftAlignedComponent(temp, autoIndentCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
-
+*/
 		remWhitespaceLinesCheckBox = new JCheckBox(msg.getString("RemWhitespaceLines"));
 		remWhitespaceLinesCheckBox.setActionCommand("RemWhitespaceLines");
 		remWhitespaceLinesCheckBox.addActionListener(this);
 		addLeftAlignedComponent(temp, remWhitespaceLinesCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
-*/
+
 
 		smoothTextCheckBox = new JCheckBox(msg.getString("SmoothText"));
 		smoothTextCheckBox.setActionCommand("SmoothTextCB");
@@ -417,6 +426,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				!bmBorderColorButton.getColor().equals(defaultBMBorderColor) ||
 				isWhitespaceVisible() ||
 				visibleEOLCheckBox.isSelected() ||
+				autoInsertClosingCurlyCheckBox.isSelected() ||
+				remWhitespaceLinesCheckBox.isSelected() ||
 				smoothTextCheckBox.isSelected() ||
 				isFractionalFontMetricsEnabled())
 			{
@@ -426,6 +437,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				setBracketMatchBorderColor(defaultBMBorderColor);
 				setWhitespaceVisible(false);
 				visibleEOLCheckBox.setSelected(false);
+				autoInsertClosingCurlyCheckBox.setSelected(false);
+				remWhitespaceLinesCheckBox.setSelected(false);
 				setTextAARenderingHint(null);
 				setFractionalFontMetricsEnabled(false);
 				hasUnsavedChanges = true;
@@ -464,6 +477,15 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		// Toggle remove whitespace-only lines.
 		else if (command.equals("RemWhitespaceLines")) {
+			boolean visible = remWhitespaceLinesCheckBox.isSelected();
+			hasUnsavedChanges = true;
+			firePropertyChange(VISIBLE_EOL_PROPERTY, !visible, visible);
+		}
+
+		else if (command.equals("AutoCloseCurlys")) {
+			boolean visible = autoInsertClosingCurlyCheckBox.isSelected();
+			hasUnsavedChanges = true;
+			firePropertyChange(VISIBLE_EOL_PROPERTY, !visible, visible);
 		}
 
 		// The checkbox to toggle smooth text.
@@ -511,7 +533,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		combo.addSpecialItem(msg.getString("RenderingHints.Default"),
 						"VALUE_TEXT_ANTIALIAS_ON");
 
-		// If this is a 1.6+ JVM, add the text antialiasing keys added in 1.6.
+		// If this is a 1.6+ JVM, add the text AA keys added in 1.6.
 		try {
 			Class clazz = RenderingHints.class;
 			// Check for a 1.6+ field.  If no exception is thrown, then the
@@ -552,6 +574,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		mainView.setBracketMatchingEnabled(bmEnabled);	// Doesn't update if it doesn't have to.
 		mainView.setMatchedBracketBGColor(getBracketMatchBGColor()); // Doesn't update if it doesn't have to.
 		mainView.setMatchedBracketBorderColor(getBracketMatchBorderColor()); // Doesn't update if it doesn't have to.
+		mainView.setRememberWhitespaceLines(remWhitespaceLinesCheckBox.isSelected()); // Doesn't update if it doesn't have to.
+		mainView.setAutoInsertClosingCurlys(autoInsertClosingCurlyCheckBox.isSelected()); // Doesn't update if it doesn't have to.
 		mainView.setWhitespaceVisible(isWhitespaceVisible()); // (RSyntaxTextArea) doesn't update if not necessary.
 		mainView.setShowEOLMarkers(visibleEOLCheckBox.isSelected());
 		mainView.setTextAAHintName(getTextAARenderingHint()); // Doesn't update if not necessary.
@@ -913,6 +937,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		setBracketMatchCheckboxSelected(bmEnabled);
 		setBracketMatchBGColor(mainView.getMatchedBracketBGColor());
 		setBracketMatchBorderColor(mainView.getMatchedBracketBorderColor());
+		remWhitespaceLinesCheckBox.setSelected(mainView.getRememberWhitespaceLines());
+		autoInsertClosingCurlyCheckBox.setSelected(mainView.getAutoInsertClosingCurlys());
 		setWhitespaceVisible(mainView.isWhitespaceVisible());
 		visibleEOLCheckBox.setSelected(mainView.getShowEOLMarkers());
 		setTextAARenderingHint(mainView.getTextAAHintName());

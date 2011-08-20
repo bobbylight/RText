@@ -73,6 +73,7 @@
 		<javac srcdir="${source-dir}" destdir="${class-dir}"
 				classpath="lib/rsyntaxtextarea.jar:lib/autocomplete.jar:lib/rsta_spellchecker.jar:${common-dir}/dist/fife.common.jar"
 				deprecation="yes"
+				includeantruntime="false"
 				debug="${debug}" debuglevel="${debuglevel}"
 				source="${java-level}" target="${java-level}">
 			<!-- Don't compile plugins; their own build script -->

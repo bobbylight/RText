@@ -107,6 +107,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public int hyperlinkModifierKey;
 	public boolean visibleWhitespace;
 	public boolean showEOLMarkers;
+	public boolean rememberWhitespaceLines;
+	public boolean autoInsertClosingCurlys;
 	public String textAAHintFieldName;
 	public boolean fractionalMetricsEnabled;
 	public Color markAllHighlightColor;
@@ -213,6 +215,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.hyperlinkModifierKey		= mainView.getHyperlinkModifierKey();
 		props.visibleWhitespace			= mainView.isWhitespaceVisible();
 		props.showEOLMarkers			= mainView.getShowEOLMarkers();
+		props.rememberWhitespaceLines	= mainView.getRememberWhitespaceLines();
+		props.autoInsertClosingCurlys	= mainView.getAutoInsertClosingCurlys();
 		props.textAAHintFieldName		= mainView.getTextAAHintName();
 		props.fractionalMetricsEnabled	= mainView.isFractionalFontMetricsEnabled();
 		props.markAllHighlightColor		= mainView.getMarkAllHighlightColor();
@@ -448,6 +452,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 			props.hyperlinkModifierKey		= prefs.getInt("hyperlinkModifierKey", props.hyperlinkModifierKey);
 			props.visibleWhitespace			= prefs.getBoolean("visibleWhitespace", props.visibleWhitespace);
 			props.showEOLMarkers			= prefs.getBoolean("showEOL", props.showEOLMarkers);
+			props.rememberWhitespaceLines	= prefs.getBoolean("rememberWhitespaceLines", props.rememberWhitespaceLines);
+			props.autoInsertClosingCurlys	= prefs.getBoolean("autoInsertClosingCurlys", props.autoInsertClosingCurlys);
 			props.textAAHintFieldName		= prefs.get("smoothText", props.textAAHintFieldName);
 			// Pre-0.9.9.4, this field was set to "true" or "false".  Just
 			// to make new textArea creation a little quicker, ensure this
@@ -635,6 +641,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 		}
 		prefs.putBoolean("visibleWhitespace",			visibleWhitespace);
 		prefs.putBoolean("showEOL",						showEOLMarkers);
+		prefs.putBoolean("rememberWhitespaceLines",		rememberWhitespaceLines);
+		prefs.putBoolean("autoInsertClosingCurlys",		autoInsertClosingCurlys);
 		prefs.put("smoothText",						textAAHintFieldName!=null ? textAAHintFieldName : "null");
 		prefs.putBoolean("fractionalMetrics",			fractionalMetricsEnabled);
 		prefs.putInt("markAllHighlightColor",			markAllHighlightColor.getRGB());
@@ -729,6 +737,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 		hyperlinkModifierKey = InputEvent.CTRL_DOWN_MASK;
 		visibleWhitespace = false;
 		showEOLMarkers = false;
+		rememberWhitespaceLines = false;
+		autoInsertClosingCurlys = false;
 		textAAHintFieldName = null;
 		fractionalMetricsEnabled = false;
 		markAllHighlightColor = RTextArea.getDefaultMarkAllHighlightColor();
