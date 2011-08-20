@@ -113,6 +113,19 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 
 
 	/**
+	 * Creates a menu item from an action, with no tool tip.
+	 *
+	 * @param a The action.
+	 * @return The menu item.
+	 */
+	private JMenuItem createMenuItem(Action a) {
+		JMenuItem item = new JMenuItem(a);
+		item.setToolTipText(null);
+		return item;
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
@@ -195,11 +208,11 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 		RText rtext = (RText)app;
 		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
 		toolsMenu = new JMenu(msg.getString("Plugin.Name"));
-		toolsMenu.addSeparator();
 		Action a = rtext.getAction(ToolPlugin.NEW_TOOL_ACTION);
-		toolsMenu.add(new JMenuItem(a));//createMenuItem(a));
+		toolsMenu.add(createMenuItem(a));
 		a = rtext.getAction(ToolPlugin.EDIT_TOOLS_ACTION);
-		toolsMenu.add(new JMenuItem(a));//createMenuItem(a));
+		toolsMenu.add(createMenuItem(a));
+		toolsMenu.addSeparator();
 		mb.addExtraMenu(toolsMenu);
 		mb.revalidate();
 
@@ -310,23 +323,21 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 	private void refreshToolMenu() {
 
 		while (toolsMenu.getMenuComponentCount()>3) {
-			toolsMenu.remove(0);
+			toolsMenu.remove(3);
 		}
 
 		if (ToolManager.get().getToolCount()>0) {
 			for (Iterator i=ToolManager.get().getToolIterator(); i.hasNext(); ){
 				Tool tool = (Tool)i.next();
 				RunToolAction a = new RunToolAction(app, tool, window);
-				JMenuItem item = new JMenuItem(a);
-				item.setToolTipText(null); // Removing annoying tool tip
-				toolsMenu.add(item, toolsMenu.getMenuComponentCount()-3);
+				toolsMenu.add(createMenuItem(a));
 			}
 		}
 		else {
 			String text = ToolPlugin.msg.getString("NoToolsDefined");
 			JMenuItem item = new JMenuItem(text);
 			item.setEnabled(false);
-			toolsMenu.add(item, toolsMenu.getMenuComponentCount()-3);
+			toolsMenu.add(item);
 		}
 
 	}

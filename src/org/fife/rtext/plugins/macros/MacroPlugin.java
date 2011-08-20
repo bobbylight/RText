@@ -306,9 +306,7 @@ public class MacroPlugin implements Plugin, PropertyChangeListener {
 			for (Iterator i=MacroManager.get().getMacroIterator(); i.hasNext(); ){
 				Macro macro = (Macro)i.next();
 				RunMacroAction a = new RunMacroAction(app, this, macro);
-				JMenuItem item = new JMenuItem(a);
-				item.setToolTipText(null); // Remove annoying tool tip
-				macrosMenu.add(item);
+				macrosMenu.add(createMenuItem(a));
 			}
 		}
 		else {

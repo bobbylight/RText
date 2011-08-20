@@ -178,7 +178,8 @@ public class Tool implements Comparable {
 			val = 0;
 		}
 		else if (o instanceof Tool) {
-			val = getName().compareTo(((Tool)o).getName());
+			val = String.CASE_INSENSITIVE_ORDER.compare(
+					getName(), ((Tool)o).getName());
 		}
 		return val;
 	}

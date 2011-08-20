@@ -91,7 +91,8 @@ public class Macro implements Comparable, Cloneable {
 			return 0;
 		}
 		else if (o instanceof Macro) {
-			val = ((Macro)o).getName().compareToIgnoreCase(getName());
+			val = String.CASE_INSENSITIVE_ORDER.compare(
+					getName(), ((Macro)o).getName());
 		}
 		return val;
 	}

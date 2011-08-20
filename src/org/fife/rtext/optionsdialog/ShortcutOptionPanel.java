@@ -38,6 +38,7 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.table.*;
 
+import org.fife.rtext.GetKeyStrokeDialog;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextActionInfo;
 import org.fife.rtext.RTextUtilities;

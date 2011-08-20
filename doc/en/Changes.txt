@@ -4,12 +4,17 @@ http://rtext.sourceforge.net
 
 1.5.0
 -------------------
+   - ??? Add "stop" button to tool console like Console console. ???
    - ??? Fix bug - FSATextField doesn't show suggestions if only 1 matching
      file exists. ???
    - ??? Make opening a file via Find in Files dialog center the matched line
      vertically in the editor. ???
    - ??? Ship with ctags distribution on Windows? ???
-   - ??? Added "New JavaScript macro" menu item to Macros menu. ???
+   - ??? Added scripted macro support.  You can now write macros in either
+     JavaScript or Groovy and assign them shortcuts, essentially creating your
+     own custom menu item actions. ???
+   - ??? Added very basic JSP code completion. ???
+   - ??? Made Source Browser sortable. ???
    - ??? Added "Check for Updates" menu item to Help menu. ???
 
 

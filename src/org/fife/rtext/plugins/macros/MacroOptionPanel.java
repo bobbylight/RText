@@ -85,7 +85,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 		setLayout(new BorderLayout());
 		setBorder(UIUtil.getEmpty5Border());
 		JPanel cp = new JPanel(new BorderLayout());
-		cp.setBorder(new OptionPanelBorder(plugin.getString("Plugin.Name")));
+		cp.setBorder(new OptionPanelBorder(plugin.getString("Options.Section.MacroList")));
 		add(cp);
 
 		model = new DefaultTableModel(new String[] {

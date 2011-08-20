@@ -84,8 +84,6 @@ public class RTextUtilities {
 
 	private static final String FILE_FILTERS_FILE	  = "ExtraFileChooserFilters.xml";
 
-	static final String MACRO_TEMPORARY_PROPERTY		  = "RText.temporaryMacroProperty";
-
 	/**
 	 * The last LookAndFeel (attempted to be) installed.  This may not be
 	 * the actual currently-active LookAndFeel, if the user tries to install

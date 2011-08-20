@@ -84,7 +84,6 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		panel.addChildPanel(new GutterOptionPanel());
 		panel.addChildPanel(new SpellingOptionPanel());
 		panel.addChildPanel(new TemplateOptionPanel());
-		panel.addChildPanel(new MacroOptionPanel(rtext, msg));
 
 		panel = new RTextFileChooserOptionPanel();
 		setIcon(panel, "file_chooser.png");
@@ -120,9 +119,6 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 				panels.add(panel);
 			}
 		}
-//		panel = new ToolOptionPanel(rtext);
-//		setIcon(panel, "tools.png");
-
 
 		OptionsDialogPanel[] array = new OptionsDialogPanel[panels.size()];
 		array = (OptionsDialogPanel[])panels.toArray(array);

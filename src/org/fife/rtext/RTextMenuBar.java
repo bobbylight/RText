@@ -542,70 +542,11 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 										RText.FILE_PROPERTIES_ACTION));
 		viewMenu.add(filePropItem);
 
-		// Macros menu.
-		menu = createMenu(menuMsg, "MenuMacros");
-		registerMenuByName(MENU_MACROS, menu);
-		add(menu);
-
-		int ctrlshift = InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK;
-
-		a = new BeginRecordingMacroAction(menuMsg.getString("MacroBegin"),
-						null, // icon
-						null, // desc
-						null, // mnemonic
-						KeyStroke.getKeyStroke(KeyEvent.VK_R,ctrlshift),
-						rtext,
-						false); // false => NOT temporary.
-		JMenuItem item = new JMenuItem(a);
-		item.setToolTipText(null);
-		UIUtil.setDescription(item, menuMsg, "MacroBeginDesc");
-		menu.add(item);
-
-		a = new BeginRecordingMacroAction(menuMsg.getString("MacroBeginTemp"),
-						null, // icon
-						null, // desc
-						null, // mnemonic
-						null,//KeyStroke.getKeyStroke(KeyEvent.VK_R,ctrlshift),
-						rtext,
-						true); // true => temporary.
-		item = new JMenuItem(a);
-		item.setToolTipText(null);
-		UIUtil.setDescription(item, menuMsg, "MacroBeginTempDesc");
-		menu.add(item);
-
-		a = new EndRecordingMacroAction(menuMsg.getString("MacroEnd"),
-						null, // icon
-						null, // desc
-						null, // mnemonic
-						KeyStroke.getKeyStroke(KeyEvent.VK_S,ctrlshift),
-						rtext);
-		item = new JMenuItem(a);
-		item.setToolTipText(null);
-		UIUtil.setDescription(item, menuMsg, "MacroEndDesc");
-		menu.add(item);
-
-		menu.addSeparator();
-
-		a = new RTextAreaEditorKit.PlaybackLastMacroAction(
-							menuMsg.getString("MacroPlay"),
-							null, // icon
-							null, // desc
-							null, // mnemonic
-							KeyStroke.getKeyStroke(KeyEvent.VK_M,ctrlshift));
-		item = new JMenuItem(a);
-		item.setToolTipText(null);
-		UIUtil.setDescription(item, menuMsg, "MacroPlayDesc");
-		menu.add(item);
-
-		savedMacroMenu = createMenu(menuMsg, "MenuSavedMacro");
-		savedMacroMenu.getPopupMenu().addPopupMenuListener(this);
-		menu.add(savedMacroMenu);
-
 		// Window menu (only visible when in MDI mode).
 		windowMenu = createMenu(menuMsg, "MenuWindow");
 		add(windowMenu);
 
-		item = new JMenuItem(menuMsg.getString("TileVertically"));
+		JMenuItem item = new JMenuItem(menuMsg.getString("TileVertically"));
 		UIUtil.setDescription(item, msg, "DescTileVertically");
 		item.setActionCommand("TileVertically");
 		item.addActionListener(rtext);
