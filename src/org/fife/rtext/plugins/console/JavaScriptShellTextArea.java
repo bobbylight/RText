@@ -32,6 +32,8 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import org.fife.rtext.RTextUtilities;
+
 
 /**
  * A shell allowing you to muck with RText's innards via Rhino.
@@ -93,6 +95,13 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	 */
 	protected void handleSubmit(String text) {
 
+		// Failed to initialize - likely Java 1.4 or 1.5
+		if (jsEngine==null) {
+			append(plugin.getString("Error.NotInitialized"), STYLE_EXCEPTION);
+			appendPrompt();
+			return;
+		}
+
 		String code = text;
 
 		/*
@@ -131,61 +140,65 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 	protected void init() {
 
-		// Run everything with reflection so we compile with Java 1.4.
-		try {
+		if (!RTextUtilities.isPreJava6()) {
 
-			Class semClazz = Class.forName("javax.script.ScriptEngineManager");
-			Object sem = semClazz.newInstance();
+			// Run everything with reflection so we compile with Java 1.4.
+			try {
 
-			// Get the Rhino engine.
-			Method m = semClazz.getDeclaredMethod("getEngineByName",
-										new Class[] { String.class });
-			jsEngine = m.invoke(sem, new Object[] { "JavaScript" });
-			seClazz = Class.forName("javax.script.ScriptEngine");
+				Class semClazz = Class.forName("javax.script.ScriptEngineManager");
+				Object sem = semClazz.newInstance();
 
-			// Create our bindings and cache them for later.
-			m = seClazz.getDeclaredMethod("createBindings", null);
-			bindings = m.invoke(jsEngine, null);
-			Class bindingsClazz = Class.forName("javax.script.Bindings");
-			m = seClazz.getDeclaredMethod("setBindings",
-							new Class[] { bindingsClazz, int.class });
-			Class scriptContextClazz = Class.forName(
-										"javax.script.ScriptContext");
-			Field scopeField = scriptContextClazz.
-										getDeclaredField("ENGINE_SCOPE");
-			int scope = scopeField.getInt(scriptContextClazz);
-			m.invoke(jsEngine, new Object[] { bindings, new Integer(scope) });
+				// Get the Rhino engine.
+				Method m = semClazz.getDeclaredMethod("getEngineByName",
+											new Class[] { String.class });
+				jsEngine = m.invoke(sem, new Object[] { "JavaScript" });
+				seClazz = Class.forName("javax.script.ScriptEngine");
 
-			// To be used in handleSubmit().
-			bindingsPut = bindingsClazz.getDeclaredMethod("put",
+				// Create our bindings and cache them for later.
+				m = seClazz.getDeclaredMethod("createBindings", null);
+				bindings = m.invoke(jsEngine, null);
+				Class bindingsClazz = Class.forName("javax.script.Bindings");
+				m = seClazz.getDeclaredMethod("setBindings",
+								new Class[] { bindingsClazz, int.class });
+				Class scriptContextClazz = Class.forName(
+											"javax.script.ScriptContext");
+				Field scopeField = scriptContextClazz.
+											getDeclaredField("ENGINE_SCOPE");
+				int scope = scopeField.getInt(scriptContextClazz);
+				m.invoke(jsEngine, new Object[] { bindings, new Integer(scope) });
+
+				// To be used in handleSubmit().
+				bindingsPut = bindingsClazz.getDeclaredMethod("put",
 								new Class[] { String.class, Object.class });
 
-			// Write stdout and stderr to this console.  Must wrap these in
-			// PrintWriters for standard print() and println() methods to work.
-			m = seClazz.getDeclaredMethod("getContext", null);
-			Object context = m.invoke(jsEngine, null);
-			m = scriptContextClazz.getDeclaredMethod("setWriter",
+				// Write stdout and stderr to this console.  Must wrap these in
+				// PrintWriters for standard print() and println() methods to work.
+				m = seClazz.getDeclaredMethod("getContext", null);
+				Object context = m.invoke(jsEngine, null);
+				m = scriptContextClazz.getDeclaredMethod("setWriter",
 											new Class[] { Writer.class });
-			PrintWriter w = new PrintWriter(new OutputWriter(STYLE_STDOUT));
-			m.invoke(context, new Object[] { w });
-			m = scriptContextClazz.getDeclaredMethod("setErrorWriter",
-					new Class[] { Writer.class });
-			w = new PrintWriter(new OutputWriter(STYLE_STDERR));
-			m.invoke(context, new Object[] { w });
+				PrintWriter w = new PrintWriter(new OutputWriter(STYLE_STDOUT));
+				m.invoke(context, new Object[] { w });
+				m = scriptContextClazz.getDeclaredMethod("setErrorWriter",
+						new Class[] { Writer.class });
+				w = new PrintWriter(new OutputWriter(STYLE_STDERR));
+				m.invoke(context, new Object[] { w });
 
-			// Import commonly-used packages.  Do this before stdout and stderr
-			// redirecting so the user won't see it in their console.
-			handleSubmit("importPackage(java.lang)");
-			handleSubmit("importPackage(java.io)");
-			handleSubmit("importPackage(java.util)");
-			handleSubmit("importPackage(java.awt)");
-			handleSubmit("importPackage(javax.swing)");
-			handleSubmit("importPackage(org.fife.rtext)");
-			handleSubmit("importPackage(org.fife.ui.rtextarea)");
-			handleSubmit("importPackage(org.fife.ui.rsyntaxtextarea)");
+				// Import commonly-used packages.  Do this before stdout and
+				// stderr redirecting so the user won't see it in their console.
+				handleSubmit("importPackage(java.lang)");
+				handleSubmit("importPackage(java.io)");
+				handleSubmit("importPackage(java.util)");
+				handleSubmit("importPackage(java.awt)");
+				handleSubmit("importPackage(javax.swing)");
+				handleSubmit("importPackage(org.fife.rtext)");
+				handleSubmit("importPackage(org.fife.ui.rtextarea)");
+				handleSubmit("importPackage(org.fife.ui.rsyntaxtextarea)");
 
-		} catch (Exception e) {
-			e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 		}
 
 	}

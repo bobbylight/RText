@@ -392,9 +392,9 @@ public class NewMacroDialog extends EscapableDialog {
 		shortcutField.setKeyStroke(KeyStroke.getKeyStroke(macro.getAccelerator()));
 
 		int index = 0;
-		int dot = macro.getName().lastIndexOf('.');
+		int dot = macro.getFile().lastIndexOf('.');
 		if (dot>-1) {
-			String ext = macro.getName().substring(dot+1);
+			String ext = macro.getFile().substring(dot);
 			//index = Arrays.binarySearch(EXTENSIONS, ext);
 			for (int i=0; i<EXTENSIONS.length; i++) {
 				if (EXTENSIONS[i].equals(ext)) {

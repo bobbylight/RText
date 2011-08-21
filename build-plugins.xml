@@ -215,6 +215,7 @@
 				<include name="org/fife/rtext/plugins/macros/**"/>
 			</fileset>
 			<manifest>
+				<attribute name="Class-Path" value="plugins/groovy-all.jar"/>
 				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.macros.MacroPlugin"/>
 				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
 			</manifest>

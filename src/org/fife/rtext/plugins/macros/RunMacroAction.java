@@ -32,6 +32,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -39,6 +40,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.StandardAction;
 
 
@@ -67,39 +69,66 @@ public class RunMacroAction extends StandardAction {
 	private Object bindings;
 
 	/**
+	 * The javax.script.ScriptContext#ENGINE_SCOPE field value.
+	 */
+	private static Integer scopeFieldValue;
+
+	/**
+	 * The javax.script.ScriptEngine#createBindings() method.
+	 */
+	private static Method createBindingsMethod;
+
+	/**
+	 * The javax.script.ScriptEngine#setBindings() method.
+	 */
+	private static Method setBindingsMethod;
+
+	/**
 	 * The javax.script.Bindings#put() method.
 	 */
-	private Method bindingsPut;
+	private static Method bindingsPutMethod;
+
+	/**
+	 * The javax.script.ScriptEngine#eval(Reader) method.
+	 */
+	private static Method evalMethod;
 
 	/**
 	 * javax.script.ScriptEngine class.
 	 */
-	private Class seClazz;
+	private static Class seClazz;
 
 	/**
 	 * The javax.script.ScriptEngineManager class.
 	 */
-	private Class semClazz;
+	private static Class semClazz;
 
 	/**
 	 * The javax.script.ScriptEngineManager instance.
 	 */
-	private Object sem;
+	private static Object sem;
 
 	/**
 	 * the javax.script.Scriptcontext class.
 	 */
-	private Class scriptContextClazz;
+	private static Class scriptContextClazz;
 
 	/**
-	 * javax.script.ScriptEngine instance for JavaScript.
+	 * The javax.script.Bindings class.
 	 */
-	private Object jsEngine;
+	private static Class bindingsClazz;
 
 	/**
-	 * javax.script.ScriptEngine instance for Groovy.
+	 * javax.script.ScriptEngine instance for JavaScript, shared across all
+	 * instances of this action.
 	 */
-	private Object groovyEngine;
+	private static Object jsEngine;
+
+	/**
+	 * javax.script.ScriptEngine instance for Groovy, shared across all
+	 * instances of this action.
+	 */
+	private static Object groovyEngine;
 
 
 	/**
@@ -116,7 +145,6 @@ public class RunMacroAction extends StandardAction {
 		setAccelerator(shortcut==null ? null : KeyStroke.getKeyStroke(shortcut));
 		setShortDescription(macro.getDesc());
 		this.macro = macro;
-		init();
 	}
 
 
@@ -162,6 +190,12 @@ public class RunMacroAction extends StandardAction {
 
 		RText app = (RText)getApplication();
 
+		// If we didn't initialize properly, no point in proceeding.
+		if (semClazz==null) {
+			showErrorInitializingMessage();
+			return;
+		}
+
 		/*
 		ScriptEngineManager sem = new ScriptEngineManager();
 		ScriptEngine jsEngine = sem.getEngineByName("JavaScript");
@@ -174,6 +208,9 @@ public class RunMacroAction extends StandardAction {
 		Object engine = null;
 		if (sourceName.endsWith(".js")) {
 			engine = initJavaScriptEngine();
+			if (engine==null) { // An error message was already displayed
+				return;
+			}
 		}
 		else if (sourceName.endsWith(".groovy")) {
 			engine = initGroovyEngine();
@@ -181,7 +218,7 @@ public class RunMacroAction extends StandardAction {
 				return;
 			}
 		}
-		if (engine==null) {
+		else {
 			app.displayException(new Exception("Bad macro type: " + sourceName));
 			return;
 		}
@@ -190,30 +227,17 @@ public class RunMacroAction extends StandardAction {
 		try {
 
 			// Create our bindings and cache them for later.
-			Method m = seClazz.getDeclaredMethod("createBindings", null);
-			bindings = m.invoke(jsEngine, null);
-			Class bindingsClazz = Class.forName("javax.script.Bindings");
-			m = seClazz.getDeclaredMethod("setBindings",
-							new Class[] { bindingsClazz, int.class });
-			Field scopeField = scriptContextClazz.
-										getDeclaredField("ENGINE_SCOPE");
-			int scope = scopeField.getInt(scriptContextClazz);
-			m.invoke(jsEngine, new Object[] { bindings, new Integer(scope) });
-
-			// To be used in handleSubmit().
-			bindingsPut = bindingsClazz.getDeclaredMethod("put",
-								new Class[] { String.class, Object.class });
+			bindings = createBindingsMethod.invoke(engine, null);
+			setBindingsMethod.invoke(engine,
+					new Object[] { bindings, scopeFieldValue });
 
 			// We always reset the value of "rtext" and "textArea", but
 			// all other variables they've modified are persistent.
-			bindingsPut.invoke(bindings,
-					new Object[] { "rtext", app });
-			bindingsPut.invoke(bindings, new Object[] { "textArea",
+			bindingsPutMethod.invoke(bindings, new Object[] { "rtext", app });
+			bindingsPutMethod.invoke(bindings, new Object[] { "textArea",
 					app.getMainView().getCurrentTextArea() });
 
-			m = seClazz.getDeclaredMethod("eval",
-								new Class[] { Reader.class });
-			m.invoke(jsEngine, new Object[] { r });
+			evalMethod.invoke(engine, new Object[] { r });
 
 		} catch (Throwable ex) {
 			// Since we launch via reflection, peel off top-level Exception
@@ -223,19 +247,6 @@ public class RunMacroAction extends StandardAction {
 			throw ex;
 		}
 
-	}
-
-
-	protected void init() {
-		// Run everything with reflection so we compile with Java 1.4.
-		try {
-			semClazz = Class.forName("javax.script.ScriptEngineManager");
-			sem = semClazz.newInstance();
-			seClazz = Class.forName("javax.script.ScriptEngine");
-			scriptContextClazz = Class.forName("javax.script.ScriptContext");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 
@@ -264,7 +275,12 @@ public class RunMacroAction extends StandardAction {
 
 				Method m = semClazz.getDeclaredMethod("getEngineByName",
 						new Class[] { String.class });
-				groovyEngine = m.invoke(sem, new Object[] { "Groovy" });
+				String engine = "Groovy";
+				groovyEngine = m.invoke(sem, new Object[] { engine });
+				if (groovyEngine==null) {
+					showLoadingEngineError(engine);
+					return null;
+				}
 
 				// Write stdout and stderr to this console.  Must wrap these in
 				// PrintWriters for standard print() and println() methods to work.
@@ -281,14 +297,14 @@ public class RunMacroAction extends StandardAction {
 
 				// Import commonly-used packages.  Do this before stdout and
 				// stderr redirecting so the user won't see it in their console.
-				String imports = "import java.lang;" +
-						"import java.io;" +
-						"import java.util;" +
-						"import java.awt;" +
-						"import javax.swing;" +
-						"import org.fife.rtext;" +
-						"import org.fife.ui.rtextarea;" +
-						"import org.fife.ui.rsyntaxtextarea;";
+				String imports = "import java.lang.*;" +
+						"import java.io.*;" +
+						"import java.util.*;" +
+						"import java.awt.*;" +
+						"import javax.swing.*;" +
+						"import org.fife.rtext.*;" +
+						"import org.fife.ui.rtextarea.*;" +
+						"import org.fife.ui.rsyntaxtextarea.*;";
 				m = seClazz.getDeclaredMethod("eval", new Class[] { String.class });
 				m.invoke(groovyEngine, new Object[] { imports });
 
@@ -317,7 +333,12 @@ public class RunMacroAction extends StandardAction {
 
 				Method m = semClazz.getDeclaredMethod("getEngineByName",
 										new Class[] { String.class });
-				jsEngine = m.invoke(sem, new Object[] { "JavaScript" });
+				String engine = "JavaScript";
+				jsEngine = m.invoke(sem, new Object[] { engine });
+				if (jsEngine==null) {
+					showLoadingEngineError(engine);
+					return null;
+				}
 
 				// Write stdout and stderr to this console.  Must wrap these in
 				// PrintWriters for standard print() and println() methods to work.
@@ -352,6 +373,80 @@ public class RunMacroAction extends StandardAction {
 		}
 
 		return jsEngine;
+
+	}
+
+
+	/**
+	 * Displays an error message stating that the scripting engine failed
+	 * to initialize.
+	 */
+	private void showErrorInitializingMessage() {
+		String key = RTextUtilities.isPreJava6() ?
+				"Error.Java6Required" : "Error.Initializing";
+		String message = plugin.getString(key);
+		RText app = (RText)getApplication();
+		String title = app.getString("ErrorDialogTitle");
+		JOptionPane.showMessageDialog(app, message, title,
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+
+	/**
+	 * Displays an error dialog stating that an  unknown error occurred
+	 * loading the scripting engine.
+	 *
+	 * @param engine The name of the engine we tried to load.
+	 */
+	private void showLoadingEngineError(String engine) {
+		String message = plugin.getString("Error.LoadingEngine", engine);
+		RText app = (RText)getApplication();
+		String title = app.getString("ErrorDialogTitle");
+		JOptionPane.showMessageDialog(app, message, title,
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+
+	/**
+	 * One-time initialization for this class; pre-loads all reflection stuff.
+	 */
+	static {
+
+		// The scripting API was added in Java 6.
+		if (!RTextUtilities.isPreJava6()) {
+
+			// Run everything with reflection so we compile with Java 1.4.
+			try {
+
+				semClazz = Class.forName("javax.script.ScriptEngineManager");
+				// Pass the Plugin ClassLoader, since the Groovy jar won't be
+				// on the application's classpath
+				Constructor cons = semClazz.getConstructor(
+										new Class[] { ClassLoader.class });
+				sem = cons.newInstance(
+						new Object[] { RunMacroAction.class.getClassLoader() });
+				seClazz = Class.forName("javax.script.ScriptEngine");
+				scriptContextClazz = Class.forName("javax.script.ScriptContext");
+				bindingsClazz = Class.forName("javax.script.Bindings");
+
+				Field scopeField = scriptContextClazz.getDeclaredField("ENGINE_SCOPE");             
+				int scope = scopeField.getInt(scriptContextClazz);
+				scopeFieldValue = new Integer(scope);
+
+				createBindingsMethod = seClazz.getDeclaredMethod("createBindings",
+										null);
+				setBindingsMethod = seClazz.getDeclaredMethod("setBindings",
+						new Class[] { bindingsClazz, int.class });
+				bindingsPutMethod = bindingsClazz.getDeclaredMethod("put",
+						new Class[] { String.class, Object.class });
+				evalMethod = seClazz.getDeclaredMethod("eval",
+						new Class[] { Reader.class });
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
 
 	}
 
