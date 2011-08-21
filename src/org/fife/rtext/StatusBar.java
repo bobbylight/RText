@@ -85,8 +85,6 @@ public class StatusBar extends org.fife.ui.StatusBar
 	// EDT thread.
 	private StringBuffer rcBuf;
 
-	private static final String BUNDLE_NAME	= "org.fife.rtext.StatusBar";
-
 
 	/**
 	 * Creates the status bar.
@@ -103,7 +101,7 @@ public class StatusBar extends org.fife.ui.StatusBar
 
 		super(defaultMessage);
 
-		ResourceBundle msg = ResourceBundle.getBundle(BUNDLE_NAME);
+		ResourceBundle msg= ResourceBundle.getBundle(StatusBar.class.getName());
 
 		// Initialize private variables.
 		fileSaveSuccessfulText = msg.getString("FileSaveSuccessful");

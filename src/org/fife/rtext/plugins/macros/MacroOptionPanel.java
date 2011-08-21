@@ -25,23 +25,27 @@
 package org.fife.rtext.plugins.macros;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 
+import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.KeyStrokeCellRenderer;
+import org.fife.rtext.RText;
 import org.fife.rtext.plugins.macros.NewMacroDialog;
 import org.fife.rtext.plugins.macros.Macro;
 import org.fife.ui.UIUtil;
@@ -93,8 +97,12 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 				plugin.getString("Options.TableHeader.Shortcut"),
 				plugin.getString("Options.TableHeader.Description") }, 0);
 
+		List customButtons = new ArrayList();
+		customButtons.add(new AddExampleMacrosAction(plugin));
+
 		macroTable = new ModifiableTable(model, ModifiableTable.BOTTOM,
-										ModifiableTable.ADD_REMOVE_MODIFY);
+										ModifiableTable.ADD_REMOVE_MODIFY,
+										customButtons);
 		macroTable.addModifiableTableListener(this);
 		macroTable.setRowHandler(new MacroTableRowHandler());
 		JTable table = macroTable.getTable();
@@ -109,6 +117,18 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 
 
 	/**
+	 * Adds a row to the table in this options panel for a macro.
+	 *
+	 * @param macro The macro to add to the table.
+	 */
+	private void addTableRowForMacro(Macro macro) {
+		model.addRow(new Object[] { macro.clone(),
+				KeyStroke.getKeyStroke(macro.getAccelerator()),
+				macro.getDesc() });
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	protected void doApplyImpl(Frame owner) {
@@ -116,20 +136,29 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 		// Clear previous macros, but remember what they were.  We'll determine
 		// what macros were genuinely "removed" by the user, and delete their
 		// corresponding scripts.
-		MacroManager tm = MacroManager.get();
-		SortedSet oldMacros = tm.clearMacros();
+		MacroManager mm = MacroManager.get();
+		SortedSet oldMacros = mm.clearMacros();
 
 		for (int i=0; i<model.getRowCount(); i++) {
 			Macro macro = (Macro)model.getValueAt(i, 0);
-			tm.addMacro(macro);
+			mm.addMacro(macro);
 			oldMacros.remove(macro); // This macro was "kept".
 		}
 
 		// Delete scripts for macros that were removed.
+		File exampleDir = getExampleMacrosDir();
 		for (Iterator i=oldMacros.iterator(); i.hasNext(); ) {
 			Macro deleted = (Macro)i.next();
-			System.out.println("Deleting macro: " + deleted);
-			new File(deleted.getFile()).delete();
+			File file = new File(deleted.getFile());
+			File parentDir = file.getParentFile();
+			if (parentDir!=null && parentDir.equals(exampleDir)) {
+				System.out.println("NOT deleting macro: " + deleted +
+						" (example macro)");
+			}
+			else {
+				System.out.println("Deleting macro: " + deleted);
+				file.delete();
+			}
 		}
 
 	}
@@ -140,6 +169,36 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	 */
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
+	}
+
+
+	/**
+	 * Returns the directory that RText's example macros are stored in.
+	 *
+	 * @return The directory.
+	 */
+	private File getExampleMacrosDir() {
+		RText app = ((MacroPlugin)getPlugin()).getRText();
+		String installDir = app.getInstallLocation();
+		return new File(installDir, "exampleMacros");
+	}
+
+
+	/**
+	 * Returns whether the table in this option panel contains a macro
+	 * with a given name.
+	 *
+	 * @param name The name to check for.
+	 * @return Whether the table contains a macro with that name.
+	 */
+	private boolean getTableContainsMacroNamed(String name) {
+		for (int i=0; i<model.getRowCount(); i++) {
+			Macro macro = (Macro)model.getValueAt(i, 0);
+			if (macro.getName().equalsIgnoreCase(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 
@@ -168,27 +227,64 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 		model.setRowCount(0);
 		for (Iterator i=tm.getMacroIterator(); i.hasNext(); ) {
 			Macro macro = (Macro)i.next();
-			model.addRow(new Object[] { macro.clone(),
-								KeyStroke.getKeyStroke(macro.getAccelerator()),
-								macro.getDesc() });
+			addTableRowForMacro(macro);
 		}
 	}
 
 
 	/**
-	 * Renderer for KeyStrokes in the JTable.
+	 * Adds the example macros that ship with RText.
 	 */
-	private static class KeyStrokeCellRenderer extends DefaultTableCellRenderer{
+	private class AddExampleMacrosAction extends AbstractAction {
 
-		public Component getTableCellRendererComponent(JTable table,
-								Object value, boolean isSelected,
-								boolean hasFocus, int row, int column) {
-			super.getTableCellRendererComponent(table, value, isSelected,
-										 hasFocus, row, column);
-			KeyStroke ks = (KeyStroke)value;
-			setText(RTextUtilities.getPrettyStringFor(ks));
-			setComponentOrientation(table.getComponentOrientation());
-			return this;
+		public AddExampleMacrosAction(MacroPlugin plugin) {
+			putValue(NAME, plugin.getString("Options.Button.AddExampleMacros"));
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			File exampleMacrosDir = getExampleMacrosDir();
+			if (exampleMacrosDir.isDirectory()) {
+				File[] files = exampleMacrosDir.listFiles();
+				int fileCount = files==null ? 0 : files.length;
+				for (int i=0; i<fileCount; i++) {
+					addMacro(files[i]);
+				}
+			}
+			else {
+				UIManager.getLookAndFeel().provideErrorFeedback(null);
+			}
+		}
+
+		private void addMacro(File file) {
+
+			String name = file.getName();
+			int dot = name.lastIndexOf('.');
+			if (dot>-1) {
+
+				Macro macro = null;
+
+				String extension = name.substring(dot+1);
+				if ("js".equalsIgnoreCase(extension) ||
+						"groovy".equalsIgnoreCase(extension)) {
+					String macroName = name.substring(0, dot);
+					if (getTableContainsMacroNamed(macroName)) {
+						int count = 1;
+						while (getTableContainsMacroNamed(macroName + "_" + count)) {
+							count++;
+						}
+						macroName += "_" + count;
+					}
+					macro = new Macro();
+					macro.setName(macroName);
+					macro.setFile(file.getAbsolutePath());
+				}
+
+				if (macro!=null) {
+					addTableRowForMacro(macro);
+				}
+
+			}
+
 		}
 
 	}

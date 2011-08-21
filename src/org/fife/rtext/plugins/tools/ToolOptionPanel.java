@@ -39,7 +39,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.KeyStrokeCellRenderer;
 import org.fife.rtext.plugins.tools.NewToolDialog;
 import org.fife.rtext.plugins.tools.Tool;
 import org.fife.ui.UIUtil;
@@ -160,25 +160,6 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 								KeyStroke.getKeyStroke(tool.getAccelerator()),
 								tool.getDescription() });
 		}
-	}
-
-
-	/**
-	 * Renderer for KeyStrokes in the JTable.
-	 */
-	private static class KeyStrokeCellRenderer extends DefaultTableCellRenderer{
-
-		public Component getTableCellRendererComponent(JTable table,
-								Object value, boolean isSelected,
-								boolean hasFocus, int row, int column) {
-			super.getTableCellRendererComponent(table, value, isSelected,
-										 hasFocus, row, column);
-			KeyStroke ks = (KeyStroke)value;
-			setText(RTextUtilities.getPrettyStringFor(ks));
-			setComponentOrientation(table.getComponentOrientation());
-			return this;
-		}
-
 	}
 
 
