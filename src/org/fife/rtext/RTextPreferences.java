@@ -107,9 +107,10 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public int hyperlinkModifierKey;
 	public boolean visibleWhitespace;
 	public boolean showEOLMarkers;
+	public boolean showTabLines;
 	public boolean rememberWhitespaceLines;
 	public boolean autoInsertClosingCurlys;
-	public String textAAHintFieldName;
+	public boolean aaEnabled;
 	public boolean fractionalMetricsEnabled;
 	public Color markAllHighlightColor;
 	public boolean markOccurrences;
@@ -215,9 +216,10 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.hyperlinkModifierKey		= mainView.getHyperlinkModifierKey();
 		props.visibleWhitespace			= mainView.isWhitespaceVisible();
 		props.showEOLMarkers			= mainView.getShowEOLMarkers();
+		props.showTabLines				= mainView.getShowTabLines();
 		props.rememberWhitespaceLines	= mainView.getRememberWhitespaceLines();
 		props.autoInsertClosingCurlys	= mainView.getAutoInsertClosingCurlys();
-		props.textAAHintFieldName		= mainView.getTextAAHintName();
+		props.aaEnabled					= mainView.isAntiAliasEnabled();
 		props.fractionalMetricsEnabled	= mainView.isFractionalFontMetricsEnabled();
 		props.markAllHighlightColor		= mainView.getMarkAllHighlightColor();
 		props.markOccurrences			= mainView.getMarkOccurrences();
@@ -452,16 +454,10 @@ public class RTextPreferences extends GUIApplicationPreferences
 			props.hyperlinkModifierKey		= prefs.getInt("hyperlinkModifierKey", props.hyperlinkModifierKey);
 			props.visibleWhitespace			= prefs.getBoolean("visibleWhitespace", props.visibleWhitespace);
 			props.showEOLMarkers			= prefs.getBoolean("showEOL", props.showEOLMarkers);
+			props.showTabLines				= prefs.getBoolean("showTabLines", props.showTabLines);
 			props.rememberWhitespaceLines	= prefs.getBoolean("rememberWhitespaceLines", props.rememberWhitespaceLines);
 			props.autoInsertClosingCurlys	= prefs.getBoolean("autoInsertClosingCurlys", props.autoInsertClosingCurlys);
-			props.textAAHintFieldName		= prefs.get("smoothText", props.textAAHintFieldName);
-			// Pre-0.9.9.4, this field was set to "true" or "false".  Just
-			// to make new textArea creation a little quicker, ensure this
-			// value is valid.
-			if (props.textAAHintFieldName!=null &&
-					!props.textAAHintFieldName.startsWith("VALUE_TEXT_ANTIALIAS_")) {
-				props.textAAHintFieldName = null;
-			}
+			props.aaEnabled					= prefs.getBoolean("editorAntiAlias", props.aaEnabled);
 			props.fractionalMetricsEnabled	= prefs.getBoolean("fractionalMetrics", props.fractionalMetricsEnabled);
 			props.markAllHighlightColor = new Color(
 				prefs.getInt("markAllHighlightColor", props.markAllHighlightColor.getRGB()));
@@ -641,9 +637,10 @@ public class RTextPreferences extends GUIApplicationPreferences
 		}
 		prefs.putBoolean("visibleWhitespace",			visibleWhitespace);
 		prefs.putBoolean("showEOL",						showEOLMarkers);
+		prefs.putBoolean("showTabLines",				showTabLines);
 		prefs.putBoolean("rememberWhitespaceLines",		rememberWhitespaceLines);
 		prefs.putBoolean("autoInsertClosingCurlys",		autoInsertClosingCurlys);
-		prefs.put("smoothText",						textAAHintFieldName!=null ? textAAHintFieldName : "null");
+		prefs.putBoolean("editorAntiAlias",					aaEnabled);
 		prefs.putBoolean("fractionalMetrics",			fractionalMetricsEnabled);
 		prefs.putInt("markAllHighlightColor",			markAllHighlightColor.getRGB());
 		prefs.putBoolean("markOccurrences",			markOccurrences);
@@ -737,9 +734,11 @@ public class RTextPreferences extends GUIApplicationPreferences
 		hyperlinkModifierKey = InputEvent.CTRL_DOWN_MASK;
 		visibleWhitespace = false;
 		showEOLMarkers = false;
+		showTabLines = false;
 		rememberWhitespaceLines = false;
 		autoInsertClosingCurlys = false;
-		textAAHintFieldName = null;
+		aaEnabled = File.separatorChar=='\\' ||
+				System.getProperty("os.name").indexOf("mac os x")>-1;
 		fractionalMetricsEnabled = false;
 		markAllHighlightColor = RTextArea.getDefaultMarkAllHighlightColor();
 		markOccurrences = true;

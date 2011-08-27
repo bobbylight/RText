@@ -1,6 +1,5 @@
 /*
- * This is a Rhino (Javascript) macro for RText.
- *
+ * This is a Groovy macro for RText.
  * The following packages are imported by default:
  * java.lang.*, java.io.*, java.util,*, java.awt.*, javax.swing.*,
  * org.fife.rtext.*, org.fife.ui.rtextarea.*, org.fife.ui.rsyntaxtextarea.*
@@ -17,40 +16,27 @@
  *   http://javadoc.fifesoft.com/rsyntaxtextarea/
  *
  */
-var removeDuplicates = true; // Change to "false" if you want to keep duplicates
-
-
-function join(lines) {
-	var sb = new StringBuffer();
-	if (lines!=null && lines.length>0) {
-		for (var i=0; i<lines.length; i++) {
-			//System.out.println(lines[i]);
-			sb.append(lines[i]).append('\n');
-		}
-	}
-	return sb.toString();
-}
-
+final def removeDuplicates = true // Change to "false" if you want to keep duplicates
 
 // Note: You'll want to consider wrapping your scripts inside calls to
 // beginAtomicEdit() and endAtomicEdit(), so the actions they perform can
 // be undone with a single Undo action.
-textArea.beginAtomicEdit();
+textArea.beginAtomicEdit()
 try {
 
-	var lines = textArea.text.split("\n");
+	def lines = textArea.text.split("\n")
 
 	if (removeDuplicates) {
-		var ts = new TreeSet();
-		for (var i=0; i<lines.length; i++) {
-			ts.add(lines[i]);
+		def ts = new TreeSet()
+		lines.each {
+			ts.add(it)
 		}
-		lines = ts.toArray();
+		lines = ts.toArray()
 	}
 
-	Arrays.sort(lines);
-	textArea.text = join(lines);
+	Arrays.sort(lines)
+	textArea.text = lines.join("\n")
 
 } finally {
-	textArea.endAtomicEdit();
+	textArea.endAtomicEdit()
 }

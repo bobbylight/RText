@@ -164,10 +164,11 @@ public abstract class AbstractMainView extends JPanel
 
 	private boolean whitespaceVisible;
 	private boolean showEOLMarkers;
+	private boolean showTabLines;
 	private boolean rememberWhitespaceLines;
 	private boolean autoInsertClosingCurlys;
 
-	private String aaHintFieldName;			// Whether text is anti-aliased.
+	private boolean aaEnabled;			// Whether text is anti-aliased.
 	private boolean fractionalMetricsEnabled;	// Whether fractional fontmetrics are used.
 
 	private Color markAllHighlightColor;
@@ -644,7 +645,7 @@ public abstract class AbstractMainView extends JPanel
 		rememberWhitespaceLines = fromPanel.rememberWhitespaceLines;
 		autoInsertClosingCurlys = fromPanel.autoInsertClosingCurlys;
 
-		aaHintFieldName = fromPanel.aaHintFieldName;
+		aaEnabled = fromPanel.aaEnabled;
 		fractionalMetricsEnabled = fromPanel.fractionalMetricsEnabled;
 
 		markAllHighlightColor = fromPanel.markAllHighlightColor;
@@ -775,6 +776,7 @@ public abstract class AbstractMainView extends JPanel
 			pane.setLineSeparator(defaultLineTerminator, false);
 		}
 		pane.setWhitespaceVisible(isWhitespaceVisible());
+		pane.setPaintTabLines(getShowTabLines());
 		pane.setEOLMarkersVisible(getShowEOLMarkers());
 		pane.setClearWhitespaceLinesEnabled(!rememberWhitespaceLines);
 		pane.setCloseCurlyBraces(autoInsertClosingCurlys);
@@ -800,7 +802,7 @@ public abstract class AbstractMainView extends JPanel
 
 		// Other properties.
 		pane.setTabsEmulated(emulateTabsWithWhitespace);
-		pane.setTextAntiAliasHint(getTextAAHintName());
+		pane.setAntiAliasingEnabled(aaEnabled);
 		pane.setFractionalFontMetricsEnabled(isFractionalFontMetricsEnabled());
 		// orientation is done later to override scrollpane's
 		// applyComponentOrientation(...).
@@ -1608,6 +1610,17 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns whether tab lines are visible in the text areas.
+	 *
+	 * @return Whether tab lines are visible.
+	 * @see #setShowTabLines(boolean)
+	 */
+	public boolean getShowTabLines() {
+		return showTabLines;
+	}
+
+
+	/**
 	 * Returns the spell checking support for RText.
 	 *
 	 * @return The spell checking support.
@@ -1637,21 +1650,6 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public int getTabSize() {
 		return tabSize;
-	}
-
-
-	/**
-	 * Returns the name of the scheme being used to antialias the text
-	 * editors' text, if any.
-	 *
-	 * @return The name of a field of <code>java.awt.RenderingHints</code>
-	 *         that is being used for text AA.  A <code>null</code> value
-	 *         means no text AA is being done.
-	 * @see #isFractionalFontMetricsEnabled
-	 * @see #setTextAAHintName(String)
-	 */
-	public String getTextAAHintName() {
-		return aaHintFieldName;
 	}
 
 
@@ -2040,7 +2038,7 @@ public abstract class AbstractMainView extends JPanel
 		setShowEOLMarkers(prefs.showEOLMarkers);
 		setRememberWhitespaceLines(prefs.rememberWhitespaceLines);
 		setAutoInsertClosingCurlys(prefs.autoInsertClosingCurlys);
-		setTextAAHintName(prefs.textAAHintFieldName);
+		setAntiAliasEnabled(prefs.aaEnabled);
 		setFractionalFontMetricsEnabled(prefs.fractionalMetricsEnabled);
 		setMarkAllHighlightColor(prefs.markAllHighlightColor);
 		setMarkOccurrences(prefs.markOccurrences);
@@ -2085,6 +2083,18 @@ public abstract class AbstractMainView extends JPanel
 		// Update the title of the RText window.
 		owner.setMessages(currentTextArea.getFileFullPath(), null);
 
+	}
+
+
+	/**
+	 * Returns whether text is anti-aliased in text areas.
+	 *
+	 * @return Whether text is anti-aliased in text areas.
+	 * @see #isFractionalFontMetricsEnabled
+	 * @see #setAntiAliasEnabled(boolean)
+	 */
+	public boolean isAntiAliasEnabled() {
+		return aaEnabled;
 	}
 
 
@@ -2689,6 +2699,24 @@ public abstract class AbstractMainView extends JPanel
 
 		return true;
 
+	}
+
+
+	/**
+	 * Sets whether anti-aliasing is enabled in text areas.  This method fires
+	 * a property change event of type {@link #SMOOTH_TEXT_PROPERTY}.
+	 *
+	 * @param Whether anti-aliasing should be enabled.
+	 * @see #isAntiAliasEnabled()
+	 */
+	public void setAntiAliasEnabled(boolean enabled) {
+		if (enabled!=aaEnabled) {
+			aaEnabled = enabled;
+			for (int i=0; i<getNumDocuments(); i++) {
+				getRTextEditorPaneAt(i).setAntiAliasingEnabled(aaEnabled);
+			}
+			firePropertyChange(SMOOTH_TEXT_PROPERTY, !aaEnabled, aaEnabled);
+		}
 	}
 
 
@@ -3578,6 +3606,22 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Toggles whether tab lines are visible in editors.
+	 *
+	 * @param show Whether tab lines should be visible.
+	 * @see #getShowTabLines()
+	 */
+	public void setShowTabLines(boolean show) {
+		if (show!=showTabLines) {
+			showTabLines = show;
+			for (int i=0; i<getNumDocuments(); i++) {
+				getRTextEditorPaneAt(i).setPaintTabLines(showTabLines);
+			}
+		}
+	}
+
+
+	/**
 	 * Sets the file filters used when opening documents to decide how to
 	 * syntax highlight documents.  All currently open text files have their
 	 * color schemes updated, if necessary.
@@ -3703,49 +3747,6 @@ public abstract class AbstractMainView extends JPanel
 			for (int i=0; i<numDocuments; i++)
 				getRTextEditorPaneAt(i).setTabSize(newSize);
 
-		}
-
-	}
-
-
-	/**
-	 * Sets the rendering hint to use when anti-aliasing text in the text
-	 * editors.  This method fires a property change of type
-	 * {@link #SMOOTH_TEXT_PROPERTY}.
-	 *
-	 * @param aaHintFieldName The name of a field in
-	 *        <code>java.awt.RenderingHints</code>.  The name of the hint is
-	 *        used so that, if new values are added in the future, they can
-	 *        be used.  Invalid/unsupported values default to
-	 *        <code>null</code>.  A <code>null</code> value indicates that
-	 *        no text anti-aliasing should be done.
-	 * @see #getTextAAHintName()
-	 */
-	public void setTextAAHintName(String aaHintFieldName) {
-
-		String old = this.aaHintFieldName;
-
-		// If they are setting the AA hint to null (no AA)...
-		if (aaHintFieldName==null && old!=null) {
-			this.aaHintFieldName = aaHintFieldName;
-			int count = getNumDocuments();
-			for (int i=0; i<count; i++) {
-				getRTextEditorPaneAt(i).setTextAntiAliasHint(
-										this.aaHintFieldName);
-			}
-			firePropertyChange(SMOOTH_TEXT_PROPERTY,
-							old, this.aaHintFieldName);
-		}
-
-		else if (aaHintFieldName!=null && !aaHintFieldName.equals(old)) {
-			this.aaHintFieldName = aaHintFieldName;
-			int count = getNumDocuments();
-			for (int i=0; i<count; i++) {
-				getRTextEditorPaneAt(i).setTextAntiAliasHint(
-											aaHintFieldName);
-			}
-			firePropertyChange(SMOOTH_TEXT_PROPERTY,
-							old, this.aaHintFieldName);
 		}
 
 	}

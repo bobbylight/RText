@@ -29,6 +29,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -78,7 +79,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 	private SyntaxScheme colorScheme;
 
-	private JPanel bracketMatchingPanel;
+	private Box bracketMatchingPanel;
 	private JCheckBox bracketMatchCheckBox;
 	private JLabel bmBGColorLabel;
 	private RColorSwatchesButton bmBGColorButton;
@@ -91,9 +92,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 //	private JCheckBox autoIndentCheckBox;
 	private JCheckBox remWhitespaceLinesCheckBox;
 	private JCheckBox autoInsertClosingCurlyCheckBox;
+	private JCheckBox showTabLinesCheckBox;
+	private RColorSwatchesButton tabLineColorButton;
 
-	private JCheckBox smoothTextCheckBox;
-	private SpecialValueComboBox smoothTextCombo;
+	private JCheckBox aaCheckBox;
 	private JCheckBox fractionalMetricsCheckBox;
 
 	private boolean isSettingStyle;
@@ -103,6 +105,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	private static final String BM_BORDER_PROPERTY			= "RSTAOpts.bracketMatchBorderColor";
 	private static final String DEFAULTS_RESTORED			= "RSTAOpts.defaultsRestored";
 	private static final String FRACTIONAL_METRICS_PROPERTY	= "RSTAOpts.fractionalFontMetrics";
+	private static final String SHOW_TAB_LINES_PROPERTY			= "RSTAOpts.showTabLines";
 	private static final String SMOOTH_TEXT_PROPERTY			= "RSTAOpts.smoothText";
 	private static final String SYNTAX_COLOR_PROPERTY			= "RSTAOpts.syntaxColor";
 	private static final String SYNTAX_FONT_PROPERTY			= "RSTAOpts.syntaxFont";
@@ -126,8 +129,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
-		JPanel contentPane = new JPanel();
-		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+		Box contentPane = Box.createVerticalBox();
 		add(contentPane, BorderLayout.NORTH);
 
 		// Syntax panel contains all of the "syntax highlighting" stuff.
@@ -171,9 +173,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		syntaxPanel.add(new RScrollPane(syntaxList), BorderLayout.WEST);
 
 		// Create a panel for other syntax style properties.
-		JPanel propertiesPanel = new JPanel();
-		propertiesPanel.setLayout(new BoxLayout(propertiesPanel,
-										BoxLayout.Y_AXIS));
+		Box propertiesPanel = Box.createVerticalBox();
+
 		// Create a panel for selecting the font.
 		fontSelector = new FontSelector(true);
 		fontSelector.setUnderlineSelectable(true);
@@ -183,8 +184,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		propertiesPanel.add(Box.createVerticalStrut(8));
 
 		// Add the foreground and background buttons to the properties panel.
-		JPanel temp = new JPanel();
-		temp.setLayout(new BoxLayout(temp, BoxLayout.LINE_AXIS));
+		Box temp = Box.createHorizontalBox();
 		temp.setAlignmentX(Component.LEFT_ALIGNMENT);
 		fgCheckBox = new JCheckBox(msg.getString("Foreground"));
 		fgCheckBox.setActionCommand("fgCheckBox");
@@ -197,8 +197,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		temp.add(Box.createHorizontalGlue());
 		propertiesPanel.add(temp);
 		propertiesPanel.add(Box.createHorizontalStrut(8));
-		temp = new JPanel();
-		temp.setLayout(new BoxLayout(temp, BoxLayout.LINE_AXIS));
+		temp = Box.createHorizontalBox();
 		temp.setAlignmentX(Component.LEFT_ALIGNMENT);
 		bgCheckBox = new JCheckBox(msg.getString("Background"));
 		bgCheckBox.setActionCommand("bgCheckBox");
@@ -233,12 +232,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		// Now create a panel containing all checkbox properties in the
 		// bottom of this panel.
-		temp = new JPanel();
+		temp = Box.createVerticalBox();
 		temp.setBorder(new OptionPanelBorder(msg.getString("Advanced")));
-		temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
 
-		bracketMatchingPanel = new JPanel();
-		bracketMatchingPanel.setLayout(new BoxLayout(bracketMatchingPanel, BoxLayout.LINE_AXIS));
+		bracketMatchingPanel = Box.createHorizontalBox();
 		bracketMatchCheckBox = new JCheckBox(msg.getString("HighlightMB"));
 		bracketMatchCheckBox.setActionCommand("BracketMatchCheckBox");
 		bracketMatchCheckBox.addActionListener(this);
@@ -259,24 +256,35 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		temp.add(Box.createVerticalStrut(3));
 
+		showTabLinesCheckBox = new JCheckBox(msg.getString("ShowIndentGuide"));
+		showTabLinesCheckBox.setActionCommand("ShowIndentGuide");
+		showTabLinesCheckBox.addActionListener(this);
+		Box box = Box.createHorizontalBox();
+		box.add(showTabLinesCheckBox);
+		box.add(Box.createHorizontalStrut(5));
+		tabLineColorButton = new RColorSwatchesButton(Color.black, 50,15);
+		box.add(tabLineColorButton);
+		box.add(Box.createHorizontalGlue());
+		addLeftAligned(temp, box);
+
+		temp.add(Box.createVerticalStrut(3));
+
 		visibleWhitespaceCheckBox = new JCheckBox(msg.getString("VisibleWhitespace"));
 		visibleWhitespaceCheckBox.setActionCommand("VisibleWhitespace");
 		visibleWhitespaceCheckBox.addActionListener(this);
-		addLeftAlignedComponent(temp, visibleWhitespaceCheckBox);
+		addLeftAligned(temp, visibleWhitespaceCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
 
 		visibleEOLCheckBox = new JCheckBox(msg.getString("VisibleEOL"));
 		visibleEOLCheckBox.setActionCommand("VisibleEOL");
 		visibleEOLCheckBox.addActionListener(this);
-		addLeftAlignedComponent(temp, visibleEOLCheckBox);
-
-		temp.add(Box.createVerticalStrut(3));
+		addLeftAligned(temp, visibleEOLCheckBox);
 
 		autoInsertClosingCurlyCheckBox = new JCheckBox(msg.getString("AutoCloseCurlys"));
 		autoInsertClosingCurlyCheckBox.setActionCommand("AutoCloseCurlys");
 		autoInsertClosingCurlyCheckBox.addActionListener(this);
-		addLeftAlignedComponent(temp, autoInsertClosingCurlyCheckBox);
+		addLeftAligned(temp, autoInsertClosingCurlyCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
 
@@ -284,43 +292,33 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		autoIndentCheckBox = new JCheckBox(msg.getString("AutoIndent"));
 		autoIndentCheckBox.setActionCommand("AutoIndent");
 		autoIndentCheckBox.addActionListener(this);
-		addLeftAlignedComponent(temp, autoIndentCheckBox);
+		addLeftAligned(temp, autoIndentCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
 */
 		remWhitespaceLinesCheckBox = new JCheckBox(msg.getString("RemWhitespaceLines"));
 		remWhitespaceLinesCheckBox.setActionCommand("RemWhitespaceLines");
 		remWhitespaceLinesCheckBox.addActionListener(this);
-		addLeftAlignedComponent(temp, remWhitespaceLinesCheckBox);
+		addLeftAligned(temp, remWhitespaceLinesCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
 
 
-		smoothTextCheckBox = new JCheckBox(msg.getString("SmoothText"));
-		smoothTextCheckBox.setActionCommand("SmoothTextCB");
-		smoothTextCheckBox.addActionListener(this);
-		smoothTextCombo = createSmoothTextCombo(msg);
-		smoothTextCombo.setActionCommand("SmoothTextCombo");
-		smoothTextCombo.addActionListener(this);
-		temp2 = new JPanel();
-		temp2.setLayout(new BoxLayout(temp2, BoxLayout.LINE_AXIS));
-		temp2.add(smoothTextCheckBox);
-		temp2.add(Box.createHorizontalStrut(5));
-		temp2.add(smoothTextCombo);
-		temp2.add(Box.createHorizontalGlue());
-		addLeftAlignedComponent(temp, temp2);
+		aaCheckBox = new JCheckBox(msg.getString("SmoothText"));
+		aaCheckBox.setActionCommand("aaCB");
+		aaCheckBox.addActionListener(this);
+		addLeftAligned(temp, aaCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
 
 		fractionalMetricsCheckBox = new JCheckBox(msg.getString("FracFM"));
 		fractionalMetricsCheckBox.setActionCommand("FracFM");
 		fractionalMetricsCheckBox.addActionListener(this);
-		addLeftAlignedComponent(temp, fractionalMetricsCheckBox);
+		addLeftAligned(temp, fractionalMetricsCheckBox);
 
 		temp.add(Box.createVerticalStrut(3));
 
-		JPanel rdPanel = new JPanel();
-		rdPanel.setLayout(new BoxLayout(rdPanel, BoxLayout.LINE_AXIS));
+		Box rdPanel = Box.createHorizontalBox();
 		RButton rdButton = new RButton(msg.getString("RestoreDefaults"));
 		rdButton.setActionCommand("RestoreDefaults");
 		rdButton.addActionListener(this);
@@ -370,13 +368,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	private void addLeftAlignedComponent(JPanel addToMe, JComponent toAdd) {
-		JPanel temp = new JPanel(new BorderLayout());
-		temp.add(toAdd, BorderLayout.LINE_START);
-		addToMe.add(temp);
-	}
-
-
 	/**
 	 * Listens for actions in this panel.
 	 */
@@ -385,7 +376,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		String command = e.getActionCommand();
 
 		// If the user clicked the "foreground" check box.
-		if (command.equals("fgCheckBox") && !isSettingStyle) {
+		if ("fgCheckBox".equals(command) && !isSettingStyle) {
 			boolean selected = fgCheckBox.isSelected();
 			foregroundButton.setEnabled(selected);
 			stylePreviewLabel.setForeground(selected ?
@@ -399,7 +390,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		}
 
 		// If the user clicked the "background" check box.
-		else if (command.equals("bgCheckBox") && !isSettingStyle) {
+		else if ("bgCheckBox".equals(command) && !isSettingStyle) {
 			boolean selected = bgCheckBox.isSelected();
 			backgroundButton.setEnabled(selected);
 			stylePreviewLabel.setBackground(selected ?
@@ -413,12 +404,13 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		}
 
 		// If the user clicked the "restore defaults" button.
-		else if (command.equals("RestoreDefaults")) {
+		else if ("RestoreDefaults".equals(command)) {
 
 			SyntaxScheme currentScheme = getSyntaxScheme();
 			SyntaxScheme defaultScheme = new SyntaxScheme(true);
 			Color defaultBMBGColor = RSyntaxTextArea.getDefaultBracketMatchBGColor();
 			Color defaultBMBorderColor = RSyntaxTextArea.getDefaultBracketMatchBorderColor();
+			boolean defaultAA = File.separatorChar=='\\';
 
 			if ( !currentScheme.equals(defaultScheme) ||
 				!bracketMatchCheckBox.isSelected() ||
@@ -426,9 +418,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				!bmBorderColorButton.getColor().equals(defaultBMBorderColor) ||
 				isWhitespaceVisible() ||
 				visibleEOLCheckBox.isSelected() ||
+				showTabLinesCheckBox.isSelected() ||
 				autoInsertClosingCurlyCheckBox.isSelected() ||
 				remWhitespaceLinesCheckBox.isSelected() ||
-				smoothTextCheckBox.isSelected() ||
+				aaCheckBox.isSelected()!=defaultAA ||
 				isFractionalFontMetricsEnabled())
 			{
 				setSyntaxScheme(defaultScheme);
@@ -437,9 +430,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				setBracketMatchBorderColor(defaultBMBorderColor);
 				setWhitespaceVisible(false);
 				visibleEOLCheckBox.setSelected(false);
+				showTabLinesCheckBox.setSelected(false);
 				autoInsertClosingCurlyCheckBox.setSelected(false);
 				remWhitespaceLinesCheckBox.setSelected(false);
-				setTextAARenderingHint(null);
+				aaCheckBox.setSelected(defaultAA);
 				setFractionalFontMetricsEnabled(false);
 				hasUnsavedChanges = true;
 				firePropertyChange(DEFAULTS_RESTORED, null, null);
@@ -450,7 +444,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		}
 
 		// Toggle whether or not the bracket-matching buttons are enabled.
-		else if (command.equals("BracketMatchCheckBox")) {
+		else if ("BracketMatchCheckBox".equals(command)) {
 			boolean selected = bracketMatchCheckBox.isSelected();
 			bmBGColorButton.setEnabled(selected);
 			bmBorderColorButton.setEnabled(selected);
@@ -459,103 +453,54 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		}
 
 		// Toggle whether whitespace is visible.
-		else if (command.equals("VisibleWhitespace")) {
+		else if ("VisibleWhitespace".equals(command)) {
 			boolean visible = visibleWhitespaceCheckBox.isSelected();
 			hasUnsavedChanges = true;
 			firePropertyChange(VISIBLE_WHITESPACE_PROPERTY, !visible, visible);
 		}
 
-		else if (command.equals("VisibleEOL")) {
+		else if ("VisibleEOL".equals(command)) {
 			boolean visible = visibleEOLCheckBox.isSelected();
 			hasUnsavedChanges = true;
 			firePropertyChange(VISIBLE_EOL_PROPERTY, !visible, visible);
 		}
 
+		else if ("ShowIndentGuide".equals(command)) {
+			boolean show = showTabLinesCheckBox.isSelected();
+			hasUnsavedChanges = true;
+			firePropertyChange(SHOW_TAB_LINES_PROPERTY, !show, show);
+		}
+
 		// Toggle auto-indent.
-		else if (command.equals("AutoIndent")) {
+		else if ("AutoIndent".equals(command)) {
 		}
 
 		// Toggle remove whitespace-only lines.
-		else if (command.equals("RemWhitespaceLines")) {
+		else if ("RemWhitespaceLines".equals(command)) {
 			boolean visible = remWhitespaceLinesCheckBox.isSelected();
 			hasUnsavedChanges = true;
 			firePropertyChange(VISIBLE_EOL_PROPERTY, !visible, visible);
 		}
 
-		else if (command.equals("AutoCloseCurlys")) {
+		else if ("AutoCloseCurlys".equals(command)) {
 			boolean visible = autoInsertClosingCurlyCheckBox.isSelected();
 			hasUnsavedChanges = true;
 			firePropertyChange(VISIBLE_EOL_PROPERTY, !visible, visible);
 		}
 
-		// The checkbox to toggle smooth text.
-		else if (command.equals("SmoothTextCB")) {
-			Object value = smoothTextCombo.getSelectedItem();
-			boolean selected = smoothTextCheckBox.isSelected();
-			smoothTextCombo.setEnabled(selected);
+		// The checkbox to toggle anti-aliasing in text editors.
+		else if ("aaCB".equals(command)) {
+			boolean selected = aaCheckBox.isSelected();
 			hasUnsavedChanges = true;
-			if (selected) {
-				firePropertyChange(SMOOTH_TEXT_PROPERTY, null, value);
-			}
-			else {
-				firePropertyChange(SMOOTH_TEXT_PROPERTY, value, null);
-			}
-		}
-
-		// The combo box for selecting the text anti-aliasing scheme.
-		else if (command.equals("SmoothTextCombo")) {
-			Object value = smoothTextCombo.getSelectedItem();
-			hasUnsavedChanges = true;
-			String old = null; // We don't know this value!
-			firePropertyChange(SMOOTH_TEXT_PROPERTY, old, value);
+			firePropertyChange(SMOOTH_TEXT_PROPERTY, !selected, selected);
 		}
 
 		// Toggle the fractional font metrics property.
-		else if (command.equals("FracFM")) {
+		else if ("FracFM".equals(command)) {
 			boolean frac = fractionalMetricsCheckBox.isSelected();
 			hasUnsavedChanges = true;
 			firePropertyChange(FRACTIONAL_METRICS_PROPERTY, !frac, frac);
 		}
-
-	}
-
-
-	/**
-	 * Creates and returns a combo box that gives the user the choice of
-	 * what text antialiasing scheme they want to use.
-	 *
-	 * @param msg The resource bundle to use for localizing.
-	 * @return The combo box.
-	 */
-	private SpecialValueComboBox createSmoothTextCombo(ResourceBundle msg) {
-
-		SpecialValueComboBox combo = new SpecialValueComboBox();
-		combo.addSpecialItem(msg.getString("RenderingHints.Default"),
-						"VALUE_TEXT_ANTIALIAS_ON");
-
-		// If this is a 1.6+ JVM, add the text AA keys added in 1.6.
-		try {
-			Class clazz = RenderingHints.class;
-			// Check for a 1.6+ field.  If no exception is thrown, then the
-			// field exists, so we can add all 1.6+ fields.
-			/*Field f = */clazz.getDeclaredField("VALUE_TEXT_ANTIALIAS_GASP");
-			combo.addSpecialItem(msg.getString("RenderingHints.GASP"),
-							"VALUE_TEXT_ANTIALIAS_GASP");
-			combo.addSpecialItem(msg.getString("RenderingHints.LCD_HRGB"),
-							"VALUE_TEXT_ANTIALIAS_LCD_HRGB");
-			combo.addSpecialItem(msg.getString("RenderingHints.LCD_HBGR"),
-							"VALUE_TEXT_ANTIALIAS_LCD_HBGR");
-			combo.addSpecialItem(msg.getString("RenderingHints.LCD_VRGB"),
-							"VALUE_TEXT_ANTIALIAS_LCD_VRGB");
-			combo.addSpecialItem(msg.getString("RenderingHints.LCD_VBGR"),
-							"VALUE_TEXT_ANTIALIAS_LCD_VBGR");
-		} catch (RuntimeException re) {
-			throw re; // Keep FindBugs happy
-		} catch (Exception e) {
-			// Ignore; this is just a 1.4 or 1.5 JVM.
-		}
-
-		return combo;
 
 	}
 
@@ -578,7 +523,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		mainView.setAutoInsertClosingCurlys(autoInsertClosingCurlyCheckBox.isSelected()); // Doesn't update if it doesn't have to.
 		mainView.setWhitespaceVisible(isWhitespaceVisible()); // (RSyntaxTextArea) doesn't update if not necessary.
 		mainView.setShowEOLMarkers(visibleEOLCheckBox.isSelected());
-		mainView.setTextAAHintName(getTextAARenderingHint()); // Doesn't update if not necessary.
+		mainView.setShowTabLines(showTabLinesCheckBox.isSelected());
+		mainView.setAntiAliasEnabled(aaCheckBox.isSelected());
 		mainView.setFractionalFontMetricsEnabled(isFractionalFontMetricsEnabled()); // Doesn't update if not necessary.
 	}
 
@@ -638,21 +584,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public SyntaxScheme getSyntaxScheme() {
 		return colorScheme;
-	}
-
-
-	/**
-	 * Returns the text anti-aliasing hint the user specified.
-	 *
-	 * @return The name of the rendering hint to use, or <code>null</code>
-	 *         if no text AA is to be done.
-	 * @see #setTextAARenderingHint
-	 */
-	public String getTextAARenderingHint() {
-		if (!smoothTextCheckBox.isSelected()) {
-			return null;
-		}
-		return smoothTextCombo.getSelectedSpecialItem();
 	}
 
 
@@ -877,34 +808,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets the text anti-aliasing rendering hint to display.
-	 *
-	 * @param hint The name of the rendering hint to display,
-	 *        or <code>null</code> if no text AA is to be done.  This value
-	 *        should be a field defined in
-	 *        <code>java.awt.RenderingHints</code>.  Invalid values will
-	 *        default to <code>null</code>.
-	 * @see #getTextAARenderingHint()
-	 */
-	public void setTextAARenderingHint(String hint) {
-		if (hint==null) {
-			smoothTextCheckBox.setSelected(false);
-			smoothTextCombo.setEnabled(false);
-			//smoothTextCombo.setSelectedIndex(0);
-		}
-		else {
-			smoothTextCheckBox.setSelected(true);
-			smoothTextCombo.setEnabled(true);
-			int index = smoothTextCombo.setSelectedSpecialItem(hint);
-			if (index==-1) { // Unknown rendering hint - default to no AA
-				smoothTextCheckBox.setSelected(false);
-				smoothTextCombo.setSelectedIndex(0);
-			}
-		}
-	}
-
-
-	/**
 	 * Sets the syntax highlighting color scheme being displayed in this
 	 * panel.
 	 *
@@ -941,7 +844,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		autoInsertClosingCurlyCheckBox.setSelected(mainView.getAutoInsertClosingCurlys());
 		setWhitespaceVisible(mainView.isWhitespaceVisible());
 		visibleEOLCheckBox.setSelected(mainView.getShowEOLMarkers());
-		setTextAARenderingHint(mainView.getTextAAHintName());
+		showTabLinesCheckBox.setSelected(mainView.getShowTabLines());
+		aaCheckBox.setSelected(mainView.isAntiAliasEnabled());
 		setFractionalFontMetricsEnabled(mainView.isFractionalFontMetricsEnabled());
 	}
 
