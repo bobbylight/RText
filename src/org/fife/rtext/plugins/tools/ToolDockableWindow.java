@@ -33,7 +33,10 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
+import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
@@ -72,6 +75,11 @@ public class ToolDockableWindow extends DockableWindow
 	 */
 	private OutputTextPane textArea;
 
+	/**
+	 * Used by toolbar button to stop the currently running tool.
+	 */
+	private StopAction stopAction;
+
 
 	/**
 	 * Constructor.
@@ -89,6 +97,17 @@ public class ToolDockableWindow extends DockableWindow
 		textArea = new OutputTextPane(plugin);
 		RScrollPane sp = new RScrollPane(textArea);
 		add(sp);
+
+		// Create a toolbar.
+		JToolBar toolbar = new JToolBar();
+		toolbar.setFloatable(false);
+		toolbar.add(Box.createHorizontalGlue());
+
+		stopAction = new StopAction(plugin, ToolPlugin.msg);
+		JButton b = new JButton(stopAction);
+		b.setText(null);
+		toolbar.add(b);
+		add(toolbar, BorderLayout.NORTH);
 
 		ComponentOrientation o = ComponentOrientation.getOrientation(getLocale());
 		applyComponentOrientation(o);
@@ -122,6 +141,18 @@ public class ToolDockableWindow extends DockableWindow
 			}
 		});
 
+	}
+
+
+	/**
+	 * Returns the currently running tool, if any.  This method should only be
+	 * called on the EDT.
+	 *
+	 * @return The currently running tool, or <code>null</code> if a tool
+	 *         isn't running.
+	 */
+	public Tool getActiveTool() {
+		return tool;
 	}
 
 
@@ -169,6 +200,15 @@ public class ToolDockableWindow extends DockableWindow
 							Integer.toString(rc), Float.toString(time) });
 					setDockableWindowTitle(title);
 				}
+				else if (e instanceof InterruptedException) { // User killed
+					String title = msg.getString("Window.Title.ProcessTerminated");
+					title = MessageFormat.format(title,
+							new Object[] { tool.getName() });
+					setDockableWindowTitle(title);
+					String text = msg.getString("Window.ProcessTerminated");
+					appendWithStyle(text,
+							textArea.getStyle(OutputTextPane.STYLE_EXCEPTION));
+				}
 				else {
 					String title = msg.getString("Window.Title.ToolError");
 					title = MessageFormat.format(title,
@@ -177,6 +217,7 @@ public class ToolDockableWindow extends DockableWindow
 					outputStackTrace(e);
 				}
 
+				stopAction.setEnabled(false);
 				tool = null;
 
 			}
@@ -207,6 +248,7 @@ public class ToolDockableWindow extends DockableWindow
 								new SimpleDateFormat().format(new Date()) });
 		setDockableWindowTitle(title);
 		textArea.setText(null);
+		stopAction.setEnabled(true);
 		return true;
 	}
 

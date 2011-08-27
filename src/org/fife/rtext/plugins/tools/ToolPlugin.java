@@ -126,6 +126,18 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 
 
 	/**
+	 * Returns the currently running tool, if any.  This method should only be
+	 * called on the EDT.
+	 *
+	 * @return The currently running tool, or <code>null</code> if a tool
+	 *         isn't running.
+	 */
+	public Tool getActiveTool() {
+		return window.getActiveTool();
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
@@ -172,6 +184,16 @@ public class ToolPlugin implements Plugin, PropertyChangeListener {
 	private File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"tools.properties");
+	}
+
+
+	/**
+	 * Returns the parent application.
+	 *
+	 * @return the parent application.
+	 */
+	RText getRText() {
+		return app;
 	}
 
 

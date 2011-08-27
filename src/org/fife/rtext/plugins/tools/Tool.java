@@ -61,6 +61,12 @@ public class Tool implements Comparable {
 	private boolean appendEnv;
 	private String accelerator; // String to ease serialization
 	private transient RText rtext;
+	private Thread runThread;
+
+	/**
+	 * Synchronizes access to {@link #runThread}.
+	 */
+	private static Object RUN_THREAD_LOCK = new Object();
 
 	private static final Pattern VAR_PATTERN =
 			Pattern.compile("\\$\\{file_(?:name|name_no_ext|dir|full_path)\\}");
@@ -225,16 +231,21 @@ public class Tool implements Comparable {
 		}
 
 		// Run this tool in a separate thread.
-		Thread t = new Thread() {
-			public void run() {
-				ProcessRunner pr = new ProcessRunner(cmd);
-				pr.setDirectory(new File(dir));
-				pr.setEnvironmentVars(env2, appendEnv);
-				pr.setOutputListener(l);
-				pr.run();
-			}
-		};
-		t.start();
+		synchronized (RUN_THREAD_LOCK) {
+			runThread = new Thread() {
+				public void run() {
+					ProcessRunner pr = new ProcessRunner(cmd);
+					pr.setDirectory(new File(dir));
+					pr.setEnvironmentVars(env2, appendEnv);
+					pr.setOutputListener(l);
+					pr.run();
+					synchronized (RUN_THREAD_LOCK) {
+						runThread = null;
+					}
+				}
+			};
+			runThread.start();
+		}
 
 	}
 
@@ -352,6 +363,28 @@ public class Tool implements Comparable {
 	private void init() {
 		args = new ArrayList(3);
 		env = new HashMap();
+	}
+
+
+	/**
+	 * Forcibly terminates this tool's external process, if it is running.
+	 *
+	 * @return If the process was running and killed.
+	 */
+	public boolean kill() {
+		synchronized (RUN_THREAD_LOCK) {
+			if (runThread!=null) {
+				runThread.interrupt();
+				try { // Be nice, just in case it's finishing up some work
+					runThread.join(1000);
+				} catch (InterruptedException ie) { // No biggie
+					ie.printStackTrace();
+				}
+				runThread = null;
+				return true;
+			}
+		}
+		return false;
 	}
 
 
