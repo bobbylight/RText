@@ -108,6 +108,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public boolean visibleWhitespace;
 	public boolean showEOLMarkers;
 	public boolean showTabLines;
+	public Color tabLinesColor;
 	public boolean rememberWhitespaceLines;
 	public boolean autoInsertClosingCurlys;
 	public boolean aaEnabled;
@@ -217,6 +218,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.visibleWhitespace			= mainView.isWhitespaceVisible();
 		props.showEOLMarkers			= mainView.getShowEOLMarkers();
 		props.showTabLines				= mainView.getShowTabLines();
+		props.tabLinesColor				= mainView.getTabLinesColor();
 		props.rememberWhitespaceLines	= mainView.getRememberWhitespaceLines();
 		props.autoInsertClosingCurlys	= mainView.getAutoInsertClosingCurlys();
 		props.aaEnabled					= mainView.isAntiAliasEnabled();
@@ -455,6 +457,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 			props.visibleWhitespace			= prefs.getBoolean("visibleWhitespace", props.visibleWhitespace);
 			props.showEOLMarkers			= prefs.getBoolean("showEOL", props.showEOLMarkers);
 			props.showTabLines				= prefs.getBoolean("showTabLines", props.showTabLines);
+			props.tabLinesColor				= new Color(
+				prefs.getInt("tabLinesColor", props.tabLinesColor.getRGB()));
 			props.rememberWhitespaceLines	= prefs.getBoolean("rememberWhitespaceLines", props.rememberWhitespaceLines);
 			props.autoInsertClosingCurlys	= prefs.getBoolean("autoInsertClosingCurlys", props.autoInsertClosingCurlys);
 			props.aaEnabled					= prefs.getBoolean("editorAntiAlias", props.aaEnabled);
@@ -638,6 +642,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs.putBoolean("visibleWhitespace",			visibleWhitespace);
 		prefs.putBoolean("showEOL",						showEOLMarkers);
 		prefs.putBoolean("showTabLines",				showTabLines);
+		prefs.putInt("tabLinesColor",					tabLinesColor.getRGB());
 		prefs.putBoolean("rememberWhitespaceLines",		rememberWhitespaceLines);
 		prefs.putBoolean("autoInsertClosingCurlys",		autoInsertClosingCurlys);
 		prefs.putBoolean("editorAntiAlias",					aaEnabled);
@@ -735,6 +740,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		visibleWhitespace = false;
 		showEOLMarkers = false;
 		showTabLines = false;
+		tabLinesColor = Color.gray;
 		rememberWhitespaceLines = false;
 		autoInsertClosingCurlys = false;
 		aaEnabled = File.separatorChar=='\\' ||

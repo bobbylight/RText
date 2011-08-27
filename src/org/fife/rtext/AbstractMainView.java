@@ -165,6 +165,7 @@ public abstract class AbstractMainView extends JPanel
 	private boolean whitespaceVisible;
 	private boolean showEOLMarkers;
 	private boolean showTabLines;
+	private Color tabLinesColor;
 	private boolean rememberWhitespaceLines;
 	private boolean autoInsertClosingCurlys;
 
@@ -642,6 +643,8 @@ public abstract class AbstractMainView extends JPanel
 
 		whitespaceVisible = fromPanel.whitespaceVisible;
 		showEOLMarkers = fromPanel.showEOLMarkers;
+		showTabLines = fromPanel.showTabLines;
+		tabLinesColor = fromPanel.tabLinesColor;
 		rememberWhitespaceLines = fromPanel.rememberWhitespaceLines;
 		autoInsertClosingCurlys = fromPanel.autoInsertClosingCurlys;
 
@@ -777,6 +780,7 @@ public abstract class AbstractMainView extends JPanel
 		}
 		pane.setWhitespaceVisible(isWhitespaceVisible());
 		pane.setPaintTabLines(getShowTabLines());
+		pane.setTabLineColor(getTabLinesColor());
 		pane.setEOLMarkersVisible(getShowEOLMarkers());
 		pane.setClearWhitespaceLinesEnabled(!rememberWhitespaceLines);
 		pane.setCloseCurlyBraces(autoInsertClosingCurlys);
@@ -1614,6 +1618,7 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @return Whether tab lines are visible.
 	 * @see #setShowTabLines(boolean)
+	 * @see #getTabLinesColor()
 	 */
 	public boolean getShowTabLines() {
 		return showTabLines;
@@ -1639,6 +1644,18 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public SyntaxFilters getSyntaxFilters() {
 		return syntaxFilters;
+	}
+
+
+	/**
+	 * Returns the color to use for tab lines in an editor.
+	 *
+	 * @return The color used for tab lines.
+	 * @see #setTabLinesColor(Color)
+	 * @see #getShowTabLines()
+	 */
+	public Color getTabLinesColor() {
+		return tabLinesColor;
 	}
 
 
@@ -2036,6 +2053,8 @@ public abstract class AbstractMainView extends JPanel
 		setModifiedDocumentDisplayNamesColor(prefs.modifiedDocumentNamesColor);
 		setWhitespaceVisible(prefs.visibleWhitespace);
 		setShowEOLMarkers(prefs.showEOLMarkers);
+		setShowTabLines(prefs.showTabLines);
+		setTabLinesColor(prefs.tabLinesColor);
 		setRememberWhitespaceLines(prefs.rememberWhitespaceLines);
 		setAutoInsertClosingCurlys(prefs.autoInsertClosingCurlys);
 		setAntiAliasEnabled(prefs.aaEnabled);
@@ -3721,9 +3740,26 @@ public abstract class AbstractMainView extends JPanel
 	public void setTabsEmulated(boolean areEmulated) {
 		if (areEmulated!=emulateTabsWithWhitespace) {
 			emulateTabsWithWhitespace = areEmulated;
-			int numDocuments = getNumDocuments();
-			for (int i=0; i<numDocuments; i++)
+			for (int i=0; i<getNumDocuments(); i++) {
 				getRTextEditorPaneAt(i).setTabsEmulated(areEmulated);
+			}
+		}
+	}
+
+
+	/**
+	 * Sets the color to use for tab lines in editors.
+	 *
+	 * @param color The color to use.
+	 * @see #getTabLinesColor()
+	 * @see #setShowTabLines(boolean)
+	 */
+	public void setTabLinesColor(Color color) {
+		if (color!=null && !color.equals(tabLinesColor)) {
+			tabLinesColor = color;
+			for (int i=0; i<getNumDocuments(); i++) {
+				getRTextEditorPaneAt(i).setTabLineColor(tabLinesColor);
+			}
 		}
 	}
 

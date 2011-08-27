@@ -55,7 +55,7 @@ import org.fife.ui.app.StandardAction;
  */
 public class Plugin implements org.fife.ui.app.Plugin {
 
-	private static final String VERSION				= "1.4.0";
+	private static final String VERSION				= "1.5.0";
 
 	private RText app;
 	private ConsoleWindow window;

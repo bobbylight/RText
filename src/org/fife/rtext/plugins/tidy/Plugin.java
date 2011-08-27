@@ -62,7 +62,7 @@ public class Plugin implements org.fife.ui.app.Plugin, PropertyChangeListener {
 	private HtmlOptions htmlOptions;
 	private XmlOptions xmlOptions;
 
-	private static final String PLUGIN_VERSION			= "1.4.0";
+	private static final String PLUGIN_VERSION			= "1.5.0";
 	private static final String PREFS_DIR_NAME			= "tidy";
 
 	private static final String MSG = "org.fife.rtext.plugins.tidy.Plugin";

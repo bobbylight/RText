@@ -33,7 +33,6 @@ import java.io.File;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.text.StyleContext;
 
 import org.fife.ui.RListSelectionModel;
 import org.fife.rtext.AbstractMainView;
@@ -109,6 +108,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	private static final String SMOOTH_TEXT_PROPERTY			= "RSTAOpts.smoothText";
 	private static final String SYNTAX_COLOR_PROPERTY			= "RSTAOpts.syntaxColor";
 	private static final String SYNTAX_FONT_PROPERTY			= "RSTAOpts.syntaxFont";
+	private static final String TAB_LINES_COLOR_PROPERTY		= "RSTAOpts.tabLinesColor";
 	private static final String UNKNOWN_PROPERTY				= "RSTAOpts.unknown";
 	private static final String VISIBLE_EOL_PROPERTY			= "RSTAOps.visibleEOL";
 	private static final String VISIBLE_WHITESPACE_PROPERTY	= "RSTAOpts.visibleWhitespace";
@@ -142,7 +142,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		syntaxList = new JList(syntaxListModel);
 		syntaxList.setSelectionModel(new RListSelectionModel());
 		syntaxList.addListSelectionListener(this);
-		syntaxList.setCellRenderer(new RSTACellRenderer());
 		syntaxList.setVisibleRowCount(14);
 		syntaxListModel.addElement(msg.getString("Style.Comment.EndOfLine"));
 		syntaxListModel.addElement(msg.getString("Style.Comment.Multiline"));
@@ -158,7 +157,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		syntaxListModel.addElement(msg.getString("Style.Literal.Backquote"));
 		syntaxListModel.addElement(msg.getString("Style.DataType"));
 		syntaxListModel.addElement(msg.getString("Style.Variable"));
-		syntaxListModel.addElement("*"+msg.getString("Style.Identifier.PlainText"));
+		syntaxListModel.addElement("<html><b>"+msg.getString("Style.Identifier.PlainText"));
 		syntaxListModel.addElement(msg.getString("Style.Whitespace"));
 		syntaxListModel.addElement(msg.getString("Style.Separator"));
 		syntaxListModel.addElement(msg.getString("Style.Operator"));
@@ -263,6 +262,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		box.add(showTabLinesCheckBox);
 		box.add(Box.createHorizontalStrut(5));
 		tabLineColorButton = new RColorSwatchesButton(Color.black, 50,15);
+		tabLineColorButton.addPropertyChangeListener(this);
 		box.add(tabLineColorButton);
 		box.add(Box.createHorizontalGlue());
 		addLeftAligned(temp, box);
@@ -419,22 +419,24 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				isWhitespaceVisible() ||
 				visibleEOLCheckBox.isSelected() ||
 				showTabLinesCheckBox.isSelected() ||
+				!Color.gray.equals(tabLineColorButton.getColor()) ||
 				autoInsertClosingCurlyCheckBox.isSelected() ||
 				remWhitespaceLinesCheckBox.isSelected() ||
 				aaCheckBox.isSelected()!=defaultAA ||
-				isFractionalFontMetricsEnabled())
+				fractionalMetricsCheckBox.isSelected())
 			{
 				setSyntaxScheme(defaultScheme);
 				setBracketMatchCheckboxSelected(true);
 				setBracketMatchBGColor(defaultBMBGColor);
-				setBracketMatchBorderColor(defaultBMBorderColor);
+				bmBorderColorButton.setColor(defaultBMBorderColor);
 				setWhitespaceVisible(false);
 				visibleEOLCheckBox.setSelected(false);
-				showTabLinesCheckBox.setSelected(false);
+				setTabLinesEnabled(false);
+				tabLineColorButton.setColor(Color.gray);
 				autoInsertClosingCurlyCheckBox.setSelected(false);
 				remWhitespaceLinesCheckBox.setSelected(false);
 				aaCheckBox.setSelected(defaultAA);
-				setFractionalFontMetricsEnabled(false);
+				fractionalMetricsCheckBox.setSelected(false);
 				hasUnsavedChanges = true;
 				firePropertyChange(DEFAULTS_RESTORED, null, null);
 				// Force a repaint of the preview panel.
@@ -467,6 +469,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		else if ("ShowIndentGuide".equals(command)) {
 			boolean show = showTabLinesCheckBox.isSelected();
+			tabLineColorButton.setEnabled(show);
 			hasUnsavedChanges = true;
 			firePropertyChange(SHOW_TAB_LINES_PROPERTY, !show, show);
 		}
@@ -518,14 +521,15 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		boolean bmEnabled = isBracketMatchCheckboxSelected();
 		mainView.setBracketMatchingEnabled(bmEnabled);	// Doesn't update if it doesn't have to.
 		mainView.setMatchedBracketBGColor(getBracketMatchBGColor()); // Doesn't update if it doesn't have to.
-		mainView.setMatchedBracketBorderColor(getBracketMatchBorderColor()); // Doesn't update if it doesn't have to.
-		mainView.setRememberWhitespaceLines(remWhitespaceLinesCheckBox.isSelected()); // Doesn't update if it doesn't have to.
+		mainView.setMatchedBracketBorderColor(bmBorderColorButton.getColor()); // Doesn't update if it doesn't have to.
+		mainView.setRememberWhitespaceLines(!remWhitespaceLinesCheckBox.isSelected()); // Doesn't update if it doesn't have to.
 		mainView.setAutoInsertClosingCurlys(autoInsertClosingCurlyCheckBox.isSelected()); // Doesn't update if it doesn't have to.
 		mainView.setWhitespaceVisible(isWhitespaceVisible()); // (RSyntaxTextArea) doesn't update if not necessary.
 		mainView.setShowEOLMarkers(visibleEOLCheckBox.isSelected());
 		mainView.setShowTabLines(showTabLinesCheckBox.isSelected());
+		mainView.setTabLinesColor(tabLineColorButton.getColor());
 		mainView.setAntiAliasEnabled(aaCheckBox.isSelected());
-		mainView.setFractionalFontMetricsEnabled(isFractionalFontMetricsEnabled()); // Doesn't update if not necessary.
+		mainView.setFractionalFontMetricsEnabled(fractionalMetricsCheckBox.isSelected()); // Doesn't update if not necessary.
 	}
 
 
@@ -550,17 +554,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public Color getBracketMatchBGColor() {
 		return bmBGColorButton.getColor();
-	}
-
-
-	/**
-	 * Returns the color the user chose for the border of a matched bracket.
-	 *
-	 * @return The color the user chose.
-	 * @see #setBracketMatchBorderColor
-	 */
-	public Color getBracketMatchBorderColor() {
-		return bmBorderColorButton.getColor();
 	}
 
 
@@ -621,17 +614,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public boolean isBracketMatchCheckboxSelected() {
 		return bracketMatchCheckBox.isSelected();
-	}
-
-
-	/**
-	 * Returns whether the user selected to use fractional font metrics.
-	 *
-	 * @return Whether the user wants fractional font metrics enabled.
-	 * @see #setFractionalFontMetricsEnabled
-	 */
-	public boolean isFractionalFontMetricsEnabled() {
-		return fractionalMetricsCheckBox.isSelected();
 	}
 
 
@@ -752,6 +734,12 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 							e.getOldValue(), e.getNewValue());
 		}
 
+		else if (source==tabLineColorButton) {
+			hasUnsavedChanges = true;
+			firePropertyChange(TAB_LINES_COLOR_PROPERTY,
+					e.getOldValue(), e.getNewValue());
+		}
+
 		else {
 			hasUnsavedChanges = true;
 			firePropertyChange(UNKNOWN_PROPERTY,
@@ -773,17 +761,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets the color to use for the border of a matched bracket.
-	 *
-	 * @param color The color to use.
-	 * @see #getBracketMatchBorderColor
-	 */
-	public void setBracketMatchBorderColor(Color color) {
-		bmBorderColorButton.setColor(color);
-	}
-
-
-	/**
 	 * Sets whether or not the bracket match color checkbox is selected.
 	 *
 	 * @param selected Whether or not the checkbox is selected.
@@ -793,17 +770,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		bracketMatchCheckBox.setSelected(selected);
 		bmBGColorButton.setEnabled(selected);
 		bmBorderColorButton.setEnabled(selected);
-	}
-
-
-	/**
-	 * Sets whether fractional font metrics is selected.
-	 *
-	 * @param enabled Whether fractional font metrics is enabled.
-	 * @see #isFractionalFontMetricsEnabled
-	 */
-	public void setFractionalFontMetricsEnabled(boolean enabled) {
-		fractionalMetricsCheckBox.setSelected(enabled);
 	}
 
 
@@ -825,6 +791,12 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
+	public void setTabLinesEnabled(boolean enabled) {
+		showTabLinesCheckBox.setSelected(enabled);
+		tabLineColorButton.setEnabled(enabled);
+	}
+
+
 	/**
 	 * Sets the values displayed by this panel to reflect those in the
 	 * application.  Child panels are not handled.
@@ -839,14 +811,15 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		boolean bmEnabled = mainView.isBracketMatchingEnabled();
 		setBracketMatchCheckboxSelected(bmEnabled);
 		setBracketMatchBGColor(mainView.getMatchedBracketBGColor());
-		setBracketMatchBorderColor(mainView.getMatchedBracketBorderColor());
-		remWhitespaceLinesCheckBox.setSelected(mainView.getRememberWhitespaceLines());
+		bmBorderColorButton.setColor(mainView.getMatchedBracketBorderColor());
+		remWhitespaceLinesCheckBox.setSelected(!mainView.getRememberWhitespaceLines());
 		autoInsertClosingCurlyCheckBox.setSelected(mainView.getAutoInsertClosingCurlys());
 		setWhitespaceVisible(mainView.isWhitespaceVisible());
 		visibleEOLCheckBox.setSelected(mainView.getShowEOLMarkers());
-		showTabLinesCheckBox.setSelected(mainView.getShowTabLines());
+		setTabLinesEnabled(mainView.getShowTabLines());
+		tabLineColorButton.setColor(mainView.getTabLinesColor());
 		aaCheckBox.setSelected(mainView.isAntiAliasEnabled());
-		setFractionalFontMetricsEnabled(mainView.isFractionalFontMetricsEnabled());
+		fractionalMetricsCheckBox.setSelected(mainView.isFractionalFontMetricsEnabled());
 	}
 
 
@@ -921,48 +894,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		stylePreviewLabel.setForeground(foregroundButton.getColor());
 		stylePreviewLabel.setBackground(backgroundButton.getColor());
 		isSettingStyle = false;
-
-	}
-
-
-	/**
-	 * Renderer that highlights the "Plain Text / Identifier" cell so users
-	 * can quickly identify the token type used for plain text.
-	 */
-	private static class RSTACellRenderer extends DefaultListCellRenderer {
-
-		public Component getListCellRendererComponent(JList list,
-							Object value, int index, boolean isSelected,
-							boolean cellHasFocus) {
-
-			super.getListCellRendererComponent(list, value, index,
-							isSelected, cellHasFocus);
-
-			Font listFont = UIManager.getFont("List.font");
-			String text = (String)value;
-
-			if (text!=null && text.startsWith("*")) {
-				setText(text.substring(1)); // Skip the '*'.
-				// WORKAROUND for Sun JRE bug 6282887: calling
-				// Font.deriveFont(style) to get a bold/italic Japanese
-				// font instead returns a font that prints squares for all
-				// (non-ASCII?) characters.  This is fixed in 1.5.0-b45,
-				// but since RSyntaxTextArea runs on 1.4+, we'll keep this
-				// workaround.
-				//this.setFont(listFont.deriveFont(Font.BOLD));
-				StyleContext sc = StyleContext.getDefaultStyleContext();
-				Font boldFont = sc.getFont(listFont.getFamily(),
-								Font.BOLD,
-								listFont.getSize());
-				this.setFont(boldFont);
-			}
-			else {
-				this.setFont(listFont);
-			}
-
-			return this;
-
-		}
 
 	}
 
