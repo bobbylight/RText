@@ -295,19 +295,6 @@ public class RunMacroAction extends StandardAction {
 				w = new PrintWriter(new OutputStreamWriter(System.err));
 				m.invoke(context, new Object[] { w });
 
-				// Import commonly-used packages.  Do this before stdout and
-				// stderr redirecting so the user won't see it in their console.
-				String imports = "import java.lang.*;" +
-						"import java.io.*;" +
-						"import java.util.*;" +
-						"import java.awt.*;" +
-						"import javax.swing.*;" +
-						"import org.fife.rtext.*;" +
-						"import org.fife.ui.rtextarea.*;" +
-						"import org.fife.ui.rsyntaxtextarea.*;";
-				m = seClazz.getDeclaredMethod("eval", new Class[] { String.class });
-				m.invoke(groovyEngine, new Object[] { imports });
-
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -352,19 +339,6 @@ public class RunMacroAction extends StandardAction {
 						new Class[] { Writer.class });
 				w = new PrintWriter(new OutputStreamWriter(System.err));
 				m.invoke(context, new Object[] { w });
-
-				// Import commonly-used packages.  Do this before stdout and
-				// stderr redirecting so the user won't see it in their console.
-				String imports = "importPackage(java.lang);" +
-							"importPackage(java.io);" +
-							"importPackage(java.util);" +
-							"importPackage(java.awt);" +
-							"importPackage(javax.swing);" +
-							"importPackage(org.fife.rtext);" +
-							"importPackage(org.fife.ui.rtextarea);" +
-							"importPackage(org.fife.ui.rsyntaxtextarea);";
-				m = seClazz.getDeclaredMethod("eval", new Class[] { String.class });
-				m.invoke(jsEngine, new Object[] { imports });
 
 			} catch (Exception e) {
 				e.printStackTrace();

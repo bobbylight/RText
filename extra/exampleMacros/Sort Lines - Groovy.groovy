@@ -1,9 +1,5 @@
 /*
- * This is a Groovy macro for RText.
- * The following packages are imported by default:
- * java.lang.*, java.io.*, java.util,*, java.awt.*, javax.swing.*,
- * org.fife.rtext.*, org.fife.ui.rtextarea.*, org.fife.ui.rsyntaxtextarea.*
- *
+ * This is a Groovy macro for RText that sorts all lines in the active editor.
  *
  * Global variables include:
  *   - rtext:           The focused application window, an instance of

@@ -1,11 +1,6 @@
 /*
  * This is a Rhino (Javascript) macro for RText.
  *
- * The following packages are imported by default:
- * java.lang.*, java.io.*, java.util,*, java.awt.*, javax.swing.*,
- * org.fife.rtext.*, org.fife.ui.rtextarea.*, org.fife.ui.rsyntaxtextarea.*
- *
- *
  * Global variables include:
  *   - rtext:           The focused application window, an instance of
  *                      org.fife.rtext.RText.
@@ -15,8 +10,9 @@
  * You can use the entire RText and RSyntaxTextArea public API's:
  *   http://javadoc.fifesoft.com/rtext/
  *   http://javadoc.fifesoft.com/rsyntaxtextarea/
- *
  */
+importPackage(java.lang, javax.swing);
+
 textArea.append("\nThis is new text\n");
 textArea.caretPosition = textArea.document.length;
 JOptionPane.showMessageDialog(rtext, "Text has been appended!");

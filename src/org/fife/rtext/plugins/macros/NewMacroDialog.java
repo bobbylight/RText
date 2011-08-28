@@ -199,6 +199,9 @@ public class NewMacroDialog extends EscapableDialog {
 	 * @return The file.
 	 */
 	private File createMacroFile() {
+		if (!isNew) { // Preserve old file
+			return new File(macro.getFile());
+		}
 		return new File(plugin.getMacroDir(),
 				nameField.getText() + EXTENSIONS[typeCombo.getSelectedIndex()]);
 	}
@@ -328,12 +331,17 @@ public class NewMacroDialog extends EscapableDialog {
 
 		switch (rc) {
 			case JOptionPane.YES_OPTION:
-				file.delete();
+				if (isNew) { // Don't delete macro file if we're editing it
+					file.delete();
+				}
 				macro = new Macro();
 				macro.setName(nameField.getText());
 				macro.setDesc(descField.getText());
 				macro.setFile(file.getAbsolutePath());
-				macro.setAccelerator(shortcutField.getKeyStroke().toString());
+				KeyStroke ks = shortcutField.getKeyStroke();
+				if (ks!=null) {
+					macro.setAccelerator(ks.toString());
+				}
 				escapePressed();
 				break;
 			case JOptionPane.NO_OPTION:
@@ -389,7 +397,10 @@ public class NewMacroDialog extends EscapableDialog {
 		descField.setText(macro.getDesc());
 		nameField.setText(macro.getName());
 		nameField.setEditable(false); // Can't change name
-		shortcutField.setKeyStroke(KeyStroke.getKeyStroke(macro.getAccelerator()));
+		String accelerator = macro.getAccelerator();
+		if (accelerator!=null && accelerator.length()>0) {
+			shortcutField.setKeyStroke(KeyStroke.getKeyStroke(accelerator));
+		}
 
 		int index = 0;
 		int dot = macro.getFile().lastIndexOf('.');
