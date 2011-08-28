@@ -27,7 +27,6 @@ package org.fife.ui.rsyntaxtextarea;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -119,7 +118,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		enabledCB = new JCheckBox(msg.getString("Enabled"));
 		enabledCB.setActionCommand("Enabled");
 		enabledCB.addActionListener(listener);
-		addLeftAlignedComponent(temp, enabledCB);
+		addLeftAligned(temp, enabledCB);
 		temp.add(Box.createVerticalStrut(5));
 
 		dictLabel = new JLabel(msg.getString("Dictionary"));
@@ -180,32 +179,25 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 			temp2.add(maxErrorsPanel);			temp2.add(errorsPerFileLabel);
 		}
 		UIUtil.makeSpringCompactGrid(temp2, 5, 2, 5, 5, 5, 5);
-		addLeftAlignedComponent(temp, temp2);
+		addLeftAligned(temp, temp2);
 		temp.add(Box.createVerticalStrut(5));
 
 		viewSpellingWindowCB = new JCheckBox(msg.getString("ViewSpellingErrorWindow"));
 		viewSpellingWindowCB.setActionCommand("ViewSpellingWindow");
 		viewSpellingWindowCB.addActionListener(listener);
-		addLeftAlignedComponent(temp, viewSpellingWindowCB);
+		addLeftAligned(temp, viewSpellingWindowCB);
 		temp.add(Box.createVerticalStrut(5));
 
 		RButton rdButton = new RButton(msg.getString("RestoreDefaults"));
 		rdButton.setActionCommand("RestoreDefaults");
 		rdButton.addActionListener(listener);
-		addLeftAlignedComponent(temp, rdButton);
+		addLeftAligned(temp, rdButton);
 		temp.add(Box.createVerticalStrut(5));
 
 		temp.add(Box.createVerticalGlue());
 
 		applyComponentOrientation(orientation);
 
-	}
-
-
-	private void addLeftAlignedComponent(Container addToMe, JComponent toAdd) {
-		JPanel temp = new JPanel(new BorderLayout());
-		temp.add(toAdd, BorderLayout.LINE_START);
-		addToMe.add(temp);
 	}
 
 
