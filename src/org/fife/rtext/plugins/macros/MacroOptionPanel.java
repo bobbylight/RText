@@ -30,6 +30,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -54,6 +55,7 @@ import org.fife.ui.modifiabletable.ModifiableTable;
 import org.fife.ui.modifiabletable.ModifiableTableChangeEvent;
 import org.fife.ui.modifiabletable.ModifiableTableListener;
 import org.fife.ui.modifiabletable.RowHandler;
+import org.fife.ui.rtextfilechooser.Utilities;
 
 
 /**
@@ -129,6 +131,25 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 
 
 	/**
+	 * Copies a file.
+	 *
+	 * @param fromFile The source file.
+	 * @param toFile The new file.
+	 * @return Whether the operation was successful.
+	 */
+	private boolean copyFile(File fromFile, File toFile) {
+		boolean success = false;
+		try {
+			Utilities.copyFile(fromFile, toFile);
+			success = true;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+		return success;
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	protected void doApplyImpl(Frame owner) {
@@ -140,12 +161,33 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 		SortedSet oldMacros = mm.clearMacros();
 
 		for (int i=0; i<model.getRowCount(); i++) {
+
 			Macro macro = (Macro)model.getValueAt(i, 0);
+
+			// If this is a macro template, create a copy of the file so the
+			// user can't edit the original.
+			MacroPlugin plugin = (MacroPlugin)getPlugin();
+			File examplesDir = getExampleMacrosDir();
+			File macroFile = new File(macro.getFile());
+			if (examplesDir.equals(macroFile.getParentFile())) {
+				// New macro name may have "_1", "_2", etc. on it, so be careful
+				String newMacroName = macro.getName() + "." + 
+						Utilities.getExtension(macroFile.getName());
+				File newMacroFile = new File(plugin.getMacroDir(),newMacroName);
+				if (copyFile(macroFile, newMacroFile)) {
+					macro.setFile(newMacroFile.getAbsolutePath());
+				}
+			}
+
 			mm.addMacro(macro);
 			oldMacros.remove(macro); // This macro was "kept".
+
 		}
 
-		// Delete scripts for macros that were removed.
+		// Delete scripts for macros that were removed.  Keep macros in the
+		// examples directory.  This should only occur if an error occurred
+		// copying an example macro into the user's macros directory (see
+		// above).
 		File exampleDir = getExampleMacrosDir();
 		for (Iterator i=oldMacros.iterator(); i.hasNext(); ) {
 			Macro deleted = (Macro)i.next();

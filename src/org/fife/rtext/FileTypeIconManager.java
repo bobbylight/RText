@@ -32,6 +32,8 @@ import java.util.HashMap;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.fife.ui.rtextfilechooser.Utilities;
+
 
 /**
  * Manages icons used for file types by subclasses of
@@ -111,16 +113,14 @@ public class FileTypeIconManager {
 
 		// If this file has no extension, use the default icon.
 		String fileName = textArea.getFileName();
-		int dot = fileName.lastIndexOf('.');
-		if (dot==-1) {
+		String extension = Utilities.getExtension(fileName);
+
+		if (extension==null) {
 			icon = defaultIcon;
 		}
-
-		// Otherwise, if there is an extension...
 		else {
 
 			// Check whether there's a special icon for this file extension.
-			String extension = fileName.substring(dot+1);
 			String iconName = (String)ext2IconNameMap.get(extension);
 			if (iconName!=null) {
 				icon = (Icon)iconName2IconMap.get(iconName);

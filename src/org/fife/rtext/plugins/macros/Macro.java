@@ -134,6 +134,11 @@ public class Macro implements Comparable, Cloneable {
 	}
 
 
+	public int hashCode() {
+		return getName().hashCode();
+	}
+
+
 	public void setAccelerator(String accelerator) {
 		this.accelerator = accelerator;
 	}
