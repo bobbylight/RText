@@ -2,20 +2,19 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
-1.5.0
+1.5.0 (09/03/2011):
 -------------------
-   - ??? Add "stop" button to tool console like Console console. ???
-   - ??? Fix bug - FSATextField doesn't show suggestions if only 1 matching
-     file exists. ???
-   - ??? Make opening a file via Find in Files dialog center the matched line
-     vertically in the editor. ???
-   - ??? Ship with ctags distribution on Windows? ???
-   - ??? Added scripted macro support.  You can now write macros in either
+   - Added scripted macro support.  You can now write macros in either
      JavaScript or Groovy and assign them shortcuts, essentially creating your
-     own custom menu item actions. ???
-   - ??? Added very basic JSP code completion. ???
-   - ??? Made Source Browser sortable. ???
-   - ??? Added "Check for Updates" menu item to Help menu. ???
+     own custom menu item actions.
+   - Added very basic JSP code completion.
+   - Add "stop" button to tool console like Console console.
+   - Updated to RSyntaxTextArea/AutoComplete 1.5.2.  Improves anti-aliasing in
+     the editor, and adds options to auto-insert closing curly braces, clear
+     whitespace-only lines on Enter presses, and painting indent/tab lines.
+   - Added "Check for Updates" menu item to Help menu.
+   - Made opening a file via Find in Files dialog center the matched line
+     vertically in the editor.
 
 
 1.4.0 (05/29/2011):

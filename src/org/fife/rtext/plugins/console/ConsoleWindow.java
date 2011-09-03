@@ -51,8 +51,7 @@ import org.fife.ui.dockablewindows.DockableWindow;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ConsoleWindow extends DockableWindow
-							implements PropertyChangeListener {
+class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 
 //	private Plugin plugin;
 	private CardLayout cards;

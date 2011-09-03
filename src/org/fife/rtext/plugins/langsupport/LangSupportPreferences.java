@@ -57,6 +57,8 @@ public class LangSupportPreferences extends Prefs {
 	public String[] java_classpath_src; // Same length as java_classpath_jars
 	public boolean java_checkForBuildPathMods;
 
+	public boolean jsp_enabled;
+
 	public boolean perl_enabled;
 	public boolean perl_paramAssistance;
 	public boolean perl_showDescWindow;
@@ -109,6 +111,8 @@ public class LangSupportPreferences extends Prefs {
 			java_classpath_src = new String[] { srcFile };
 		}
 		java_checkForBuildPathMods = true;
+
+		jsp_enabled = false;
 
 		perl_enabled = true;
 		perl_paramAssistance = true;

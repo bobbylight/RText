@@ -136,7 +136,7 @@ public class RunMacroAction extends StandardAction {
 	 *
 	 * @param app The parent application.
 	 * @param plugin The plugin.
-	 * @param tool The tool to run.
+	 * @param macro The macro to run.
 	 */
 	public RunMacroAction(RText app, MacroPlugin plugin, Macro macro) {
 		super(app, macro.getName());

@@ -42,6 +42,7 @@ import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.java.JarInfo;
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
+import org.fife.rsta.ac.jsp.JspLanguageSupport;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 import org.fife.rsta.ac.sh.ShellLanguageSupport;
 import org.fife.rtext.AbstractMainView;
@@ -246,6 +247,10 @@ public class Plugin implements org.fife.ui.app.Plugin {
 			}
 		}
 
+		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_JSP);
+		JspLanguageSupport jspls = (JspLanguageSupport)ls;
+		jspls.setAutoCompleteEnabled(prefs.jsp_enabled);
+
 		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PERL);
 		PerlLanguageSupport pls = (PerlLanguageSupport)ls;
 		pls.setParsingEnabled(prefs.perl_compile);
@@ -335,6 +340,10 @@ public class Plugin implements org.fife.ui.app.Plugin {
 			}
 		}
 		prefs.java_checkForBuildPathMods = JarManager.getCheckModifiedDatestamps();
+
+		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_JSP);
+		JspLanguageSupport jspls = (JspLanguageSupport)ls;
+		prefs.jsp_enabled = jspls.isAutoCompleteEnabled();
 
 		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PERL);
 		PerlLanguageSupport pls = (PerlLanguageSupport)ls;

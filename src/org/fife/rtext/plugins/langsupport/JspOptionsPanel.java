@@ -36,9 +36,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 
-import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
+import org.fife.rsta.ac.jsp.JspLanguageSupport;
 import org.fife.ui.OptionsDialogPanel;
+import org.fife.ui.RButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
@@ -50,10 +51,11 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-public class JspOptionsPanel extends OptionsDialogPanel {
+class JspOptionsPanel extends OptionsDialogPanel {
 
 	private Listener listener;
 	private JCheckBox enabledCB;
+	private RButton rdButton;
 
 	private static final String PROPERTY		= "Property";
 
@@ -88,6 +90,11 @@ public class JspOptionsPanel extends OptionsDialogPanel {
 		enabledCB = createCB("Options.General.EnableCodeCompletion");
 		addLeftAligned(box, enabledCB);
 
+		cp.add(Box.createVerticalStrut(5));
+		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton.addActionListener(listener);
+		addLeftAligned(cp, rdButton);
+
 		cp.add(Box.createVerticalGlue());
 
 		applyComponentOrientation(o);
@@ -111,11 +118,12 @@ public class JspOptionsPanel extends OptionsDialogPanel {
 	protected void doApplyImpl(Frame owner) {
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
-		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_JSP);
-/* Only enable when we update RSTA jars
+		JspLanguageSupport ls = (JspLanguageSupport)lsf.getSupportFor(
+				SyntaxConstants.SYNTAX_STYLE_JSP);
+
 		// Options dealing with code completion.
 		ls.setAutoCompleteEnabled(enabledCB.isSelected());
-*/
+
 	}
 
 
@@ -145,11 +153,12 @@ public class JspOptionsPanel extends OptionsDialogPanel {
 	protected void setValuesImpl(Frame owner) {
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
-		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_JSP);
-/* Only enable when we update RSTA jars
+		JspLanguageSupport ls = (JspLanguageSupport)lsf.getSupportFor(
+				SyntaxConstants.SYNTAX_STYLE_JSP);
+
 		// Options dealing with code completion
 		setEnabledCBSelected(ls.isAutoCompleteEnabled());
-*/
+
 	}
 
 
@@ -167,6 +176,14 @@ public class JspOptionsPanel extends OptionsDialogPanel {
 				setEnabledCBSelected(enabledCB.isSelected());
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
+			}
+
+			else if (rdButton==source) {
+				if (enabledCB.isSelected()) {
+					enabledCB.setSelected(false);
+					hasUnsavedChanges = true;
+					firePropertyChange(PROPERTY, null, null);
+				}
 			}
 
 		}

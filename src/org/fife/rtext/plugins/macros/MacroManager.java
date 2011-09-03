@@ -226,7 +226,7 @@ public class MacroManager {
 
 	/**
 	 * Removes a macro.  This method fires a property change event of type
-	 * {@link #PROPERTY_TOOLS}.
+	 * {@link #PROPERTY_MACROS}.
 	 *
 	 * @param macro The macro to remove.
 	 * @see #addMacro(Macro)

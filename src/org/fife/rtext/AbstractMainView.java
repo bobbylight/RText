@@ -2142,10 +2142,10 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns whether fractional fontmetrics is enabled.
+	 * Returns whether fractional font-metrics is enabled.
 	 *
-	 * @return Whether fractional fontmetrics is enabled.
-	 * @see #getTextAAHintName()
+	 * @return Whether fractional font-metrics is enabled.
+	 * @see #isAntiAliasEnabled()
 	 * @see #setFractionalFontMetricsEnabled
 	 */
 	public boolean isFractionalFontMetricsEnabled() {
@@ -2725,7 +2725,7 @@ public abstract class AbstractMainView extends JPanel
 	 * Sets whether anti-aliasing is enabled in text areas.  This method fires
 	 * a property change event of type {@link #SMOOTH_TEXT_PROPERTY}.
 	 *
-	 * @param Whether anti-aliasing should be enabled.
+	 * @param enabled Whether anti-aliasing should be enabled.
 	 * @see #isAntiAliasEnabled()
 	 */
 	public void setAntiAliasEnabled(boolean enabled) {
