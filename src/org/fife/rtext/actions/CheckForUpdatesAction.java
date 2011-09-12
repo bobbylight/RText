@@ -48,7 +48,8 @@ public class CheckForUpdatesAction extends StandardAction {
 	/**
 	 * The URL to contact to see if there is a newer RText release.
 	 */
-	private static final String CHECK_URL = "http://fifesoft.com/rtext/latest.properties";
+	private static final String CHECK_URL =
+		"http://fifesoft.com/rtext/latest.properties?clientVersion=" + RText.VERSION_STRING;
 
 	/**
 	 * Where the user is directed to download the latest version.
