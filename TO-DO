@@ -1,4 +1,4 @@
-Last updated 05/29/2011
+Last updated 09/13/2011
 
 - Very basic variable code completion for Groovy.
 - Fix bug - new tools aren't always remembered (? still true?)
@@ -6,18 +6,24 @@ Last updated 05/29/2011
 
 UI Features
 -----------
-1.  Add option to have Find/Replace in Files syntax highlight matches.
-2.  Create better icons for file types.
+1.  Make sort functionality for Source Browser actually work.
+2.  Make dockable window tabbed panes collapsible.
+3.  Rearrange editor options to be more intuitive.
 
 
 Functionality
 -------------
-1.  Add XML validation (squiggle underlining).
-2.  Add scripted macro support (Java 6+ only).
+1.  Make directory for Rhino user-defined scripts that get run on startup (this
+    would require Java 6, of course).
+2.  Add XML validation (squiggle underlining).
 3.  Add VB syntax highlighting.
 4.  Add drag-and-drop support to list view (rearranging files, opening).
-4.  Make OptionsDialogPanels lazy-initialize on first display.
-5.  Provide Exuberant ctags with Windows install.
+5.  Change file list view from an AbstractMainView to just an optional
+    dockable window ("Open Files" window).
+6.  Make OptionsDialogPanels lazy-initialize on first display.
+7.  Provide Exuberant ctags with Windows install.
+8.  Improve Help!  Especially for new tool & macro support, startup scripts
+    (above), etc.
 
 
 Miscellaney

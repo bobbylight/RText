@@ -72,7 +72,7 @@ public class Plugin implements org.fife.ui.app.Plugin {
 	private Listener listener;
 	private Icon[] icons;
 
-	private static final String PLUGIN_VERSION			= "1.5.0";
+	private static final String PLUGIN_VERSION			= "2.0.0";
 	private static final String PREFS_FILE_NAME			= "langSupport.properties";
 
 	private static final String MSG = "org.fife.rtext.plugins.langsupport.Plugin";
