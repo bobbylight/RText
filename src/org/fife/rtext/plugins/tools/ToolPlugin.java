@@ -46,8 +46,8 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
+import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.MenuBar;
-import org.fife.ui.app.Plugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.StandardAction;
 
@@ -58,7 +58,8 @@ import org.fife.ui.app.StandardAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ToolPlugin implements Plugin, PropertyChangeListener {
+public class ToolPlugin extends AbstractPlugin
+		implements PropertyChangeListener {
 
 	private static final String VERSION				= "2.0.0";
 

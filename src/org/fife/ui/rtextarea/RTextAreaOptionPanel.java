@@ -52,6 +52,11 @@ import org.fife.ui.rtextarea.RTextArea;
 public class RTextAreaOptionPanel extends OptionsDialogPanel
 		implements ActionListener, DocumentListener, PropertyChangeListener {
 
+	/**
+	 * ID used to identify this option panel.
+	 */
+	public static final String ID = "RTextAreaOptionPanel";
+
 	private FontSelector fontSelector;
 
 	private JLabel tabSizeLabel;
@@ -89,9 +94,10 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public RTextAreaOptionPanel() {
 
+		setId(ID);
+
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
-
 		ResourceBundle msg = ResourceBundle.getBundle(
 								"org.fife.ui.rtextarea.OptionPanel");
 

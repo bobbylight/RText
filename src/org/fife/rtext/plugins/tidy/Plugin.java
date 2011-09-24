@@ -42,6 +42,7 @@ import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
+import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
@@ -53,7 +54,8 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Plugin implements org.fife.ui.app.Plugin, PropertyChangeListener {
+public class Plugin extends AbstractPlugin
+		implements PropertyChangeListener {
 
 	private RText rtext;
 	private TidyAction action;

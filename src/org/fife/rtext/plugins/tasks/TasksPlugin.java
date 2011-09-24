@@ -42,8 +42,8 @@ import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
+import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.MenuBar;
-import org.fife.ui.app.Plugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.rsyntaxtextarea.parser.Parser;
@@ -55,7 +55,7 @@ import org.fife.ui.rsyntaxtextarea.parser.Parser;
  * @author Robert Futrell
  * @version 1.0
  */
-public class TasksPlugin implements Plugin {
+public class TasksPlugin extends AbstractPlugin {
 
 	/**
 	 * The parent application.

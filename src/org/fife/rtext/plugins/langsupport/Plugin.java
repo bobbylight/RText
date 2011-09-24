@@ -50,12 +50,14 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.sourcebrowser.SourceBrowserPlugin;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
+import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.autocomplete.CompletionXMLParser;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rtextarea.Gutter;
+import org.fife.ui.rtextarea.RTextAreaOptionPanel;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 
@@ -66,7 +68,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Plugin implements org.fife.ui.app.Plugin {
+public class Plugin extends AbstractPlugin {
 
 	private RText rtext;
 	private Listener listener;
@@ -89,6 +91,7 @@ public class Plugin implements org.fife.ui.app.Plugin {
 	 * @param app The parent application.
 	 */
 	public Plugin(AbstractPluggableGUIApplication app) {
+		setOptionsDialogPanelParentPanelID(RTextAreaOptionPanel.ID);
 	}
 
 

@@ -1580,11 +1580,6 @@ public class RText extends AbstractPluggableGUIApplication
 				SwingUtilities.updateComponentTreeUI(optionsDialog);
 				optionsDialog.pack();
 			}
-			OptionsDialog pluginOptDialog = getPluginOptionsDialog(false);
-			if (pluginOptDialog != null) {
-				SwingUtilities.updateComponentTreeUI(pluginOptDialog);
-				pluginOptDialog.pack();
-			}
 			if (helpDialog != null) {
 				SwingUtilities.updateComponentTreeUI(helpDialog);
 				helpDialog.pack();

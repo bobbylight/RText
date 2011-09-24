@@ -23,6 +23,7 @@
 package org.fife.rtext.optionsdialog;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.ImageIcon;
@@ -116,7 +117,19 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 			Plugin plugin = plugins[i];
 			panel = plugin.getOptionsDialogPanel();
 			if (panel!=null) {
-				panels.add(panel);
+				String parentID = plugin.getOptionsDialogPanelParentPanelID();
+				if (parentID!=null) {
+					OptionsDialogPanel parent = getParentPanel(panels, parentID);
+					if (parent!=null) {
+						parent.addChildPanel(panel);
+					}
+					else { // Unknown parent specified...
+						panels.add(panel);
+					}
+				}
+				else {
+					panels.add(panel);
+				}
 			}
 		}
 
@@ -124,6 +137,25 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		array = (OptionsDialogPanel[])panels.toArray(array);
 		setOptionsPanels(array); // Calls pack().
 
+	}
+
+
+	/**
+	 * Returns the options dialog with the specified ID.
+	 *
+	 * @param panels The already added panels.
+	 * @param parentID The panel ID to search for.  Should not be
+	 *        <code>null</code>.
+	 * @return The panel, or <code>null</code> if it wasn't found.
+	 */
+	private OptionsDialogPanel getParentPanel(List panels, String parentID) {
+		for (Iterator i=panels.iterator(); i.hasNext(); ) {
+			OptionsDialogPanel panel = (OptionsDialogPanel)i.next();
+			if (parentID.equals(panel.getId())) {
+				return panel;
+			}
+		}
+		return null;
 	}
 
 
