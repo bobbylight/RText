@@ -25,7 +25,6 @@
 package org.fife.rtext.plugins.langsupport;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -103,7 +102,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		cp.add(Box.createVerticalStrut(5));
 
 		enabledCB = createCB("Options.General.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB);
+		addLeftAligned(box, enabledCB, 5);
 
 		Box box2 = Box.createVerticalBox();
 		if (o.isLeftToRight()) {
@@ -115,7 +114,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		box.add(box2);
 
 		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box2, showDescWindowCB);
+		addLeftAligned(box2, showDescWindowCB, 5);
 
 		box2.add(Box.createVerticalGlue());
 
@@ -125,7 +124,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		cp.add(box);
 
 		autoActivateCB = createCB("Options.General.EnableAutoActivation");
-		addLeftAligned(box, autoActivateCB);
+		addLeftAligned(box, autoActivateCB, 5);
 
 		box2 = Box.createVerticalBox();
 		if (o.isLeftToRight()) {
@@ -165,20 +164,12 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		cp.add(Box.createVerticalStrut(5));
 		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton);
+		addLeftAligned(cp, rdButton, 5);
 
 		cp.add(Box.createVerticalGlue());
 
 		applyComponentOrientation(o);
 
-	}
-
-
-	private void addLeftAligned(Box to, Component c) {
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(c, BorderLayout.LINE_START);
-		to.add(panel);
-		to.add(Box.createVerticalStrut(5));
 	}
 
 

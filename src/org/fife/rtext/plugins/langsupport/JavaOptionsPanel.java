@@ -240,15 +240,9 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 		applyComponentOrientation(o);
 
+		addChildPanel(new JavaFoldingOptionsPanel());
+
 	}
-
-
-//	private void addLeftAligned(Box to, Component c) {
-//		JPanel panel = new JPanel(new BorderLayout());
-//		panel.add(c, BorderLayout.LINE_START);
-//		to.add(panel);
-//		to.add(Box.createVerticalStrut(5));
-//	}
 
 
 	private JCheckBox createCB(String key) {

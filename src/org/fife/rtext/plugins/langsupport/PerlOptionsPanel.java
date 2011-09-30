@@ -25,7 +25,6 @@
 package org.fife.rtext.plugins.langsupport;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -125,7 +124,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		cp.add(Box.createVerticalStrut(5));
 
 		enabledCB = createCB("Options.General.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB);
+		addLeftAligned(box, enabledCB, 5);
 
 		Box box2 = Box.createVerticalBox();
 		if (o.isLeftToRight()) {
@@ -137,13 +136,13 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		box.add(box2);
 
 		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box2, showDescWindowCB);
+		addLeftAligned(box2, showDescWindowCB, 5);
 
 		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
-		addLeftAligned(box2, paramAssistanceCB);
+		addLeftAligned(box2, paramAssistanceCB, 5);
 
 		useParensCB = createCB("UseParensInCodeCompletion");
-		addLeftAligned(box2, useParensCB);
+		addLeftAligned(box2, useParensCB, 5);
 
 		box2.add(Box.createVerticalGlue());
 
@@ -153,7 +152,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		cp.add(box);
 
 		compileCB = createCB("Options.General.UnderlineErrors");
-		addLeftAligned(box, compileCB);
+		addLeftAligned(box, compileCB, 5);
 
 		box2 = Box.createVerticalBox();
 		if (o.isLeftToRight()) {
@@ -193,7 +192,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		box3.add(Box.createHorizontalStrut(40));
 		box3.add(taintModeCB);
 		box3.add(Box.createHorizontalGlue());
-		addLeftAligned(box2, box3);
+		addLeftAligned(box2, box3, 5);
 		box2.add(Box.createVerticalGlue());
 
 		box = Box.createVerticalBox();
@@ -201,7 +200,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 				getString("Options.Perl.Section.Perl5Lib")));
 		cp.add(box);
 		overridePerl5LibCB = createCB("OverridePerl5Lib");
-		addLeftAligned(box, overridePerl5LibCB);
+		addLeftAligned(box, overridePerl5LibCB, 5);
 		DefaultTableModel model = new DefaultTableModel(0, 1);
 		perl5Table = new ModifiableTable(model, ModifiableTable.BOTTOM,
 										ModifiableTable.ALL_BUTTONS);
@@ -217,20 +216,12 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 
 		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton);
+		addLeftAligned(cp, rdButton, 5);
 
 //		cp.add(Box.createVerticalGlue());
 
 		applyComponentOrientation(o);
 
-	}
-
-
-	private void addLeftAligned(Box to, Component c) {
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(c, BorderLayout.LINE_START);
-		to.add(panel);
-		to.add(Box.createVerticalStrut(5));
 	}
 
 

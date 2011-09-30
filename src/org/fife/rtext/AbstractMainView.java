@@ -812,6 +812,8 @@ public abstract class AbstractMainView extends JPanel
 		// applyComponentOrientation(...).
 		//pane.applyComponentOrientation(getTextAreaOrientation());
 
+		pane.setCodeFoldingEnabled(true);
+
 		// Listeners.
 		pane.addPropertyChangeListener(owner);
 		pane.addPropertyChangeListener((StatusBar)owner.getStatusBar());

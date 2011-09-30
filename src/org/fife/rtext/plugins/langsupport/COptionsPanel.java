@@ -25,7 +25,6 @@
 package org.fife.rtext.plugins.langsupport;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -36,7 +35,6 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import org.fife.rsta.ac.LanguageSupport;
@@ -59,6 +57,7 @@ class COptionsPanel extends OptionsDialogPanel {
 	private JCheckBox enabledCB;
 	private JCheckBox paramAssistanceCB;
 	private JCheckBox showDescWindowCB;
+	private JCheckBox foldingEnabledCB;
 	private RButton rdButton;
 
 	private static final String PROPERTY		= "Property";
@@ -92,7 +91,7 @@ class COptionsPanel extends OptionsDialogPanel {
 		cp.add(Box.createVerticalStrut(5));
 
 		enabledCB = createCB("Options.General.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB);
+		addLeftAligned(box, enabledCB, 5);
 
 		Box box2 = Box.createVerticalBox();
 		if (o.isLeftToRight()) {
@@ -104,12 +103,21 @@ class COptionsPanel extends OptionsDialogPanel {
 		box.add(box2);
 
 		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box2, showDescWindowCB);
+		addLeftAligned(box2, showDescWindowCB, 5);
 
 		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
-		addLeftAligned(box2, paramAssistanceCB);
+		addLeftAligned(box2, paramAssistanceCB, 5);
 
 		box2.add(Box.createVerticalGlue());
+
+		box = Box.createVerticalBox();
+		box.setBorder(new OptionPanelBorder(msg.
+				getString("Options.General.Section.Folding")));
+		cp.add(box);
+		cp.add(Box.createVerticalStrut(5));
+
+		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
+		addLeftAligned(box, foldingEnabledCB, 5);
 
 		cp.add(Box.createVerticalStrut(5));
 		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
@@ -120,14 +128,6 @@ class COptionsPanel extends OptionsDialogPanel {
 
 		applyComponentOrientation(o);
 
-	}
-
-
-	private void addLeftAligned(Box to, Component c) {
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(c, BorderLayout.LINE_START);
-		to.add(panel);
-		to.add(Box.createVerticalStrut(5));
 	}
 
 
@@ -213,6 +213,11 @@ class COptionsPanel extends OptionsDialogPanel {
 			}
 
 			else if (showDescWindowCB==source) {
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
+			else if (foldingEnabledCB==source) {
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
 			}
