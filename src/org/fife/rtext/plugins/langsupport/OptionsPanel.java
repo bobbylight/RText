@@ -120,6 +120,9 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 
 		// Language-specific child panels
 		addChildPanel(new COptionsPanel());
+		addChildPanel(new CPlusPlusOptionsPanel());
+		addChildPanel(new CSharpOptionsPanel());
+		addChildPanel(new GroovyOptionsPanel());
 		addChildPanel(new HtmlOptionsPanel());
 		addChildPanel(new JavaOptionsPanel());
 		addChildPanel(new JspOptionsPanel());

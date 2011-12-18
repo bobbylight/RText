@@ -69,6 +69,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 	private JTextField aaDelayField;
 	private JLabel aaKeysLabel;
 	private JTextField aaKeysField;
+	private JCheckBox foldingEnabledCB;
 	private RButton rdButton;
 
 	private static final String PROPERTY		= "Property";
@@ -162,6 +163,15 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		box2.add(Box.createVerticalGlue());
 
 		cp.add(Box.createVerticalStrut(5));
+		box = Box.createVerticalBox();
+		box.setBorder(new OptionPanelBorder(msg.
+				getString("Options.General.Section.Folding")));
+		cp.add(box);
+		cp.add(Box.createVerticalStrut(5));
+
+		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
+		addLeftAligned(box, foldingEnabledCB, 5);
+
 		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton, 5);

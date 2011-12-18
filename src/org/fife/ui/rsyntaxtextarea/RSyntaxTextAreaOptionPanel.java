@@ -146,7 +146,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		syntaxListModel.addElement(msg.getString("Style.Comment.EndOfLine"));
 		syntaxListModel.addElement(msg.getString("Style.Comment.Multiline"));
 		syntaxListModel.addElement(msg.getString("Style.Comment.Documentation"));
+		syntaxListModel.addElement(msg.getString("Style.Comment.Keyword"));
+		syntaxListModel.addElement(msg.getString("Style.Comment.Markup"));
 		syntaxListModel.addElement(msg.getString("Style.ReservedWord"));
+		syntaxListModel.addElement(msg.getString("Style.ReservedWord2"));
 		syntaxListModel.addElement(msg.getString("Style.Function"));
 		syntaxListModel.addElement(msg.getString("Style.Literal.Boolean"));
 		syntaxListModel.addElement(msg.getString("Style.Literal.Integer"));
@@ -157,6 +160,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		syntaxListModel.addElement(msg.getString("Style.Literal.Backquote"));
 		syntaxListModel.addElement(msg.getString("Style.DataType"));
 		syntaxListModel.addElement(msg.getString("Style.Variable"));
+		syntaxListModel.addElement(msg.getString("Style.RegularExpression"));
+		syntaxListModel.addElement(msg.getString("Style.Annotation"));
 		syntaxListModel.addElement("<html><b>"+msg.getString("Style.Identifier.PlainText"));
 		syntaxListModel.addElement(msg.getString("Style.Whitespace"));
 		syntaxListModel.addElement(msg.getString("Style.Separator"));
@@ -165,11 +170,12 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		syntaxListModel.addElement(msg.getString("Style.MarkupTag.Delimiter"));
 		syntaxListModel.addElement(msg.getString("Style.MarkupTag.TagName"));
 		syntaxListModel.addElement(msg.getString("Style.MarkupTag.Attribute"));
+		syntaxListModel.addElement(msg.getString("Style.MarkupTag.AttributeValue"));
 		syntaxListModel.addElement(msg.getString("Style.Error.Identifier"));
 		syntaxListModel.addElement(msg.getString("Style.Error.Number"));
 		syntaxListModel.addElement(msg.getString("Style.Error.String"));
 		syntaxListModel.addElement(msg.getString("Style.Error.Char"));
-		syntaxPanel.add(new RScrollPane(syntaxList), BorderLayout.WEST);
+		syntaxPanel.add(new RScrollPane(syntaxList), BorderLayout.LINE_START);
 
 		// Create a panel for other syntax style properties.
 		Box propertiesPanel = Box.createVerticalBox();
@@ -344,7 +350,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				if (index==-1) return;
 				index = indexToStyle(index); // To get index into schemes.
 				RTextAreaOptionPanel parent = (RTextAreaOptionPanel)getParentPanel();
-				Style style = colorScheme.styles[index];
+				Style style = colorScheme.getStyle(index);
 				Font f = style.font!=null ? style.font : parent.getTextAreaFont();
 				boolean u = style.font!=null ? style.underline : parent.getUnderline();
 				Color fg = style.foreground!=null ? style.foreground :
@@ -383,7 +389,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 					foregroundButton.getColor() : Color.BLACK);
 			// Update our color scheme.
 			int i = syntaxList.getSelectedIndex();
-			colorScheme.styles[indexToStyle(i)].foreground =
+			colorScheme.getStyle(indexToStyle(i)).foreground =
 						selected ? foregroundButton.getColor() : null;
 			hasUnsavedChanges = true;
 			firePropertyChange(SYNTAX_COLOR_PROPERTY, null, null);
@@ -397,7 +403,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 					backgroundButton.getColor() : Color.WHITE);
 			// Update our color scheme.
 			int i = syntaxList.getSelectedIndex();
-			colorScheme.styles[indexToStyle(i)].background =
+			colorScheme.getStyle(indexToStyle(i)).background =
 						selected ? backgroundButton.getColor() : null;
 			hasUnsavedChanges = true;
 			firePropertyChange(SYNTAX_COLOR_PROPERTY, null, null);
@@ -648,7 +654,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				colorScheme!=null) {
 
 			int i = syntaxList.getSelectedIndex();
-			Style style = colorScheme.styles[indexToStyle(i)];
+			Style style = colorScheme.getStyle(indexToStyle(i));
 			style.fontMetrics = null;
 
 			Font f = null;
@@ -692,7 +698,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				hasUnsavedChanges = true;
 				// Update our color scheme.
 				int i = syntaxList.getSelectedIndex();
-				colorScheme.styles[indexToStyle(i)].foreground = fg;
+				colorScheme.getStyle(indexToStyle(i)).foreground = fg;
 				firePropertyChange(SYNTAX_COLOR_PROPERTY, e.getOldValue(),
 												e.getNewValue());
 			}
@@ -716,7 +722,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				hasUnsavedChanges = true;
 				// Update our color scheme.
 				int i = syntaxList.getSelectedIndex();
-				colorScheme.styles[indexToStyle(i)].background = bg;
+				colorScheme.getStyle(indexToStyle(i)).background = bg;
 				firePropertyChange(SYNTAX_COLOR_PROPERTY, e.getOldValue(),
 												e.getNewValue());
 			}
@@ -849,7 +855,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		RTextAreaOptionPanel parent = (RTextAreaOptionPanel)getParentPanel();
 		Font font = null;
 		boolean underline = false;
-		Style style = colorScheme.styles[index];
+		Style style = colorScheme.getStyle(index);
 		if (style.font!=null) {
 			font = style.font;
 			underline = style.underline;

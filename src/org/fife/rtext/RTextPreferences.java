@@ -564,8 +564,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 		Object bgObj = props.backgroundObject;
 		if (bgObj instanceof Color) {
 			Color color = (Color)bgObj;
-			for (int i=0; i<props.colorScheme.styles.length; i++) {
-				Style s = props.colorScheme.styles[i];
+			for (int i=0; i<props.colorScheme.getStyleCount(); i++) {
+				Style s = props.colorScheme.getStyle(i);
 				// Some schemes are null (generic token types)
 				if (s!=null && color.equals(s.background)) {
 					s.background = null;

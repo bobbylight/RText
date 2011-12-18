@@ -313,9 +313,11 @@ public class XmlSourceTreeGenerator extends DefaultHandler {
 			this.endOffset = pos;
 		}
 
+		/*
 		public void setMainAttr(String attr) {
 			this.mainAttr = attr;
 		}
+		*/
 
 		public void setStartOffset(Position pos) {
 			this.offset = pos;

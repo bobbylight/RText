@@ -193,6 +193,9 @@ class COptionsPanel extends OptionsDialogPanel {
 		paramAssistanceCB.setSelected(ls.isParameterAssistanceEnabled());
 		showDescWindowCB.setSelected(ls.getShowDescWindow());
 
+		// Code folding options
+		//foldingEnabledCB.setSelected()
+
 	}
 
 

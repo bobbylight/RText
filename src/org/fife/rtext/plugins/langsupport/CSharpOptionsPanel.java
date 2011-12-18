@@ -1,7 +1,7 @@
 /*
- * 09/29/2011
+ * 12/18/2011
  *
- * JavaFoldingOptionsPanel.java - Folding options for Java language support.
+ * CSharpOptionsPanel.java - Options for C#.
  * Copyright (C) 2011 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
@@ -28,19 +28,19 @@ import java.awt.Frame;
 
 
 /**
- * Options panel containing code folding options for Java files.
+ * Options panel containing options for C#.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-public class JavaFoldingOptionsPanel extends AbstractFoldingOnlyOptionsPanel {
+public class CSharpOptionsPanel extends AbstractFoldingOnlyOptionsPanel {
 
 
 	/**
 	 * Constructor.
 	 */
-	public JavaFoldingOptionsPanel() {
-		super("Options.Java.Folding.Name", null);
+	public CSharpOptionsPanel() {
+		super("Options.CSharp.Name", "page_white_csharp.png");
 	}
 
 

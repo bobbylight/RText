@@ -84,6 +84,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	private JCheckBox showDescWindowCB;
 	private JCheckBox useParensCB;
 	private JCheckBox compileCB;
+	private JCheckBox foldingEnabledCB;
 	private JLabel installLocLabel;
 	private FSATextField installLocField;
 	private RButton installBrowseButton;
@@ -118,6 +119,15 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		add(cp, BorderLayout.NORTH);
 
 		Box box = Box.createVerticalBox();
+		box.setBorder(new OptionPanelBorder(msg.
+				getString("Options.General.Section.Folding")));
+		cp.add(box);
+		cp.add(Box.createVerticalStrut(5));
+
+		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
+		addLeftAligned(box, foldingEnabledCB, 5);
+
+		box = Box.createVerticalBox();
 		box.setBorder(new OptionPanelBorder(msg.
 				getString("Options.Perl.Section.CodeCompletion")));
 		cp.add(box);
@@ -208,7 +218,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		perl5Table.setRowHandler(new Perl5LibTableRowHandler());
 		perl5Table.getTable().setTableHeader(null);
 		Dimension s = perl5Table.getTable().getPreferredScrollableViewportSize();
-		s.height = 140; // JTable default is 400!
+		s.height = 120; // JTable default is 400!
 		perl5Table.getTable().setPreferredScrollableViewportSize(s);
 		box.add(perl5Table);
 
