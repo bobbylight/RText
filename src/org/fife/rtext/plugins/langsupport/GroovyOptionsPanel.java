@@ -24,7 +24,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
-import java.awt.Frame;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
 /**
@@ -40,19 +40,8 @@ public class GroovyOptionsPanel extends AbstractFoldingOnlyOptionsPanel {
 	 * Constructor.
 	 */
 	public GroovyOptionsPanel() {
-		super("Options.Groovy.Name", "page_white_groovy.png");
-	}
-
-
-	protected void doApplyImpl(Frame owner) {
-		// TODO Auto-generated method stub
-
-	}
-
-
-	protected void setValuesImpl(Frame owner) {
-		// TODO Auto-generated method stub
-
+		super("Options.Groovy.Name", "page_white_groovy.png",
+				SyntaxConstants.SYNTAX_STYLE_GROOVY);
 	}
 
 

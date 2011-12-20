@@ -194,6 +194,8 @@ public abstract class AbstractMainView extends JPanel
 
 	private EventListenerList listenerList;
 
+	private Map codeFoldingEnabledStates;
+
 	private Icon bookmarkIcon;
 	private boolean bookmarksEnabled;
 	private Font lineNumberFont;
@@ -812,7 +814,7 @@ public abstract class AbstractMainView extends JPanel
 		// applyComponentOrientation(...).
 		//pane.applyComponentOrientation(getTextAreaOrientation());
 
-		pane.setCodeFoldingEnabled(true);
+		pane.setCodeFoldingEnabled(isCodeFoldingEnabledFor(style));
 
 		// Listeners.
 		pane.addPropertyChangeListener(owner);
@@ -1060,6 +1062,29 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public int getCaretStyle(int mode) {
 		return carets[mode];
+	}
+
+
+	/**
+	 * Returns a comma-separated string of languages with code folding enabled.
+	 *
+	 * @return A comma-separated string.
+	 * @see #isCodeFoldingEnabledFor(String)
+	 * @see #setCodeFoldingEnabledFor(String, boolean)
+	 */
+	public String getCodeFoldingEnabledForString() {
+		StringBuffer sb = new StringBuffer();
+		Set entrySet = codeFoldingEnabledStates.entrySet();
+		for (Iterator i=entrySet.iterator(); i.hasNext(); ) {
+			Map.Entry entry = (Map.Entry)i.next();
+			if (Boolean.TRUE.equals(entry.getValue())) {
+				sb.append(entry.getKey() + ",");
+			}
+		}
+		if (sb.length()>0) {
+			sb.setLength(sb.length()-1);
+		}
+		return sb.toString();
 	}
 
 
@@ -2089,6 +2114,15 @@ public abstract class AbstractMainView extends JPanel
 		toggleTextModeAction = new ToggleTextModeAction(owner);
 		capsLockAction = new CapsLockAction(owner);
 
+		// Get folding states before creating initial editors.
+		codeFoldingEnabledStates = new HashMap();
+		if (prefs.codeFoldingEnabledFor!=null) {
+			String[] languages = prefs.codeFoldingEnabledFor.split(",");
+			for (int i=0; i<languages.length; i++) {
+				codeFoldingEnabledStates.put(languages[i], Boolean.TRUE);
+			}
+		}
+
 		// Start us out with whatever files they passed in.
 		if (filesToOpen==null) {
 			addNewEmptyUntitledFile();
@@ -2127,6 +2161,18 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public boolean isBracketMatchingEnabled() {
 		return bracketMatchingEnabled;
+	}
+
+
+	/**
+	 * Returns whether code folding is enabled for a language.
+	 *
+	 * @param language A language.
+	 * @return Whether code folding is enabled for that language.
+	 * @see #setCodeFoldingEnabledFor(String, boolean)
+	 */
+	public boolean isCodeFoldingEnabledFor(String language) {
+		return Boolean.TRUE.equals(codeFoldingEnabledStates.get(language));
 	}
 
 
@@ -2930,6 +2976,29 @@ public abstract class AbstractMainView extends JPanel
 			int numDocuments = getNumDocuments();
 			for (int i=0; i<numDocuments; i++)
 				getRTextEditorPaneAt(i).setCaretStyle(mode, style);
+		}
+	}
+
+
+	/**
+	 * Sets whether code folding is enabled for a language.
+	 *
+	 * @param language The language.
+	 * @param enabled Whether code folding should be enabled for the language.
+	 * @see #isCodeFoldingEnabledFor(String)
+	 */
+	public void setCodeFoldingEnabledFor(String language, boolean enabled) {
+		boolean prev = isCodeFoldingEnabledFor(language);
+		if (enabled!=prev) {
+			codeFoldingEnabledStates.put(language, Boolean.valueOf(enabled));
+			for (int i=0; i<getNumDocuments(); i++) {
+				RTextEditorPane textArea = getRTextEditorPaneAt(i);
+				if (language.equals(textArea.getSyntaxEditingStyle())) {
+					RTextScrollPane sp = getRTextScrollPaneAt(i);
+					sp.getGutter().setFoldIndicatorEnabled(enabled);
+					textArea.setCodeFoldingEnabled(enabled);
+				}
+			}
 		}
 	}
 

@@ -1,7 +1,7 @@
 /*
  * 12/18/2011
  *
- * CPlusPlusOptionsPanel.java - Options for C++.
+ * MxmlOptionsPanel.java - Options for MXML.
  * Copyright (C) 2011 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
@@ -28,20 +28,20 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
 /**
- * Options panel containing options for C++.
+ * Options panel containing options for MXML.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-public class CPlusPlusOptionsPanel extends AbstractFoldingOnlyOptionsPanel {
+public class MxmlOptionsPanel extends AbstractFoldingOnlyOptionsPanel {
 
 
 	/**
 	 * Constructor.
 	 */
-	public CPlusPlusOptionsPanel() {
-		super("Options.CPlusPlus.Name", "page_white_cplusplus.png",
-				SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
+	public MxmlOptionsPanel() {
+		super("Options.Mxml.Name", "mxml.png",
+				SyntaxConstants.SYNTAX_STYLE_MXML);
 	}
 
 

@@ -26,6 +26,7 @@ package org.fife.rtext.plugins.langsupport;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
@@ -35,6 +36,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 
+import org.fife.rtext.AbstractMainView;
+import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RButton;
 import org.fife.ui.UIUtil;
@@ -49,6 +52,7 @@ import org.fife.ui.UIUtil;
  */
 abstract class AbstractFoldingOnlyOptionsPanel extends OptionsDialogPanel {
 
+	private String language;
 	private JCheckBox enabledCB;
 	private RButton rdButton;
 	private Listener listener;
@@ -59,8 +63,10 @@ abstract class AbstractFoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Constructor.
 	 */
-	public AbstractFoldingOnlyOptionsPanel(String nameKey, String icon) {
+	public AbstractFoldingOnlyOptionsPanel(String nameKey, String icon,
+			String language) {
 
+		this.language = language;
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString(nameKey));
 		if (icon!=null) {
@@ -100,10 +106,27 @@ abstract class AbstractFoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	}
 
 
+	protected void doApplyCodeFoldingPreference(RText rtext) {
+		AbstractMainView view = rtext.getMainView();
+		view.setCodeFoldingEnabledFor(language, enabledCB.isSelected());
+	}
+
+
 	protected JCheckBox createCB(String key) {
 		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
 		cb.addActionListener(listener);
 		return cb;
+	}
+
+
+	/**
+	 * Applies the selected code folding preference.  Subclasses can override
+	 * if they display more options.
+	 *
+	 * @param owner The parent {@link RText} application.
+	 */
+	protected final void doApplyImpl(Frame owner) {
+		doApplyCodeFoldingPreference((RText)owner);
 	}
 
 
@@ -121,6 +144,21 @@ abstract class AbstractFoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	 */
 	public JComponent getTopJComponent() {
 		return enabledCB;
+	}
+
+
+	/**
+	 * Checks or unchecks the "enable code folding" check box.  Subclasses can
+	 * override this if they add more options to this panel.
+	 */
+	protected final void setValuesImpl(Frame owner) {
+		setCodeFoldingValueImpl((RText)owner); 
+	}
+
+
+	protected void setCodeFoldingValueImpl(RText rtext) {
+		AbstractMainView view = rtext.getMainView();
+		enabledCB.setSelected(view.isCodeFoldingEnabledFor(language));
 	}
 
 

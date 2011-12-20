@@ -24,7 +24,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
-import java.awt.Frame;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
 /**
@@ -40,19 +40,7 @@ public class JavaFoldingOptionsPanel extends AbstractFoldingOnlyOptionsPanel {
 	 * Constructor.
 	 */
 	public JavaFoldingOptionsPanel() {
-		super("Options.Java.Folding.Name", null);
-	}
-
-
-	protected void doApplyImpl(Frame owner) {
-		// TODO Auto-generated method stub
-
-	}
-
-
-	protected void setValuesImpl(Frame owner) {
-		// TODO Auto-generated method stub
-
+		super("Options.Java.Folding.Name", null, SyntaxConstants.SYNTAX_STYLE_JAVA);
 	}
 
 

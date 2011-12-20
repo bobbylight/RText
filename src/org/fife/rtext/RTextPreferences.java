@@ -149,6 +149,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public float searchWindowOpacity;
 	public int searchWindowOpacityRule;
 	public boolean dropShadowsInEditor;
+	public String codeFoldingEnabledFor;
 
 	public KeyStroke[] mainViewActionAccelerators;
 
@@ -263,6 +264,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.searchWindowOpacity		= rtext.getSearchWindowOpacity();
 		props.searchWindowOpacityRule	= rtext.getSearchWindowOpacityRule();
 		props.dropShadowsInEditor		= RTextUtilities.getDropShadowsEnabledInEditor();
+		props.codeFoldingEnabledFor		= mainView.getCodeFoldingEnabledForString();
 
 		// Save the actions.
 		props.accelerators = new HashMap();
@@ -514,6 +516,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 			props.searchWindowOpacity = prefs.getFloat("searchWindowOpacity", props.searchWindowOpacity);
 			props.searchWindowOpacityRule = prefs.getInt("searchWindowOpacityRule", props.searchWindowOpacityRule);
 			props.dropShadowsInEditor = prefs.getBoolean("dropShadowsInEditor", getDefaultDropShadowsInEditorValue());
+			props.codeFoldingEnabledFor = prefs.get("codeFoldingEnabledFor", props.codeFoldingEnabledFor);
 
 			// Get all properties associated with the RTextMenuBar class.
 			prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -676,6 +679,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs.putFloat("searchWindowOpacity",			searchWindowOpacity);
 		prefs.putInt("searchWindowOpacityRule",			searchWindowOpacityRule);
 		prefs.putBoolean("dropShadowsInEditor",			dropShadowsInEditor);
+		prefs.put("codeFoldingEnabledFor",				codeFoldingEnabledFor);
 
 		// Save all properties related to the RTextMenuBar class.
 		prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -789,6 +793,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		searchWindowOpacityRule = ChildWindowListener.
 										TRANSLUCENT_WHEN_OVERLAPPING_APP;
 		dropShadowsInEditor = getDefaultDropShadowsInEditorValue();
+		codeFoldingEnabledFor = "";
 
 		accelerators = new HashMap();
 		for (int i=0; i<actionNames.length; i++) {

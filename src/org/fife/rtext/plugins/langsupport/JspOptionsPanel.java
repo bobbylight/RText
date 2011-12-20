@@ -135,9 +135,11 @@ class JspOptionsPanel extends OptionsDialogPanel {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public JComponent getTopJComponent() {
-		// TODO Auto-generated method stub
-		return null;
+		return enabledCB;
 	}
 
 

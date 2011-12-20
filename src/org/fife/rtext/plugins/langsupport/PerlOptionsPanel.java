@@ -351,7 +351,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	 * {@inheritDoc}
 	 */
 	public JComponent getTopJComponent() {
-		return useParensCB;
+		return foldingEnabledCB;
 	}
 
 

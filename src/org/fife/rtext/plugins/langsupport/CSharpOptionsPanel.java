@@ -24,7 +24,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
-import java.awt.Frame;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
 /**
@@ -40,19 +40,8 @@ public class CSharpOptionsPanel extends AbstractFoldingOnlyOptionsPanel {
 	 * Constructor.
 	 */
 	public CSharpOptionsPanel() {
-		super("Options.CSharp.Name", "page_white_csharp.png");
-	}
-
-
-	protected void doApplyImpl(Frame owner) {
-		// TODO Auto-generated method stub
-
-	}
-
-
-	protected void setValuesImpl(Frame owner) {
-		// TODO Auto-generated method stub
-
+		super("Options.CSharp.Name", "page_white_csharp.png",
+				SyntaxConstants.SYNTAX_STYLE_CSHARP);
 	}
 
 
