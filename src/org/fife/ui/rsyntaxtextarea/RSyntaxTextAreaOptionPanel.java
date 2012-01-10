@@ -158,7 +158,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		// Syntax panel contains all of the "syntax highlighting" stuff.
 		syntaxPanel = new JPanel(new BorderLayout());
 		syntaxPanel.setBorder(new OptionPanelBorder(
-								msg.getString("SyntaxHighlighting")));
+								msg.getString("FontsAndColors")));
 
 		// Add the token style selection panel to the right.
 		syntaxListModel = new DefaultListModel();
@@ -208,11 +208,15 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		fontSelector.setUnderlineSelectable(true);
 		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
 		fontSelector.addPropertyChangeListener(FontSelector.ENABLED_PROPERTY, this);
-		propertiesPanel.add(fontSelector);
+		 // Just to keep it right-aligned with stuff above...
+		Box temp = Box.createHorizontalBox();
+		temp.add(fontSelector);
+		temp.add(Box.createHorizontalStrut(5));
+		propertiesPanel.add(temp);
 		propertiesPanel.add(Box.createVerticalStrut(8));
 
 		// Add the foreground and background buttons to the properties panel.
-		Box temp = Box.createHorizontalBox();
+		temp = Box.createHorizontalBox();
 		temp.setAlignmentX(Component.LEFT_ALIGNMENT);
 		fgCheckBox = new JCheckBox(msg.getString("Foreground"));
 		fgCheckBox.setActionCommand("fgCheckBox");

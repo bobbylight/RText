@@ -80,8 +80,8 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		setIcon(panel, "textarea.png");
 		panels.add(panel);
 
-		panel.addChildPanel(new CaretAndSelectionOptionPanel());
 		panel.addChildPanel(new RSyntaxTextAreaOptionPanel());
+		panel.addChildPanel(new CaretAndSelectionOptionPanel());
 		panel.addChildPanel(new GutterOptionPanel());
 		panel.addChildPanel(new SpellingOptionPanel());
 		panel.addChildPanel(new TemplateOptionPanel());
