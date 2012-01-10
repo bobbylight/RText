@@ -208,6 +208,16 @@ class DefaultSourceTree extends JTree {
 	}
 
 
+	/**
+	 * Toggles whether the leaf nodes in this source tree are sorted.
+	 *
+	 * @param sorted Whether the tree nodes are sorted.
+	 */
+	public void setSorted(boolean sorted) {
+		System.out.println("TODO: Implement DefaultSourceTree#setSorted()");
+	}
+
+
 	public void updateUI() {
 		super.updateUI();
 		treeRenderer = new SourceTreeCellRenderer();

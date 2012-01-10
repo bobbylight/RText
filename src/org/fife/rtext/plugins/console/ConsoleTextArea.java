@@ -53,6 +53,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
+import javax.swing.text.Utilities;
 
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.rtextarea.RTextArea;
@@ -215,6 +216,7 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		InputMap im = getInputMap();
 		ActionMap am = getActionMap();
+		int ctrl = getToolkit().getMenuShortcutKeyMask();
 
 		// backspace
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "backspace");
@@ -223,8 +225,9 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		// Just remove "delete previous word" for now, since DefaultEditorKit
 		// doesn't expose the delegate for us to call into. 
-		int ctrl = getToolkit().getMenuShortcutKeyMask();
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, ctrl), "invalid");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, ctrl),
+				"delevePreviousWord");
+		am.put("delevePreviousWord", new DeletePreviousWordAction());
 
 		// delete
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");
@@ -517,7 +520,11 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		public void actionPerformed(ActionEvent e) {
 			int start = getSelectionStart();
-			if (start<=inputMinOffs) {
+			int end = getSelectionEnd();
+			if (start>=inputMinOffs && end!=start) {
+				replaceSelection(null);
+			}
+			else if (start<=inputMinOffs) {
 				UIManager.getLookAndFeel().
 							provideErrorFeedback(ConsoleTextArea.this);
 				setCaretPosition(getDocument().getLength());
@@ -531,7 +538,7 @@ abstract class ConsoleTextArea extends JTextPane {
 
 
 	/**
-	 * Action performed when delete 
+	 * Action performed when delete is pressed.
 	 */
 	private class DeleteAction extends TextAction {
 
@@ -553,6 +560,42 @@ abstract class ConsoleTextArea extends JTextPane {
 			}
 			else {
 				delegate.actionPerformed(e);
+			}
+		}
+
+	}
+
+
+	/**
+	 * Deletes the previous word.
+	 */
+	private class DeletePreviousWordAction extends TextAction {
+
+		public DeletePreviousWordAction() {
+			super("delevePreviousWord");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			int start = getSelectionStart();
+			int end = getSelectionEnd();
+			if (start>=inputMinOffs && end!=start) {
+				replaceSelection(null);
+				return;
+			}
+			else if (start<=inputMinOffs) {
+				UIManager.getLookAndFeel().
+							provideErrorFeedback(ConsoleTextArea.this);
+				return;
+			}
+			try {
+				end = Utilities.getPreviousWord(ConsoleTextArea.this,start);
+				if (end>=inputMinOffs) { // Should always be true
+					int offs = Math.min(start, end);
+					int len = Math.abs(end - start);
+					getDocument().remove(offs, len);
+				}
+			} catch (BadLocationException ble) {
+				ble.printStackTrace(); // Never happens
 			}
 		}
 

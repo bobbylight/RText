@@ -379,7 +379,7 @@ public class XmlSourceTreeGenerator extends DefaultHandler {
 
 		public void actionPerformed(ActionEvent e) {
 			recursivelyCheck(root);
-			System.out.println("Here");
+			//System.out.println("Here");
 		}
 
 		public void caretUpdate(CaretEvent e) {

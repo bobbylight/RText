@@ -27,15 +27,16 @@ RText currently has many features, including (but not limited to):
 
 1.  Editing multiple documents at once.
 2.  Syntax highlighting for over 25 popular programming languages.
-3.  Bracket Matching.
-4.  CTags support.
-5.  Macros.
-6.  Printing and Print Preview.
-7.  Find/Replace/Find in Files, including full regex support.
-8.  Undo/Redo.
-9.  Online HTML Help.
-10. Customizable GUI (Look and Feel, icon set, font, background, etc.).
-11. Code completion (certain languages only).
+3.  Code folding.
+4.  Bracket matching.
+5.  CTags support.
+6.  Macros.
+7.  Printing and Print Preview.
+8.  Find/Replace/Find in Files, including full regex support.
+9.  Undo/Redo.
+10. Online HTML Help.
+11. Customizable GUI (Look and Feel, icon set, font, background, etc.).
+12. Code completion (certain languages only).
 
 Syntax highlighting can be added for new languages relatively easily, and
 a plugin API is being developed to add new functionality to RText with ease.

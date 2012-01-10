@@ -31,6 +31,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -40,6 +41,7 @@ import javax.swing.text.Document;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.ui.*;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextArea;
 
 
@@ -57,8 +59,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public static final String ID = "RTextAreaOptionPanel";
 
-	private FontSelector fontSelector;
-
 	private JLabel tabSizeLabel;
 	private JTextField tabSizeField;
 	private int tabSize;
@@ -70,11 +70,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	private JLabel linkColorLabel;
 	private RColorSwatchesButton linkColorButton;
 
-	private JTextField backgroundField;
-	private RButton backgroundButton;
-	private BackgroundDialog backgroundDialog;
-	private Object background;
-	private String bgImageFileName; // null if background is a color.
 	private JCheckBox wordWrapCheckBox;
 	private JCheckBox highlightCurrentLineCheckBox;
 	private RColorSwatchesButton hclColorButton;
@@ -83,6 +78,24 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	private JLabel marginLineColorLabel;
 	private RColorSwatchesButton marginLineColorButton;
 	private int marginLinePosition;
+
+	private JCheckBox visibleWhitespaceCheckBox;
+	private JCheckBox visibleEOLCheckBox;
+//	private JCheckBox autoIndentCheckBox;
+	private JCheckBox remWhitespaceLinesCheckBox;
+	private JCheckBox autoInsertClosingCurlyCheckBox;
+	private JCheckBox aaCheckBox;
+	private JCheckBox fractionalMetricsCheckBox;
+
+	private Box bracketMatchingPanel;
+	private JCheckBox bracketMatchCheckBox;
+	private JLabel bmBGColorLabel;
+	private RColorSwatchesButton bmBGColorButton;
+	private JLabel bmBorderColorLabel;
+	private RColorSwatchesButton bmBorderColorButton;
+
+	private JCheckBox showTabLinesCheckBox;
+	private RColorSwatchesButton tabLineColorButton;
 
 	private RButton restoreDefaultsButton;
 
@@ -109,16 +122,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		// We'll add everything to this panel, then add this panel so that
 		// stuff stays at the "top."
 		Box topPanel = Box.createVerticalBox();
-		JPanel fontPanel = new JPanel(new BorderLayout());
-		fontPanel.setBorder(new OptionPanelBorder(msg.getString("Font")));
-		fontSelector = new FontSelector();
-		fontSelector.setColorSelectable(true);
-		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
-		fontSelector.addPropertyChangeListener(FontSelector.FONT_COLOR_PROPERTY, this);
-		fontPanel.add(fontSelector);
-		topPanel.add(fontPanel);
-
-		topPanel.add(Box.createVerticalStrut(5));
 
 		Box tabPanel = Box.createVerticalBox();
 		tabPanel.setBorder(new OptionPanelBorder(msg.getString("Tabs")));
@@ -190,22 +193,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		bigOtherPanel.setBorder(new OptionPanelBorder(msg.getString("Other")));
 
 		Box otherPanel = new Box(BoxLayout.LINE_AXIS);
-		JLabel bgLabel = new JLabel(msg.getString("Background"));
-		backgroundField = new JTextField(20);
-		backgroundField.setEditable(false);
-		backgroundButton = new RButton(msg.getString("Change"));
-		backgroundButton.setActionCommand("BackgroundButton");
-		backgroundButton.addActionListener(this);
-		bgLabel.setLabelFor(backgroundButton);
-		otherPanel.add(bgLabel);
-		otherPanel.add(Box.createHorizontalStrut(5));
-		otherPanel.add(backgroundField);
-		otherPanel.add(Box.createHorizontalStrut(5));
-		otherPanel.add(backgroundButton);
-		otherPanel.add(Box.createHorizontalGlue());
-		bigOtherPanel.add(otherPanel);
-
-		otherPanel = new Box(BoxLayout.LINE_AXIS);
 		wordWrapCheckBox = new JCheckBox(msg.getString("WordWrap"));
 		wordWrapCheckBox.setActionCommand("WordWrapCheckBox");
 		wordWrapCheckBox.addActionListener(this);
@@ -242,10 +229,73 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		otherPanel.add(Box.createHorizontalStrut(5));
 		otherPanel.add(marginLineColorLabel);
 		otherPanel.add(marginLineColorButton);
+
 		otherPanel.add(Box.createHorizontalGlue());
 		bigOtherPanel.add(otherPanel);
+		bigOtherPanel.add(Box.createVerticalStrut(3));
 
-		bigOtherPanel.add(Box.createVerticalStrut(5));
+		visibleWhitespaceCheckBox = createCheckBox(msg, "VisibleWhitespace");
+		addLeftAligned(bigOtherPanel, visibleWhitespaceCheckBox);
+		bigOtherPanel.add(Box.createVerticalStrut(3));
+
+		visibleEOLCheckBox = createCheckBox(msg, "VisibleEOL");
+		addLeftAligned(bigOtherPanel, visibleEOLCheckBox);
+
+		autoInsertClosingCurlyCheckBox = createCheckBox(msg, "AutoCloseCurlys");
+		addLeftAligned(bigOtherPanel, autoInsertClosingCurlyCheckBox);
+		bigOtherPanel.add(Box.createVerticalStrut(3));
+
+/*
+		autoIndentCheckBox = createCheckBox("AutoIndent");
+		addLeftAligned(bigOtherPanel, autoIndentCheckBox);
+		bigOtherPanel.add(Box.createVerticalStrut(3));
+*/
+		remWhitespaceLinesCheckBox = createCheckBox(msg, "RemWhitespaceLines");
+		addLeftAligned(bigOtherPanel, remWhitespaceLinesCheckBox);
+		bigOtherPanel.add(Box.createVerticalStrut(3));
+
+		aaCheckBox = new JCheckBox(msg.getString("SmoothText"));
+		aaCheckBox.setActionCommand("aaCB");
+		aaCheckBox.addActionListener(this);
+		addLeftAligned(bigOtherPanel, aaCheckBox);
+		bigOtherPanel.add(Box.createVerticalStrut(3));
+
+		fractionalMetricsCheckBox = createCheckBox(msg, "FracFM");
+		addLeftAligned(bigOtherPanel, fractionalMetricsCheckBox);
+		bigOtherPanel.add(Box.createVerticalStrut(3));
+
+		bracketMatchingPanel = Box.createHorizontalBox();
+		bracketMatchCheckBox = new JCheckBox(msg.getString("HighlightMB"));
+		bracketMatchCheckBox.setActionCommand("BracketMatchCheckBox");
+		bracketMatchCheckBox.addActionListener(this);
+		bmBGColorLabel = new JLabel(msg.getString("BackgroundFill"));
+		bmBGColorButton = new RColorSwatchesButton(Color.BLACK, 50,15);
+		bmBGColorButton.addPropertyChangeListener(this);
+		bmBorderColorLabel = new JLabel(msg.getString("Border"));
+		bmBorderColorButton = new RColorSwatchesButton(Color.BLACK, 50,15);
+		bmBorderColorButton.addPropertyChangeListener(this);
+		bracketMatchingPanel.add(bracketMatchCheckBox);
+		bracketMatchingPanel.add(bmBGColorLabel);
+		bracketMatchingPanel.add(bmBGColorButton);
+		bracketMatchingPanel.add(Box.createHorizontalStrut(5));
+		bracketMatchingPanel.add(bmBorderColorLabel);
+		bracketMatchingPanel.add(bmBorderColorButton);
+		bracketMatchingPanel.add(Box.createHorizontalGlue());
+		addLeftAligned(bigOtherPanel, bracketMatchingPanel);
+		bigOtherPanel.add(Box.createVerticalStrut(3));
+
+		showTabLinesCheckBox = new JCheckBox(msg.getString("ShowIndentGuide"));
+		showTabLinesCheckBox.setActionCommand("ShowIndentGuide");
+		showTabLinesCheckBox.addActionListener(this);
+		Box box = Box.createHorizontalBox();
+		box.add(showTabLinesCheckBox);
+		box.add(Box.createHorizontalStrut(5));
+		tabLineColorButton = new RColorSwatchesButton(Color.black, 50,15);
+		tabLineColorButton.addPropertyChangeListener(this);
+		box.add(tabLineColorButton);
+		box.add(Box.createHorizontalGlue());
+		addLeftAligned(bigOtherPanel, box);
+		bigOtherPanel.add(Box.createVerticalStrut(3));
 
 		topPanel.add(bigOtherPanel);
 
@@ -279,11 +329,11 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			int defaultTabSize = RTextArea.getDefaultTabSize();
 			int defaultMarginLinePosition = RTextArea.getDefaultMarginLinePosition();
 			Color defaultMarginLineColor = RTextArea.getDefaultMarginLineColor();
-			Font defaultFont = RTextArea.getDefaultFont();
-			Color defaultForeground = RTextArea.getDefaultForeground();
+			boolean defaultAA = File.separatorChar=='\\';
+			Color defaultBMBGColor = RSyntaxTextArea.getDefaultBracketMatchBGColor();
+			Color defaultBMBorderColor = RSyntaxTextArea.getDefaultBracketMatchBorderColor();
 
-			if ( !Color.WHITE.equals(background) ||
-				wordWrapCheckBox.isSelected() ||
+			if ( wordWrapCheckBox.isSelected() ||
 				!highlightCurrentLineCheckBox.isSelected() ||
 				!getCurrentLineHighlightColor().equals(defaultCurrentLineHighlightColor) ||
 				getTabSize()!=defaultTabSize ||
@@ -294,11 +344,18 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				!marginLineCheckBox.isSelected() ||
 				getMarginLinePosition()!=defaultMarginLinePosition ||
 				!getMarginLineColor().equals(defaultMarginLineColor) ||
-				!getTextAreaFont().equals(defaultFont) ||
-				getUnderline()==true ||
-				!getTextAreaForeground().equals(defaultForeground))
+				isWhitespaceVisible() ||
+				visibleEOLCheckBox.isSelected() ||
+				autoInsertClosingCurlyCheckBox.isSelected() ||
+				remWhitespaceLinesCheckBox.isSelected() ||
+				aaCheckBox.isSelected()!=defaultAA ||
+				fractionalMetricsCheckBox.isSelected() ||
+				!bracketMatchCheckBox.isSelected() ||
+				!bmBGColorButton.getColor().equals(defaultBMBGColor) ||
+				!bmBorderColorButton.getColor().equals(defaultBMBorderColor) ||
+				showTabLinesCheckBox.isSelected() ||
+				!Color.gray.equals(tabLineColorButton.getColor()))
 			{
-				setBackgroundObject(Color.WHITE);
 				wordWrapCheckBox.setSelected(false);
 				highlightCurrentLineCheckBox.setSelected(true);
 				hclColorButton.setEnabled(true);
@@ -311,31 +368,22 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				setMarginLineEnabled(true);
 				setMarginLinePosition(defaultMarginLinePosition);
 				setMarginLineColor(defaultMarginLineColor);
-				setTextAreaFont(defaultFont, false);
-				setTextAreaForeground(defaultForeground);
 				setHyperlinksEnabled(true);
+				setWhitespaceVisible(false);
+				visibleEOLCheckBox.setSelected(false);
+				autoInsertClosingCurlyCheckBox.setSelected(false);
+				remWhitespaceLinesCheckBox.setSelected(false);
+				aaCheckBox.setSelected(defaultAA);
+				fractionalMetricsCheckBox.setSelected(false);
+				setBracketMatchCheckboxSelected(true);
+				setBracketMatchBGColor(defaultBMBGColor);
+				bmBorderColorButton.setColor(defaultBMBorderColor);
+				setTabLinesEnabled(false);
+				tabLineColorButton.setColor(Color.gray);
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
 			}
 
-		}
-
-		else if (command.equals("BackgroundButton")) {
-			if (backgroundDialog==null) {
-				backgroundDialog = new BackgroundDialog(getOptionsDialog());
-			}
-			backgroundDialog.initializeData(background, bgImageFileName);
-			backgroundDialog.setVisible(true);
-			Object newBG = backgroundDialog.getChosenBackground();
-			// Non-null newBG means user hit OK, not Cancel.
-			if (newBG!=null && !newBG.equals(background)) {
-				Object oldBG = background;
-				setBackgroundObject(newBG);
-				setBackgroundImageFileName(backgroundDialog.
-										getCurrentImageFileName());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, oldBG, newBG);
-			}
 		}
 
 		else if (command.equals("WordWrapCheckBox")) {
@@ -380,6 +428,66 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			firePropertyChange(PROPERTY, -1, modKeyCombo.getSelectedIndex());
 		}
 
+		// Toggle whether whitespace is visible.
+		else if ("VisibleWhitespace".equals(command)) {
+			boolean visible = visibleWhitespaceCheckBox.isSelected();
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !visible, visible);
+		}
+
+		else if ("VisibleEOL".equals(command)) {
+			boolean visible = visibleEOLCheckBox.isSelected();
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !visible, visible);
+		}
+
+		// Toggle auto-indent.
+		else if ("AutoIndent".equals(command)) {
+		}
+
+		// Toggle remove whitespace-only lines.
+		else if ("RemWhitespaceLines".equals(command)) {
+			boolean visible = remWhitespaceLinesCheckBox.isSelected();
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !visible, visible);
+		}
+
+		else if ("AutoCloseCurlys".equals(command)) {
+			boolean visible = autoInsertClosingCurlyCheckBox.isSelected();
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !visible, visible);
+		}
+
+		// The checkbox to toggle anti-aliasing in text editors.
+		else if ("aaCB".equals(command)) {
+			boolean selected = aaCheckBox.isSelected();
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !selected, selected);
+		}
+
+		// Toggle the fractional font metrics property.
+		else if ("FracFM".equals(command)) {
+			boolean frac = fractionalMetricsCheckBox.isSelected();
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !frac, frac);
+		}
+
+		// Toggle whether or not the bracket-matching buttons are enabled.
+		else if ("BracketMatchCheckBox".equals(command)) {
+			boolean selected = bracketMatchCheckBox.isSelected();
+			bmBGColorButton.setEnabled(selected);
+			bmBorderColorButton.setEnabled(selected);
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !selected, selected);
+		}
+
+		else if ("ShowIndentGuide".equals(command)) {
+			boolean show = showTabLinesCheckBox.isSelected();
+			tabLineColorButton.setEnabled(show);
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !show, show);
+		}
+
 	}
 
 
@@ -388,6 +496,14 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 * <code>DocumentListener</code>.
 	 */
 	public void changedUpdate(DocumentEvent e) {
+	}
+
+
+	private JCheckBox createCheckBox(ResourceBundle msg, String key) {
+		JCheckBox cb = new JCheckBox(msg.getString(key));
+		cb.setActionCommand(key);
+		cb.addActionListener(this);
+		return cb;
 	}
 
 
@@ -417,10 +533,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
 
-		mainView.setTextAreaForeground(getTextAreaForeground());
-		mainView.setTextAreaFont(getTextAreaFont(), getUnderline());
-		mainView.setBackgroundObject(getBackgroundObject());
-		mainView.setBackgroundImageFileName(getBackgroundImageFileName());
 		mainView.setLineWrap(getWordWrap());
 		rtext.setRowColumnIndicatorVisible(!mainView.getLineWrap());
 		if (isCurrentLineHighlightCheckboxSelected()==true) {
@@ -438,6 +550,18 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		mainView.setHyperlinksEnabled(getHyperlinksEnabled()); // Doesn't update if unnecessary.
 		mainView.setHyperlinkColor(getHyperlinkColor()); // Doesn't update if unnecessary.
 		mainView.setHyperlinkModifierKey(getHyperlinkModifierKey()); // Doesn't update if unnecessary.
+		mainView.setRememberWhitespaceLines(!remWhitespaceLinesCheckBox.isSelected()); // Doesn't update if it doesn't have to.
+		mainView.setAutoInsertClosingCurlys(autoInsertClosingCurlyCheckBox.isSelected()); // Doesn't update if it doesn't have to.
+		mainView.setWhitespaceVisible(isWhitespaceVisible()); // (RSyntaxTextArea) doesn't update if not necessary.
+		mainView.setShowEOLMarkers(visibleEOLCheckBox.isSelected());
+		mainView.setAntiAliasEnabled(aaCheckBox.isSelected());
+		mainView.setFractionalFontMetricsEnabled(fractionalMetricsCheckBox.isSelected()); // Doesn't update if not necessary.
+		boolean bmEnabled = isBracketMatchCheckboxSelected();
+		mainView.setBracketMatchingEnabled(bmEnabled);	// Doesn't update if it doesn't have to.
+		mainView.setMatchedBracketBGColor(getBracketMatchBGColor()); // Doesn't update if it doesn't have to.
+		mainView.setMatchedBracketBorderColor(bmBorderColorButton.getColor()); // Doesn't update if it doesn't have to.
+		mainView.setShowTabLines(showTabLinesCheckBox.isSelected());
+		mainView.setTabLinesColor(tabLineColorButton.getColor());
 
 	}
 
@@ -507,27 +631,14 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Returns the name of the file containing the chosen background image.
-	 * If the user selected a color for the background, this method returns
-	 * <code>null</code>.
+	 * Returns the color the user chose for the background of a matched
+	 * bracket.
 	 *
-	 * @return The name of the file containing the chosen background image.
-	 * @see #getBackgroundObject()
+	 * @return The color the user chose.
+	 * @see #setBracketMatchBGColor
 	 */
-	public String getBackgroundImageFileName() {
-		return bgImageFileName;
-	}
-
-
-	/**
-	 * Returns the background object (a color or an image) selected by the
-	 * user.
-	 *
-	 * @return The background object.
-	 * @see #getBackgroundImageFileName()
-	 */
-	public Object getBackgroundObject() {
-		return background;
+	public Color getBracketMatchBGColor() {
+		return bmBGColorButton.getColor();
 	}
 
 
@@ -624,26 +735,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Returns the font to use in text areas.
-	 *
-	 * @return The font to use.
-	 */
-	public Font getTextAreaFont() {
-		return fontSelector.getDisplayedFont();
-	}
-
-
-	/**
-	 * Returns the text area's foreground color.
-	 *
-	 * @return The foreground color of the text area.
-	 */
-	public Color getTextAreaForeground() {
-		return fontSelector.getFontColor();
-	}
-
-
-	/**
 	 * Returns the <code>JComponent</code> at the "top" of this Options
 	 * panel.  This is the component that will receive focus if the user
 	 * switches to this Options panel in the Options dialog.  As an added
@@ -652,17 +743,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public JComponent getTopJComponent() {
 		return tabSizeField;
-	}
-
-
-	/**
-	 * Returns whether the text area's font should be underlined.
-	 *
-	 * @return Whether the text areas should underline their font.
-	 * @see #getFont()
-	 */
-	public boolean getUnderline() {
-		return fontSelector.getUnderline();
 	}
 
 
@@ -681,6 +761,17 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public void insertUpdate(DocumentEvent e) {
 		doDocumentUpdated(e);
+	}
+
+
+	/**
+	 * Returns whether or not the bracketMatch checkbox is selected
+	 *
+	 * @return Whether or not the checkbox is selected.
+	 * @see #setBracketMatchCheckboxSelected
+	 */
+	public boolean isBracketMatchCheckboxSelected() {
+		return bracketMatchCheckBox.isSelected();
 	}
 
 
@@ -707,6 +798,18 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
+	 * Returns whether the user decided whitespace should be visible.
+	 *
+	 * @return Whether or not the user wants whitespace to be visible in the
+	 *         text area(s).
+	 * @see #setWhitespaceVisible
+	 */
+	public boolean isWhitespaceVisible() {
+		return visibleWhitespaceCheckBox.isSelected();
+	}
+
+
+	/**
 	 * Called when a property changes in an object we're listening to.
 	 */
 	public void propertyChange(PropertyChangeEvent e) {
@@ -726,40 +829,26 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets the name of the file containing the background image.  If the
-	 * initial background object is a color, you should pass <code>null</code>
-	 * to this method.
+	 * Sets the color to use for the background of a matched bracket.
 	 *
-	 * @param name The name of the file containing the background image.
-	 * @see #getBackgroundImageFileName
-	 * @see #setBackgroundObject
+	 * @param color The color to use.
+	 * @see #getBracketMatchBGColor
 	 */
-	private void setBackgroundImageFileName(String name) {
-		bgImageFileName = name;
-		if (bgImageFileName!=null)
-			backgroundField.setText(bgImageFileName);
+	public void setBracketMatchBGColor(Color color) {
+		bmBGColorButton.setColor(color);
 	}
 
 
 	/**
-	 * Sets the background object displayed in this options panel.
+	 * Sets whether or not the bracket match color checkbox is selected.
 	 *
-	 * @param background The background object.
-	 * @see #getBackgroundObject
+	 * @param selected Whether or not the checkbox is selected.
+	 * @see #isBracketMatchCheckboxSelected
 	 */
-	private void setBackgroundObject(Object background) {
-		if (background instanceof Color) {
-			String s = background.toString();
-			backgroundField.setText(s.substring(s.indexOf('[')));
-		}
-		else if (background instanceof Image) {
-			// backgroundField taken care of by setBackgroundImageFileName.
-		}
-		else {
-			throw new IllegalArgumentException("Background must be either " +
-				"a Color or an Image");
-		}
-		this.background = background;
+	public void setBracketMatchCheckboxSelected(boolean selected) {
+		bracketMatchCheckBox.setSelected(selected);
+		bmBGColorButton.setEnabled(selected);
+		bmBorderColorButton.setEnabled(selected);
 	}
 
 
@@ -891,6 +980,12 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
+	public void setTabLinesEnabled(boolean enabled) {
+		showTabLinesCheckBox.setSelected(enabled);
+		tabLineColorButton.setEnabled(enabled);
+	}
+
+
 	/**
 	 * Sets the tab size currently being displayed.
 	 *
@@ -908,30 +1003,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets the font/underline status to display for text areas.
-	 *
-	 * @param font The font.
-	 * @param underline Whether the font is underlined.
-	 * @see #getTextAreaFont()
-	 * @see #getUnderline()
-	 */
-	private void setTextAreaFont(Font font, boolean underline) {
-		fontSelector.setDisplayedFont(font, underline);
-	}
-
-
-	/**
-	 * Sets the foreground color for text areas.
-	 *
-	 * @param fg The new foreground color.
-	 * @see #getTextAreaForeground()
-	 */
-	private void setTextAreaForeground(Color fg) {
-		fontSelector.setFontColor(fg);
-	}
-
-
-	/**
 	 * Sets the values displayed by this panel to reflect those in the
 	 * application.  Child panels are not handled.
 	 *
@@ -941,10 +1012,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
-		setTextAreaForeground(mainView.getTextAreaForeground());
-		setTextAreaFont(mainView.getTextAreaFont(), mainView.getTextAreaUnderline());
-		setBackgroundObject(mainView.getBackgroundObject());
-		setBackgroundImageFileName(mainView.getBackgroundImageFileName());
 		setWordWrap(mainView.getLineWrap());
 		setCurrentLineHighlightCheckboxSelected(mainView.isCurrentLineHighlightEnabled());
 		setCurrentLineHighlightColor(mainView.getCurrentLineHighlightColor());
@@ -956,6 +1023,30 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		setHyperlinksEnabled(mainView.getHyperlinksEnabled());
 		setHyperlinkColor(mainView.getHyperlinkColor());
 		setHyperlinkModifierKey(mainView.getHyperlinkModifierKey());
+		remWhitespaceLinesCheckBox.setSelected(!mainView.getRememberWhitespaceLines());
+		autoInsertClosingCurlyCheckBox.setSelected(mainView.getAutoInsertClosingCurlys());
+		setWhitespaceVisible(mainView.isWhitespaceVisible());
+		visibleEOLCheckBox.setSelected(mainView.getShowEOLMarkers());
+		aaCheckBox.setSelected(mainView.isAntiAliasEnabled());
+		fractionalMetricsCheckBox.setSelected(mainView.isFractionalFontMetricsEnabled());
+		boolean bmEnabled = mainView.isBracketMatchingEnabled();
+		setBracketMatchCheckboxSelected(bmEnabled);
+		setBracketMatchBGColor(mainView.getMatchedBracketBGColor());
+		bmBorderColorButton.setColor(mainView.getMatchedBracketBorderColor());
+		setTabLinesEnabled(mainView.getShowTabLines());
+		tabLineColorButton.setColor(mainView.getTabLinesColor());
+	}
+
+
+	/**
+	 * Sets whether the "Visible whitespace" checkbox is selected.
+	 *
+	 * @param visible Whether the "visible whitespace" checkbox should be
+	 *        selected.
+	 * @see #isWhitespaceVisible
+	 */
+	public void setWhitespaceVisible(boolean visible) {
+		visibleWhitespaceCheckBox.setSelected(visible);
 	}
 
 
@@ -967,18 +1058,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	private void setWordWrap(boolean enabled) {
 		wordWrapCheckBox.setSelected(enabled);
-	}
-
-
-	/**
-	 * Overridden to ensure the background dialog is updated as well.
-	 */
-	public void updateUI() {
-		super.updateUI();
-		if (backgroundDialog!=null) {
-			SwingUtilities.updateComponentTreeUI(backgroundDialog); // Updates dialog.
-			backgroundDialog.updateUI(); // Updates image file chooser.
-		}
 	}
 
 

@@ -29,6 +29,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -695,7 +696,26 @@ public class SourceBrowserPlugin extends GUIPlugin
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			// TODO
+
+			Class clazz = sourceTree.getClass();
+			Method sortMethod = null;
+			try {
+				sortMethod = clazz.getMethod("setSorted",
+						new Class[] { boolean.class });
+			} catch (NoSuchMethodException nsme) {
+				nsme.printStackTrace();
+				return;
+			}
+
+			Object[] args = { Boolean.valueOf(sortButton.isSelected()) };
+			try {
+				sortMethod.invoke(sourceTree, args);
+			} catch (RuntimeException re) { // FindBugs
+				throw re;
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
 		}
 
 	}

@@ -98,9 +98,11 @@
 			<fileset dir="i18n">
 				<exclude name="org/fife/rtext/plugins/**"/>
 			</fileset>
-			<!-- Images. -->
 			<fileset dir="${source-dir}">
+				<!-- Images. -->
 				<include name="org/fife/rtext/graphics/**"/>
+				<!-- Samples for options dialog. -->
+				<include name="org/fife/ui/rsyntaxtextarea/*.txt"/>
 			</fileset>
 			<manifest>
 				<attribute name="Built-By" value="${compiler}"/>

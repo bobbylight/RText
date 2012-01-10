@@ -23,7 +23,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.ui.rtextarea;
+package org.fife.ui.rsyntaxtextarea;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

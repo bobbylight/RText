@@ -1,4 +1,4 @@
-Last updated 09/13/2011
+Last updated 01/09/2012
 
 - Very basic variable code completion for Groovy.
 - Fix bug - new tools aren't always remembered (? still true?)
@@ -7,8 +7,7 @@ Last updated 09/13/2011
 UI Features
 -----------
 1.  Make sort functionality for Source Browser actually work.
-2.  Make dockable window tabbed panes collapsible.
-3.  Rearrange editor options to be more intuitive.
+2.  Rearrange editor options to be more intuitive.
 
 
 Functionality
@@ -50,5 +49,4 @@ Probably won't happen
 2.  WW: Make tokens with whitespace break at whitespace boundaries too
     (e.g. MLC's)!
 3.  Make plugins have their own help that gets added dynamically to RText's.
-4.  Make plugins add options to options dialog dynamically.  This and (3) are
-    tough because the user can open Help/Options before all plugins have loaded.
+    Tough because the user can open Help/Options before all plugins have loaded.
