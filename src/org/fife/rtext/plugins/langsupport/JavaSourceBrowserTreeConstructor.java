@@ -56,7 +56,7 @@ public class JavaSourceBrowserTreeConstructor {
 
 	public JTree constructSourceBrowserTree(RText rtext) {
 		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
-		JavaOutlineTree tree = new JavaOutlineTree();
+		JavaOutlineTree tree = new JavaOutlineTree(false);
 		tree.listenTo(textArea);
 		return tree;
 	}
