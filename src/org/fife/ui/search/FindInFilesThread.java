@@ -500,7 +500,7 @@ class FindInFilesThread extends GUIWorkerThread {
 		// table, so we'll limit how much we display.
 		final int maxLen = 1280;
 
-		StringBuffer sb = new StringBuffer("<html><font face=\"Monospaced\">");
+		StringBuffer sb = new StringBuffer("<html><nobr><font face=\"Monospaced\">");
 		boolean firstNonWhitespace = false; // Skip leading whitespace
 
 		while (t!=null && t.isPaintable() && sb.length()<maxLen) {
