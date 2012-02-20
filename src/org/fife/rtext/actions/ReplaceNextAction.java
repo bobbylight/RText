@@ -34,6 +34,7 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.search.ReplaceDialog;
 
@@ -104,12 +105,9 @@ class ReplaceNextAction extends ReplaceAction {
 
 		try {
 
-			boolean found = SearchEngine.replace(textArea, searchString,
-									replaceDialog.getReplaceString(),
-									mainView.searchingForward,
-									mainView.searchMatchCase,
-									mainView.searchWholeWord,
-									mainView.searchRegExpression);
+			SearchContext context = mainView.createSearchContext(searchString,
+										replaceDialog.getReplaceString());
+			boolean found = SearchEngine.replace(textArea, context);
 
 			if (!found) {
 				searchString = RTextUtilities.escapeForHTML(searchString, null);

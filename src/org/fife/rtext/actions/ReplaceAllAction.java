@@ -36,6 +36,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.StandardAction;
+import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 
 
@@ -78,16 +79,14 @@ class ReplaceAllAction extends StandardAction {
 
 		// Next, initialize some variables for this action.
 		String searchString = mainView.replaceDialog.getSearchString();
-		boolean matchCase = mainView.searchMatchCase;
-		boolean wholeWord = mainView.searchWholeWord;
-		boolean regex = mainView.searchRegExpression;
 
 		// Do the replacement.
 		int count = 0;
 		try {
-			count = SearchEngine.replaceAll(textArea, searchString,
-							mainView.replaceDialog.getReplaceString(),
-							matchCase, wholeWord, regex);
+
+			SearchContext context = mainView.createSearchContext(searchString,
+					mainView.replaceDialog.getReplaceString());
+			count = SearchEngine.replaceAll(textArea, context);
 
 			if (count==-1) {
 				// TODO: Display an error about bad regex.

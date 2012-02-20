@@ -60,6 +60,7 @@ import org.fife.ui.rtextarea.Macro;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextAreaEditorKit;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.ui.search.*;
 
@@ -871,6 +872,28 @@ public abstract class AbstractMainView extends JPanel
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, InputEvent.CTRL_MASK), "nothing");
 
 		return scrollPane;
+	}
+
+
+	/**
+	 * Creates and returns a search context based on the most recent user
+	 * preferences.
+	 *
+	 * @param searchFor The text or regular expression to search for.
+	 * @param replaceWith The text to replace with, or <code>null</code>.
+	 * @return The search context.
+	 */
+	public SearchContext createSearchContext(String searchFor,
+											String replaceWith) {
+		SearchContext context = new SearchContext();
+		context.setMatchCase(searchMatchCase);
+		context.setRegularExpression(searchRegExpression);
+		context.setReplaceWith(replaceWith);
+		context.setSearchFor(searchFor);
+		context.setSearchForward(searchingForward);
+		context.setSearchSelectionOnly(false); // TODO: Implement me
+		context.setWholeWord(searchWholeWord);
+		return context;
 	}
 
 

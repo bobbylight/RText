@@ -365,19 +365,19 @@ class DefaultSourceTree extends JTree {
 
 			String text = null;
 
-			// If we've already generated the (probably HTML) tooltip text,
+			// If we've already generated the (probably HTML) tool tip text,
 			// use it.
 			if (entry.cachedToolTipText!=null) {
 				text = entry.cachedToolTipText;
 			}
 
-			// Create the tooltip text (HTML, or just text if only a line
+			// Create the tool tip text (HTML, or just text if only a line
 			// number was found (such as #defines for C/C++).
 			else {
 
 				text = entry.getPlainTextPattern();
 
-				// If we have a pattern, try to create an HTML tooltip.
+				// If we have a pattern, try to create an HTML tool tip.
 				if (text!=null) {
 
 					// To trim off the "regular expression" parts.

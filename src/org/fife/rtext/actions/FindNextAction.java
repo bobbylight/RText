@@ -34,6 +34,7 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.search.FindDialog;
 import org.fife.ui.search.ReplaceDialog;
@@ -110,9 +111,9 @@ class FindNextAction extends FindAction {
 
 		try {
 
-			// If "mark all" is selected, first mark all occurances in
+			// If "mark all" is selected, first mark all occurrences in
 			// the text area, then do the "find" (so that the next
-			// occurance is indeed selected).
+			// occurrence is indeed selected).
 			textArea.clearMarkAllHighlights(); // Always remove old stuff.
 			if (mainView.searchMarkAll) {
 				textArea.markAll(searchString,
@@ -121,11 +122,9 @@ class FindNextAction extends FindAction {
 								mainView.searchRegExpression);
 			}
 
-			boolean found = SearchEngine.find(textArea, searchString,
-								mainView.searchingForward,
-								mainView.searchMatchCase,
-								mainView.searchWholeWord,
-								mainView.searchRegExpression);
+			SearchContext context = mainView.createSearchContext(searchString,
+														null);
+			boolean found = SearchEngine.find(textArea, context);
 			if (!found) {
 				searchString = RTextUtilities.escapeForHTML(searchString, null);
 				String temp = rtext.getString("CannotFindString", searchString);

@@ -63,6 +63,7 @@ import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.plaf.basic.BasicGraphicsUtils;
 
+import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 
 
@@ -273,19 +274,20 @@ public class SearchToolBar extends JToolBar {
 	class FindButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			String actionCommand = e.getActionCommand();
-			boolean forward = true;
-			if (actionCommand.equals("FindNext")) {
-				forward = true;
-			}
-			else {//if (actionCommand.equals("FindPrevious")) {
-				forward = false;
-			}
+
+			boolean forward = "FindNext".equals(e.getActionCommand());
 			String text = findField.getText();
 			RTextEditorPane textArea = owner.getMainView().getCurrentTextArea();
-			boolean found = SearchEngine.find(textArea, text, forward,
-									matchCaseCheckBox.isSelected(),
-									false, false);
+
+			SearchContext context = new SearchContext();
+			context.setMatchCase(matchCaseCheckBox.isSelected());
+			context.setRegularExpression(false);
+			context.setSearchFor(text);
+			context.setSearchForward(forward);
+			context.setSearchSelectionOnly(false);
+			context.setWholeWord(false);
+
+			boolean found = SearchEngine.find(textArea, context);
 			if (found) {
 				infoLabel.setText("");
 			}
@@ -294,9 +296,11 @@ public class SearchToolBar extends JToolBar {
 				infoLabel.setText(textNotFound);
 				UIManager.getLookAndFeel().provideErrorFeedback(findField);
 			}
+
 			if (!findField.isFocusOwner()) {
 				findField.grabFocus();
 			}
+
 		}
 
 	}

@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -188,10 +187,13 @@ public class Plugin extends AbstractPlugin {
 
 		loadPreferences();
 
-		// Install our custom source browser tree view for Java.
+		// Install our custom source browser tree view for Java and JavaScript.
 		System.setProperty(
 				SourceBrowserPlugin.CUSTOM_HANDLER_PREFIX + RSyntaxTextArea.SYNTAX_STYLE_JAVA,
 				"org.fife.rtext.plugins.langsupport.JavaSourceBrowserTreeConstructor");
+		System.setProperty(
+				SourceBrowserPlugin.CUSTOM_HANDLER_PREFIX + RSyntaxTextArea.SYNTAX_STYLE_JAVASCRIPT,
+				"org.fife.rtext.plugins.langsupport.JavaScriptSourceBrowserTreeConstructor");
 
 	}
 
