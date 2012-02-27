@@ -213,24 +213,42 @@ public class Plugin extends AbstractPlugin {
 		}
 
 		LanguageSupportFactory fact = LanguageSupportFactory.get();
+		AbstractMainView view = rtext.getMainView();
 
-		LanguageSupport ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_C);
+		String language = SyntaxConstants.SYNTAX_STYLE_C;
+		LanguageSupport ls = fact.getSupportFor(language);
 		ls.setAutoCompleteEnabled(prefs.c_enabled);
 		ls.setParameterAssistanceEnabled(prefs.c_paramAssistance);
 		ls.setShowDescWindow(prefs.c_showDescWindow);
+		view.setCodeFoldingEnabledFor(language, prefs.c_folding_enabled);
 
-		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_HTML);
+		language = SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS;
+		view.setCodeFoldingEnabledFor(language, prefs.cpp_folding_enabled);
+
+		language = SyntaxConstants.SYNTAX_STYLE_CSHARP;
+		view.setCodeFoldingEnabledFor(language, prefs.cs_folding_enabled);
+
+		language = SyntaxConstants.SYNTAX_STYLE_CSS;
+		view.setCodeFoldingEnabledFor(language, prefs.css_folding_enabled);
+
+		language = SyntaxConstants.SYNTAX_STYLE_GROOVY;
+		view.setCodeFoldingEnabledFor(language, prefs.groovy_folding_enabled);
+
+		language = SyntaxConstants.SYNTAX_STYLE_HTML;
+		ls = fact.getSupportFor(language);
 		ls.setAutoCompleteEnabled(prefs.html_enabled);
 		ls.setShowDescWindow(prefs.html_showDescWindow);
 		ls.setAutoActivationDelay(prefs.html_autoActivationDelay);
 		ls.setAutoActivationEnabled(prefs.html_autoActivation);
 
-		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_JAVA);
+		language = SyntaxConstants.SYNTAX_STYLE_JAVA;
+		ls = fact.getSupportFor(language);
 		JavaLanguageSupport jls = (JavaLanguageSupport)ls;
 		jls.setAutoCompleteEnabled(prefs.java_enabled);
 		jls.setParameterAssistanceEnabled(prefs.java_paramAssistance);
 		jls.setShowDescWindow(prefs.java_showDescWindow);
 		JarManager.setCheckModifiedDatestamps(prefs.java_checkForBuildPathMods);
+		view.setCodeFoldingEnabledFor(language, prefs.java_folding_enabled);
 
 		jls.setAutoActivationDelay(prefs.java_autoActivationDelay);
 		jls.setAutoActivationEnabled(prefs.java_autoActivation);
@@ -252,11 +270,19 @@ public class Plugin extends AbstractPlugin {
 			}
 		}
 
-		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_JSP);
+		language = SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT;
+		view.setCodeFoldingEnabledFor(language, prefs.js_folding_enabled);
+
+		language = SyntaxConstants.SYNTAX_STYLE_JSP;
+		ls = fact.getSupportFor(language);
 		JspLanguageSupport jspls = (JspLanguageSupport)ls;
 		jspls.setAutoCompleteEnabled(prefs.jsp_enabled);
 
-		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PERL);
+		language = SyntaxConstants.SYNTAX_STYLE_MXML;
+		view.setCodeFoldingEnabledFor(language, prefs.mxml_folding_enabled);
+
+		language = SyntaxConstants.SYNTAX_STYLE_PERL;
+		ls = fact.getSupportFor(language);
 		PerlLanguageSupport pls = (PerlLanguageSupport)ls;
 		pls.setParsingEnabled(prefs.perl_compile);
 		pls.setAutoCompleteEnabled(prefs.perl_enabled);
@@ -276,14 +302,17 @@ public class Plugin extends AbstractPlugin {
 			}
 			pls.setPerl5LibOverride(override);
 		}
+		view.setCodeFoldingEnabledFor(language, prefs.perl_folding_enabled);
 
-		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PHP);
+		language = SyntaxConstants.SYNTAX_STYLE_PHP;
+		ls = fact.getSupportFor(language);
 		ls.setAutoCompleteEnabled(prefs.php_enabled);
 		ls.setShowDescWindow(prefs.php_showDescWindow);
 		ls.setAutoActivationEnabled(prefs.php_autoActivation);
 		ls.setAutoActivationDelay(prefs.php_autoActivationDelay);
 
-		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL);
+		language = SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
+		ls = fact.getSupportFor(language);
 		ShellLanguageSupport sls = (ShellLanguageSupport)ls;
 		sls.setAutoCompleteEnabled(prefs.sh_enabled);
 		sls.setShowDescWindow(prefs.sh_showDescWindow);
@@ -306,19 +335,36 @@ public class Plugin extends AbstractPlugin {
 
 		LangSupportPreferences prefs = new LangSupportPreferences();
 		LanguageSupportFactory fact = LanguageSupportFactory.get();
+		AbstractMainView view = rtext.getMainView();
 
-		LanguageSupport ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_C);
+		String language = SyntaxConstants.SYNTAX_STYLE_C;
+		LanguageSupport ls = fact.getSupportFor(language);
 		prefs.c_enabled = ls.isAutoCompleteEnabled();
 		prefs.c_paramAssistance = ls.isParameterAssistanceEnabled();
 		prefs.c_showDescWindow = ls.getShowDescWindow();
+		prefs.c_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
-		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_HTML);
+		language = SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS;
+		prefs.cpp_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_CSHARP;
+		prefs.cs_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_CSS;
+		prefs.css_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_GROOVY;
+		prefs.groovy_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_HTML;
+		ls = fact.getSupportFor(language);
 		prefs.html_enabled = ls.isAutoCompleteEnabled();
 		prefs.html_showDescWindow = ls.getShowDescWindow();
 		prefs.html_autoActivation = ls.isAutoActivationEnabled();
 		prefs.html_autoActivationDelay = ls.getAutoActivationDelay();
 
-		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_JAVA);
+		language = SyntaxConstants.SYNTAX_STYLE_JAVA;
+		ls = fact.getSupportFor(language);
 		JavaLanguageSupport jls = (JavaLanguageSupport)ls;
 		prefs.java_enabled = jls.isAutoCompleteEnabled();
 		prefs.java_paramAssistance = jls.isParameterAssistanceEnabled();
@@ -345,12 +391,21 @@ public class Plugin extends AbstractPlugin {
 			}
 		}
 		prefs.java_checkForBuildPathMods = JarManager.getCheckModifiedDatestamps();
+		prefs.java_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
-		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_JSP);
+		language = SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT;
+		prefs.js_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_JSP;
+		ls = fact.getSupportFor(language);
 		JspLanguageSupport jspls = (JspLanguageSupport)ls;
 		prefs.jsp_enabled = jspls.isAutoCompleteEnabled();
 
-		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PERL);
+		language = SyntaxConstants.SYNTAX_STYLE_MXML;
+		prefs.mxml_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_PERL;
+		ls = fact.getSupportFor(language);
 		PerlLanguageSupport pls = (PerlLanguageSupport)ls;
 		prefs.perl_compile = pls.isParsingEnabled();
 		prefs.perl_enabled = pls.isAutoCompleteEnabled();
@@ -362,14 +417,17 @@ public class Plugin extends AbstractPlugin {
 		prefs.perl_warnings = pls.getWarningsEnabled();
 		prefs.perl_overridden_perl5lib = pls.getPerl5LibOverride();
 		prefs.perl_override_perl5lib = prefs.perl_overridden_perl5lib!=null;
+		prefs.perl_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
-		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PHP);
+		language = SyntaxConstants.SYNTAX_STYLE_PHP;
+		ls = fact.getSupportFor(language);
 		prefs.php_enabled = ls.isAutoCompleteEnabled();
 		prefs.php_showDescWindow = ls.getShowDescWindow();
 		prefs.php_autoActivation = ls.isAutoActivationEnabled();
 		prefs.php_autoActivationDelay = ls.getAutoActivationDelay();
 
-		ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL);
+		language = SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
+		ls = fact.getSupportFor(language);
 		ShellLanguageSupport sls = (ShellLanguageSupport)ls;
 		prefs.sh_enabled = sls.isAutoCompleteEnabled();
 		prefs.sh_showDescWindow = sls.getShowDescWindow();

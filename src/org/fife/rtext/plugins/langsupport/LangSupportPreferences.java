@@ -42,6 +42,15 @@ public class LangSupportPreferences extends Prefs {
 	public boolean c_enabled;
 	public boolean c_paramAssistance;
 	public boolean c_showDescWindow;
+	public boolean c_folding_enabled;
+
+	public boolean cpp_folding_enabled;
+
+	public boolean cs_folding_enabled;
+
+	public boolean css_folding_enabled;
+
+	public boolean groovy_folding_enabled;
 
 	public boolean html_enabled;
 	public boolean html_showDescWindow;
@@ -56,8 +65,13 @@ public class LangSupportPreferences extends Prefs {
 	public String[] java_classpath_jars;
 	public String[] java_classpath_src; // Same length as java_classpath_jars
 	public boolean java_checkForBuildPathMods;
+	public boolean java_folding_enabled;
+
+	public boolean js_folding_enabled;
 
 	public boolean jsp_enabled;
+
+	public boolean mxml_folding_enabled;
 
 	public boolean perl_enabled;
 	public boolean perl_paramAssistance;
@@ -69,6 +83,7 @@ public class LangSupportPreferences extends Prefs {
 	public boolean perl_taintMode;
 	public boolean perl_override_perl5lib;
 	public String perl_overridden_perl5lib;
+	public boolean perl_folding_enabled;
 
 	public boolean php_enabled;
 	public boolean php_showDescWindow;
@@ -87,6 +102,15 @@ public class LangSupportPreferences extends Prefs {
 		c_enabled = true;
 		c_paramAssistance = true;
 		c_showDescWindow = true;
+		c_folding_enabled = true;
+
+		cpp_folding_enabled = true;
+
+		cs_folding_enabled = true;
+
+		css_folding_enabled = true;
+
+		groovy_folding_enabled = true;
 
 		html_enabled = true;
 		html_showDescWindow = true;
@@ -111,8 +135,11 @@ public class LangSupportPreferences extends Prefs {
 			java_classpath_src = new String[] { srcFile };
 		}
 		java_checkForBuildPathMods = true;
+		java_folding_enabled = true;
 
 		jsp_enabled = false;
+
+		mxml_folding_enabled = true;
 
 		perl_enabled = true;
 		perl_paramAssistance = true;
@@ -131,6 +158,7 @@ public class LangSupportPreferences extends Prefs {
 		perl_taintMode = false;
 		perl_override_perl5lib = false;
 		perl_overridden_perl5lib = null;
+		perl_folding_enabled = true;
 
 		php_enabled = true;
 		php_showDescWindow = true;

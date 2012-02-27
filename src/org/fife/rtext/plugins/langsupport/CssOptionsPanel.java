@@ -1,7 +1,7 @@
 /*
- * 09/29/2011
+ * 12/18/2011
  *
- * JavaFoldingOptionsPanel.java - Folding options for Java language support.
+ * CSharpOptionsPanel.java - Options for C#.
  * Copyright (C) 2011 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
@@ -28,19 +28,20 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
 /**
- * Options panel containing code folding options for Java files.
+ * Options panel containing options for CSS.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-public class JavaFoldingOptionsPanel extends AbstractFoldingOnlyOptionsPanel {
+public class CssOptionsPanel extends FoldingOnlyOptionsPanel {
 
 
 	/**
 	 * Constructor.
 	 */
-	public JavaFoldingOptionsPanel() {
-		super("Options.Java.Folding.Name", null, SyntaxConstants.SYNTAX_STYLE_JAVA);
+	public CssOptionsPanel() {
+		super("Options.CSS.Name", "css.png",
+				SyntaxConstants.SYNTAX_STYLE_CSS);
 	}
 
 

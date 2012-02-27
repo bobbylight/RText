@@ -1,7 +1,7 @@
 /*
  * 12/18/2011
  *
- * AbstractFoldingOnlyOptionsPanel.java - Folding options panel.
+ * FoldingOnlyOptionsPanel.java - Folding options panel.
  * Copyright (C) 2011 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://rtext.fifesoft.com
@@ -50,7 +50,7 @@ import org.fife.ui.UIUtil;
  * @author Robert Futrell
  * @version 1.0
  */
-abstract class AbstractFoldingOnlyOptionsPanel extends OptionsDialogPanel {
+class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 
 	private String language;
 	private JCheckBox enabledCB;
@@ -63,7 +63,15 @@ abstract class AbstractFoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Constructor.
 	 */
-	public AbstractFoldingOnlyOptionsPanel(String nameKey, String icon,
+	public FoldingOnlyOptionsPanel(String icon, String language) {
+		this("Options.General.Folding.Name", icon, language);
+	}
+
+
+	/**
+	 * Constructor.
+	 */
+	public FoldingOnlyOptionsPanel(String nameKey, String icon,
 			String language) {
 
 		this.language = language;
@@ -108,6 +116,7 @@ abstract class AbstractFoldingOnlyOptionsPanel extends OptionsDialogPanel {
 
 	protected void doApplyCodeFoldingPreference(RText rtext) {
 		AbstractMainView view = rtext.getMainView();
+System.out.println(getParentPanel().getName() + ": " + language);
 		view.setCodeFoldingEnabledFor(language, enabledCB.isSelected());
 	}
 

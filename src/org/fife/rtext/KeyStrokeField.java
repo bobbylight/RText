@@ -35,7 +35,7 @@ import javax.swing.KeyStroke;
 /**
  * A text field that lets a user enter a <code>KeyStroke</code>.
  *
- * @author robert Robert Futrell
+ * @author Robert Futrell
  * @version 1.0
  */
 public class KeyStrokeField extends JTextField {

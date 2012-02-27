@@ -26,7 +26,6 @@ package org.fife.rtext.plugins.langsupport;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -38,7 +37,6 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
@@ -112,7 +110,7 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 
 		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton);
+		addLeftAligned(cp, rdButton, 5);
 
 		cp.add(Box.createVerticalGlue());
 
@@ -122,23 +120,17 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 		addChildPanel(new COptionsPanel());
 		addChildPanel(new CPlusPlusOptionsPanel());
 		addChildPanel(new CSharpOptionsPanel());
+		addChildPanel(new CssOptionsPanel());
 		addChildPanel(new GroovyOptionsPanel());
 		addChildPanel(new HtmlOptionsPanel());
 		addChildPanel(new JavaOptionsPanel());
+		addChildPanel(new JavaScriptOptionsPanel());
 		addChildPanel(new JspOptionsPanel());
 		addChildPanel(new MxmlOptionsPanel());
 		addChildPanel(new PerlOptionsPanel());
 		addChildPanel(new PhpOptionsPanel());
 		addChildPanel(new ShellOptionsPanel());
 
-	}
-
-
-	private void addLeftAligned(Box to, Component c) {
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(c, BorderLayout.LINE_START);
-		to.add(panel);
-		to.add(Box.createVerticalStrut(5));
 	}
 
 

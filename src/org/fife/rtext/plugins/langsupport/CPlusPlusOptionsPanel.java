@@ -33,7 +33,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-public class CPlusPlusOptionsPanel extends AbstractFoldingOnlyOptionsPanel {
+public class CPlusPlusOptionsPanel extends FoldingOnlyOptionsPanel {
 
 
 	/**
