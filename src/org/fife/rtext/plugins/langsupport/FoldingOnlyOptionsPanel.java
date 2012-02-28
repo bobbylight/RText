@@ -116,7 +116,6 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 
 	protected void doApplyCodeFoldingPreference(RText rtext) {
 		AbstractMainView view = rtext.getMainView();
-System.out.println(getParentPanel().getName() + ": " + language);
 		view.setCodeFoldingEnabledFor(language, enabledCB.isSelected());
 	}
 
@@ -182,6 +181,13 @@ System.out.println(getParentPanel().getName() + ": " + language);
 
 			if (enabledCB==source) {
 				setEnabledCBSelected(enabledCB.isSelected());
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
+			else if (rdButton==source &&
+					!enabledCB.isSelected()) {
+				setEnabledCBSelected(true);
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
 			}
