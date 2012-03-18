@@ -135,6 +135,7 @@ public interface RTextActionInfo {
 	};
 
 	static final int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+	static final int alt = InputEvent.ALT_MASK;
 	static final int shift = InputEvent.SHIFT_MASK;
 	static final int defaultShift    = defaultModifier|shift;
 
@@ -162,7 +163,7 @@ public interface RTextActionInfo {
 		KeyStroke.getKeyStroke(KeyEvent.VK_1, defaultModifier),
 		KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, defaultModifier),
 		KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, defaultModifier),
-		null,
+		KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, alt),
 		KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0),
 		null,
 		null,
