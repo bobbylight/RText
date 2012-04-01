@@ -35,7 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.Icon;
-import javax.swing.tree.*;
 
 import org.fife.ctags.TagEntry;
 import org.fife.io.ProcessRunner;
@@ -130,7 +129,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	 * @param root The root node to add children to.
 	 * @param style The syntax style.
 	 */
-	private void addChildNodesForStyle(DefaultMutableTreeNode root, String style) {
+	private void addChildNodesForStyle(SourceTreeNode root, String style) {
 
 		// SYNTAX_STYLE_ACTIONSCRIPT is handled below with MXML
 
@@ -289,7 +288,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	 * @param contents An array of <code>org.fife.ctags.TagEntry</code>s and
 	 *        <code>String</code>s to add as children of this node.
 	 */
-	private static void addTagTypeNode(DefaultMutableTreeNode root,
+	private static void addTagTypeNode(SourceTreeNode root,
 							String title, Object contents) {
 		addTagTypeNode(root, title, contents, null);
 	}
@@ -306,8 +305,8 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	 * @param icon The icon for this node's children.  This may be
 	 *        <code>null</code>.
 	 */
-	private static void addTagTypeNode(DefaultMutableTreeNode root,
-						String title, Object contents, Icon icon) {
+	private static void addTagTypeNode(SourceTreeNode root, String title,
+										Object contents, Icon icon) {
 
 		List contentsList = (List)contents;
 		GroupTreeNode node = new GroupTreeNode(icon);
@@ -316,7 +315,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 		if (contentsList!=null) {
 			size = contentsList.size();
 			for (int i=0; i<size; i++) {
-				node.add(new DefaultMutableTreeNode(contentsList.get(i)));
+				node.add(new SourceTreeNode(contentsList.get(i)));
 			}
 		}
 
@@ -374,13 +373,13 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 			t.interrupt();
 			t = null;
 			String s = plugin.getBundle().getString("Error.RunawayProcess");
-			return new DefaultMutableTreeNode(s);
+			return new SourceTreeNode(s);
 		}
 		else if (runner.getLastError()!=null) {
 			// If we got an error launching/running the process (such as
 			// "not a valid win32 process", etc.), say so.
 			String s = plugin.getBundle().getString("Error.RunningProcess");
-			return new DefaultMutableTreeNode(s);
+			return new SourceTreeNode(s);
 		}
 		t = null;
 
@@ -395,7 +394,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 			if (!file.isFile()) {
 				// TODO: Give better error message here - and localize me!
 				String s = "tags file not found!";
-				return new DefaultMutableTreeNode(s);
+				return new SourceTreeNode(s);
 			}
 			try {
 				r = new BufferedReader(new FileReader(file));
@@ -404,7 +403,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 				// "not a valid win32 process", etc.), say so.
 				ioe.printStackTrace();
 				String s = plugin.getBundle().getString("Error.RunningProcess");
-				return new DefaultMutableTreeNode(s);
+				return new SourceTreeNode(s);
 			}
 		}
 		String line = null;
@@ -423,8 +422,8 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 		}
 
 		// Sets the tree stuff.
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode(
-										textArea.getFileName());
+		SourceTreeNode root = new SourceTreeNode(textArea.getFileName());
+		root.setSortable(false);
 		addChildNodesForStyle(root, style);
 
 		return root;
@@ -444,12 +443,13 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 		String[] commandLine = null;
 
 		if (exuberant) {
-			commandLine = new String[5];
+			commandLine = new String[6];
 			commandLine[0] = plugin.getCTagsExecutableLocation();
 			commandLine[1] = "-f";
 			commandLine[2] = "-";
 			commandLine[3] = "--language-force=" + language;
-			commandLine[4] = sourceFile;
+			commandLine[4] = "--sort=no"; // Sorting is a UI option
+			commandLine[5] = sourceFile;
 		}
 		else { // standard
 			commandLine = new String[2];
@@ -470,7 +470,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	 * returned from <code>get</code> to prevent deadlock.
 	 */
 	public void finished() {
-		tree.setRoot((TreeNode)get());
+		tree.setRoot((SourceTreeNode)get());
 	}
 
 

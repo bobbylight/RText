@@ -35,7 +35,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.tree.*;
 
 import org.fife.ctags.TagEntry;
 import org.fife.rtext.*;
@@ -76,7 +75,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private Icon pluginIcon;
 	private boolean useHTMLToolTips;
 	private SourceBrowserThread sourceBrowserThread;
-	private DefaultMutableTreeNode workingRoot;
+	private SourceTreeNode workingRoot;
 
 	private String ctagsExecutableLocation;
 	private File ctagsFile;				// Just for speed.
@@ -124,7 +123,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 		setUseHTMLToolTips(sbp.useHTMLToolTips);
 
 		sourceBrowserThread = new SourceBrowserThread(this);
-		workingRoot = new DefaultMutableTreeNode(msg.getString("Working"));
+		workingRoot = new SourceTreeNode(msg.getString("Working"));
 
 		System.setProperty(CUSTOM_HANDLER_PREFIX + SyntaxConstants.SYNTAX_STYLE_XML,
 				"org.fife.rtext.plugins.sourcebrowser.xml.XmlSourceTreeGenerator");
@@ -220,6 +219,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 									new Class[] { RText.class });
 							sourceTree = (JTree)m.invoke(handler,
 									new Object[] { owner });
+							ensureSourceTreeSortedProperly();
 							scrollPane.setViewportView(sourceTree);
 						} catch (RuntimeException re) { // FindBugs
 							throw re;
@@ -265,6 +265,34 @@ public class SourceBrowserPlugin extends GUIPlugin
 												(DefaultSourceTree)sourceTree);
 			}
 
+		}
+
+	}
+
+
+	/**
+	 * Ensures that a source tree is sorted or not sorted, to match the
+	 * sorting button's current state.
+	 */
+	protected void ensureSourceTreeSortedProperly() {
+
+		Class clazz = sourceTree.getClass();
+		Method sortMethod = null;
+		try {
+			sortMethod = clazz.getMethod("setSorted",
+										new Class[] { boolean.class });
+		} catch (NoSuchMethodException nsme) {
+			nsme.printStackTrace();
+			return;
+		}
+
+		Object[] args = { Boolean.valueOf(sortButton.isSelected()) };
+		try {
+			sortMethod.invoke(sourceTree, args);
+		} catch (RuntimeException re) { // FindBugs
+			throw re;
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 
 	}
@@ -620,8 +648,8 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * @param errorMessage The message to display.
 	 */
 	private void setErrorMessage(String message) {
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
-		DefaultMutableTreeNode node = new DefaultMutableTreeNode(message);
+		SourceTreeNode root = new SourceTreeNode(null, false);
+		SourceTreeNode node = new SourceTreeNode(message);
 		root.add(node);
 		((DefaultSourceTree)sourceTree).setRoot(root);
 	}
@@ -696,26 +724,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 		}
 
 		public void actionPerformed(ActionEvent e) {
-
-			Class clazz = sourceTree.getClass();
-			Method sortMethod = null;
-			try {
-				sortMethod = clazz.getMethod("setSorted",
-						new Class[] { boolean.class });
-			} catch (NoSuchMethodException nsme) {
-				nsme.printStackTrace();
-				return;
-			}
-
-			Object[] args = { Boolean.valueOf(sortButton.isSelected()) };
-			try {
-				sortMethod.invoke(sourceTree, args);
-			} catch (RuntimeException re) { // FindBugs
-				throw re;
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-
+			ensureSourceTreeSortedProperly();
 		}
 
 	}

@@ -60,7 +60,10 @@ import org.fife.ui.rtextarea.SearchEngine;
 
 
 /**
- * The default source tree used by the source browser.
+ * The default source tree used by the source browser.<p>
+ * This class has a lot of functionality copied from RSTALanguageSupport's
+ * <code>AbstractSourceTree</code> class, but is unfortunately here because
+ * we don't want this plugin to depend on that library.
  *
  * @author Robert Futrell
  * @version 1.0
@@ -75,6 +78,7 @@ class DefaultSourceTree extends JTree {
 	private int mouseX;
 	private int mouseY;
 	private boolean ignoreTreeSelections;
+	private boolean sorted;
 
 	private Icon fileIcon;
 	private String lineFoundText;
@@ -109,6 +113,14 @@ class DefaultSourceTree extends JTree {
 
 
 	/**
+	 * Expands the appropriate tree nodes after the source has been re-parsed.
+	 */
+	private void expandInitialNodes() {
+		UIUtil.expandAllNodes(this);
+	}
+
+
+	/**
 	 * Returns the text being displayed for the specified row in the ctags
 	 * tree.
 	 *
@@ -124,11 +136,22 @@ class DefaultSourceTree extends JTree {
 
 
 	/**
+	 * Returns whether the contents of this tree are sorted.
+	 *
+	 * @return Whether the contents of this tree are sorted.
+	 * @see #setSorted(boolean)
+	 */
+	public boolean isSorted() {
+		return sorted;
+	}
+
+
+	/**
 	 * Decides whether or not to display the popup menu.
 	 *
 	 * @param e The mouse event to check.
 	 */
-	public void maybeShowPopup(MouseEvent e) {
+	private void maybeShowPopup(MouseEvent e) {
 
 		if (e.isPopupTrigger()) {
 
@@ -193,13 +216,31 @@ class DefaultSourceTree extends JTree {
 
 
 	/**
+	 * Refreshes what children are visible in the tree.  This should be called
+	 * manually when updating a source tree with a new root, and is also called
+	 * internally on filtering and sorting.
+	 */
+	public void refresh() {
+		Object root = getModel().getRoot();
+		if (root instanceof SourceTreeNode) {
+			SourceTreeNode node = (SourceTreeNode)root;
+			node.setSorted(isSorted());
+			node.refresh();
+			((DefaultTreeModel)getModel()).reload();
+			plugin.ensureSourceTreeSortedProperly();
+			expandInitialNodes();
+		}
+	}
+
+
+	/**
 	 * Sets the root of this tree, and updates the expanded state of any nodes.
 	 *
 	 * @param newRoot The new root.
 	 */
-	void setRoot(TreeNode newRoot) {
+	void setRoot(SourceTreeNode newRoot) {
 		treeModel.setRoot(newRoot);
-		UIUtil.expandAllNodes(this);
+		refresh();
 	}
 
 
@@ -212,9 +253,18 @@ class DefaultSourceTree extends JTree {
 	 * Toggles whether the leaf nodes in this source tree are sorted.
 	 *
 	 * @param sorted Whether the tree nodes are sorted.
+	 * @see #isSorted()
 	 */
 	public void setSorted(boolean sorted) {
-		System.out.println("TODO: Implement DefaultSourceTree#setSorted()");
+		if (this.sorted!=sorted) {
+			this.sorted = sorted;
+			Object root = getModel().getRoot();
+			if (root instanceof SourceTreeNode) {
+				((SourceTreeNode)root).setSorted(sorted);
+			}
+			((DefaultTreeModel)getModel()).reload();
+			expandInitialNodes();
+		}
 	}
 
 

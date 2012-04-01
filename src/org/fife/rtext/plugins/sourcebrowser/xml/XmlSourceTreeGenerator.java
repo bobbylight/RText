@@ -1,27 +1,3 @@
-/*
- * 03/29/2012
- *
- * XmlSourceTreeGenerator.java - Source tree for XML.
- * Copyright (C) 2012 Robert Futrell
- * robert_futrell at users.sourceforge.net
- * http://rtext.fifesoft.com
- *
- * This file is a part of RText.
- * 
- * RText is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * RText is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
 package org.fife.rtext.plugins.sourcebrowser.xml;
 
 import java.awt.Component;
@@ -209,42 +185,6 @@ public class XmlSourceTreeGenerator extends DefaultHandler {
 	}
 
 
-	/**
-	 * Returns a string representing the "main" attribute for an element.
-	 *
-	 * @param attributes The attributes of an element.  Calling code should
-	 *        have already verified this has length &gt; 0.
-	 * @return The "main" attribute.
-	 */
-	private String getMainAttribute(Attributes attributes) {
-
-		int nameIndex = -1;
-		int idIndex = -1;
-
-		for (int i=0; i<attributes.getLength(); i++) {
-			String name = attributes.getLocalName(i);
-			if ("id".equals(name)) {
-				idIndex = i;
-				break;
-			}
-			else if ("name".equals(name)) {
-				nameIndex = i;
-			}
-		}
-
-		int i = idIndex;
-		if (i==-1) {
-			i = nameIndex;
-			if (i==-1) {
-				i = 0; // Default to first attribute
-			}
-		}
-
-		return attributes.getLocalName(i) + "=" + attributes.getValue(i);
-
-	}
-
-
 	private int getTagStart(int end) {
 
 		Element root = doc.getDefaultRootElement();
@@ -293,9 +233,18 @@ public class XmlSourceTreeGenerator extends DefaultHandler {
 							Attributes attributes) {
 
 		XmlTreeNode newElem = new XmlTreeNode(qName);
-		if (attributes.getLength()>0) {
-			newElem.setMainAttribute(getMainAttribute(attributes));
-		}
+//		if (attributes.getLength()>0) {
+//			String mainAttr = attributes.getLocalName(0) + "=" +
+//								attributes.getValue(0);
+//			for (int i=1; i<attributes.getLength(); i++) {
+//				String name = attributes.getLocalName(i);
+//				if ("id".equals(name) || "name".equals(name)) {
+//					mainAttr = name + "=" + attributes.getValue(i);
+//					break;
+//				}
+//			}
+//			newElem.setMainAttr(mainAttr);
+//		}
 		if (locator!=null) {
 			int line = locator.getLineNumber();
 			if (line!=-1) {
@@ -364,9 +313,11 @@ public class XmlSourceTreeGenerator extends DefaultHandler {
 			this.endOffset = pos;
 		}
 
-		public void setMainAttribute(String attr) {
+		/*
+		public void setMainAttr(String attr) {
 			this.mainAttr = attr;
 		}
+		*/
 
 		public void setStartOffset(Position pos) {
 			this.offset = pos;
@@ -444,7 +395,7 @@ public class XmlSourceTreeGenerator extends DefaultHandler {
 						return true;
 					}
 				}
-				// None of the children contain the offset, must be this guy
+				// None of the children contain the offset, must this guy
 				node.selectInTree();
 				return true;
 			}

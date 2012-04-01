@@ -26,7 +26,6 @@
 package org.fife.rtext.plugins.sourcebrowser;
 
 import javax.swing.Icon;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 
 /**
@@ -35,7 +34,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author Robert Futrell
  * @version 1.0
  */
-class GroupTreeNode extends DefaultMutableTreeNode {
+class GroupTreeNode extends SourceTreeNode {
 
 	private Icon icon;
 
@@ -47,6 +46,7 @@ class GroupTreeNode extends DefaultMutableTreeNode {
 	 *        <code>null</code>.
 	 */
 	public GroupTreeNode(Icon icon) {
+		super(null, false);
 		setIcon(icon);
 	}
 
