@@ -130,7 +130,7 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 		addChildPanel(new PerlOptionsPanel());
 		addChildPanel(new PhpOptionsPanel());
 		addChildPanel(new ShellOptionsPanel());
-
+		addChildPanel(new XmlOptionsPanel());
 	}
 
 

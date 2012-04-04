@@ -108,10 +108,6 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		setIcon(panel, "shortcuts.png");
 		panels.add(panel);
 
-		panel = new XmlOptionPanel(rtext, msg);
-		setIcon(panel, "xml.png");
-		panels.add(panel);
-
 		Plugin[] plugins = rtext.getPlugins();
 		for (int i=0; i<plugins.length; i++) {
 			Plugin plugin = plugins[i];

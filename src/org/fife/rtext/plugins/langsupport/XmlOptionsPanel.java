@@ -22,7 +22,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.fife.rtext.optionsdialog;
+package org.fife.rtext.plugins.langsupport;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
@@ -31,23 +31,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.modes.XMLTokenMaker;
 
 
 /**
- * Options panel for XML language assistance.
+ * Options panel for XML language assistance.  Most of the options here
+ * actually don't correspond to options made available in
+ * <code>RSTALanguageSupport</code>, but rather options built into RSTA proper;
+ * however, to keep the options dialog organized consistently all
+ * language-specific options are under the umbrella of this plugin.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class XmlOptionPanel extends OptionsDialogPanel implements ActionListener {
+class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 
 	private JCheckBox autoCompleteClosingTagsCB;
 
@@ -56,13 +60,12 @@ class XmlOptionPanel extends OptionsDialogPanel implements ActionListener {
 
 	/**
 	 * Constructor.
-	 *
-	 * @param rtext The owning RText instance.
-	 * @param msg The resource bundle to use.
 	 */
-	public XmlOptionPanel(RText rtext, ResourceBundle msg) {
+	public XmlOptionsPanel() {
 
-		super(msg.getString("Options.Xml.Name"));
+		ResourceBundle msg = Plugin.msg;
+		setName(msg.getString("Options.Xml.Name"));
+		setIcon(new ImageIcon(getClass().getResource("xml.png")));
 
 		ComponentOrientation o = ComponentOrientation.
 										getOrientation(getLocale());
