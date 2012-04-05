@@ -24,6 +24,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -34,6 +35,9 @@ import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.text.BadLocationException;
 
 import org.fife.rsta.ac.LanguageSupport;
@@ -46,6 +50,7 @@ import org.fife.rsta.ac.perl.PerlLanguageSupport;
 import org.fife.rsta.ac.sh.ShellLanguageSupport;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.sourcebrowser.SourceBrowserPlugin;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
@@ -91,6 +96,27 @@ public class Plugin extends AbstractPlugin {
 	 */
 	public Plugin(AbstractPluggableGUIApplication app) {
 		setOptionsDialogPanelParentPanelID(RTextAreaOptionPanel.ID);
+	}
+
+
+	/**
+	 * Adds plugin-specific actions to RText's menu bar.
+	 */
+	private void addActionsToMenus() {
+
+		RTextMenuBar mb = (RTextMenuBar)rtext.getJMenuBar();
+
+		// Add "Go to Member" action to the end of the "Go to..." menu section.
+		JMenu searchMenu = mb.getMenuByName(RTextMenuBar.MENU_SEARCH);
+		for (int i=searchMenu.getMenuComponentCount()-1; i>=0; i--) {
+			Component c = searchMenu.getMenuComponent(i);
+			if (c instanceof JSeparator) {
+				GoToMemberAction gtma = new GoToMemberAction(rtext);
+				searchMenu.insert(new JMenuItem(gtma), i);
+				break;
+			}
+		}
+
 	}
 
 
@@ -186,6 +212,8 @@ public class Plugin extends AbstractPlugin {
 											getClass().getClassLoader());
 
 		loadPreferences();
+
+		addActionsToMenus();
 
 		// Install our custom source browser tree view for Java and JavaScript.
 		System.setProperty(

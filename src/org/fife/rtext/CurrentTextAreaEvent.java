@@ -37,10 +37,27 @@ import java.util.EventObject;
 public class CurrentTextAreaEvent extends EventObject {
 
 	private static final int MIN_TYPE_VALUE			= 0;
+
+	/**
+	 * Fired when the currently active text area changes.
+	 */
 	public static final int TEXT_AREA_CHANGED		= 0;
+
+	/**
+	 * Fired when the current text area is made dirty or saved.
+	 */
 	public static final int IS_MODIFIED_CHANGED		= 1;
+
+	/**
+	 * Fired when the current text area's filename is changed.
+	 */
 	public static final int FILE_NAME_CHANGED		= 2;
+
+	/**
+	 * Fired when the current text area's syntax style changes.
+	 */
 	public static final int SYNTAX_STYLE_CNANGED		= 3;
+
 	private static final int MAX_TYPE_VALUE			= 3;
 
 	private int type;
