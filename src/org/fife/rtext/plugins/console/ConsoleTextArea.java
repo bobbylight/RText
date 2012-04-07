@@ -148,7 +148,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	protected void appendImpl(final String text, final String style) {
 
-		// Ensure the meat of this method is done on th EDT, to prevent
+		// Ensure the meat of this method is done on the EDT, to prevent
 		// concurrency errors.
 		if (SwingUtilities.isEventDispatchThread()) {
 
