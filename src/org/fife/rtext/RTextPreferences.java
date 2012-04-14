@@ -724,7 +724,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		SyntaxFilters syntaxFilters = new SyntaxFilters();
 		syntaxFilters.restoreDefaultFileFilters();
 		syntaxFiltersString = syntaxFilters.toString();
-		maxFileHistorySize = 5;
+		maxFileHistorySize = 20;
 		fileHistoryString = null;
 		currentLineHighlightEnabled = true;
 		currentLineHighlightColor = RTextArea.getDefaultCurrentLineHighlightColor();

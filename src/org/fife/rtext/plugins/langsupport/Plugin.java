@@ -112,7 +112,9 @@ public class Plugin extends AbstractPlugin {
 			Component c = searchMenu.getMenuComponent(i);
 			if (c instanceof JSeparator) {
 				GoToMemberAction gtma = new GoToMemberAction(rtext);
-				searchMenu.insert(new JMenuItem(gtma), i);
+				JMenuItem item = new JMenuItem(gtma);
+				item.setToolTipText(null);
+				searchMenu.insert(item, i);
 				break;
 			}
 		}
