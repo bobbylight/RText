@@ -125,9 +125,6 @@ public class SourceBrowserPlugin extends GUIPlugin
 		sourceBrowserThread = new SourceBrowserThread(this);
 		workingRoot = new SourceTreeNode(msg.getString("Working"));
 
-		System.setProperty(CUSTOM_HANDLER_PREFIX + SyntaxConstants.SYNTAX_STYLE_XML,
-				"org.fife.rtext.plugins.sourcebrowser.xml.XmlSourceTreeGenerator");
-
 	}
 
 

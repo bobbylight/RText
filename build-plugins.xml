@@ -240,10 +240,10 @@
 			</manifest>
 		</jar>
 		<!-- Needed by RTextLanguageSupport -->
-		<copy file="lib/language_support.jar" todir="${dist-dir}/plugins"/>
-		<copy file="lib/Rhino.build-date"     todir="${dist-dir}/plugins"/>
-		<copy file="lib/Rhino.LICENSE.txt"    todir="${dist-dir}/plugins"/>
-		<copy file="lib/js-14.jar"            todir="${dist-dir}/plugins"/>
+		<copy file="lib/language_support.jar"   todir="${dist-dir}/plugins"/>
+		<copy file="lib/Rhino.build-date"       todir="${dist-dir}/plugins"/>
+		<copy file="lib/Rhino.LICENSE.txt"      todir="${dist-dir}/plugins"/>
+		<copy file="lib/js-14_Patch_716562.jar" todir="${dist-dir}/plugins"/>
 
 	</target>
 

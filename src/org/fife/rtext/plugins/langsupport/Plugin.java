@@ -217,13 +217,17 @@ public class Plugin extends AbstractPlugin {
 
 		addActionsToMenus();
 
-		// Install our custom source browser tree view for Java and JavaScript.
+		// Install our custom source browser tree views for some languages.
 		System.setProperty(
 				SourceBrowserPlugin.CUSTOM_HANDLER_PREFIX + RSyntaxTextArea.SYNTAX_STYLE_JAVA,
 				"org.fife.rtext.plugins.langsupport.JavaSourceBrowserTreeConstructor");
 		System.setProperty(
 				SourceBrowserPlugin.CUSTOM_HANDLER_PREFIX + RSyntaxTextArea.SYNTAX_STYLE_JAVASCRIPT,
 				"org.fife.rtext.plugins.langsupport.JavaScriptSourceBrowserTreeConstructor");
+		System.setProperty(
+				SourceBrowserPlugin.CUSTOM_HANDLER_PREFIX + RSyntaxTextArea.SYNTAX_STYLE_XML,
+				"org.fife.rtext.plugins.langsupport.XmlSourceBrowserTreeConstructor");
+
 
 	}
 

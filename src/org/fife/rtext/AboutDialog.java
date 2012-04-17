@@ -173,6 +173,9 @@ panel.add(editor);
 		appendLibrary(sb, "Substance:",
 				"https://substance.dev.java.net/",
 				msg.getString("Desc.Substance"));
+		appendLibrary(sb, "Groovy:",
+				"http://groovy.codehaus.org/",
+				msg.getString("Desc.Groovy"));
 		sb.append("</table>");
 
 		final SelectableLabel label = new SelectableLabel(sb.toString());
