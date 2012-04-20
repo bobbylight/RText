@@ -281,11 +281,13 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 				if (!enabledCB.isSelected() ||
 						!showDescWindowCB.isSelected() ||
 						!autoActivateCB.isSelected() ||
-						!"300".equals(aaDelayField.getText())) {
+						!"300".equals(aaDelayField.getText()) ||
+						!foldingEnabledCB.isSelected()) {
 					setEnabledCBSelected(true);
 					showDescWindowCB.setSelected(true);
 					setAutoActivateCBSelected(true);
 					aaDelayField.setText("300");
+					foldingEnabledCB.setSelected(true);
 					hasUnsavedChanges = true;
 					firePropertyChange(PROPERTY, null, null);
 				}

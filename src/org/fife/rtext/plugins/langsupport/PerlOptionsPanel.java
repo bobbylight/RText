@@ -487,7 +487,8 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 				boolean installLocFieldModified =
 					!origInstallLoc.equals(installFieldText);
 
-				if (!compileCB.isSelected() ||
+				if (!foldingEnabledCB.isSelected() ||
+						!compileCB.isSelected() ||
 						!enabledCB.isSelected() ||
 						installLocFieldModified ||
 						!paramAssistanceCB.isSelected() ||
@@ -496,6 +497,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 						!useParensCB.isSelected() ||
 						!warningsCB.isSelected() ||
 						overridePerl5LibCB.isSelected()) {
+					foldingEnabledCB.setSelected(true);
 					setCompileCBSelected(true);
 					setEnabledCBSelected(true);
 					installLocField.setFileSystemAware(false);

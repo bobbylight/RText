@@ -99,16 +99,16 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	protected void doApplyCodeFoldingPreference(RText rtext) {
-		AbstractMainView view = rtext.getMainView();
-		view.setCodeFoldingEnabledFor(language, enabledCB.isSelected());
-	}
-
-
 	protected JCheckBox createCB(String key) {
 		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
 		cb.addActionListener(listener);
 		return cb;
+	}
+
+
+	protected void doApplyCodeFoldingPreference(RText rtext) {
+		AbstractMainView view = rtext.getMainView();
+		view.setCodeFoldingEnabledFor(language, enabledCB.isSelected());
 	}
 
 
@@ -140,18 +140,18 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	}
 
 
+	protected void setCodeFoldingValueImpl(RText rtext) {
+		AbstractMainView view = rtext.getMainView();
+		enabledCB.setSelected(view.isCodeFoldingEnabledFor(language));
+	}
+
+
 	/**
 	 * Checks or unchecks the "enable code folding" check box.  Subclasses can
 	 * override this if they add more options to this panel.
 	 */
 	protected final void setValuesImpl(Frame owner) {
 		setCodeFoldingValueImpl((RText)owner); 
-	}
-
-
-	protected void setCodeFoldingValueImpl(RText rtext) {
-		AbstractMainView view = rtext.getMainView();
-		enabledCB.setSelected(view.isCodeFoldingEnabledFor(language));
 	}
 
 
@@ -180,7 +180,8 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 		}
 
 		private void setEnabledCBSelected(boolean selected) {
-			// TODO: Toggle enabled state of other check boxes.
+			enabledCB.setSelected(true);
+			// Toggle enabled state of any other check boxes.
 		}
 
 	}

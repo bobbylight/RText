@@ -41,7 +41,7 @@ import org.fife.ui.app.StandardAction;
  */
 public class Plugin extends AbstractPlugin {
 
-	private static final String VERSION				= "2.0.0";
+	private static final String VERSION				= "2.0.2";
 
 	private RText app;
 	private ConsoleWindow window;

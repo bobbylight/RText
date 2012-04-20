@@ -212,9 +212,11 @@ class COptionsPanel extends OptionsDialogPanel {
 
 			else if (rdButton==source) {
 				if (!enabledCB.isSelected() ||
+						!foldingEnabledCB.isSelected() ||
 						!paramAssistanceCB.isSelected() ||
 						!showDescWindowCB.isSelected()) {
 					setEnabledCBSelected(true);
+					foldingEnabledCB.setSelected(true);
 					paramAssistanceCB.setSelected(true);
 					showDescWindowCB.setSelected(true);
 					hasUnsavedChanges = true;

@@ -49,7 +49,7 @@ public class Plugin extends AbstractPlugin
 	private HtmlOptions htmlOptions;
 	private XmlOptions xmlOptions;
 
-	private static final String PLUGIN_VERSION			= "2.0.0";
+	private static final String PLUGIN_VERSION			= "2.0.2";
 	private static final String PREFS_DIR_NAME			= "tidy";
 
 	private static final String MSG = "org.fife.rtext.plugins.tidy.Plugin";
