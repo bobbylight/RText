@@ -1,6 +1,6 @@
 ================================
 = RText Readme                 =
-= http://rtext.sourceforge.net =
+= http://fifesoft.com/rtext    =
 ================================
 
 Contents
@@ -76,15 +76,32 @@ http://sourceforge.net/tracker/?atid=610805&group_id=95266&func=browse
 
 4. License
 -----------
-RText is distributed under the GNU General Public License; please see the
-file named License.txt distributed with this program, or visit
-http://www.gnu.org.
+As of version 2.0.2, RText is distributed under a modified BSD license; please
+see the file named License.txt distributed with this program, or visit
+http://www.opensource.org/licenses/BSD-3-Clause.
+
+All libraries used by RText (which are listed below) come with their license
+files included in both the binary and source packages.
 
 The editor used in RText is RSyntaxTextArea, an open source, syntax
-highlighting text component licensed under the LGPL.  This license is
-included with RText in the file RSyntaxTextArea.License.txt.  For more
-information on RSyntaxTextArea, please visit
+highlighting text component licensed under a modified BSD license.  This
+license is included with RText in the file RSyntaxTextArea.License.txt.  For
+more information on RSyntaxTextArea, please visit
 http://fifesoft.com/rsyntaxtextarea.
+
+RSyntaxTextArea's RSTALanguageSupport (included as part of the language support
+plugin via language_support.jar) includes Mozilla Rhino for JavaScript code
+completion and parsing, which is licensed under the MPL 1.1.  For more
+information, please visit http://www.mozilla.org/rhino/.
+  
+RText links against RSyntaxTextArea's SpellChecker plugin, which is built on
+top of Jazzy, an open source spell checker library for Java applications.
+Since Jazzy is licensed under the LGPL 2.1, the rsta_spellchecker.jar is also
+licensed under LGPL 2.1.  For more information, please visit the
+RSyntaxTextArea project at http://fifesoft.com/rsyntaxtextarea.
+
+The source code tidying plugin uses JTidy, a Java port of HTMLTidy which uses
+an "MIT-like license."  See http://jtidy.sourceforge.net/ for more information.
 
 
 5. Getting Support
@@ -122,5 +139,6 @@ robert_futrell@users.sourceforge.net
 
 8. Special Thanks
 -----------------
-- Sourceforge.net for hosting RText
+- Sourceforge.net for hosting RText's bug tracker and other tools.
 - Steve Christensen for creating Solaris packages.
+- Rob Manning for getting RText into Maven.
