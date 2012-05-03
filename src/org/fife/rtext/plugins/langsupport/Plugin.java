@@ -27,9 +27,12 @@ import javax.swing.text.BadLocationException;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
-import org.fife.rsta.ac.java.JarInfo;
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
+import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
+import org.fife.rsta.ac.java.buildpath.LibraryInfo;
+import org.fife.rsta.ac.java.buildpath.SourceLocation;
+import org.fife.rsta.ac.java.buildpath.ZipSourceLocation;
 import org.fife.rsta.ac.jsp.JspLanguageSupport;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 import org.fife.rsta.ac.sh.ShellLanguageSupport;
@@ -63,7 +66,7 @@ public class Plugin extends AbstractPlugin {
 	private Listener listener;
 	private Icon[] icons;
 
-	private static final String PLUGIN_VERSION			= "2.0.2";
+	private static final String PLUGIN_VERSION			= "2.0.3";
 	private static final String PREFS_FILE_NAME			= "langSupport.properties";
 
 	private static final String MSG = "org.fife.rtext.plugins.langsupport.Plugin";
@@ -272,18 +275,18 @@ public class Plugin extends AbstractPlugin {
 		jls.setAutoActivationDelay(prefs.java_autoActivationDelay);
 		jls.setAutoActivationEnabled(prefs.java_autoActivation);
 		JarManager jarMan = jls.getJarManager();
-		jarMan.clearJars();
+		jarMan.clearClassFileSources();
 		int count = prefs.java_classpath_jars==null ? 0 :
 						prefs.java_classpath_jars.length;
 		for (int i=0; i<count; i++) {
 			File jar = new File(prefs.java_classpath_jars[i]);
-			JarInfo info = new JarInfo(jar);
+			JarLibraryInfo info = new JarLibraryInfo(jar);
 			if (prefs.java_classpath_src[i]!=null) {
 				File src = new File(prefs.java_classpath_src[i]);
-				info.setSourceLocation(src);
+				info.setSourceLocation(new ZipSourceLocation(src));
 			}
 			try {
-				jarMan.addJar(info);
+				jarMan.addClassFileSource(info);
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 			}
@@ -390,7 +393,7 @@ public class Plugin extends AbstractPlugin {
 		prefs.java_showDescWindow = jls.getShowDescWindow();
 		prefs.java_autoActivation = jls.isAutoActivationEnabled();
 		prefs.java_autoActivationDelay = jls.getAutoActivationDelay();
-		List jars = jls.getJarManager().getJars();
+		List jars = jls.getJarManager().getClassFileSources();
 		int count = jars==null ? 0 : jars.size();
 		if (count==0) {
 			prefs.java_classpath_jars = null;
@@ -400,12 +403,12 @@ public class Plugin extends AbstractPlugin {
 			prefs.java_classpath_jars = new String[count];
 			prefs.java_classpath_src = new String[count];
 			for (int i=0; i<count; i++) {
-				JarInfo info = (JarInfo)jars.get(i);
-				File jarFile = info.getJarFile();
-				prefs.java_classpath_jars[i] = jarFile.getAbsolutePath();
-				File srcLocFile = info.getSourceLocation();
+				LibraryInfo info = (LibraryInfo)jars.get(i);
+				String jarFile = info.getLocationAsString();
+				prefs.java_classpath_jars[i] = jarFile;
+				SourceLocation srcLocFile = info.getSourceLocation();
 				if (srcLocFile!=null) {
-					prefs.java_classpath_src[i] = srcLocFile.getAbsolutePath();
+					prefs.java_classpath_src[i] = srcLocFile.getLocationAsString();
 				}
 			}
 		}

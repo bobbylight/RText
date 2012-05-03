@@ -11,7 +11,8 @@ package org.fife.rtext.plugins.langsupport;
 
 import java.io.File;
 
-import org.fife.rsta.ac.java.JarInfo;
+import org.fife.rsta.ac.java.buildpath.LibraryInfo;
+import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 import org.fife.ui.app.Prefs;
 
@@ -107,16 +108,16 @@ public class LangSupportPreferences extends Prefs {
 		java_showDescWindow = true;
 		java_autoActivation = false;
 		java_autoActivationDelay = AUTO_ACTIVATION_DELAY;
-		JarInfo info = JarInfo.getMainJREJarInfo();
+		LibraryInfo info = LibraryInfo.getMainJreJarInfo();
 		if (info==null) {
 			java_classpath_jars = null;
 			java_classpath_src = null;
 		}
 		else {
-			File jar = info.getJarFile();
-			File src = info.getSourceLocation();
-			java_classpath_jars = new String[] { jar.getAbsolutePath() };
-			String srcFile = src==null ? null : src.getAbsolutePath();
+			String jar = info.getLocationAsString();
+			SourceLocation src = info.getSourceLocation();
+			java_classpath_jars = new String[] { jar };
+			String srcFile = src==null ? null : src.getLocationAsString();
 			java_classpath_src = new String[] { srcFile };
 		}
 		java_checkForBuildPathMods = true;

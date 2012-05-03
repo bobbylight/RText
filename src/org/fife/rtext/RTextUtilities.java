@@ -250,6 +250,7 @@ public class RTextUtilities {
 			addFilter(chooser, msg, "CSharp",	"cs");
 			addFilter(chooser, msg, "CSS", "css");
 			addFilter(chooser, msg, "Delphi", "pas");
+			addFilter(chooser, msg, "DTD", "dtd");
 			addFilter(chooser, msg, "Flex", "mxml");
 			addFilter(chooser, msg, "Fortran",
 					new String[] { "f", "for", "fort", "f77", "f90" });
@@ -260,6 +261,7 @@ public class RTextUtilities {
 			addFilter(chooser, msg, "Java", "java");
 			addFilter(chooser, msg, "JavaScript", "js");
 			addFilter(chooser, msg, "JSP", "jsp");
+			addFilter(chooser, msg, "LaTeX", new String[] { "tex", "ltx", "latex" });
 			addFilter(chooser, msg, "Lisp",
 					new String[] { "cl", "clisp", "el", "l", "lisp", "lsp", "ml" });
 			addFilter(chooser, msg, "Lua", "lua");
@@ -303,6 +305,7 @@ public class RTextUtilities {
 						"cs",
 						"css",
 						"pas",
+						"dtd",
 						"mxml",
 						"f", "for", "fort", "f77", "f90",
 						"groovy", "grv",
@@ -310,6 +313,7 @@ public class RTextUtilities {
 						"java",
 						"js",
 						"jsp",
+						"tex", "ltx", "latex",
 						"cl", "clisp", "el", "l", "lisp", "lsp", "ml",
 						"lua",
 						"Makefile", "makefile",

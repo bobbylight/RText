@@ -73,7 +73,7 @@ public class TasksPlugin extends AbstractPlugin {
 	private static final String MSG = "org.fife.rtext.plugins.tasks.TasksPlugin";
 	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
-	private static final String VERSION					= "2.0.2";
+	private static final String VERSION					= "2.0.3";
 	private static final String VIEW_TASKS_ACTION		= "viewTasksAction";
 
 

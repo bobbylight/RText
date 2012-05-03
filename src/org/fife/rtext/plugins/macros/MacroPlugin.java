@@ -42,7 +42,7 @@ import org.fife.ui.app.StandardAction;
 public class MacroPlugin extends AbstractPlugin
 		implements PropertyChangeListener {
 
-	private static final String VERSION				= "2.0.2";
+	private static final String VERSION				= "2.0.3";
 
 	private RText app;
 	private Icon icon;

@@ -39,7 +39,10 @@ import javax.swing.text.AbstractDocument;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
-import org.fife.rsta.ac.java.JarInfo;
+import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
+import org.fife.rsta.ac.java.buildpath.LibraryInfo;
+import org.fife.rsta.ac.java.buildpath.SourceLocation;
+import org.fife.rsta.ac.java.buildpath.ZipSourceLocation;
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
 import org.fife.rtext.NumberDocumentFilter;
@@ -275,16 +278,16 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		// TODO: This is very inefficient!  This will always create new
 		// JarReaders for all jars, even if it isn't necessary.  This will
 		// cause a pause when ctrl+spacing for the first time.
-		jarMan.clearJars();
+		jarMan.clearClassFileSources();
 		for (int i=0; i<model.getRowCount(); i++) {
 			File jar = (File)model.getValueAt(i, 0);
-			JarInfo info = new JarInfo(jar);
+			LibraryInfo info = new JarLibraryInfo(jar);
 			String source = (String)model.getValueAt(i, 1);
 			if (source!=null && source.length()>0) {
-				info.setSourceLocation(new File(source));
+				info.setSourceLocation(new ZipSourceLocation(new File(source)));
 			}
 			try {
-				jarMan.addJar(info);
+				jarMan.addClassFileSource(info);
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 			}
@@ -318,12 +321,12 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 		model.setRowCount(0);
 
-		List jars = jarMan.getJars();
-		for (Iterator i=jars.iterator(); i.hasNext(); ) { 
-			JarInfo info = (JarInfo)i.next();
+		List jars = jarMan.getClassFileSources();
+		for (Iterator i=jars.iterator(); i.hasNext(); ) {
+			JarLibraryInfo info = (JarLibraryInfo)i.next();
 			File jar = info.getJarFile();
-			File sourceFile = info.getSourceLocation();
-			String source = sourceFile!=null ? sourceFile.getAbsolutePath() : null;
+			SourceLocation sourceLoc = info.getSourceLocation();
+			String source = sourceLoc!=null ? sourceLoc.getLocationAsString() : null;
 			model.addRow(new Object[] { jar, source });
 		}
 
@@ -524,13 +527,13 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 				chooser.setVisible(true);
 				String dir = chooser.getChosenDirectory();
 				if (dir!=null) {
-					JarInfo info = JarInfo.getJREJarInfo(new File(dir));
+					LibraryInfo info = LibraryInfo.getJreJarInfo(new File(dir));
 					if (info!=null) {
 						String src = null;
 						if (info.getSourceLocation()!=null) {
-							src = info.getSourceLocation().getAbsolutePath();
+							src = info.getSourceLocation().getLocationAsString();
 						}
-						model.addRow(new Object[] { info.getJarFile(), src });
+						model.addRow(new Object[] { info.getLocationAsString(), src });
 						hasUnsavedChanges = true;
 						firePropertyChange(PROPERTY, null, null);
 					}
@@ -539,7 +542,8 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 			else if (rdButton==source) {
 
-				JarInfo jreInfo = JarInfo.getMainJREJarInfo();
+				JarLibraryInfo jreInfo = (JarLibraryInfo)LibraryInfo.
+														getMainJreJarInfo();
 
 				int rowCount = model.getRowCount();
 				boolean jreFieldModified = rowCount!=1 ||
@@ -561,7 +565,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 					aaDelayField.setText("300");
 					model.setRowCount(0);
 					String src = jreInfo.getSourceLocation()!=null ?
-							jreInfo.getSourceLocation().getAbsolutePath() :
+							jreInfo.getSourceLocation().getLocationAsString() :
 								null;
 					model.addRow(new Object[] {
 							jreInfo.getJarFile(),

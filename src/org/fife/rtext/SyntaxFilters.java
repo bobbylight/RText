@@ -276,12 +276,14 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_CSHARP,			createValue(new String[] { "*.cs" }));
 		filters.put(SYNTAX_STYLE_CSS,				createValue(new String[] { "*.css" }));
 		filters.put(SYNTAX_STYLE_DELPHI,				createValue(new String[] { "*.pas" }));
+		filters.put(SYNTAX_STYLE_DTD,				createValue(new String[] { "*.dtd" }));
 		filters.put(SYNTAX_STYLE_FORTRAN,			createValue(new String[] { "*.f", "*.for", "*.fort", "*.f77", "*.f90" }));
 		filters.put(SYNTAX_STYLE_GROOVY,			createValue(new String[] { "*.groovy", "*.grv" }));
 		filters.put(SYNTAX_STYLE_HTML,			createValue(new String[] { "*.htm", "*.html" }));
 		filters.put(SYNTAX_STYLE_JAVA,			createValue(new String[] { "*.java" }));
 		filters.put(SYNTAX_STYLE_JAVASCRIPT,		createValue(new String[] { "*.js" }));
 		filters.put(SYNTAX_STYLE_JSP,				createValue(new String[] { "*.jsp" }));
+		filters.put(SYNTAX_STYLE_LATEX,				createValue(new String[] { "*.tex", "*.ltx", "*.latex" }));
 		filters.put(SYNTAX_STYLE_LISP, 				createValue(new String[] { "*.cl", "*.clisp", "*.el", "*.l", "*.lisp", "*.lsp", "*.ml" }));
 		filters.put(SYNTAX_STYLE_LUA,				createValue(new String[] { "*.lua" }));
 		filters.put(SYNTAX_STYLE_MAKEFILE,			createValue(new String[] { "Makefile", "makefile" }));

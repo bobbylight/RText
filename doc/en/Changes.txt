@@ -2,6 +2,21 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+2.0.3 (05/02/2012):
+-------------------
+   - Added code folding for several languages, including C, C++, Java, Perl,
+     XML, Groovy, C#, JavaScript, MXML, CSS and LaTeX.
+   - Dockable window panels are now collapsible, allowing you to allot more
+     screen real estate to the editors when necessary.
+   - Added LaTeX syntax highlighting and code folding.
+   - Added DTD syntax highlighting.
+   - Added "Go to Member" shortcut (Ctrl+Shift+O) similar to Eclipse.
+     Currently only for Java, JavaScript, and XML.
+   - The Source Browser's tree view of source code is now sortable.
+   - License changed to modified BSD from GPL.  This allows folks to use pieces
+     of RText without making their entire application GPL.
+
+
 1.5.0 (09/03/2011):
 -------------------
    - Added scripted macro support.  You can now write macros in either
