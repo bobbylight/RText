@@ -140,12 +140,14 @@ public class SyntaxFilters implements SyntaxConstants {
 	 *
 	 * @param style The style.
 	 * @return The list of filters.
-	 * @throws IllegalArgumentException If <code>style</code> is invalid.
 	 */
 	private List getFiltersForStyle(String style) {
 		List l = (List)filters.get(style);
 		if (l==null) {
-			throw new IllegalArgumentException("Unknown style: " + style);
+			// Allow plugins to add filters for new languages not built into
+			// RSyntaxTextArea.
+			l = new ArrayList();
+			filters.put(style, l);
 		}
 		return l;
 	}
@@ -155,7 +157,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * Returns a list of all wildcard file filters associated with this
 	 * syntax type, separated by spaces.  For example, if the C++ syntax
 	 * style has filters <code>*.cpp</code> and <code>*.h</code> associated
-	 * with it, then <code>getFilterString(SYNTAX_STYLE_C_PLUSPLUS)</code>
+	 * with it, then <code>getFilterString(SYNTAX_STYLE_CPLUSPLUS)</code>
 	 * would return <code>"*.cpp *.h"</code>.
 	 *
 	 * @param style The syntax style to check.

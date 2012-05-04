@@ -180,7 +180,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 		}
 
 		private void setEnabledCBSelected(boolean selected) {
-			enabledCB.setSelected(true);
+			enabledCB.setSelected(selected); // Should be a no-op
 			// Toggle enabled state of any other check boxes.
 		}
 

@@ -10,17 +10,16 @@
 package org.fife.rtext.plugins.macros;
 
 import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ResourceBundle;
 import javax.swing.ImageIcon;
 
+import org.fife.io.IOUtil;
 import org.fife.rtext.RText;
 import org.fife.ui.app.StandardAction;
 
@@ -102,22 +101,8 @@ class NewMacroAction extends StandardAction {
 
 
 	private String getInitialContentImpl(String ext) throws IOException {
-
-		StringBuffer sb = new StringBuffer();
-
 		InputStream in = getClass().getResourceAsStream(ext + ".template.txt");
-		BufferedReader r = new BufferedReader(new InputStreamReader(in));
-		String line = null;
-		try {
-			while ((line=r.readLine())!=null) {
-				sb.append(line).append('\n');
-			}
-		} finally {
-			r.close();
-		}
-
-		return sb.toString();
-
+		return IOUtil.readFully(in);
 	}
 
 

@@ -172,9 +172,7 @@ class FindInFilesThread extends GUIWorkerThread {
 					// encoding, instead of assuming system default,
 					// somehow.
 					Reader r = new BufferedReader(new UnicodeReader(temp));
-					String style = view.getSyntaxFilters().
-								getSyntaxStyleForFile(temp.getName(),
-										view.getIgnoreBackupExtensions());
+					String style = view.getSyntaxStyleForFile(temp.getName());
 					textArea.read(r, null);	// Clears all old text.
 					// Important!  Clear undo history, or RSTA's undo manager
 					// will keep all old text (i.e. copies of ALL previous

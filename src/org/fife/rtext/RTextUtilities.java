@@ -294,7 +294,8 @@ public class RTextUtilities {
 				e.printStackTrace();
 			}
 
-			chooser.setFileFilter(new ExtensionFileFilter(
+			// Add "all supported" filter, but keep "All files" the default.
+			chooser.addChoosableFileFilter(new ExtensionFileFilter(
 					msg.getString("AllSupported"),
 					new String[] {
 						"as", "asc",
@@ -334,6 +335,7 @@ public class RTextUtilities {
 					ExtensionFileFilter.SYSTEM_CASE_CHECK,
 					false
 			));
+			chooser.setFileFilter(null);
 
 			// Have the chooser open initially to RText's working directory.
 			chooser.setCurrentDirectory(rtext.getWorkingDirectory());

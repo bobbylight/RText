@@ -36,6 +36,7 @@ import org.fife.rsta.ac.java.buildpath.ZipSourceLocation;
 import org.fife.rsta.ac.jsp.JspLanguageSupport;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 import org.fife.rsta.ac.sh.ShellLanguageSupport;
+import org.fife.rsta.ac.xml.XmlLanguageSupport;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
@@ -47,6 +48,7 @@ import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.autocomplete.CompletionXMLParser;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.modes.XMLTokenMaker;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.RTextAreaOptionPanel;
@@ -300,6 +302,9 @@ public class Plugin extends AbstractPlugin {
 		JspLanguageSupport jspls = (JspLanguageSupport)ls;
 		jspls.setAutoCompleteEnabled(prefs.jsp_enabled);
 
+		language = SyntaxConstants.SYNTAX_STYLE_LATEX;
+		view.setCodeFoldingEnabledFor(language, prefs.latex_folding_enabled);
+
 		language = SyntaxConstants.SYNTAX_STYLE_MXML;
 		view.setCodeFoldingEnabledFor(language, prefs.mxml_folding_enabled);
 
@@ -339,6 +344,13 @@ public class Plugin extends AbstractPlugin {
 		sls.setAutoCompleteEnabled(prefs.sh_enabled);
 		sls.setShowDescWindow(prefs.sh_showDescWindow);
 		sls.setUseLocalManPages(prefs.sh_useSystemManPages);
+
+		language = SyntaxConstants.SYNTAX_STYLE_XML;
+		ls = fact.getSupportFor(language);
+		XmlLanguageSupport xls = (XmlLanguageSupport)ls;
+		view.setCodeFoldingEnabledFor(language, prefs.xml_folding_enabled);
+		XMLTokenMaker.setCompleteCloseTags(prefs.xml_autoCloseTags);
+		xls.setShowSyntaxErrors(prefs.xml_showSyntaxErrors);
 
 	}
 
@@ -423,6 +435,9 @@ public class Plugin extends AbstractPlugin {
 		JspLanguageSupport jspls = (JspLanguageSupport)ls;
 		prefs.jsp_enabled = jspls.isAutoCompleteEnabled();
 
+		language = SyntaxConstants.SYNTAX_STYLE_LATEX;
+		prefs.latex_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
 		language = SyntaxConstants.SYNTAX_STYLE_MXML;
 		prefs.mxml_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
@@ -454,6 +469,13 @@ public class Plugin extends AbstractPlugin {
 		prefs.sh_enabled = sls.isAutoCompleteEnabled();
 		prefs.sh_showDescWindow = sls.getShowDescWindow();
 		prefs.sh_useSystemManPages = sls.getUseLocalManPages();
+
+		language = SyntaxConstants.SYNTAX_STYLE_XML;
+		ls = fact.getSupportFor(language);
+		XmlLanguageSupport xls = (XmlLanguageSupport)ls;
+		prefs.xml_folding_enabled = view.isCodeFoldingEnabledFor(language);
+		prefs.xml_autoCloseTags = XMLTokenMaker.getCompleteCloseMarkupTags();
+		prefs.xml_showSyntaxErrors = xls.getShowSyntaxErrors();
 
 		File file = new File(RTextUtilities.getPreferencesDirectory(),
 								PREFS_FILE_NAME);

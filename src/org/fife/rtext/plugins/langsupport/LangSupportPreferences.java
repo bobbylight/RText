@@ -57,6 +57,8 @@ public class LangSupportPreferences extends Prefs {
 
 	public boolean jsp_enabled;
 
+	public boolean latex_folding_enabled;
+
 	public boolean mxml_folding_enabled;
 
 	public boolean perl_enabled;
@@ -79,6 +81,10 @@ public class LangSupportPreferences extends Prefs {
 	public boolean sh_enabled;
 	public boolean sh_showDescWindow;
 	public boolean sh_useSystemManPages;
+
+	public boolean xml_folding_enabled;
+	public boolean xml_autoCloseTags;
+	public boolean xml_showSyntaxErrors;
 
 
 	public void setDefaults() {
@@ -125,6 +131,8 @@ public class LangSupportPreferences extends Prefs {
 
 		jsp_enabled = false;
 
+		latex_folding_enabled = true;
+
 		mxml_folding_enabled = true;
 
 		perl_enabled = true;
@@ -154,6 +162,10 @@ public class LangSupportPreferences extends Prefs {
 		sh_enabled = true;
 		sh_showDescWindow = File.separatorChar=='/';
 		sh_useSystemManPages = File.separatorChar=='/';
+
+		xml_folding_enabled = true;
+		xml_autoCloseTags = true;
+		xml_showSyntaxErrors = true;
 
 	}
 

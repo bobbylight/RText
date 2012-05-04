@@ -738,8 +738,7 @@ public abstract class AbstractMainView extends JPanel
 	private RTextEditorPane createRTextEditorPane(FileLocation loc,
 				String encoding) throws IOException {
 
-		String style = syntaxFilters.getSyntaxStyleForFile(loc.getFileName(),
-										getIgnoreBackupExtensions());
+		String style = getSyntaxStyleForFile(loc.getFileName());
 		RTextEditorPane pane = new RTextEditorPane(owner, lineWrapEnabled,
 												textMode, loc, encoding);
 
@@ -1676,9 +1675,22 @@ public abstract class AbstractMainView extends JPanel
 	 * documents).
 	 *
 	 * @return The filters being used.
+	 * @see #setSyntaxFilters(SyntaxFilters)
 	 */
 	public SyntaxFilters getSyntaxFilters() {
 		return syntaxFilters;
+	}
+
+
+	/**
+	 * Returns the syntax style to use for a file.
+	 *
+	 * @param fileName The name of the file.
+	 * @return The syntax style to use.
+	 */
+	public String getSyntaxStyleForFile(String fileName) {
+		return syntaxFilters.getSyntaxStyleForFile(fileName,
+				getIgnoreBackupExtensions());
 	}
 
 
@@ -2763,8 +2775,7 @@ public abstract class AbstractMainView extends JPanel
 		// Decide if we need to update the UI for syntax highlighting
 		// purposes (i.e., if the user saves a .txt file as a .java or a
 		// .c => .cpp, etc.).
-		String newStyle = syntaxFilters.getSyntaxStyleForFile(
-							loc.getFileName(), getIgnoreBackupExtensions());
+		String newStyle = getSyntaxStyleForFile(loc.getFileName());
 		setSyntaxStyle(currentTextArea, newStyle);
 
 		// If they had the same file opened twice (i.e., the "foo (1)"
@@ -3161,8 +3172,7 @@ public abstract class AbstractMainView extends JPanel
 			int docCount = getNumDocuments();
 			for (int i=0; i<docCount; i++) {
 				RTextEditorPane textArea = getRTextEditorPaneAt(i);
-				String style = syntaxFilters.getSyntaxStyleForFile(
-						textArea.getFileName(), getIgnoreBackupExtensions());
+				String style = getSyntaxStyleForFile(textArea.getFileName());
 				setSyntaxStyle(textArea, style);
 			}
 		}
@@ -3285,8 +3295,7 @@ public abstract class AbstractMainView extends JPanel
 			for (int i=0; i<numDocuments; i++) {
 				RTextEditorPane textArea = getRTextEditorPaneAt(i);
 				String oldStyle = textArea.getSyntaxEditingStyle();
-				String newStyle = syntaxFilters.getSyntaxStyleForFile(
-							textArea.getFileName(), getIgnoreBackupExtensions());
+				String newStyle = getSyntaxStyleForFile(textArea.getFileName());
 				if (!oldStyle.equals(newStyle)) {
 					setSyntaxStyle(textArea, newStyle);
 					if (textArea==currentTextArea) {
@@ -3724,8 +3733,9 @@ public abstract class AbstractMainView extends JPanel
 	 * syntax highlight documents.  All currently open text files have their
 	 * color schemes updated, if necessary.
 	 *
-	 * @param syntaxFilters The filter set to use.
-	 * @see #getSyntaxFilters
+	 * @param syntaxFilters The filter set to use.  This cannot be
+	 *        <code>null</code>.
+	 * @see #getSyntaxFilters()
 	 */
 	public void setSyntaxFilters(SyntaxFilters syntaxFilters) {
 
@@ -3736,8 +3746,7 @@ public abstract class AbstractMainView extends JPanel
 		for (int i=0; i<numDocuments; i++) {
 			RTextEditorPane textArea = getRTextEditorPaneAt(i);
 			String oldStyle = textArea.getSyntaxEditingStyle();
-			String newStyle = syntaxFilters.getSyntaxStyleForFile(
-						textArea.getFileName(), getIgnoreBackupExtensions());
+			String newStyle = getSyntaxStyleForFile(textArea.getFileName());
 			if (!oldStyle.equals(newStyle)) {
 				setSyntaxStyle(textArea, newStyle);
 				if (textArea==currentTextArea) {
