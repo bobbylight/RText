@@ -14,8 +14,8 @@ Functionality
 -------------
 1.  Make directory for Rhino user-defined scripts that get run on startup (this
     would require Java 6, of course).
-2.  Add XML validation (squiggle underlining).
-3.  Add VB syntax highlighting.
+2.  Add VB syntax highlighting.
+3.  Add NSIS syntax highlighting.
 4.  Add drag-and-drop support to list view (rearranging files, opening).
 5.  Change file list view from an AbstractMainView to just an optional
     dockable window ("Open Files" window).

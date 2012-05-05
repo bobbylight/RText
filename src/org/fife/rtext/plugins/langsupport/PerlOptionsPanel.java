@@ -259,8 +259,12 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		AbstractMainView view = app.getMainView();
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
-		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PERL);
+		final String language = SyntaxConstants.SYNTAX_STYLE_PERL;
+		LanguageSupport ls = lsf.getSupportFor(language);
 		PerlLanguageSupport pls = (PerlLanguageSupport)ls;
+
+		// Code folding options
+		view.setCodeFoldingEnabledFor(language, foldingEnabledCB.isSelected());
 
 		// Options dealing with code completion.
 		pls.setAutoCompleteEnabled(enabledCB.isSelected());
@@ -389,8 +393,13 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	protected void setValuesImpl(Frame owner) {
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
-		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PERL);
+		final String language = SyntaxConstants.SYNTAX_STYLE_PERL;
+		LanguageSupport ls=lsf.getSupportFor(language);
 		PerlLanguageSupport pls = (PerlLanguageSupport)ls;
+
+		// Code folding options
+		AbstractMainView view = ((RText)owner).getMainView();
+		foldingEnabledCB.setSelected(view.isCodeFoldingEnabledFor(language));
 
 		// Options dealing with code completion
 		setEnabledCBSelected(pls.isAutoCompleteEnabled());

@@ -140,6 +140,11 @@ public class SpellingSupport implements SpellingParserListener {
 		spellingParser.setAllowIgnore(true);
 		spellingParser.addSpellingParserListener(this);
 		try {
+			if (userDictionary!=null && !userDictionary.exists()) {
+				// First time running RText
+				userDictionary.getParentFile().mkdirs();
+				userDictionary.createNewFile();
+			}
 			spellingParser.setUserDictionary(userDictionary);
 		} catch (IOException ioe) {
 			String desc = rtext.getString("Error.LoadingUserDictionary.txt",

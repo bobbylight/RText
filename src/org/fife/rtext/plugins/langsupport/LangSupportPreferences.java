@@ -112,7 +112,7 @@ public class LangSupportPreferences extends Prefs {
 		java_enabled = false;
 		java_paramAssistance = true;
 		java_showDescWindow = true;
-		java_autoActivation = false;
+		java_autoActivation = true;
 		java_autoActivationDelay = AUTO_ACTIVATION_DELAY;
 		LibraryInfo info = LibraryInfo.getMainJreJarInfo();
 		if (info==null) {
@@ -129,7 +129,9 @@ public class LangSupportPreferences extends Prefs {
 		java_checkForBuildPathMods = true;
 		java_folding_enabled = true;
 
-		jsp_enabled = false;
+		js_folding_enabled = true;
+
+		jsp_enabled = true;
 
 		latex_folding_enabled = true;
 

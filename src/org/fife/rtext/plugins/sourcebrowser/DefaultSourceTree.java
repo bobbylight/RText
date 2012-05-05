@@ -310,14 +310,15 @@ class DefaultSourceTree extends JTree {
 		 */
 		public void mouseClicked(MouseEvent e) {
 
-			// Double-clicking on "<ctags executable not configured" brings up the
-			// options dialog.
+			// Double-clicking on "<ctags executable not configured" brings up
+			// the options dialog.
 			if (e.getClickCount()==2 && e.getButton()==MouseEvent.BUTTON1) {
 				TreePath path = getSelectionPath();
 				if (path!=null) {
 					DefaultMutableTreeNode node =
 						(DefaultMutableTreeNode)path.getLastPathComponent();
-					if (node.toString().startsWith("<")) {
+					String strVal = node.toString();
+					if (strVal!=null && strVal.startsWith("<")) {
 						plugin.showOptions();
 						return;
 					}
@@ -571,10 +572,13 @@ class DefaultSourceTree extends JTree {
 				}
 			}
 			if (icon==null) { // Languages without custom icons.
-				if (leaf && value.toString().indexOf("(0)")==-1) {
-					setIcon(greenBullet);
+				if (leaf && value!=null) {
+					String strVal = value.toString();
+					if (strVal!=null && strVal.indexOf("(0)")==-1) {
+						setIcon(greenBullet);
+					}
 				}
-				else {
+				if (getIcon()==null) {
 					setIcon(row==0 ? fileIcon : yellowBullet);
 				}
 			}

@@ -326,19 +326,19 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 
 			else if (rdButton==source) {
 
-				if (enabledCB.isSelected() ||
+				if (!enabledCB.isSelected() ||
 						!paramAssistanceCB.isSelected() ||
 						!showDescWindowCB.isSelected() ||
 						strictCB.isSelected() ||
 						e4xCB.isSelected() ||
-						autoActivateCB.isSelected() ||
+						!autoActivateCB.isSelected() ||
 						!"300".equals(aaDelayField.getText())) {
-					setEnabledCBSelected(false);
+					setEnabledCBSelected(true);
 					paramAssistanceCB.setSelected(true);
 					showDescWindowCB.setSelected(true);
 					strictCB.setSelected(false);
 					e4xCB.setSelected(false);
-					setAutoActivateCBSelected(false);
+					setAutoActivateCBSelected(true);
 					aaDelayField.setText("300");
 					hasUnsavedChanges = true;
 					firePropertyChange(PROPERTY, null, null);

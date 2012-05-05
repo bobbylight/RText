@@ -555,13 +555,13 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 						!paramAssistanceCB.isSelected() ||
 						!showDescWindowCB.isSelected() ||
 						!buildPathModsCB.isSelected() ||
-						autoActivateCB.isSelected() ||
+						!autoActivateCB.isSelected() ||
 						!"300".equals(aaDelayField.getText())) {
 					setEnabledCBSelected(false);
 					paramAssistanceCB.setSelected(true);
 					showDescWindowCB.setSelected(true);
 					buildPathModsCB.setSelected(true);
-					setAutoActivateCBSelected(false);
+					setAutoActivateCBSelected(true);
 					aaDelayField.setText("300");
 					model.setRowCount(0);
 					String src = jreInfo.getSourceLocation()!=null ?

@@ -133,7 +133,7 @@ robert_futrell@users.sourceforge.net
 - Maciej:                      Polish Translation
 - Marcos, leandro:             Portuguese Translation
 - vladimir:                    Russian Translation
-- phrodo:                      Spanish Translation
+- Leonardo:                    Spanish Translation
 - burak:                       Turkish Translation
 
 
