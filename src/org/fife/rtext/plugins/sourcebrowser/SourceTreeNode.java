@@ -28,7 +28,6 @@ import javax.swing.tree.TreeNode;
  *
  * @author Robert Futrell
  * @version 1.0
- * @see DefaultSourceTree
  */
 public class SourceTreeNode extends DefaultMutableTreeNode {
 
