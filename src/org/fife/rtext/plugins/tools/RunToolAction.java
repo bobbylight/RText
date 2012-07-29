@@ -10,6 +10,7 @@
 package org.fife.rtext.plugins.tools;
 
 import java.awt.Container;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -89,6 +90,9 @@ class RunToolAction extends StandardAction {
 	 */
 	private void showButDontFocus(JComponent comp) {
 
+		JComponent editor = ((RText)getApplication()).getMainView().
+				getCurrentTextArea();
+
 		// This is tricky, because the component cannot be focused unless
 		// its tab is the selected one, so we must figure out what tab we're
 		// in and activate it.
@@ -98,6 +102,15 @@ class RunToolAction extends StandardAction {
 		while (!(parent instanceof JTabbedPane)) {
 			prev = parent;
 			parent = parent.getParent();
+			if (parent instanceof Frame) {
+				// We're in a popup window - just make sure it's not minimized
+				Frame frame = (Frame)parent;
+				if (frame.getState()==Frame.ICONIFIED) {
+					frame.setState(Frame.NORMAL);
+					editor.requestFocusInWindow();
+				}
+				return;
+			}
 		}
 
 		// Now, parent is the JTabbedPane and prev is the component at the
@@ -112,8 +125,7 @@ class RunToolAction extends StandardAction {
 		}
 
 		// Give focus back to the text area, so the user can keep typing.
-		((RText)getApplication()).getMainView().getCurrentTextArea().
-													requestFocusInWindow();
+		editor.requestFocusInWindow();
 
 	}
 

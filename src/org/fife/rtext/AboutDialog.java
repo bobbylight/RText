@@ -49,8 +49,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 
 
 		// Add a panel containing information about installed plugins.
-		JPanel temp = UIUtil.createTabbedPanePanel();
-		temp.setLayout(new BorderLayout());
+		JPanel temp = UIUtil.createTabbedPanePanel(new BorderLayout());
 		temp.setBorder(UIUtil.getEmpty5Border());
 		JPanel panel = UIUtil.createTabbedPanePanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
@@ -95,8 +94,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 	protected JPanel createAboutApplicationPanel() {
 
 		// Create the picture.
-		JPanel temp = UIUtil.createTabbedPanePanel();
-		temp.setLayout(new BorderLayout());
+		JPanel temp = UIUtil.createTabbedPanePanel(new BorderLayout());
 		temp.setBorder(UIUtil.getEmpty5Border());
 		ClassLoader cl = this.getClass().getClassLoader();
 		ResourceBundle msg = ResourceBundle.getBundle(MSG);
@@ -141,8 +139,7 @@ panel.add(editor);
 	 */
 	private JPanel createLibrariesPanel(ResourceBundle msg) {
 
-		JPanel panel = UIUtil.createTabbedPanePanel();
-		panel.setLayout(new BorderLayout());
+		JPanel panel = UIUtil.createTabbedPanePanel(new BorderLayout());
 		panel.setBorder(UIUtil.getEmpty5Border());
 
 		StringBuffer sb = new StringBuffer("<html><table>");

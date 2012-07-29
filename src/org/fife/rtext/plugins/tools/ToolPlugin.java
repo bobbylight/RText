@@ -124,6 +124,16 @@ public class ToolPlugin extends AbstractPlugin
 
 
 	/**
+	 * Returns the dockable window for the tool plugin.
+	 *
+	 * @return The dockable window.
+	 */
+	public ToolDockableWindow getDockableWindow() {
+		return window;
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
