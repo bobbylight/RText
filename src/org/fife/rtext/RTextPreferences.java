@@ -426,9 +426,9 @@ public class RTextPreferences extends GUIApplicationPreferences
 			props.caretColor = new Color(
 				prefs.getInt("caretColor", props.caretColor.getRGB()));
 			props.selectionColor = new Color(
-				prefs.getInt("selectionColor", props.selectionColor.getRGB()));
+				prefs.getInt("selectionColor", props.selectionColor.getRGB()), true);
 			props.currentLineHighlightColor = new Color(
-				prefs.getInt("currentLineHighlightColor", props.currentLineHighlightColor.getRGB()));
+				prefs.getInt("currentLineHighlightColor", props.currentLineHighlightColor.getRGB()), true);
 			props.modifiedDocumentNamesColor = new Color(
 				prefs.getInt("modifiedDocumentNamesColor", props.modifiedDocumentNamesColor.getRGB()));
 			props.matchedBracketBGColor = new Color(
