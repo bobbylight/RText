@@ -243,7 +243,6 @@
 		<copy file="lib/language_support.jar"   todir="${dist-dir}/plugins"/>
 		<copy file="lib/Rhino.build-date"       todir="${dist-dir}/plugins"/>
 		<copy file="lib/Rhino.LICENSE.txt"      todir="${dist-dir}/plugins"/>
-		<copy file="lib/rhino.rsta.readme.txt"  todir="${dist-dir}/plugins"/>
 		<copy file="lib/js-14.jar"              todir="${dist-dir}/plugins"/>
 
 	</target>
