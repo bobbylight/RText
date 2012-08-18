@@ -65,7 +65,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 		boolean useRegex = dialog.getUseRegEx();
 		boolean doVerboseOutput = dialog.getDoVerboseOutput();
 		String replaceString = ((ReplaceInFilesDialog)dialog).getReplaceString();
-		String searchingFile = dialog.getBundle().getString("SearchingFile");
+		String searchingFile = dialog.getString2("SearchingFile");
 
 		if (!useRegex && !matchCase)
 			searchString = searchString.toLowerCase();
@@ -81,8 +81,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 
 			// If the user canceled the search...
 			if (Thread.currentThread().isInterrupted()) {
-				dialog.searchCompleted(
-					dialog.getBundle().getString("SearchTerminated"));
+				dialog.searchCompleted(dialog.getString2("SearchTerminated"));
 				return null;
 			}
 

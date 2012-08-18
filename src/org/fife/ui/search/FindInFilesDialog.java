@@ -83,9 +83,11 @@ public class FindInFilesDialog extends AbstractSearchDialog
 	private FindInFilesDocumentListener docListener;
 
 	// Some strings cached from our resources for efficiency.
-	private ResourceBundle resources;
 	private String defaultStatusText;
 	private String searchingCompleteString;
+
+	private static final String MSG = "org.fife.ui.search.Search";
+	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
 
 	/**
@@ -96,7 +98,7 @@ public class FindInFilesDialog extends AbstractSearchDialog
 	public FindInFilesDialog(Frame owner) {
 
 		super(owner);
-		this.setTitle(msg.getString("FindInFilesDialogTitle"));
+		this.setTitle(getString2("FindInFilesDialogTitle"));
 
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
@@ -134,18 +136,18 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		inFolderTextField.getDocument().addDocumentListener(docListener);
 
 		// Make a panel containing the edit boxes and their associated labels.
-		JPanel inputPanel = createInputPanel(msg);
+		JPanel inputPanel = createInputPanel();
 
 		// Make a "Conditions" panel.
 		JPanel conditionsPanel = new JPanel();
-		conditionsPanel.setBorder(createTitledBorder(msg.getString("Conditions")));
+		conditionsPanel.setBorder(createTitledBorder(getString2("Conditions")));
 		conditionsPanel.setLayout(new BoxLayout(conditionsPanel, BoxLayout.PAGE_AXIS));
 		conditionsPanel.add(caseCheckBox);
 		conditionsPanel.add(wholeWordCheckBox);
 		conditionsPanel.add(regExpCheckBox);
 
 		// Make a "Report detail" panel.
-		JPanel detailEtcPanel = createDetailsPanel(msg);
+		JPanel detailEtcPanel = createDetailsPanel();
 
 		// Make a panel containing the "Conditions" and "detailEtc" panels.
 		JPanel bottomLeftPanel = new JPanel();
@@ -163,16 +165,16 @@ public class FindInFilesDialog extends AbstractSearchDialog
 
 		// Make a panel containing the buttons.
 		JPanel rightPanel2 = new JPanel(new GridLayout(3,1, 5,5));
-		findButton = new RButton(msg.getString("Find"));
-		findButton.setMnemonic((int)msg.getString("FindMnemonic").charAt(0));
+		findButton = new RButton(getString("Find"));
+		findButton.setMnemonic((int)getString("FindMnemonic").charAt(0));
 		findButton.setActionCommand("FindInFiles");
 		findButton.addActionListener(this);
-		browseButton = new RButton(msg.getString("Browse"));
-		browseButton.setMnemonic((int)msg.getString("BrowseMnemonic").charAt(0));
+		browseButton = new RButton(getString2("Browse"));
+		browseButton.setMnemonic((int)getString2("BrowseMnemonic").charAt(0));
 		browseButton.setActionCommand("Browse");
 		browseButton.addActionListener(this);
-		cancelButton = new RButton(msg.getString("Close"));
-		cancelButton.setMnemonic((int)msg.getString("CloseMnemonic").charAt(0));
+		cancelButton = new RButton(getString2("Close"));
+		cancelButton.setMnemonic((int)getString2("CloseMnemonic").charAt(0));
 		cancelButton.setActionCommand("Close");
 		cancelButton.addActionListener(this);
 		rightPanel2.add(findButton);
@@ -192,8 +194,8 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		topPanel.add(leftPanel);
 		topPanel.add(rightPanel, BorderLayout.LINE_END);
 
-		// Make a panel containing a "Verbose output" checkbox.
-		JPanel extraOptionsPanel = createExtraOptionsPanel(msg);
+		// Make a panel containing a "Verbose output" check box.
+		JPanel extraOptionsPanel = createExtraOptionsPanel();
 
 		// Make the "results" panel.
 		JPanel resultsPanel = new JPanel(new GridLayout(1,1, 3,3));
@@ -201,7 +203,7 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		resultsPanel.setBorder(BorderFactory.createCompoundBorder(
 			empty5Border,
 			BorderFactory.createCompoundBorder(
-				createTitledBorder(msg.getString("Results")),
+				createTitledBorder(getString2("Results")),
 				BorderFactory.createEmptyBorder(3,3,3,3)
 			)));
 		resultsComponent = createResultsComponent();
@@ -215,9 +217,8 @@ public class FindInFilesDialog extends AbstractSearchDialog
 
 		// Initialize some variables.
 		eventListenerList = new EventListenerList();
-		this.resources = msg;
-		defaultStatusText = resources.getString("DefaultStatusText");
-		searchingCompleteString = resources.getString("SearchingComplete");
+		defaultStatusText = getString2("DefaultStatusText");
+		searchingCompleteString = getString2("SearchingComplete");
 
 		// Put everything together.
 		setStatusText(defaultStatusText);
@@ -373,30 +374,29 @@ public class FindInFilesDialog extends AbstractSearchDialog
 	/**
 	 * Creates the panel containing "Report Detail" options.
 	 *
-	 * @param msg The resource bundle.
 	 * @return The panel.
 	 */
-	protected JPanel createDetailsPanel(ResourceBundle msg) {
+	protected JPanel createDetailsPanel() {
 
 		JPanel detailPanel = new JPanel();
-		detailPanel.setBorder(createTitledBorder(msg.getString("ReportDetail")));
+		detailPanel.setBorder(createTitledBorder(getString2("ReportDetail")));
 		detailPanel.setLayout(new BoxLayout(detailPanel, BoxLayout.PAGE_AXIS));
-		matchingLinesRadioButton = new JRadioButton(msg.getString("MatchingLines"));
-		matchingLinesRadioButton.setMnemonic((int)msg.getString("MatchingLinesMnemonic").charAt(0));
+		matchingLinesRadioButton = new JRadioButton(getString2("MatchingLines"));
+		matchingLinesRadioButton.setMnemonic((int)getString2("MatchingLinesMnemonic").charAt(0));
 		matchingLinesRadioButton.setSelected(true);
 		detailPanel.add(matchingLinesRadioButton);
-		fileCountsOnlyRadioButton = new JRadioButton(msg.getString("FileCounts"));
-		fileCountsOnlyRadioButton.setMnemonic((int)msg.getString("FileCountsMnemonic").charAt(0));
+		fileCountsOnlyRadioButton = new JRadioButton(getString2("FileCounts"));
+		fileCountsOnlyRadioButton.setMnemonic((int)getString2("FileCountsMnemonic").charAt(0));
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(matchingLinesRadioButton);
 		bg.add(fileCountsOnlyRadioButton);
 		detailPanel.add(fileCountsOnlyRadioButton);
 
-		// Make a panel containing the "Report detail" panel and some checkboxes.
+		// Make a panel containing the "Report detail" panel and some check boxes.
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		subfoldersCheckBox = new JCheckBox(msg.getString("SearchSubfolders"));
-		subfoldersCheckBox.setMnemonic((int)msg.getString("SearchSubfoldersMnemonic").charAt(0));
+		subfoldersCheckBox = new JCheckBox(getString2("SearchSubfolders"));
+		subfoldersCheckBox.setMnemonic((int)getString2("SearchSubfoldersMnemonic").charAt(0));
 		panel.add(detailPanel);
 		panel.add(subfoldersCheckBox);
 
@@ -409,15 +409,14 @@ public class FindInFilesDialog extends AbstractSearchDialog
 	 * Returns a panel containing any extra options, such as a "verbose"
 	 * output option.
 	 *
-	 * @param msg The resource bundle.
 	 * @return The panel, or <code>null</code> if there are no extra
 	 *         options.
 	 */
-	protected JPanel createExtraOptionsPanel(ResourceBundle msg) {
+	protected JPanel createExtraOptionsPanel() {
 		JPanel temp = new JPanel();
 		temp.setLayout(new BoxLayout(temp, BoxLayout.LINE_AXIS));
-		verboseCheckBox = new JCheckBox(msg.getString("Verbose"));
-		verboseCheckBox.setMnemonic((int)msg.getString("VerboseMnemonic").charAt(0));
+		verboseCheckBox = new JCheckBox(getString2("Verbose"));
+		verboseCheckBox.setMnemonic((int)getString2("VerboseMnemonic").charAt(0));
 		temp.add(verboseCheckBox);
 		temp.add(Box.createHorizontalGlue());
 		return temp;
@@ -428,23 +427,22 @@ public class FindInFilesDialog extends AbstractSearchDialog
 	 * Creates and returns the panel containing input fields and their
 	 * labels.
 	 *
-	 * @param msg The resource bundle.
 	 * @return The panel.
 	 */
-	protected JPanel createInputPanel(ResourceBundle msg) {
+	protected JPanel createInputPanel() {
 
 		JPanel inputPanel = new JPanel(new SpringLayout());
 
 		// Make labels to go with the combo boxes/text fields.
-		JLabel findLabel = new JLabel(msg.getString("FindWhat"));
+		JLabel findLabel = new JLabel(getString2("FindWhat"));
 		findLabel.setLabelFor(findTextCombo);
-		findLabel.setDisplayedMnemonic((int)msg.getString("FindWhatMnemonic").charAt(0));
-		JLabel inLabel = new JLabel(msg.getString("InFiles"));
+		findLabel.setDisplayedMnemonic((int)getString2("FindWhatMnemonic").charAt(0));
+		JLabel inLabel = new JLabel(getString2("InFiles"));
 		inLabel.setLabelFor(inFilesComboBox);
-		inLabel.setDisplayedMnemonic((int)msg.getString("InFilesMnemonic").charAt(0));
-		JLabel dirLabel = new JLabel(msg.getString("InDirectory"));
+		inLabel.setDisplayedMnemonic((int)getString2("InFilesMnemonic").charAt(0));
+		JLabel dirLabel = new JLabel(getString2("InDirectory"));
 		dirLabel.setLabelFor(inFolderTextField);
-		dirLabel.setDisplayedMnemonic((int)msg.getString("InDirectoryMnemonic").charAt(0));
+		dirLabel.setDisplayedMnemonic((int)getString2("InDirectoryMnemonic").charAt(0));
 
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(findTextCombo);
@@ -523,8 +521,8 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		final File directory = new File(dirPath);
 		if (!directory.isDirectory()) {
 			JOptionPane.showMessageDialog(this,
-						resources.getString("ErrorDirNotExist") + dirPath,
-						resources.getString("ErrorDialogTitle"),
+						getString2("ErrorDirNotExist") + dirPath,
+						getString2("ErrorDialogTitle"),
 						JOptionPane.ERROR_MESSAGE);
 			inFolderTextField.selectAll();
 			inFolderTextField.requestFocusInWindow();
@@ -545,7 +543,7 @@ public class FindInFilesDialog extends AbstractSearchDialog
 				JOptionPane.showMessageDialog(this,
 					"Invalid regular expression:\n" + text +
 					"\nPlease check your regular expression search string.",
-					resources.getString("ErrorDialogTitle"),
+					getString2("ErrorDialogTitle"),
 					JOptionPane.ERROR_MESSAGE);
 				return;
 			}
@@ -589,12 +587,15 @@ public class FindInFilesDialog extends AbstractSearchDialog
 
 
 	/**
-	 * Returns the resource bundle for this dialog.
+	 * Returns localized text specific to Find in Files/Replace in Files.
+	 * Localized text for general Find and Replace dialogs can be obtained
+	 * via <code>getString()</code>.
 	 *
-	 * @return The resource bundle.
+	 * @param key The key for the text.
+	 * @return The localized text.
 	 */
-	ResourceBundle getBundle() {
-		return resources;
+	String getString2(String key) {
+		return msg.getString(key);
 	}
 
 
@@ -770,7 +771,7 @@ public class FindInFilesDialog extends AbstractSearchDialog
 	 * Returns whether everything in the UI that needs to be filled in for
 	 * a search to be performed is filled in.
 	 *
-	 * @return Whether eveything is filled in.
+	 * @return Whether everything is filled in.
 	 */
 	protected boolean isEverythingFilledIn() {
 		return getWorkerThread()==null && 
@@ -834,9 +835,9 @@ public class FindInFilesDialog extends AbstractSearchDialog
 					String searchString = (String)findTextCombo.
 												getSelectedItem();
 					JOptionPane.showMessageDialog(FindInFilesDialog.this,
-						resources.getString("SearchStringNotFound") +
+						getString2("SearchStringNotFound") +
 												searchString + "'.",
-						resources.getString("InfoDialogTitle"),
+						getString2("InfoDialogTitle"),
 						JOptionPane.INFORMATION_MESSAGE);
 				}
 
@@ -859,14 +860,12 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		findButton.setEnabled(enabled);
 		browseButton.setEnabled(enabled);
 		if (searching) {
-			cancelButton.setText(resources.getString("Stop"));
-			cancelButton.setMnemonic((int)resources.
-								getString("StopMnemonic").charAt(0));
+			cancelButton.setText(getString2("Stop"));
+			cancelButton.setMnemonic((int)getString2("StopMnemonic").charAt(0));
 		}
 		else {
-			cancelButton.setText(resources.getString("Close"));
-			cancelButton.setMnemonic((int)resources.
-								getString("CloseMnemonic").charAt(0));
+			cancelButton.setText(getString2("Close"));
+			cancelButton.setMnemonic((int)getString2("CloseMnemonic").charAt(0));
 		}
 		findTextCombo.setEnabled(enabled);
 		inFilesComboBox.setEnabled(enabled);
@@ -998,19 +997,17 @@ public class FindInFilesDialog extends AbstractSearchDialog
 	/**
 	 * Listens for the text field gaining focus.
 	 */
-	private class FindInFilesFocusAdapter extends FocusAdapter {
+	protected class FindInFilesFocusAdapter extends FocusAdapter {
 
 		public void focusGained(FocusEvent e) {
 
 			Component component = e.getComponent();
 			((JTextField)component).selectAll();
 
+			// Remember what it originally was, in case they tabbed out.
 			if (component==getTextComponent(findTextCombo))
-				// Remember what it originally was, in case they tabbed out.
 				lastSearchString = (String)findTextCombo.getSelectedItem();
-
 			else if (component==getTextComponent(inFilesComboBox))
-				// Remember what it originally was, in case they tabbed out.
 				lastInFilesString = (String)inFilesComboBox.getSelectedItem();
 
 		}
@@ -1047,8 +1044,7 @@ public class FindInFilesDialog extends AbstractSearchDialog
 				if (!FindInFilesThread.NO_LINE_NUMBER.equals(lineStr)) {
 					// Should be in format "3" or "5-7".
 					if (lineStr.indexOf('-')>-1) {
-						lineStr =
-							lineStr.substring(0, lineStr.indexOf('-'));
+						lineStr = lineStr.substring(0, lineStr.indexOf('-'));
 					}
 					try {
 						line = Integer.parseInt(lineStr);
@@ -1069,7 +1065,6 @@ public class FindInFilesDialog extends AbstractSearchDialog
 	 */
 	private class FindInFilesKeyListener extends KeyAdapter {
 
-		// Listens for a user releasing a key.
 		public void keyReleased(KeyEvent e) {
 
 			// This is an ugly hack to get around JComboBox's

@@ -18,7 +18,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -71,15 +70,14 @@ class FindInFilesThread extends GUIWorkerThread {
 		this.dialog = dialog;
 		this.directory = directory;
 
-		ResourceBundle msg = dialog.getBundle();
-		verboseLabelString = "<html><em>" + msg.getString("VerboseLabel") +
+		verboseLabelString = "<html><em>" + dialog.getString2("VerboseLabel") +
 							"</em>";
-		errorLabelString = "<html><em>" + msg.getString("ErrorLabel") +
+		errorLabelString = "<html><em>" + dialog.getString2("ErrorLabel") +
 							"</em>";
-		verboseNoFiltMatchString = msg.getString("VerboseNoFiltMatch");
-		dontSearchSubfoldersString = msg.getString("SearchSubFoldUnchecked");
-		newFilesToExamineString = msg.getString("NewFilesToExamine");
-		occurrencesString = msg.getString("Occurrences");
+		verboseNoFiltMatchString = dialog.getString2("VerboseNoFiltMatch");
+		dontSearchSubfoldersString = dialog.getString2("SearchSubFoldUnchecked");
+		newFilesToExamineString = dialog.getString2("NewFilesToExamine");
+		occurrencesString = dialog.getString2("Occurrences");
 
 	}
 
@@ -125,7 +123,7 @@ class FindInFilesThread extends GUIWorkerThread {
 		boolean useRegex = dialog.getUseRegEx();
 		boolean doVerboseOutput = dialog.getDoVerboseOutput();
 		Segment seg = new Segment();
-		String searchingFile = dialog.getBundle().getString("SearchingFile");
+		String searchingFile = dialog.getString2("SearchingFile");
 
 		if (!useRegex && !matchCase)
 			searchString = searchString.toLowerCase();
@@ -139,8 +137,7 @@ class FindInFilesThread extends GUIWorkerThread {
 
 			// If the user canceled the search...
 			if (Thread.currentThread().isInterrupted()) {
-				dialog.searchCompleted(
-					dialog.getBundle().getString("SearchTerminated"));
+				dialog.searchCompleted(dialog.getString2("SearchTerminated"));
 				return null;
 			}
 
@@ -395,7 +392,7 @@ class FindInFilesThread extends GUIWorkerThread {
 								((startLine+1) + "-" + (endLine+1));
 					if (!oneLine) {
 						text += " <em>" +
-								dialog.getBundle().getString("MultiLineMatch") +
+								dialog.getString2("MultiLineMatch") +
 								"</em>";
 					}
 					MatchData data = new MatchData(

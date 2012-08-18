@@ -12,8 +12,8 @@ package org.fife.ui.search;
 
 import java.awt.*;
 import java.io.*;
-import java.util.*;
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ui.AssistanceIconPanel;
 import org.fife.rsta.ui.MaxWidthComboBox;
@@ -25,11 +25,11 @@ import org.fife.ui.*;
  * Dialog that does string replacement across multiple files.
  *
  * @author Robert Futrell
- * @version 0.8
+ * @version 0.9
  */
 public class ReplaceInFilesDialog extends FindInFilesDialog {
 
-	protected MaxWidthComboBox replaceCombo;
+	private MaxWidthComboBox replaceCombo;
 
 
 	/**
@@ -39,29 +39,26 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	 */
 	public ReplaceInFilesDialog(Frame owner) {
 		super(owner);
-		this.setTitle(msg.getString("ReplaceInFilesDialogTitle"));
-		findButton.setText(msg.getString("Replace"));
-		findButton.setMnemonic((int)msg.getString("ReplaceMnemonic").charAt(0));
+		this.setTitle(getString2("ReplaceInFilesDialogTitle"));
+		findButton.setText(getString2("Replace"));
+		findButton.setMnemonic((int)getString2("ReplaceMnemonic").charAt(0));
 	}
 
 
 	/**
-	 * Creates the panel containing "Report Detail" options.
-	 *
-	 * @param msg The resource bundle.
-	 * @return The panel.
+	 * {@inheritDoc}
 	 */
-	protected JPanel createDetailsPanel(ResourceBundle msg) {
+	protected JPanel createDetailsPanel() {
 
-		// Make a panel containing the "Report detail" panel and some checkboxes.
+		// A panel containing the "Report detail" panel and some check boxes.
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		panel.add(Box.createVerticalStrut(5));
-		subfoldersCheckBox = new JCheckBox(msg.getString("SearchSubfolders"));
-		subfoldersCheckBox.setMnemonic((int)msg.getString("SearchSubfoldersMnemonic").charAt(0));
+		subfoldersCheckBox = new JCheckBox(getString2("SearchSubfolders"));
+		subfoldersCheckBox.setMnemonic((int)getString2("SearchSubfoldersMnemonic").charAt(0));
 		panel.add(subfoldersCheckBox);
-		verboseCheckBox = new JCheckBox(msg.getString("Verbose"));
-		verboseCheckBox.setMnemonic((int)msg.getString("VerboseMnemonic").charAt(0));
+		verboseCheckBox = new JCheckBox(getString2("Verbose"));
+		verboseCheckBox.setMnemonic((int)getString2("VerboseMnemonic").charAt(0));
 		panel.add(verboseCheckBox);
 		panel.add(Box.createVerticalGlue());
 
@@ -71,32 +68,24 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 
 
 	/**
-	 * Returns a panel containing any extra options, such as a "verbose"
-	 * output option.
-	 *
-	 * @param msg The resource bundle.
-	 * @return The panel, or <code>null</code> if there are no extra
-	 *         options.
+	 * {@inheritDoc}
 	 */
-	protected JPanel createExtraOptionsPanel(ResourceBundle msg) {
+	protected JPanel createExtraOptionsPanel() {
 		return null;
 	}
 
 
 	/**
-	 * Creates and returns the panel containing input fields and their
-	 * labels.
-	 *
-	 * @param msg The resource bundle.
-	 * @return The panel.
+	 * {@inheritDoc}
 	 */
-	protected JPanel createInputPanel(ResourceBundle msg) {
+	protected JPanel createInputPanel() {
 
-		JPanel inputPanel = super.createInputPanel(msg);
+		JPanel inputPanel = super.createInputPanel();
 
-		JLabel replaceLabel = new JLabel(msg.getString("ReplaceWith"));
-		replaceLabel.setDisplayedMnemonic((int)msg.getString("ReplaceWithMnemonic").charAt(0));
+		JLabel replaceLabel = new JLabel(getString2("ReplaceWith"));
+		replaceLabel.setDisplayedMnemonic((int)getString2("ReplaceWithMnemonic").charAt(0));
 		replaceCombo = createSearchComboBox(true);
+		getTextComponent(replaceCombo).addFocusListener(new FindInFilesFocusAdapter());
 		replaceLabel.setLabelFor(replaceCombo);
 
 		JPanel temp = new JPanel(new BorderLayout());
@@ -126,10 +115,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 
 
 	/**
-	 * Creates and returns the component used to display search
-	 * results.
-	 *
-	 * @return The component.
+	 * {@inheritDoc}
 	 */
 	protected ResultsComponent createResultsComponent() {
 		ReplaceInFilesTable table = new ReplaceInFilesTable();
@@ -139,10 +125,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 
 
 	/**
-	 * Returns the thread that will do the searching.
-	 *
-	 * @param directory The directory to search in.
-	 * @return The thread.
+	 * {@inheritDoc}
 	 */
 	protected FindInFilesThread createWorkerThread(File directory) {
 		return new ReplaceInFilesThread(this, directory);
@@ -199,9 +182,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 
 
 	/**
-	 * Enables or disables widgets in the dialog as appropriate.
-	 *
-	 * @param searching Whether searching is starting.
+	 * {@inheritDoc}
 	 */
 	protected void setSearching(boolean searching) {
 		super.setSearching(searching);
@@ -227,6 +208,21 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 		}
 
 		super.setVisible(visible);
+
+	}
+
+
+	/**
+	 * Overridden to update the "Replace with" combo box updated also.
+	 */
+	public void updateUI() {
+
+		super.updateUI();
+
+		// Replace listeners on "Replace with" combo box
+		FindInFilesFocusAdapter focusAdapter = new FindInFilesFocusAdapter();
+		JTextComponent textField = getTextComponent(replaceCombo);
+		textField.addFocusListener(focusAdapter);
 
 	}
 

@@ -15,6 +15,7 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -367,6 +368,17 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 
 		}
 
+	}
+
+
+	/**
+	 * Overridden to keep the left-hand side of the row visible on selection.
+	 * This is because otherwise the viewport jumps to show the entire cell
+	 * selected.
+	 */
+	public void scrollRectToVisible(Rectangle r) {
+		r.x = 0; r.width = 0;
+		super.scrollRectToVisible(r);
 	}
 
 
