@@ -55,20 +55,13 @@ class ReplaceInFilesAction extends StandardAction {
 		// Create the "Replace in Files" dialog if it hasn't already been.
 		if (mainView.replaceInFilesDialog==null) {
 			mainView.replaceInFilesDialog = new ReplaceInFilesDialog(rtext);
+			mainView.replaceInFilesDialog.setSearchContext(mainView.searchContext);
 			RTextUtilities.configureFindInFilesDialog(mainView.replaceInFilesDialog);
 			mainView.replaceInFilesDialog.addPropertyChangeListener(mainView);
 			mainView.replaceInFilesDialog.addFindInFilesListener(mainView);
 		}
 
-		// So we don't have to type so much.
-		ReplaceInFilesDialog dialog = mainView.replaceInFilesDialog;
-
-		// Set the search parameters correctly and display the dialog.
-		dialog.setSearchParameters(mainView.searchStrings,
-							mainView.searchMatchCase,
-							mainView.searchWholeWord,
-							mainView.searchRegExpression);
-		dialog.setVisible(true);
+		mainView.replaceInFilesDialog.setVisible(true);
 
 	}
 

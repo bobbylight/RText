@@ -50,20 +50,13 @@ class FindInFilesAction extends StandardAction {
 		// Create the "Find in Files" dialog if it hasn't already been.
 		if (mainView.findInFilesDialog==null) {
 			mainView.findInFilesDialog = new FindInFilesDialog(rtext);
+			mainView.findInFilesDialog.setSearchContext(mainView.searchContext);
 			RTextUtilities.configureFindInFilesDialog(mainView.findInFilesDialog);
 			mainView.findInFilesDialog.addPropertyChangeListener(mainView);
 			mainView.findInFilesDialog.addFindInFilesListener(mainView);
 		}
 
-		// So we don't have to type so much.
-		FindInFilesDialog findInFilesDialog = mainView.findInFilesDialog;
-
-		// Set the search parameters correctly and display the dialog.
-		findInFilesDialog.setSearchParameters(mainView.searchStrings,
-										mainView.searchMatchCase,
-										mainView.searchWholeWord,
-										mainView.searchRegExpression);
-		findInFilesDialog.setVisible(true);
+		mainView.findInFilesDialog.setVisible(true);
 
 	}
 

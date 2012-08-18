@@ -63,6 +63,13 @@
 
 
 	<!-- Compiles all classes except for plugin classes.  -->
+	<path id="project.class.path">
+		<pathelement location="lib/rsyntaxtextarea.jar"/>
+		<pathelement location="lib/autocomplete.jar"/>
+		<pathelement location="lib/rstaui.jar"/>
+		<pathelement location="lib/rsta_spellchecker.jar"/>
+		<pathelement location="${common-dir}/dist/fife.common.jar"/>
+	</path>
 	<target name="compile-main-classes" description="Compile the source.">
 		<!-- Build all common classes. -->
 		<ant antfile="${common-dir}/build.xml" target="make-common-jar"
@@ -71,7 +78,7 @@
 		<delete includeEmptyDirs="true" quiet="true" dir="${class-dir}"/>
 		<mkdir dir="${class-dir}"/>
 		<javac srcdir="${source-dir}" destdir="${class-dir}"
-				classpath="lib/rsyntaxtextarea.jar:lib/autocomplete.jar:lib/rsta_spellchecker.jar:${common-dir}/dist/fife.common.jar"
+				classpathref="project.class.path"
 				deprecation="yes"
 				includeantruntime="false"
 				debug="${debug}" debuglevel="${debuglevel}"
@@ -111,7 +118,7 @@
 				<!-- OfficeLnFs are only available on Windows, but -->
 				<!-- it doesn't hurt anything to have them on the  -->
 				<!-- classpath everywhere.                         -->
-				<attribute name="Class-Path" value="fife.common.jar rsyntaxtextarea.jar autocomplete.jar rsta_spellchecker.jar lnfs/OfficeLnFs.jar"/>
+				<attribute name="Class-Path" value="fife.common.jar rsyntaxtextarea.jar autocomplete.jar rstaui.jar rsta_spellchecker.jar lnfs/OfficeLnFs.jar"/>
 			</manifest>
 		</jar>
 	</target>
@@ -201,7 +208,7 @@
 	<target name="make-javadoc" depends="compile-main-classes">
 		<javadoc  destdir="${doc-dir}" author="true" version="true"
 			 	breakiterator="yes"
-				classpath="lib/rsyntaxtextarea.jar:lib/autocomplete.jar:lib/language_support.jar:lib/rsta_spellchecker.jar:lib/jtidy-r938.jar:${common-dir}/dist/fife.common.jar">
+				classpathref="project.class.path">
 			<packageset dir="${common-dir}/src" defaultexcludes="yes">
 				<include name="org/**"/>
 			</packageset>

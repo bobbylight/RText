@@ -19,10 +19,10 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextUtilities;
-import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
-import org.fife.ui.search.FindDialog;
-import org.fife.ui.search.ReplaceDialog;
+import org.fife.rsta.ui.search.FindDialog;
+import org.fife.rsta.ui.search.ReplaceDialog;
+import org.fife.rsta.ui.search.SearchDialogSearchContext;
 
 
 /**
@@ -56,20 +56,12 @@ class FindNextAction extends FindAction {
 		ensureSearchDialogsCreated();
 		RText rtext = (RText)getApplication();
 		AbstractMainView mainView = rtext.getMainView();
-
-		// Do this just once for performance.
 		FindDialog findDialog = mainView.findDialog;
 
 		// If the current text string is nothing (ie, they haven't searched
 		// yet), bring up Find dialog.
 		if (mainView.searchStrings.size()==0 && !findDialog.isVisible() &&
 				!mainView.replaceDialog.isVisible()) {
-			findDialog.setSearchParameters(mainView.searchStrings,
-									mainView.searchMatchCase,
-									mainView.searchWholeWord,
-									mainView.searchRegExpression,
-									!mainView.searchingForward,
-									mainView.searchMarkAll);
 			findDialog.setVisible(true);
 			return;
 		}
@@ -100,15 +92,12 @@ class FindNextAction extends FindAction {
 			// the text area, then do the "find" (so that the next
 			// occurrence is indeed selected).
 			textArea.clearMarkAllHighlights(); // Always remove old stuff.
-			if (mainView.searchMarkAll) {
-				textArea.markAll(searchString,
-								mainView.searchMatchCase,
-								mainView.searchWholeWord,
-								mainView.searchRegExpression);
+			SearchDialogSearchContext context = mainView.searchContext;
+			if (context.getMarkAll()) {
+				textArea.markAll(searchString, context.getMatchCase(),
+						context.getWholeWord(), context.isRegularExpression());
 			}
 
-			SearchContext context = mainView.createSearchContext(searchString,
-														null);
 			boolean found = SearchEngine.find(textArea, context);
 			if (!found) {
 				searchString = RTextUtilities.escapeForHTML(searchString, null);

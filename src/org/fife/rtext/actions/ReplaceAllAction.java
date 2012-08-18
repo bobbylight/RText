@@ -69,8 +69,7 @@ class ReplaceAllAction extends StandardAction {
 		int count = 0;
 		try {
 
-			SearchContext context = mainView.createSearchContext(searchString,
-					mainView.replaceDialog.getReplaceString());
+			SearchContext context = mainView.searchContext;
 			count = SearchEngine.replaceAll(textArea, context);
 
 			if (count==-1) {

@@ -15,13 +15,13 @@ import java.util.regex.PatternSyntaxException;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
+import org.fife.rsta.ui.search.ReplaceDialog;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
-import org.fife.ui.search.ReplaceDialog;
 
 
 /**
@@ -55,20 +55,12 @@ class ReplaceNextAction extends ReplaceAction {
 		ensureSearchDialogsCreated();
 		RText rtext = (RText)getApplication();
 		AbstractMainView mainView = rtext.getMainView();
-
-		// Do this just once for performance.
 		ReplaceDialog replaceDialog = mainView.replaceDialog;
 
 		// If it's nothing (ie, they haven't searched yet), bring up the
 		// Replace dialog.
 		if (mainView.searchStrings.size()==0 && !replaceDialog.isVisible()
 				&& !mainView.findDialog.isVisible()) {
-			replaceDialog.setSearchParameters(mainView.searchStrings,
-									mainView.searchMatchCase,
-									mainView.searchWholeWord,
-									mainView.searchRegExpression,
-									!mainView.searchingForward,
-									mainView.searchMarkAll);
 			replaceDialog.setVisible(true);
 			return;
 		}
@@ -90,10 +82,8 @@ class ReplaceNextAction extends ReplaceAction {
 
 		try {
 
-			SearchContext context = mainView.createSearchContext(searchString,
-										replaceDialog.getReplaceString());
+			SearchContext context = mainView.searchContext;
 			boolean found = SearchEngine.replace(textArea, context);
-
 			if (!found) {
 				searchString = RTextUtilities.escapeForHTML(searchString, null);
 				String temp = rtext.getString("CannotFindString", searchString);

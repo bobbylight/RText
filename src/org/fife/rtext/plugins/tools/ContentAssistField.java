@@ -11,11 +11,11 @@ package org.fife.rtext.plugins.tools;
 
 import javax.swing.JTextField;
 
-import org.fife.rtext.ContentAssistable;
+import org.fife.rsta.ui.ContentAssistable;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
-import org.fife.ui.search.AbstractSearchDialog;
+import org.fife.rsta.ui.search.AbstractSearchDialog;
 
 
 /**

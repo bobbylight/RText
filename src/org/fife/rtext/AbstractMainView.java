@@ -32,6 +32,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 
 import org.fife.io.UnicodeWriter;
+import org.fife.rsta.ui.search.*;
 import org.fife.rtext.actions.CapsLockAction;
 import org.fife.rtext.actions.ToggleTextModeAction;
 import org.fife.ui.UIUtil;
@@ -45,7 +46,6 @@ import org.fife.ui.rtextarea.Macro;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextAreaEditorKit;
 import org.fife.ui.rtextarea.RTextScrollPane;
-import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.ui.search.*;
 
@@ -93,14 +93,10 @@ public abstract class AbstractMainView extends JPanel
 
 	private RTextEditorPane currentTextArea;			// Currently active text area.
 
+	public SearchDialogSearchContext searchContext;
 	public FindDialog findDialog;					// The dialog that lets you search for text.
 	public ReplaceDialog replaceDialog;			// The dialog that lets you replace text.
 	public Vector searchStrings;					// The strings to go in the "Find What" combo boxes.
-	public boolean searchingForward;				// Whether to search forward.
-	public boolean searchMatchCase;				// If true, match case while searching.
-	public boolean searchWholeWord;				// Whether searches look for spaces around matches.
-	public boolean searchRegExpression;			// If true, searchString is a Java regular expression.
-	public boolean searchMarkAll;					// If true, all search results will be marked.
 	private boolean lineNumbersEnabled;			// If true, line numbers are visible on the documents.
 	private boolean lineWrapEnabled;				// If true, word wrap is enabled for all documents.
 	private String defaultLineTerminator;			// Line terminator of new text files.
@@ -572,12 +568,8 @@ public abstract class AbstractMainView extends JPanel
 
 		findDialog		= fromPanel.findDialog;
 		replaceDialog		= fromPanel.replaceDialog;
+		searchContext		= fromPanel.searchContext;
 		searchStrings		= fromPanel.searchStrings;
-		searchingForward	= fromPanel.searchingForward;
-		searchMatchCase	= fromPanel.searchMatchCase;
-		searchWholeWord	= fromPanel.searchWholeWord;
-		searchRegExpression	= fromPanel.searchRegExpression;
-		searchMarkAll		= fromPanel.searchMarkAll;
 		lineNumbersEnabled	= fromPanel.lineNumbersEnabled;
 		lineWrapEnabled	= fromPanel.lineWrapEnabled;
 
@@ -856,28 +848,6 @@ public abstract class AbstractMainView extends JPanel
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, InputEvent.CTRL_MASK), "nothing");
 
 		return scrollPane;
-	}
-
-
-	/**
-	 * Creates and returns a search context based on the most recent user
-	 * preferences.
-	 *
-	 * @param searchFor The text or regular expression to search for.
-	 * @param replaceWith The text to replace with, or <code>null</code>.
-	 * @return The search context.
-	 */
-	public SearchContext createSearchContext(String searchFor,
-											String replaceWith) {
-		SearchContext context = new SearchContext();
-		context.setMatchCase(searchMatchCase);
-		context.setRegularExpression(searchRegExpression);
-		context.setReplaceWith(replaceWith);
-		context.setSearchFor(searchFor);
-		context.setSearchForward(searchingForward);
-		context.setSearchSelectionOnly(false); // TODO: Implement me
-		context.setWholeWord(searchWholeWord);
-		return context;
 	}
 
 
@@ -2091,10 +2061,7 @@ public abstract class AbstractMainView extends JPanel
 		syntaxFilters = new SyntaxFilters(prefs.syntaxFiltersString);
 
 		searchStrings = new Vector(0);
-		searchingForward = true;	// Default to searching forward.
-		searchMatchCase = false;	// Default is don't match case.
-		searchWholeWord = false;	// Default is not whole word.
-		searchMarkAll   = false; // Default is not to mark all.
+		searchContext = new SearchDialogSearchContext();
 
 		setHighlightModifiedDocumentDisplayNames(prefs.highlightModifiedDocNames);
 		setModifiedDocumentDisplayNamesColor(prefs.modifiedDocumentNamesColor);
@@ -2486,22 +2453,8 @@ public abstract class AbstractMainView extends JPanel
 						e.getOldValue(), e.getNewValue());
 		}
 
-		// If the user changed any search options via a search dialog...
-		else if (propertyName.equals(FindDialog.MATCH_CASE_PROPERTY)) {
-			searchMatchCase = ((Boolean)e.getNewValue()).booleanValue();
-		}
-		else if (propertyName.equals(FindDialog.MATCH_WHOLE_WORD_PROPERTY)) {
-			searchWholeWord = ((Boolean)e.getNewValue()).booleanValue();
-		}
-		else if (propertyName.equals(FindDialog.USE_REG_EX_PROPERTY)) {
-			searchRegExpression = ((Boolean)e.getNewValue()).booleanValue();
-		}
-		else if (propertyName.equals(FindDialog.SEARCH_DOWNWARD_PROPERTY)) {
-			searchingForward = ((Boolean)e.getNewValue()).booleanValue();
-		}
 		else if (propertyName.equals(FindDialog.MARK_ALL_PROPERTY)) {
 			currentTextArea.clearMarkAllHighlights();
-			searchMarkAll = ((Boolean)e.getNewValue()).booleanValue();
 		}
 
 		// This is exclusive to the FindInFilesDialog.

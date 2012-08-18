@@ -39,6 +39,7 @@ import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
 
 import org.fife.jgoodies.looks.common.ShadowPopupBorder;
+import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.ui.SubstanceUtils;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;

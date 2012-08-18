@@ -27,6 +27,7 @@ import javax.swing.text.Element;
 import javax.swing.text.Segment;
 
 import org.fife.io.UnicodeReader;
+import org.fife.rsta.ui.search.FindDialog;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.ui.GUIWorkerThread;

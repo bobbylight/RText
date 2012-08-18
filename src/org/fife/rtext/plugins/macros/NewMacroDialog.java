@@ -35,7 +35,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.fife.rtext.DecorativeIconPanel;
+import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.rtext.KeyStrokeField;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;

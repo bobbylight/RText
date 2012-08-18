@@ -14,12 +14,14 @@ import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.JButton;
 
+import org.fife.rsta.ui.search.AbstractFindReplaceDialog;
+import org.fife.rsta.ui.search.FindDialog;
+import org.fife.rsta.ui.search.ReplaceDialog;
+import org.fife.rsta.ui.search.SearchDialogSearchContext;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.ui.app.StandardAction;
-import org.fife.ui.search.FindDialog;
-import org.fife.ui.search.ReplaceDialog;
 
 
 /**
@@ -79,30 +81,15 @@ class FindAction extends StandardAction {
 		}
 
 		AbstractMainView mainView = rtext.getMainView();
+		ensureSearchDialogsCreated();
+		FindDialog findDialog = mainView.findDialog;
+		ReplaceDialog replaceDialog = mainView.replaceDialog;
 
-		// Lazily create find and replace dialogs if necessary.
-		if (mainView.findDialog==null) {
-			mainView.findDialog = new FindDialog(rtext, mainView);
-			mainView.replaceDialog = new ReplaceDialog(rtext, mainView);
-			mainView.findDialog.addActionListener(mainView);
-			mainView.replaceDialog.addActionListener(mainView);
-			mainView.findDialog.addPropertyChangeListener(mainView);
-			mainView.replaceDialog.addPropertyChangeListener(mainView);
+		if (replaceDialog.isVisible()) {
+			replaceDialog.setVisible(false);
 		}
 
-		FindDialog findDialog = mainView.findDialog;
-		boolean findDialogVisible = findDialog.isVisible();
-
-		// Display the Find dialog if necessary.
-		if (!findDialogVisible && !mainView.replaceDialog.isVisible()) {
-
-			findDialog.setSearchParameters(mainView.searchStrings,
-									mainView.searchMatchCase,
-									mainView.searchWholeWord,
-									mainView.searchRegExpression,
-									!mainView.searchingForward,
-									mainView.searchMarkAll);
-
+		if (!findDialog.isVisible()) {
 			// If the current document has selected text, use the selection
 			// as the value to search for.
 			RTextEditorPane editor = mainView.getCurrentTextArea();
@@ -110,15 +97,10 @@ class FindAction extends StandardAction {
 			if (selectedText!=null) {
 				findDialog.setSearchString(selectedText);
 			}
-
 			findDialog.setVisible(true);
-
 		}
-
-		// If the find dialog is visible but not enabled, have it request
-		// focus.
-		else if (findDialogVisible) {
-			findDialog.toFront();
+		else {
+			findDialog.requestFocus();
 		}
 
 	}
@@ -131,15 +113,26 @@ class FindAction extends StandardAction {
 		RText rtext = (RText)getApplication();
 		AbstractMainView mainView = rtext.getMainView();
 		if (mainView.replaceDialog==null) {
+			mainView.searchContext = new SearchDialogSearchContext();
 			mainView.findDialog = new FindDialog(rtext, mainView);
+			configureSearchDialog(mainView.findDialog);
 			mainView.replaceDialog = new ReplaceDialog(rtext, mainView);
-			mainView.findDialog.addActionListener(mainView);
-			mainView.replaceDialog.addActionListener(mainView);
-			mainView.findDialog.addPropertyChangeListener(mainView);
-			mainView.replaceDialog.addPropertyChangeListener(mainView);
-			rtext.registerChildWindowListeners(mainView.findDialog);
-			rtext.registerChildWindowListeners(mainView.replaceDialog);
+			configureSearchDialog(mainView.replaceDialog);
 		}
+	}
+
+
+	/**
+	 * Configures the Find or Replace dialog.
+	 *
+	 * @param dialog Either the Find or Replace dialog.
+	 */
+	private void configureSearchDialog(AbstractFindReplaceDialog dialog) {
+		RText rtext = (RText)getApplication();
+		AbstractMainView mainView = rtext.getMainView();
+		dialog.setSearchContext(mainView.searchContext);
+		dialog.addPropertyChangeListener(FindDialog.MARK_ALL_PROPERTY,mainView);
+		rtext.registerChildWindowListeners(dialog);
 	}
 
 

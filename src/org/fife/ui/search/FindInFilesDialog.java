@@ -22,10 +22,11 @@ import javax.swing.border.Border;
 import javax.swing.event.*;
 import javax.swing.text.JTextComponent;
 
-import org.fife.rtext.AssistanceIconPanel;
+import org.fife.rsta.ui.AssistanceIconPanel;
+import org.fife.rsta.ui.RComboBoxModel;
+import org.fife.rsta.ui.search.AbstractSearchDialog;
 import org.fife.ui.FSATextField;
 import org.fife.ui.RButton;
-import org.fife.ui.RComboBoxModel;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.StatusBar;
 import org.fife.ui.UIUtil;
@@ -93,19 +94,8 @@ public class FindInFilesDialog extends AbstractSearchDialog
 	 * @param owner The main window that owns this dialog.
 	 */
 	public FindInFilesDialog(Frame owner) {
-		this(owner, ResourceBundle.getBundle("org.fife.ui.search.Search"));
-	}
 
-
-	/**
-	 * Creates a new <code>FindInFilesDialog</code>.
-	 *
-	 * @param owner The owner of this dialog.
-	 * @param msg The resource bundle.
-	 */
-	public FindInFilesDialog(Frame owner, ResourceBundle msg) {
-
-		super(owner, msg, true);
+		super(owner);
 		this.setTitle(msg.getString("FindInFilesDialogTitle"));
 
 		ComponentOrientation orientation = ComponentOrientation.
@@ -860,41 +850,6 @@ public class FindInFilesDialog extends AbstractSearchDialog
 
 
 	/**
-	 * This function should be called to update match case, whole word, etc.
-	 *
-	 * @param searchString The text the user wants to search for.
-	 * @param matchCase Whether the "match case" checkbox should be checked.
-	 * @param wholeWord Whether the "whole word" checkbox should be checked.
-	 */
-	public void setSearchParameters(String searchString, boolean matchCase,
-								boolean wholeWord, boolean regExp) {
-		findTextCombo.addItem(searchString);
-		findTextCombo.setSelectedIndex(0);
-		caseCheckBox.setSelected(matchCase);
-		wholeWordCheckBox.setSelected(wholeWord);
-		regExpCheckBox.setSelected(regExp);
-	}
-
-
-	/**
-	 * This function should be called to update match case, whole word, etc.
-	 */
-	public void setSearchParameters(Vector findComboBoxStrings,
-					boolean matchCase, boolean wholeWord, boolean regExp) {
-		findTextCombo.removeAllItems();
-		int size = findComboBoxStrings.size();
-		for (int i=size-1; i>=0; i--) {
-			findTextCombo.addItem(findComboBoxStrings.get(i));
-		}
-		if (size>0)
-			findTextCombo.setSelectedIndex(0);
-		caseCheckBox.setSelected(matchCase);
-		wholeWordCheckBox.setSelected(wholeWord);
-		regExpCheckBox.setSelected(regExp);
-	}
-
-
-	/**
 	 * Enables or disables widgets in the dialog as appropriate.
 	 *
 	 * @param searching Whether searching is starting.
@@ -916,18 +871,6 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		findTextCombo.setEnabled(enabled);
 		inFilesComboBox.setEnabled(enabled);
 		inFolderTextField.setEnabled(enabled);
-	}
-
-
-	/**
-	 * Sets the <code>String</code> to search for.
-	 *
-	 * @param newSearchString The <code>String</code> to put into the
-	 *        search field.
-	 */
-	public void setSearchString(String newSearchString) {
-		findTextCombo.addItem(newSearchString);
-		findTextCombo.setSelectedIndex(0);
 	}
 
 

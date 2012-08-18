@@ -15,7 +15,9 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
-import org.fife.rtext.AssistanceIconPanel;
+import org.fife.rsta.ui.AssistanceIconPanel;
+import org.fife.rsta.ui.MaxWidthComboBox;
+import org.fife.rsta.ui.search.RegexAwareComboBox;
 import org.fife.ui.*;
 
 
@@ -36,18 +38,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	 * @param owner The main window that owns this dialog.
 	 */
 	public ReplaceInFilesDialog(Frame owner) {
-		this(owner, ResourceBundle.getBundle("org.fife.ui.search.Search"));
-	}
-
-
-	/**
-	 * Creates a new <code>ReplaceInFilesDialog</code>.
-	 *
-	 * @param owner The owner of this dialog.
-	 * @param msg The resource bundle.
-	 */
-	public ReplaceInFilesDialog(Frame owner, ResourceBundle msg) {
-		super(owner, msg);
+		super(owner);
 		this.setTitle(msg.getString("ReplaceInFilesDialogTitle"));
 		findButton.setText(msg.getString("Replace"));
 		findButton.setMnemonic((int)msg.getString("ReplaceMnemonic").charAt(0));

@@ -16,7 +16,7 @@ import javax.swing.Icon;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
-import org.fife.ui.search.ReplaceDialog;
+import org.fife.rsta.ui.search.ReplaceDialog;
 
 
 /**
@@ -60,34 +60,22 @@ class ReplaceAction extends FindAction {
 		RText rtext = (RText)getApplication();
 		AbstractMainView mainView = rtext.getMainView();
 
+		if (mainView.findDialog.isVisible()) {
+			mainView.findDialog.setVisible(false);
+		}
+
 		ReplaceDialog replaceDialog = mainView.replaceDialog;
-		boolean replaceDialogVisible = replaceDialog.isVisible();
-
-		// If the dialog isn't showing, bring it up.
-		if (!replaceDialogVisible && !mainView.findDialog.isVisible()) {
-
-			replaceDialog.setSearchParameters(mainView.searchStrings,
-									mainView.searchMatchCase,
-									mainView.searchWholeWord,
-									mainView.searchRegExpression,
-									!mainView.searchingForward,
-									mainView.searchMarkAll);
-
+		if (!replaceDialog.isVisible()) {
 			// If the current document has selected text, use the selection
 			// as the value to search for.
 			RTextEditorPane editor = mainView.getCurrentTextArea();
 			String selectedText = editor.getSelectedText();
 			if (selectedText!=null)
 				replaceDialog.setSearchString(selectedText);
-
 			replaceDialog.setVisible(true);
-
 		}
-
-		// If the replace dialog is already visible but not active, have
-		// it request focus.
-		else if (replaceDialogVisible) {
-			replaceDialog.toFront();
+		else {
+			replaceDialog.requestFocus();
 		}
 
 	}

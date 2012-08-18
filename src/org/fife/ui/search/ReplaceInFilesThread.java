@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.fife.io.*;
+import org.fife.rsta.ui.search.FindDialog;
 import org.fife.ui.rtextarea.SearchEngine;
 
 

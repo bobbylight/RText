@@ -45,7 +45,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 
-import org.fife.rtext.AssistanceIconPanel;
+import org.fife.rsta.ui.AssistanceIconPanel;
+import org.fife.rsta.ui.search.AbstractSearchDialog;
 import org.fife.rtext.KeyStrokeField;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.EscapableDialog;
@@ -62,7 +63,6 @@ import org.fife.ui.modifiabletable.ModifiableTable;
 import org.fife.ui.modifiabletable.RowHandler;
 import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
-import org.fife.ui.search.AbstractSearchDialog;
 
 
 /**
