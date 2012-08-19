@@ -76,7 +76,6 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
 		Box topPanel = Box.createVerticalBox();
-		add(topPanel, BorderLayout.NORTH);
 
 		// Add the "general" options panel.
 		Container generalPanel = createGeneralPanel();

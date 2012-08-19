@@ -42,7 +42,12 @@ import org.fife.ui.autocomplete.CompletionCellRenderer;
  * @author Robert Futrell
  * @version 1.0
  */
-class OptionsPanel extends PluginOptionsDialogPanel {
+public class OptionsPanel extends PluginOptionsDialogPanel {
+
+	/**
+	 * ID used to identify this option panel, so others can attach to it.
+	 */
+	public static final String OPTION_PANEL_ID = "LanguageSupportOptionPanel";
 
 	private JCheckBox altColorCB;
 	private RColorSwatchesButton altColorButton;
@@ -55,6 +60,7 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 	public OptionsPanel(Plugin plugin) {
 
 		super(plugin);
+		setId(OPTION_PANEL_ID);
 		URL url = getClass().getResource("comment.png");
 		setIcon(new ImageIcon(url));
 

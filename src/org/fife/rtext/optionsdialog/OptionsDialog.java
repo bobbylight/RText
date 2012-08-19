@@ -102,7 +102,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 			if (panel!=null) {
 				String parentID = plugin.getOptionsDialogPanelParentPanelID();
 				if (parentID!=null) {
-					OptionsDialogPanel parent = getParentPanel(panels, parentID);
+					OptionsDialogPanel parent = getPanelById(panels, parentID);
 					if (parent!=null) {
 						parent.addChildPanel(panel);
 					}
@@ -124,18 +124,41 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 
 
 	/**
-	 * Returns the options dialog with the specified ID.
+	 * Returns the options dialog panel with the specified ID.
 	 *
 	 * @param panels The already added panels.
-	 * @param parentID The panel ID to search for.  Should not be
-	 *        <code>null</code>.
+	 * @param id The panel ID to search for.  Should not be <code>null</code>.
 	 * @return The panel, or <code>null</code> if it wasn't found.
 	 */
-	private OptionsDialogPanel getParentPanel(List panels, String parentID) {
+	private OptionsDialogPanel getPanelById(List panels, String id) {
 		for (Iterator i=panels.iterator(); i.hasNext(); ) {
 			OptionsDialogPanel panel = (OptionsDialogPanel)i.next();
-			if (parentID.equals(panel.getId())) {
-				return panel;
+			OptionsDialogPanel result = getPanelByIdImpl(panel, id);
+			if (result!=null) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+
+	/**
+	 * Scans a panel and its children recursively, checking for the panel
+	 * with the specified ID.
+	 *
+	 * @param id The ID of the panel to search for.
+	 * @return The panel, or <code>null</code> if it wasn't found.
+	 */
+	private OptionsDialogPanel getPanelByIdImpl(OptionsDialogPanel panel,
+			String id) {
+		if (id.equals(panel.getId())) {
+			return panel;
+		}
+		for (int i=0; i<panel.getChildPanelCount(); i++) {
+			OptionsDialogPanel child = panel.getChildPanel(i);
+			OptionsDialogPanel result = getPanelByIdImpl(child, id);
+			if (result!=null) {
+				return result;
 			}
 		}
 		return null;

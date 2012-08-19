@@ -80,8 +80,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	 * @param app The owner of the options dialog in which this panel appears.
 	 * @param msg The resource bundle to use.
 	 */
-	public LanguageOptionPanel(final GUIApplication app,
-							final ResourceBundle msg) {
+	public LanguageOptionPanel(GUIApplication app, ResourceBundle msg) {
 
 		super(msg.getString("OptLaName"));
 		this.app = app;
