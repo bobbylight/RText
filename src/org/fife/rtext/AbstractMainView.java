@@ -3692,7 +3692,7 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public void setSyntaxFilters(SyntaxFilters syntaxFilters) {
 
-		this.syntaxFilters = syntaxFilters;
+		this.syntaxFilters.setPreservingPluginAdded(syntaxFilters);
 
 		// Reset all open files' color schemes if necessary.
 		int numDocuments = getNumDocuments();

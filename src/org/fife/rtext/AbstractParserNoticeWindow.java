@@ -10,6 +10,7 @@
  */
 package org.fife.rtext;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
@@ -75,6 +76,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 		size.height = 200;
 		table.setPreferredScrollableViewportSize(size);
 		UIUtil.fixJTableRendererOrientations(table);
+		possiblyFixGridColor(table);
 		return table;
 	}
 
@@ -134,6 +136,25 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 	 */
 	protected RText getRText() {
 		return rtext;
+	}
+
+
+	/**
+	 * Make a table use the right grid color on Windows Vista, when using the
+	 * Windows Look and Feel.
+	 *
+	 * @param table The table to update.
+	 */
+	private void possiblyFixGridColor(JTable table) {
+		String laf = UIManager.getLookAndFeel().getClass().getName();
+		if (laf.endsWith("WindowsLookAndFeel")) {
+			if (Color.white.equals(table.getBackground())) {
+				Color gridColor = table.getGridColor();
+				if (gridColor!=null && gridColor.getRGB()<=0x808080) {
+					table.setGridColor(new Color(0xe3e3e3));
+				}
+			}
+		}
 	}
 
 

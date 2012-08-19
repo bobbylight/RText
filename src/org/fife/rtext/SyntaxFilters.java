@@ -36,6 +36,10 @@ public class SyntaxFilters implements SyntaxConstants {
 	 */
 	private Map filters;
 
+	/**
+	 * Filters added by plugins for additional languages.
+	 */
+	private Map addedFilters;
 
 	/**
 	 * Creates a new <code>SyntaxFilters</code> with default values for
@@ -146,8 +150,16 @@ public class SyntaxFilters implements SyntaxConstants {
 		if (l==null) {
 			// Allow plugins to add filters for new languages not built into
 			// RSyntaxTextArea.
-			l = new ArrayList();
-			filters.put(style, l);
+			if (addedFilters==null) {
+				addedFilters = new HashMap();
+			}
+			else {
+				l = (List)addedFilters.get(style);
+			}
+			if (l==null) {
+				l = new ArrayList();
+				addedFilters.put(style, l);
+			}
 		}
 		return l;
 	}
@@ -208,23 +220,36 @@ public class SyntaxFilters implements SyntaxConstants {
 			fileName = RTextUtilities.stripBackupExtensions(fileName);
 		}
 
-		Iterator it;
-		Pattern p;
+		String style = getSyntaxStyleForFileImpl(fileName, filters);
+		if (style==null && addedFilters!=null) {
+			style = getSyntaxStyleForFileImpl(fileName, addedFilters);
+		}
+		return style!=null ? style : SYNTAX_STYLE_NONE;
 
+	}
+
+
+	/**
+	 * Looks for a syntax style for a file name in a given map.
+	 *
+	 * @param fileName The file name.
+	 * @param filters The map of filters.
+	 * @return The syntax style for the file, or <code>null</code> if not found
+	 *         in that map.
+	 */
+	private String getSyntaxStyleForFileImpl(String fileName, Map filters) {
 		for (Iterator i=filters.entrySet().iterator(); i.hasNext(); ) {
 			Map.Entry entry = (Map.Entry)i.next();
-			it = ((List)entry.getValue()).iterator();
+			Iterator it = ((List)entry.getValue()).iterator();
 			while (it.hasNext()) {
-				p = RTextUtilities.getPatternForFileFilter(
+				Pattern p = RTextUtilities.getPatternForFileFilter(
 									(String)it.next(), true);
 				if (p!=null && p.matcher(fileName).matches()) {
 					return (String)entry.getKey();
 				}
 			}
 		}
-
-		return SYNTAX_STYLE_NONE;
-
+		return null;
 	}
 
 
@@ -303,6 +328,8 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_WINDOWS_BATCH,		createValue(new String[] { "*.bat", "*.cmd" }));
 		filters.put(SYNTAX_STYLE_XML,				createValue(new String[] { "*.xml", "*.xsl", "*.xsd", "*.wsdl", "*.macro", "*.manifest" }));
 
+		// Keep any filters added by the user
+
 	}
 
 
@@ -336,7 +363,18 @@ public class SyntaxFilters implements SyntaxConstants {
 
 
 	/**
-	 * Returns this object as a string.
+	 * Sets values for all the filters not added by plugins.
+	 *
+	 * @param filters The new vlaues for filters.
+	 */
+	public void setPreservingPluginAdded(SyntaxFilters filters) {
+		this.filters = new HashMap(filters.filters);
+	}
+
+
+	/**
+	 * Returns this object as a string.  Note that we currently do not save
+	 * plugin-defined syntax filters.
 	 *
 	 * @return A string representing this <code>SyntaxFilters</code>.
 	 */
