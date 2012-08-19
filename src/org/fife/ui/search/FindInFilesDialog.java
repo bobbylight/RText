@@ -305,6 +305,16 @@ public class FindInFilesDialog extends AbstractSearchDialog
 			}
 		}
 
+		else if (command.equals("Subfolders")) {
+			boolean search = subfoldersCheckBox.isSelected();
+			((FindInFilesSearchContext)context).setSearchSubfolders(search);
+		}
+
+		else if (command.equals("Verbose")) {
+			boolean verbose = verboseCheckBox.isSelected();
+			((FindInFilesSearchContext)context).setVerbose(verbose);
+		}
+
 		// The superclass might care about this action.
 		else {
 			super.actionPerformed(e);
@@ -397,6 +407,8 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		subfoldersCheckBox = new JCheckBox(getString2("SearchSubfolders"));
 		subfoldersCheckBox.setMnemonic((int)getString2("SearchSubfoldersMnemonic").charAt(0));
+		subfoldersCheckBox.setActionCommand("Subfolders");
+		subfoldersCheckBox.addActionListener(this);
 		panel.add(detailPanel);
 		panel.add(subfoldersCheckBox);
 
@@ -416,6 +428,8 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		JPanel temp = new JPanel();
 		temp.setLayout(new BoxLayout(temp, BoxLayout.LINE_AXIS));
 		verboseCheckBox = new JCheckBox(getString2("Verbose"));
+		verboseCheckBox.setActionCommand("Verbose");
+		verboseCheckBox.addActionListener(this);
 		verboseCheckBox.setMnemonic((int)getString2("VerboseMnemonic").charAt(0));
 		temp.add(verboseCheckBox);
 		temp.add(Box.createHorizontalGlue());
@@ -434,9 +448,9 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		JPanel inputPanel = new JPanel(new SpringLayout());
 
 		// Make labels to go with the combo boxes/text fields.
-		JLabel findLabel = new JLabel(getString2("FindWhat"));
+		JLabel findLabel = new JLabel(getString("FindWhat"));
 		findLabel.setLabelFor(findTextCombo);
-		findLabel.setDisplayedMnemonic((int)getString2("FindWhatMnemonic").charAt(0));
+		findLabel.setDisplayedMnemonic((int)getString("FindWhatMnemonic").charAt(0));
 		JLabel inLabel = new JLabel(getString2("InFiles"));
 		inLabel.setLabelFor(inFilesComboBox);
 		inLabel.setDisplayedMnemonic((int)getString2("InFilesMnemonic").charAt(0));
@@ -778,6 +792,17 @@ public class FindInFilesDialog extends AbstractSearchDialog
 				getLength(getTextComponent(findTextCombo))>0 &&
 				getLength(getTextComponent(inFilesComboBox))>0 &&
 				getLength(inFolderTextField)>0;
+	}
+
+
+	/**
+	 * Overridden to initialize UI elements specific to this subclass.
+	 */
+	protected void refreshUIFromContext() {
+		super.refreshUIFromContext();
+		FindInFilesSearchContext fifsc = (FindInFilesSearchContext)context;
+		subfoldersCheckBox.setSelected(fifsc.getSearchSubfolders());
+		verboseCheckBox.setSelected(fifsc.getVerbose());
 	}
 
 

@@ -17,7 +17,6 @@ import javax.swing.JButton;
 import org.fife.rsta.ui.search.AbstractFindReplaceDialog;
 import org.fife.rsta.ui.search.FindDialog;
 import org.fife.rsta.ui.search.ReplaceDialog;
-import org.fife.rsta.ui.search.SearchDialogSearchContext;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
@@ -113,7 +112,6 @@ class FindAction extends StandardAction {
 		RText rtext = (RText)getApplication();
 		AbstractMainView mainView = rtext.getMainView();
 		if (mainView.replaceDialog==null) {
-			mainView.searchContext = new SearchDialogSearchContext();
 			mainView.findDialog = new FindDialog(rtext, mainView);
 			configureSearchDialog(mainView.findDialog);
 			mainView.replaceDialog = new ReplaceDialog(rtext, mainView);

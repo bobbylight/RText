@@ -40,8 +40,8 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	public ReplaceInFilesDialog(Frame owner) {
 		super(owner);
 		this.setTitle(getString2("ReplaceInFilesDialogTitle"));
-		findButton.setText(getString2("Replace"));
-		findButton.setMnemonic((int)getString2("ReplaceMnemonic").charAt(0));
+		findButton.setText(getString("Replace"));
+		findButton.setMnemonic((int)getString("ReplaceMnemonic").charAt(0));
 	}
 
 
@@ -82,8 +82,8 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 
 		JPanel inputPanel = super.createInputPanel();
 
-		JLabel replaceLabel = new JLabel(getString2("ReplaceWith"));
-		replaceLabel.setDisplayedMnemonic((int)getString2("ReplaceWithMnemonic").charAt(0));
+		JLabel replaceLabel = new JLabel(getString("ReplaceWith"));
+		replaceLabel.setDisplayedMnemonic((int)getString("ReplaceWithMnemonic").charAt(0));
 		replaceCombo = createSearchComboBox(true);
 		getTextComponent(replaceCombo).addFocusListener(new FindInFilesFocusAdapter());
 		replaceLabel.setLabelFor(replaceCombo);

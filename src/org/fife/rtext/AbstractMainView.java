@@ -93,7 +93,7 @@ public abstract class AbstractMainView extends JPanel
 
 	private RTextEditorPane currentTextArea;			// Currently active text area.
 
-	public SearchDialogSearchContext searchContext;
+	public FindInFilesSearchContext searchContext;
 	public FindDialog findDialog;					// The dialog that lets you search for text.
 	public ReplaceDialog replaceDialog;			// The dialog that lets you replace text.
 	public Vector searchStrings;					// The strings to go in the "Find What" combo boxes.
@@ -2061,7 +2061,7 @@ public abstract class AbstractMainView extends JPanel
 		syntaxFilters = new SyntaxFilters(prefs.syntaxFiltersString);
 
 		searchStrings = new Vector(0);
-		searchContext = new SearchDialogSearchContext();
+		searchContext = new FindInFilesSearchContext();
 
 		setHighlightModifiedDocumentDisplayNames(prefs.highlightModifiedDocNames);
 		setModifiedDocumentDisplayNamesColor(prefs.modifiedDocumentNamesColor);
