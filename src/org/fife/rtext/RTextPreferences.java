@@ -88,6 +88,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public boolean marginLineEnabled;
 	public int marginLinePosition;
 	public Color marginLineColor;
+	public boolean highlightSecondaryLanguages;
+	public Color[] secondaryLanguageColors;
 	public boolean hyperlinksEnabled;
 	public Color hyperlinkColor;
 	public int hyperlinkModifierKey;
@@ -200,6 +202,11 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.marginLineEnabled			= mainView.isMarginLineEnabled();
 		props.marginLinePosition			= mainView.getMarginLinePosition();
 		props.marginLineColor			= mainView.getMarginLineColor();
+		props.highlightSecondaryLanguages = mainView.getHighlightSecondaryLanguages();
+		props.secondaryLanguageColors = new Color[3];
+		for (int i=0; i<props.secondaryLanguageColors.length; i++) {
+			props.secondaryLanguageColors[i] = mainView.getSecondaryLanguageColor(i);
+		}
 		props.hyperlinksEnabled			= mainView.getHyperlinksEnabled();
 		props.hyperlinkColor			= mainView.getHyperlinkColor();
 		props.hyperlinkModifierKey		= mainView.getHyperlinkModifierKey();
@@ -440,6 +447,11 @@ public class RTextPreferences extends GUIApplicationPreferences
 				prefs.getInt("matchedBracketBorderColor", props.matchedBracketBorderColor.getRGB()));
 			props.marginLineColor = new Color(
 				prefs.getInt("marginLineColor", props.marginLineColor.getRGB()));
+			props.highlightSecondaryLanguages = prefs.getBoolean("highlightSecondaryLanguages", props.highlightSecondaryLanguages);
+			for (int i=0; i<props.secondaryLanguageColors.length; i++) {
+				props.secondaryLanguageColors[i] = new Color(prefs.getInt(
+				"secondaryLanguageColor_" + i, props.secondaryLanguageColors[i].getRGB()));
+			}
 			props.hyperlinksEnabled = prefs.getBoolean("hyperlinksEnabled", props.hyperlinksEnabled);
 			props.hyperlinkColor = new Color(
 				prefs.getInt("hyperlinkColor", props.hyperlinkColor.getRGB()));
@@ -607,6 +619,10 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs.putBoolean("highlightModifiedDocNames",highlightModifiedDocNames);
 		prefs.putFloat("imageAlpha",					imageAlpha);
 		prefs.putInt("marginLineColor",				marginLineColor.getRGB());
+		prefs.putBoolean("highlightSecondaryLanguages",highlightSecondaryLanguages);
+		for (int i=0; i<3; i++) {
+			prefs.putInt("secondaryLanguageColor_" + i, secondaryLanguageColors[i].getRGB());
+		}
 		prefs.putBoolean("hyperlinksEnabled",			hyperlinksEnabled);
 		prefs.putInt("hyperlinkColor",				hyperlinkColor.getRGB());
 		prefs.putInt("hyperlinkModifierKey",			hyperlinkModifierKey);
@@ -707,8 +723,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 		backgroundObject = Color.WHITE;
 		imageAlpha = 0.3f;	// Arbitrary initial value.
 		wordWrap = false;
-		caretColor = Color.BLACK;
-		selectionColor = new Color(200,200,255);
+		caretColor = RTextArea.getDefaultCaretColor();
+		selectionColor = RSyntaxTextArea.getDefaultSelectionColor();
 		colorScheme = new SyntaxScheme(true);
 		SyntaxFilters syntaxFilters = new SyntaxFilters();
 		syntaxFilters.restoreDefaultFileFilters();
@@ -728,6 +744,11 @@ public class RTextPreferences extends GUIApplicationPreferences
 		marginLineEnabled = true;
 		marginLinePosition = RTextArea.getDefaultMarginLinePosition();
 		marginLineColor = RTextArea.getDefaultMarginLineColor();
+		highlightSecondaryLanguages = false;
+		secondaryLanguageColors = new Color[3];
+		secondaryLanguageColors[0] = new Color(0xfff0cc);
+		secondaryLanguageColors[1] = new Color(0xdafeda);
+		secondaryLanguageColors[2] = new Color(0xffe0f0);
 		hyperlinksEnabled = true;
 		hyperlinkColor = Color.BLUE;
 		hyperlinkModifierKey = InputEvent.CTRL_DOWN_MASK;

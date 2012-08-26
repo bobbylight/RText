@@ -140,6 +140,8 @@ public abstract class AbstractMainView extends JPanel
 	private boolean marginLineEnabled;
 	private int marginLinePosition;
 	private Color marginLineColor;
+	private boolean highlightSecondaryLanguages;
+	private Color[] secondaryLanguageColors;
 
 	private boolean hyperlinksEnabled;
 	private Color hyperlinkColor;
@@ -618,6 +620,10 @@ public abstract class AbstractMainView extends JPanel
 		marginLineEnabled = fromPanel.marginLineEnabled;
 		marginLinePosition = fromPanel.marginLinePosition;
 		marginLineColor = fromPanel.marginLineColor;
+		highlightSecondaryLanguages = fromPanel.highlightSecondaryLanguages;
+		for (int i=0; i<secondaryLanguageColors.length; i++) {
+			secondaryLanguageColors[i] = fromPanel.secondaryLanguageColors[i];
+		}
 
 		hyperlinksEnabled = fromPanel.hyperlinksEnabled;
 		hyperlinkColor = fromPanel.hyperlinkColor;
@@ -747,6 +753,10 @@ public abstract class AbstractMainView extends JPanel
 		pane.setMarginLineEnabled(marginLineEnabled);
 		pane.setMarginLinePosition(getMarginLinePosition());
 		pane.setMarginLineColor(getMarginLineColor());
+		pane.setHighlightSecondaryLanguages(getHighlightSecondaryLanguages());
+		for (int i=0; i<secondaryLanguageColors.length; i++) {
+			pane.setSecondaryLanguageBackground(i+1, getSecondaryLanguageColor(i));
+		}
 		pane.setMarkAllHighlightColor(getMarkAllHighlightColor());
 		pane.setMarkOccurrences(getMarkOccurrences());
 		pane.setMarkOccurrencesColor(getMarkOccurrencesColor());
@@ -1221,6 +1231,17 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns whether secondary languages are highlighted.
+	 *
+	 * @return Whether secondary languages are highlighted.
+	 * @see #setHighlightSecondaryLanguages(boolean)
+	 */
+	public boolean getHighlightSecondaryLanguages() {
+		return highlightSecondaryLanguages;
+	}
+
+
+	/**
 	 * Returns the color editors use for hyperlinks.
 	 *
 	 * @return The color used.
@@ -1590,6 +1611,18 @@ public abstract class AbstractMainView extends JPanel
 	 * @return The scroll pane.
 	 */
 	public abstract RTextScrollPane getRTextScrollPaneAt(int index);
+
+
+	/**
+	 * Returns the color to use for a secondary language.
+	 *
+	 * @param index The index of the secondary color.
+	 * @return The color to use.
+	 * @see #setSecondaryLanguageColor(int, Color)
+	 */
+	public Color getSecondaryLanguageColor(int index) {
+		return secondaryLanguageColors[index];
+	}
 
 
 	/**
@@ -2069,6 +2102,11 @@ public abstract class AbstractMainView extends JPanel
 		setMarginLineEnabled(prefs.marginLineEnabled);
 		setMarginLinePosition(prefs.marginLinePosition);
 		setMarginLineColor(prefs.marginLineColor);
+		setHighlightSecondaryLanguages(prefs.highlightSecondaryLanguages);
+		secondaryLanguageColors = new Color[3];
+		for (int i=0; i<secondaryLanguageColors.length; i++) {
+			setSecondaryLanguageColor(i, prefs.secondaryLanguageColors[i]);
+		}
 		setHyperlinksEnabled(prefs.hyperlinksEnabled);
 		setHyperlinkColor(prefs.hyperlinkColor);
 		setHyperlinkModifierKey(prefs.hyperlinkModifierKey);
@@ -3184,6 +3222,22 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Sets whether secondary languages are highlighted.
+	 *
+	 * @param highlight Whether to highlight secondary languages.
+	 * @see #getHighlightSecondaryLanguages()
+	 */
+	public void setHighlightSecondaryLanguages(boolean highlight) {
+		if (highlight!=highlightSecondaryLanguages) {
+			highlightSecondaryLanguages = highlight;
+			for (int i=0; i<getNumDocuments(); i++) {
+				getRTextEditorPaneAt(i).setHighlightSecondaryLanguages(highlight);
+			}
+		}
+	}
+
+
+	/**
 	 * Sets the color hyperlinks are displayed with in text editors.
 	 *
 	 * @param c The color to display.  This cannot be <code>null</code>.
@@ -3192,8 +3246,7 @@ public abstract class AbstractMainView extends JPanel
 	public void setHyperlinkColor(Color c) {
 		if (c!=null && !c.equals(getHyperlinkColor())) {
 			this.hyperlinkColor = c;
-			int docCount = getNumDocuments();
-			for (int i=0; i<docCount; i++) {
+			for (int i=0; i<getNumDocuments(); i++) {
 				getRTextEditorPaneAt(i).setHyperlinkForeground(c);
 			}
 		}
@@ -3630,6 +3683,24 @@ public abstract class AbstractMainView extends JPanel
 				textArea.setRoundedSelectionEdges(rounded);
 			}
 			firePropertyChange(ROUNDED_SELECTION_PROPERTY, !rounded, rounded);
+		}
+	}
+
+
+	/**
+	 * Sets the color to use for a secondary language.
+	 *
+	 * @param index The index, <code>0-3</code>.
+	 * @param color The color.  This should not be <code>null</code>.
+	 * @see #getSecondaryLanguageColor(int)
+	 */
+	public void setSecondaryLanguageColor(int index, Color color) {
+		if (color!=null && !color.equals(secondaryLanguageColors[index])) {
+			secondaryLanguageColors[index] = color;
+			for (int i=0; i<getNumDocuments(); i++) {
+				getRTextEditorPaneAt(i).
+						setSecondaryLanguageBackground(index+1, color);
+			}
 		}
 	}
 

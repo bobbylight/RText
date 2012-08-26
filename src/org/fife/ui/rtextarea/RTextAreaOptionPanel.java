@@ -111,8 +111,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 		Box tabPanel = Box.createVerticalBox();
 		tabPanel.setBorder(new OptionPanelBorder(msg.getString("Tabs")));
-		JPanel inputPanel = new JPanel();
-		inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.LINE_AXIS));
+		Box inputPanel = Box.createHorizontalBox();
 		tabSizeLabel = new JLabel(msg.getString("TabSize"));
 		tabSizeField = new JTextField();
 		tabSizeField.getDocument().addDocumentListener(this);
@@ -123,8 +122,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		inputPanel.add(tabSizeField);
 		inputPanel.add(Box.createHorizontalGlue());
 		tabPanel.add(inputPanel);
-		JPanel etPanel = new JPanel();
-		etPanel.setLayout(new BoxLayout(etPanel, BoxLayout.LINE_AXIS));
+		Box etPanel = Box.createHorizontalBox();
 		emulateTabsCheckBox = new JCheckBox(msg.getString("EmulateTabs"));
 		emulateTabsCheckBox.setActionCommand("EmulateTabsCheckBox");
 		emulateTabsCheckBox.addActionListener(this);
@@ -139,21 +137,16 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		Box linkPanel = Box.createVerticalBox();
 		linkPanel.setBorder(new OptionPanelBorder(msg.getString("Hyperlinks")));
 
-		JPanel temp = new JPanel();
-		temp.setLayout(new BoxLayout(temp, BoxLayout.LINE_AXIS));
 		linkCB = new JCheckBox(msg.getString("MakeLinksClickable"));
 		linkCB.setActionCommand("MakeLinksClickable");
 		linkCB.addActionListener(this);
-		temp.add(linkCB);
-		temp.add(Box.createHorizontalGlue());
-		linkPanel.add(temp);
-		linkPanel.add(Box.createVerticalStrut(5));
+		addLeftAligned(linkPanel, linkCB, 5);
 
 		modKeyCombo = createModKeyCombo();
 		modKeyLabel = new JLabel(msg.getString("ModifierKey"));
 		modKeyLabel.setLabelFor(modKeyCombo);
 		linkColorButton = new RColorSwatchesButton();
-		linkColorButton.addPropertyChangeListener(this);
+		linkColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		linkColorLabel = new JLabel(msg.getString("HyperlinkColor"));
 		linkColorLabel.setLabelFor(linkColorButton);
 		JPanel modKeyPanel = new JPanel(new BorderLayout());
@@ -190,7 +183,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		highlightCurrentLineCheckBox.setActionCommand("HighlightCurrentLineCheckBox");
 		highlightCurrentLineCheckBox.addActionListener(this);
 		hclColorButton = new RColorSwatchesButton(Color.BLACK, 50,15);
-		hclColorButton.addPropertyChangeListener(this);
+		hclColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		otherPanel.add(highlightCurrentLineCheckBox);
 		otherPanel.add(hclColorButton);
 		otherPanel.add(Box.createHorizontalGlue());
@@ -207,7 +200,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		marginLinePositionField.setPreferredSize(size);
 		marginLineColorLabel = new JLabel(msg.getString("WithThisColor"));
 		marginLineColorButton = new RColorSwatchesButton(Color.BLACK, 50,15);
-		marginLineColorButton.addPropertyChangeListener(this);
+		marginLineColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		marginLineColorLabel.setLabelFor(marginLineColorButton);
 		otherPanel.add(marginLineCheckBox);
 		otherPanel.add(marginLinePositionField);
@@ -255,10 +248,10 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		bracketMatchCheckBox.addActionListener(this);
 		bmBGColorLabel = new JLabel(msg.getString("BackgroundFill"));
 		bmBGColorButton = new RColorSwatchesButton(Color.BLACK, 50,15);
-		bmBGColorButton.addPropertyChangeListener(this);
+		bmBGColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		bmBorderColorLabel = new JLabel(msg.getString("Border"));
 		bmBorderColorButton = new RColorSwatchesButton(Color.BLACK, 50,15);
-		bmBorderColorButton.addPropertyChangeListener(this);
+		bmBorderColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		bracketMatchingPanel.add(bracketMatchCheckBox);
 		bracketMatchingPanel.add(bmBGColorLabel);
 		bracketMatchingPanel.add(bmBGColorButton);
@@ -280,7 +273,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		box.add(showTabLinesCheckBox);
 		box.add(Box.createHorizontalStrut(5));
 		tabLineColorButton = new RColorSwatchesButton(Color.black, 50,15);
-		tabLineColorButton.addPropertyChangeListener(this);
+		tabLineColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		box.add(tabLineColorButton);
 		box.add(Box.createHorizontalGlue());
 		addLeftAligned(bigOtherPanel, box);
@@ -288,14 +281,10 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 		topPanel.add(bigOtherPanel);
 
-		JPanel rdPanel = new JPanel();
-		rdPanel.setLayout(new BoxLayout(rdPanel, BoxLayout.LINE_AXIS));
 		restoreDefaultsButton = new RButton(msg.getString("RestoreDefaults"));
 		restoreDefaultsButton.setActionCommand("RestoreDefaults");
 		restoreDefaultsButton.addActionListener(this);
-		rdPanel.add(restoreDefaultsButton);
-		rdPanel.add(Box.createHorizontalGlue());
-		topPanel.add(rdPanel);
+		addLeftAligned(topPanel, restoreDefaultsButton);
 
 		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(orientation);
