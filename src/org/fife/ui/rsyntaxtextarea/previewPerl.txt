@@ -1,0 +1,19 @@
+# This is example Perl code
+use strict;
+
+sub isAMatch {
+   return $_[0] =~ /Kennedy$/;
+}
+
+print "Enter your name: ";
+chomp(my $name = <stdin>);
+print "Hello, $name!\n";
+print "You are a Kennedy!\n" if isAMatch($name);
+
+my $longText = <<EOF;
+This is line 1
+This is line 2
+This is line 3
+This is line 4: Your name is $name
+EOF
+print "*** Long text: ***\n$longText";

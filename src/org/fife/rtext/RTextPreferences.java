@@ -82,6 +82,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public boolean highlightModifiedDocNames;
 	public Color modifiedDocumentNamesColor;
 	public boolean bracketMatchingEnabled;
+	public boolean matchBothBrackets;
 	public Color matchedBracketBGColor;
 	public Color matchedBracketBorderColor;
 	public boolean marginLineEnabled;
@@ -193,6 +194,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.modifiedDocumentNamesColor	= mainView.getModifiedDocumentDisplayNamesColor();
 		props.language					= rtext.getLanguage();
 		props.bracketMatchingEnabled		= mainView.isBracketMatchingEnabled();
+		props.matchBothBrackets			= mainView.getMatchBothBrackets();
 		props.matchedBracketBGColor		= mainView.getMatchedBracketBGColor();
 		props.matchedBracketBorderColor	= mainView.getMatchedBracketBorderColor();
 		props.marginLineEnabled			= mainView.isMarginLineEnabled();
@@ -396,6 +398,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 			// Get all properties associated with the MainPanel class.
 			prefs = Preferences.userNodeForPackage(AbstractMainView.class);
 			props.bracketMatchingEnabled		= prefs.getBoolean("bracketMatchingEnabled", props.bracketMatchingEnabled);
+			props.matchBothBrackets				= prefs.getBoolean("matchBothBrackets", props.matchBothBrackets);
 			props.currentLineHighlightEnabled	= prefs.getBoolean("currentLineHighlightEnabled", props.currentLineHighlightEnabled);
 			props.emulateTabsWithSpaces		= prefs.getBoolean("emulateTabs", props.emulateTabsWithSpaces);
 			props.highlightModifiedDocNames	= prefs.getBoolean("highlightModifiedDocNames", props.highlightModifiedDocNames);
@@ -596,6 +599,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		// Save all properties related to the AbstractMainView class.
 		prefs = Preferences.userNodeForPackage(AbstractMainView.class);
 		prefs.putBoolean("bracketMatchingEnabled",		bracketMatchingEnabled);
+		prefs.putBoolean("matchBothBrackets",			matchBothBrackets);
 		prefs.putInt("caretColor",				caretColor.getRGB());
 		prefs.putInt("currentLineHighlightColor",	currentLineHighlightColor.getRGB());
 		prefs.putBoolean("currentLineHighlightEnabled",	currentLineHighlightEnabled);
@@ -718,6 +722,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		modifiedDocumentNamesColor = Color.RED;
 		language = "en";	// Default to English.
 		bracketMatchingEnabled = true;
+		matchBothBrackets = false;
 		matchedBracketBGColor = RSyntaxTextArea.getDefaultBracketMatchBGColor();
 		matchedBracketBorderColor = RSyntaxTextArea.getDefaultBracketMatchBorderColor();
 		marginLineEnabled = true;

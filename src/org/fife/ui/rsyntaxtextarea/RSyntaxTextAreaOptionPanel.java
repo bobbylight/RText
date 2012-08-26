@@ -83,11 +83,12 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	private static final String UNKNOWN_PROPERTY				= "RSTAOpts.unknown";
 
 	private static final String[] SAMPLES = {
-		"previewJava.txt", "previewXml.txt",
+		"previewJava.txt", "previewPerl.txt", "previewXml.txt",
 	};
 
 	private static final String[] SAMPLE_STYLES = {
-		SyntaxConstants.SYNTAX_STYLE_JAVA, SyntaxConstants.SYNTAX_STYLE_XML,
+		SyntaxConstants.SYNTAX_STYLE_JAVA, SyntaxConstants.SYNTAX_STYLE_PERL,
+		SyntaxConstants.SYNTAX_STYLE_XML,
 	};
 
 	/**
@@ -242,10 +243,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		Box horizBox = Box.createHorizontalBox();
 		horizBox.add(new JLabel(msg.getString("SampleTextLabel")));
 		horizBox.add(Box.createHorizontalStrut(5));
-		String[] samples = {
-				msg.getString("Sample.Java"),
-				msg.getString("Sample.Xml"),
-		};
+		final String[] samples = { "Java", "Perl", "XML", };
 		sampleCombo = new JComboBox(samples);
 		sampleCombo.setEditable(false);
 		sampleCombo.addActionListener(this);

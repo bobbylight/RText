@@ -133,6 +133,7 @@ public abstract class AbstractMainView extends JPanel
 	private long modificationCheckDelay = 10000;		// Delay in milliseconds.
 
 	private boolean bracketMatchingEnabled;
+	private boolean matchBothBrackets;
 	private Color matchedBracketBGColor;
 	private Color matchedBracketBorderColor;
 
@@ -610,6 +611,7 @@ public abstract class AbstractMainView extends JPanel
 		modificationCheckDelay = fromPanel.modificationCheckDelay;
 
 		bracketMatchingEnabled = fromPanel.bracketMatchingEnabled;
+		matchBothBrackets = fromPanel.matchBothBrackets;
 		matchedBracketBGColor = fromPanel.matchedBracketBGColor;
 		matchedBracketBorderColor = fromPanel.matchedBracketBorderColor;
 
@@ -750,6 +752,7 @@ public abstract class AbstractMainView extends JPanel
 		pane.setMarkOccurrencesColor(getMarkOccurrencesColor());
 		setSyntaxStyle(pane, style);
 		pane.setBracketMatchingEnabled(isBracketMatchingEnabled());
+		pane.setPaintMatchedBracketPair(getMatchBothBrackets());
 		pane.setMatchedBracketBGColor(getMatchedBracketBGColor());
 		pane.setMatchedBracketBorderColor(getMatchedBracketBorderColor());
 		if (defaultLineTerminator!=null &&
@@ -1437,6 +1440,18 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns whether both brackets are highlighted when bracket matching.
+	 *
+	 * @return Whether both brackets are matched (as opposed to just the
+	 *         opposite bracket).
+	 * @see #setMatchBothBrackets(boolean)
+	 */
+	public boolean getMatchBothBrackets() {
+		return matchBothBrackets;
+	}
+
+
+	/**
 	 * Returns the background color used in bracket matching.
 	 *
 	 * @return The background color used when highlighting a bracket.
@@ -2048,6 +2063,7 @@ public abstract class AbstractMainView extends JPanel
 		setCurrentLineHighlightEnabled(prefs.currentLineHighlightEnabled);
 		setCurrentLineHighlightColor(prefs.currentLineHighlightColor);
 		setBracketMatchingEnabled(prefs.bracketMatchingEnabled);
+		setMatchBothBrackets(prefs.matchBothBrackets);
 		setMatchedBracketBGColor(prefs.matchedBracketBGColor);
 		setMatchedBracketBorderColor(prefs.matchedBracketBorderColor);
 		setMarginLineEnabled(prefs.marginLineEnabled);
@@ -3451,6 +3467,23 @@ public abstract class AbstractMainView extends JPanel
 				getRTextEditorPaneAt(i).setMarkOccurrencesColor(color);
 			}
 			firePropertyChange(MARK_OCCURRENCES_COLOR_PROPERTY, old, color);
+		}
+	}
+
+
+	/**
+	 * Sets whether both brackets are highlighted when bracket matching.
+	 *
+	 * @param matchBoth Whether to highlight both brackets (as opposed to just
+	 *        the opposite bracket).
+	 * @see #getMatchBothBrackets()
+	 */
+	public void setMatchBothBrackets(boolean matchBoth) {
+		if (matchBothBrackets!=matchBoth) {
+			matchBothBrackets = matchBoth;
+			for (int i=0; i<getNumDocuments(); i++) {
+				getRTextEditorPaneAt(i).setPaintMatchedBracketPair(matchBoth);
+			}
 		}
 	}
 

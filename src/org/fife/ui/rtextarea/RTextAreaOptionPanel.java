@@ -78,6 +78,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	private RColorSwatchesButton bmBGColorButton;
 	private JLabel bmBorderColorLabel;
 	private RColorSwatchesButton bmBorderColorButton;
+	private JCheckBox bothBracketsCB;
 
 	private JCheckBox showTabLinesCheckBox;
 	private RColorSwatchesButton tabLineColorButton;
@@ -159,18 +160,17 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		modKeyPanel.add(modKeyCombo, BorderLayout.LINE_START);
 		JPanel linkColorPanel = new JPanel(new BorderLayout());
 		linkColorPanel.add(linkColorButton, BorderLayout.LINE_START);
-		temp = new JPanel(new SpringLayout());
-		if (orientation.isLeftToRight()) {
-			temp.add(modKeyLabel);    temp.add(modKeyPanel);
-			temp.add(linkColorLabel); temp.add(linkColorPanel);
-		}
-		else {
-			temp.add(modKeyPanel);    temp.add(modKeyLabel);
-			temp.add(linkColorPanel); temp.add(linkColorLabel);
-		}
-		UIUtil.makeSpringCompactGrid(temp, 2,2, 20,0, 5,5);
-		linkPanel.add(temp);
-
+		Box box = Box.createHorizontalBox();
+		box.add(Box.createHorizontalStrut(20));
+		box.add(modKeyLabel);
+		box.add(Box.createHorizontalStrut(5));
+		box.add(modKeyCombo);
+		box.add(Box.createHorizontalStrut(40));
+		box.add(linkColorLabel);
+		box.add(Box.createHorizontalStrut(5));
+		box.add(linkColorButton);
+		box.add(Box.createHorizontalGlue());
+		linkPanel.add(box);
 		topPanel.add(linkPanel);
 		topPanel.add(Box.createVerticalStrut(5));
 
@@ -267,12 +267,16 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		bracketMatchingPanel.add(bmBorderColorButton);
 		bracketMatchingPanel.add(Box.createHorizontalGlue());
 		addLeftAligned(bigOtherPanel, bracketMatchingPanel);
+		bothBracketsCB = new JCheckBox(msg.getString("HighlightBothBrackets"));
+		bothBracketsCB.setActionCommand("BothBracketsCB");
+		bothBracketsCB.addActionListener(this);
+		addLeftAligned(bigOtherPanel, bothBracketsCB, 3, 20);
 		bigOtherPanel.add(Box.createVerticalStrut(3));
 
 		showTabLinesCheckBox = new JCheckBox(msg.getString("ShowIndentGuide"));
 		showTabLinesCheckBox.setActionCommand("ShowIndentGuide");
 		showTabLinesCheckBox.addActionListener(this);
-		Box box = Box.createHorizontalBox();
+		box = Box.createHorizontalBox();
 		box.add(showTabLinesCheckBox);
 		box.add(Box.createHorizontalStrut(5));
 		tabLineColorButton = new RColorSwatchesButton(Color.black, 50,15);
@@ -308,7 +312,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 		String command = e.getActionCommand();
 
-		if (command.equals("RestoreDefaults")) {
+		if ("RestoreDefaults".equals(command)) {
 
 			Color defaultCurrentLineHighlightColor = RTextArea.getDefaultCurrentLineHighlightColor();
 			int defaultTabSize = RTextArea.getDefaultTabSize();
@@ -338,6 +342,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				!bracketMatchCheckBox.isSelected() ||
 				!bmBGColorButton.getColor().equals(defaultBMBGColor) ||
 				!bmBorderColorButton.getColor().equals(defaultBMBorderColor) ||
+				bothBracketsCB.isSelected() ||
 				showTabLinesCheckBox.isSelected() ||
 				!Color.gray.equals(tabLineColorButton.getColor()))
 			{
@@ -363,6 +368,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				setBracketMatchCheckboxSelected(true);
 				setBracketMatchBGColor(defaultBMBGColor);
 				bmBorderColorButton.setColor(defaultBMBorderColor);
+				bothBracketsCB.setSelected(false);
 				setTabLinesEnabled(false);
 				tabLineColorButton.setColor(Color.gray);
 				hasUnsavedChanges = true;
@@ -371,26 +377,26 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 		}
 
-		else if (command.equals("WordWrapCheckBox")) {
+		else if ("WordWrapCheckBox".equals(command)) {
 			boolean ww = wordWrapCheckBox.isSelected();
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, !ww, ww);
 		}
 	
-		else if (command.equals("HighlightCurrentLineCheckBox")) {
+		else if ("HighlightCurrentLineCheckBox".equals(command)) {
 			boolean selected = highlightCurrentLineCheckBox.isSelected();
 			hclColorButton.setEnabled(selected);
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, !selected, selected);
 		}
 
-		else if (command.equals("EmulateTabsCheckBox")) {
+		else if ("EmulateTabsCheckBox".equals(command)) {
 			boolean selected = emulateTabsCheckBox.isSelected();
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, !selected, selected);
 		}
 
-		else if (command.equals("MarginLineCheckBox")) {
+		else if ("MarginLineCheckBox".equals(command)) {
 			boolean selected = marginLineCheckBox.isSelected();
 			marginLinePositionField.setEnabled(selected);
 			marginLineColorButton.setEnabled(selected);
@@ -398,7 +404,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			firePropertyChange(PROPERTY, !selected, selected);
 		}
 
-		else if (command.equals("MakeLinksClickable")) {
+		else if ("MakeLinksClickable".equals(command)) {
 			boolean selected = linkCB.isSelected();
 			modKeyLabel.setEnabled(selected);
 			modKeyCombo.setEnabled(selected);
@@ -408,12 +414,11 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			firePropertyChange(PROPERTY, !selected, selected);
 		}
 
-		else if (command.equals("ModKeyCombo")) {
+		else if ("ModKeyCombo".equals(command)) {
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, -1, modKeyCombo.getSelectedIndex());
 		}
 
-		// Toggle whether whitespace is visible.
 		else if ("VisibleWhitespace".equals(command)) {
 			boolean visible = visibleWhitespaceCheckBox.isSelected();
 			hasUnsavedChanges = true;
@@ -426,11 +431,9 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			firePropertyChange(PROPERTY, !visible, visible);
 		}
 
-		// Toggle auto-indent.
 		else if ("AutoIndent".equals(command)) {
 		}
 
-		// Toggle remove whitespace-only lines.
 		else if ("RemWhitespaceLines".equals(command)) {
 			boolean visible = remWhitespaceLinesCheckBox.isSelected();
 			hasUnsavedChanges = true;
@@ -443,25 +446,29 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			firePropertyChange(PROPERTY, !visible, visible);
 		}
 
-		// The checkbox to toggle anti-aliasing in text editors.
 		else if ("aaCB".equals(command)) {
 			boolean selected = aaCheckBox.isSelected();
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, !selected, selected);
 		}
 
-		// Toggle the fractional font metrics property.
 		else if ("FracFM".equals(command)) {
 			boolean frac = fractionalMetricsCheckBox.isSelected();
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, !frac, frac);
 		}
 
-		// Toggle whether or not the bracket-matching buttons are enabled.
 		else if ("BracketMatchCheckBox".equals(command)) {
 			boolean selected = bracketMatchCheckBox.isSelected();
 			bmBGColorButton.setEnabled(selected);
 			bmBorderColorButton.setEnabled(selected);
+			bothBracketsCB.setEnabled(selected);
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !selected, selected);
+		}
+
+		else if ("BothBracketsCB".equals(command)) {
+			boolean selected = bothBracketsCB.isSelected();
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, !selected, selected);
 		}
@@ -499,7 +506,12 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			new Integer(InputEvent.SHIFT_DOWN_MASK),
 			new Integer(InputEvent.ALT_DOWN_MASK),
 		};
-		JComboBox combo = new JComboBox(items);
+		JComboBox combo = new JComboBox(items) {
+			// Force preferred size to prevent vertical stretching!
+			public Dimension getMaximumSize() {
+				return getPreferredSize();
+			}
+		};
 		combo.setRenderer(new ModKeyCellRenderer());
 		combo.setActionCommand("ModKeyCombo");
 		combo.addActionListener(this);
@@ -545,6 +557,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		mainView.setBracketMatchingEnabled(bmEnabled);	// Doesn't update if it doesn't have to.
 		mainView.setMatchedBracketBGColor(getBracketMatchBGColor()); // Doesn't update if it doesn't have to.
 		mainView.setMatchedBracketBorderColor(bmBorderColorButton.getColor()); // Doesn't update if it doesn't have to.
+		mainView.setMatchBothBrackets(bothBracketsCB.isSelected());
 		mainView.setShowTabLines(showTabLinesCheckBox.isSelected());
 		mainView.setTabLinesColor(tabLineColorButton.getColor());
 
@@ -834,6 +847,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		bracketMatchCheckBox.setSelected(selected);
 		bmBGColorButton.setEnabled(selected);
 		bmBorderColorButton.setEnabled(selected);
+		bothBracketsCB.setEnabled(selected);
 	}
 
 
@@ -1018,6 +1032,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		setBracketMatchCheckboxSelected(bmEnabled);
 		setBracketMatchBGColor(mainView.getMatchedBracketBGColor());
 		bmBorderColorButton.setColor(mainView.getMatchedBracketBorderColor());
+		bothBracketsCB.setSelected(mainView.getMatchBothBrackets());
 		setTabLinesEnabled(mainView.getShowTabLines());
 		tabLineColorButton.setColor(mainView.getTabLinesColor());
 	}
