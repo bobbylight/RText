@@ -120,7 +120,7 @@ robert_futrell@users.sourceforge.net
 7. Contributors
 ---------------
 - linostar:                    Arabic Translation
-- sonyichi:                    Simplified Chinese Translation
+- Terrance, sonyichi:          Simplified Chinese Translation
 - kp200906, liou xiao:         Traditional Chinese Translation
 - Rogier, roel, sebastiaan:    Dutch Translation
 - pivwan:                      French Translation
@@ -130,9 +130,9 @@ robert_futrell@users.sourceforge.net
 - Luca, stepagweb:             Italian Translation
 - tomoM:                       Japanese Translation
 - Kwangsub, sbrownii:          Korean Translation
-- Maciej:                      Polish Translation
-- Marcos, leandro:             Portuguese Translation
-- vladimir:                    Russian Translation
+- Chris, Maciej:               Polish Translation
+- Pat, Marcos, leandro:        Portuguese Translation
+- Nadiya, Vladimir:            Russian Translation
 - Leonardo:                    Spanish Translation
 - burak:                       Turkish Translation
 
