@@ -136,7 +136,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 					sbb.getString("OptionPanel.CtagsType.Exuberant"));
 		exubCtagsRB.setActionCommand("ExuberantCtags");
 		exubCtagsRB.addActionListener(this);
-		JPanel temp2 = new JPanel(new BorderLayout());
+		Container temp2 = new JPanel(new BorderLayout());
 		temp2.add(exubCtagsRB, BorderLayout.LINE_START);
 		typePanel.add(temp2, BorderLayout.NORTH);
 		standardCtagsRB = new JRadioButton(
@@ -200,8 +200,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 		if (linkPos>-1) { // Always true
 			String part1 = text.substring(0, linkPos);
 			String part3 = text.substring(linkPos+3);
-			temp2 = new JPanel();
-			temp2.setLayout(new BoxLayout(temp2, BoxLayout.LINE_AXIS));
+			temp2 = createHorizontalBox();
 			temp2.add(new JLabel(part1));
 			Hyperlink link = new Hyperlink(
 				sbb.getString("OptionPanel.ExuberantHomePage"),

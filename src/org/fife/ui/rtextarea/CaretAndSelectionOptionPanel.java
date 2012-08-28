@@ -346,7 +346,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		JLabel markAllLabel = new JLabel(msg.getString("MarkAllColor"));
 		markAllLabel.setLabelFor(markAllColorButton);
 
-		Box temp = Box.createHorizontalBox();
+		Box temp = createHorizontalBox();
 		temp.add(selLabel); temp.add(Box.createHorizontalStrut(5));
 		temp.add(selColorButton);
 		temp.add(Box.createHorizontalStrut(40));
@@ -355,7 +355,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		addLeftAligned(p, temp);
 		p.add(Box.createHorizontalStrut(3));
 
-		temp = Box.createHorizontalBox();
+		temp = createHorizontalBox();
 		roundedSelCheckBox = new JCheckBox(msg.getString("RoundSel"));
 		roundedSelCheckBox.setActionCommand("RoundedSelectionCheckBox");
 		roundedSelCheckBox.addActionListener(this);
@@ -392,7 +392,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
 		moColorLabel = new JLabel(msg.getString("Color"));
 		moColorLabel.setLabelFor(moColorButton);
-		Box box = Box.createHorizontalBox();
+		Box box = createHorizontalBox();
 		box.add(Box.createHorizontalStrut(20));
 		box.add(moColorLabel);
 		box.add(Box.createHorizontalStrut(5));

@@ -256,7 +256,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		temp.add(Box.createVerticalStrut(5));
 
 		// A combo in which to select the dockable window's placement.
-		Box locationPanel = Box.createHorizontalBox();
+		Box locationPanel = createHorizontalBox();
 		locationCombo = new JComboBox();
 		UIUtil.fixComboOrientation(locationCombo);
 		locationCombo.addItem(gpb.getString("Location.top"));

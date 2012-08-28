@@ -182,7 +182,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		box2.add(Box.createVerticalStrut(5));
 		warningsCB = createCB("Warnings");
 		taintModeCB = createCB("TaintMode");
-		Box box3 = Box.createHorizontalBox();
+		Box box3 = createHorizontalBox();
 		box3.add(warningsCB);
 		box3.add(Box.createHorizontalStrut(40));
 		box3.add(taintModeCB);

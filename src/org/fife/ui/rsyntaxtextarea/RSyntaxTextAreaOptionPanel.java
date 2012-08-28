@@ -125,7 +125,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		mainBackgroundButton.setActionCommand("BackgroundButton");
 		mainBackgroundButton.addActionListener(this);
 		bgLabel.setLabelFor(mainBackgroundButton);
-		Box bgRestPanel = Box.createHorizontalBox();
+		Box bgRestPanel = createHorizontalBox();
 		bgRestPanel.add(mainBackgroundField);
 		bgRestPanel.add(Box.createHorizontalStrut(5));
 		bgRestPanel.add(mainBackgroundButton);
@@ -195,14 +195,14 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
 		fontSelector.addPropertyChangeListener(FontSelector.ENABLED_PROPERTY, this);
 		 // Just to keep it right-aligned with stuff above...
-		Box temp = Box.createHorizontalBox();
+		Box temp = createHorizontalBox();
 		temp.add(fontSelector);
 		temp.add(Box.createHorizontalStrut(5));
 		propertiesPanel.add(temp);
 		propertiesPanel.add(Box.createVerticalStrut(8));
 
 		// Add the foreground and background buttons to the properties panel.
-		temp = Box.createHorizontalBox();
+		temp = createHorizontalBox();
 		temp.setAlignmentX(Component.LEFT_ALIGNMENT);
 		fgCheckBox = new JCheckBox(msg.getString("Foreground"));
 		fgCheckBox.setActionCommand("fgCheckBox");
@@ -215,7 +215,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		temp.add(Box.createHorizontalGlue());
 		propertiesPanel.add(temp);
 		propertiesPanel.add(Box.createVerticalStrut(8));
-		temp = Box.createHorizontalBox();
+		temp = createHorizontalBox();
 		temp.setAlignmentX(Component.LEFT_ALIGNMENT);
 		bgCheckBox = new JCheckBox(msg.getString("Background"));
 		bgCheckBox.setActionCommand("bgCheckBox");
@@ -240,7 +240,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		// bottom of this panel.
 		temp = Box.createVerticalBox();
 		temp.setBorder(new OptionPanelBorder(msg.getString("Preview")));
-		Box horizBox = Box.createHorizontalBox();
+		Box horizBox = createHorizontalBox();
 		horizBox.add(new JLabel(msg.getString("SampleTextLabel")));
 		horizBox.add(Box.createHorizontalStrut(5));
 		final String[] samples = { "Java", "Perl", "XML", };
@@ -254,7 +254,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		temp.add(new RScrollPane(sampleArea));
 		temp.add(Box.createVerticalStrut(3));
 
-		Box rdPanel = Box.createHorizontalBox();
+		Box rdPanel = createHorizontalBox();
 		RButton rdButton = new RButton(msg.getString("RestoreDefaults"));
 		rdButton.setActionCommand("RestoreDefaults");
 		rdButton.addActionListener(this);

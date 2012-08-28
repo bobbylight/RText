@@ -17,6 +17,7 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -79,7 +80,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 		toolbar.setFloatable(false);
 
 		JLabel label = new JLabel(plugin.getString("Shell"));
-		Box temp = Box.createHorizontalBox();
+		Box temp = new Box(BoxLayout.LINE_AXIS);
 		temp.add(label);
 		temp.add(Box.createHorizontalStrut(5));
 		shellCombo = new JComboBox();

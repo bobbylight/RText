@@ -90,7 +90,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 		altColorCB.addActionListener(listener);
 		altColorButton = new RColorSwatchesButton();
 		altColorButton.addActionListener(listener);
-		Box temp2 = Box.createHorizontalBox();
+		Box temp2 = createHorizontalBox();
 		temp2.add(altColorCB);
 		temp2.add(Box.createHorizontalStrut(5));
 		temp2.add(altColorButton);

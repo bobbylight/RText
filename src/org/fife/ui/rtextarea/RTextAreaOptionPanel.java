@@ -111,7 +111,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 		Box tabPanel = Box.createVerticalBox();
 		tabPanel.setBorder(new OptionPanelBorder(msg.getString("Tabs")));
-		Box inputPanel = Box.createHorizontalBox();
+		Box inputPanel = createHorizontalBox();
 		tabSizeLabel = new JLabel(msg.getString("TabSize"));
 		tabSizeField = new JTextField();
 		tabSizeField.getDocument().addDocumentListener(this);
@@ -122,7 +122,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		inputPanel.add(tabSizeField);
 		inputPanel.add(Box.createHorizontalGlue());
 		tabPanel.add(inputPanel);
-		Box etPanel = Box.createHorizontalBox();
+		Box etPanel = createHorizontalBox();
 		emulateTabsCheckBox = new JCheckBox(msg.getString("EmulateTabs"));
 		emulateTabsCheckBox.setActionCommand("EmulateTabsCheckBox");
 		emulateTabsCheckBox.addActionListener(this);
@@ -153,7 +153,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		modKeyPanel.add(modKeyCombo, BorderLayout.LINE_START);
 		JPanel linkColorPanel = new JPanel(new BorderLayout());
 		linkColorPanel.add(linkColorButton, BorderLayout.LINE_START);
-		Box box = Box.createHorizontalBox();
+		Box box = createHorizontalBox();
 		box.add(Box.createHorizontalStrut(20));
 		box.add(modKeyLabel);
 		box.add(Box.createHorizontalStrut(5));
@@ -242,7 +242,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		addLeftAligned(bigOtherPanel, fractionalMetricsCheckBox);
 		bigOtherPanel.add(Box.createVerticalStrut(3));
 
-		bracketMatchingPanel = Box.createHorizontalBox();
+		bracketMatchingPanel = createHorizontalBox();
 		bracketMatchCheckBox = new JCheckBox(msg.getString("HighlightMB"));
 		bracketMatchCheckBox.setActionCommand("BracketMatchCheckBox");
 		bracketMatchCheckBox.addActionListener(this);
@@ -269,7 +269,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		showTabLinesCheckBox = new JCheckBox(msg.getString("ShowIndentGuide"));
 		showTabLinesCheckBox.setActionCommand("ShowIndentGuide");
 		showTabLinesCheckBox.addActionListener(this);
-		box = Box.createHorizontalBox();
+		box = createHorizontalBox();
 		box.add(showTabLinesCheckBox);
 		box.add(Box.createHorizontalStrut(5));
 		tabLineColorButton = new RColorSwatchesButton(Color.black, 50,15);

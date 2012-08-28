@@ -61,9 +61,8 @@ class PrintingOptionPanel extends OptionsDialogPanel
 		setLayout(new BorderLayout());
 		setBorder(UIUtil.getEmpty5Border());
 
-		JPanel printFontPanel = new JPanel();
+		Box printFontPanel = new Box(BoxLayout.LINE_AXIS);
 		printFontPanel.setBorder(new OptionPanelBorder(msg.getString("OptPrFTitle")));
-		printFontPanel.setLayout(new BoxLayout(printFontPanel, BoxLayout.LINE_AXIS));
 		printFontPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		fontSelector = new FontSelector();
@@ -71,8 +70,7 @@ class PrintingOptionPanel extends OptionsDialogPanel
 		printFontPanel.add(fontSelector);
 		printFontPanel.add(Box.createHorizontalGlue());
 
-		JPanel temp = new JPanel();
-		temp.setLayout(new BoxLayout(temp, BoxLayout.PAGE_AXIS));
+		Box temp = Box.createVerticalBox();
 		headerCheckBox = new JCheckBox(msg.getString("OptPrPH"));
 		footerCheckBox = new JCheckBox(msg.getString("OptPrPF"));
 		headerCheckBox.setEnabled(false);
@@ -86,8 +84,7 @@ class PrintingOptionPanel extends OptionsDialogPanel
 		printHeaderFooterPanel.add(temp);
 		printHeaderFooterPanel.add(Box.createHorizontalGlue());
 
-		temp = new JPanel();
-		temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
+		temp = Box.createVerticalBox();
 		temp.add(printFontPanel);
 		temp.add(printHeaderFooterPanel);
 

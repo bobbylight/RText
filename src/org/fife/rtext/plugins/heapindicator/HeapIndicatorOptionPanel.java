@@ -82,8 +82,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 
 		// A panel to contain everything that will go into our "top" area.
 		Box topPanel = Box.createVerticalBox();
-		JPanel topPanel2 = new JPanel();
-		topPanel2.setLayout(new BoxLayout(topPanel2, BoxLayout.Y_AXIS));
+		Box topPanel2 = Box.createVerticalBox();
 		topPanel2.setBorder(BorderFactory.createCompoundBorder(
 				new OptionPanelBorder(msg.getString(
 								"Plugin.OptionPanel.Title.General")),
@@ -102,8 +101,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 
 		// Panel for the indicator's refresh rate.
 		temp = new JPanel(new BorderLayout());
-		JPanel temp2 = new JPanel();
-		temp2.setLayout(new BoxLayout(temp2, BoxLayout.LINE_AXIS));
+		Box temp2 = new Box(BoxLayout.LINE_AXIS);
 		JLabel label = UIUtil.createLabel(msg,
 						"Plugin.OptionPanel.RefreshRate.text",
 						"Plugin.OptionPanel.RefreshRate.mnemonic");
@@ -119,14 +117,13 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 		topPanel.add(topPanel2);
 		topPanel.add(Box.createVerticalStrut(5));
 
-		topPanel2 = new JPanel();
-		topPanel2.setLayout(new BoxLayout(topPanel2, BoxLayout.Y_AXIS));
+		topPanel2 = Box.createVerticalBox();
 		topPanel2.setBorder(BorderFactory.createCompoundBorder(
 				new OptionPanelBorder(msg.getString(
 								"Plugin.OptionPanel.Title.Appearance")),
 				empty5Border));
 
-		// Panel for the "use system colors" checkbox.
+		// Panel for the "use system colors" check box.
 		temp = new JPanel(new BorderLayout());
 		systemColorsCheckBox = new JCheckBox(msg.getString(
 						"Plugin.OptionPanel.SystemColors.text"));
@@ -164,9 +161,9 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 			temp.add(borderButton);      temp.add(borderLabel);
 		}
 		UIUtil.makeSpringCompactGrid(temp, 2,2, 5,5, 5,5);
-		temp2 = new JPanel(new BorderLayout());
-		temp2.add(temp, BorderLayout.LINE_START);
-		topPanel2.add(temp2);
+		JPanel temp3 = new JPanel(new BorderLayout());
+		temp3.add(temp, BorderLayout.LINE_START);
+		topPanel2.add(temp3);
 
 		topPanel.add(topPanel2);
 

@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
+import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -110,8 +110,7 @@ class BackgroundDialog extends JDialog implements ActionListener {
 		imageChooser.applyComponentOrientation(orientation);
 
 		// Create a panel showing a "background preview."
-		JPanel previewPanel = new JPanel();
-		previewPanel.setLayout(new BoxLayout(previewPanel, BoxLayout.Y_AXIS));
+		Box previewPanel = Box.createVerticalBox();
 		previewPanel.setBorder(BorderFactory.createTitledBorder(
 									msg.getString("PreviewLabel")));
 		colorOrImageIcon = new ColorOrImageIcon();

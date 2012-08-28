@@ -13,6 +13,7 @@ package org.fife.rtext.optionsdialog;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
+import java.awt.Container;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +23,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -87,8 +87,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		// Create a panel to put everything in.  We'll add this panel to our
 		// "North" so it doesn't stretch when the user resizes the dialog.
-		JPanel everything = new JPanel();
-		everything.setLayout(new BoxLayout(everything, BoxLayout.Y_AXIS));
+		Box everything = Box.createVerticalBox();
 
 		viewCombo = new JComboBox();
 		UIUtil.fixComboOrientation(viewCombo);
@@ -179,8 +178,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		everything.add(temp);
 
 		// Add a panel for the "modified filenames" color button.
-		JPanel miscPanel = new JPanel();
-		miscPanel.setLayout(new BoxLayout(miscPanel, BoxLayout.LINE_AXIS));
+		Container miscPanel = createHorizontalBox();
 		highlightModifiedCheckBox = new JCheckBox(msg.getString("OptUIHMDN"));
 		highlightModifiedCheckBox.setActionCommand("HighlightModifiedCheckBox");
 		highlightModifiedCheckBox.addActionListener(this);

@@ -95,8 +95,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		setLayout(new BorderLayout());
 
 		// Create a panel for stuff aligned at the top.
-		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+		Box topPanel = Box.createVerticalBox();
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.setBorder(new OptionPanelBorder(
 				msg.getString("OptNewFileTitle")));
@@ -172,8 +171,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		topPanel.add(Box.createVerticalStrut(5));
 
 		// A panel for other general stuff.
-		JPanel otherPanel = new JPanel();
-		otherPanel.setLayout(new BoxLayout(otherPanel, BoxLayout.Y_AXIS));
+		Box otherPanel = Box.createVerticalBox();
 		otherPanel.setBorder(new OptionPanelBorder(
 									msg.getString("OptOtherTitle")));
 		temp = new JPanel();

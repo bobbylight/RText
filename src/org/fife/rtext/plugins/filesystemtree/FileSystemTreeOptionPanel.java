@@ -19,7 +19,6 @@ import java.awt.event.ItemListener;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -85,9 +84,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 		topPanel.add(Box.createVerticalStrut(5));
 
 		// A combo in which to select the dockable window's placement.
-		JPanel locationPanel = new JPanel();
-		locationPanel.setLayout(new BoxLayout(locationPanel,
-										BoxLayout.LINE_AXIS));
+		Box locationPanel = createHorizontalBox();
 		locationCombo = new JComboBox();
 		UIUtil.fixComboOrientation(locationCombo);
 		locationCombo.addItem(gpb.getString("Location.top"));

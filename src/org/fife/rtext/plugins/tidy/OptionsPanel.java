@@ -87,7 +87,7 @@ class OptionsPanel extends PluginOptionsDialogPanel implements ActionListener {
 		JLabel label = new JLabel(msg.getString("Options.SpaceCount"));
 		htmlSpaceSpinner = new JSpinner(new SpinnerNumberModel(4, -1,25, 1));
 		label.setLabelFor(htmlSpaceSpinner);
-		Container temp2 = Box.createHorizontalBox();
+		Container temp2 = createHorizontalBox();
 		temp2.add(label);
 		temp2.add(Box.createHorizontalStrut(5));
 		temp2.add(htmlSpaceSpinner);
@@ -105,7 +105,7 @@ class OptionsPanel extends PluginOptionsDialogPanel implements ActionListener {
 		label = new JLabel(msg.getString("Options.WrapLength"));
 		htmlWrapLenSpinner = new JSpinner(new SpinnerNumberModel(4, 0,999999, 1));
 		label.setLabelFor(htmlWrapLenSpinner);
-		temp2 = Box.createHorizontalBox();
+		temp2 = createHorizontalBox();
 		temp2.add(label);
 		temp2.add(Box.createHorizontalStrut(5));
 		temp2.add(htmlWrapLenSpinner);
@@ -125,7 +125,7 @@ class OptionsPanel extends PluginOptionsDialogPanel implements ActionListener {
 		label = new JLabel(msg.getString("Options.SpaceCount"));
 		xmlSpaceSpinner = new JSpinner(new SpinnerNumberModel(4, -1,25, 1));
 		label.setLabelFor(xmlSpaceSpinner);
-		temp2 = Box.createHorizontalBox();
+		temp2 = createHorizontalBox();
 		temp2.add(label);
 		temp2.add(Box.createHorizontalStrut(5));
 		temp2.add(xmlSpaceSpinner);
@@ -139,7 +139,7 @@ class OptionsPanel extends PluginOptionsDialogPanel implements ActionListener {
 		label = new JLabel(msg.getString("Options.WrapLength"));
 		xmlWrapLenSpinner = new JSpinner(new SpinnerNumberModel(4, 0,999999, 1));
 		label.setLabelFor(xmlWrapLenSpinner);
-		temp2 = Box.createHorizontalBox();
+		temp2 = createHorizontalBox();
 		temp2.add(label);
 		temp2.add(Box.createHorizontalStrut(5));
 		temp2.add(xmlWrapLenSpinner);
@@ -156,7 +156,7 @@ class OptionsPanel extends PluginOptionsDialogPanel implements ActionListener {
 							msg.getString("Options.RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
-		temp = Box.createHorizontalBox();
+		temp = createHorizontalBox();
 		temp.add(defaultsButton);
 		temp.add(Box.createHorizontalGlue());
 		cp.add(temp);
