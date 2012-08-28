@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -606,8 +605,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			contentPane.setBorder(UIUtil.getEmpty5Border());
 
 			// Panel containing main stuff.
-			JPanel topPanel = new JPanel();
-			topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+			Box topPanel = Box.createVerticalBox();
 			JPanel temp = new JPanel(new BorderLayout());
 			temp.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
 			JLabel label = UIUtil.createLabel(Plugin.msg,

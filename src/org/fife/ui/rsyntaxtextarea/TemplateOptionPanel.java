@@ -21,7 +21,6 @@ import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -271,15 +270,14 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 					new TemplateNameDocumentFilter());
 			}
 			idLabel.setLabelFor(idField);
-			JPanel temp = new JPanel();
-			temp.setLayout(new BoxLayout(temp, BoxLayout.LINE_AXIS));
-			temp.add(idLabel);
-			temp.add(Box.createHorizontalStrut(5));
-			temp.add(idField);
-			temp.add(Box.createHorizontalGlue());
-			contentPane.add(temp, BorderLayout.NORTH);
+			Box box = createHorizontalBox();
+			box.add(idLabel);
+			box.add(Box.createHorizontalStrut(5));
+			box.add(idField);
+			box.add(Box.createHorizontalGlue());
+			contentPane.add(box, BorderLayout.NORTH);
 
-			temp = new JPanel(new GridLayout(2,1, 5,5));
+			JPanel temp = new JPanel(new GridLayout(2,1, 5,5));
 			temp.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 			JLabel label = UIUtil.createLabel(msg,
 							"BeforeCaretText", "BeforeCaretMnemonic");

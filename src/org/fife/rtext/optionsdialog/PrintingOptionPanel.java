@@ -77,10 +77,9 @@ class PrintingOptionPanel extends OptionsDialogPanel
 		footerCheckBox.setEnabled(false);
 		temp.add(headerCheckBox);
 		temp.add(footerCheckBox);
-		JPanel printHeaderFooterPanel = new JPanel();
+		Box printHeaderFooterPanel = createHorizontalBox();
 		printHeaderFooterPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		printHeaderFooterPanel.setBorder(new OptionPanelBorder(msg.getString("OptPrHFL")));
-		printHeaderFooterPanel.setLayout(new BoxLayout(printHeaderFooterPanel, BoxLayout.LINE_AXIS));
 		printHeaderFooterPanel.add(temp);
 		printHeaderFooterPanel.add(Box.createHorizontalGlue());
 

@@ -48,11 +48,10 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected JPanel createDetailsPanel() {
+	protected Box createDetailsPanel() {
 
 		// A panel containing the "Report detail" panel and some check boxes.
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		Box panel = Box.createVerticalBox();
 		panel.add(Box.createVerticalStrut(5));
 		subfoldersCheckBox = new JCheckBox(getString2("SearchSubfolders"));
 		subfoldersCheckBox.setMnemonic((int)getString2("SearchSubfoldersMnemonic").charAt(0));
@@ -70,7 +69,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected JPanel createExtraOptionsPanel() {
+	protected Box createExtraOptionsPanel() {
 		return null;
 	}
 

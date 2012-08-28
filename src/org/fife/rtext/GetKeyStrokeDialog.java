@@ -17,7 +17,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -53,9 +52,8 @@ public class GetKeyStrokeDialog extends JDialog implements ActionListener {
 		ComponentOrientation orientation = ComponentOrientation.
 								getOrientation(getLocale());
 		ResourceBundle msg = rtext.getResourceBundle();
-		JPanel contentPane = new JPanel();
+		Box contentPane = Box.createVerticalBox();
 		contentPane.setBorder(UIUtil.getEmpty5Border());
-		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		JPanel temp = new JPanel(new BorderLayout());
 		JLabel prompt = new JLabel(msg.getString("KeyStrokePrompt"));
 		temp.add(prompt, BorderLayout.LINE_START);

@@ -139,27 +139,24 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		JPanel inputPanel = createInputPanel();
 
 		// Make a "Conditions" panel.
-		JPanel conditionsPanel = new JPanel();
+		Box conditionsPanel = Box.createVerticalBox();
 		conditionsPanel.setBorder(createTitledBorder(getString2("Conditions")));
-		conditionsPanel.setLayout(new BoxLayout(conditionsPanel, BoxLayout.PAGE_AXIS));
 		conditionsPanel.add(caseCheckBox);
 		conditionsPanel.add(wholeWordCheckBox);
 		conditionsPanel.add(regExpCheckBox);
 
 		// Make a "Report detail" panel.
-		JPanel detailEtcPanel = createDetailsPanel();
+		Box detailEtcPanel = createDetailsPanel();
 
 		// Make a panel containing the "Conditions" and "detailEtc" panels.
-		JPanel bottomLeftPanel = new JPanel();
-		bottomLeftPanel.setLayout(new BoxLayout(bottomLeftPanel, BoxLayout.LINE_AXIS));
+		Box bottomLeftPanel = new Box(BoxLayout.LINE_AXIS);
 		bottomLeftPanel.add(conditionsPanel);
 		bottomLeftPanel.add(Box.createHorizontalStrut(10));
 		bottomLeftPanel.add(detailEtcPanel);
 		bottomLeftPanel.add(Box.createHorizontalGlue());
 
 		// Make a panel containing all of the text fields, and the bottom left panel.
-		JPanel leftPanel = new JPanel();
-		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+		Box leftPanel = Box.createVerticalBox();
 		leftPanel.add(inputPanel);
 		leftPanel.add(bottomLeftPanel);
 
@@ -195,7 +192,7 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		topPanel.add(rightPanel, BorderLayout.LINE_END);
 
 		// Make a panel containing a "Verbose output" check box.
-		JPanel extraOptionsPanel = createExtraOptionsPanel();
+		Box extraOptionsPanel = createExtraOptionsPanel();
 
 		// Make the "results" panel.
 		JPanel resultsPanel = new JPanel(new GridLayout(1,1, 3,3));
@@ -222,9 +219,8 @@ public class FindInFilesDialog extends AbstractSearchDialog
 
 		// Put everything together.
 		setStatusText(defaultStatusText);
-		JPanel temp = new JPanel();
+		Box temp = Box.createVerticalBox();
 		temp.setBorder(empty5Border);
-		temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
 		temp.add(topPanel);
 		temp.add(Box.createVerticalStrut(5));
 		if (extraOptionsPanel!=null) {
@@ -386,11 +382,10 @@ public class FindInFilesDialog extends AbstractSearchDialog
 	 *
 	 * @return The panel.
 	 */
-	protected JPanel createDetailsPanel() {
+	protected Box createDetailsPanel() {
 
-		JPanel detailPanel = new JPanel();
+		Box detailPanel = Box.createVerticalBox();
 		detailPanel.setBorder(createTitledBorder(getString2("ReportDetail")));
-		detailPanel.setLayout(new BoxLayout(detailPanel, BoxLayout.PAGE_AXIS));
 		matchingLinesRadioButton = new JRadioButton(getString2("MatchingLines"));
 		matchingLinesRadioButton.setMnemonic((int)getString2("MatchingLinesMnemonic").charAt(0));
 		matchingLinesRadioButton.setSelected(true);
@@ -403,8 +398,7 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		detailPanel.add(fileCountsOnlyRadioButton);
 
 		// Make a panel containing the "Report detail" panel and some check boxes.
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		Box panel = Box.createVerticalBox();
 		subfoldersCheckBox = new JCheckBox(getString2("SearchSubfolders"));
 		subfoldersCheckBox.setMnemonic((int)getString2("SearchSubfoldersMnemonic").charAt(0));
 		subfoldersCheckBox.setActionCommand("Subfolders");
@@ -424,9 +418,8 @@ public class FindInFilesDialog extends AbstractSearchDialog
 	 * @return The panel, or <code>null</code> if there are no extra
 	 *         options.
 	 */
-	protected JPanel createExtraOptionsPanel() {
-		JPanel temp = new JPanel();
-		temp.setLayout(new BoxLayout(temp, BoxLayout.LINE_AXIS));
+	protected Box createExtraOptionsPanel() {
+		Box temp = new Box(BoxLayout.LINE_AXIS);
 		verboseCheckBox = new JCheckBox(getString2("Verbose"));
 		verboseCheckBox.setActionCommand("Verbose");
 		verboseCheckBox.addActionListener(this);
