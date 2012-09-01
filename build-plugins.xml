@@ -18,7 +18,7 @@
 
 	<!-- Set global properties for this build. -->
 	<property name="app-name-small" value="rtext_standard_plugins"/>
-	<property name="version"        value="2.0.0"/>
+	<property name="version"        value="2.0.4"/>
 	<property name="source-dir"     location="src"/>
 	<property name="class-dir"      location="ant-classes"/>
 	<property name="dist-dir"       location="dist"/>
@@ -244,6 +244,24 @@
 		<copy file="lib/Rhino.build-date"       todir="${dist-dir}/plugins"/>
 		<copy file="lib/Rhino.LICENSE.txt"      todir="${dist-dir}/plugins"/>
 		<copy file="lib/js-14.jar"              todir="${dist-dir}/plugins"/>
+
+		<!-- Project plugin. -->
+		<jar destfile="${dist-dir}/plugins/ProjectSupport.jar">
+			<fileset dir="${class-dir}">
+				<include name="org/fife/rtext/plugins/project/**"/>
+			</fileset>
+			<fileset dir="${source-dir}">
+				<include name="org/fife/rtext/plugins/project/**/*.gif"/>
+				<include name="org/fife/rtext/plugins/project/**/*.png"/>
+			</fileset>
+			<fileset dir="i18n">
+				<include name="org/fife/rtext/plugins/project/**"/>
+			</fileset>
+			<manifest>
+				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.project.ProjectPlugin"/>
+				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
+			</manifest>
+		</jar>
 
 	</target>
 

@@ -76,7 +76,7 @@ public class Plugin extends AbstractPlugin {
 
 		StandardAction a = new ViewConsoleAction(this.app, msg, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
-		this.app.addAction(VIEW_CONSOLE_ACTION, a);
+		app.addAction(VIEW_CONSOLE_ACTION, a);
 
 		window = new ConsoleWindow(this.app, this);
 		window.setPosition(prefs.windowPosition);
