@@ -1,3 +1,12 @@
+/*
+ * 08/28/2012
+ *
+ * Project.java - A logical representation of a programming project.
+ * Copyright (C) 2012 Robert Futrell
+ * http://fifesoft.com/rtext
+ * Licensed under a modified BSD license.
+ * See the included license file for details.
+ */
 package org.fife.rtext.plugins.project;
 
 import java.util.ArrayList;
@@ -37,6 +46,11 @@ public class Project {
 
 	public String getName() {
 		return name;
+	}
+
+
+	public void removeEntry(ProjectEntry entry) {
+		entries.remove(entry);
 	}
 
 

@@ -1,3 +1,12 @@
+/*
+ * 08/28/2012
+ *
+ * WorkspaceTree.java - A tree representation of a workspace.
+ * Copyright (C) 2012 Robert Futrell
+ * http://fifesoft.com/rtext
+ * Licensed under a modified BSD license.
+ * See the included license file for details.
+ */
 package org.fife.rtext.plugins.project.tree;
 
 import java.awt.Point;
@@ -6,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
@@ -31,7 +41,6 @@ public class WorkspaceTree extends JTree {
 	private DefaultTreeModel model;
 	private DefaultMutableTreeNode root;
 	private JPopupMenu popup;
-	private Workspace workspace;
 
 
 	public WorkspaceTree(ProjectPlugin plugin, Workspace workspace) {
@@ -42,6 +51,11 @@ public class WorkspaceTree extends JTree {
 		setModel(model);
 		setWorkspace(workspace);
 		setCellRenderer(new WorkspaceTreeRenderer());
+
+		// Add a needed extra bit of space at the top.
+		setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createEmptyBorder(3, 3, 0, 3),
+				getBorder()));
 
 	}
 
@@ -133,7 +147,6 @@ public class WorkspaceTree extends JTree {
 	public void setWorkspace(Workspace workspace) {
 
 		root = new WorkspaceRootTreeNode(plugin, workspace);
-		this.workspace = workspace;
 
 		for (Iterator i=workspace.getProjectIterator(); i.hasNext(); ) {
 			Project project = (Project)i.next();

@@ -250,21 +250,24 @@ public class MacroManager {
 		// a ClassLoader parameter, but until then, this is a workaround.
 		ClassLoader threadCL = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(Macro.class.getClassLoader());
-
-		// Put our macros into a list.
-		List macroList = new ArrayList(macros);
-
-		// Save our list of macros as XML.
-		File file = new File(dir, MACRO_DEFINITION_FILE_NAME);
-		XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
-									new FileOutputStream(file)));
 		try {
-			e.writeObject(macroList);
-		} finally {
-			e.close();
-		}
 
-		Thread.currentThread().setContextClassLoader(threadCL);
+			// Put our macros into a list.
+			List macroList = new ArrayList(macros);
+
+			// Save our list of macros as XML.
+			File file = new File(dir, MACRO_DEFINITION_FILE_NAME);
+			XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
+										new FileOutputStream(file)));
+			try {
+				e.writeObject(macroList);
+			} finally {
+				e.close();
+			}
+
+		} finally {
+			Thread.currentThread().setContextClassLoader(threadCL);
+		}
 
 	}
 

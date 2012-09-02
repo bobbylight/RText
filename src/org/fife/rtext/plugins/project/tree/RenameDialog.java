@@ -1,3 +1,12 @@
+/*
+ * 08/28/2012
+ *
+ * RenameDialog.java - Dialog for renaming workspace tree nodes.
+ * Copyright (C) 2012 Robert Futrell
+ * http://fifesoft.com/rtext
+ * Licensed under a modified BSD license.
+ * See the included license file for details.
+ */
 package org.fife.rtext.plugins.project.tree;
 
 import java.awt.BorderLayout;
@@ -5,23 +14,25 @@ import java.awt.ComponentOrientation;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.DocumentFilter;
 
+import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.rsta.ui.EscapableDialog;
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
@@ -38,8 +49,13 @@ public class RenameDialog extends EscapableDialog{
 	private JButton okButton;
 	private JButton cancelButton;
 	private JTextField nameField;
+	private DecorativeIconPanel renameDIP;
+	private NameChecker nameChecker;
 
 	private RText owner;
+	private String type;
+
+	private static Icon ERROR_ICON;
 
 
 	/**
@@ -48,11 +64,13 @@ public class RenameDialog extends EscapableDialog{
 	 * @param owner The rtext window that owns this dialog.
 	 * @param type The type of node being renamed.
 	 */
-	public RenameDialog(RText owner, String type, DocumentFilter filter) {
+	public RenameDialog(RText owner, String type, NameChecker checker) {
 
 		super(owner);
 		this.owner = owner;
+		this.type = type;
 		Listener listener = new Listener();
+		this.nameChecker = checker;
 
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
@@ -67,12 +85,13 @@ public class RenameDialog extends EscapableDialog{
 		JLabel label = new JLabel(Messages.getString(key));
 		label.setDisplayedMnemonic(Messages.getString(key + ".Mnemonic").charAt(0));
 		nameField = new JTextField(40);
-		((AbstractDocument)nameField.getDocument()).setDocumentFilter(filter);
+		nameField.getDocument().addDocumentListener(listener);
 		label.setLabelFor(nameField);
+		renameDIP = new DecorativeIconPanel();
 		Box box = new Box(BoxLayout.LINE_AXIS);
 		box.add(label);
 		box.add(Box.createHorizontalStrut(5));
-		box.add(nameField);
+		box.add(RTextUtilities.createAssistancePanel(nameField, renameDIP));
 		box.add(Box.createHorizontalGlue());
 
 		// Make a panel containing the OK and Cancel buttons.
@@ -104,6 +123,20 @@ public class RenameDialog extends EscapableDialog{
 
 
 	/**
+	 * Returns the icon to use for fields with errors.
+	 *
+	 * @return The icon.
+	 */
+	private Icon getErrorIcon() {
+		if (ERROR_ICON==null) {
+			URL res = getClass().getResource("error_co.gif");
+			ERROR_ICON = new ImageIcon(res);
+		}
+		return ERROR_ICON;
+	}
+
+
+	/**
 	 * Returns the name selected.
 	 *
 	 * @return The name selected, or <code>null</code> if the dialog was
@@ -113,6 +146,23 @@ public class RenameDialog extends EscapableDialog{
 	public String getName() {
 		String name = nameField.getText();
 		return name.length()>0 ? name : null;
+	}
+
+
+	private void setBadNameValue(String reasonKey) {
+		renameDIP.setShowIcon(true);
+		String reason = Messages.getString(
+				"RenameDialog.InvalidName." + reasonKey, type);
+		renameDIP.setIcon(getErrorIcon());
+		renameDIP.setToolTipText(reason);
+		okButton.setEnabled(false);
+	}
+
+
+	private void setGoodNameValue() {
+		renameDIP.setShowIcon(false);
+		renameDIP.setToolTipText(null);
+		okButton.setEnabled(true);
 	}
 
 
@@ -138,9 +188,9 @@ public class RenameDialog extends EscapableDialog{
 			String command = e.getActionCommand();
 			if (command.equals("OK")) {
 				escapePressed();
-				nameField.setText(null); // So user gets back nothing
 			}
 			else if (command.equals("Cancel")) {
+				nameField.setText(null); // So user gets back nothing
 				escapePressed();
 			}
 		}
@@ -148,12 +198,35 @@ public class RenameDialog extends EscapableDialog{
 		public void changedUpdate(DocumentEvent e) {
 		}
 
+		private void handleDocumentEvent(DocumentEvent e) {
+
+			if (nameField.getDocument().getLength()==0) {
+				setBadNameValue("empty");
+				return;
+			}
+
+			String text = nameField.getText();
+			if (!nameChecker.isValid(text)) {
+				setBadNameValue("invalidChars");
+				return;
+			}
+
+//			if (isNew && MacroManager.get().containsMacroNamed(name)) {
+//				setWarnMacroName();
+//			}
+//			else {
+//				setGoodMacroName();
+//			}
+setGoodNameValue();
+
+		}
+
 		public void insertUpdate(DocumentEvent e) {
-			okButton.setEnabled(nameField.getDocument().getLength()>0);
+			handleDocumentEvent(e);
 		}
 
 		public void removeUpdate(DocumentEvent e) {
-			okButton.setEnabled(nameField.getDocument().getLength()>0);
+			handleDocumentEvent(e);
 		}
 
 	}

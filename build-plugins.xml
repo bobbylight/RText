@@ -253,6 +253,7 @@
 			<fileset dir="${source-dir}">
 				<include name="org/fife/rtext/plugins/project/**/*.gif"/>
 				<include name="org/fife/rtext/plugins/project/**/*.png"/>
+				<include name="org/fife/rtext/plugins/project/**/*.dtd"/>
 			</fileset>
 			<fileset dir="i18n">
 				<include name="org/fife/rtext/plugins/project/**"/>

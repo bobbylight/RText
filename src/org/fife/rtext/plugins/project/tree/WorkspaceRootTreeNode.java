@@ -1,3 +1,12 @@
+/*
+ * 08/28/2012
+ *
+ * WorkspaceRootTreeNode.java - Tree node for the workspace root.
+ * Copyright (C) 2012 Robert Futrell
+ * http://fifesoft.com/rtext
+ * Licensed under a modified BSD license.
+ * See the included license file for details.
+ */
 package org.fife.rtext.plugins.project.tree;
 
 import java.util.ArrayList;
@@ -5,9 +14,7 @@ import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.text.DocumentFilter;
 
-import org.fife.rtext.NumberDocumentFilter;
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
@@ -58,15 +65,42 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	protected void handleRename() {
 		RText rtext = plugin.getRText();
 		String type = Messages.getString("ProjectPlugin.Workspace");
-		DocumentFilter filter = new NumberDocumentFilter();
-		RenameDialog dialog = new RenameDialog(rtext, type, filter);
+		RenameDialog dialog = new RenameDialog(rtext, type, new WorkspaceNameChecker());
 		dialog.setName(workspace.getName());
 		dialog.setVisible(true);
+		String newName = dialog.getName();
+		if (newName!=null) {
+			workspace.setName(newName);
+			plugin.refreshTree(this);
+		}
 	}
 
 
 	public String toString() {
 		return workspace.getName();
+	}
+
+
+	/**
+	 * Ensures that proposed project names are valid.
+	 */
+	private static class WorkspaceNameChecker implements NameChecker {
+
+		public boolean isValid(String text) {
+			int length = text.length();
+			if (length==0) {
+				return false;
+			}
+			for (int i=0; i<length; i++) {
+				char ch = text.charAt(i);
+				if (!(Character.isLetterOrDigit(ch) || ch=='_' || ch=='-' ||
+						ch==' ')) {
+					return false;
+				}
+			}
+			return !text.endsWith(".");
+		}
+
 	}
 
 

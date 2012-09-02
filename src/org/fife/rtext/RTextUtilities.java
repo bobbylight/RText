@@ -203,7 +203,7 @@ public class RTextUtilities {
 
 	/**
 	 * Creates a panel containing the specified component and an (optional)
-	 * dedorative (or assistance) icon panel.
+	 * decorative (or assistance) icon panel.
 	 *
 	 * @param comp The component.
 	 * @param iconPanel The icon panel.  If this is <code>null</code>, then a

@@ -11,6 +11,9 @@ package org.fife.rtext.plugins.project;
 
 import java.awt.BorderLayout;
 
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.tree.WorkspaceTree;
 import org.fife.ui.RScrollPane;
@@ -36,11 +39,27 @@ class ProjectWindow extends DockableWindow {
 		setPosition(DockableWindow.LEFT);
 		setLayout(new BorderLayout());
 
-		Workspace workspace = new Workspace("A Workspace!");
-		tree = new WorkspaceTree(plugin, workspace);
+		tree = new WorkspaceTree(plugin, plugin.getWorkspace());
 		RScrollPane sp = new RScrollPane(tree);
 		add(sp);
 
+	}
+
+
+	/**
+	 * Refreshes the workspace tree from the specified node down.
+	 *
+	 * @param fromNode The node to start the refreshing from.
+	 */
+	void refreshTree(TreeNode fromNode) {
+		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+		if (fromNode!=null) {
+			model.reload(fromNode);
+		}
+		else {
+			model.reload();
+			//UIUtil.expandAllNodes(tree);
+		}
 	}
 
 

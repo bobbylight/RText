@@ -78,6 +78,7 @@ public class Plugin extends AbstractPlugin {
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
 		app.addAction(VIEW_CONSOLE_ACTION, a);
 
+		// Window MUST always be created for preference saving on shutdown
 		window = new ConsoleWindow(this.app, this);
 		window.setPosition(prefs.windowPosition);
 		window.setActive(prefs.windowVisible);

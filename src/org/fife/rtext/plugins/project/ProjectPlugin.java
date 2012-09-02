@@ -9,6 +9,8 @@
  */
 package org.fife.rtext.plugins.project;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -18,9 +20,11 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
@@ -38,6 +42,7 @@ public class ProjectPlugin extends AbstractPlugin {
 	private RText rtext;
 	private ProjectWindow window;
 	private Icon icon;
+	private Workspace workspace;
 
 	private static final String VIEW_CONSOLE_ACTION	= "viewProjectWindowAction";
 	private static final String VERSION_STRING = "2.0.4";
@@ -45,12 +50,22 @@ public class ProjectPlugin extends AbstractPlugin {
 
 	public ProjectPlugin(AbstractPluggableGUIApplication app) {
 
+		rtext = (RText)app; // Needed now in case of XML errors below.
+
 		URL res = getClass().getResource("application_side_list.png");
 		icon = new ImageIcon(res);
+		ProjectPluginPrefs prefs = loadPrefs();
 
 		StandardAction a = new ViewProjectsAction((RText)app, this);
-		//a.setAccelerator(prefs.windowVisibilityAccelerator);
+		a.setAccelerator(prefs.windowVisibilityAccelerator);
 		app.addAction(VIEW_CONSOLE_ACTION, a);
+
+		loadInitialWorkspace(prefs.openWorkspaceName);
+
+		// Window MUST always be created for preference saving on shutdown
+		window = new ProjectWindow(rtext, this);
+		window.setPosition(prefs.windowPosition);
+		window.setActive(prefs.windowVisible);
 
 	}
 
@@ -94,6 +109,17 @@ public class ProjectPlugin extends AbstractPlugin {
 
 
 	/**
+	 * Returns the file containing the preferences for this plugin.
+	 *
+	 * @return The preferences file for this plugin.
+	 */
+	private File getPrefsFile() {
+		return new File(RTextUtilities.getPreferencesDirectory(),
+				"projects.properties");
+	}
+
+
+	/**
 	 * Returns the parent RText instance.
 	 *
 	 * @return The parent RText instance.
@@ -103,9 +129,28 @@ public class ProjectPlugin extends AbstractPlugin {
 	}
 
 
+	/**
+	 * Returns the directory that workspaces are saved to.
+	 *
+	 * @return The directory.
+	 */
+	public File getWorkspacesDir() {
+		return new File(RTextUtilities.getPreferencesDirectory(), "workspaces");
+	}
+
+
+	/**
+	 * Returns the active workspace.
+	 *
+	 * @return The active workspace, or <code>null</code> if none.
+	 */
+	public Workspace getWorkspace() {
+		return workspace;
+	}
+
+
 	public void install(AbstractPluggableGUIApplication app) {
 
-		rtext = (RText)app;
 		RTextMenuBar mb = (RTextMenuBar)app.getJMenuBar();
 
 		// Add an item to the "View" menu to toggle console visibility
@@ -128,7 +173,7 @@ public class ProjectPlugin extends AbstractPlugin {
 			}
 		});
 
-		setProjectWindowVisible(true);
+		rtext.addDockableWindow(window);
 
 	}
 
@@ -140,13 +185,88 @@ public class ProjectPlugin extends AbstractPlugin {
 	 * @see #setProjectWindowVisible(boolean)
 	 */
 	boolean isProjectWindowVisible() {
-		return window!=null && window.isActive();
+		return window.isActive();
+	}
+
+
+	/**
+	 * Loads the initial workspace as previously saved in the preferences.
+	 *
+	 * @param workspaceName The name of the workspace to load.
+	 */
+	private void loadInitialWorkspace(String workspaceName) {
+		if (workspaceName!=null) {
+			File workspaceFile = new File(getWorkspacesDir(),
+					workspaceName + ".xml");
+			if (workspaceFile.isFile()) {
+				// Always true unless user manually removed it
+				try {
+					workspace = Workspace.load(workspaceFile);
+				} catch (IOException ioe) {
+					rtext.displayException(ioe);
+				}
+			}
+		}
+		if (workspace==null) {
+			workspace = new Workspace("Workspace");
+		}
+	}
+
+
+	/**
+	 * Loads saved preferences for this plugin.  If this is the first
+	 * time through, default values will be returned.
+	 *
+	 * @return The preferences.
+	 */
+	private ProjectPluginPrefs loadPrefs() {
+		ProjectPluginPrefs prefs = new ProjectPluginPrefs();
+		File prefsFile = getPrefsFile();
+		if (prefsFile.isFile()) {
+			try {
+				prefs.load(prefsFile);
+			} catch (IOException ioe) {
+				rtext.displayException(ioe);
+				// (Some) defaults will be used
+			}
+		}
+		return prefs;
+	}
+
+
+	/**
+	 * Refreshes the workspace tree from the specified node down.
+	 *
+	 * @param fromNode The node to start the refreshing from.
+	 */
+	public void refreshTree(TreeNode fromNode) {
+		window.refreshTree(fromNode);
 	}
 
 
 	public void savePreferences() {
-		// TODO Auto-generated method stub
-		
+
+		ProjectPluginPrefs prefs = new ProjectPluginPrefs();
+		prefs.windowPosition = window.getPosition();
+		StandardAction a = (StandardAction)rtext.getAction(VIEW_CONSOLE_ACTION);
+		prefs.windowVisibilityAccelerator = a.getAccelerator();
+		prefs.windowVisible = window.isActive();
+		prefs.openWorkspaceName = workspace==null ? null : workspace.getName();
+		File prefsFile = getPrefsFile();
+		try {
+			prefs.save(prefsFile);
+		} catch (IOException ioe) {
+			rtext.displayException(ioe);
+		}
+
+		if (workspace!=null) {
+			try {
+				workspace.save(getWorkspacesDir());
+			} catch (IOException ioe) {
+				rtext.displayException(ioe);
+			}
+		}
+
 	}
 
 
@@ -158,10 +278,6 @@ public class ProjectPlugin extends AbstractPlugin {
 	 */
 	void setProjectWindowVisible(boolean visible) {
 		if (visible!=isProjectWindowVisible()) {
-			if (visible && window==null) {
-				window = new ProjectWindow(rtext, this);
-				rtext.addDockableWindow(window);
-			}
 			window.setActive(visible);
 		}
 	}
