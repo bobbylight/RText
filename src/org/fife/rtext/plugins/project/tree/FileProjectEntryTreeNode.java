@@ -1,7 +1,7 @@
 /*
  * 08/28/2012
  *
- * ProjectEntryTreeNode.java - Tree node for project entries.
+ * FileProjectEntryTreeNode.java - Tree node for file project entries.
  * Copyright (C) 2012 Robert Futrell
  * http://fifesoft.com/rtext
  * Licensed under a modified BSD license.
@@ -10,6 +10,7 @@
 package org.fife.rtext.plugins.project.tree;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
@@ -24,21 +25,37 @@ import org.fife.rtext.plugins.project.ProjectPlugin;
 
 
 /**
- * The tree node used for project entries.
+ * The tree node used for file project entries.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-public class ProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
+public class FileProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 
 	private ProjectEntry entry;
 	private Icon icon;
 
 
-	public ProjectEntryTreeNode(ProjectPlugin plugin, ProjectEntry entry) {
+	public FileProjectEntryTreeNode(ProjectPlugin plugin, ProjectEntry entry) {
 		super(plugin);
 		this.entry = entry;
 		icon = FileSystemView.getFileSystemView().getSystemIcon(entry.getFile());
+	}
+
+
+	/**
+	 * Returns the file or directory represented by this tree node's project
+	 * entry.
+	 *
+	 * @return The file or directory.
+	 */
+	public File getFile() {
+		return entry.getFile();
+	}
+
+
+	public Icon getIcon() {
+		return icon;
 	}
 
 
@@ -53,11 +70,6 @@ public class ProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
-	public Icon getIcon() {
-		return icon;
-	}
-
-
 	protected void handleProperties() {
 		JOptionPane.showMessageDialog(null, "Properties of the item!");
 	}
@@ -68,7 +80,7 @@ public class ProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 		boolean directory = entry.getFile().isDirectory();
 		String key = "ProjectPlugin." + (directory ? "Directory" : "File");
 		String type = Messages.getString(key);
-		RenameDialog dialog = new RenameDialog(rtext, type, new ProjectEntryNameChecker());
+		RenameDialog dialog = new RenameDialog(rtext, type, new FileProjectEntryNameChecker());
 		dialog.setName(entry.getFile().getName());
 		dialog.setVisible(true);
 	}
@@ -80,9 +92,9 @@ public class ProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 	
 
 	/**
-	 * Ensures that proposed project entry names are valid.
+	 * Ensures that proposed file project entry names are valid.
 	 */
-	private static class ProjectEntryNameChecker implements NameChecker {
+	private static class FileProjectEntryNameChecker implements NameChecker {
 
 		public boolean isValid(String text) {
 			int length = text.length();
@@ -91,8 +103,7 @@ public class ProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 			}
 			for (int i=0; i<length; i++) {
 				char ch = text.charAt(i);
-				if (!(Character.isLetterOrDigit(ch) || ch=='_' || ch=='-' ||
-						ch==' ')) {
+				if (!(Character.isLetterOrDigit(ch) || ch=='_' || ch==' ')) {
 					return false;
 				}
 			}
@@ -123,7 +134,7 @@ public class ProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 					JOptionPane.YES_NO_OPTION);
 			if (rc==JOptionPane.YES_OPTION) {
 				ProjectTreeNode parent = (ProjectTreeNode)getParent();
-				parent.remove(ProjectEntryTreeNode.this);
+				parent.remove(FileProjectEntryTreeNode.this);
 				Project project = parent.getProject();
 				project.removeEntry(entry);
 				plugin.refreshTree(parent);

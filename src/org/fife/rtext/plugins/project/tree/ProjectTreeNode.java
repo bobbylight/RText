@@ -19,10 +19,12 @@ import javax.swing.JOptionPane;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.FileProjectEntry;
+import org.fife.rtext.plugins.project.FolderProjectEntry;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.Project;
 import org.fife.rtext.plugins.project.ProjectEntry;
 import org.fife.rtext.plugins.project.ProjectPlugin;
+import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
 
@@ -37,6 +39,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	private Project project;
 	private static Icon icon;
 	private static RTextFileChooser chooser;
+
 
 	public ProjectTreeNode(ProjectPlugin plugin, Project project) {
 		super(plugin);
@@ -69,6 +72,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	public List getPopupActions() {
 		List actions = new ArrayList();
 		actions.add(new NewFileAction());
+		actions.add(new NewFolderAction());
 		actions.add(null);
 		actions.add(new RenameAction());
 		actions.add(null);
@@ -117,7 +121,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	private class NewFileAction extends BaseAction {
 
 		public NewFileAction() {
-			super("Action.NewFile");
+			super("Action.NewFile", "page_white_add.png");
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -127,7 +131,33 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 				File toAdd = chooser.getSelectedFile();
 				ProjectEntry entry = new FileProjectEntry(toAdd);
 				project.addEntry(entry);
-				add(new ProjectEntryTreeNode(plugin, entry));
+				add(new FileProjectEntryTreeNode(plugin, entry));
+				plugin.refreshTree(ProjectTreeNode.this);
+			}
+		}
+
+	}
+
+
+	/**
+	 * Action for a menu item that adds a folder to this project.
+	 */
+	private class NewFolderAction extends BaseAction {
+
+		public NewFolderAction() {
+			super("Action.NewFolder", "folder_add.png");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			RText rtext = plugin.getRText();
+			RDirectoryChooser chooser = new RDirectoryChooser(rtext);
+			chooser.setVisible(true);
+			String dir = chooser.getChosenDirectory();
+			if (dir!=null) {
+				File dirFile = new File(dir);
+				ProjectEntry entry = new FolderProjectEntry(dirFile);
+				project.addEntry(entry);
+				add(new FileProjectEntryTreeNode(plugin, entry));
 				plugin.refreshTree(ProjectTreeNode.this);
 			}
 		}
