@@ -69,6 +69,7 @@ public class Workspace {
 	 * Adds a project to this workspace.
 	 *
 	 * @param project The project to add.
+	 * @see #removeProject(Project)
 	 */
 	public void addProject(Project project) {
 		projects.add(project);
@@ -145,7 +146,7 @@ public class Workspace {
 
 			Element projElem = (Element)projElemList.item(i);
 			name = projElem.getAttribute("name");
-			Project project = new Project(name);
+			Project project = new Project(workspace, name);
 			workspace.addProject(project);
 
 			NodeList entryList = projElem.getElementsByTagName("project-entry");
@@ -155,10 +156,10 @@ public class Workspace {
 				String type = entryElem.getAttribute("type");
 				ProjectEntry entry = null;
 				if (ProjectEntry.DIR_PROJECT_ENTRY.equals(type)) {
-					entry = new FolderProjectEntry(new File(name));
+					entry = new FolderProjectEntry(project, new File(name));
 				}
 				else if (ProjectEntry.FILE_PROJECT_ENTRY.equals(type)) {
-					entry = new FileProjectEntry(new File(name));
+					entry = new FileProjectEntry(project, new File(name));
 				}
 				project.addEntry(entry);
 			}
@@ -203,6 +204,11 @@ public class Workspace {
 			throw new IOException(text);
 		}
 		return doc;
+	}
+
+
+	public void removeProject(Project project) {
+		projects.remove(project);
 	}
 
 

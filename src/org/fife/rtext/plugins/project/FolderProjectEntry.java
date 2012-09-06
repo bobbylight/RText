@@ -21,10 +21,12 @@ import java.io.File;
  */
 public class FolderProjectEntry implements ProjectEntry {
 
+	private Project parent;
 	private File dir;
 
 
-	public FolderProjectEntry(File folder) {
+	public FolderProjectEntry(Project parent, File folder) {
+		this.parent = parent;
 		this.dir = folder;
 	}
 
@@ -50,6 +52,11 @@ public class FolderProjectEntry implements ProjectEntry {
 	}
 
 
+	public Project getProject() {
+		return parent;
+	}
+
+
 	public String getType() {
 		return DIR_PROJECT_ENTRY;
 	}
@@ -57,6 +64,11 @@ public class FolderProjectEntry implements ProjectEntry {
 
 	public int hashCode() {
 		return dir.hashCode();
+	}
+
+
+	public void removeFromProject() {
+		parent.removeEntry(this);
 	}
 
 

@@ -32,6 +32,7 @@ import javax.swing.text.AbstractDocument;
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rtext.NumberDocumentFilter;
+import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RButton;
 import org.fife.ui.UIUtil;
@@ -67,7 +68,7 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Php.Name"));
 		listener = new Listener();
-		setIcon(new ImageIcon(getClass().getResource("page_white_php.png")));
+		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/page_white_php.png")));
 
 		ComponentOrientation o = ComponentOrientation.
 											getOrientation(getLocale());

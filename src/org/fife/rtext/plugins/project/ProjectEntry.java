@@ -40,10 +40,28 @@ public interface ProjectEntry extends Comparable {
 
 
 	/**
+	 * Returns the project containing this entry.
+	 *
+	 * @return The parent project.
+	 * @see #removeFromProject()
+	 */
+	Project getProject();
+
+
+	/**
 	 * Returns the type of project entry this is.
 	 *
 	 * @return The type of project entry.
 	 */
 	String getType();
+
+
+	/**
+	 * Removes this entry from its parent project.
+	 *
+	 * @see #getProject()
+	 */
+	void removeFromProject();
+
 
 }

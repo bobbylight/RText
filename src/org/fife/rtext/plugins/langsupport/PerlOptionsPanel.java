@@ -90,7 +90,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Perl.Name"));
 		listener = new Listener();
-		setIcon(new ImageIcon(getClass().getResource("epic.gif")));
+		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/epic.gif")));
 
 		ComponentOrientation o = ComponentOrientation.
 											getOrientation(getLocale());

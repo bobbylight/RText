@@ -26,6 +26,7 @@ import javax.swing.border.Border;
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.sh.ShellLanguageSupport;
+import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RButton;
 import org.fife.ui.UIUtil;
@@ -57,7 +58,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Sh.Name"));
 		listener = new Listener();
-		setIcon(new ImageIcon(getClass().getResource("page_white_tux.png")));
+		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/page_white_tux.png")));
 
 		ComponentOrientation o = ComponentOrientation.
 											getOrientation(getLocale());

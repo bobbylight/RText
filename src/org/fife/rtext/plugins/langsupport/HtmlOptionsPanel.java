@@ -32,6 +32,7 @@ import javax.swing.text.AbstractDocument;
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rtext.NumberDocumentFilter;
+import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RButton;
 import org.fife.ui.UIUtil;
@@ -68,7 +69,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Html.Name"));
 		listener = new Listener();
-		setIcon(new ImageIcon(getClass().getResource("html.png")));
+		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/html.png")));
 
 		ComponentOrientation o = ComponentOrientation.
 											getOrientation(getLocale());

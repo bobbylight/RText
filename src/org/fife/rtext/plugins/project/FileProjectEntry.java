@@ -20,15 +20,17 @@ import java.io.File;
  */
 public class FileProjectEntry implements ProjectEntry {
 
+	private Project parent;
 	private File file;
 
 
-	public FileProjectEntry(String file) {
-		this(new File(file));
+	public FileProjectEntry(Project parent, String file) {
+		this(parent, new File(file));
 	}
 
 
-	public FileProjectEntry(File file) {
+	public FileProjectEntry(Project parent, File file) {
+		this.parent = parent;
 		this.file = file;
 	}
 
@@ -54,6 +56,11 @@ public class FileProjectEntry implements ProjectEntry {
 	}
 
 
+	public Project getProject() {
+		return parent;
+	}
+
+
 	public String getType() {
 		return FILE_PROJECT_ENTRY;
 	}
@@ -61,6 +68,11 @@ public class FileProjectEntry implements ProjectEntry {
 
 	public int hashCode() {
 		return file.hashCode();
+	}
+
+
+	public void removeFromProject() {
+		parent.removeEntry(this);
 	}
 
 

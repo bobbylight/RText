@@ -48,6 +48,9 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	public abstract Icon getIcon();
 
 
+	protected abstract void handleDelete();
+
+
 	protected abstract void handleProperties();
 
 
@@ -71,6 +74,22 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 				URL url = getClass().getResource(image);
 				putValue(SMALL_ICON, new ImageIcon(url));
 			}
+		}
+
+	}
+
+
+	/**
+	 * Action for deleting a tree node.
+	 */
+	protected class DeleteAction extends BaseAction {
+
+		public DeleteAction() {
+			super("Action.Delete");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			handleDelete();
 		}
 
 	}

@@ -20,7 +20,7 @@
                                    and *NIX installer.
        7. make-javadoc:            Creates javadoc for all /org/fife
                                    classes in ${doc-dir}.
-       8. make-mac-insatller:      Creates a dmg file for installing on
+       8. make-mac-installer:      Creates a dmg file for installing on
                                    Mac OS X.
 
 	This script assumes that, from the current directory, you have the

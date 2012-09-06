@@ -46,6 +46,7 @@ import org.fife.rsta.ac.java.buildpath.ZipSourceLocation;
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
 import org.fife.rtext.NumberDocumentFilter;
+import org.fife.rtext.RText;
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.FSATextField;
 import org.fife.ui.OptionsDialogPanel;
@@ -97,7 +98,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Java.Name"));
 		listener = new Listener();
-		setIcon(new ImageIcon(getClass().getResource("cup.png")));
+		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/java.png")));
 
 		ComponentOrientation o = ComponentOrientation.
 											getOrientation(getLocale());

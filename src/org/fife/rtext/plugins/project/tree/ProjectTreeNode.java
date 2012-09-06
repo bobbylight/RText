@@ -75,6 +75,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 		actions.add(new NewFolderAction());
 		actions.add(null);
 		actions.add(new RenameAction());
+		actions.add(new DeleteAction());
 		actions.add(null);
 		actions.add(new PropertiesAction());
 		return actions;
@@ -88,6 +89,24 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	 */
 	public Project getProject() {
 		return project;
+	}
+
+
+	protected void handleDelete() {
+
+		String text = Messages.getString("Action.Delete.Confirm",
+				"ProjectPlugin.Project", getProject().getName());
+		RText rtext = plugin.getRText();
+		String title = rtext.getString("ConfDialogTitle");
+
+		int rc = JOptionPane.showConfirmDialog(rtext, text, title,
+				JOptionPane.YES_NO_OPTION);
+		if (rc==JOptionPane.YES_OPTION) {
+			project.removeFromWorkspace();
+			removeFromParent();
+			plugin.refreshTree(getParent());
+		}
+
 	}
 
 
@@ -129,7 +148,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 			int rc = chooser.showOpenDialog(plugin.getRText());
 			if (rc==RTextFileChooser.APPROVE_OPTION) {
 				File toAdd = chooser.getSelectedFile();
-				ProjectEntry entry = new FileProjectEntry(toAdd);
+				ProjectEntry entry = new FileProjectEntry(project, toAdd);
 				project.addEntry(entry);
 				add(new FileProjectEntryTreeNode(plugin, entry));
 				plugin.refreshTree(ProjectTreeNode.this);
@@ -155,7 +174,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 			String dir = chooser.getChosenDirectory();
 			if (dir!=null) {
 				File dirFile = new File(dir);
-				ProjectEntry entry = new FolderProjectEntry(dirFile);
+				ProjectEntry entry = new FolderProjectEntry(project, dirFile);
 				project.addEntry(entry);
 				add(new FileProjectEntryTreeNode(plugin, entry));
 				plugin.refreshTree(ProjectTreeNode.this);

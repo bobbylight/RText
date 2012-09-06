@@ -47,6 +47,16 @@ class ProjectWindow extends DockableWindow {
 
 
 	/**
+	 * Returns the tree view of the active workspace.
+	 *
+	 * @return The tree view.
+	 */
+	public WorkspaceTree getTree() {
+		return tree;
+	}
+
+
+	/**
 	 * Refreshes the workspace tree from the specified node down.
 	 *
 	 * @param fromNode The node to start the refreshing from.

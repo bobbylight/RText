@@ -57,6 +57,11 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
+	protected void handleDelete() {
+		JOptionPane.showMessageDialog(null, "Not yet supported (or used)!");
+	}
+
+
 	protected void handleProperties() {
 		JOptionPane.showMessageDialog(null, "Properties of the item!");
 	}

@@ -52,7 +52,6 @@ public class RenameDialog extends EscapableDialog{
 	private DecorativeIconPanel renameDIP;
 	private NameChecker nameChecker;
 
-	private RText owner;
 	private String type;
 
 	private static Icon ERROR_ICON;
@@ -67,7 +66,6 @@ public class RenameDialog extends EscapableDialog{
 	public RenameDialog(RText owner, String type, NameChecker checker) {
 
 		super(owner);
-		this.owner = owner;
 		this.type = type;
 		Listener listener = new Listener();
 		this.nameChecker = checker;

@@ -17,7 +17,7 @@ import java.util.HashMap;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import org.fife.ui.rtextfilechooser.Utilities;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
 /**
@@ -32,7 +32,7 @@ public class FileTypeIconManager {
 	/**
 	 * The map of file extensions to icon names.
 	 */
-	private HashMap ext2IconNameMap;
+	private HashMap type2IconNameMap;
 
 	/**
 	 * The map of icon names to icons.
@@ -62,24 +62,21 @@ public class FileTypeIconManager {
 		ClassLoader cl = this.getClass().getClassLoader();
 		defaultIcon = new ImageIcon(cl.getResource(DEFAULT_ICON_PATH));
 
-		ext2IconNameMap = new HashMap();
-		ext2IconNameMap.put("bat",	PATH + "bat.gif");
-		ext2IconNameMap.put("cmd",	PATH + "bat.gif");
-		ext2IconNameMap.put("c",		PATH + "c.gif");
-		ext2IconNameMap.put("cpp",	PATH + "cpp.gif");
-		ext2IconNameMap.put("cxx",	PATH + "cpp.gif");
-		ext2IconNameMap.put("cs",	PATH + "cs.gif");
-		ext2IconNameMap.put("h",		PATH + "h.gif");
-		ext2IconNameMap.put("html",	PATH + "html.gif");
-		ext2IconNameMap.put("java",	PATH + "java.gif");
-		ext2IconNameMap.put("pl",	PATH + "pl.gif");
-		ext2IconNameMap.put("perl",	PATH + "pl.gif");
-		ext2IconNameMap.put("pm",	PATH + "pl.gif");
-		ext2IconNameMap.put("sas",	PATH + "sas.gif");
-		ext2IconNameMap.put("sh",	PATH + "sh.gif");
-		ext2IconNameMap.put("bsh",	PATH + "sh.gif");
-		ext2IconNameMap.put("csh",	PATH + "sh.gif");
-		ext2IconNameMap.put("ksh",	PATH + "sh.gif");
+		type2IconNameMap = new HashMap();
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_C,				PATH + "c.gif");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_CLOJURE,			PATH + "clojure.png");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS,		PATH + "cpp.gif");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_CSHARP,			PATH + "cs.gif");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_CSS,				PATH + "css.png");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_HTML,				PATH + "html.png");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_JAVA,				PATH + "java.png");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT,		PATH + "script_code.png");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_PERL,				PATH + "epic.gif");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_PHP,				PATH + "page_white_php.png");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_SAS,				PATH + "sas.gif");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL,		PATH + "page_white_tux.png");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH,	PATH + "bat.gif");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_XML,				PATH + "xml.png");
 
 		iconName2IconMap = new HashMap();
 
@@ -97,16 +94,15 @@ public class FileTypeIconManager {
 		Icon icon = null;
 
 		// If this file has no extension, use the default icon.
-		String fileName = textArea.getFileName();
-		String extension = Utilities.getExtension(fileName);
+		String style = textArea.getSyntaxEditingStyle();
 
-		if (extension==null) {
+		if (style==null) { // Never happens
 			icon = defaultIcon;
 		}
 		else {
 
 			// Check whether there's a special icon for this file extension.
-			String iconName = (String)ext2IconNameMap.get(extension);
+			String iconName = (String)type2IconNameMap.get(style);
 			if (iconName!=null) {
 				icon = (Icon)iconName2IconMap.get(iconName);
 				// Load and cache the icon if it's not yet loaded.
@@ -118,7 +114,7 @@ public class FileTypeIconManager {
 			}
 
 			// No special icon?  Then use the default one.
-			else { // iconName==null.
+			else {
 				icon = defaultIcon;
 			}
 
@@ -140,7 +136,7 @@ public class FileTypeIconManager {
 
 
 	/**
-	 * An icon capable of displaying informational "subicons" in the corners
+	 * An icon capable of displaying informational "sub-icons" in the corners
 	 * of a main icon.
 	 */
 	static class TextAreaAwareIcon implements Icon, PropertyChangeListener {

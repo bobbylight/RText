@@ -22,13 +22,15 @@ import java.util.List;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Project {
+public class Project implements Comparable {
 
+	private Workspace workspace;
 	private String name;
 	private List entries;
 
 
-	public Project(String name) {
+	public Project(Workspace workspace, String name) {
+		this.workspace = workspace;
 		setName(name);
 		entries = new ArrayList();
 	}
@@ -36,6 +38,22 @@ public class Project {
 
 	public void addEntry(ProjectEntry entry) {
 		entries.add(entry);
+	}
+
+
+	public int compareTo(Object o) {
+		if (o instanceof Project) {
+			return getName().compareTo(((Project)o).getName());
+		}
+		return -1;
+	}
+
+
+	public boolean equals(Object o) {
+		if (o==this) {
+			return true;
+		}
+		return compareTo(o)==0;
 	}
 
 
@@ -49,8 +67,18 @@ public class Project {
 	}
 
 
+	public int hashCode() {
+		return getName().hashCode();
+	}
+
+
 	public void removeEntry(ProjectEntry entry) {
 		entries.remove(entry);
+	}
+
+
+	public void removeFromWorkspace() {
+		workspace.removeProject(this);
 	}
 
 

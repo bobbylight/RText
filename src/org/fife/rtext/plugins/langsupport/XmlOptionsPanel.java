@@ -58,7 +58,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Xml.Name"));
-		setIcon(new ImageIcon(getClass().getResource("xml.png")));
+		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/xml.png")));
 
 		ComponentOrientation o = ComponentOrientation.
 										getOrientation(getLocale());

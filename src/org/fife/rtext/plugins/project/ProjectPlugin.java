@@ -25,6 +25,7 @@ import javax.swing.tree.TreeNode;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.plugins.project.tree.WorkspaceTree;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
@@ -126,6 +127,16 @@ public class ProjectPlugin extends AbstractPlugin {
 	 */
 	public RText getRText() {
 		return rtext;
+	}
+
+
+	/**
+	 * Returns the tree view of the active workspace.
+	 *
+	 * @return The tree view.
+	 */
+	public WorkspaceTree getTree() {
+		return window.getTree();
 	}
 
 
