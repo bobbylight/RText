@@ -48,7 +48,7 @@
 	<!-- Set global properties for this build. -->
 	<property name="app-name"         value="RText"/>
 	<property name="app-name-small"   value="rtext"/>
-	<property name="version"          value="2.0.2"/>
+	<property name="version"          value="2.0.4"/>
 	<property name="source-dir"       location="src"/>
 	<property name="common-dir"       location="../Common"/>
 	<property name="class-dir"        location="ant-classes"/>
@@ -135,6 +135,10 @@
 				<!-- Skip those put into lib/plugins -->
 				<exclude name="language_support.jar"/>
 				<exclude name="jtidy*"/>
+				<exclude name="js-14.jar"/>
+				<exclude name="RSTALanguageSupport.License.txt"/>
+				<exclude name="Rhino.build-date"/>
+				<exclude name="Rhino.LICENSE.txt"/>
 			</fileset>
 			<fileset dir="${common-dir}/dist"/>
 			<fileset dir="${common-dir}/native"/>
@@ -156,17 +160,21 @@
 	<!-- source for the "standard" plugins.                           -->
 	<target name="make-rtext-source-zip"
 		description="Builds the source zip for RText.">
+		<delete file="./${app-name-small}_${version}_Source.zip" quiet="true"/>
 		<zip destfile="./${app-name-small}_${version}_Source.zip">
 			<fileset dir="..">
 				<include name="RText/**"/>
+				<exclude name="RText/bin/**"/>
 				<exclude name="RText/classes/**"/>
 				<exclude name="RText/ant-classes/**"/>
 				<exclude name="RText/dist/**"/>
-				<exclude name="RText/.*"/>
+				<exclude name="RText/javadoc/**"/>
 				<exclude name="RText/*.dll"/>
+				<exclude name="RText/${app-name-small}_${version}_win32_setup.exe"/>
 				<exclude name="RText/*.gz"/>
-				<exclude name="*.zip"/>
+				<exclude name="${app-name-small}_${version}*.zip"/>
 				<include name="Common/build.xml"/>
+				<include name="Common/.*"/>
 				<include name="Common/src/**"/>
 				<include name="Common/i18n/**"/>
 				<include name="Common/extra/**"/>
@@ -179,6 +187,7 @@
 	<!-- Builds a UNIX "installer" gzipped tar file.  -->
 	<target name="make-unix-installer" depends="make-rtext-app"
 			description="Makes the rtext tar.gz installer for *NIX.">
+		<delete file="${app-name-small}_${version}_unix_bin.tar.gz" quiet="true"/>
 		<tar destfile="${app-name-small}_${version}_unix_bin.tar">
 			<tarfileset dir="${dist-dir}" prefix="/rtext"
 					preserveleadingslashes="false">

@@ -2,6 +2,28 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+2.0.4 (09/07/2012):
+-------------------
+   - HTML, JSP, and PHP syntax highlighting now also highlight embedded CSS.
+   - Background color highlighting for "secondary" languages (such as CSS and
+     JS in HTML, JSP and PHP) can be configured from the Options dialog.
+   - Add Clojure code folding, configurable from the Options dialog, as well
+     as some minor Clojure syntax highlighting improvements.
+   - The default editor font has changed to Consolas on Windows Vista and 7.
+   - Decreased memory usage required for regex find and replace operations.
+   - Improved performance of Mark Occurrences, especially when there are lots
+     and lots of them.
+   - Added E4X syntax highlighting to the JavaScript highlighter (disabled by
+     default since it's rarely used).
+   - Added an option to have bracket matching highlight both brackets in the
+     pair, instead of just the "opposite" one.
+   - Fix to RTextScrollPane to facilitate using it in the NetBeans GUI builder.
+   - Updated translations:  Chinese (peter_barnes), Russian (Nadiya), Polish
+     (Chris), Spanish (Leonardo), Brazilian Portuguese (Pat), and Korean
+     (Changkyoon).
+   - Fixed several bugs.
+
+
 2.0.3 (05/02/2012):
 -------------------
    - Added code folding for several languages, including C, C++, Java, Perl,

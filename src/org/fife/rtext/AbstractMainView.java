@@ -812,10 +812,6 @@ public abstract class AbstractMainView extends JPanel
 		pane.addPropertyChangeListener(this);
 		pane.addHyperlinkListener(this);
 
-//CompletionProvider provider = new WordCompletionProvider(C_FUNCTIONS);
-//AutoCompletion ac = new AutoCompletion(provider);
-//ac.install(pane);
-
 		// Add any parsers.
 		if (spellingSupport.isSpellCheckingEnabled()) {
 			pane.addParser(spellingSupport.getSpellingParser());
@@ -2784,6 +2780,8 @@ public abstract class AbstractMainView extends JPanel
 		// .c => .cpp, etc.).
 		String newStyle = getSyntaxStyleForFile(loc.getFileName());
 		setSyntaxStyle(currentTextArea, newStyle);
+		currentTextArea.setCodeFoldingEnabled(
+				isCodeFoldingEnabledFor(newStyle));
 
 		// If they had the same file opened twice (i.e., the "foo (1)"
 		// and "foo (2)"), and did "Save As..." on one of them, the other

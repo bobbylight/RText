@@ -1,13 +1,11 @@
-Last updated 01/09/2012
+Last updated 09/07/2012
 
 - Very basic variable code completion for Groovy.
-- Fix bug - new tools aren't always remembered (? still true?)
 
 
 UI Features
 -----------
-1.  Make sort functionality for Source Browser actually work.
-2.  Rearrange editor options to be more intuitive.
+1.  Rearrange editor options to be more intuitive.
 
 
 Functionality
