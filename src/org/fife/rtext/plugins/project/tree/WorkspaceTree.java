@@ -11,27 +11,30 @@ package org.fife.rtext.plugins.project.tree;
 
 import java.awt.Cursor;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
+import javax.swing.InputMap;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
+import javax.swing.KeyStroke;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.TreePath;
 
 import org.fife.rtext.AbstractMainView;
-import org.fife.rtext.plugins.project.FileProjectEntry;
-import org.fife.rtext.plugins.project.FolderProjectEntry;
-import org.fife.rtext.plugins.project.Project;
-import org.fife.rtext.plugins.project.ProjectEntry;
 import org.fife.rtext.plugins.project.ProjectPlugin;
-import org.fife.rtext.plugins.project.Workspace;
+import org.fife.rtext.plugins.project.model.Workspace;
 import org.fife.ui.rtextfilechooser.FileSelector;
 
 
@@ -54,6 +57,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		this.plugin = plugin;
 		root = new WorkspaceRootTreeNode(plugin, workspace);
 		model = new DefaultTreeModel(root);
+		createActions();
 		setModel(model);
 		setWorkspace(workspace);
 		setCellRenderer(new WorkspaceTreeRenderer());
@@ -94,25 +98,25 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	}
 
 
-	private FileProjectEntryTreeNode createProjectEntryNode(ProjectEntry entry) {
-		FileProjectEntryTreeNode node = null;
-		if (entry instanceof FileProjectEntry) {
-			node = new FileProjectEntryTreeNode(plugin, entry);
-		}
-		else {
-			node = new FolderProjectEntryTreeNode(plugin, (FolderProjectEntry)entry);
-		}
-		return node;
-	}
+	/**
+	 * Adds wrapper actions to the tree item-specific actions, so users can
+	 * use keyboard shortcuts to activate them.
+	 */
+	private void createActions() {
 
+		InputMap im = getInputMap();
+		ActionMap am = getActionMap();
 
-	private ProjectTreeNode createProjectNode(Project project) {
-		ProjectTreeNode node = new ProjectTreeNode(plugin, project);
-		for (Iterator i=project.getEntryIterator(); i.hasNext(); ) {
-			ProjectEntry entry = (ProjectEntry)i.next();
-			node.add(createProjectEntryNode(entry));
-		}
-		return node;
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "Refresh");
+		am.put("Refresh", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				Object selected = getLastSelectedPathComponent();
+				if (selected instanceof PhysicalLocationTreeNode) {
+					refreshChildren((PhysicalLocationTreeNode)selected);
+				}
+			}
+		});
+
 	}
 
 
@@ -264,16 +268,9 @@ public class WorkspaceTree extends JTree implements FileSelector {
 
 
 	public void setWorkspace(Workspace workspace) {
-
-		root = new WorkspaceRootTreeNode(plugin, workspace);
-
-		for (Iterator i=workspace.getProjectIterator(); i.hasNext(); ) {
-			Project project = (Project)i.next();
-			root.add(createProjectNode(project));
-		}
-
-		model.setRoot(root);
-
+		WorkspaceTreeRootCreator creator = new WorkspaceTreeRootCreator(plugin);
+		workspace.accept(creator);
+		model.setRoot(creator.getRoot());
 	}
 
 

@@ -42,10 +42,6 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 			super(plugin);
 		}
 
-		public List getPopupActions() {
-			return null;
-		}
-
 		public Icon getIcon() {
 			return null;
 		}
@@ -53,6 +49,8 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 		protected void handleDelete() {}
 
 		protected void handleProperties() {}
+
+		protected void handleRefresh() {}
 
 		protected void handleRename() {}
 		

@@ -7,11 +7,12 @@
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
-package org.fife.rtext.plugins.project;
+package org.fife.rtext.plugins.project.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 
 
 /**
@@ -22,7 +23,7 @@ import java.util.List;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Project implements Comparable {
+public class Project implements Comparable, ProjectEntryParent {
 
 	private Workspace workspace;
 	private String name;
@@ -33,6 +34,15 @@ public class Project implements Comparable {
 		this.workspace = workspace;
 		setName(name);
 		entries = new ArrayList();
+	}
+
+
+	public void accept(WorkspaceVisitor visitor) {
+		visitor.visit(this);
+		for (Iterator i=getEntryIterator(); i.hasNext(); ) {
+			((ProjectEntry)i.next()).accept(visitor);
+		}
+		visitor.postVisit(this);
 	}
 
 

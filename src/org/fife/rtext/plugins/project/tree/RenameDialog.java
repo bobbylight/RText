@@ -52,8 +52,6 @@ public class RenameDialog extends EscapableDialog{
 	private DecorativeIconPanel renameDIP;
 	private NameChecker nameChecker;
 
-	private String type;
-
 	private static Icon ERROR_ICON;
 
 
@@ -66,7 +64,6 @@ public class RenameDialog extends EscapableDialog{
 	public RenameDialog(RText owner, String type, NameChecker checker) {
 
 		super(owner);
-		this.type = type;
 		Listener listener = new Listener();
 		this.nameChecker = checker;
 
@@ -135,6 +132,17 @@ public class RenameDialog extends EscapableDialog{
 
 
 	/**
+	 * Returns a localized error message to use in this dialog.
+	 *
+	 * @param key The (part of the) key to display.
+	 * @return The localized error message.
+	 */
+	public static String getLocalizedReason(String key) {
+		return Messages.getString("RenameDialog.InvalidName." + key);
+	}
+
+
+	/**
 	 * Returns the name selected.
 	 *
 	 * @return The name selected, or <code>null</code> if the dialog was
@@ -147,12 +155,10 @@ public class RenameDialog extends EscapableDialog{
 	}
 
 
-	private void setBadNameValue(String reasonKey) {
+	private void setBadNameValue(String reason) {
 		renameDIP.setShowIcon(true);
-		String reason = Messages.getString(
-				"RenameDialog.InvalidName." + reasonKey, type);
 		renameDIP.setIcon(getErrorIcon());
-		renameDIP.setToolTipText(reason);
+		renameDIP.setToolTipText(getLocalizedReason(reason));
 		okButton.setEnabled(false);
 	}
 
@@ -204,8 +210,9 @@ public class RenameDialog extends EscapableDialog{
 			}
 
 			String text = nameField.getText();
-			if (!nameChecker.isValid(text)) {
-				setBadNameValue("invalidChars");
+			String error = nameChecker.isValid(text);
+			if (error!=null) {
+				setBadNameValue(error);
 				return;
 			}
 

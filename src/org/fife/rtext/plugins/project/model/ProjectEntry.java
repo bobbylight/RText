@@ -7,9 +7,10 @@
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
-package org.fife.rtext.plugins.project;
+package org.fife.rtext.plugins.project.model;
 
 import java.io.File;
+
 
 
 /**
@@ -18,17 +19,23 @@ import java.io.File;
  * @author Robert Futrell
  * @version 1.0
  */
-public interface ProjectEntry extends Comparable {
+public interface ProjectEntry extends ModelEntity, Comparable {
 
 	/**
 	 * A project entry that's a single file somewhere on the file system.
 	 */
-	public static final String FILE_PROJECT_ENTRY = "file";
+	public static final String FILE_PROJECT_ENTRY = "file-entry";
 
 	/**
 	 * A project entry that's a directory and all of its contents.
 	 */
-	public static final String DIR_PROJECT_ENTRY  = "directory";
+	public static final String DIR_PROJECT_ENTRY  = "folder-entry";
+
+	/**
+	 * A project entry that's a logical folder (not a physical folder on the
+	 * local file system).
+	 */
+	public static final String LOGICAL_DIR_PROJECT_ENTRY = "logical-folder-entry";
 
 
 	/**
@@ -40,12 +47,20 @@ public interface ProjectEntry extends Comparable {
 
 
 	/**
-	 * Returns the project containing this entry.
+	 * Returns the parent of this entry.
 	 *
-	 * @return The parent project.
-	 * @see #removeFromProject()
+	 * @return The parent model object.
+	 * @see #removeFromParent()
 	 */
-	Project getProject();
+	ProjectEntryParent getParent();
+
+
+	/**
+	 * Returns the data to save about this entry in workspace XML.
+	 *
+	 * @return The save data.
+	 */
+	String getSaveData();
 
 
 	/**
@@ -57,11 +72,11 @@ public interface ProjectEntry extends Comparable {
 
 
 	/**
-	 * Removes this entry from its parent project.
+	 * Removes this entry from its parent.
 	 *
-	 * @see #getProject()
+	 * @see #getParent()
 	 */
-	void removeFromProject();
+	void removeFromParent();
 
 
 }

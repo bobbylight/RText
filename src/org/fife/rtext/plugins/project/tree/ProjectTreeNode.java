@@ -18,12 +18,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import org.fife.rtext.RText;
-import org.fife.rtext.plugins.project.FileProjectEntry;
-import org.fife.rtext.plugins.project.FolderProjectEntry;
 import org.fife.rtext.plugins.project.Messages;
-import org.fife.rtext.plugins.project.Project;
-import org.fife.rtext.plugins.project.ProjectEntry;
 import org.fife.rtext.plugins.project.ProjectPlugin;
+import org.fife.rtext.plugins.project.model.FileProjectEntry;
+import org.fife.rtext.plugins.project.model.FolderProjectEntry;
+import org.fife.rtext.plugins.project.model.LogicalFolderProjectEntry;
+import org.fife.rtext.plugins.project.model.Project;
+import org.fife.rtext.plugins.project.model.ProjectEntry;
 import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
@@ -73,6 +74,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 		List actions = new ArrayList();
 		actions.add(new NewFileAction());
 		actions.add(new NewFolderAction());
+		actions.add(new NewLogicalFolderAction());
 		actions.add(null);
 		actions.add(new RenameAction());
 		actions.add(new DeleteAction());
@@ -112,6 +114,11 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 	protected void handleProperties() {
 		JOptionPane.showMessageDialog(null, "Properties of the item!");
+	}
+
+
+	protected void handleRefresh() {
+		// Do nothing
 	}
 
 
@@ -185,23 +192,45 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 
 	/**
+	 * Action for a menu item that adds a logical folder to this project.
+	 */
+	private class NewLogicalFolderAction extends BaseAction {
+
+		public NewLogicalFolderAction() {
+			super("Action.NewLogicalFolder", "folder_add.png");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			String input = JOptionPane.showInputDialog("Enter logical folder name!");
+			if (input!=null) {
+				LogicalFolderProjectEntry entry =
+						new LogicalFolderProjectEntry(project, input);
+				project.addEntry(entry);
+				add(new LogicalFolderProjectEntryTreeNode(plugin, entry));
+				plugin.refreshTree(ProjectTreeNode.this);
+			}
+		}
+
+	}
+
+
+	/**
 	 * Ensures that proposed project names are valid.
 	 */
 	private static class ProjectNameChecker implements NameChecker {
 
-		public boolean isValid(String text) {
+		public String isValid(String text) {
 			int length = text.length();
 			if (length==0) {
-				return false;
+				return "empty";
 			}
 			for (int i=0; i<length; i++) {
 				char ch = text.charAt(i);
-				if (!(Character.isLetterOrDigit(ch) || ch=='_' || ch=='-' ||
-						ch==' ')) {
-					return false;
+				if (ch=='<' || ch=='>' || ch=='&') {
+					return "invalidProjectNameChars";
 				}
 			}
-			return !text.endsWith(".");
+			return null;
 		}
 
 	}

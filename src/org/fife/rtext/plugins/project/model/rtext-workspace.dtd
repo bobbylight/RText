@@ -1,0 +1,16 @@
+<!-- DTD for workspaces. -->
+<!ELEMENT workspace            (projects)>
+<!ELEMENT projects             (project)*>
+<!ELEMENT project              (file-entry|folder-entry|logical-folder-entry)*>
+<!ELEMENT file-entry           EMPTY>
+<!ELEMENT folder-entry         EMPTY>
+<!ELEMENT logical-folder-entry EMPTY>
+
+<!ATTLIST project
+      name      CDATA  #REQUIRED>
+<!ATTLIST file-entry
+      path      CDATA  #REQUIRED>
+<!ATTLIST folder-entry
+      path      CDATA  #REQUIRED>
+<!ATTLIST logical-folder-entry
+      name      CDATA  #REQUIRED>

@@ -130,8 +130,22 @@ public class FileTypeIconManager {
 	 *
 	 * @return The singleton instance of this class.
 	 */
-	public static FileTypeIconManager getInstance() {
+	public static FileTypeIconManager get() {
 		return INSTANCE;
+	}
+
+
+	/**
+	 * Sets the icon to use for a specific syntax style.  This allows plugins
+	 * adding language support for specific file types to set the icon to use
+	 * for the relevant files.
+	 *
+	 * @param syntaxStyle The syntax style.
+	 * @param icon The icon to use.
+	 */
+	public void setIconFor(String syntaxStyle, Icon icon) {
+		type2IconNameMap.put(syntaxStyle, syntaxStyle);
+		iconName2IconMap.put(syntaxStyle, icon);
 	}
 
 

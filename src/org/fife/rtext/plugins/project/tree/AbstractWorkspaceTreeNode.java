@@ -10,14 +10,13 @@
 package org.fife.rtext.plugins.project.tree;
 
 import java.awt.event.ActionEvent;
-import java.net.URL;
+import java.awt.event.KeyEvent;
 import java.util.List;
-import javax.swing.AbstractAction;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 
 
@@ -37,7 +36,7 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
-	public abstract List getPopupActions();
+	public final List getPopupActions() { return null };
 
 
 	/**
@@ -54,29 +53,10 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	protected abstract void handleProperties();
 
 
+	protected abstract void handleRefresh();
+
+
 	protected abstract void handleRename();
-
-
-	/**
-	 * A base class for tree node actions.
-	 */
-	protected abstract class BaseAction extends AbstractAction {
-
-		protected BaseAction(String keyRoot) {
-			this(keyRoot, null);
-		}
-
-		protected BaseAction(String keyRoot, String image) {
-			putValue(NAME, Messages.getString(keyRoot));
-			String temp = Messages.getString(keyRoot + ".Mnemonic");
-			putValue(MNEMONIC_KEY, new Integer(temp.charAt(0)));
-			if (image!=null) {
-				URL url = getClass().getResource(image);
-				putValue(SMALL_ICON, new ImageIcon(url));
-			}
-		}
-
-	}
 
 
 	/**
@@ -112,12 +92,36 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 
 	/**
+	 * Refreshes the selected tree node.
+	 */
+	protected class RefreshAction extends BaseAction {
+
+		public RefreshAction() {
+			super("Action.Refresh");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			WorkspaceTree tree = plugin.getTree();
+			Object obj = tree.getLastSelectedPathComponent();
+			if (obj instanceof AbstractWorkspaceTreeNode) {
+				((AbstractWorkspaceTreeNode)obj).handleRefresh();
+			}
+			else {
+				UIManager.getLookAndFeel().provideErrorFeedback(tree);
+			}
+		}
+
+	}
+
+
+	/**
 	 * Action for renaming a tree node.
 	 */
 	protected class RenameAction extends BaseAction {
 
 		public RenameAction() {
 			super("Action.Rename");
+			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 		}
 
 		public void actionPerformed(ActionEvent e) {

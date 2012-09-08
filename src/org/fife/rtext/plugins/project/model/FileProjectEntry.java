@@ -7,9 +7,10 @@
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
-package org.fife.rtext.plugins.project;
+package org.fife.rtext.plugins.project.model;
 
 import java.io.File;
+
 
 
 /**
@@ -18,20 +19,25 @@ import java.io.File;
  * @author Robert Futrell
  * @version 1.0
  */
-public class FileProjectEntry implements ProjectEntry {
+public class FileProjectEntry extends AbstractProjectEntry {
 
-	private Project parent;
 	private File file;
 
 
-	public FileProjectEntry(Project parent, String file) {
+	public FileProjectEntry(ProjectEntryParent parent, String file) {
 		this(parent, new File(file));
 	}
 
 
-	public FileProjectEntry(Project parent, File file) {
-		this.parent = parent;
+	public FileProjectEntry(ProjectEntryParent parent, File file) {
+		super(parent);
 		this.file = file;
+	}
+
+
+	public void accept(WorkspaceVisitor visitor) {
+		visitor.visit(this);
+		visitor.postVisit(this);
 	}
 
 
@@ -43,21 +49,13 @@ public class FileProjectEntry implements ProjectEntry {
 	}
 
 
-	public boolean equals(Object o) {
-		if (o==this) {
-			return true;
-		}
-		return compareTo(o)==0;
-	}
-
-
 	public File getFile() {
 		return file;
 	}
 
 
-	public Project getProject() {
-		return parent;
+	public String getSaveData() {
+		return getFile().getAbsolutePath();
 	}
 
 
@@ -68,11 +66,6 @@ public class FileProjectEntry implements ProjectEntry {
 
 	public int hashCode() {
 		return file.hashCode();
-	}
-
-
-	public void removeFromProject() {
-		parent.removeEntry(this);
 	}
 
 

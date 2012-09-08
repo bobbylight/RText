@@ -9,7 +9,6 @@
  */
 package org.fife.rtext.plugins.project.tree;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +18,8 @@ import javax.swing.filechooser.FileSystemView;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
-import org.fife.rtext.plugins.project.ProjectEntry;
 import org.fife.rtext.plugins.project.ProjectPlugin;
+import org.fife.rtext.plugins.project.model.ProjectEntry;
 import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
 
 
@@ -30,16 +29,19 @@ import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
  * @author Robert Futrell
  * @version 1.0
  */
-public class FileProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
+public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 
-	private ProjectEntry entry;
 	private Icon icon;
 
 
 	public FileProjectEntryTreeNode(ProjectPlugin plugin, ProjectEntry entry) {
-		super(plugin);
-		this.entry = entry;
+		super(plugin, entry);
 		icon = FileSystemView.getFileSystemView().getSystemIcon(entry.getFile());
+	}
+
+
+	protected NameChecker createNameChecker() {
+		return new FileProjectEntryNameChecker();
 	}
 
 
@@ -80,7 +82,7 @@ public class FileProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 		FileIOExtras extras = FileIOExtras.getInstance();
 		if (!hard && extras!=null) {
 			if (FileTreeNode.handleDeleteNative(files, plugin)) {
-				entry.removeFromProject();
+				entry.removeFromParent();
 				removeFromParent();
 				plugin.refreshTree(getParent());
 			}
@@ -102,7 +104,7 @@ public class FileProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 				JOptionPane.showMessageDialog(rtext, text, title,
 						JOptionPane.ERROR_MESSAGE);
 			}
-			entry.removeFromProject();
+			entry.removeFromParent();
 			removeFromParent();
 			plugin.refreshTree(getParent());
 		}
@@ -115,12 +117,17 @@ public class FileProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
+	protected void handleRefresh() {
+		// Do nothing
+	}
+
+
 	protected void handleRename() {
 		RText rtext = plugin.getRText();
 		boolean directory = entry.getFile().isDirectory();
-		String key = "ProjectPlugin." + (directory ? "Directory" : "File");
+		String key = "ProjectPlugin." + (directory ? "Folder" : "File");
 		String type = Messages.getString(key);
-		RenameDialog dialog = new RenameDialog(rtext, type, new FileProjectEntryNameChecker());
+		RenameDialog dialog = new RenameDialog(rtext, type, createNameChecker());
 		dialog.setName(entry.getFile().getName());
 		dialog.setVisible(true);
 	}
@@ -136,48 +143,22 @@ public class FileProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 	 */
 	private static class FileProjectEntryNameChecker implements NameChecker {
 
-		public boolean isValid(String text) {
+		public String isValid(String text) {
 			int length = text.length();
 			if (length==0) {
-				return false;
+				return "empty";
 			}
 			for (int i=0; i<length; i++) {
 				char ch = text.charAt(i);
-				if (!(Character.isLetterOrDigit(ch) || ch=='_' || ch==' ')) {
-					return false;
+				if (!(Character.isLetterOrDigit(ch) || ch=='_' || ch=='-' ||
+						ch==' ' || ch=='.')) {
+					return "invalidFileName";
 				}
 			}
-			return !text.endsWith(".");
-		}
-
-	}
-
-
-	/**
-	 * Removes this entry from its parent.
-	 */
-	private class RemoveAction extends BaseAction {
-
-		public RemoveAction() {
-			super("Action.RemoveProjectEntry");
-		}
-
-		public void actionPerformed(ActionEvent e) {
-
-			RText rtext = plugin.getRText();
-			String title = rtext.getString("ConfDialogTitle");
-			String selectedEntry = entry.getFile().getName();
-			String text = Messages.getString(
-					"Action.RemoveProjectEntry.Confirm", selectedEntry);
-
-			int rc = JOptionPane.showConfirmDialog(rtext, text, title,
-					JOptionPane.YES_NO_OPTION);
-			if (rc==JOptionPane.YES_OPTION) {
-				removeFromParent();
-				entry.removeFromProject();
-				plugin.refreshTree(parent);
+			if (text.endsWith(".")) {
+				return "fileNameCannotEndWithDot";
 			}
-
+			return null;
 		}
 
 	}

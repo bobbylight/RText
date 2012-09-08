@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
-import org.fife.rtext.plugins.project.Workspace;
+import org.fife.rtext.plugins.project.model.Workspace;
 
 
 /**
@@ -67,6 +67,11 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
+	protected void handleRefresh() {
+		// Do nothing
+	}
+
+
 	protected void handleRename() {
 		RText rtext = plugin.getRText();
 		String type = Messages.getString("ProjectPlugin.Workspace");
@@ -91,19 +96,22 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	 */
 	private static class WorkspaceNameChecker implements NameChecker {
 
-		public boolean isValid(String text) {
+		public String isValid(String text) {
 			int length = text.length();
 			if (length==0) {
-				return false;
+				return "empty";
 			}
 			for (int i=0; i<length; i++) {
 				char ch = text.charAt(i);
 				if (!(Character.isLetterOrDigit(ch) || ch=='_' || ch=='-' ||
-						ch==' ')) {
-					return false;
+						ch==' ' || ch=='.')) {
+					return "invalidWorkspaceName";
 				}
 			}
-			return !text.endsWith(".");
+			if (text.endsWith(".")) {
+				return "workspaceCannotEndWithDot";
+			}
+			return null;
 		}
 
 	}

@@ -7,7 +7,7 @@
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
-package org.fife.rtext.plugins.project;
+package org.fife.rtext.plugins.project.model;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -26,15 +25,17 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.fife.io.UnicodeReader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import org.fife.io.UnicodeReader;
+import org.fife.rtext.plugins.project.Messages;
 
 
 /**
@@ -43,25 +44,24 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Workspace {
+public class Workspace implements ModelEntity {
 
 	private String name;
 	private List projects;
 
 
 	public Workspace(String name) {
-
 		setName(name);
 		projects = new ArrayList();
+	}
 
-//		// Test data
-//		for (int i=0; i<3; i++) {
-//			Project project = new Project("Project" + (i+1));
-//			project.addEntry(new FileProjectEntry("C:/temp/test.txt"));
-//			project.addEntry(new FileProjectEntry("C:/temp/test.java"));
-//			projects.add(project);
-//		}
 
+	public void accept(WorkspaceVisitor visitor) {
+		visitor.visit(this);
+		for (Iterator i=getProjectIterator(); i.hasNext(); ) {
+			((Project)i.next()).accept(visitor);
+		}
+		visitor.postVisit(this);
 	}
 
 
@@ -76,52 +76,6 @@ public class Workspace {
 	}
 
 
-	/**
-	 * Creates a DOM representation of this workspace.
-	 *
-	 * @return The DOM representation of this workspace.
-	 * @throws IOException If an error occurs.
-	 */
-	private Document createXmlRepresentation() throws IOException {
-
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db = null;
-		try {
-			db = dbf.newDocumentBuilder();
-		} catch (ParserConfigurationException pce) {
-			pce.printStackTrace();
-			throw new IOException(pce.getMessage());
-		}
-		Document doc = db.newDocument();
-
-		Element root = doc.createElement("workspace");
-		doc.appendChild(root);
-
-		Element projectsElem = doc.createElement("projects");
-		root.appendChild(projectsElem);
-
-		for (Iterator i=getProjectIterator(); i.hasNext(); ) {
-
-			Project project = (Project)i.next();
-			Element projElem = doc.createElement("project");
-			projElem.setAttribute("name", project.getName());
-			projectsElem.appendChild(projElem);
-
-			for (Iterator j=project.getEntryIterator(); j.hasNext(); ) {
-				ProjectEntry entry = (ProjectEntry)j.next();
-				Element entryElem = doc.createElement("project-entry");
-				entryElem.setAttribute("type", entry.getType());
-				entryElem.setAttribute("name", entry.getFile().getAbsolutePath());
-				projElem.appendChild(entryElem);
-			}
-
-		}
-
-		return doc;
-
-	}
-
-
 	public String getName() {
 		return name;
 	}
@@ -132,6 +86,13 @@ public class Workspace {
 	}
 
 
+	/**
+	 * Loads a workspace from an XML file.
+	 *
+	 * @param file The XML file.
+	 * @return The workspace.
+	 * @throws IOException If an IO error occurs.
+	 */
 	public static Workspace load(File file) throws IOException {
 
 		Document doc = loadXmlRepresentation(file);
@@ -143,27 +104,11 @@ public class Workspace {
 		Element projectsElem = (Element)children.item(0);
 		NodeList projElemList = projectsElem.getElementsByTagName("project");
 		for (int i=0; i<projElemList.getLength(); i++) {
-
 			Element projElem = (Element)projElemList.item(i);
 			name = projElem.getAttribute("name");
 			Project project = new Project(workspace, name);
 			workspace.addProject(project);
-
-			NodeList entryList = projElem.getElementsByTagName("project-entry");
-			for (int j=0; j<entryList.getLength(); j++) {
-				Element entryElem = (Element)entryList.item(j);
-				name = entryElem.getAttribute("name");
-				String type = entryElem.getAttribute("type");
-				ProjectEntry entry = null;
-				if (ProjectEntry.DIR_PROJECT_ENTRY.equals(type)) {
-					entry = new FolderProjectEntry(project, new File(name));
-				}
-				else if (ProjectEntry.FILE_PROJECT_ENTRY.equals(type)) {
-					entry = new FileProjectEntry(project, new File(name));
-				}
-				project.addEntry(entry);
-			}
-
+			recursivelyAddChildren(projElem, project);
 		}
 
 		return workspace;
@@ -172,7 +117,8 @@ public class Workspace {
 
 
 	/**
-	 * Loads a workspace from XML.
+	 * Loads an XML file into a DOM structure, validating against the workspace
+	 * DTD.
 	 *
 	 * @param file the XML file.
 	 * @return The document.
@@ -207,6 +153,48 @@ public class Workspace {
 	}
 
 
+	/**
+	 * Recursively adds project entry nodes to a project entry parent node.
+	 *
+	 * @param parentElem The parent node's XML element.
+	 * @param parent The parent node.
+	 */
+	private static void recursivelyAddChildren(Element parentElem,
+			ProjectEntryParent parent) {
+
+		NodeList childNodes = parentElem.getChildNodes();
+		for (int j=0; j<childNodes.getLength(); j++) {
+
+			Node childNode = childNodes.item(j);
+			if (childNode.getNodeType()==Node.ELEMENT_NODE) {
+
+				Element childElem = (Element)childNode;
+				String tag = childElem.getNodeName();
+				ProjectEntry entry = null;
+
+				if (ProjectEntry.DIR_PROJECT_ENTRY.equals(tag)) {
+					File folder = new File(childElem.getAttribute("path"));
+					entry = new FolderProjectEntry(parent, folder);
+				}
+				else if (ProjectEntry.FILE_PROJECT_ENTRY.equals(tag)) {
+					File file = new File(childElem.getAttribute("path"));
+					entry = new FileProjectEntry(parent, file);
+				}
+				else if (ProjectEntry.LOGICAL_DIR_PROJECT_ENTRY.equals(tag)) {
+					String dirName = childElem.getAttribute("name");
+					entry = new LogicalFolderProjectEntry(parent, dirName);
+					recursivelyAddChildren(childElem, (ProjectEntryParent)entry);
+				}
+
+				parent.addEntry(entry);
+
+			}
+
+		}
+
+	}
+
+
 	public void removeProject(Project project) {
 		projects.remove(project);
 	}
@@ -214,7 +202,9 @@ public class Workspace {
 
 	public void save(File dir) throws IOException {
 
-		Document doc = createXmlRepresentation();
+		DOMModelCreator domCreator = new DOMModelCreator();
+		accept(domCreator);
+		Document doc = domCreator.getDocument();
 
 		File file = new File(dir, name + ".xml");
 		Result result = new StreamResult(file);

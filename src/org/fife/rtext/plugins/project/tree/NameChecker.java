@@ -22,9 +22,10 @@ public interface NameChecker {
 	 * Determines whether the text is valid.
 	 *
 	 * @param text The new value.
-	 * @return Whether the new value is valid.
+	 * @return <code>null</code> if the new name is valid, or an error message
+	 *         otherwise.
 	 */
-	boolean isValid(String text);
+	String isValid(String text);
 
 
 }

@@ -15,8 +15,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.filechooser.FileSystemView;
 
-import org.fife.rtext.plugins.project.FolderProjectEntry;
 import org.fife.rtext.plugins.project.ProjectPlugin;
+import org.fife.rtext.plugins.project.model.FolderProjectEntry;
 
 
 /**
@@ -29,7 +29,8 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		implements PhysicalLocationTreeNode {
 
 
-	public FolderProjectEntryTreeNode(ProjectPlugin plugin, FolderProjectEntry entry) {
+	public FolderProjectEntryTreeNode(ProjectPlugin plugin,
+			FolderProjectEntry entry) {
 		super(plugin, entry);
 		add(new NotYetPopulatedChild(plugin));
 	}
@@ -37,6 +38,11 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 
 	private FileTreeNode createFileTreeNode(File file) {
 		return new FileTreeNode(plugin, file);
+	}
+
+
+	protected NameChecker createNameChecker() {
+		return new FolderProjectEntryNameChecker();
 	}
 
 
@@ -88,6 +94,11 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
+	protected void handleRefresh() {
+		plugin.getTree().refreshChildren(this);
+	}
+
+
 	public boolean isNotPopulated() {
 		int childCount = getChildCount();
 		return childCount==1 && (getFirstChild() instanceof NotYetPopulatedChild);
@@ -105,6 +116,32 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 				add(createFileTreeNode(filteredChildren[i]));
 			}
 		}
+	}
+
+
+	/**
+	 * Ensures that proposed file project entry names are valid.
+	 */
+	static class FolderProjectEntryNameChecker implements NameChecker {
+
+		public String isValid(String text) {
+			int length = text.length();
+			if (length==0) {
+				return "empty";
+			}
+			for (int i=0; i<length; i++) {
+				char ch = text.charAt(i);
+				if (!(Character.isLetterOrDigit(ch) || ch=='_' || ch=='-' ||
+						ch==' ' || ch=='.')) {
+					return "invalidFolderName";
+				}
+			}
+			if (text.endsWith(".")) {
+				return "folderNameCannotEndWithDot";
+			}
+			return null;
+		}
+
 	}
 
 

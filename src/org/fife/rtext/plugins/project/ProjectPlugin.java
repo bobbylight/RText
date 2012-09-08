@@ -25,6 +25,7 @@ import javax.swing.tree.TreeNode;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.plugins.project.model.Workspace;
 import org.fife.rtext.plugins.project.tree.WorkspaceTree;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.AbstractPlugin;

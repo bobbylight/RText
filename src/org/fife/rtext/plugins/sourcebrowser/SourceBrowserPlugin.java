@@ -227,7 +227,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 			// (via the text editor's syntax highlighting style).  We do
 			// it this way because the user may have some odd extension
 			// (like .abc) mapped to say C source files.
-			Icon fileIcon = FileTypeIconManager.getInstance().
+			Icon fileIcon = FileTypeIconManager.get().
 										getIconFor(textArea);
 			((DefaultSourceTree)sourceTree).setRootIcon(fileIcon);
 			String language = getLanguageForStyle(style);

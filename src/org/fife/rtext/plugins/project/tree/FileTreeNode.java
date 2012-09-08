@@ -199,6 +199,11 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
+	protected void handleRefresh() {
+		plugin.getTree().refreshChildren(this);
+	}
+
+
 	protected void handleRename() {
 		// TODO Auto-generated method stub
 	}

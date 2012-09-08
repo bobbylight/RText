@@ -1283,7 +1283,7 @@ public abstract class AbstractMainView extends JPanel
 	protected Icon getIconFor(RTextScrollPane scrollPane) {
 		RTextEditorPane textArea = (RTextEditorPane)scrollPane.
 								getTextArea();
-		return FileTypeIconManager.getInstance().getIconFor(textArea);
+		return FileTypeIconManager.get().getIconFor(textArea);
 	}
 
 
