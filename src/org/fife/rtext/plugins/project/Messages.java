@@ -42,6 +42,17 @@ public class Messages {
 
 
 	/**
+	 * Returns a localized message representing a mnemonic (a single character).
+	 *
+	 * @param key The key for the message.
+	 * @return The localized mnemonic.
+	 */
+	public static int getMnemonic(String key) {
+		return msg.getString(key).charAt(0);
+	}
+
+
+	/**
 	 * Returns a localized message.
 	 *
 	 * @param key The key for the message.

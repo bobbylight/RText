@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
+import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.Workspace;
 
 
@@ -64,11 +65,6 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 
 	protected void handleProperties() {
 		JOptionPane.showMessageDialog(null, "Properties of the item!");
-	}
-
-
-	protected void handleRefresh() {
-		// Do nothing
 	}
 
 

@@ -17,6 +17,12 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 
 
 	/**
+	 * Refreshes the children of this node.
+	 */
+	void handleRefresh();
+
+
+	/**
 	 * Returns whether this folder tree node has not yet been populated
 	 * (expanded).
 	 *
@@ -45,6 +51,8 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 		public Icon getIcon() {
 			return null;
 		}
+
+		public List getPopupActions() { return null; }
 
 		protected void handleDelete() {}
 

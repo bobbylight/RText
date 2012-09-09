@@ -19,6 +19,7 @@ import javax.swing.filechooser.FileSystemView;
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
+import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.ProjectEntry;
 import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
 
@@ -63,11 +64,19 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 	public List getPopupActions() {
 		List actions = new ArrayList();
+		if (!getFile().isDirectory()) {
+			actions.add(new OpenAction());
+		}
+		possiblyAddOpenInActions(actions);
 		actions.add(new RenameAction());
 		actions.add(null);
 		actions.add(new RemoveAction());
 		actions.add(new DeleteAction());
 		actions.add(null);
+		if (getFile().isDirectory()) {
+			actions.add(new RefreshAction());
+			actions.add(null);
+		}
 		actions.add(new PropertiesAction());
 		return actions;
 	}
@@ -114,11 +123,6 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 	protected void handleProperties() {
 		JOptionPane.showMessageDialog(null, "Properties of the item!");
-	}
-
-
-	protected void handleRefresh() {
-		// Do nothing
 	}
 
 

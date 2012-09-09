@@ -7,7 +7,7 @@
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
-package org.fife.rtext.plugins.project.tree;
+package org.fife.rtext.plugins.project;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
@@ -33,7 +33,7 @@ import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.rsta.ui.EscapableDialog;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
-import org.fife.rtext.plugins.project.Messages;
+import org.fife.rtext.plugins.project.tree.NameChecker;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
 
@@ -122,9 +122,9 @@ public class RenameDialog extends EscapableDialog{
 	 *
 	 * @return The icon.
 	 */
-	private Icon getErrorIcon() {
+	public static Icon getErrorIcon() {
 		if (ERROR_ICON==null) {
-			URL res = getClass().getResource("error_co.gif");
+			URL res = RenameDialog.class.getResource("error_co.gif");
 			ERROR_ICON = new ImageIcon(res);
 		}
 		return ERROR_ICON;

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -23,7 +22,6 @@ import javax.swing.filechooser.FileSystemView;
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
-import org.fife.ui.rtextfilechooser.Actions;
 import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
 
 
@@ -37,11 +35,6 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		implements PhysicalLocationTreeNode {
 
 	private Icon icon;
-
-	/**
-	 * Whether we're running in a Java 6 or higher JVM.
-	 */
-	private static final boolean IS_JAVA_6_PLUS;
 
 
 	public FileTreeNode(ProjectPlugin plugin, File file) {
@@ -113,31 +106,21 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 
 
 	public List getPopupActions() {
-
 		List actions = new ArrayList();
-
-		if (IS_JAVA_6_PLUS) {
-			Action a = new Actions.SystemOpenAction(plugin.getTree(), "view");
-			// Make the name a little better for this popup.
-			a.putValue(Action.NAME,
-					Messages.getString("Action.OpenInSystemViewer"));
-			actions.add(a);
-			a = new Actions.SystemOpenAction(plugin.getTree(), "edit");
-			// Make the name a little better for this popup.
-			a.putValue(Action.NAME,
-					Messages.getString("Action.OpenInSystemEditor"));
-			actions.add(a);
-			actions.add(null);
+		if (!getFile().isDirectory()) {
+			actions.add(new OpenAction());
 		}
-
+		possiblyAddOpenInActions(actions);
 		actions.add(new DeleteAction());
 		actions.add(null);
 		actions.add(new RenameAction());
 		actions.add(null);
+		if (getFile().isDirectory()) {
+			actions.add(new RefreshAction());
+			actions.add(null);
+		}
 		actions.add(new PropertiesAction());
-
 		return actions;
-
 	}
 
 
@@ -199,7 +182,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
-	protected void handleRefresh() {
+	public void handleRefresh() {
 		plugin.getTree().refreshChildren(this);
 	}
 
@@ -233,12 +216,5 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		return getFile().getName();
 	}
 	
-
-	static {
-		// Some actions only work with Java 6+.
-		String ver = System.getProperty("java.specification.version");
-		IS_JAVA_6_PLUS = !ver.startsWith("1.4") && !ver.startsWith("1.5");
-	}
-
 
 }

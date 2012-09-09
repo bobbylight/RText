@@ -19,7 +19,7 @@ import javax.swing.filechooser.FileSystemView;
 
 import org.fife.rsta.ac.java.DecoratableIcon;
 import org.fife.rtext.RText;
-import org.fife.rtext.plugins.project.Messages;
+import org.fife.rtext.plugins.project.LogicalFolderNameDialog;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.LogicalFolderProjectEntry;
 
@@ -43,12 +43,27 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 
 	public Icon getIcon() {
+		return getLogicalFolderIcon();
+	}
+
+
+	/**
+	 * Returns the icon shared amongst all logical folders.
+	 *
+	 * @return The shared icon.
+	 */
+	public static Icon getLogicalFolderIcon() {
 		return icon;
 	}
 
 
 	public List getPopupActions() {
 		List actions = new ArrayList();
+		LogicalFolderProjectEntry entry = (LogicalFolderProjectEntry)this.entry;
+		actions.add(new NewFileAction(entry, this));
+		actions.add(new NewFolderAction(entry, this));
+		actions.add(new NewLogicalFolderAction(entry, this));
+		actions.add(null);
 		actions.add(new RenameAction());
 		actions.add(null);
 		actions.add(new RemoveAction());
@@ -71,19 +86,17 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
-	protected void handleRefresh() {
-		// Do nothing
-	}
-
-
 	protected void handleRename() {
-		RText rtext = plugin.getRText();
-		String key = "ProjectPlugin.LogicalFolder";
-		String type = Messages.getString(key);
-		RenameDialog dialog = new RenameDialog(rtext, type,
-				new FolderProjectEntryTreeNode.FolderProjectEntryNameChecker());
-		dialog.setName(((LogicalFolderProjectEntry)entry).getName());
+		RText parent = plugin.getRText();
+		LogicalFolderNameDialog dialog = new LogicalFolderNameDialog(parent,
+				entry.getSaveData(), new LogicalFolderNameChecker());
 		dialog.setVisible(true);
+		String name = dialog.getLogicalFolderName();
+		if (name!=null) {
+			LogicalFolderProjectEntry lfpe = (LogicalFolderProjectEntry)entry;
+			lfpe.setName(name);
+			plugin.refreshTree(this);
+		}
 	}
 
 
@@ -99,9 +112,9 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 	static {
 		File testFile =  new File(System.getProperty("java.io.tmpdir"));
 		Icon temp = FileSystemView.getFileSystemView().getSystemIcon(testFile);
-		icon = new DecoratableIcon(temp);
-		URL decorationRes = LogicalFolderProjectEntryTreeNode.class.
-				getResource("/org/fife/rtext/graphics/modified_overlay.png");
+		icon = new DecoratableIcon(16, temp);
+		URL decorationRes = RText.class.
+				getResource("/org/fife/rsta/ui/search/lightbulb.png");
 		Icon decoration = new ImageIcon(decorationRes);
 		icon.addDecorationIcon(decoration);
 	}

@@ -12,6 +12,7 @@ package org.fife.rtext.plugins.project.tree;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -23,10 +24,12 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.InputMap;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.ExpandVetoException;
@@ -57,7 +60,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		this.plugin = plugin;
 		root = new WorkspaceRootTreeNode(plugin, workspace);
 		model = new DefaultTreeModel(root);
-		createActions();
+		installActions();
 		setModel(model);
 		setWorkspace(workspace);
 		setCellRenderer(new WorkspaceTreeRenderer());
@@ -85,37 +88,21 @@ public class WorkspaceTree extends JTree implements FileSelector {
 					(AbstractWorkspaceTreeNode)node;
 			List actions = treeNode.getPopupActions();
 			for (Iterator i=actions.iterator(); i.hasNext(); ) {
-				Action action = (Action)i.next();
-				if (action==null) {
-					popup.addSeparator();
+				Object obj = i.next();
+				if (obj instanceof JMenu) {
+					popup.add((JMenu)obj);
 				}
 				else {
-					popup.add(new JMenuItem(action));
+					Action action = (Action)obj;
+					if (action==null) {
+						popup.addSeparator();
+					}
+					else {
+						popup.add(new JMenuItem(action));
+					}
 				}
 			}
 		}
-
-	}
-
-
-	/**
-	 * Adds wrapper actions to the tree item-specific actions, so users can
-	 * use keyboard shortcuts to activate them.
-	 */
-	private void createActions() {
-
-		InputMap im = getInputMap();
-		ActionMap am = getActionMap();
-
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "Refresh");
-		am.put("Refresh", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				Object selected = getLastSelectedPathComponent();
-				if (selected instanceof PhysicalLocationTreeNode) {
-					refreshChildren((PhysicalLocationTreeNode)selected);
-				}
-			}
-		});
 
 	}
 
@@ -194,10 +181,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			}
 			else if (comp instanceof FileProjectEntryTreeNode) {
 				FileProjectEntryTreeNode node = (FileProjectEntryTreeNode)comp;
-				File file = node.getFile();
-				if (!file.isDirectory()) {
-					return file;
-				}
+				return node.getFile();
 			}
 		}
 		return null;
@@ -236,6 +220,69 @@ public class WorkspaceTree extends JTree implements FileSelector {
 
 
 	/**
+	 * Adds wrapper actions to the tree item-specific actions, so users can
+	 * use keyboard shortcuts to activate them.
+	 */
+	private void installActions() {
+
+		InputMap im = getInputMap();
+		ActionMap am = getActionMap();
+
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "Rename");
+		am.put("Rename", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				Object selected = getLastSelectedPathComponent();
+				if (selected instanceof AbstractWorkspaceTreeNode) {
+					((AbstractWorkspaceTreeNode)selected).handleRename();
+				}
+			}
+		});
+
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "Refresh");
+		am.put("Refresh", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				Object selected = getLastSelectedPathComponent();
+				if (selected instanceof PhysicalLocationTreeNode) {
+					refreshChildren((PhysicalLocationTreeNode)selected);
+				}
+			}
+		});
+
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+		am.put("Enter", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				File file = null;
+				Object selected = getLastSelectedPathComponent();
+				if (selected instanceof FileProjectEntryTreeNode) {
+					file = ((FileProjectEntryTreeNode)selected).getFile();
+				}
+				else if (selected instanceof FileTreeNode) {
+					file = ((FileTreeNode)selected).getFile();
+				}
+				if (file.isFile()) {
+					plugin.getRText().openFile(file.getAbsolutePath());
+				}
+				else {
+					UIManager.getLookAndFeel().provideErrorFeedback(null);
+				}
+			}
+		});
+
+		int alt = InputEvent.ALT_MASK;
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, alt), "Properties");
+		am.put("Properties", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				Object selected = getLastSelectedPathComponent();
+				if (selected instanceof AbstractWorkspaceTreeNode) {
+					((AbstractWorkspaceTreeNode)selected).handleProperties();
+				}
+			}
+		});
+
+	}
+
+
+	/**
 	 * Overridden to display our popup menu if necessary.
 	 *
 	 * @param e The mouse event.
@@ -257,7 +304,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	 *
 	 * @param node The node whose children should be refreshed.
 	 */
-	private void refreshChildren(PhysicalLocationTreeNode node) {
+	void refreshChildren(PhysicalLocationTreeNode node) {
 
 		if (node instanceof PhysicalLocationTreeNode) {
 			node.refreshChildren();

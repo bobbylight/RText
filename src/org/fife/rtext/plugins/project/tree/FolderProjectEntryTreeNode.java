@@ -94,7 +94,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
-	protected void handleRefresh() {
+	public void handleRefresh() {
 		plugin.getTree().refreshChildren(this);
 	}
 

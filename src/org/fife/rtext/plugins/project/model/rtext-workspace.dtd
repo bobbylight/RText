@@ -4,7 +4,7 @@
 <!ELEMENT project              (file-entry|folder-entry|logical-folder-entry)*>
 <!ELEMENT file-entry           EMPTY>
 <!ELEMENT folder-entry         EMPTY>
-<!ELEMENT logical-folder-entry EMPTY>
+<!ELEMENT logical-folder-entry (file-entry|folder-entry|logical-folder-entry)*>
 
 <!ATTLIST project
       name      CDATA  #REQUIRED>

@@ -9,8 +9,6 @@
  */
 package org.fife.rtext.plugins.project.tree;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
@@ -20,13 +18,8 @@ import javax.swing.JOptionPane;
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
-import org.fife.rtext.plugins.project.model.FileProjectEntry;
-import org.fife.rtext.plugins.project.model.FolderProjectEntry;
-import org.fife.rtext.plugins.project.model.LogicalFolderProjectEntry;
+import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.Project;
-import org.fife.rtext.plugins.project.model.ProjectEntry;
-import org.fife.ui.rtextfilechooser.RDirectoryChooser;
-import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
 
 /**
@@ -39,26 +32,11 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 	private Project project;
 	private static Icon icon;
-	private static RTextFileChooser chooser;
 
 
 	public ProjectTreeNode(ProjectPlugin plugin, Project project) {
 		super(plugin);
 		this.project = project;
-	}
-
-
-	/**
-	 * Returns the file chooser to use when adding files to a project.
-	 *
-	 * @return The file chooser.
-	 */
-	private static RTextFileChooser getFileChooser() {
-		if (chooser==null) {
-			chooser = new RTextFileChooser();
-			chooser.setShowHiddenFiles(true);
-		}
-		return chooser;
 	}
 
 
@@ -72,9 +50,9 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 	public List getPopupActions() {
 		List actions = new ArrayList();
-		actions.add(new NewFileAction());
-		actions.add(new NewFolderAction());
-		actions.add(new NewLogicalFolderAction());
+		actions.add(new NewFileAction(project, this));
+		actions.add(new NewFolderAction(project, this));
+		actions.add(new NewLogicalFolderAction(project, this));
 		actions.add(null);
 		actions.add(new RenameAction());
 		actions.add(new DeleteAction());
@@ -117,11 +95,6 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
-	protected void handleRefresh() {
-		// Do nothing
-	}
-
-
 	protected void handleRename() {
 		RText rtext = plugin.getRText();
 		String type = Messages.getString("ProjectPlugin.Project");
@@ -138,79 +111,6 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 	public String toString() {
 		return project.getName();
-	}
-
-
-	/**
-	 * Action for a menu item that adds a file to this project.
-	 */
-	private class NewFileAction extends BaseAction {
-
-		public NewFileAction() {
-			super("Action.NewFile", "page_white_add.png");
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			RTextFileChooser chooser = getFileChooser();
-			int rc = chooser.showOpenDialog(plugin.getRText());
-			if (rc==RTextFileChooser.APPROVE_OPTION) {
-				File toAdd = chooser.getSelectedFile();
-				ProjectEntry entry = new FileProjectEntry(project, toAdd);
-				project.addEntry(entry);
-				add(new FileProjectEntryTreeNode(plugin, entry));
-				plugin.refreshTree(ProjectTreeNode.this);
-			}
-		}
-
-	}
-
-
-	/**
-	 * Action for a menu item that adds a folder to this project.
-	 */
-	private class NewFolderAction extends BaseAction {
-
-		public NewFolderAction() {
-			super("Action.NewFolder", "folder_add.png");
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			RText rtext = plugin.getRText();
-			RDirectoryChooser chooser = new RDirectoryChooser(rtext);
-			chooser.setVisible(true);
-			String dir = chooser.getChosenDirectory();
-			if (dir!=null) {
-				File dirFile = new File(dir);
-				ProjectEntry entry = new FolderProjectEntry(project, dirFile);
-				project.addEntry(entry);
-				add(new FileProjectEntryTreeNode(plugin, entry));
-				plugin.refreshTree(ProjectTreeNode.this);
-			}
-		}
-
-	}
-
-
-	/**
-	 * Action for a menu item that adds a logical folder to this project.
-	 */
-	private class NewLogicalFolderAction extends BaseAction {
-
-		public NewLogicalFolderAction() {
-			super("Action.NewLogicalFolder", "folder_add.png");
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			String input = JOptionPane.showInputDialog("Enter logical folder name!");
-			if (input!=null) {
-				LogicalFolderProjectEntry entry =
-						new LogicalFolderProjectEntry(project, input);
-				project.addEntry(entry);
-				add(new LogicalFolderProjectEntryTreeNode(plugin, entry));
-				plugin.refreshTree(ProjectTreeNode.this);
-			}
-		}
-
 	}
 
 
