@@ -18,10 +18,12 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
+import org.fife.rtext.plugins.project.model.FolderFilterInfo;
 import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
 
 
@@ -34,6 +36,10 @@ import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
 public class FileTreeNode extends AbstractWorkspaceTreeNode
 		implements PhysicalLocationTreeNode {
 
+	/**
+	 * Only used if this tree node represents a folder.
+	 */
+	private FolderFilterInfo filterInfo;
 	private Icon icon;
 
 
@@ -42,13 +48,16 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		setUserObject(file);
 		if (file.isDirectory()) {
 			add(new NotYetPopulatedChild(plugin));
+			filterInfo = new FolderFilterInfo();
 		}
 		icon = FileSystemView.getFileSystemView().getSystemIcon(file);
 	}
 
 
 	private FileTreeNode createFileTreeNode(File file) {
-		return new FileTreeNode(plugin, file);
+		FileTreeNode ftn = new FileTreeNode(plugin, file);
+		ftn.setFilterInfo(filterInfo);
+		return ftn;
 	}
 
 
@@ -59,7 +68,6 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	 * @param files The array of files to filter and sort.
 	 * @return The filtered and sorted array of files.
 	 */
-	// TODO: Have FolderProjectEntrys contain filters.
 	private File[] filterAndSort(File[] files) {
 
 		int num = files.length;
@@ -70,10 +78,12 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		// sort them individually.  This part could be made more compact,
 		// but it isn't just for a tad more speed.
 		for (int i=0; i<num; i++) {
-			if (files[i].isDirectory())
-				dirList.add(files[i]);
-			else
-				fileList.add(files[i]);
+			if (filterInfo!=null && filterInfo.isAllowed(files[i])) {
+				if (files[i].isDirectory())
+					dirList.add(files[i]);
+				else
+					fileList.add(files[i]);
+			}
 		}
 
 		// On Windows and OS X, comparison is case-insensitive.
@@ -209,6 +219,19 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 				add(createFileTreeNode(filteredChildren[i]));
 			}
 		}
+	}
+
+
+	public void setFilterInfo(FolderFilterInfo info) {
+		this.filterInfo = info;
+		for (int i=0; i<getChildCount(); i++) {
+			TreeNode child = getChildAt(i);
+			if (child instanceof FileTreeNode) { // i.e. not NotYetPopulated...
+				FileTreeNode ftn = (FileTreeNode)child;
+				ftn.setFilterInfo(filterInfo);
+			}
+		}
+		handleRefresh();
 	}
 
 

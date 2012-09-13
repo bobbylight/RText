@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.plugins.project.ProjectPlugin;
+import org.fife.rtext.plugins.project.model.FolderFilterInfo;
 import org.fife.rtext.plugins.project.model.FolderProjectEntry;
 
 
@@ -28,11 +30,14 @@ import org.fife.rtext.plugins.project.model.FolderProjectEntry;
 public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		implements PhysicalLocationTreeNode {
 
+	private FolderFilterInfo filterInfo;
+
 
 	public FolderProjectEntryTreeNode(ProjectPlugin plugin,
 			FolderProjectEntry entry) {
 		super(plugin, entry);
 		add(new NotYetPopulatedChild(plugin));
+		filterInfo = new FolderFilterInfo();
 	}
 
 
@@ -53,7 +58,6 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	 * @param files The array of files to filter and sort.
 	 * @return The filtered and sorted array of files.
 	 */
-	// TODO: Have FolderProjectEntrys contain filters.
 	private File[] filterAndSort(File[] files) {
 
 		int num = files.length;
@@ -64,10 +68,12 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		// sort them individually.  This part could be made more compact,
 		// but it isn't just for a tad more speed.
 		for (int i=0; i<num; i++) {
-			if (files[i].isDirectory())
-				dirList.add(files[i]);
-			else
-				fileList.add(files[i]);
+			if (filterInfo.isAllowed(files[i])) {
+				if (files[i].isDirectory())
+					dirList.add(files[i]);
+				else
+					fileList.add(files[i]);
+			}
 		}
 
 		// On Windows and OS X, comparison is case-insensitive.
@@ -116,6 +122,19 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 				add(createFileTreeNode(filteredChildren[i]));
 			}
 		}
+	}
+
+
+	public void setFilterInfo(FolderFilterInfo info) {
+		this.filterInfo = info;
+		for (int i=0; i<getChildCount(); i++) {
+			TreeNode child = getChildAt(i);
+			if (child instanceof FileTreeNode) { // i.e. not NotYetPopulated...
+				FileTreeNode ftn = (FileTreeNode)child;
+				ftn.setFilterInfo(filterInfo);
+			}
+		}
+		handleRefresh();
 	}
 
 

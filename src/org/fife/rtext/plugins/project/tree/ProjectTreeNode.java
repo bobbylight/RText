@@ -54,8 +54,9 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 		actions.add(new NewFolderAction(project, this));
 		actions.add(new NewLogicalFolderAction(project, this));
 		actions.add(null);
-		actions.add(new RenameAction());
 		actions.add(new DeleteAction());
+		actions.add(null);
+		actions.add(new RenameAction());
 		actions.add(null);
 		actions.add(new PropertiesAction());
 		return actions;

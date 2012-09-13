@@ -305,12 +305,8 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	 * @param node The node whose children should be refreshed.
 	 */
 	void refreshChildren(PhysicalLocationTreeNode node) {
-
-		if (node instanceof PhysicalLocationTreeNode) {
-			node.refreshChildren();
-			model.reload(node);
-		}
-
+		node.refreshChildren();
+		model.reload(node);
 	}
 
 

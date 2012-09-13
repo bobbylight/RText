@@ -68,10 +68,10 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 			actions.add(new OpenAction());
 		}
 		possiblyAddOpenInActions(actions);
-		actions.add(new RenameAction());
-		actions.add(null);
-		actions.add(new RemoveAction());
 		actions.add(new DeleteAction());
+		actions.add(new RemoveAction());
+		actions.add(null);
+		actions.add(new RenameAction());
 		actions.add(null);
 		if (getFile().isDirectory()) {
 			actions.add(new RefreshAction());

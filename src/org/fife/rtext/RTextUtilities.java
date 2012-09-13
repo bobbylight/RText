@@ -773,6 +773,26 @@ public class RTextUtilities {
 
 
 	/**
+	 * Returns all elements in an array, joined by a specific sequence.
+	 *
+	 * @param array The array.  If this is <code>null</code> or has zero
+	 *        length, <code>null</code> is returned.
+	 * @param connector Text to connect each array element with.
+	 * @return The joined text.
+	 */
+	public static final String join(String[] array, String connector) {
+		if (array==null || array.length==0) {
+			return null;
+		}
+		StringBuffer sb = new StringBuffer(array[0]);
+		for (int i=1; i<array.length; i++) {
+			sb.append(connector).append(array[i]);
+		}
+		return sb.toString();
+	}
+
+
+	/**
 	 * Opens all files in the specified directory tree in RText.
 	 *
 	 * @param rtext The RText instance in which to open the files.

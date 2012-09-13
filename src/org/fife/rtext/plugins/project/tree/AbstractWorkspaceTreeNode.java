@@ -19,6 +19,7 @@ import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -26,8 +27,10 @@ import javax.swing.tree.TreeNode;
 
 import org.fife.rsta.ac.java.DecoratableIcon;
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.LogicalFolderNameDialog;
 import org.fife.rtext.plugins.project.Messages;
+import org.fife.rtext.plugins.project.NewFolderDialog;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.FileProjectEntry;
 import org.fife.rtext.plugins.project.model.FolderProjectEntry;
@@ -35,7 +38,6 @@ import org.fife.rtext.plugins.project.model.LogicalFolderProjectEntry;
 import org.fife.rtext.plugins.project.model.ProjectEntry;
 import org.fife.rtext.plugins.project.model.ProjectEntryParent;
 import org.fife.ui.rtextfilechooser.Actions;
-import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
 
@@ -49,11 +51,6 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 	protected ProjectPlugin plugin;
 	private static RTextFileChooser chooser;
-
-	/**
-	 * Whether we're running in a Java 6 or higher JVM.
-	 */
-	private static final boolean IS_JAVA_6_PLUS;
 
 
 	public AbstractWorkspaceTreeNode(ProjectPlugin plugin) {
@@ -102,7 +99,7 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 * @param actions The action list to add to.
 	 */
 	protected void possiblyAddOpenInActions(List actions) {
-		if (IS_JAVA_6_PLUS) {
+		if (!RTextUtilities.isPreJava6()) {
 			WorkspaceTree tree = plugin.getTree();
 			JMenu openInMenu = new JMenu(Messages.getString("Action.OpenIn"));
 			openInMenu.add(new Actions.SystemOpenAction(tree, "edit"));
@@ -110,13 +107,6 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			actions.add(openInMenu);
 			actions.add(null);
 		}
-	}
-
-
-	static {
-		// Some actions only work with Java 6+.
-		String ver = System.getProperty("java.specification.version");
-		IS_JAVA_6_PLUS = !ver.startsWith("1.4") && !ver.startsWith("1.5");
 	}
 
 
@@ -181,7 +171,7 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 		public void actionPerformed(ActionEvent e) {
 			RText rtext = plugin.getRText();
-			RDirectoryChooser chooser = new RDirectoryChooser(rtext);
+			NewFolderDialog chooser = new NewFolderDialog(rtext);
 			chooser.setVisible(true);
 			String dir = chooser.getChosenDirectory();
 			if (dir!=null) {
@@ -189,7 +179,10 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 				FolderProjectEntry entry = new FolderProjectEntry(
 						parent, dirFile);
 				parent.addEntry(entry);
-				add(new FolderProjectEntryTreeNode(plugin, entry));
+				FolderProjectEntryTreeNode childNode =
+						new FolderProjectEntryTreeNode(plugin, entry);
+				childNode.setFilterInfo(chooser.getFilterInfo());
+				add(childNode);
 				plugin.refreshTree(node);
 			}
 		}
@@ -253,9 +246,33 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		public void actionPerformed(ActionEvent e) {
 			WorkspaceTree tree = plugin.getTree();
 			Object selected = tree.getLastSelectedPathComponent();
+			File file = null;
+System.out.println("a - " + selected);
 			if (selected instanceof FileTreeNode) {
-				File file = ((FileTreeNode)selected).getFile();
-				plugin.getRText().openFile(file.getAbsolutePath());
+				file = ((FileTreeNode)selected).getFile();
+			}
+			else if (selected instanceof FileProjectEntryTreeNode) {
+				FileProjectEntryTreeNode node = (FileProjectEntryTreeNode)selected;
+				file = node.getFile();
+				if (!file.isFile()) {
+					promptForRemoval(node);
+					return;
+				}
+			}
+			plugin.getRText().openFile(file.getAbsolutePath());
+		}
+
+		private void promptForRemoval(FileProjectEntryTreeNode node) {
+			String msg = Messages.getString("Prompt.FileDoesntExist.Remove",
+					node.getFile().getAbsolutePath());
+			RText rtext = plugin.getRText();
+			String title = rtext.getString("ConfDialogTitle");
+			int rc = JOptionPane.showConfirmDialog(rtext, msg, title,
+					JOptionPane.YES_NO_OPTION);
+			if (rc==JOptionPane.YES_OPTION) {
+				TreeNode parent = node.getParent();
+				node.removeFromParent();
+				plugin.refreshTree(parent);
 			}
 		}
 
