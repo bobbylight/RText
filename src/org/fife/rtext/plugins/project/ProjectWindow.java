@@ -15,6 +15,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.RText;
+import org.fife.rtext.plugins.project.tree.PhysicalLocationTreeNode;
 import org.fife.rtext.plugins.project.tree.WorkspaceTree;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.dockablewindows.DockableWindow;
@@ -62,13 +63,18 @@ class ProjectWindow extends DockableWindow {
 	 * @param fromNode The node to start the refreshing from.
 	 */
 	void refreshTree(TreeNode fromNode) {
-		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
-		if (fromNode!=null) {
-			model.reload(fromNode);
+		if (fromNode instanceof PhysicalLocationTreeNode) {
+			((PhysicalLocationTreeNode)fromNode).handleRefresh();
 		}
 		else {
-			model.reload();
-			//UIUtil.expandAllNodes(tree);
+			DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+			if (fromNode!=null) {
+				model.reload(fromNode);
+			}
+			else {
+				model.reload();
+				//UIUtil.expandAllNodes(tree);
+			}
 		}
 	}
 

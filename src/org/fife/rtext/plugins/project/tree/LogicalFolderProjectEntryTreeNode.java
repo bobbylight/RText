@@ -20,6 +20,7 @@ import javax.swing.filechooser.FileSystemView;
 import org.fife.rsta.ac.java.DecoratableIcon;
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.LogicalFolderNameDialog;
+import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.LogicalFolderProjectEntry;
 
@@ -65,12 +66,18 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 		actions.add(new NewLogicalFolderAction(entry, this));
 		actions.add(null);
 		actions.add(new RemoveAction());
-		actions.add(new DeleteAction());
+		actions.add(new DeleteAction(false));
 		actions.add(null);
 		actions.add(new RenameAction());
 		actions.add(null);
 		actions.add(new PropertiesAction());
 		return actions;
+	}
+
+
+	public String getToolTipText() {
+		return Messages.getString("ProjectPlugin.ToolTip.LogicalFolderProjectEntry",
+				entry.getSaveData());
 	}
 
 

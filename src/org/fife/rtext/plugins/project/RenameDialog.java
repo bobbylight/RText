@@ -118,6 +118,15 @@ public class RenameDialog extends EscapableDialog{
 
 
 	/**
+	 * Overridden to set the name "the user entered" to <code>null</code>.
+	 */
+	public void escapePressed() {
+		nameField.setText(null); // So user gets back nothing
+		super.escapePressed();
+	}
+
+
+	/**
 	 * Returns the icon to use for fields with errors.
 	 *
 	 * @return The icon.
@@ -191,10 +200,9 @@ public class RenameDialog extends EscapableDialog{
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();
 			if (command.equals("OK")) {
-				escapePressed();
+				setVisible(false);
 			}
 			else if (command.equals("Cancel")) {
-				nameField.setText(null); // So user gets back nothing
 				escapePressed();
 			}
 		}

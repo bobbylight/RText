@@ -773,12 +773,26 @@ public class RTextUtilities {
 
 
 	/**
+	 * Returns all elements in an array, joined by <code>", "</code>.
+	 *
+	 * @param array The array.  If this is <code>null</code> or has zero
+	 *        length, <code>null</code> is returned.
+	 * @return The joined text.
+	 * @see #join(String[], String)
+	 */
+	public static final String join(String[] array) {
+		return join(array, ", ");
+	}
+
+
+	/**
 	 * Returns all elements in an array, joined by a specific sequence.
 	 *
 	 * @param array The array.  If this is <code>null</code> or has zero
 	 *        length, <code>null</code> is returned.
 	 * @param connector Text to connect each array element with.
 	 * @return The joined text.
+	 * @see #join(String[])
 	 */
 	public static final String join(String[] array, String connector) {
 		if (array==null || array.length==0) {

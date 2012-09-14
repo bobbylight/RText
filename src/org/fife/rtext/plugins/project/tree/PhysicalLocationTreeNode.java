@@ -54,6 +54,8 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 
 		public List getPopupActions() { return null; }
 
+		public String getToolTipText() { return null; }
+
 		protected void handleDelete() {}
 
 		protected void handleProperties() {}

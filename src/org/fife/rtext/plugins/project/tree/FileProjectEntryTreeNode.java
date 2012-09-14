@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileSystemView;
 
 import org.fife.rtext.RText;
@@ -68,8 +69,8 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 			actions.add(new OpenAction());
 		}
 		possiblyAddOpenInActions(actions);
-		actions.add(new DeleteAction());
 		actions.add(new RemoveAction());
+		actions.add(new DeleteAction());
 		actions.add(null);
 		actions.add(new RenameAction());
 		actions.add(null);
@@ -79,6 +80,12 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 		}
 		actions.add(new PropertiesAction());
 		return actions;
+	}
+
+
+	public String getToolTipText() {
+		return Messages.getString("ProjectPlugin.ToolTip.FileProjectEntry",
+				getFile().getAbsolutePath());
 	}
 
 
@@ -98,8 +105,8 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 			return;
 		}
 
-		String text = Messages.getString("Action.Delete.Confirm",
-				"ProjectPlugin.File", getFile().getName());
+		String text = Messages.getString("Action.DeleteFile.Confirm",
+				getFile().getName());
 		RText rtext = plugin.getRText();
 		String title = rtext.getString("ConfDialogTitle");
 
@@ -134,6 +141,18 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 		RenameDialog dialog = new RenameDialog(rtext, type, createNameChecker());
 		dialog.setName(entry.getFile().getName());
 		dialog.setVisible(true);
+		String newName = dialog.getName();
+		if (newName!=null) {
+			File old = entry.getFile();
+			File newFile = new File(old.getParentFile(), newName);
+			boolean success = old.renameTo(newFile);
+			if (success) {
+				plugin.refreshTree(getParent());
+			}
+			else {
+				UIManager.getLookAndFeel().provideErrorFeedback(null);
+			}
+		}
 	}
 
 

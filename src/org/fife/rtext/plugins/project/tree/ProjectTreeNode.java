@@ -73,10 +73,14 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
+	public String getToolTipText() {
+		return null;
+	}
+
 	protected void handleDelete() {
 
-		String text = Messages.getString("Action.Delete.Confirm",
-				"ProjectPlugin.Project", getProject().getName());
+		String text = Messages.getString("Action.DeleteProject.Confirm",
+				getProject().getName());
 		RText rtext = plugin.getRText();
 		String title = rtext.getString("ConfDialogTitle");
 

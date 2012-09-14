@@ -257,7 +257,7 @@ public class NewFolderDialog extends EscapableDialog {
 		if (filters==null || filters.length==0) {
 			inFilterField.setText(null);
 		}
-		inFilterField.setText(RTextUtilities.join(filters, ", "));
+		inFilterField.setText(RTextUtilities.join(filters));
 	}
 
 
@@ -278,7 +278,7 @@ public class NewFolderDialog extends EscapableDialog {
 		if (filters==null || filters.length==0) {
 			outFolderField.setText(null);
 		}
-		outFolderField.setText(RTextUtilities.join(filters, ", "));
+		outFolderField.setText(RTextUtilities.join(filters));
 	}
 
 
@@ -286,7 +286,7 @@ public class NewFolderDialog extends EscapableDialog {
 		if (filters==null || filters.length==0) {
 			outFilterField.setText(null);
 		}
-		outFilterField.setText(RTextUtilities.join(filters, ", "));
+		outFilterField.setText(RTextUtilities.join(filters));
 	}
 
 

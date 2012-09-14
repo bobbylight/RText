@@ -16,6 +16,7 @@ import java.util.Comparator;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.TreeNode;
 
+import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.FolderFilterInfo;
 import org.fife.rtext.plugins.project.model.FolderProjectEntry;
@@ -68,8 +69,9 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		// sort them individually.  This part could be made more compact,
 		// but it isn't just for a tad more speed.
 		for (int i=0; i<num; i++) {
-			if (filterInfo.isAllowed(files[i])) {
-				if (files[i].isDirectory())
+			boolean isDir = files[i].isDirectory();
+			if (filterInfo!=null && filterInfo.isAllowed(files[i], isDir)) {
+				if (isDir)
 					dirList.add(files[i]);
 				else
 					fileList.add(files[i]);
@@ -97,6 +99,18 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		File[] fileArray = new File[dirList.size()];
 		return (File[])dirList.toArray(fileArray);
 
+	}
+
+
+	public String getToolTipText() {
+		File file = getFile();
+		return Messages.getString("ProjectPlugin.ToolTip.FolderProjectEntry",
+			new String[] { file.getAbsolutePath(),
+				FileTreeNode.getFilterString(filterInfo.getAllowedFileFilters(), "*"),
+				FileTreeNode.getFilterString(filterInfo.getDisallowedFileFilters()),
+				FileTreeNode.getFilterString(filterInfo.getDisallowedDirectories())
+			}
+		);
 	}
 
 

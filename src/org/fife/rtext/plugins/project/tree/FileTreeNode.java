@@ -21,8 +21,10 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
+import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.FolderFilterInfo;
 import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
 
@@ -78,8 +80,9 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		// sort them individually.  This part could be made more compact,
 		// but it isn't just for a tad more speed.
 		for (int i=0; i<num; i++) {
-			if (filterInfo!=null && filterInfo.isAllowed(files[i])) {
-				if (files[i].isDirectory())
+			boolean isDir = files[i].isDirectory();
+			if (filterInfo!=null && filterInfo.isAllowed(files[i], isDir)) {
+				if (isDir)
 					dirList.add(files[i]);
 				else
 					fileList.add(files[i]);
@@ -115,6 +118,29 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
+	/**
+	 * Returns a string representation of the specified array of filters.
+	 *
+	 * @param filters The array of filters, may be <code>null</code>.
+	 * @return A string representation of the filters.
+	 */
+	public static final String getFilterString(String[] filters) {
+		return getFilterString(filters, "&nbsp;");
+	}
+
+
+	/**
+	 * Returns a string representation of the specified array of filters.
+	 *
+	 * @param filters The array of filters, may be <code>null</code>.
+	 * @param def The value to display if the filter array is <code>null</code>.
+	 * @return A string representation of the filters.
+	 */
+	public static final String getFilterString(String[] filters, String def) {
+		return filters==null ? def : RTextUtilities.join(filters);
+	}
+
+
 	public List getPopupActions() {
 		List actions = new ArrayList();
 		if (!getFile().isDirectory()) {
@@ -139,6 +165,25 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
+	public String getToolTipText() {
+		File file = getFile();
+		if (file.isFile()) {
+			return Messages.getString("ProjectPlugin.ToolTip.File",
+					getFile().getAbsolutePath());
+		}
+		else if (file.isDirectory()) {
+			return Messages.getString("ProjectPlugin.ToolTip.Folder",
+				new String[] { file.getAbsolutePath(),
+					getFilterString(filterInfo.getAllowedFileFilters(), "*"),
+					getFilterString(filterInfo.getDisallowedFileFilters()),
+					getFilterString(filterInfo.getDisallowedDirectories())
+				}
+			);
+		}
+		return null; // File does not exist
+	}
+
+
 	protected void handleDelete() {
 
 		final boolean hard = false;
@@ -154,8 +199,8 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 			return;
 		}
 
-		String text = Messages.getString("Action.Delete.Confirm",
-				"ProjectPlugin.File", file.getName());
+		String text = Messages.getString("Action.DeleteFile.Confirm",
+				file.getName());
 		RText rtext = plugin.getRText();
 		String title = rtext.getString("ConfDialogTitle");
 
@@ -198,7 +243,26 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 
 
 	protected void handleRename() {
-		// TODO Auto-generated method stub
+		RText rtext = plugin.getRText();
+		boolean directory = getFile().isDirectory();
+		String key = "ProjectPlugin." + (directory ? "Folder" : "File");
+		String type = Messages.getString(key);
+		RenameDialog dialog = new RenameDialog(rtext, type,
+				new FileNameChecker(getFile().getParentFile(), directory));
+		dialog.setName(getFile().getName());
+		dialog.setVisible(true);
+		String newName = dialog.getName();
+		if (newName!=null) {
+			File old = getFile();
+			File newFile = new File(old.getParentFile(), newName);
+			boolean success = old.renameTo(newFile);
+			if (success) {
+				plugin.refreshTree(getParent());
+			}
+			else {
+				UIManager.getLookAndFeel().provideErrorFeedback(null);
+			}
+		}
 	}
 
 
@@ -239,5 +303,46 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		return getFile().getName();
 	}
 	
+
+	/**
+	 * Ensures that proposed file names are valid.
+	 */
+	private static class FileNameChecker implements NameChecker {
+
+		private File parentDir;
+		private boolean folder;
+
+		public FileNameChecker(File parentDir, boolean folder) {
+			this.parentDir = parentDir;
+			this.folder = folder;
+		}
+
+		public String isValid(String text) {
+			int length = text.length();
+			if (length==0) {
+				return "empty";
+			}
+			for (int i=0; i<length; i++) {
+				char ch = text.charAt(i);
+				if (!(Character.isLetterOrDigit(ch) || ch=='_' || ch=='-' ||
+						ch==' ' || ch=='.')) {
+					return folder ? "invalidFolderName" : "invalidFileName";
+				}
+			}
+			if (text.endsWith(".")) {
+				return folder ? "folderNameCannotEndWithDot" :
+					"fileNameCannotEndWithDot";
+			}
+			if (parentDir!=null) {
+				File test = new File(parentDir, text);
+				if (test.exists()) {
+					return "alreadyExists";
+				}
+			}
+			return null;
+		}
+
+	}
+
 
 }

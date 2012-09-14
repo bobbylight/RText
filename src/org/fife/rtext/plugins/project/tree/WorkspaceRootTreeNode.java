@@ -58,6 +58,11 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
+	public String getToolTipText() {
+		return null;
+	}
+
+
 	protected void handleDelete() {
 		JOptionPane.showMessageDialog(null, "Not yet supported (or used)!");
 	}

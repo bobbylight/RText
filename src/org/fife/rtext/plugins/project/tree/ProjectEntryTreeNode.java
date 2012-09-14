@@ -11,10 +11,12 @@ package org.fife.rtext.plugins.project.tree;
 
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
+import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
+import org.fife.rtext.plugins.project.model.LogicalFolderProjectEntry;
 import org.fife.rtext.plugins.project.model.ProjectEntry;
 
 
@@ -49,12 +51,15 @@ abstract class ProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 			RText rtext = plugin.getRText();
 			String title = rtext.getString("ConfDialogTitle");
 			String selectedEntry = entry.getSaveData();
-			String text = Messages.getString(
-					"Action.RemoveProjectEntry.Confirm", selectedEntry);
+			String key = (entry instanceof LogicalFolderProjectEntry) ?
+					"Action.RemoveLogicalProjectEntry.Confirm" :
+					"Action.RemoveProjectEntry.Confirm";
+			String text = Messages.getString(key, selectedEntry);
 
 			int rc = JOptionPane.showConfirmDialog(rtext, text, title,
 					JOptionPane.YES_NO_OPTION);
 			if (rc==JOptionPane.YES_OPTION) {
+				TreeNode parent = getParent(); // Cache before removing!
 				removeFromParent();
 				entry.removeFromParent();
 				plugin.refreshTree(parent);

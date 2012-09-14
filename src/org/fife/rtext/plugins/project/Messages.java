@@ -71,8 +71,7 @@ public class Messages {
 	 * @return The localized message.
 	 */
 	public static String getString(String key, String param) {
-		String temp = msg.getString(key);
-		return MessageFormat.format(temp, new Object[] { param });
+		return getString(key, new String[] { param });
 	}
 
 
@@ -85,8 +84,20 @@ public class Messages {
 	 * @return The localized message.
 	 */
 	public static String getString(String key, String param1, String param2) {
+		return getString(key, new String[] { param1, param2 });
+	}
+
+
+	/**
+	 * Returns a localized message.
+	 *
+	 * @param key The key for the message.
+	 * @param params Parameters for the message.
+	 * @return The localized message.
+	 */
+	public static String getString(String key, String[] params) {
 		String temp = msg.getString(key);
-		return MessageFormat.format(temp, new Object[] { param1, param2 });
+		return MessageFormat.format(temp, params);
 	}
 
 

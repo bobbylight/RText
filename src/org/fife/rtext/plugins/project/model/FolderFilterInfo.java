@@ -66,9 +66,10 @@ public class FolderFilterInfo {
 	 * Returns whether a file or directory should be displayed.
 	 *
 	 * @param file The file or directory.
+	 * @param isDir Whether the file is a directory (passed in for performance).
 	 * @return Whether this filter set allows it to be displayed.
 	 */
-	public boolean isAllowed(File file) {
+	public boolean isAllowed(File file, boolean isDir) {
 
 		String name = file.getName();
 
@@ -81,7 +82,7 @@ public class FolderFilterInfo {
 			}
 		}
 
-		if (disallowedDirectories!=null && file.isDirectory()) {
+		if (disallowedDirectories!=null && isDir) {
 			if (disallowedDirPatterns==null) {
 				disallowedDirPatterns = wildcardToRegex(disallowedDirectories);
 			}

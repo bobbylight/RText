@@ -29,6 +29,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -69,6 +70,8 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(3, 3, 0, 3),
 				getBorder()));
+
+		ToolTipManager.sharedInstance().registerComponent(this);
 
 	}
 
@@ -200,6 +203,18 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			return new File[] { file };
 		}
 		return new File[0];
+	}
+
+
+	public String getToolTipText(MouseEvent e) {
+		TreePath path = getPathForLocation(e.getX(), e.getY());
+		if (path!=null) {
+			Object last = path.getLastPathComponent();
+			if (last instanceof AbstractWorkspaceTreeNode) {
+				return ((AbstractWorkspaceTreeNode)last).getToolTipText();
+			}
+		}
+		return null;
 	}
 
 

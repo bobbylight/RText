@@ -21,6 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -67,6 +68,7 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		if (chooser==null) {
 			chooser = new RTextFileChooser();
 			chooser.setShowHiddenFiles(true);
+			chooser.setMultiSelectionEnabled(true);
 		}
 		return chooser;
 	}
@@ -81,6 +83,9 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 
 	public abstract List getPopupActions();
+
+
+	public abstract String getToolTipText();
 
 
 	protected abstract void handleDelete();
@@ -116,11 +121,21 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	protected class DeleteAction extends BaseAction {
 
 		public DeleteAction() {
+			this(true);
+		}
+
+		public DeleteAction(boolean enabled) {
 			super("Action.Delete");
+			setEnabled(enabled);
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			handleDelete();
+			// Run later to allow popup to hide
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					handleDelete();
+				}
+			});
 		}
 
 	}
@@ -135,7 +150,7 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		private TreeNode node;
 
 		public NewFileAction(ProjectEntryParent parent, TreeNode node) {
-			super("Action.NewFile", "page_white_add.png");
+			super("Action.NewFiles", "page_white_add.png");
 			this.parent = parent;
 			this.node = node;
 		}
@@ -144,10 +159,12 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			RTextFileChooser chooser = getFileChooser();
 			int rc = chooser.showOpenDialog(plugin.getRText());
 			if (rc==RTextFileChooser.APPROVE_OPTION) {
-				File toAdd = chooser.getSelectedFile();
-				ProjectEntry entry = new FileProjectEntry(parent, toAdd);
-				parent.addEntry(entry);
-				add(new FileProjectEntryTreeNode(plugin, entry));
+				File[] toAdd = chooser.getSelectedFiles();
+				for (int i=0; i<toAdd.length; i++) {
+					ProjectEntry entry = new FileProjectEntry(parent, toAdd[i]);
+					parent.addEntry(entry);
+					add(new FileProjectEntryTreeNode(plugin, entry));
+				}
 				plugin.refreshTree(node);
 			}
 		}

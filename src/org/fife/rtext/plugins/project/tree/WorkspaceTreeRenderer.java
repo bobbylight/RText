@@ -10,7 +10,6 @@
 package org.fife.rtext.plugins.project.tree;
 
 import java.awt.Component;
-
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
