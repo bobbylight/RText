@@ -18,7 +18,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -52,14 +51,13 @@ public class WorkspaceTree extends JTree implements FileSelector {
 
 	private ProjectPlugin plugin;
 	private DefaultTreeModel model;
-	private DefaultMutableTreeNode root;
 	private JPopupMenu popup;
 
 
 	public WorkspaceTree(ProjectPlugin plugin, Workspace workspace) {
 
 		this.plugin = plugin;
-		root = new WorkspaceRootTreeNode(plugin, workspace);
+		WorkspaceRootTreeNode root = new WorkspaceRootTreeNode(plugin, workspace);
 		model = new DefaultTreeModel(root);
 		installActions();
 		setModel(model);
@@ -134,6 +132,19 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			popup.show(this, p.x, p.y);
 		}
 
+	}
+
+
+	/**
+	 * Expands all project nodes in the tree.
+	 */
+	private void expandAllProjects() {
+		WorkspaceRootTreeNode root = (WorkspaceRootTreeNode)model.getRoot();
+		for (int i=0; i<root.getChildCount(); i++) {
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+					root.getChildAt(i);
+			expandPath(new TreePath(node.getPath()));
+		}
 	}
 
 
@@ -329,6 +340,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		WorkspaceTreeRootCreator creator = new WorkspaceTreeRootCreator(plugin);
 		workspace.accept(creator);
 		model.setRoot(creator.getRoot());
+		expandAllProjects();
 	}
 
 

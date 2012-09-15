@@ -108,6 +108,11 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
+	protected NameChecker createNameChecker() {
+		return new FolderProjectEntryNameChecker();
+	}
+
+
 	public FolderFilterInfo getFilterInfo() {
 		return ((FolderProjectEntry)entry).getFilterInfo();
 	}
@@ -117,11 +122,11 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		File file = getFile();
 		FolderFilterInfo filterInfo = getFilterInfo();
 		return Messages.getString("ProjectPlugin.ToolTip.FolderProjectEntry",
-			new String[] { getDisplayName(),
-				file.getAbsolutePath(),
-				FileTreeNode.getFilterString(filterInfo.getAllowedFileFilters(), "*"),
-				FileTreeNode.getFilterString(filterInfo.getHiddenFileFilters()),
-				FileTreeNode.getFilterString(filterInfo.getHiddenFolderFilters())
+			new String[] { escapeForHtml(getDisplayName()),
+				escapeForHtml(file.getAbsolutePath()),
+				escapeForHtml(FileTreeNode.getFilterString(filterInfo.getAllowedFileFilters(), "*")),
+				escapeForHtml(FileTreeNode.getFilterString(filterInfo.getHiddenFileFilters())),
+				escapeForHtml(FileTreeNode.getFilterString(filterInfo.getHiddenFolderFilters()))
 			}
 		);
 	}
@@ -172,6 +177,19 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		if (!isNotPopulated()) {
 			handleRefresh();
 		}
+	}
+
+
+	private class FolderProjectEntryNameChecker implements NameChecker {
+
+		public String isValid(String text) {
+			int length = text.length();
+			if (length==0) {
+				return "empty";
+			}
+			return null;
+		}
+		
 	}
 
 

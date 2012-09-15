@@ -21,6 +21,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
+import org.fife.rtext.plugins.project.model.FolderProjectEntry;
 import org.fife.rtext.plugins.project.model.ProjectEntry;
 import org.fife.ui.rtextfilechooser.FileDisplayNames;
 import org.fife.ui.rtextfilechooser.Utilities;
@@ -149,7 +150,16 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 		String key = "ProjectPlugin." + (directory ? "Folder" : "File");
 		String type = Messages.getString(key);
 		RenameDialog dialog = new RenameDialog(rtext, type, createNameChecker());
-		dialog.setName(entry.getFile().getName());
+		if (this instanceof FolderProjectEntryTreeNode) {
+			FolderProjectEntry fpe = (FolderProjectEntry)entry;
+			dialog.setDescription(getIcon(),
+					Messages.getString("RenameDialog.DisplayName.Desc"));
+			dialog.setNameLabel(Messages.getString("RenameDialog.DisplayName.Label"));
+			dialog.setName(fpe.getDisplayName());
+		}
+		else {
+			dialog.setName(FileDisplayNames.get().getName(entry.getFile()));
+		}
 		dialog.setVisible(true);
 		String newName = dialog.getName();
 		if (newName!=null) {

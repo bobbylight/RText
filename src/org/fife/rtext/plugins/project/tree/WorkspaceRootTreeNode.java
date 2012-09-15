@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.project.tree;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
@@ -19,6 +20,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
+import org.fife.rtext.plugins.project.model.Project;
 import org.fife.rtext.plugins.project.model.Workspace;
 
 
@@ -56,6 +58,8 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 
 	public List getPopupActions() {
 		List actions = new ArrayList();
+		actions.add(new NewProjectAction());
+		actions.add(null);
 		actions.add(new RenameAction());
 		actions.add(null);
 		actions.add(new PropertiesAction());
@@ -89,6 +93,37 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 			workspace.setName(newName);
 			plugin.refreshTree(this);
 		}
+	}
+
+
+	/**
+	 * Creates a new project in this workspace.
+	 */
+	private class NewProjectAction extends BaseAction {
+
+		public NewProjectAction() {
+			super("Action.NewProject");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			RText rtext = plugin.getRText();
+			RenameDialog dialog = new RenameDialog(rtext, "Project",
+					new ProjectTreeNode.ProjectNameChecker(workspace));
+			Icon icon = ProjectTreeNode.getProjectIcon();
+			dialog.setDescription(icon, Messages.getString("NewProjectDialog.Desc"));
+			dialog.setTitle(Messages.getString("NewProjectDialog.Title"));
+			dialog.setName(null); // Move focus from desc SelectableLabel to field.
+			dialog.setVisible(true);
+			String newName = dialog.getName();
+			if (newName!=null) {
+				Project project = new Project(workspace, newName);
+				workspace.addProject(project);
+				ProjectTreeNode childNode =
+						new ProjectTreeNode(plugin, project);
+				plugin.insertTreeNodeInto(childNode, WorkspaceRootTreeNode.this);
+			}
+		}
+
 	}
 
 

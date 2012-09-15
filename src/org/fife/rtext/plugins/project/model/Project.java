@@ -77,6 +77,11 @@ public class Project implements Comparable, ProjectEntryParent {
 	}
 
 
+	public Workspace getWorkspace() {
+		return workspace;
+	}
+
+
 	public int hashCode() {
 		return getName().hashCode();
 	}

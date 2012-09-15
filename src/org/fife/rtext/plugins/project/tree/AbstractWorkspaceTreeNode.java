@@ -60,6 +60,11 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
+	protected String escapeForHtml(String text) {
+		return RTextUtilities.escapeForHTML(text, null);
+	}
+
+
 	/**
 	 * Returns the name to display for this node in the workspace tree.
 	 *

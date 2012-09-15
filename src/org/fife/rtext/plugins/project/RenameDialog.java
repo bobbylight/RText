@@ -35,6 +35,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.tree.NameChecker;
 import org.fife.ui.ResizableFrameContentPane;
+import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
 
 
@@ -46,6 +47,8 @@ import org.fife.ui.UIUtil;
  */
 public class RenameDialog extends EscapableDialog{
 
+	private JPanel topPanel;
+	private JLabel nameLabel;
 	private JButton okButton;
 	private JButton cancelButton;
 	private JTextField nameField;
@@ -77,21 +80,23 @@ public class RenameDialog extends EscapableDialog{
 
 		// A panel containing the main content.
 		String key = "RenameDialog.Field.Label";
-		JLabel label = new JLabel(Messages.getString(key));
-		label.setDisplayedMnemonic(Messages.getString(key + ".Mnemonic").charAt(0));
+		nameLabel = new JLabel(Messages.getString(key));
+		nameLabel.setDisplayedMnemonic(Messages.getString(key + ".Mnemonic").charAt(0));
 		nameField = new JTextField(40);
 		nameField.getDocument().addDocumentListener(listener);
-		label.setLabelFor(nameField);
+		nameLabel.setLabelFor(nameField);
 		renameDIP = new DecorativeIconPanel();
 		Box box = new Box(BoxLayout.LINE_AXIS);
-		box.add(label);
+		box.add(nameLabel);
 		box.add(Box.createHorizontalStrut(5));
 		box.add(RTextUtilities.createAssistancePanel(nameField, renameDIP));
 		box.add(Box.createHorizontalGlue());
+		topPanel = new JPanel(new BorderLayout());
+		topPanel.add(box, BorderLayout.SOUTH);
 
 		// Make a panel containing the OK and Cancel buttons.
 		JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,5));
-		buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
+		//buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
 		okButton = UIUtil.createRButton(bundle, "OKButtonLabel", "OKButtonMnemonic");
 		okButton.setActionCommand("OK");
 		okButton.addActionListener(listener);
@@ -102,7 +107,7 @@ public class RenameDialog extends EscapableDialog{
 		buttonPanel.add(cancelButton);
 
 		// Put everything into a neat little package.
-		cp.add(box, BorderLayout.NORTH);
+		cp.add(topPanel, BorderLayout.NORTH);
 		JPanel temp = new JPanel();
 		temp.add(buttonPanel);
 		cp.add(temp, BorderLayout.SOUTH);
@@ -111,7 +116,7 @@ public class RenameDialog extends EscapableDialog{
 		setTitle(Messages.getString("RenameDialog.Title", type));
 		setModal(true);
 		applyComponentOrientation(orientation);
-		pack();
+		packSpecial();
 		setLocationRelativeTo(owner);
 
 	}
@@ -164,11 +169,39 @@ public class RenameDialog extends EscapableDialog{
 	}
 
 
+	/**
+	 * Packs this dialog, taking special care to not be too wide due to our
+	 * <code>SelectableLabel</code>.
+	 */
+	private void packSpecial() {
+		pack();
+		setSize(520, getHeight()+60); // Enough for line wrapping
+	}
+
+
 	private void setBadNameValue(String reason) {
 		renameDIP.setShowIcon(true);
 		renameDIP.setIcon(getErrorIcon());
 		renameDIP.setToolTipText(getLocalizedReason(reason));
 		okButton.setEnabled(false);
+	}
+
+
+	public void setDescription(Icon icon, String desc) {
+		SelectableLabel descText = new SelectableLabel(desc);
+		JLabel label = new JLabel(icon);
+		if (getComponentOrientation().isLeftToRight()) {
+			label.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 15));
+		}
+		else {
+			label.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 10));
+		}
+		JPanel temp = new JPanel(new BorderLayout());
+		temp.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
+		temp.add(label, BorderLayout.LINE_START);
+		temp.add(descText);
+		topPanel.add(temp, BorderLayout.NORTH);
+		packSpecial();
 	}
 
 
@@ -189,6 +222,19 @@ public class RenameDialog extends EscapableDialog{
 		nameField.setText(name);
 		nameField.requestFocusInWindow();
 		nameField.selectAll();
+		if (name==null) {
+			okButton.setEnabled(false);
+		}
+	}
+
+
+	/**
+	 * Sets the label text for the name field.
+	 *
+	 * @param label The new label text.
+	 */
+	public void setNameLabel(String label) {
+		nameLabel.setText(label);
 	}
 
 

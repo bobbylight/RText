@@ -76,6 +76,23 @@ public class Workspace implements ModelEntity {
 	}
 
 
+	/**
+	 * Returns whether a project already exists with the specified name.
+	 *
+	 * @param name The proposed project name.
+	 * @return Whether a project with that name already exists.
+	 */
+	public boolean containsProjectNamed(String name) {
+		for (Iterator i=getProjectIterator(); i.hasNext(); ) {
+			Project project = (Project)i.next();
+			if (name.equals(project.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 	public String getName() {
 		return name;
 	}

@@ -20,6 +20,7 @@ import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.Project;
+import org.fife.rtext.plugins.project.model.Workspace;
 
 
 /**
@@ -49,7 +50,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	 * {@inheritDoc}
 	 */
 	public Icon getIcon() {
-		return icon;
+		return getProjectIcon();
 	}
 
 
@@ -75,6 +76,16 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	 */
 	public Project getProject() {
 		return project;
+	}
+
+
+	/**
+	 * Returns the icon shared amongst all project tree nodes.
+	 *
+	 * @return The shared icon.
+	 */
+	public static Icon getProjectIcon() {
+		return icon;
 	}
 
 
@@ -108,7 +119,8 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	protected void handleRename() {
 		RText rtext = plugin.getRText();
 		String type = Messages.getString("ProjectPlugin.Project");
-		RenameDialog dialog = new RenameDialog(rtext, type, new ProjectNameChecker());
+		RenameDialog dialog = new RenameDialog(rtext, type,
+				new ProjectNameChecker(project.getWorkspace()));
 		dialog.setName(project.getName());
 		dialog.setVisible(true);
 		String newName = dialog.getName();
@@ -122,18 +134,21 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	/**
 	 * Ensures that proposed project names are valid.
 	 */
-	private static class ProjectNameChecker implements NameChecker {
+	public static class ProjectNameChecker implements NameChecker {
+
+		private Workspace workspace;
+
+		public ProjectNameChecker(Workspace workspace) {
+			this.workspace = workspace;
+		}
 
 		public String isValid(String text) {
 			int length = text.length();
 			if (length==0) {
 				return "empty";
 			}
-			for (int i=0; i<length; i++) {
-				char ch = text.charAt(i);
-				if (ch=='<' || ch=='>' || ch=='&') {
-					return "invalidProjectNameChars";
-				}
+			if (workspace.containsProjectNamed(text)) {
+				return "projectAlreadyExists";
 			}
 			return null;
 		}
