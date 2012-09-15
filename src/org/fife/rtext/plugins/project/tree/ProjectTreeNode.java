@@ -40,6 +40,11 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
+	public String getDisplayName() {
+		return project.getName();
+	}
+
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -111,11 +116,6 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 			project.setName(newName);
 			plugin.refreshTree(getParent());
 		}
-	}
-
-
-	public String toString() {
-		return project.getName();
 	}
 
 

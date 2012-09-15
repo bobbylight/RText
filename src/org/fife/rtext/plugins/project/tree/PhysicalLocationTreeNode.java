@@ -48,6 +48,8 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 			super(plugin);
 		}
 
+		public String getDisplayName() { return null; }
+
 		public Icon getIcon() {
 			return null;
 		}

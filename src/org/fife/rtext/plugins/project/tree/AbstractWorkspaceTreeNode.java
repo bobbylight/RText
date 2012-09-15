@@ -61,6 +61,14 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 
 	/**
+	 * Returns the name to display for this node in the workspace tree.
+	 *
+	 * @return The display name.
+	 */
+	public abstract String getDisplayName();
+
+
+	/**
 	 * Returns the file chooser to use when adding files to a project.
 	 *
 	 * @return The file chooser.
@@ -113,6 +121,11 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			actions.add(openInMenu);
 			actions.add(null);
 		}
+	}
+
+
+	public final String toString() {
+		return getDisplayName();
 	}
 
 

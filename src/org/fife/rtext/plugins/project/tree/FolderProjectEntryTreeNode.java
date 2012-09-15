@@ -13,6 +13,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.TreeNode;
 
@@ -31,34 +33,27 @@ import org.fife.rtext.plugins.project.model.FolderProjectEntry;
 public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		implements PhysicalLocationTreeNode {
 
-	private FolderFilterInfo filterInfo;
-
 
 	public FolderProjectEntryTreeNode(ProjectPlugin plugin,
 			FolderProjectEntry entry) {
 		super(plugin, entry);
 		add(new NotYetPopulatedChild(plugin));
-		filterInfo = new FolderFilterInfo();
-	}
-
-
-	private FileTreeNode createFileTreeNode(File file) {
-		return new FileTreeNode(plugin, file);
 	}
 
 
 	/**
-	 * Does any filtering and sorting of an array of files so that they will
-	 * be displayed properly.
+	 * Filters and sorts the list of child files, and adds child tree nodes
+	 * for the children not filtered out.
 	 *
-	 * @param files The array of files to filter and sort.
-	 * @return The filtered and sorted array of files.
+	 * @param files The array of files to filter, and add (sorted) child tree
+	 *        nodes for those not filtered out.
 	 */
-	private File[] filterAndSort(File[] files) {
+	private void addChildrenFilteredAndSorted(File[] files) {
 
 		int num = files.length;
 		ArrayList dirList = new ArrayList();
 		ArrayList fileList = new ArrayList();
+		FolderFilterInfo filterInfo = getFilterInfo();
 
 		// First, separate the directories from regular files so we can
 		// sort them individually.  This part could be made more compact,
@@ -87,23 +82,46 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 			};
 		}
 
-		Collections.sort(fileList, c);
 		Collections.sort(dirList, c);
-		dirList.addAll(fileList);
+		for (Iterator i=dirList.iterator(); i.hasNext(); ) {
+			add(createFileTreeNode((File)i.next(), true));
+		}
+		Collections.sort(fileList, c);
+		for (Iterator i=fileList.iterator(); i.hasNext(); ) {
+			add(createFileTreeNode((File)i.next(), false));
+		}
 
-		File[] fileArray = new File[dirList.size()];
-		return (File[])dirList.toArray(fileArray);
+	}
 
+
+	private FileTreeNode createFileTreeNode(File file, boolean folder) {
+		FileTreeNode ftn = new FileTreeNode(plugin, file);
+		if (folder) {
+			ftn.setFilterInfo(getFilterInfo());
+		}
+		return ftn;
+	}
+
+
+	public String getDisplayName() {
+		return ((FolderProjectEntry)entry).getDisplayName();
+	}
+
+
+	public FolderFilterInfo getFilterInfo() {
+		return ((FolderProjectEntry)entry).getFilterInfo();
 	}
 
 
 	public String getToolTipText() {
 		File file = getFile();
+		FolderFilterInfo filterInfo = getFilterInfo();
 		return Messages.getString("ProjectPlugin.ToolTip.FolderProjectEntry",
-			new String[] { file.getAbsolutePath(),
+			new String[] { getDisplayName(),
+				file.getAbsolutePath(),
 				FileTreeNode.getFilterString(filterInfo.getAllowedFileFilters(), "*"),
-				FileTreeNode.getFilterString(filterInfo.getDisallowedFileFilters()),
-				FileTreeNode.getFilterString(filterInfo.getDisallowedDirectories())
+				FileTreeNode.getFilterString(filterInfo.getHiddenFileFilters()),
+				FileTreeNode.getFilterString(filterInfo.getHiddenFolderFilters())
 			}
 		);
 	}
@@ -111,6 +129,12 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 
 	public void handleRefresh() {
 		plugin.getTree().refreshChildren(this);
+	}
+
+
+	protected void handleRenameImpl(String newName) {
+		setDisplayName(newName);
+		plugin.refreshTree(getParent());
 	}
 
 
@@ -126,24 +150,28 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 			removeAllChildren();
 			FileSystemView fsv = FileSystemView.getFileSystemView();
 			File[] children = fsv.getFiles(file, false);
-			File[] filteredChildren = filterAndSort(children);
-			for (int i=0; i<filteredChildren.length; i++) {
-				add(createFileTreeNode(filteredChildren[i]));
-			}
+			addChildrenFilteredAndSorted(children);
 		}
 	}
 
 
+	public void setDisplayName(String displayName) {
+		((FolderProjectEntry)entry).setDisplayName(displayName);
+	}
+
+
 	public void setFilterInfo(FolderFilterInfo info) {
-		this.filterInfo = info;
+		((FolderProjectEntry)entry).setFilterInfo(info);
 		for (int i=0; i<getChildCount(); i++) {
 			TreeNode child = getChildAt(i);
 			if (child instanceof FileTreeNode) { // i.e. not NotYetPopulated...
 				FileTreeNode ftn = (FileTreeNode)child;
-				ftn.setFilterInfo(filterInfo);
+				ftn.setFilterInfo(info);
 			}
 		}
-		handleRefresh();
+		if (!isNotPopulated()) {
+			handleRefresh();
+		}
 	}
 
 

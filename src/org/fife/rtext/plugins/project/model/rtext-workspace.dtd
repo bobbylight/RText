@@ -1,16 +1,20 @@
 <!-- DTD for workspaces. -->
-<!ELEMENT workspace            (projects)>
-<!ELEMENT projects             (project)*>
-<!ELEMENT project              (file-entry|folder-entry|logical-folder-entry)*>
-<!ELEMENT file-entry           EMPTY>
-<!ELEMENT folder-entry         EMPTY>
-<!ELEMENT logical-folder-entry (file-entry|folder-entry|logical-folder-entry)*>
+<!ELEMENT workspace      (projects)>
+<!ELEMENT projects       (project)*>
+<!ELEMENT project        (file|folder|logical-folder)*>
+<!ELEMENT file           EMPTY>
+<!ELEMENT folder         EMPTY>
+<!ELEMENT logical-folder (file|folder|logical-folder)*>
 
 <!ATTLIST project
-      name      CDATA  #REQUIRED>
-<!ATTLIST file-entry
-      path      CDATA  #REQUIRED>
-<!ATTLIST folder-entry
-      path      CDATA  #REQUIRED>
-<!ATTLIST logical-folder-entry
-      name      CDATA  #REQUIRED>
+      name            CDATA  #REQUIRED>
+<!ATTLIST file
+      path            CDATA  #REQUIRED>
+<!ATTLIST folder
+      name            CDATA  #IMPLIED
+      path            CDATA  #REQUIRED
+      displayed-files CDATA  #REQUIRED
+      hidden-files    CDATA  #REQUIRED
+      hidden-folders  CDATA  #REQUIRED>
+<!ATTLIST logical-folder
+      name            CDATA  #REQUIRED>

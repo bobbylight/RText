@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
@@ -27,6 +28,7 @@ import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.FolderFilterInfo;
 import org.fife.ui.rtextfilechooser.FileDisplayNames;
+import org.fife.ui.rtextfilechooser.Utilities;
 import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
 
 
@@ -57,21 +59,14 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
-	private FileTreeNode createFileTreeNode(File file) {
-		FileTreeNode ftn = new FileTreeNode(plugin, file);
-		ftn.setFilterInfo(filterInfo);
-		return ftn;
-	}
-
-
 	/**
-	 * Does any filtering and sorting of an array of files so that they will
-	 * be displayed properly.
+	 * Filters and sorts the list of child files, and adds child tree nodes
+	 * for the children not filtered out.
 	 *
-	 * @param files The array of files to filter and sort.
-	 * @return The filtered and sorted array of files.
+	 * @param files The array of files to filter, and add (sorted) child tree
+	 *        nodes for those not filtered out.
 	 */
-	private File[] filterAndSort(File[] files) {
+	private void addChildrenFilteredAndSorted(File[] files) {
 
 		int num = files.length;
 		ArrayList dirList = new ArrayList();
@@ -104,15 +99,31 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 			};
 		}
 
-		Collections.sort(fileList, c);
 		Collections.sort(dirList, c);
-		dirList.addAll(fileList);
-
-		File[] fileArray = new File[dirList.size()];
-		return (File[])dirList.toArray(fileArray);
+		for (Iterator i=dirList.iterator(); i.hasNext(); ) {
+			add(createFileTreeNode((File)i.next(), true));
+		}
+		Collections.sort(fileList, c);
+		for (Iterator i=fileList.iterator(); i.hasNext(); ) {
+			add(createFileTreeNode((File)i.next(), false));
+		}
 
 	}
 
+
+	private FileTreeNode createFileTreeNode(File file, boolean folder) {
+		FileTreeNode ftn = new FileTreeNode(plugin, file);
+		if (folder) {
+			ftn.setFilterInfo(filterInfo);
+		}
+		return ftn;
+	}
+
+
+	public String getDisplayName() {
+		return FileDisplayNames.get().getName(getFile());
+	}
+	
 
 	public File getFile() {
 		return (File)getUserObject();
@@ -170,14 +181,15 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		File file = getFile();
 		if (file.isFile()) {
 			return Messages.getString("ProjectPlugin.ToolTip.File",
-					getFile().getAbsolutePath());
+					getFile().getAbsolutePath(),
+					Utilities.getFileSizeStringFor(file));
 		}
 		else if (file.isDirectory()) {
 			return Messages.getString("ProjectPlugin.ToolTip.Folder",
 				new String[] { file.getAbsolutePath(),
 					getFilterString(filterInfo.getAllowedFileFilters(), "*"),
-					getFilterString(filterInfo.getDisallowedFileFilters()),
-					getFilterString(filterInfo.getDisallowedDirectories())
+					getFilterString(filterInfo.getHiddenFileFilters()),
+					getFilterString(filterInfo.getHiddenFolderFilters())
 				}
 			);
 		}
@@ -279,10 +291,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 			removeAllChildren();
 			FileSystemView fsv = FileSystemView.getFileSystemView();
 			File[] children = fsv.getFiles(file, false);
-			File[] filteredChildren = filterAndSort(children);
-			for (int i=0; i<filteredChildren.length; i++) {
-				add(createFileTreeNode(filteredChildren[i]));
-			}
+			addChildrenFilteredAndSorted(children);
 		}
 	}
 
@@ -296,14 +305,11 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 				ftn.setFilterInfo(filterInfo);
 			}
 		}
-		handleRefresh();
+		if (!isNotPopulated()) {
+			handleRefresh();
+		}
 	}
 
-
-	public String toString() {
-		return FileDisplayNames.get().getName(getFile());
-	}
-	
 
 	/**
 	 * Ensures that proposed file names are valid.

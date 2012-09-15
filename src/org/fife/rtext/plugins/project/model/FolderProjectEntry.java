@@ -11,6 +11,8 @@ package org.fife.rtext.plugins.project.model;
 
 import java.io.File;
 
+import org.fife.ui.rtextfilechooser.FileDisplayNames;
+
 
 /**
  * A project entry representing a folder on the local file system
@@ -22,11 +24,15 @@ import java.io.File;
 public class FolderProjectEntry extends AbstractProjectEntry {
 
 	private File dir;
+	private String displayName;
+	private FolderFilterInfo filterInfo;
 
 
 	public FolderProjectEntry(ProjectEntryParent parent, File folder) {
 		super(parent);
 		this.dir = folder;
+		this.displayName = FileDisplayNames.get().getName(this.dir);
+		setFilterInfo(new FolderFilterInfo());
 	}
 
 
@@ -44,8 +50,18 @@ public class FolderProjectEntry extends AbstractProjectEntry {
 	}
 
 
+	public String getDisplayName() {
+		return displayName;
+	}
+
+
 	public File getFile() {
 		return dir;
+	}
+
+
+	public FolderFilterInfo getFilterInfo() {
+		return filterInfo;
 	}
 
 
@@ -61,6 +77,16 @@ public class FolderProjectEntry extends AbstractProjectEntry {
 
 	public int hashCode() {
 		return dir.hashCode();
+	}
+
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+
+	public void setFilterInfo(FolderFilterInfo filterInfo) {
+		this.filterInfo = filterInfo;
 	}
 
 

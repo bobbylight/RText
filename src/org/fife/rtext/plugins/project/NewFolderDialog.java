@@ -150,8 +150,8 @@ public class NewFolderDialog extends EscapableDialog {
 		}
 		FolderFilterInfo info = new FolderFilterInfo();
 		info.setAllowedFileFilters(getAllowedFileFilters());
-		info.setDisallowedDirectoryFilters(getDisallowedDirectories());
-		info.setDisallowedFileFilters(getDisallowedFileFilters());
+		info.setHiddenFolderFilters(getDisallowedDirectories());
+		info.setHiddenFileFilters(getDisallowedFileFilters());
 		return info;
 	}
 

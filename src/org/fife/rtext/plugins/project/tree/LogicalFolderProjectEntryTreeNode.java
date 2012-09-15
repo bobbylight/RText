@@ -43,6 +43,11 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
+	public String getDisplayName() {
+		return ((LogicalFolderProjectEntry)entry).getName();
+	}
+	
+
 	public Icon getIcon() {
 		return getLogicalFolderIcon();
 	}
@@ -106,11 +111,6 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 		}
 	}
 
-
-	public String toString() {
-		return ((LogicalFolderProjectEntry)entry).getName();
-	}
-	
 
 	/**
 	 * Get a slightly modified version of the standard "folder" icon for this

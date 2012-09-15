@@ -37,10 +37,10 @@ public class FolderFilterInfo {
 
 
 	public FolderFilterInfo(String[] allowedFileFilters,
-			String[] disallowedFileFilters, String[] disallowedDirectories) {
+			String[] hiddenFileFilters, String[] hiddenFolderFilters) {
 		setAllowedFileFilters(allowedFileFilters);
-		setDisallowedDirectoryFilters(disallowedDirectories);
-		setDisallowedFileFilters(disallowedFileFilters);
+		setHiddenFolderFilters(hiddenFolderFilters);
+		setHiddenFileFilters(hiddenFileFilters);
 	}
 
 
@@ -50,13 +50,13 @@ public class FolderFilterInfo {
 	}
 
 
-	public String[] getDisallowedDirectories() {
+	public String[] getHiddenFolderFilters() {
 		return disallowedDirectories==null ? null :
 			(String[])disallowedDirectories.clone();
 	}
 
 
-	public String[] getDisallowedFileFilters() {
+	public String[] getHiddenFileFilters() {
 		return disallowedFileFilters==null ? null :
 			(String[])disallowedFileFilters.clone();
 	}
@@ -104,7 +104,7 @@ public class FolderFilterInfo {
 	}
 
 
-	private boolean matches(String fileName, Pattern[] patterns) {
+	private static final boolean matches(String fileName, Pattern[] patterns) {
 		for (int i=0; i<patterns.length; i++) {
 			if (patterns[i].matcher(fileName).matches()) {
 				return true;
@@ -124,7 +124,7 @@ public class FolderFilterInfo {
 	}
 
 
-	public void setDisallowedDirectoryFilters(String[] filters) {
+	public void setHiddenFolderFilters(String[] filters) {
 		if (filters!=null && filters.length==1 && filters[0].length()==0) {
 			filters = null;
 		}
@@ -133,7 +133,7 @@ public class FolderFilterInfo {
 	}
 
 
-	public void setDisallowedFileFilters(String[] filters) {
+	public void setHiddenFileFilters(String[] filters) {
 		if (filters!=null && filters.length==1 && filters[0].length()==0) {
 			filters = null;
 		}

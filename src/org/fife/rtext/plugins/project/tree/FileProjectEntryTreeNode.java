@@ -23,6 +23,7 @@ import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.ProjectEntry;
 import org.fife.ui.rtextfilechooser.FileDisplayNames;
+import org.fife.ui.rtextfilechooser.Utilities;
 import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
 
 
@@ -49,6 +50,11 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 				file.isDirectory());
 	}
 
+
+	public String getDisplayName() {
+		return FileDisplayNames.get().getName(getFile());
+	}
+	
 
 	/**
 	 * Returns the file or directory represented by this tree node's project
@@ -88,7 +94,8 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 	public String getToolTipText() {
 		return Messages.getString("ProjectPlugin.ToolTip.FileProjectEntry",
-				getFile().getAbsolutePath());
+				getFile().getAbsolutePath(),
+				Utilities.getFileSizeStringFor(getFile()));
 	}
 
 
@@ -146,22 +153,22 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 		dialog.setVisible(true);
 		String newName = dialog.getName();
 		if (newName!=null) {
-			File old = entry.getFile();
-			File newFile = new File(old.getParentFile(), newName);
-			boolean success = old.renameTo(newFile);
-			if (success) {
-				plugin.refreshTree(getParent());
-			}
-			else {
-				UIManager.getLookAndFeel().provideErrorFeedback(null);
-			}
+			handleRenameImpl(newName);
 		}
 	}
 
 
-	public String toString() {
-		return FileDisplayNames.get().getName(getFile());
+	protected void handleRenameImpl(String newName) {
+		File old = entry.getFile();
+		File newFile = new File(old.getParentFile(), newName);
+		boolean success = old.renameTo(newFile);
+		if (success) {
+			plugin.refreshTree(getParent());
+		}
+		else {
+			UIManager.getLookAndFeel().provideErrorFeedback(null);
+		}
 	}
-	
+
 
 }

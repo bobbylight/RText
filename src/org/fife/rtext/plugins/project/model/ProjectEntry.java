@@ -24,18 +24,18 @@ public interface ProjectEntry extends ModelEntity, Comparable {
 	/**
 	 * A project entry that's a single file somewhere on the file system.
 	 */
-	public static final String FILE_PROJECT_ENTRY = "file-entry";
+	public static final String FILE_PROJECT_ENTRY = "file";
 
 	/**
 	 * A project entry that's a directory and all of its contents.
 	 */
-	public static final String DIR_PROJECT_ENTRY  = "folder-entry";
+	public static final String DIR_PROJECT_ENTRY  = "folder";
 
 	/**
 	 * A project entry that's a logical folder (not a physical folder on the
 	 * local file system).
 	 */
-	public static final String LOGICAL_DIR_PROJECT_ENTRY = "logical-folder-entry";
+	public static final String LOGICAL_DIR_PROJECT_ENTRY = "logical-folder";
 
 
 	/**

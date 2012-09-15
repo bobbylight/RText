@@ -153,6 +153,14 @@ public class Workspace implements ModelEntity {
 	}
 
 
+	private static String[] parseFilters(String str) {
+		if (str==null || str.trim().length()==0) {
+			return null;
+		}
+		return str.trim().split("\\s*,\\s*");
+	}
+
+
 	/**
 	 * Recursively adds project entry nodes to a project entry parent node.
 	 *
@@ -175,6 +183,19 @@ public class Workspace implements ModelEntity {
 				if (ProjectEntry.DIR_PROJECT_ENTRY.equals(tag)) {
 					File folder = new File(childElem.getAttribute("path"));
 					entry = new FolderProjectEntry(parent, folder);
+					String displayName = childElem.getAttribute("name");
+					if (displayName!=null && displayName.length()>0) {
+						((FolderProjectEntry)entry).setDisplayName(displayName);
+					}
+					String temp = childElem.getAttribute("displayed-files");
+					String[] displayedFiles = parseFilters(temp);
+					temp = childElem.getAttribute("hidden-files");
+					String[] hiddenFiles = parseFilters(temp);
+					temp = childElem.getAttribute("hidden-folders");
+					String[] hiddenFolders = parseFilters(temp);
+					FolderFilterInfo info = new FolderFilterInfo(displayedFiles,
+							hiddenFiles, hiddenFolders);
+					((FolderProjectEntry)entry).setFilterInfo(info);
 				}
 				else if (ProjectEntry.FILE_PROJECT_ENTRY.equals(tag)) {
 					File file = new File(childElem.getAttribute("path"));

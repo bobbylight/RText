@@ -14,6 +14,8 @@ import java.util.Stack;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import org.fife.rtext.RTextUtilities;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -103,6 +105,14 @@ class DOMModelCreator implements WorkspaceVisitor {
 	public void visit(FolderProjectEntry entry) {
 		Element entryElem = doc.createElement(entry.getType());
 		entryElem.setAttribute("path", entry.getSaveData());
+		entryElem.setAttribute("name", entry.getDisplayName());
+		FolderFilterInfo info = entry.getFilterInfo();
+		entryElem.setAttribute("displayed-files",
+				RTextUtilities.join(info.getAllowedFileFilters()));
+		entryElem.setAttribute("hidden-files",
+				RTextUtilities.join(info.getHiddenFileFilters()));
+		entryElem.setAttribute("hidden-folders",
+				RTextUtilities.join(info.getHiddenFolderFilters()));
 		getCurrentProjectEntryParentElem().appendChild(entryElem);
 	}
 

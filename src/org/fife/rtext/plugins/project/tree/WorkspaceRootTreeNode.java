@@ -41,6 +41,11 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
+	public String getDisplayName() {
+		return workspace.getName();
+	}
+
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -84,11 +89,6 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 			workspace.setName(newName);
 			plugin.refreshTree(this);
 		}
-	}
-
-
-	public String toString() {
-		return workspace.getName();
 	}
 
 
