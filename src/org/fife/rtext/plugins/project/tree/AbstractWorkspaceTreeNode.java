@@ -24,6 +24,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import org.fife.rsta.ac.java.DecoratableIcon;
@@ -144,12 +145,12 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Action for a menu item that adds a file to this project.
 	 */
-	protected class NewFileAction extends BaseAction {
+	protected class AddFileAction extends BaseAction {
 
 		private ProjectEntryParent parent;
-		private TreeNode node;
+		private MutableTreeNode node;
 
-		public NewFileAction(ProjectEntryParent parent, TreeNode node) {
+		public AddFileAction(ProjectEntryParent parent, MutableTreeNode node) {
 			super("Action.NewFiles", "page_white_add.png");
 			this.parent = parent;
 			this.node = node;
@@ -163,9 +164,10 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 				for (int i=0; i<toAdd.length; i++) {
 					ProjectEntry entry = new FileProjectEntry(parent, toAdd[i]);
 					parent.addEntry(entry);
-					add(new FileProjectEntryTreeNode(plugin, entry));
+					FileProjectEntryTreeNode childNode =
+							new FileProjectEntryTreeNode(plugin, entry);
+					plugin.insertTreeNodeInto(childNode, node);
 				}
-				plugin.refreshTree(node);
 			}
 		}
 
@@ -175,12 +177,12 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Action for a menu item that adds a folder to this project.
 	 */
-	protected class NewFolderAction extends BaseAction {
+	protected class AddFolderAction extends BaseAction {
 
 		private ProjectEntryParent parent;
-		private TreeNode node;
+		private MutableTreeNode node;
 
-		public NewFolderAction(ProjectEntryParent parent, TreeNode node) {
+		public AddFolderAction(ProjectEntryParent parent, MutableTreeNode node) {
 			super("Action.NewFolder", "folder_add.png");
 			this.parent = parent;
 			this.node = node;
@@ -199,8 +201,7 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 				FolderProjectEntryTreeNode childNode =
 						new FolderProjectEntryTreeNode(plugin, entry);
 				childNode.setFilterInfo(chooser.getFilterInfo());
-				add(childNode);
-				plugin.refreshTree(node);
+				plugin.insertTreeNodeInto(childNode, node);
 			}
 		}
 
@@ -210,12 +211,13 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Action for a menu item that adds a logical folder to this project.
 	 */
-	protected class NewLogicalFolderAction extends BaseAction {
+	protected class AddLogicalFolderAction extends BaseAction {
 
 		private ProjectEntryParent parent;
-		private TreeNode node;
+		private MutableTreeNode node;
 
-		public NewLogicalFolderAction(ProjectEntryParent parent, TreeNode node) {
+		public AddLogicalFolderAction(ProjectEntryParent parent,
+				MutableTreeNode node) {
 
 			super("Action.NewLogicalFolder", "folder_add.png");
 			this.parent = parent;
@@ -241,8 +243,9 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 				LogicalFolderProjectEntry entry =
 						new LogicalFolderProjectEntry(this.parent, name);
 				this.parent.addEntry(entry);
-				add(new LogicalFolderProjectEntryTreeNode(plugin, entry));
-				plugin.refreshTree(node);
+				MutableTreeNode child =
+						new LogicalFolderProjectEntryTreeNode(plugin, entry);
+				plugin.insertTreeNodeInto(child, this.node);
 			}
 		}
 
@@ -264,7 +267,6 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			WorkspaceTree tree = plugin.getTree();
 			Object selected = tree.getLastSelectedPathComponent();
 			File file = null;
-System.out.println("a - " + selected);
 			if (selected instanceof FileTreeNode) {
 				file = ((FileTreeNode)selected).getFile();
 			}

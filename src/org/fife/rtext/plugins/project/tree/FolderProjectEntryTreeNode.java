@@ -47,11 +47,6 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
-	protected NameChecker createNameChecker() {
-		return new FolderProjectEntryNameChecker();
-	}
-
-
 	/**
 	 * Does any filtering and sorting of an array of files so that they will
 	 * be displayed properly.
@@ -149,32 +144,6 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 			}
 		}
 		handleRefresh();
-	}
-
-
-	/**
-	 * Ensures that proposed file project entry names are valid.
-	 */
-	static class FolderProjectEntryNameChecker implements NameChecker {
-
-		public String isValid(String text) {
-			int length = text.length();
-			if (length==0) {
-				return "empty";
-			}
-			for (int i=0; i<length; i++) {
-				char ch = text.charAt(i);
-				if (!(Character.isLetterOrDigit(ch) || ch=='_' || ch=='-' ||
-						ch==' ' || ch=='.')) {
-					return "invalidFolderName";
-				}
-			}
-			if (text.endsWith(".")) {
-				return "folderNameCannotEndWithDot";
-			}
-			return null;
-		}
-
 	}
 
 

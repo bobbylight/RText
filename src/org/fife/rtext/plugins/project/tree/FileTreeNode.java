@@ -26,6 +26,7 @@ import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.FolderFilterInfo;
+import org.fife.ui.rtextfilechooser.FileDisplayNames;
 import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
 
 
@@ -300,14 +301,14 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 
 
 	public String toString() {
-		return getFile().getName();
+		return FileDisplayNames.get().getName(getFile());
 	}
 	
 
 	/**
 	 * Ensures that proposed file names are valid.
 	 */
-	private static class FileNameChecker implements NameChecker {
+	public static class FileNameChecker implements NameChecker {
 
 		private File parentDir;
 		private boolean folder;

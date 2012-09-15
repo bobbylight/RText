@@ -20,6 +20,8 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.RText;
@@ -158,6 +160,18 @@ public class ProjectPlugin extends AbstractPlugin {
 	 */
 	public Workspace getWorkspace() {
 		return workspace;
+	}
+
+
+	/**
+	 * Adds a new child to the parent tree node.
+	 *
+	 * @param child The new child node.
+	 * @param parent The parent node.
+	 */
+	public void insertTreeNodeInto(MutableTreeNode child, MutableTreeNode parent) {
+		DefaultTreeModel model = (DefaultTreeModel)getTree().getModel();
+		model.insertNodeInto(child, parent, parent.getChildCount());
 	}
 
 

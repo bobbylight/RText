@@ -61,9 +61,9 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 	public List getPopupActions() {
 		List actions = new ArrayList();
 		LogicalFolderProjectEntry entry = (LogicalFolderProjectEntry)this.entry;
-		actions.add(new NewFileAction(entry, this));
-		actions.add(new NewFolderAction(entry, this));
-		actions.add(new NewLogicalFolderAction(entry, this));
+		actions.add(new AddFileAction(entry, this));
+		actions.add(new AddFolderAction(entry, this));
+		actions.add(new AddLogicalFolderAction(entry, this));
 		actions.add(null);
 		actions.add(new RemoveAction());
 		actions.add(new DeleteAction(false));

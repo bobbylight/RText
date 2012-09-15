@@ -22,6 +22,7 @@ import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.ProjectEntry;
+import org.fife.ui.rtextfilechooser.FileDisplayNames;
 import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
 
 
@@ -43,7 +44,9 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 
 	protected NameChecker createNameChecker() {
-		return new FileProjectEntryNameChecker();
+		File file = getFile();
+		return new FileTreeNode.FileNameChecker(file.getParentFile(),
+				file.isDirectory());
 	}
 
 
@@ -157,34 +160,8 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 
 	public String toString() {
-		return entry.getFile().getName();
+		return FileDisplayNames.get().getName(getFile());
 	}
 	
-
-	/**
-	 * Ensures that proposed file project entry names are valid.
-	 */
-	private static class FileProjectEntryNameChecker implements NameChecker {
-
-		public String isValid(String text) {
-			int length = text.length();
-			if (length==0) {
-				return "empty";
-			}
-			for (int i=0; i<length; i++) {
-				char ch = text.charAt(i);
-				if (!(Character.isLetterOrDigit(ch) || ch=='_' || ch=='-' ||
-						ch==' ' || ch=='.')) {
-					return "invalidFileName";
-				}
-			}
-			if (text.endsWith(".")) {
-				return "fileNameCannotEndWithDot";
-			}
-			return null;
-		}
-
-	}
-
 
 }

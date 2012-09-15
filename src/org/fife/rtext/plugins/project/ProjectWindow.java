@@ -69,7 +69,9 @@ class ProjectWindow extends DockableWindow {
 		else {
 			DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
 			if (fromNode!=null) {
-				model.reload(fromNode);
+				model.nodeStructureChanged(fromNode);
+				//reload(fromNode);
+				//tree.expandPath(new TreePath(fromNode));
 			}
 			else {
 				model.reload();
