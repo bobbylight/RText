@@ -30,6 +30,7 @@ import javax.swing.tree.TreeNode;
 import org.fife.rsta.ac.java.DecoratableIcon;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.plugins.project.BaseAction;
 import org.fife.rtext.plugins.project.LogicalFolderNameDialog;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.NewFolderDialog;

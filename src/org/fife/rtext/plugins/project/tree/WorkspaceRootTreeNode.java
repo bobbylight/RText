@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import org.fife.rtext.RText;
+import org.fife.rtext.plugins.project.BaseAction;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
@@ -30,16 +31,15 @@ import org.fife.rtext.plugins.project.model.Workspace;
  * @author Robert Futrell
  * @version 1.0
  */
-class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
+public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 
 	private Workspace workspace;
-	private Icon icon;
+	private static final Icon icon;
 
 
 	public WorkspaceRootTreeNode(ProjectPlugin plugin, Workspace workspace) {
 		super(plugin);
 		this.workspace = workspace;
-		icon = new ImageIcon(getClass().getResource("application_double.png"));
 	}
 
 
@@ -52,7 +52,7 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	 * {@inheritDoc}
 	 */
 	public Icon getIcon() {
-		return icon;
+		return getWorkspaceIcon();
 	}
 
 
@@ -69,6 +69,16 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 
 	public String getToolTipText() {
 		return null;
+	}
+
+
+	/**
+	 * Returns the icon shared amongst all workspaces.
+	 *
+	 * @return The shared icon instance.
+	 */
+	public static final Icon getWorkspaceIcon() {
+		return icon;
 	}
 
 
@@ -90,9 +100,22 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 		dialog.setVisible(true);
 		String newName = dialog.getName();
 		if (newName!=null) {
-			workspace.setName(newName);
-			plugin.refreshTree(this);
+			if (workspace.setName(newName)) {
+				plugin.refreshTree(this);
+			}
+			else {
+				String msg = Messages.getString("ProjectPlugin.ErrorRenamingWorkspace");
+				String title = rtext.getString("ErrorDialogTitle");
+				JOptionPane.showMessageDialog(rtext, msg, title,
+						JOptionPane.ERROR_MESSAGE);
+			}
 		}
+	}
+
+
+	static {
+		icon = new ImageIcon(WorkspaceRootTreeNode.class.
+								getResource("application_double.png"));
 	}
 
 
@@ -130,7 +153,7 @@ class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	/**
 	 * Ensures that proposed project names are valid.
 	 */
-	private static class WorkspaceNameChecker implements NameChecker {
+	public static class WorkspaceNameChecker implements NameChecker {
 
 		public String isValid(String text) {
 			int length = text.length();

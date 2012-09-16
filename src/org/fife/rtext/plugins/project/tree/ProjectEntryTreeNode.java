@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.RText;
+import org.fife.rtext.plugins.project.BaseAction;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.LogicalFolderProjectEntry;

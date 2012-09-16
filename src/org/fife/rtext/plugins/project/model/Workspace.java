@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -35,7 +36,9 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import org.fife.io.UnicodeReader;
+import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
+import org.fife.rtext.plugins.project.ProjectPlugin;
 
 
 /**
@@ -46,12 +49,16 @@ import org.fife.rtext.plugins.project.Messages;
  */
 public class Workspace implements ModelEntity {
 
+	private ProjectPlugin plugin;
+	private File file;
 	private String name;
 	private List projects;
 
 
-	public Workspace(String name) {
-		setName(name);
+	public Workspace(ProjectPlugin plugin, File file) {
+		this.plugin = plugin;
+		this.file = file;
+		this.name = getNameFromFile(file);//setName(getNameFromFile(file));
 		projects = new ArrayList();
 	}
 
@@ -93,7 +100,27 @@ public class Workspace implements ModelEntity {
 	}
 
 
+	/**
+	 * Returns the absolute path to the file containing this workspace.
+	 *
+	 * @return This workspace's file.
+	 */
+	public String getFileFullPath() {
+		return file.getAbsolutePath();
+	}
+
+
 	public String getName() {
+		return name;
+	}
+
+
+	private String getNameFromFile(File file) {
+		String name = file.getName();
+		int lastDot = name.lastIndexOf('.');
+		if (lastDot>-1) {
+			name = name.substring(0, lastDot);
+		}
 		return name;
 	}
 
@@ -106,23 +133,23 @@ public class Workspace implements ModelEntity {
 	/**
 	 * Loads a workspace from an XML file.
 	 *
+	 * @param plugin The project plugin.
 	 * @param file The XML file.
 	 * @return The workspace.
 	 * @throws IOException If an IO error occurs.
 	 */
-	public static Workspace load(File file) throws IOException {
+	public static Workspace load(ProjectPlugin plugin, File file) throws IOException {
 
 		Document doc = loadXmlRepresentation(file);
 		Element root = doc.getDocumentElement();
-		String name = file.getName().substring(0, file.getName().length()-4);
-		Workspace workspace = new Workspace(name);
+		Workspace workspace = new Workspace(plugin, file);
 
 		NodeList children = root.getElementsByTagName("projects");
 		Element projectsElem = (Element)children.item(0);
 		NodeList projElemList = projectsElem.getElementsByTagName("project");
 		for (int i=0; i<projElemList.getLength(); i++) {
 			Element projElem = (Element)projElemList.item(i);
-			name = projElem.getAttribute("name");
+			String name = projElem.getAttribute("name");
 			Project project = new Project(workspace, name);
 			workspace.addProject(project);
 			recursivelyAddChildren(projElem, project);
@@ -238,14 +265,18 @@ public class Workspace implements ModelEntity {
 	}
 
 
-	public void save(File dir) throws IOException {
+	public void save() throws IOException {
+		saveImpl(file);
+	}
+
+
+	private void saveImpl(File loc) throws IOException {
 
 		DOMModelCreator domCreator = new DOMModelCreator();
 		accept(domCreator);
 		Document doc = domCreator.getDocument();
 
-		File file = new File(dir, name + ".xml");
-		Result result = new StreamResult(file);
+		Result result = new StreamResult(loc);
 		Transformer t = null;
 		try {
 			t = TransformerFactory.newInstance().newTransformer();
@@ -257,14 +288,51 @@ public class Workspace implements ModelEntity {
 		} catch (TransformerConfigurationException tce) {
 			throw new IOException(tce.getMessage());
 		} catch (TransformerException te) {
-			te.printStackTrace();
+			throw new IOException(te.getMessage());
 		}
 
 	}
 
 
-	public void setName(String name) {
-		this.name = name;
+	/**
+	 * Gives this workspace a new name.  Immediately creates a new XML file
+	 * in the same directory containing the previous workspace file.
+	 * 
+	 * @param name The new workspace name.
+	 * @return Whether the operation was successful.
+	 */
+	public boolean setName(String name) {
+
+		RText rtext = plugin.getRText();
+
+		File tempFile = new File(file.getParentFile(), name + ".xml");
+		if (tempFile.isFile()) {
+			String msg = rtext.getString("FileAlreadyExists",
+					tempFile.getAbsolutePath());
+			String title = rtext.getString("ConfDialogTitle");
+			int rc = JOptionPane.showConfirmDialog(rtext, msg, title,
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if (rc!=JOptionPane.YES_OPTION) {
+				// Bail early, but don't give an error message by returning
+				// false
+				return true;
+			}
+		}
+
+		// If a save in the new location is successful, remember our new file
+		// name and location.
+		try {
+			saveImpl(tempFile);
+			file.delete(); // Don't leave outdated workspace files laying around 
+			file = tempFile;
+			this.name = name;
+		} catch (IOException ioe) {
+			rtext.displayException(ioe);
+			return false;
+		}
+
+		return true;
+
 	}
 
 

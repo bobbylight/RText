@@ -222,19 +222,19 @@ public class ProjectPlugin extends AbstractPlugin {
 	 */
 	private void loadInitialWorkspace(String workspaceName) {
 		if (workspaceName!=null) {
-			File workspaceFile = new File(getWorkspacesDir(),
-					workspaceName + ".xml");
+			File workspaceFile = new File(workspaceName);
 			if (workspaceFile.isFile()) {
 				// Always true unless user manually removed it
 				try {
-					workspace = Workspace.load(workspaceFile);
+					workspace = Workspace.load(this, workspaceFile);
 				} catch (IOException ioe) {
 					rtext.displayException(ioe);
 				}
 			}
 		}
 		if (workspace==null) {
-			workspace = new Workspace("Workspace");
+			File defaultWorkspace = new File(getWorkspacesDir(), "Workspace.xml");
+			workspace = new Workspace(this, defaultWorkspace);
 		}
 	}
 
@@ -277,7 +277,9 @@ public class ProjectPlugin extends AbstractPlugin {
 		StandardAction a = (StandardAction)rtext.getAction(VIEW_CONSOLE_ACTION);
 		prefs.windowVisibilityAccelerator = a.getAccelerator();
 		prefs.windowVisible = window.isActive();
-		prefs.openWorkspaceName = workspace==null ? null : workspace.getName();
+		prefs.openWorkspaceName = workspace==null ? null :
+			workspace.getFileFullPath();
+
 		File prefsFile = getPrefsFile();
 		try {
 			prefs.save(prefsFile);
@@ -287,7 +289,7 @@ public class ProjectPlugin extends AbstractPlugin {
 
 		if (workspace!=null) {
 			try {
-				workspace.save(getWorkspacesDir());
+				workspace.save();
 			} catch (IOException ioe) {
 				rtext.displayException(ioe);
 			}
@@ -309,8 +311,18 @@ public class ProjectPlugin extends AbstractPlugin {
 	}
 
 
+	/**
+	 * Sets the active workspace.
+	 *
+	 * @param workspace The new active workspace.
+	 */
+	void setWorkspace(Workspace workspace) {
+		this.workspace = workspace;
+		getTree().setWorkspace(workspace);
+	}
+
+
 	public boolean uninstall() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

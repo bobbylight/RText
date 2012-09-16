@@ -137,7 +137,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	 * @return A string representation of the filters.
 	 */
 	public static final String getFilterString(String[] filters) {
-		return getFilterString(filters, "&nbsp;");
+		return getFilterString(filters, "");
 	}
 
 

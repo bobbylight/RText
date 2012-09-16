@@ -7,14 +7,13 @@
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
-package org.fife.rtext.plugins.project.tree;
+package org.fife.rtext.plugins.project;
 
 import java.net.URL;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
-import org.fife.rtext.plugins.project.Messages;
 
 /**
  * A base class for tree node actions.
@@ -22,7 +21,7 @@ import org.fife.rtext.plugins.project.Messages;
  * @author Robert Futrell
  * @version 1.0
  */
-abstract class BaseAction extends AbstractAction {
+public abstract class BaseAction extends AbstractAction {
 
 
 	protected BaseAction(String keyRoot) {
