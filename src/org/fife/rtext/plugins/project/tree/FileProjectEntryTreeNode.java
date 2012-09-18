@@ -75,16 +75,22 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 	public List getPopupActions() {
 		List actions = new ArrayList();
-		if (!getFile().isDirectory()) {
+		boolean dir = getFile().isDirectory();
+		if (!dir) {
 			actions.add(new OpenAction());
 		}
-		possiblyAddOpenInActions(actions);
+		if (!possiblyAddOpenInActions(actions) && dir) {
+			actions.add(null);
+		}
+		actions.add(new MoveUpAction());
+		actions.add(new MoveDownAction());
+		actions.add(null);
 		actions.add(new RemoveAction());
 		actions.add(new DeleteAction());
 		actions.add(null);
 		actions.add(new RenameAction());
 		actions.add(null);
-		if (getFile().isDirectory()) {
+		if (dir) {
 			actions.add(new RefreshAction());
 			actions.add(null);
 		}
@@ -173,7 +179,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 		File newFile = new File(old.getParentFile(), newName);
 		boolean success = old.renameTo(newFile);
 		if (success) {
-			plugin.refreshTree(getParent());
+			plugin.getTree().nodeChanged(this);
 		}
 		else {
 			UIManager.getLookAndFeel().provideErrorFeedback(null);

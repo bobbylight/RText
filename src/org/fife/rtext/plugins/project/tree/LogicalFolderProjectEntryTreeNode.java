@@ -70,6 +70,9 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 		actions.add(new AddFolderAction(entry, this));
 		actions.add(new AddLogicalFolderAction(entry, this));
 		actions.add(null);
+		actions.add(new MoveUpAction());
+		actions.add(new MoveDownAction());
+		actions.add(null);
 		actions.add(new RemoveAction());
 		actions.add(new DeleteAction(false));
 		actions.add(null);

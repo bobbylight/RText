@@ -756,7 +756,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		showEOLMarkers = false;
 		showTabLines = false;
 		tabLinesColor = Color.gray;
-		rememberWhitespaceLines = false;
+		rememberWhitespaceLines = true;
 		autoInsertClosingCurlys = false;
 		aaEnabled = File.separatorChar=='\\' ||
 				System.getProperty("os.name").indexOf("mac os x")>-1;

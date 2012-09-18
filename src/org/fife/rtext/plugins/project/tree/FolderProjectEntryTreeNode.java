@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.TreeNode;
 
@@ -139,7 +138,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 
 	protected void handleRenameImpl(String newName) {
 		setDisplayName(newName);
-		plugin.refreshTree(getParent());
+		plugin.getTree().nodeChanged(this);
 	}
 
 

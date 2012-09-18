@@ -15,6 +15,7 @@ import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.tree.TreePath;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.BaseAction;
@@ -101,7 +102,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 		String newName = dialog.getName();
 		if (newName!=null) {
 			if (workspace.setName(newName)) {
-				plugin.refreshTree(this);
+				plugin.getTree().nodeChanged(this);
 			}
 			else {
 				String msg = Messages.getString("ProjectPlugin.ErrorRenamingWorkspace");
@@ -144,6 +145,9 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 				ProjectTreeNode childNode =
 						new ProjectTreeNode(plugin, project);
 				plugin.insertTreeNodeInto(childNode, WorkspaceRootTreeNode.this);
+				// Ensure Workspace root node is expanded when first plugin is
+				// added.
+				plugin.getTree().expandPath(new TreePath(getPath()));
 			}
 		}
 

@@ -82,6 +82,8 @@ public class RTextUtilities {
 	 */
 	private static boolean dropShadowsEnabledInEditor;
 
+	private static final boolean CASE_SENSITIVE;
+
 
 	/**
 	 * Adds a set of "default" code templates to the text areas.
@@ -634,9 +636,11 @@ public class RTextUtilities {
 	 * finding files that match the wildcard expression.<p>
 	 *
 	 * Example: For<p>
-	 * <code>String regEx = RTextUtilities.getPatternForFileFilter("*.c");
+	 * <code>String regEx = RTextUtilities.getPatternForFileFilter("*.c", false);
 	 * </code><p>
-	 * the returned pattern will match <code>^.*\.c$</code>.
+	 * the returned pattern will match <code>^.*\.c$</code>.<p>
+	 * 
+	 * Case-sensitivity is taken into account appropriately.
 	 *
 	 * @param fileFilter The file filter for which to create equivalent regular
 	 *        expressions.  This filter can currently only contain the
@@ -651,8 +655,10 @@ public class RTextUtilities {
 										boolean showErrorDialog) {
 
 		String pattern = createRegexForFileFilter(fileFilter);
+		int flags = isFileSystemCaseSensitive() ? 0 :
+				(Pattern.CASE_INSENSITIVE|Pattern.UNICODE_CASE);
 		try {
-			return Pattern.compile(pattern);
+			return Pattern.compile(pattern, flags);
 		} catch (PatternSyntaxException pse) {
 			if (showErrorDialog) {
 				String text = pse.getMessage();
@@ -758,6 +764,16 @@ public class RTextUtilities {
 
 		return bi;
 
+	}
+
+
+	/**
+	 * Returns whether the local file system is case-sensitive.
+	 *
+	 * @return Whether the local file system is case-sensitive.
+	 */
+	public static final boolean isFileSystemCaseSensitive() {
+		return CASE_SENSITIVE;
 	}
 
 
@@ -986,6 +1002,13 @@ public class RTextUtilities {
 			}
 		}
 		return fileName;
+	}
+
+
+	static {
+		String os = System.getProperty("os.name").toLowerCase();
+		CASE_SENSITIVE = os.indexOf("windows")==-1 &&
+				os.indexOf("mac os x")==-1;
 	}
 
 

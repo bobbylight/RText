@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
+import javax.swing.UIManager;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.tree.DefaultTreeModel;
@@ -28,6 +29,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.model.Workspace;
+import org.fife.rtext.plugins.project.tree.AbstractWorkspaceTreeNode;
 import org.fife.rtext.plugins.project.tree.WorkspaceTree;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.AbstractPlugin;
@@ -42,6 +44,13 @@ import org.fife.ui.app.StandardAction;
  * @version 1.0
  */
 public class ProjectPlugin extends AbstractPlugin {
+
+	/**
+	 * System property that, if defined, overrides the workspace initially
+	 * opened by this property.  Should be the full path to the workspace XML
+	 * file.
+	 */
+	public static final String PROPERTY_INITIAL_WORKSPACE = "workspace.override";
 
 	private RText rtext;
 	private ProjectWindow window;
@@ -64,6 +73,13 @@ public class ProjectPlugin extends AbstractPlugin {
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
 		app.addAction(VIEW_CONSOLE_ACTION, a);
 
+		String workspaceOverride = System.getProperty(PROPERTY_INITIAL_WORKSPACE);
+		if (workspaceOverride!=null) {
+			File wsOverrideFile = new File(workspaceOverride);
+			if (wsOverrideFile.isFile()) {
+				prefs.openWorkspaceName = wsOverrideFile.getAbsolutePath();
+			}
+		}
 		loadInitialWorkspace(prefs.openWorkspaceName);
 
 		// Window MUST always be created for preference saving on shutdown
@@ -168,14 +184,35 @@ public class ProjectPlugin extends AbstractPlugin {
 	 *
 	 * @param child The new child node.
 	 * @param parent The parent node.
+	 * @see #insertTreeNodeInto(MutableTreeNode, MutableTreeNode, int)
 	 */
-	public void insertTreeNodeInto(MutableTreeNode child, MutableTreeNode parent) {
+	public void insertTreeNodeInto(MutableTreeNode child,
+			MutableTreeNode parent) {
+		insertTreeNodeInto(child, parent, parent.getChildCount());
+	}
+
+
+	/**
+	 * Adds a new child to the parent tree node.
+	 *
+	 * @param child The new child node.
+	 * @param parent The parent node.
+	 * @param index The index at which to insert the child node.
+	 * @see #insertTreeNodeInto(MutableTreeNode, MutableTreeNode)
+	 */
+	public void insertTreeNodeInto(MutableTreeNode child,
+			MutableTreeNode parent, int index) {
 		DefaultTreeModel model = (DefaultTreeModel)getTree().getModel();
-		model.insertNodeInto(child, parent, parent.getChildCount());
+		model.insertNodeInto(child, parent, index);
 	}
 
 
 	public void install(AbstractPluggableGUIApplication app) {
+
+		File workspaceDir = getWorkspacesDir();
+		if (!workspaceDir.isDirectory()) {
+			workspaceDir.mkdirs();
+		}
 
 		RTextMenuBar mb = (RTextMenuBar)app.getJMenuBar();
 
@@ -257,6 +294,48 @@ public class ProjectPlugin extends AbstractPlugin {
 			}
 		}
 		return prefs;
+	}
+
+
+	/**
+	 * Moves a tree node down in its parent's list of children, if possible.
+	 *
+	 * @param node The node to move down.
+	 * @see #moveTreeNodeUp(AbstractWorkspaceTreeNode)
+	 */
+	public void moveTreeNodeDown(AbstractWorkspaceTreeNode node) {
+		DefaultTreeModel model = (DefaultTreeModel)getTree().getModel();
+		MutableTreeNode parent = (MutableTreeNode)node.getParent();
+		int index = parent.getIndex(node);
+		if (index<parent.getChildCount()-1) {
+			model.removeNodeFromParent(node);
+			insertTreeNodeInto(node, parent, index+1);
+			node.moveProjectEntityDown();
+		}
+		else {
+			UIManager.getLookAndFeel().provideErrorFeedback(rtext);
+		}
+	}
+
+
+	/**
+	 * Moves a tree node up in its parent's list of children, if possible.
+	 *
+	 * @param node The node to move up.
+	 * @see #moveTreeNodeDown(AbstractWorkspaceTreeNode)
+	 */
+	public void moveTreeNodeUp(AbstractWorkspaceTreeNode node) {
+		DefaultTreeModel model = (DefaultTreeModel)getTree().getModel();
+		MutableTreeNode parent = (MutableTreeNode)node.getParent();
+		int index = parent.getIndex(node);
+		if (index>0) {
+			model.removeNodeFromParent(node);
+			insertTreeNodeInto(node, parent, index-1);
+			node.moveProjectEntityUp();
+		}
+		else {
+			UIManager.getLookAndFeel().provideErrorFeedback(rtext);
+		}
 	}
 
 

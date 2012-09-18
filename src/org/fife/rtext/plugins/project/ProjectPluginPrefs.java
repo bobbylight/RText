@@ -62,7 +62,7 @@ public class ProjectPluginPrefs extends Prefs {
 	 * {@inheritDoc}
 	 */
 	public void setDefaults() {
-		windowVisible = false;
+		windowVisible = true;
 		windowPosition = DockableWindow.LEFT;
 		windowVisibilityAccelerator = null;
 		openWorkspaceName = null;

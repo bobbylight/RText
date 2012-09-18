@@ -19,13 +19,11 @@ import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
-import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 import org.fife.rsta.ac.java.DecoratableIcon;
 import org.fife.rtext.RText;
@@ -50,7 +48,7 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  * @author Robert Futrell
  * @version 1.0
  */
-abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
+public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 	protected ProjectPlugin plugin;
 	private static RTextFileChooser chooser;
@@ -113,12 +111,41 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 
 	/**
+	 * Moves the project model entity this tree node represents "down" in its
+	 * parent, if it makes logical sense to do so.  The default implementation
+	 * returns <code>false</code>, since for most entities this operation
+	 * does not make sense.
+	 *
+	 * @return Whether the entity was moved down.
+	 * @see #moveProjectEntityUp()
+	 */
+	public boolean moveProjectEntityDown() {
+		return false;
+	}
+
+
+	/**
+	 * Moves the project model entity this tree node represents "up" in its
+	 * parent, if it makes logical sense to do so.  The default implementation
+	 * returns <code>false</code>, since for most entities this operation
+	 * does not make sense.
+	 *
+	 * @return Whether the entity was moved up.
+	 * @see #moveProjectEntityDown()
+	 */
+	public boolean moveProjectEntityUp() {
+		return false;
+	}
+
+
+	/**
 	 * Adds menu items to open in the system's default editor and viewer
 	 * applications, if we're running in Java 6 or later.
 	 *
 	 * @param actions The action list to add to.
+	 * @return Whether the actions were added.
 	 */
-	protected void possiblyAddOpenInActions(List actions) {
+	protected boolean possiblyAddOpenInActions(List actions) {
 		if (!RTextUtilities.isPreJava6()) {
 			WorkspaceTree tree = plugin.getTree();
 			JMenu openInMenu = new JMenu(Messages.getString("Action.OpenIn"));
@@ -126,7 +153,9 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			openInMenu.add(new Actions.SystemOpenAction(tree, "open"));
 			actions.add(openInMenu);
 			actions.add(null);
+			return true;
 		}
+		return false;
 	}
 
 
@@ -272,6 +301,41 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 
 	/**
+	 * Moves this tree node "down" in the list of its parent's children.
+	 */
+	protected class MoveDownAction extends BaseAction {
+
+		public MoveDownAction() {
+			super("Action.MoveDown");
+			int index = getParent().getIndex(AbstractWorkspaceTreeNode.this);
+			setEnabled(index<getParent().getChildCount()-1);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			plugin.moveTreeNodeDown(AbstractWorkspaceTreeNode.this);
+		}
+
+	}
+
+
+	/**
+	 * Moves this tree node "up" in the list of its parent's children.
+	 */
+	protected class MoveUpAction extends BaseAction {
+
+		public MoveUpAction() {
+			super("Action.MoveUp");
+			setEnabled(getParent().getIndex(AbstractWorkspaceTreeNode.this)>0);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			plugin.moveTreeNodeUp(AbstractWorkspaceTreeNode.this);
+		}
+
+	}
+
+
+	/**
 	 * Opens the selected file in RText.
 	 */
 	protected class OpenAction extends BaseAction {
@@ -286,6 +350,7 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			WorkspaceTree tree = plugin.getTree();
 			Object selected = tree.getLastSelectedPathComponent();
 			File file = null;
+			System.out.println(selected);
 			if (selected instanceof FileTreeNode) {
 				file = ((FileTreeNode)selected).getFile();
 			}
@@ -293,25 +358,11 @@ abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 				FileProjectEntryTreeNode node = (FileProjectEntryTreeNode)selected;
 				file = node.getFile();
 				if (!file.isFile()) {
-					promptForRemoval(node);
+					tree.promptForRemoval(node);
 					return;
 				}
 			}
 			plugin.getRText().openFile(file.getAbsolutePath());
-		}
-
-		private void promptForRemoval(FileProjectEntryTreeNode node) {
-			String msg = Messages.getString("Prompt.FileDoesntExist.Remove",
-					node.getFile().getAbsolutePath());
-			RText rtext = plugin.getRText();
-			String title = rtext.getString("ConfDialogTitle");
-			int rc = JOptionPane.showConfirmDialog(rtext, msg, title,
-					JOptionPane.YES_NO_OPTION);
-			if (rc==JOptionPane.YES_OPTION) {
-				TreeNode parent = node.getParent();
-				node.removeFromParent();
-				plugin.refreshTree(parent);
-			}
 		}
 
 	}

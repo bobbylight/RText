@@ -270,7 +270,9 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 			File newFile = new File(old.getParentFile(), newName);
 			boolean success = old.renameTo(newFile);
 			if (success) {
-				plugin.refreshTree(getParent());
+				setUserObject(newFile);
+				icon = FileSystemView.getFileSystemView().getSystemIcon(newFile);
+				plugin.getTree().nodeChanged(this);
 			}
 			else {
 				UIManager.getLookAndFeel().provideErrorFeedback(null);

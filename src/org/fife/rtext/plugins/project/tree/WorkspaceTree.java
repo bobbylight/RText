@@ -25,6 +25,7 @@ import javax.swing.BorderFactory;
 import javax.swing.InputMap;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
@@ -33,9 +34,12 @@ import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.ExpandVetoException;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.fife.rtext.AbstractMainView;
+import org.fife.rtext.RText;
+import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.Workspace;
 import org.fife.ui.rtextfilechooser.FileSelector;
@@ -241,6 +245,12 @@ public class WorkspaceTree extends JTree implements FileSelector {
 				AbstractMainView mainView = plugin.getRText().getMainView();
 				mainView.openFile(file.getAbsolutePath(), null);
 			}
+			else if (getLastSelectedPathComponent()
+					instanceof FileProjectEntryTreeNode) {
+				FileProjectEntryTreeNode node = (FileProjectEntryTreeNode)
+						getLastSelectedPathComponent();
+				promptForRemoval(node);
+			}
 		}
 	}
 
@@ -260,6 +270,16 @@ public class WorkspaceTree extends JTree implements FileSelector {
 				Object selected = getLastSelectedPathComponent();
 				if (selected instanceof AbstractWorkspaceTreeNode) {
 					((AbstractWorkspaceTreeNode)selected).handleRename();
+				}
+			}
+		});
+
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "Delete");
+		am.put("Delete", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				Object selected = getLastSelectedPathComponent();
+				if (selected instanceof ProjectEntryTreeNode) {
+					((ProjectEntryTreeNode)selected).handleRemove();
 				}
 			}
 		});
@@ -309,6 +329,16 @@ public class WorkspaceTree extends JTree implements FileSelector {
 
 
 	/**
+	 * Refreshes the display of a specific tree node.
+	 *
+	 * @param node The tree node to refresh.
+	 */
+	public void nodeChanged(TreeNode node) {
+		model.nodeChanged(node);
+	}
+
+
+	/**
 	 * Overridden to display our popup menu if necessary.
 	 *
 	 * @param e The mouse event.
@@ -320,6 +350,33 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		}
 		else if (e.getID()==MouseEvent.MOUSE_CLICKED && e.getClickCount()==2) {
 			handleOpenFile();
+		}
+	}
+
+
+	/**
+	 * Prompts the user that a file does not exist, and asks whether they want
+	 * to remove the tree node for it.  The node is removed (and the project
+	 * updated) if the user selects "yes."
+	 *
+	 * @param node The node to prompt about and possibly remove.
+	 */
+	public void promptForRemoval(FileProjectEntryTreeNode node) {
+		File file = node.getFile();
+		if (file.isDirectory()) {
+			// FolderProjectEntryTreeNode extends FileProjectEntryTreeNode,
+			// and careless callers might not realize this.
+			return;
+		}
+		String msg = Messages.getString("Prompt.FileDoesntExist.Remove",
+				node.getFile().getAbsolutePath());
+		RText rtext = plugin.getRText();
+		String title = rtext.getString("ConfDialogTitle");
+		int rc = JOptionPane.showConfirmDialog(rtext, msg, title,
+				JOptionPane.YES_NO_OPTION);
+		if (rc==JOptionPane.YES_OPTION) {
+			model.removeNodeFromParent(node);
+			node.entry.removeFromParent();
 		}
 	}
 

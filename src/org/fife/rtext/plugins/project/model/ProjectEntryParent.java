@@ -39,6 +39,12 @@ public interface ProjectEntryParent extends ModelEntity {
 	Iterator getEntryIterator();
 
 
+	boolean moveProjectEntryDown(ProjectEntry entry);
+
+
+	boolean moveProjectEntryUp(ProjectEntry entry);
+
+
 	/**
 	 * Removes a project entry.
 	 *

@@ -125,6 +125,23 @@ public class Workspace implements ModelEntity {
 	}
 
 
+	/**
+	 * Returns the index of the specified project in the project list.
+	 *
+	 * @param project The project to search for.
+	 * @return The index of the project, or <code>-1</code> if the project is
+	 *         not contained in this workspace.
+	 */
+	private int getProjectIndex(Project project) {
+		for (int i=0; i<projects.size(); i++) {
+			if (project==projects.get(i)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+
 	public Iterator getProjectIterator() {
 		return projects.iterator();
 	}
@@ -194,6 +211,28 @@ public class Workspace implements ModelEntity {
 			throw new IOException(text);
 		}
 		return doc;
+	}
+
+
+	public boolean moveProjectDown(Project project) {
+		int index = getProjectIndex(project);
+		if (index>-1 && index<projects.size()-1) {
+			projects.remove(index);
+			projects.add(index+1, project);
+			return true;
+		}
+		return false;
+	}
+
+
+	public boolean moveProjectUp(Project project) {
+		int index = getProjectIndex(project);
+		if (index>0) {
+			projects.remove(index);
+			projects.add(index-1, project);
+			return true;
+		}
+		return false;
 	}
 
 
@@ -272,6 +311,12 @@ public class Workspace implements ModelEntity {
 
 	private void saveImpl(File loc) throws IOException {
 
+		// Sanity check, folders may be deleted out from under us
+		File parentDir = loc.getParentFile();
+		if (!parentDir.exists()) {
+			parentDir.mkdirs();
+		}
+
 		DOMModelCreator domCreator = new DOMModelCreator();
 		accept(domCreator);
 		Document doc = domCreator.getDocument();
@@ -348,7 +393,7 @@ public class Workspace implements ModelEntity {
 		public InputSource resolveEntity(String publicID,  String systemID)
 				throws SAXException {
 			return new InputSource(getClass().
-					getResourceAsStream("rtext-workspace.dtd"));
+					getResourceAsStream("rtext-workspace-1.0.dtd"));
 		}
 
 	}

@@ -67,6 +67,23 @@ public class Project implements Comparable, ProjectEntryParent {
 	}
 
 
+	/**
+	 * Returns the index of the specified project entry.
+	 *
+	 * @param entry The entry to look for.
+	 * @return The index of the entry, or <code>-1</code> if it is not
+	 *         contained in this project.
+	 */
+	private int getEntryIndex(ProjectEntry entry) {
+		for (int i=0; i<entries.size(); i++) {
+			if (entry==entries.get(i)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+
 	public Iterator getEntryIterator() {
 		return entries.iterator();
 	}
@@ -84,6 +101,28 @@ public class Project implements Comparable, ProjectEntryParent {
 
 	public int hashCode() {
 		return getName().hashCode();
+	}
+
+
+	public boolean moveProjectEntryDown(ProjectEntry entry) {
+		int index = getEntryIndex(entry);
+		if (index>-1 && index<entries.size()-1) {
+			entries.remove(index);
+			entries.add(index+1, entry);
+			return true;
+		}
+		return false;
+	}
+
+
+	public boolean moveProjectEntryUp(ProjectEntry entry) {
+		int index = getEntryIndex(entry);
+		if (index>0) {
+			entries.remove(index);
+			entries.add(index-1, entry);
+			return true;
+		}
+		return false;
 	}
 
 

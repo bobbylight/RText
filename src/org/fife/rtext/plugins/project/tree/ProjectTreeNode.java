@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.tree.DefaultTreeModel;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
@@ -60,6 +61,9 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 		actions.add(new AddFolderAction(project, this));
 		actions.add(new AddLogicalFolderAction(project, this));
 		actions.add(null);
+		actions.add(new MoveUpAction());
+		actions.add(new MoveDownAction());
+		actions.add(null);
 		actions.add(new DeleteAction());
 		actions.add(null);
 		actions.add(new RenameAction());
@@ -93,6 +97,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 		return null;
 	}
 
+
 	protected void handleDelete() {
 
 		String text = Messages.getString("Action.DeleteProject.Confirm",
@@ -104,8 +109,8 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 				JOptionPane.YES_NO_OPTION);
 		if (rc==JOptionPane.YES_OPTION) {
 			project.removeFromWorkspace();
-			removeFromParent();
-			plugin.refreshTree(getParent());
+			((DefaultTreeModel)plugin.getTree().getModel()).
+					removeNodeFromParent(this);
 		}
 
 	}
@@ -126,8 +131,20 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 		String newName = dialog.getName();
 		if (newName!=null) {
 			project.setName(newName);
-			plugin.refreshTree(getParent());
+			plugin.getTree().nodeChanged(this);
 		}
+	}
+
+
+	public boolean moveProjectEntityDown() {
+		Workspace workspace = project.getWorkspace();
+		return workspace.moveProjectDown(project);
+	}
+
+
+	public boolean moveProjectEntityUp() {
+		Workspace workspace = project.getWorkspace();
+		return workspace.moveProjectUp(project);
 	}
 
 
