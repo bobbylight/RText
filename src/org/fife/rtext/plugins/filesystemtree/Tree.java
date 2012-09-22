@@ -1,3 +1,12 @@
+/*
+ * 09/22/2012
+ *
+ * Tree.java - The extended file system tree used by this plugin.
+ * Copyright (C) 2012 Robert Futrell
+ * http://fifesoft.com/rtext
+ * Licensed under a modified BSD license.
+ * See the included license file for details.
+ */
 package org.fife.rtext.plugins.filesystemtree;
 
 import java.awt.Cursor;
@@ -25,7 +34,6 @@ class Tree extends FileSystemTree {
 	private OpenAction openAction;
 	private OpenAction openInNewWindowAction;
 	private GoIntoAction goIntoAction;
-	private PropertiesAction propertiesAction;
 
 	private static final String MSG =
 			"org.fife.rtext.plugins.filesystemtree.PopupMenu";
@@ -43,15 +51,7 @@ class Tree extends FileSystemTree {
 		addMouseListener(listener);
 		addPropertyChangeListener(listener);
 
-		// Make the Enter key trigger opening a file on the JTree.
-		InputMap inputMap = getInputMap(JComponent.WHEN_FOCUSED);
-		ActionMap actionMap = getActionMap();
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "OnEnter");
-		actionMap.put("OnEnter", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				doOpenFile();
-			}
-		});
+		installKeyboardActions();
 
 		// Add a needed extra bit of space at the top.
 		setBorder(BorderFactory.createCompoundBorder(
@@ -72,7 +72,6 @@ class Tree extends FileSystemTree {
 		boolean enable = selected!=null && selected.isFile();
 		openAction.setEnabled(enable);
 		openInNewWindowAction.setEnabled(enable);
-		propertiesAction.setEnabled(enable);
 
 		goIntoAction.setEnabled(selected!=null && selected.isDirectory());
 
@@ -101,10 +100,6 @@ class Tree extends FileSystemTree {
 		popup.insert(new JMenuItem(goIntoAction), 4);
 		popup.insert(new JPopupMenu.Separator(), 5);
 
-		popup.addSeparator();
-		propertiesAction = new PropertiesAction(msg.getString("Action.Properties"));
-		popup.add(new JMenuItem(propertiesAction));
-
 		// Re-do this to set orientation for new menu items.
 		popup.applyComponentOrientation(getComponentOrientation());
 		return popup;
@@ -127,6 +122,23 @@ class Tree extends FileSystemTree {
 				mainView.openFile(file.getAbsolutePath(), null);
 			}
 		}
+	}
+
+
+	/**
+	 * Overridden to install our extra actions.
+	 */
+	protected void installKeyboardActions() {
+
+		super.installKeyboardActions();
+
+		InputMap im = getInputMap();
+		ActionMap am = getActionMap();
+
+		// Enter => open the file in RText.
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "OnEnter");
+		am.put("OnEnter", openAction);
+
 	}
 
 
@@ -230,32 +242,6 @@ class Tree extends FileSystemTree {
 		public void run() {
 			AbstractMainView mainView = rtext.getMainView();
 			mainView.openFile(file, null);
-		}
-
-	}
-
-
-	/**
-	 * Displays a dialog about the selected file.
-	 */
-	private class PropertiesAction extends AbstractAction {
-
-		public PropertiesAction(String name) {
-			putValue(NAME, name);
-			int alt = InputEvent.ALT_MASK;
-			putValue(ACCELERATOR_KEY,
-					KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, alt));
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			File file = getSelectedFile();
-			if (file.isFile()) {
-				// TODO: Extract class sharing code with TextFilePropertiesDialog
-				// and display it!
-			}
-			else { // File was deleted from under us?
-				UIManager.getLookAndFeel().provideErrorFeedback(Tree.this);
-			}
 		}
 
 	}
