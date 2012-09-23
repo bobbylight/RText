@@ -373,11 +373,12 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 */
 	protected class PropertiesAction extends BaseAction {
 
-		public PropertiesAction() {
+		public PropertiesAction(boolean enabled) {
 			super("Action.Properties");
 			int alt = InputEvent.ALT_MASK;
 			KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, alt);
 			putValue(ACCELERATOR_KEY, ks);
+			setEnabled(enabled);
 		}
 
 		public void actionPerformed(ActionEvent e) {

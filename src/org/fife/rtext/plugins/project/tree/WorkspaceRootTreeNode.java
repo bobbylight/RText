@@ -10,6 +10,7 @@
 package org.fife.rtext.plugins.project.tree;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
@@ -63,7 +64,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 		actions.add(null);
 		actions.add(new RenameAction());
 		actions.add(null);
-		actions.add(new PropertiesAction());
+		actions.add(new PropertiesAction(true));
 		return actions;
 	}
 
@@ -89,7 +90,8 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 
 
 	protected void handleProperties() {
-		JOptionPane.showMessageDialog(null, "Properties of the item!");
+		File file = new File(workspace.getFileFullPath());
+		FileTreeNode.handleProperties(plugin.getRText(), file);
 	}
 
 

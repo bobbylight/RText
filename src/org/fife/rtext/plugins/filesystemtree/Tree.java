@@ -51,8 +51,6 @@ class Tree extends FileSystemTree {
 		addMouseListener(listener);
 		addPropertyChangeListener(listener);
 
-		installKeyboardActions();
-
 		// Add a needed extra bit of space at the top.
 		setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEmptyBorder(3, 0, 0, 0),
@@ -79,6 +77,19 @@ class Tree extends FileSystemTree {
 
 
 	/**
+	 * Creates actions for the file system tree that this plugin adds on top
+	 * of the defaults.
+	 */
+	private void createPluginSpecificActions() {
+		ResourceBundle msg = ResourceBundle.getBundle(MSG);
+		openAction = new OpenAction(msg.getString("Open"), false);
+		openInNewWindowAction = new OpenAction(
+						msg.getString("OpenInNewWindow"), true);
+		goIntoAction = new GoIntoAction(null/*plugin.getRText()*/, msg);
+	}
+
+
+	/**
 	 * Creates the popup menu for this file system tree.  Subclasses can
 	 * override this method if they wish to add more menu items to the
 	 * popup menu.
@@ -89,14 +100,9 @@ class Tree extends FileSystemTree {
 
 		JPopupMenu popup = super.createPopupMenu();
 
-		ResourceBundle msg = ResourceBundle.getBundle(MSG);
-		openAction = new OpenAction(msg.getString("Open"), false);
 		popup.insert(new JMenuItem(openAction), 0);
-		openInNewWindowAction = new OpenAction(
-						msg.getString("OpenInNewWindow"), true);
 		popup.insert(new JMenuItem(openInNewWindowAction), 1);
 
-		goIntoAction = new GoIntoAction(plugin.getRText(), msg);
 		popup.insert(new JMenuItem(goIntoAction), 4);
 		popup.insert(new JPopupMenu.Separator(), 5);
 
@@ -134,9 +140,10 @@ class Tree extends FileSystemTree {
 
 		InputMap im = getInputMap();
 		ActionMap am = getActionMap();
+		createPluginSpecificActions();
 
 		// Enter => open the file in RText.
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "OnEnter");
+		im.put((KeyStroke)openAction.getValue(Action.ACCELERATOR_KEY), "OnEnter");
 		am.put("OnEnter", openAction);
 
 	}
@@ -201,6 +208,10 @@ class Tree extends FileSystemTree {
 		public OpenAction(String name, boolean newWindow) {
 			putValue(NAME, name);
 			this.newWindow = newWindow;
+			if (!newWindow) {
+				KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+				putValue(ACCELERATOR_KEY, ks);
+			}
 		}
 
 		public void actionPerformed(ActionEvent e) {

@@ -9,15 +9,20 @@
  */
 package org.fife.rtext.plugins.project.tree;
 
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
+
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.TreeNode;
 
+import org.fife.rtext.plugins.project.BaseAction;
 import org.fife.rtext.plugins.project.Messages;
+import org.fife.rtext.plugins.project.NewFolderDialog;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.FolderFilterInfo;
 import org.fife.rtext.plugins.project.model.FolderProjectEntry;
@@ -117,6 +122,17 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
+	/**
+	 * Overridden to add a menu item to configure the filters for this
+	 * project entry.
+	 */
+	public List getPopupActions() {
+		List actions = super.getPopupActions();
+		actions.add(actions.size()-1, new ConfigureFiltersAction());
+		return actions;
+	}
+
+
 	public String getToolTipText() {
 		File file = getFile();
 		FolderFilterInfo filterInfo = getFilterInfo();
@@ -176,6 +192,32 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		if (!isNotPopulated()) {
 			handleRefresh();
 		}
+	}
+
+
+	/**
+	 * Configures the filters for this project entry.
+	 */
+	private class ConfigureFiltersAction extends BaseAction {
+
+		public ConfigureFiltersAction() {
+			super("Action.ConfigureFilters");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+
+			FolderProjectEntry fpe = (FolderProjectEntry)entry;
+			NewFolderDialog dialog = new NewFolderDialog(plugin.getRText(),fpe);
+			dialog.setVisible(true);
+
+			FolderFilterInfo info = dialog.getFilterInfo();
+			if (info!=null) {
+				fpe.setFilterInfo(info);
+				handleRefresh();
+			}
+
+		}
+
 	}
 
 

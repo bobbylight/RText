@@ -68,7 +68,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 		actions.add(null);
 		actions.add(new RenameAction());
 		actions.add(null);
-		actions.add(new PropertiesAction());
+		actions.add(new PropertiesAction(false));
 		return actions;
 	}
 
@@ -117,7 +117,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 
 	protected void handleProperties() {
-		JOptionPane.showMessageDialog(null, "Properties of the item!");
+		// Do nothing
 	}
 
 

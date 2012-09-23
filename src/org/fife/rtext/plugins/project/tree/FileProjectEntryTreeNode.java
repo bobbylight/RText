@@ -94,7 +94,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 			actions.add(new RefreshAction());
 			actions.add(null);
 		}
-		actions.add(new PropertiesAction());
+		actions.add(new PropertiesAction(true));
 		return actions;
 	}
 
@@ -146,7 +146,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 
 	protected void handleProperties() {
-		JOptionPane.showMessageDialog(null, "Properties of the item!");
+		FileTreeNode.handleProperties(plugin.getRText(), getFile());
 	}
 
 

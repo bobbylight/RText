@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.project.tree;
 
+import java.awt.Window;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -167,7 +168,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 			actions.add(new RefreshAction());
 			actions.add(null);
 		}
-		actions.add(new PropertiesAction());
+		actions.add(new PropertiesAction(true));
 		return actions;
 	}
 
@@ -246,7 +247,18 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 
 
 	protected void handleProperties() {
-		// TODO Auto-generated method stub
+		handleProperties(plugin.getRText(), getFile());
+	}
+
+
+	static void handleProperties(Window parent, File file) {
+		FileIOExtras extras = FileIOExtras.getInstance();
+		if (extras!=null) {
+			extras.showFilePropertiesDialog(parent, file);
+		}
+		else {
+			UIManager.getLookAndFeel().provideErrorFeedback(null);
+		}
 	}
 
 

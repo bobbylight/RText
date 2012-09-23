@@ -27,12 +27,14 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.model.FolderFilterInfo;
+import org.fife.rtext.plugins.project.model.FolderProjectEntry;
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
@@ -74,8 +76,25 @@ public class NewFolderDialog extends EscapableDialog {
 	 * @param parent The window that owns this directory chooser.
 	 */
 	public NewFolderDialog(RText parent) {
+		this(parent, null);
+	}
+
+
+	/**
+	 * Constructor.
+	 *
+	 * @param parent The window that owns this directory chooser.
+	 * @param entry If non-<code>null</code>, this will be a dialog to edit
+	 *        the entry, instead of create a new one.
+	 */
+	public NewFolderDialog(RText parent, FolderProjectEntry entry) {
 		super(parent);
 		init(parent);
+		if (entry!=null) {
+			setFolderProjectEntryInfo(entry);
+		}
+		pack();
+		setLocationRelativeTo(parent);
 	}
 
 
@@ -243,17 +262,32 @@ public class NewFolderDialog extends EscapableDialog {
 		panelIndex = 0;
 		layout.show(cp, PANELS[panelIndex]);
 		setContentPane(container);
-		setTitle(Messages.getString("FolderDialog.Title"));
+		setTitle(Messages.getString("FolderDialog.Title.Add"));
 		applyComponentOrientation(orientation);
 		getRootPane().setDefaultButton(okButton);
-		pack();
 		setModal(true);
-		setLocationRelativeTo(parent);
 
 	}
 
 
-	public void setAllowedFileFilters(String[] filters) {
+	private void moveForwardOneStep() {
+		backButton.setEnabled(true);
+		if (panelIndex==PANELS.length-1) {
+			chosenDirectory = directoryTree.getSelectedFileName();
+			setVisible(false);
+		}
+		else {
+			layout.show(cp, PANELS[++panelIndex]);
+			if (panelIndex==PANELS.length-1) {
+				okButton.setText(Messages.getString("Button.Finish"));
+				okButton.setMnemonic(Messages.getMnemonic("Button.Finish.Mnemonic"));
+				descLabel.setText(Messages.getString("FolderDialog.Filters.Desc"));
+			}
+		}
+	}
+
+
+	private void setAllowedFileFilters(String[] filters) {
 		if (filters==null || filters.length==0) {
 			inFilterField.setText(null);
 		}
@@ -269,12 +303,12 @@ public class NewFolderDialog extends EscapableDialog {
 	 * @return Whether the directory exists and was selected.
 	 * @see #getChosenDirectory()
 	 */
-	public boolean setChosenDirectory(File dir) {
+	private boolean setChosenDirectory(File dir) {
 		return directoryTree.setSelectedFile(dir);
 	}
 
 
-	public void setDisallowedDirectories(String[] filters) {
+	private void setDisallowedDirectories(String[] filters) {
 		if (filters==null || filters.length==0) {
 			outFolderField.setText(null);
 		}
@@ -282,11 +316,43 @@ public class NewFolderDialog extends EscapableDialog {
 	}
 
 
-	public void setDisallowedFileFilters(String[] filters) {
+	private void setDisallowedFileFilters(String[] filters) {
 		if (filters==null || filters.length==0) {
 			outFilterField.setText(null);
 		}
 		outFilterField.setText(RTextUtilities.join(filters));
+	}
+
+
+	/**
+	 * Configures this dialog to edit an existing folder project entry,
+	 * instead of creating a new one.
+	 *
+	 * @param entry The entry to initialize all fields with.
+	 */
+	private void setFolderProjectEntryInfo(FolderProjectEntry entry) {
+
+		setChosenDirectory(entry.getFile());
+		FolderFilterInfo info = entry.getFilterInfo();
+		setAllowedFileFilters(info.getAllowedFileFilters());
+		setDisallowedDirectories(info.getHiddenFolderFilters());
+		setDisallowedFileFilters(info.getHiddenFileFilters());
+
+		setTitle(Messages.getString("FolderDialog.Title.Edit"));
+
+		// Folder panel is disabled, might as well skip it.
+		directoryTree.setEnabled(false);
+		setChosenDirectory(entry.getFile());
+		moveForwardOneStep();
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				inFilterField.selectAll();
+				inFilterField.requestFocusInWindow();
+			}
+		});
+
+		pack();
+
 	}
 
 
@@ -299,19 +365,7 @@ public class NewFolderDialog extends EscapableDialog {
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (okButton==source) {
-				backButton.setEnabled(true);
-				if (panelIndex==PANELS.length-1) {
-					chosenDirectory = directoryTree.getSelectedFileName();
-					setVisible(false);
-				}
-				else {
-					layout.show(cp, PANELS[++panelIndex]);
-					if (panelIndex==PANELS.length-1) {
-						okButton.setText(Messages.getString("Button.Finish"));
-						okButton.setMnemonic(Messages.getMnemonic("Button.Finish.Mnemonic"));
-						descLabel.setText(Messages.getString("FolderDialog.Filters.Desc"));
-					}
-				}
+				moveForwardOneStep();
 			}
 			else if (backButton==source) {
 				layout.show(cp, PANELS[--panelIndex]);
