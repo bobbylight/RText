@@ -31,6 +31,7 @@ import javax.swing.text.AbstractDocument;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
+import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.NumberDocumentFilter;
 import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
@@ -204,6 +205,11 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		}
 		ls.setAutoActivationDelay(delay);
 
+		RText rtext = (RText)owner;
+		AbstractMainView view = rtext.getMainView();
+		boolean folding = foldingEnabledCB.isSelected();
+		view.setCodeFoldingEnabledFor(SyntaxConstants.SYNTAX_STYLE_HTML, folding);
+
 	}
 
 
@@ -254,6 +260,12 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		setAutoActivateCBSelected(ls.isAutoActivationEnabled());
 		aaDelayField.setText(Integer.toString(ls.getAutoActivationDelay()));
 
+		// Options related to code folding.
+		RText rtext = (RText)owner;
+		AbstractMainView view = rtext.getMainView();
+		boolean folding = view.isCodeFoldingEnabledFor(SyntaxConstants.SYNTAX_STYLE_HTML);
+		foldingEnabledCB.setSelected(folding);
+
 	}
 
 
@@ -273,7 +285,14 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 				firePropertyChange(PROPERTY, null, null);
 			}
 
-			else if (showDescWindowCB==source) {
+			else if (autoActivateCB==source) {
+				setAutoActivateCBSelected(autoActivateCB.isSelected());
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
+			else if (foldingEnabledCB==source ||
+					showDescWindowCB==source) {
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
 			}

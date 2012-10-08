@@ -42,6 +42,7 @@ public class LangSupportPreferences extends Prefs {
 	public boolean html_showDescWindow;
 	public boolean html_autoActivation;
 	public int html_autoActivationDelay;
+	public boolean html_folding_enabled;
 
 	public boolean java_enabled;
 	public boolean java_paramAssistance;
@@ -77,6 +78,7 @@ public class LangSupportPreferences extends Prefs {
 	public boolean php_showDescWindow;
 	public boolean php_autoActivation;
 	public int php_autoActivationDelay;
+	public boolean php_folding_enabled;
 
 	public boolean sh_enabled;
 	public boolean sh_showDescWindow;
@@ -108,6 +110,7 @@ public class LangSupportPreferences extends Prefs {
 		html_showDescWindow = true;
 		html_autoActivation = true;
 		html_autoActivationDelay = AUTO_ACTIVATION_DELAY;
+		html_folding_enabled = true;
 
 		java_enabled = false;
 		java_paramAssistance = true;
@@ -160,6 +163,7 @@ public class LangSupportPreferences extends Prefs {
 		php_showDescWindow = true;
 		php_autoActivation = true;
 		php_autoActivationDelay = AUTO_ACTIVATION_DELAY;
+		php_folding_enabled = true;
 
 		sh_enabled = true;
 		sh_showDescWindow = File.separatorChar=='/';

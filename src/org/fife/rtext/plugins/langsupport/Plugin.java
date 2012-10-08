@@ -264,6 +264,7 @@ public class Plugin extends AbstractPlugin {
 		ls.setShowDescWindow(prefs.html_showDescWindow);
 		ls.setAutoActivationDelay(prefs.html_autoActivationDelay);
 		ls.setAutoActivationEnabled(prefs.html_autoActivation);
+		view.setCodeFoldingEnabledFor(language, prefs.html_folding_enabled);
 
 		language = SyntaxConstants.SYNTAX_STYLE_JAVA;
 		ls = fact.getSupportFor(language);
@@ -337,6 +338,7 @@ public class Plugin extends AbstractPlugin {
 		ls.setShowDescWindow(prefs.php_showDescWindow);
 		ls.setAutoActivationEnabled(prefs.php_autoActivation);
 		ls.setAutoActivationDelay(prefs.php_autoActivationDelay);
+		view.setCodeFoldingEnabledFor(language, prefs.php_folding_enabled);
 
 		language = SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
 		ls = fact.getSupportFor(language);
@@ -396,6 +398,7 @@ public class Plugin extends AbstractPlugin {
 		prefs.html_showDescWindow = ls.getShowDescWindow();
 		prefs.html_autoActivation = ls.isAutoActivationEnabled();
 		prefs.html_autoActivationDelay = ls.getAutoActivationDelay();
+		prefs.html_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_JAVA;
 		ls = fact.getSupportFor(language);
@@ -462,6 +465,7 @@ public class Plugin extends AbstractPlugin {
 		prefs.php_showDescWindow = ls.getShowDescWindow();
 		prefs.php_autoActivation = ls.isAutoActivationEnabled();
 		prefs.php_autoActivationDelay = ls.getAutoActivationDelay();
+		prefs.php_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
 		ls = fact.getSupportFor(language);

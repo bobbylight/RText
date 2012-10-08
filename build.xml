@@ -48,7 +48,7 @@
 	<!-- Set global properties for this build. -->
 	<property name="app-name"         value="RText"/>
 	<property name="app-name-small"   value="rtext"/>
-	<property name="version"          value="2.0.4"/>
+	<property name="version"          value="2.0.5"/>
 	<property name="source-dir"       location="src"/>
 	<property name="common-dir"       location="../Common"/>
 	<property name="class-dir"        location="ant-classes"/>

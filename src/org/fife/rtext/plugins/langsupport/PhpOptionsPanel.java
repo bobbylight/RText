@@ -31,6 +31,7 @@ import javax.swing.text.AbstractDocument;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
+import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.NumberDocumentFilter;
 import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
@@ -55,6 +56,7 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 	private JTextField aaDelayField;
 	private JLabel aaHtmlKeysLabel;
 	private JTextField aaHtmlKeysField;
+	private JCheckBox foldingEnabledCB;
 	private RButton rdButton;
 
 	private static final String PROPERTY		= "Property";
@@ -148,6 +150,16 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 		box2.add(Box.createVerticalGlue());
 
 		cp.add(Box.createVerticalStrut(5));
+		box = Box.createVerticalBox();
+		box.setBorder(new OptionPanelBorder(msg.
+				getString("Options.General.Section.Folding")));
+		cp.add(box);
+		cp.add(Box.createVerticalStrut(5));
+
+		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
+		addLeftAligned(box, foldingEnabledCB, 5);
+
+		cp.add(Box.createVerticalStrut(5));
 		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton, 5);
@@ -193,6 +205,12 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 			}
 		}
 		ls.setAutoActivationDelay(delay);
+
+		// Options dealing with code folding.
+		RText rtext = (RText)owner;
+		AbstractMainView view = rtext.getMainView();
+		boolean folding = foldingEnabledCB.isSelected();
+		view.setCodeFoldingEnabledFor(SyntaxConstants.SYNTAX_STYLE_PHP, folding);
 
 	}
 
@@ -244,6 +262,12 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 		setAutoActivateCBSelected(ls.isAutoActivationEnabled());
 		aaDelayField.setText(Integer.toString(ls.getAutoActivationDelay()));
 
+		// Options related to code folding.
+		RText rtext = (RText)owner;
+		AbstractMainView view = rtext.getMainView();
+		boolean folding = view.isCodeFoldingEnabledFor(SyntaxConstants.SYNTAX_STYLE_PHP);
+		foldingEnabledCB.setSelected(folding);
+
 	}
 
 
@@ -263,7 +287,14 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 				firePropertyChange(PROPERTY, null, null);
 			}
 
-			else if (showDescWindowCB==source) {
+			else if (autoActivateCB==source) {
+				setAutoActivateCBSelected(autoActivateCB.isSelected());
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
+			else if (foldingEnabledCB==source ||
+					showDescWindowCB==source) {
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
 			}
@@ -272,11 +303,13 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 				if (!enabledCB.isSelected() ||
 						!showDescWindowCB.isSelected() ||
 						!autoActivateCB.isSelected() ||
-						!"300".equals(aaDelayField.getText())) {
+						!"300".equals(aaDelayField.getText()) ||
+						!foldingEnabledCB.isSelected()) {
 					setEnabledCBSelected(true);
 					showDescWindowCB.setSelected(true);
 					setAutoActivateCBSelected(true);
 					aaDelayField.setText("300");
+					foldingEnabledCB.setSelected(true);
 					hasUnsavedChanges = true;
 					firePropertyChange(PROPERTY, null, null);
 				}
