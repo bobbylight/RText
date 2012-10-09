@@ -66,6 +66,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 		add(mainPanel);
 
 		shellTextArea = new SystemShellTextArea(plugin);
+		setPrimaryComponent(shellTextArea);
 		shellTextArea.addPropertyChangeListener(
 							ConsoleTextArea.PROPERTY_PROCESS_RUNNING, this);
 		JScrollPane sp = new JScrollPane(shellTextArea);
@@ -212,9 +213,11 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 			if (source==shellCombo) {
 				int index = shellCombo.getSelectedIndex();
 				if (index==0) {
+					setPrimaryComponent(shellTextArea);
 					cards.show(mainPanel, "System");
 				}
 				else {
+					setPrimaryComponent(jsTextArea);
 					cards.show(mainPanel, "JavaScript");
 				}
 			}

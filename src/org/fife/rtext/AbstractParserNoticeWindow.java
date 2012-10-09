@@ -70,6 +70,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 					parent.getHeight()>getPreferredSize().height : false;
 			}
 		};
+		setPrimaryComponent(table);
 		fixTableModel(model);
 		table.addMouseListener(new TableMouseListener());
 		Dimension size = table.getPreferredScrollableViewportSize();

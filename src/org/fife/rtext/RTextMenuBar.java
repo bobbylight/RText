@@ -508,6 +508,15 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		viewMenu.addSeparator();
 
+		JMenu focusDwMenu = createMenu(menuMsg, "MenuFocusDockableWindowGroup");
+		focusDwMenu.add(createMenuItem(rtext.getAction(RText.MOVE_FOCUS_LEFT_ACTION)));
+		focusDwMenu.add(createMenuItem(rtext.getAction(RText.MOVE_FOCUS_RIGHT_ACTION)));
+		focusDwMenu.add(createMenuItem(rtext.getAction(RText.MOVE_FOCUS_UP_ACTION)));
+		focusDwMenu.add(createMenuItem(rtext.getAction(RText.MOVE_FOCUS_DOWN_ACTION)));
+		viewMenu.add(focusDwMenu);
+
+		viewMenu.addSeparator();
+
 		nextDocItem = createMenuItem(rtext.getAction(RText.NEXT_DOCUMENT_ACTION));
 		viewMenu.add(nextDocItem);
 		prevDocItem = createMenuItem(rtext.getAction(RText.PREVIOUS_DOCUMENT_ACTION));

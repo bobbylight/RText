@@ -38,6 +38,7 @@ import org.fife.ui.app.GUIApplicationPreferences;
 import org.fife.ui.app.Plugin;
 import org.fife.ui.app.ThirdPartyLookAndFeelManager;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.dockablewindows.DockableWindowPanel;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
@@ -467,6 +468,20 @@ public class RText extends AbstractPluggableGUIApplication
 
 
 	/**
+	 * Focuses the specified dockable window group.  Does nothing if there
+	 * are no dockable windows at the location specified.
+	 *
+	 * @param group The dockable window group to focus.
+	 */
+	public void focusDockableWindowGroup(int group) {
+		DockableWindowPanel dwp = (DockableWindowPanel)mainContentPanel;
+		if (!dwp.focusDockableWindowGroup(group)) { // Should never happen
+			UIManager.getLookAndFeel().provideErrorFeedback(this);
+		}
+	}
+
+
+	/**
 	 * Returns the filename used for newly created, empty text files.  This
 	 * value is locale-specific.
 	 *
@@ -510,6 +525,19 @@ public class RText extends AbstractPluggableGUIApplication
 			chooser = RTextUtilities.createFileChooser(this);
 		}
 		return chooser;
+	}
+
+
+	/**
+	 * Returns the focused dockable window group.
+	 *
+	 * @return The focused window group, or <code>-1</code> if no dockable
+	 *         window group is focused.
+	 * @see DockableWindowConstants
+	 */
+	public int getFocusedDockableWindowGroup() {
+		DockableWindowPanel dwp = (DockableWindowPanel)mainContentPanel;
+		return dwp.getFocusedDockableWindowGroup();
 	}
 
 
@@ -771,6 +799,18 @@ public class RText extends AbstractPluggableGUIApplication
 		if (textArea!=null) {
 			textArea.requestFocusInWindow();
 		}
+	}
+
+
+	/**
+	 * Returns whether dockable windows are at the specified location.
+	 *
+	 * @param group A constant from {@link DockableWindowConstants}
+	 * @return Whether dockable windows are at the specified location.
+	 */
+	public boolean hasDockableWindowGroup(int group) {
+		DockableWindowPanel dwp = (DockableWindowPanel)mainContentPanel;
+		return dwp.hasDockableWindowGroup(group);
 	}
 
 

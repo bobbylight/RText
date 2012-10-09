@@ -209,6 +209,22 @@ public class ActionFactory implements RTextActionInfo {
 		a.setAccelerator(prefs.getAccelerator(RTL_ACTION));
 		rtext.addAction(RTL_ACTION, a);
 
+		a = new MoveFocusLeftAction(rtext, msg);
+		a.setAccelerator(prefs.getAccelerator(MOVE_FOCUS_LEFT_ACTION));
+		rtext.addAction(MOVE_FOCUS_LEFT_ACTION, a);
+
+		a = new MoveFocusRightAction(rtext, msg);
+		a.setAccelerator(prefs.getAccelerator(MOVE_FOCUS_RIGHT_ACTION));
+		rtext.addAction(MOVE_FOCUS_RIGHT_ACTION, a);
+
+		a = new MoveFocusUpAction(rtext, msg);
+		a.setAccelerator(prefs.getAccelerator(MOVE_FOCUS_UP_ACTION));
+		rtext.addAction(MOVE_FOCUS_UP_ACTION, a);
+
+		a = new MoveFocusDownAction(rtext, msg);
+		a.setAccelerator(prefs.getAccelerator(MOVE_FOCUS_DOWN_ACTION));
+		rtext.addAction(MOVE_FOCUS_DOWN_ACTION, a);
+
 		a = new ViewSplitAction(rtext, msg, null, "SplitHorizontallyAction",
 								VIEW_SPLIT_HORIZ_ACTION);
 		a.setAccelerator(prefs.getAccelerator(VIEW_SPLIT_HORIZ_ACTION));

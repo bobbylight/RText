@@ -98,6 +98,7 @@ class RTextSplitPaneView extends AbstractMainView
 
 		String name = "Files";
 		listWindow = new DockableWindow(name, new BorderLayout());
+		listWindow.setPrimaryComponent(documentList);
 		URL res = getClass().getResource(IMAGE_FILE);
 		listWindow.setIcon(new ImageIcon(res));
 		listWindow.add(documentListScrollPane);

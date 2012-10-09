@@ -58,6 +58,7 @@ class ProjectWindow extends DockableWindow {
 		add(createToolBar(), BorderLayout.NORTH);
 
 		tree = new WorkspaceTree(plugin, plugin.getWorkspace());
+		setPrimaryComponent(tree);
 		DockableWindowScrollPane sp = new DockableWindowScrollPane(tree);
 		add(sp);
 

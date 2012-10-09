@@ -124,6 +124,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		tree = new Tree(this);
 		RScrollPane scrollPane = new DockableWindowScrollPane(tree);
 		wind.add(scrollPane);
+		wind.setPrimaryComponent(tree);
 
 		wind.setActive(prefs.active);
 		wind.setPosition(prefs.position);

@@ -67,6 +67,10 @@ public interface RTextActionInfo {
 	public static final String GOTO_ACTION				= "gotoAction";
 	public static final String LTR_ACTION				= "leftToRightAction";
 	public static final String RTL_ACTION				= "rightToLeftAction";
+	public static final String MOVE_FOCUS_LEFT_ACTION	= "moveFocusLeftAction";
+	public static final String MOVE_FOCUS_RIGHT_ACTION	= "moveFocusRightAction";
+	public static final String MOVE_FOCUS_UP_ACTION		= "moveFocusUpAction";
+	public static final String MOVE_FOCUS_DOWN_ACTION	= "moveFocusDownAction";
 	public static final String VIEW_SPLIT_HORIZ_ACTION	= "viewSplitHorizontallyAction";
 	public static final String VIEW_SPLIT_NONE_ACTION	= "viewSplitNoneAction";
 	public static final String VIEW_SPLIT_VERT_ACTION	= "viewSplitVerticallyAction";
@@ -115,6 +119,10 @@ public interface RTextActionInfo {
 		GOTO_ACTION,
 		LTR_ACTION,
 		RTL_ACTION,
+		MOVE_FOCUS_LEFT_ACTION,
+		MOVE_FOCUS_RIGHT_ACTION,
+		MOVE_FOCUS_UP_ACTION,
+		MOVE_FOCUS_DOWN_ACTION,
 		VIEW_SPLIT_HORIZ_ACTION,
 		VIEW_SPLIT_NONE_ACTION,
 		VIEW_SPLIT_VERT_ACTION,
@@ -124,7 +132,8 @@ public interface RTextActionInfo {
 	static final int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	static final int alt = InputEvent.ALT_MASK;
 	static final int shift = InputEvent.SHIFT_MASK;
-	static final int defaultShift    = defaultModifier|shift;
+	static final int defaultAlt = defaultModifier|alt;
+	static final int defaultShift = defaultModifier|shift;
 
 
 	/**
@@ -171,6 +180,10 @@ public interface RTextActionInfo {
 		KeyStroke.getKeyStroke(KeyEvent.VK_L, defaultModifier),
 		null,
 		null,
+		KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, defaultAlt),
+		KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, defaultAlt),
+		KeyStroke.getKeyStroke(KeyEvent.VK_UP, defaultAlt),
+		KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, defaultAlt),
 		null,
 		null,
 		null,

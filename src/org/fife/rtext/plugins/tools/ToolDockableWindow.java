@@ -80,6 +80,7 @@ public class ToolDockableWindow extends DockableWindow
 		//setPosition(BOTTOM);
 
 		textArea = new OutputTextPane(plugin);
+		setPrimaryComponent(textArea);
 		RScrollPane sp = new RScrollPane(textArea);
 		add(sp);
 

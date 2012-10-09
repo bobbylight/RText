@@ -136,6 +136,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 		tb.setBorder(new BottomLineBorder(3));
 
 		sourceTree = new DefaultSourceTree(this, owner);
+		wind.setPrimaryComponent(sourceTree);
 
 		scrollPane = new DockableWindowScrollPane(sourceTree);
 		//scrollPane.setViewportBorder(
@@ -162,7 +163,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	public void currentTextAreaPropertyChanged(CurrentTextAreaEvent e) {
 
 		// Don't worry about it if we're not visible.
-		DockableWindow wind = getDockableWindow(getPluginName());
+		final DockableWindow wind = getDockableWindow(getPluginName());
 		if (!wind.isActive()/* || !wind.isShowing()*/)
 			return;
 
@@ -201,6 +202,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 									new Class[] { RText.class });
 							sourceTree = (JTree)m.invoke(handler,
 									new Object[] { owner });
+							wind.setPrimaryComponent(sourceTree);
 							ensureSourceTreeSortedProperly();
 							scrollPane.setViewportView(sourceTree);
 						} catch (RuntimeException re) { // FindBugs
@@ -214,6 +216,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 			if (!(sourceTree instanceof DefaultSourceTree)) {
 				sourceTree = new DefaultSourceTree(this, owner);
+				wind.setPrimaryComponent(sourceTree);
 				scrollPane.setViewportView(sourceTree);
 			}
 
