@@ -28,6 +28,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;
 
 import org.fife.io.ProcessRunnerOutputListener;
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.dockablewindows.DockableWindow;
 
@@ -82,6 +83,7 @@ public class ToolDockableWindow extends DockableWindow
 		textArea = new OutputTextPane(plugin);
 		setPrimaryComponent(textArea);
 		RScrollPane sp = new RScrollPane(textArea);
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
 		add(sp);
 
 		// Create a toolbar.

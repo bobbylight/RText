@@ -181,7 +181,6 @@ class TidyAction extends StandardAction implements TidyMessageListener {
 		else if (level==TidyMessage.Level.WARNING && result!=RESULT_ERRORS) {
 			result = RESULT_WARNINGS;
 		}
-System.out.println("*** " + level.toString() + " => " + msg.getMessage());
 		output.append(msg.getMessage()).append('\n');
 
 	}

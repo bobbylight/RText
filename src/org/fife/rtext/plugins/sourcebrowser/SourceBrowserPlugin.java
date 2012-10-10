@@ -137,8 +137,10 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		sourceTree = new DefaultSourceTree(this, owner);
 		wind.setPrimaryComponent(sourceTree);
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
 
 		scrollPane = new DockableWindowScrollPane(sourceTree);
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(scrollPane);
 		//scrollPane.setViewportBorder(
 		//					BorderFactory.createEmptyBorder(3,3,3,3));
 		wind.add(scrollPane);
@@ -203,6 +205,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 							sourceTree = (JTree)m.invoke(handler,
 									new Object[] { owner });
 							wind.setPrimaryComponent(sourceTree);
+							RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
 							ensureSourceTreeSortedProperly();
 							scrollPane.setViewportView(sourceTree);
 						} catch (RuntimeException re) { // FindBugs
@@ -217,6 +220,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 			if (!(sourceTree instanceof DefaultSourceTree)) {
 				sourceTree = new DefaultSourceTree(this, owner);
 				wind.setPrimaryComponent(sourceTree);
+				RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
 				scrollPane.setViewportView(sourceTree);
 			}
 

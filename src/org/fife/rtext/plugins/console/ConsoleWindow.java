@@ -22,12 +22,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextUtilities;
+import org.fife.ui.RScrollPane;
 import org.fife.ui.dockablewindows.DockableWindow;
 
 
@@ -69,11 +70,13 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 		setPrimaryComponent(shellTextArea);
 		shellTextArea.addPropertyChangeListener(
 							ConsoleTextArea.PROPERTY_PROCESS_RUNNING, this);
-		JScrollPane sp = new JScrollPane(shellTextArea);
+		RScrollPane sp = new RScrollPane(shellTextArea);
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
 		mainPanel.add(sp, "System");
 
 		jsTextArea = new JavaScriptShellTextArea(plugin);
-		sp = new JScrollPane(jsTextArea);
+		sp = new RScrollPane(jsTextArea);
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
 		mainPanel.add(sp, "JavaScript");
 
 		// Create a "toolbar" for the shells.

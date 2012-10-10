@@ -48,7 +48,9 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 
 		model = new SpellingTableModel(rtext.getString("SpellingErrorList.Word"));
 		JTable table = createTable(model);
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(table);
 		RScrollPane sp = new DockableWindowScrollPane(table);
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
 
 		setLayout(new BorderLayout());
 		add(sp);

@@ -23,6 +23,7 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.AbstractParserNoticeWindow;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -58,7 +59,9 @@ class TaskWindow extends AbstractParserNoticeWindow
 
 		model = new TaskNoticeTableModel(rtext.getString("TaskList.Task"));
 		table = createTable(model);
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(table);
 		RScrollPane sp = new DockableWindowScrollPane(table);
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
 
 		setLayout(new BorderLayout());
 		add(sp);

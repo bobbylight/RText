@@ -133,7 +133,6 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 
 
 	public TreeNode getChildAt(int index) {
-		//System.out.println(index);
 		return (TreeNode)visibleChildren.get(index);
 	}
 

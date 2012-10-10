@@ -24,6 +24,7 @@ import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.BottomLineBorder;
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.model.Workspace;
 import org.fife.rtext.plugins.project.tree.PhysicalLocationTreeNode;
 import org.fife.rtext.plugins.project.tree.WorkspaceRootTreeNode;
@@ -58,8 +59,10 @@ class ProjectWindow extends DockableWindow {
 		add(createToolBar(), BorderLayout.NORTH);
 
 		tree = new WorkspaceTree(plugin, plugin.getWorkspace());
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(tree);
 		setPrimaryComponent(tree);
 		DockableWindowScrollPane sp = new DockableWindowScrollPane(tree);
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
 		add(sp);
 
 	}

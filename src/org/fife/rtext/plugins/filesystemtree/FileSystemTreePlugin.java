@@ -122,7 +122,9 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		tb.add(b);
 
 		tree = new Tree(this);
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(tree);
 		RScrollPane scrollPane = new DockableWindowScrollPane(tree);
+		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(scrollPane);
 		wind.add(scrollPane);
 		wind.setPrimaryComponent(tree);
 

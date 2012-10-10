@@ -438,7 +438,6 @@ public class RemoteFileChooser extends EscapableDialog
 			owner.displayException(mue);
 			return;
 		}
-		//System.out.println(url);
 
 		AbstractMainView mainView = owner.getMainView();
 		String encoding = encodingCombo.isVisible() ?
