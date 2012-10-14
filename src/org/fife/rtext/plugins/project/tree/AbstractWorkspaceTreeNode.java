@@ -374,7 +374,11 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	protected class PropertiesAction extends BaseAction {
 
 		public PropertiesAction(boolean enabled) {
-			super("Action.Properties");
+			this(false, enabled);
+		}
+
+		public PropertiesAction(boolean root, boolean enabled) {
+			super(root ? "Action.Properties.Workspace" : "Action.Properties");
 			int alt = InputEvent.ALT_MASK;
 			KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, alt);
 			putValue(ACCELERATOR_KEY, ks);
@@ -418,7 +422,11 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	protected class RenameAction extends BaseAction {
 
 		public RenameAction() {
-			super("Action.Rename");
+			this(false);
+		}
+
+		public RenameAction(boolean root) {
+			super(root ? "Action.Rename.Workspace" : "Action.Rename");
 			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 		}
 

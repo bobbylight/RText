@@ -24,6 +24,7 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
@@ -56,6 +57,7 @@ public class ProjectPlugin extends AbstractPlugin {
 	private ProjectWindow window;
 	private Icon icon;
 	private Workspace workspace;
+	private ProjectPluginOptionPanel optionPanel;
 
 	private static final String VIEW_CONSOLE_ACTION	= "viewProjectWindowAction";
 	private static final String VERSION_STRING = "2.0.4";
@@ -83,16 +85,29 @@ public class ProjectPlugin extends AbstractPlugin {
 		loadInitialWorkspace(prefs.openWorkspaceName);
 
 		// Window MUST always be created for preference saving on shutdown
-		window = new ProjectWindow(rtext, this);
-		window.setPosition(prefs.windowPosition);
-		window.setActive(prefs.windowVisible);
+		window = new ProjectWindow(rtext, this, prefs);
 
 	}
 
 
+	/**
+	 * Returns the dockable window for this plugin.
+	 *
+	 * @return This plugin's dockable window.
+	 */
+	public ProjectWindow getDockableWindow() {
+		return window;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
-		// TODO Auto-generated method stub
-		return null;
+		if (optionPanel==null) {
+			optionPanel = new ProjectPluginOptionPanel(this);
+		}
+		return optionPanel;
 	}
 
 
@@ -204,6 +219,7 @@ public class ProjectPlugin extends AbstractPlugin {
 			MutableTreeNode parent, int index) {
 		DefaultTreeModel model = (DefaultTreeModel)getTree().getModel();
 		model.insertNodeInto(child, parent, index);
+		getTree().expandPath(new TreePath(model.getPathToRoot(parent)));
 	}
 
 
@@ -340,6 +356,14 @@ public class ProjectPlugin extends AbstractPlugin {
 
 
 	/**
+	 * Refreshes the workspace name displayed in the dockable window.
+	 */
+	public void refreshWorkspaceName() {
+		window.refreshWorkspaceName();
+	}
+
+
+	/**
 	 * Refreshes the workspace tree from the specified node down.
 	 *
 	 * @param fromNode The node to start the refreshing from.
@@ -358,6 +382,7 @@ public class ProjectPlugin extends AbstractPlugin {
 		prefs.windowVisible = window.isActive();
 		prefs.openWorkspaceName = workspace==null ? null :
 			workspace.getFileFullPath();
+		prefs.treeRootVisible = getTree().isRootVisible();
 
 		File prefsFile = getPrefsFile();
 		try {
@@ -398,6 +423,19 @@ public class ProjectPlugin extends AbstractPlugin {
 	void setWorkspace(Workspace workspace) {
 		this.workspace = workspace;
 		getTree().setWorkspace(workspace);
+		refreshWorkspaceName();
+	}
+
+
+	/**
+	 * Toggles whether the workspace tree's root node is visible.
+	 *
+	 * @return Whether the root node is visible after this call.
+	 */
+	boolean toggleTreeRootVisible() {
+		boolean newValue = !getTree().isRootVisible();
+		getTree().setRootVisible(newValue);
+		return newValue;
 	}
 
 

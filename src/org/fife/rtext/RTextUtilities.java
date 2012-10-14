@@ -272,6 +272,7 @@ public class RTextUtilities {
 			addFilter(chooser, msg, "Lua", "lua");
 			addFilter(chooser, msg, "Makefile", 
 					new String[] { "Makefile", "makefile" });
+			addFilter(chooser, msg, "Nsis", "nsi");
 			addFilter(chooser, msg, "Perl",
 					new String[] { "pl", "perl", "pm" });
 			addFilter(chooser, msg, "PHP",
@@ -323,6 +324,7 @@ public class RTextUtilities {
 						"cl", "clisp", "el", "l", "lisp", "lsp", "ml",
 						"lua",
 						"Makefile", "makefile",
+						"nsi",
 						"perl", "pl", "pm",
 						"php",
 						"properties",

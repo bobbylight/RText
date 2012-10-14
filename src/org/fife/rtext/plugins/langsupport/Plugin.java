@@ -309,6 +309,9 @@ public class Plugin extends AbstractPlugin {
 		language = SyntaxConstants.SYNTAX_STYLE_MXML;
 		view.setCodeFoldingEnabledFor(language, prefs.mxml_folding_enabled);
 
+		language = SyntaxConstants.SYNTAX_STYLE_NSIS;
+		view.setCodeFoldingEnabledFor(language, prefs.nsis_folding_enabled);
+
 		language = SyntaxConstants.SYNTAX_STYLE_PERL;
 		ls = fact.getSupportFor(language);
 		PerlLanguageSupport pls = (PerlLanguageSupport)ls;
@@ -443,6 +446,9 @@ public class Plugin extends AbstractPlugin {
 
 		language = SyntaxConstants.SYNTAX_STYLE_MXML;
 		prefs.mxml_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_NSIS;
+		prefs.nsis_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_PERL;
 		ls = fact.getSupportFor(language);

@@ -62,6 +62,8 @@ public class LangSupportPreferences extends Prefs {
 
 	public boolean mxml_folding_enabled;
 
+	public boolean nsis_folding_enabled;
+
 	public boolean perl_enabled;
 	public boolean perl_paramAssistance;
 	public boolean perl_showDescWindow;
@@ -139,6 +141,8 @@ public class LangSupportPreferences extends Prefs {
 		latex_folding_enabled = true;
 
 		mxml_folding_enabled = true;
+
+		nsis_folding_enabled = true;
 
 		perl_enabled = true;
 		perl_paramAssistance = true;

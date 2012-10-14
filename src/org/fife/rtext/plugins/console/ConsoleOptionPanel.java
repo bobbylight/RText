@@ -46,6 +46,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 			implements ActionListener, ItemListener, PropertyChangeListener {
 
 	private JCheckBox visibleCB;
+	private JLabel locationLabel;
 	private JComboBox locationCombo;
 	private JCheckBox stdoutCB;
 	private JCheckBox stderrCB;
@@ -114,6 +115,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		Object source = e.getSource();
 
 		if (visibleCB==source) {
+			setVisibleCBSelected(visibleCB.isSelected());
 			hasUnsavedChanges = true;
 			boolean visible = visibleCB.isSelected();
 			firePropertyChange(PROPERTY, !visible, visible);
@@ -220,7 +222,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 
 
 	/**
-	 * Creates a color swatch button we're listening for changes on.
+	 * Creates a color picker button we're listening for changes on.
 	 *
 	 * @return The button.
 	 */
@@ -265,9 +267,9 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		locationCombo.addItem(gpb.getString("Location.right"));
 		locationCombo.addItem(gpb.getString("Location.floating"));
 		locationCombo.addItemListener(this);
-		JLabel locLabel = new JLabel(gpb.getString("Location.title"));
-		locLabel.setLabelFor(locationCombo);
-		locationPanel.add(locLabel);
+		locationLabel = new JLabel(gpb.getString("Location.title"));
+		locationLabel.setLabelFor(locationCombo);
+		locationPanel.add(locationLabel);
 		locationPanel.add(Box.createHorizontalStrut(5));
 		locationPanel.add(locationCombo);
 		locationPanel.add(Box.createHorizontalGlue());
@@ -353,7 +355,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 
 
 	/**
-	 * Called when one of our color swatch buttons is modified.
+	 * Called when one of our color picker buttons is modified.
 	 *
 	 * @param e The event.
 	 */
@@ -368,7 +370,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	 */
 	private void restoreDefaults() {
 
-		visibleCB.setSelected(true);
+		setVisibleCBSelected(true);
 		locationCombo.setSelectedIndex(2);
 
 		stdoutCB.setSelected(true);
@@ -408,6 +410,13 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		promptButton.setColor(window.getForeground(ConsoleTextArea.STYLE_PROMPT));
 		exceptionsButton.setColor(window.getForeground(ConsoleTextArea.STYLE_EXCEPTION));
 
+	}
+
+
+	private void setVisibleCBSelected(boolean selected) {
+		visibleCB.setSelected(selected);
+		locationLabel.setEnabled(selected);
+		locationCombo.setEnabled(selected);
 	}
 
 

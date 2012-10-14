@@ -1,13 +1,13 @@
 /*
- * 06/13/2005
+ * 10/12/2012
  *
- * FileSystemTreeOptionPanel.java - Option panel for the FileSystemTree plugin.
- * Copyright (C) 2005 Robert Futrell
+ * ProjectPluginOptionPanel - Options panel for the Projects plugin.
+ * Copyright (C) 2012 Robert Futrell
  * http://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
-package org.fife.rtext.plugins.filesystemtree;
+package org.fife.rtext.plugins.project;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
@@ -26,22 +26,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import org.fife.rtext.*;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
-import org.fife.ui.app.Plugin;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
 
 
 /**
- * Option panel for the {@link FileSystemTree} plugin.
+ * Options panel for the Projects plugin,=.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
-			implements ActionListener, ItemListener, DockableWindowConstants {
+class ProjectPluginOptionPanel extends PluginOptionsDialogPanel
+		implements ItemListener, ActionListener {
 
 	private JCheckBox visibleCB;
 	private JLabel locationLabel;
@@ -52,25 +50,26 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 
 	/**
 	 * Constructor.
+	 *
+	 * @param plugin The plugin whose options we're displaying.
 	 */
-	public FileSystemTreeOptionPanel(RText rtext, Plugin plugin) {
+	public ProjectPluginOptionPanel(ProjectPlugin plugin) {
 
 		super(plugin);
-		ResourceBundle gpb = ResourceBundle.getBundle(
-								"org/fife/ui/app/GUIPlugin");
-		ResourceBundle fsvb = ResourceBundle.getBundle(
-								FileSystemTreePlugin.BUNDLE_NAME);
-		setName(fsvb.getString("Name"));
+		setName(Messages.getString("ProjectPlugin.Name"));
 
-		ComponentOrientation orientation = ComponentOrientation.
-									getOrientation(getLocale());
+		ResourceBundle gpb = ResourceBundle.getBundle(
+				"org/fife/ui/app/GUIPlugin");
+		ComponentOrientation orientation = ComponentOrientation
+				.getOrientation(getLocale());
 
 		Border empty5Border = UIUtil.getEmpty5Border();
-		setBorder(BorderFactory.createCompoundBorder(
-				empty5Border,
-				BorderFactory.createCompoundBorder(
-					new OptionPanelBorder(fsvb.getString("OptionPanel.Title")),
-					empty5Border)));
+		setBorder(BorderFactory
+				.createCompoundBorder(empty5Border, BorderFactory
+						.createCompoundBorder(
+								new OptionPanelBorder(Messages
+										.getString("OptionPanel.Title")),
+								empty5Border)));
 		setLayout(new BorderLayout());
 
 		// A panel to contain everything that will go into our "top" area.
@@ -130,10 +129,10 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	 * {@inheritDoc}
 	 */
 	protected void doApplyImpl(Frame owner) {
-		FileSystemTreePlugin p = (FileSystemTreePlugin)getPlugin();
-		DockableWindow wind = p.getDockableWindow(p.getPluginName());
+		ProjectPlugin pp = (ProjectPlugin)getPlugin();
+		DockableWindow wind = pp.getDockableWindow();
 		wind.setActive(visibleCB.isSelected());
-		wind.setPosition(getFileSystemTreePlacement());
+		wind.setPosition(getDockableWindowPlacement());
 	}
 
 
@@ -147,12 +146,12 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 
 
 	/**
-	 * Returns the selected placement for the file system tree.
+	 * Returns the selected placement for this plugin's dockable window.
 	 *
 	 * @return The selected placement.
-	 * @see #setFileSystemPlacement
+	 * @see #setDockableWindowPlacement(int)
 	 */
-	public int getFileSystemTreePlacement() {
+	public int getDockableWindowPlacement() {
 		return locationCombo.getSelectedIndex();
 	}
 
@@ -178,7 +177,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 		if (e.getSource()==locationCombo &&
 				e.getStateChange()==ItemEvent.SELECTED) {
 			hasUnsavedChanges = true;
-			int placement = getFileSystemTreePlacement();
+			int placement = getDockableWindowPlacement();
 			firePropertyChange(PROPERTY, -1, placement);
 		}
 	}
@@ -189,11 +188,12 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param placement The new dockable window location; should be one of the
 	 *        constants in {@link DockableWindowConstants}.
-	 * @see #getFileSystemTreePlacement()
+	 * @see #getDockableWindowPlacement()
 	 */
-	private void setFileSystemTreePlacement(int placement) {
-		if (!DockableWindow.isValidPosition(placement))
-			placement = LEFT;
+	private void setDockableWindowPlacement(int placement) {
+		if (!DockableWindow.isValidPosition(placement)) {
+			placement = DockableWindowConstants.LEFT;
+		}
 		locationCombo.setSelectedIndex(placement);
 	}
 
@@ -203,10 +203,10 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	 * this plugin.
 	 */
 	protected void setValuesImpl(Frame frame) {
-		FileSystemTreePlugin p = (FileSystemTreePlugin)getPlugin();
-		DockableWindow wind = p.getDockableWindow(p.getPluginName());
+		ProjectPlugin pp = (ProjectPlugin)getPlugin();
+		DockableWindow wind = pp.getDockableWindow();
 		setVisibleCBSelected(wind.isActive());
-		setFileSystemTreePlacement(wind.getPosition());
+		setDockableWindowPlacement(wind.getPosition());
 	}
 
 

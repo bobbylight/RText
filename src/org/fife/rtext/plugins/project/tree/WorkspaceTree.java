@@ -78,17 +78,17 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	}
 
 
-	private void configurePopupMenu() {
+	private void configurePopupMenu(Object node) {
 
-		if (popup==null) {
-			popup = new JPopupMenu();
-		}
-		else {
-			popup.removeAll();
-		}
-
-		Object node = getSelectionPath().getLastPathComponent();
 		if (node!=null) {
+
+			if (popup==null) {
+				popup = new JPopupMenu();
+			}
+			else {
+				popup.removeAll();
+			}
+
 			AbstractWorkspaceTreeNode treeNode =
 					(AbstractWorkspaceTreeNode)node;
 			List actions = treeNode.getPopupActions();
@@ -107,6 +107,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 					}
 				}
 			}
+
 		}
 
 	}
@@ -119,19 +120,22 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	 */
 	private void displayPopupMenu(Point p) {
 
+		Object selectedNode = null;
+
 		// Select the tree node at the mouse position.
 		TreePath path = getPathForLocation(p.x, p.y);
 		if (path!=null) {
 			setSelectionPath(path);
 			scrollPathToVisible(path);
+			selectedNode = getSelectionPath().getLastPathComponent();
 		}
 		else {
 			clearSelection();
-			return;
+			selectedNode = model.getRoot();
 		}
 
 		// Configure and display it!
-		configurePopupMenu();
+		configurePopupMenu(selectedNode);
 		if (popup.getComponentCount()!=0) {
 			popup.show(this, p.x, p.y);
 		}

@@ -315,6 +315,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_LUA,				createValue(new String[] { "*.lua" }));
 		filters.put(SYNTAX_STYLE_MAKEFILE,			createValue(new String[] { "Makefile", "makefile" }));
 		filters.put(SYNTAX_STYLE_MXML,				createValue(new String[] { "*.mxml" }));
+		filters.put(SYNTAX_STYLE_NSIS,				createValue(new String[] { "*.nsi" }));
 		filters.put(SYNTAX_STYLE_PERL,			createValue(new String[] { "*.perl", "*.pl", "*.pm" }));
 		filters.put(SYNTAX_STYLE_PHP,				createValue(new String[] { "*.php" }));
 		filters.put(SYNTAX_STYLE_PROPERTIES_FILE,	createValue(new String[] { "*.properties", "*.ini" }));
@@ -365,7 +366,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	/**
 	 * Sets values for all the filters not added by plugins.
 	 *
-	 * @param filters The new vlaues for filters.
+	 * @param filters The new values for filters.
 	 */
 	public void setPreservingPluginAdded(SyntaxFilters filters) {
 		this.filters = new HashMap(filters.filters);

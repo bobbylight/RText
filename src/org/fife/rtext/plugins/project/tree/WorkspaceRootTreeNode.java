@@ -62,9 +62,9 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 		List actions = new ArrayList();
 		actions.add(new NewProjectAction());
 		actions.add(null);
-		actions.add(new RenameAction());
+		actions.add(new RenameAction(true));
 		actions.add(null);
-		actions.add(new PropertiesAction(true));
+		actions.add(new PropertiesAction(true, true));
 		return actions;
 	}
 
@@ -105,6 +105,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 		if (newName!=null) {
 			if (workspace.setName(newName)) {
 				plugin.getTree().nodeChanged(this);
+				plugin.refreshWorkspaceName();
 			}
 			else {
 				String msg = Messages.getString("ProjectPlugin.ErrorRenamingWorkspace");

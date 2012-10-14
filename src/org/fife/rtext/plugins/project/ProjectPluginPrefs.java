@@ -45,6 +45,11 @@ public class ProjectPluginPrefs extends Prefs {
 	 */
 	public String openWorkspaceName;
 
+	/**
+	 * Whether the root node of the workspace tree view is visible.
+	 */
+	public boolean treeRootVisible;
+
 
 	/**
 	 * Overridden to validate the task identifiers value.
@@ -66,6 +71,7 @@ public class ProjectPluginPrefs extends Prefs {
 		windowPosition = DockableWindow.LEFT;
 		windowVisibilityAccelerator = null;
 		openWorkspaceName = null;
+		treeRootVisible = false;
 	}
 
 

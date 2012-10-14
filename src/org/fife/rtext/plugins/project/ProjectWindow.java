@@ -15,13 +15,16 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
+import javax.swing.Box;
 import javax.swing.Icon;
-import javax.swing.JMenuItem;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
+import org.fife.help.HelpDialog;
 import org.fife.rtext.BottomLineBorder;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
@@ -45,10 +48,11 @@ import org.fife.ui.rtextfilechooser.filters.ExtensionFileFilter;
 class ProjectWindow extends DockableWindow {
 
 	private ProjectPlugin plugin;
+	private JLabel workspaceNameLabel;
 	private WorkspaceTree tree;
 
 
-	public ProjectWindow(RText app, ProjectPlugin plugin) {
+	public ProjectWindow(RText app, ProjectPlugin plugin, ProjectPluginPrefs prefs) {
 
 		this.plugin = plugin;
 		setDockableWindowName(Messages.getString("Project.DockableWindow.Title"));
@@ -56,7 +60,7 @@ class ProjectWindow extends DockableWindow {
 		setPosition(DockableWindow.LEFT);
 		setLayout(new BorderLayout());
 
-		add(createToolBar(), BorderLayout.NORTH);
+		add(createToolBar(prefs), BorderLayout.NORTH);
 
 		tree = new WorkspaceTree(plugin, plugin.getWorkspace());
 		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(tree);
@@ -65,20 +69,39 @@ class ProjectWindow extends DockableWindow {
 		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
 		add(sp);
 
+		setPosition(prefs.windowPosition);
+		setActive(prefs.windowVisible);
+		tree.setRootVisible(prefs.treeRootVisible);
+
 	}
 
 
-	private JToolBar createToolBar() {
+	private JToolBar createToolBar(ProjectPluginPrefs prefs) {
+
 		JToolBar toolbar = new JToolBar();
 		toolbar.setFloatable(false);
+
+		workspaceNameLabel = new JLabel();
+		refreshWorkspaceName();
+		toolbar.add(workspaceNameLabel);
+
+		toolbar.add(Box.createHorizontalGlue());
+
 		MenuButton mb = new MenuButton(plugin.getPluginIcon());
-		mb.addMenuItem(new JMenuItem(new NewWorkspaceAction()));
-		mb.addMenuItem(new JMenuItem(new OpenWorkspaceAction()));
+		mb.addMenuItem(new NewWorkspaceAction());
+		mb.addMenuItem(new OpenWorkspaceAction());
+		mb.addSeparator();
+		mb.addMenuItem(new JCheckBoxMenuItem(
+				new ShowWorkspaceTreeNodeAction(prefs.treeRootVisible)));
+		mb.addSeparator();
+		mb.addMenuItem(new PluginHelpAction());
 		mb.setMinimumSize(new Dimension(8, 8)); // Allow small resize
 		toolbar.add(mb);
+
 		toolbar.setMinimumSize(new Dimension(8, 8)); // Allow small resize
 		toolbar.setBorder(new BottomLineBorder(3));
 		return toolbar;
+
 	}
 
 
@@ -89,6 +112,21 @@ class ProjectWindow extends DockableWindow {
 	 */
 	public WorkspaceTree getTree() {
 		return tree;
+	}
+
+
+	/**
+	 * Refreshes the workspace name label to reflect that of the current
+	 * workspace.
+	 */
+	void refreshWorkspaceName() {
+		workspaceNameLabel.setText(plugin.getWorkspace().getName());
+		// Don't let it hog space in the tool bar.
+		Dimension size = workspaceNameLabel.getMinimumSize();
+		if (size!=null) {
+			size.width = 1;
+			workspaceNameLabel.setMinimumSize(size);
+		}
 	}
 
 
@@ -143,6 +181,25 @@ class ProjectWindow extends DockableWindow {
 			}
 
 			return success;
+		}
+
+	}
+
+
+	/**
+	 * Opens the Help dialog to the information about this plugin.
+	 */
+	private class PluginHelpAction extends AbstractWorkspaceAction {
+
+		public PluginHelpAction() {
+			super("Action.Help");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			RText rtext = plugin.getRText();
+			HelpDialog helpDialog = rtext.getHelpDialog();
+			// TODO: Open to documentation specific to the workspace plugin.
+			helpDialog.setVisible(true);
 		}
 
 	}
@@ -256,6 +313,30 @@ class ProjectWindow extends DockableWindow {
 			// user to use it.
 			chooser.setCurrentDirectory(plugin.getWorkspacesDir());
 			return chooser;
+		}
+
+	}
+
+
+	/**
+	 * Toggles the visibility of the workspace tree view's root node.
+	 */
+	private class ShowWorkspaceTreeNodeAction extends AbstractWorkspaceAction {
+
+		public ShowWorkspaceTreeNodeAction(boolean selected) {
+			super("Action.ShowWorkspaceTreeRootNode");
+			setSelected(selected);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			setSelected(plugin.toggleTreeRootVisible());
+		}
+
+		private void setSelected(boolean selected) {
+			// TODO: Use actual Action static field when we no longer require
+			// Java 1.4 & 1.5 compatibility.
+			final String ACTION_SELECTED_KEY = "SwingSelectedKey";
+			putValue(ACTION_SELECTED_KEY, Boolean.valueOf(selected));
 		}
 
 	}

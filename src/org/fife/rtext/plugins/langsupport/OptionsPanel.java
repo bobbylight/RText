@@ -120,6 +120,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 		addChildPanel(new JspOptionsPanel());
 		addChildPanel(new LatexOptionsPanel());
 		addChildPanel(new MxmlOptionsPanel());
+		addChildPanel(new NsisOptionsPanel());
 		addChildPanel(new PerlOptionsPanel());
 		addChildPanel(new PhpOptionsPanel());
 		addChildPanel(new ShellOptionsPanel());
