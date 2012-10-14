@@ -21,6 +21,7 @@ import javax.swing.SwingUtilities;
 
 import org.fife.io.ProcessRunner;
 import org.fife.io.ProcessRunnerOutputListener;
+import org.fife.rtext.RText;
 
 
 /**
@@ -254,6 +255,15 @@ class SystemShellTextArea extends ConsoleTextArea {
 	 * @param text The text entered by the user.
 	 */
 	protected void handleSubmit(String text) {
+
+		if (plugin.getRText().getOS()==RText.OS_WINDOWS) {
+			// On Windows, allow format e.g. "cd\temp" => "cd C:\temp".
+			if (text.startsWith(CD + '\\')) {
+				File root = getRootDir(pwd);
+				text = CD + " " + root.getAbsolutePath() +
+						text.substring(CD.length()+1);
+			}
+		}
 
 		// Check for a built-in command first
 		String[] input = text.split("\\s+");

@@ -680,14 +680,15 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		public void actionPerformed(ActionEvent e) {
 
+			Document doc = getDocument();
 			int dot = getCaretPosition();
 			if (dot<inputMinOffs) {
+				setCaretPosition(doc.getLength());
 				UIManager.getLookAndFeel().provideErrorFeedback(
 													ConsoleTextArea.this);
 				return;
 			}
 
-			Document doc = getDocument();
 			int startOffs = inputMinOffs;
 			int len = doc.getLength() - startOffs;
 			setCaretPosition(doc.getLength()); // Might be in middle of line

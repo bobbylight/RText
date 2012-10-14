@@ -536,7 +536,7 @@ public class Plugin extends AbstractPlugin {
 					int line = notice.getLine();
 					Icon icon = icons[notice.getLevel()];
 					try {
-						g.addLineTrackingIcon(line, icon);
+						g.addLineTrackingIcon(line, icon, notice.getMessage());
 					} catch (BadLocationException ble) { // Never happens
 						System.err.println("*** Error adding notice:\n" +
 								notice + ":");
