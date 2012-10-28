@@ -998,6 +998,9 @@ public class RTextUtilities {
 				UIUtil.installOsSpecificLafTweaks();
 				StoreKeeper.updateLookAndFeels(lnf);
 
+			} catch (NoClassDefFoundError ncdfe) {
+				// They missed a required LaF jar on in LookAndFeels.xml
+				rtext.displayException(ncdfe);
 			} catch (Exception e) {
 				rtext.displayException(e);
 			}

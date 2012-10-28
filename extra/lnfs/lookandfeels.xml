@@ -19,6 +19,10 @@
     Kunststoff), you must add it here.  The format is as follows:
 
        <LookAndFeel name="<name>" class="<class>" jars="<jar>"/>
+    
+    or:
+    
+       <LookAndFeel name="<name>" class="<class>" dir="<dir>"/>
 
     where:
 
@@ -27,7 +31,13 @@
                dialog.
        <class> is the Look and Feel's main class.
        <jars>  is the jar file containing the Look and Feel.  This path
-               should be relative to the RText installation directory.
+               should be relative to the RText installation directory.  If a
+               Look and Feel requires more than one jar, they should be
+               separated by commas.
+       <dirs>  An alternative to the <jars> attribute.  If you have a LaF with
+               lots of jars (e.g. Substance), you can point to a root directory
+               containing them all.  This directory should be relative to the
+               RText installation directory.
 
     An example:  For the JGoodies Plastic look and feel, place the Look's
     jar file (e.g. looks-1.3.jar) under RText's "lnfs" directory and add
@@ -53,38 +63,38 @@
 <ThirdPartyLookAndFeels>
 
 <LookAndFeel name="Substance Autumn"
-      class="org.pushingpixels.substance.api.skin.SubstanceAutumnLookAndFeel"
-      jars="lnfs/substance.jar,lnfs/trident.jar"
-      minJavaVersion="1.6"/>
+   class="org.pushingpixels.substance.api.skin.SubstanceAutumnLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
 
 <LookAndFeel name="Substance Business"
-      class="org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel"
-      jars="lnfs/substance.jar,lnfs/trident.jar"
-      minJavaVersion="1.6"/>
+   class="org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
 
 <LookAndFeel name="Substance Business Black Steel"
-      class="org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel"
-      jars="lnfs/substance.jar,lnfs/trident.jar"
-      minJavaVersion="1.6"/>
+   class="org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
 
 <LookAndFeel name="Substance Graphite Glass"
-      class="org.pushingpixels.substance.api.skin.SubstanceGraphiteGlassLookAndFeel"
-      jars="lnfs/substance.jar,lnfs/trident.jar"
-      minJavaVersion="1.6"/>
+   class="org.pushingpixels.substance.api.skin.SubstanceGraphiteGlassLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
 
 <LookAndFeel name="Substance Moderate"
-      class="org.pushingpixels.substance.api.skin.SubstanceModerateLookAndFeel"
-      jars="lnfs/substance.jar,lnfs/trident.jar"
-      minJavaVersion="1.6"/>
+   class="org.pushingpixels.substance.api.skin.SubstanceModerateLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
 
 <LookAndFeel name="Substance Mist Aqua"
-      class="org.pushingpixels.substance.api.skin.SubstanceMistAquaLookAndFeel"
-      jars="lnfs/substance.jar,lnfs/trident.jar"
-      minJavaVersion="1.6"/>
+   class="org.pushingpixels.substance.api.skin.SubstanceMistAquaLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
 
 <LookAndFeel name="Substance Office Black 2007"
-      class="org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel"
-      jars="lnfs/substance.jar,lnfs/trident.jar"
-      minJavaVersion="1.6"/>
+   class="org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
 
 </ThirdPartyLookAndFeels>
