@@ -33,7 +33,7 @@ import org.fife.rtext.plugins.project.model.Workspace;
 import org.fife.rtext.plugins.project.tree.AbstractWorkspaceTreeNode;
 import org.fife.rtext.plugins.project.tree.WorkspaceTree;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
-import org.fife.ui.app.AbstractPlugin;
+import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.StandardAction;
 
@@ -44,7 +44,7 @@ import org.fife.ui.app.StandardAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ProjectPlugin extends AbstractPlugin {
+public class ProjectPlugin extends GUIPlugin {
 
 	/**
 	 * System property that, if defined, overrides the workspace initially
@@ -54,12 +54,12 @@ public class ProjectPlugin extends AbstractPlugin {
 	public static final String PROPERTY_INITIAL_WORKSPACE = "workspace.override";
 
 	private RText rtext;
-	private ProjectWindow window;
 	private Icon icon;
 	private Workspace workspace;
 	private ProjectPluginOptionPanel optionPanel;
 
 	private static final String VIEW_CONSOLE_ACTION	= "viewProjectWindowAction";
+	private static final String DOCKABLE_WINDOW_PROJECTS = "projectsDockableWindow";
 	private static final String VERSION_STRING = "2.0.4";
 
 
@@ -85,7 +85,8 @@ public class ProjectPlugin extends AbstractPlugin {
 		loadInitialWorkspace(prefs.openWorkspaceName);
 
 		// Window MUST always be created for preference saving on shutdown
-		window = new ProjectWindow(rtext, this, prefs);
+		ProjectWindow window = new ProjectWindow(rtext, this, prefs);
+		putDockableWindow(DOCKABLE_WINDOW_PROJECTS, window);
 
 	}
 
@@ -96,7 +97,7 @@ public class ProjectPlugin extends AbstractPlugin {
 	 * @return This plugin's dockable window.
 	 */
 	public ProjectWindow getDockableWindow() {
-		return window;
+		return (ProjectWindow)getDockableWindow(DOCKABLE_WINDOW_PROJECTS);
 	}
 
 
@@ -170,7 +171,7 @@ public class ProjectPlugin extends AbstractPlugin {
 	 * @return The tree view.
 	 */
 	public WorkspaceTree getTree() {
-		return window.getTree();
+		return getDockableWindow().getTree();
 	}
 
 
@@ -252,8 +253,6 @@ public class ProjectPlugin extends AbstractPlugin {
 			}
 		});
 
-		rtext.addDockableWindow(window);
-
 	}
 
 
@@ -264,7 +263,7 @@ public class ProjectPlugin extends AbstractPlugin {
 	 * @see #setProjectWindowVisible(boolean)
 	 */
 	boolean isProjectWindowVisible() {
-		return window.isActive();
+		return getDockableWindow().isActive();
 	}
 
 
@@ -359,7 +358,7 @@ public class ProjectPlugin extends AbstractPlugin {
 	 * Refreshes the workspace name displayed in the dockable window.
 	 */
 	public void refreshWorkspaceName() {
-		window.refreshWorkspaceName();
+		getDockableWindow().refreshWorkspaceName();
 	}
 
 
@@ -369,11 +368,13 @@ public class ProjectPlugin extends AbstractPlugin {
 	 * @param fromNode The node to start the refreshing from.
 	 */
 	public void refreshTree(TreeNode fromNode) {
-		window.refreshTree(fromNode);
+		getDockableWindow().refreshTree(fromNode);
 	}
 
 
 	public void savePreferences() {
+
+		ProjectWindow window = getDockableWindow();
 
 		ProjectPluginPrefs prefs = new ProjectPluginPrefs();
 		prefs.windowPosition = window.getPosition();
@@ -410,7 +411,7 @@ public class ProjectPlugin extends AbstractPlugin {
 	 */
 	void setProjectWindowVisible(boolean visible) {
 		if (visible!=isProjectWindowVisible()) {
-			window.setActive(visible);
+			getDockableWindow().setActive(visible);
 		}
 	}
 

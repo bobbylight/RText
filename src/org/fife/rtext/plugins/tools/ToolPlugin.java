@@ -31,7 +31,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
-import org.fife.ui.app.AbstractPlugin;
+import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.StandardAction;
@@ -43,14 +43,12 @@ import org.fife.ui.app.StandardAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ToolPlugin extends AbstractPlugin
-		implements PropertyChangeListener {
+public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 	private static final String VERSION				= "2.0.4";
 
 	private RText app;
 	private Icon icon;
-	private ToolDockableWindow window;
 	private JMenu toolsMenu;
 
 	private static final String MSG = "org.fife.rtext.plugins.tools.ToolPlugin";
@@ -59,7 +57,7 @@ public class ToolPlugin extends AbstractPlugin
 	private static final String EDIT_TOOLS_ACTION		= "editToolsAction";
 	private static final String NEW_TOOL_ACTION			= "newToolAction";
 	private static final String VIEW_TOOL_OUTPUT_ACTION	= "viewToolOutputAction";
-
+	private static final String DOCKABLE_WINDOW_TOOLS	= "toolsDockableWindow";
 
 	/**
 	 * Constructor.
@@ -91,9 +89,10 @@ public class ToolPlugin extends AbstractPlugin
 
 		// Current design forces the dockable window to always be created,
 		// even if it isn't initially visible
-		window = new ToolDockableWindow(this);
+		ToolDockableWindow window = new ToolDockableWindow(this);
 		window.setPosition(prefs.windowPosition);
 		window.setActive(prefs.windowVisible);
+		putDockableWindow(DOCKABLE_WINDOW_TOOLS, window);
 
 	}
 
@@ -119,7 +118,7 @@ public class ToolPlugin extends AbstractPlugin
 	 *         isn't running.
 	 */
 	public Tool getActiveTool() {
-		return window.getActiveTool();
+		return getDockableWindow().getActiveTool();
 	}
 
 
@@ -129,7 +128,7 @@ public class ToolPlugin extends AbstractPlugin
 	 * @return The dockable window.
 	 */
 	public ToolDockableWindow getDockableWindow() {
-		return window;
+		return (ToolDockableWindow)getDockableWindow(DOCKABLE_WINDOW_TOOLS);
 	}
 
 
@@ -254,8 +253,6 @@ public class ToolPlugin extends AbstractPlugin
 			}
 		});
 
-		rtext.addDockableWindow(window);
-
 		loadTools(); // Do after menu has been added
 
 	}
@@ -268,6 +265,7 @@ public class ToolPlugin extends AbstractPlugin
 	 * @see #setToolOutputWindowVisible(boolean)
 	 */
 	boolean isToolOutputWindowVisible() {
+		ToolDockableWindow window = getDockableWindow();
 		return window!=null && window.isActive();
 	}
 
@@ -347,7 +345,7 @@ public class ToolPlugin extends AbstractPlugin
 		if (ToolManager.get().getToolCount()>0) {
 			for (Iterator i=ToolManager.get().getToolIterator(); i.hasNext(); ){
 				Tool tool = (Tool)i.next();
-				RunToolAction a = new RunToolAction(app, tool, window);
+				RunToolAction a = new RunToolAction(app, tool, getDockableWindow());
 				toolsMenu.add(createMenuItem(a));
 			}
 		}
@@ -367,6 +365,7 @@ public class ToolPlugin extends AbstractPlugin
 	public void savePreferences() {
 
 		saveTools();
+		ToolDockableWindow window = getDockableWindow();
 
 		ToolsPrefs prefs = new ToolsPrefs();
 		prefs.windowPosition = window.getPosition();
@@ -418,6 +417,7 @@ public class ToolPlugin extends AbstractPlugin
 	 */
 	void setToolOutputWindowVisible(boolean visible) {
 		if (visible!=isToolOutputWindowVisible()) {
+			ToolDockableWindow window = getDockableWindow();
 			if (visible && window==null) {
 				window = new ToolDockableWindow(this);
 				app.addDockableWindow(window);

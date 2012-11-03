@@ -20,7 +20,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
  * @author Robert Futrell
  * @version 1.0
  */
-public class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
+class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
 
 
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
@@ -29,12 +29,12 @@ public class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
 
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, 
 				row, focused);
-
-		AbstractWorkspaceTreeNode node = (AbstractWorkspaceTreeNode)value;
-		setIcon(node.getIcon());
-
+		// Not true the first time through!
+		if (value instanceof AbstractWorkspaceTreeNode) {
+			AbstractWorkspaceTreeNode node = (AbstractWorkspaceTreeNode)value;
+			setIcon(node.getIcon());
+		}
 		return this;
-
 	}
 
 

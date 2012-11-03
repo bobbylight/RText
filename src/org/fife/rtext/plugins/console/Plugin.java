@@ -28,7 +28,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
-import org.fife.ui.app.AbstractPlugin;
+import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.StandardAction;
 
@@ -39,9 +39,10 @@ import org.fife.ui.app.StandardAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Plugin extends AbstractPlugin {
+public class Plugin extends GUIPlugin {
 
-	private static final String VERSION				= "2.0.4";
+	private static final String VERSION					= "2.0.4";
+	private static final String DOCKABLE_WINDOW_CONSOLE	= "consoleDockableWindow";
 
 	private RText app;
 	private ConsoleWindow window;
@@ -82,6 +83,7 @@ public class Plugin extends AbstractPlugin {
 		window = new ConsoleWindow(this.app, this);
 		window.setPosition(prefs.windowPosition);
 		window.setActive(prefs.windowVisible);
+		putDockableWindow(DOCKABLE_WINDOW_CONSOLE, window);
 
 		window.setForeground(ConsoleTextArea.STYLE_EXCEPTION, prefs.exceptionFG);
 		window.setForeground(ConsoleTextArea.STYLE_PROMPT, prefs.promptFG);
@@ -232,7 +234,6 @@ public class Plugin extends AbstractPlugin {
 		});
 
 		window.clearConsoles(); // Needed to pick up styles
-		rtext.addDockableWindow(window);
 
 	}
 

@@ -27,7 +27,7 @@ import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
-import org.fife.ui.app.AbstractPlugin;
+import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.dockablewindows.DockableWindow;
@@ -40,7 +40,7 @@ import org.fife.ui.rsyntaxtextarea.parser.Parser;
  * @author Robert Futrell
  * @version 1.0
  */
-public class TasksPlugin extends AbstractPlugin {
+public class TasksPlugin extends GUIPlugin {
 
 	/**
 	 * The parent application.
@@ -75,6 +75,7 @@ public class TasksPlugin extends AbstractPlugin {
 
 	private static final String VERSION					= "2.0.4";
 	private static final String VIEW_TASKS_ACTION		= "viewTasksAction";
+	private static final String DOCKABLE_WINDOW_TASKS	= "tasksDockableWindow";
 
 
 	/**
@@ -355,6 +356,7 @@ public class TasksPlugin extends AbstractPlugin {
 			window.setPosition(windowPosition);
 			window.setActive(true);
 			app.addDockableWindow(window);
+			putDockableWindow(DOCKABLE_WINDOW_TASKS, window);
 		}
 		else {
 			window.setActive(!window.isActive());

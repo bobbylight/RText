@@ -29,6 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -402,6 +403,21 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		workspace.accept(creator);
 		model.setRoot(creator.getRoot());
 		expandAllProjects();
+	}
+
+
+	/**
+	 * Overridden to also update this tree's popup menu.
+	 */
+	public void updateUI() {
+		super.updateUI();
+		if (popup!=null) {
+			SwingUtilities.updateComponentTreeUI(popup);
+		}
+		// Explicitly set DefaultTreeCellRenderers cache fonts, colors, etc.,
+		// and don't get updated by the JTree on LaF updates, so we must do
+		// so ourselves.
+		setCellRenderer(new WorkspaceTreeRenderer());
 	}
 
 
