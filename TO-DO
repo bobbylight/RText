@@ -1,6 +1,4 @@
-Last updated 09/07/2012
-
-- Very basic variable code completion for Groovy.
+Last updated 11/04/2012
 
 
 UI Features
@@ -13,13 +11,12 @@ Functionality
 1.  Make directory for Rhino user-defined scripts that get run on startup (this
     would require Java 6, of course).
 2.  Add VB syntax highlighting.
-3.  Add NSIS syntax highlighting.
-4.  Add drag-and-drop support to list view (rearranging files, opening).
-5.  Change file list view from an AbstractMainView to just an optional
+3.  Add drag-and-drop support to list view (rearranging files, opening).
+4.  Change file list view from an AbstractMainView to just an optional
     dockable window ("Open Files" window).
-6.  Make OptionsDialogPanels lazy-initialize on first display.
-7.  Provide Exuberant ctags with Windows install.
-8.  Improve Help!  Especially for new tool & macro support, startup scripts
+5.  Make OptionsDialogPanels lazy-initialize on first display.
+6.  Provide Exuberant ctags with Windows install.
+7.  Improve Help!  Especially for new tool & macro support, startup scripts
     (above), etc.
 
 

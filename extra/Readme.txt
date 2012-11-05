@@ -128,7 +128,7 @@ robert_futrell@users.sourceforge.net
 - flatron:                     Hungarian Translation
 - sonny, gri3fon:              Indonesian Translation
 - Luca, stepagweb:             Italian Translation
-- tomoM:                       Japanese Translation
+- Josh, tomoM:                 Japanese Translation
 - Changkyoon, Kwangsub:        Korean Translation
 - Chris, Maciej:               Polish Translation
 - Pat, Marcos, leandro:        Portuguese Translation
