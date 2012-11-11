@@ -32,6 +32,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 
 import org.fife.io.UnicodeWriter;
+import org.fife.rsta.ui.GoToDialog;
 import org.fife.rsta.ui.search.*;
 import org.fife.rtext.actions.CapsLockAction;
 import org.fife.rtext.actions.ToggleTextModeAction;

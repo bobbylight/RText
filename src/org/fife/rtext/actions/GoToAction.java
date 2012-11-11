@@ -15,8 +15,8 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.text.BadLocationException;
 
+import org.fife.rsta.ui.GoToDialog;
 import org.fife.rtext.AbstractMainView;
-import org.fife.rtext.GoToDialog;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.ui.app.StandardAction;
@@ -50,9 +50,11 @@ class GoToAction extends StandardAction {
 		RText rtext = (RText)getApplication();
 		AbstractMainView mainView = rtext.getMainView();
 
-		// Initializing the dialog now saves on load time when we first bring rtext up.
-		if (mainView.goToDialog==null)
-			mainView.goToDialog = new GoToDialog(rtext, mainView);
+		if (mainView.goToDialog==null) {
+			mainView.goToDialog = new GoToDialog(rtext);
+			mainView.goToDialog.setErrorDialogTitle(
+					rtext.getString("ErrorDialogTitle"));
+		}
 
 		// Prepare and show the GoTo Line dialog.
 		RTextEditorPane editor = mainView.getCurrentTextArea();

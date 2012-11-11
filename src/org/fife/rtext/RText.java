@@ -77,7 +77,7 @@ import org.fife.util.TranslucencyUtil;
  * status bar.
  *
  * @author Robert Futrell
- * @version 2.0.4
+ * @version 2.0.5
  */
 public class RText extends AbstractPluggableGUIApplication
 			implements ActionListener, CaretListener, PropertyChangeListener,
