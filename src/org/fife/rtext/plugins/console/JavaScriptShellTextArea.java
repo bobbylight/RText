@@ -48,6 +48,11 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	 */
 	private Object jsEngine;
 
+	/**
+	 * Whether this engine has been initialized.
+	 */
+	private boolean initialized;
+
 
 	/**
 	 * Constructor.
@@ -79,11 +84,27 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	 * Submits the entered JavaScript code.
 	 */
 	protected void handleSubmit(String text) {
+		handleSubmitImpl(text, true);
+	}
+
+
+	/**
+	 * Submits the entered JavaScript code.
+	 * 
+	 * @param text The text to submit.
+	 * @param appendPrompt Whether another prompt should be added to the text
+	 *        area after the command completes.
+	 */
+	private void handleSubmitImpl(String text, boolean appendPrompt) {
+
+		possiblyInitialize();
 
 		// Failed to initialize - likely Java 1.4 or 1.5
 		if (jsEngine==null) {
-			append(plugin.getString("Error.NotInitialized"), STYLE_EXCEPTION);
-			appendPrompt();
+			if (appendPrompt) {
+				append(plugin.getString("Error.NotInitialized"), STYLE_EXCEPTION);
+				appendPrompt();
+			}
 			return;
 		}
 
@@ -118,12 +139,29 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 			append(sw.toString(), STYLE_EXCEPTION);
 		}
 
-		appendPrompt();
+		if (appendPrompt) {
+			appendPrompt();
+		}
 
 	}
 
 
 	protected void init() {
+		// Do nothing; we do this lazily on the first statement submitted to
+		// avoid loading the JS scripting engine.
+	}
+
+
+	/**
+	 * Initializes the JS scripting engine, if it hasn't already been
+	 * initialized.
+	 */
+	private void possiblyInitialize() {
+
+		if (initialized) {
+			return;
+		}
+		initialized = true;
 
 		if (!RTextUtilities.isPreJava6()) {
 
@@ -171,14 +209,9 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 				// Import commonly-used packages.  Do this before stdout and
 				// stderr redirecting so the user won't see it in their console.
-				handleSubmit("importPackage(java.lang)");
-				handleSubmit("importPackage(java.io)");
-				handleSubmit("importPackage(java.util)");
-				handleSubmit("importPackage(java.awt)");
-				handleSubmit("importPackage(javax.swing)");
-				handleSubmit("importPackage(org.fife.rtext)");
-				handleSubmit("importPackage(org.fife.ui.rtextarea)");
-				handleSubmit("importPackage(org.fife.ui.rsyntaxtextarea)");
+				handleSubmitImpl("importPackage(java.lang, java.io, java.util, " +
+					"java.awt, java.swing, org.fife.rtext, org.fife.ui.rtextarea, " +
+					"org.fife.ui.rsyntaxtextarea)", false);
 
 			} catch (Exception e) {
 				e.printStackTrace();

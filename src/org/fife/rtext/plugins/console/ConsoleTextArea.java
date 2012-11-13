@@ -103,7 +103,6 @@ abstract class ConsoleTextArea extends JTextPane {
 		listener = new Listener();
 		addMouseListener(listener);
 		init();
-		clear(); // Appends note about built-in commands and prompt
 		cmdHistory = new LinkedList();
 	}
 
