@@ -74,6 +74,7 @@ public class FileTypeIconManager {
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_PERL,				PATH + "epic.gif");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_PHP,				PATH + "page_white_php.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_SAS,				PATH + "sas.gif");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_SCALA,			PATH + "scala.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL,		PATH + "page_white_tux.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH,	PATH + "bat.gif");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_XML,				PATH + "xml.png");

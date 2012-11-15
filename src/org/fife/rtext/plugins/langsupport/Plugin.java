@@ -302,6 +302,7 @@ public class Plugin extends AbstractPlugin {
 		ls = fact.getSupportFor(language);
 		JspLanguageSupport jspls = (JspLanguageSupport)ls;
 		jspls.setAutoCompleteEnabled(prefs.jsp_enabled);
+		view.setCodeFoldingEnabledFor(language, prefs.jsp_folding_enabled);
 
 		language = SyntaxConstants.SYNTAX_STYLE_LATEX;
 		view.setCodeFoldingEnabledFor(language, prefs.latex_folding_enabled);
@@ -342,6 +343,9 @@ public class Plugin extends AbstractPlugin {
 		ls.setAutoActivationEnabled(prefs.php_autoActivation);
 		ls.setAutoActivationDelay(prefs.php_autoActivationDelay);
 		view.setCodeFoldingEnabledFor(language, prefs.php_folding_enabled);
+
+		language = SyntaxConstants.SYNTAX_STYLE_SCALA;
+		view.setCodeFoldingEnabledFor(language, prefs.scala_folding_enabled);
 
 		language = SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
 		ls = fact.getSupportFor(language);
@@ -440,6 +444,7 @@ public class Plugin extends AbstractPlugin {
 		ls = fact.getSupportFor(language);
 		JspLanguageSupport jspls = (JspLanguageSupport)ls;
 		prefs.jsp_enabled = jspls.isAutoCompleteEnabled();
+		prefs.jsp_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_LATEX;
 		prefs.latex_folding_enabled = view.isCodeFoldingEnabledFor(language);
@@ -472,6 +477,9 @@ public class Plugin extends AbstractPlugin {
 		prefs.php_autoActivation = ls.isAutoActivationEnabled();
 		prefs.php_autoActivationDelay = ls.getAutoActivationDelay();
 		prefs.php_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_SCALA;
+		prefs.scala_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
 		ls = fact.getSupportFor(language);

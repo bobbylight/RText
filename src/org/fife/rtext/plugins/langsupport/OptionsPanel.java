@@ -123,6 +123,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 		addChildPanel(new NsisOptionsPanel());
 		addChildPanel(new PerlOptionsPanel());
 		addChildPanel(new PhpOptionsPanel());
+		addChildPanel(new ScalaOptionsPanel());
 		addChildPanel(new ShellOptionsPanel());
 		addChildPanel(new XmlOptionsPanel());
 	}

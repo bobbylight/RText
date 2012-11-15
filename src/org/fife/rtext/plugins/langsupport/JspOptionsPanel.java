@@ -23,6 +23,8 @@ import javax.swing.border.Border;
 
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.jsp.JspLanguageSupport;
+import org.fife.rtext.AbstractMainView;
+import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RButton;
 import org.fife.ui.UIUtil;
@@ -40,6 +42,7 @@ class JspOptionsPanel extends OptionsDialogPanel {
 
 	private Listener listener;
 	private JCheckBox enabledCB;
+	private JCheckBox foldingEnabledCB;
 	private RButton rdButton;
 
 	private static final String PROPERTY		= "Property";
@@ -74,8 +77,12 @@ class JspOptionsPanel extends OptionsDialogPanel {
 
 		enabledCB = createCB("Options.General.EnableCodeCompletion");
 		addLeftAligned(box, enabledCB);
-
 		cp.add(Box.createVerticalStrut(5));
+
+		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
+		addLeftAligned(box, foldingEnabledCB, 5);
+		cp.add(Box.createVerticalStrut(5));
+
 		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton);
@@ -108,6 +115,12 @@ class JspOptionsPanel extends OptionsDialogPanel {
 
 		// Options dealing with code completion.
 		ls.setAutoCompleteEnabled(enabledCB.isSelected());
+
+		// Options dealing with code folding.
+		RText rtext = (RText)owner;
+		AbstractMainView view = rtext.getMainView();
+		boolean folding = foldingEnabledCB.isSelected();
+		view.setCodeFoldingEnabledFor(SyntaxConstants.SYNTAX_STYLE_JSP, folding);
 
 	}
 
@@ -146,6 +159,12 @@ class JspOptionsPanel extends OptionsDialogPanel {
 		// Options dealing with code completion
 		setEnabledCBSelected(ls.isAutoCompleteEnabled());
 
+		// Options related to code folding.
+		RText rtext = (RText)owner;
+		AbstractMainView view = rtext.getMainView();
+		boolean folding = view.isCodeFoldingEnabledFor(SyntaxConstants.SYNTAX_STYLE_JSP);
+		foldingEnabledCB.setSelected(folding);
+
 	}
 
 
@@ -165,9 +184,16 @@ class JspOptionsPanel extends OptionsDialogPanel {
 				firePropertyChange(PROPERTY, null, null);
 			}
 
+			else if (foldingEnabledCB==source) {
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
 			else if (rdButton==source) {
-				if (enabledCB.isSelected()) {
+				if (enabledCB.isSelected() ||
+						!foldingEnabledCB.isSelected()) {
 					enabledCB.setSelected(false);
+					foldingEnabledCB.setSelected(true);
 					hasUnsavedChanges = true;
 					firePropertyChange(PROPERTY, null, null);
 				}
