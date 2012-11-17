@@ -46,8 +46,8 @@ robert -at- fifesoft dot com.
   
      org.fife.rsta.ui.demo.RSTAUIDemoApp
   
-  It is a simple example of using the Find and Replace dialogs.  It currently
-  does not demo "Mark All".     
+  It is a simple example of using the Find, Replace, and Go To Line dialogs.
+  It currently does not demo "Mark All".     
       
 * Feedback
 
@@ -77,11 +77,11 @@ robert -at- fifesoft dot com.
      * Chinese (Traditional):  kin Por Fok, liou xiao
      * Dutch:                  Roel, Sebastiaan, lovepuppy
      * French:                 PivWan
-     * German:                 bikerpete
-     * Hungarian:              flatron
+     * German:                 Domenic, bikerpete
+     * Hungarian:              Zityi, flatron
      * Indonesian:             azis, Sonny
      * Italian:                Luca, stepagweb
-     * Japanese:               izumi, tomoM
+     * Japanese:               Josh, izumi, tomoM
      * Korean:                 Changkyoon, sbrownii
      * Polish:                 Chris, Maciej Mrug
      * Portuguese (Brazil):    Pat, Marcos Parmeggiani, Leandro
