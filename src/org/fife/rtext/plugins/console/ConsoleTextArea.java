@@ -98,7 +98,6 @@ abstract class ConsoleTextArea extends JTextPane {
 	public ConsoleTextArea(Plugin plugin) {
 		this.plugin = plugin;
 		installDefaultStyles();
-		setTabSize(4); // Do after installStyles()
 		fixKeyboardShortcuts();
 		listener = new Listener();
 		addMouseListener(listener);
@@ -282,7 +281,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	/**
 	 * Installs the styles used by this text component.
 	 */
-	public void installDefaultStyles() {
+	private void installDefaultStyles() {
 
 		setFont(RTextArea.getDefaultFont());
 
@@ -301,6 +300,8 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		Style exception = addStyle(STYLE_EXCEPTION, defaultStyle);
 		StyleConstants.setForeground(exception, DEFAULT_EXCEPTION_FG);
+
+		setTabSize(4); // Do last
 
 	}
 
@@ -354,7 +355,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 *
 	 * @param tabSize The new tab size, in characters.
 	 */
-	public void setTabSize(int tabSize) {
+	private void setTabSize(int tabSize) {
 
 		FontMetrics fm = getFontMetrics(getFont());
 		int charWidth = fm.charWidth('m');
@@ -403,6 +404,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	public void updateUI() {
 		super.updateUI();
+		installDefaultStyles();
 		if (popup!=null) {
 			SwingUtilities.updateComponentTreeUI(popup);
 		}

@@ -146,12 +146,6 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	}
 
 
-	protected void init() {
-		// Do nothing; we do this lazily on the first statement submitted to
-		// avoid loading the JS scripting engine.
-	}
-
-
 	/**
 	 * Initializes the JS scripting engine, if it hasn't already been
 	 * initialized.
