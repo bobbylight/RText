@@ -1,15 +1,16 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file contains all user-defined file filters that will be          -->
-<!-- displayed in RText's file chooser.  If you want a certain file type    -->
-<!-- to have a filter defined in the file chooser, add it here.             -->
+<!--
+   This file contains all user-defined file filters that will be
+   displayed in RText's file chooser.  If you want a certain file type
+   to have a filter defined in the file chooser, add it here.
 
-<!-- Example:                                                               -->
-<!--    <ExtensionFileFilter name="Foo Source Files" ignoreCase="true"      -->
-<!--          showExtensions="true">                                        -->
-<!--       <Extension>foo</Extension>                                       -->
-<!--       <Extension>foobar</Extension>                                    -->
-<!--    </ExtensionFileFilter>                                              -->
-
+   Example:
+      <ExtensionFileFilter name="Foo Source Files" ignoreCase="true"
+            showExtensions="true">
+         <Extension>foo</Extension>
+         <Extension>foobar</Extension>
+      </ExtensionFileFilter>
+-->
 <ExtraFileFilters>
 </ExtraFileFilters>

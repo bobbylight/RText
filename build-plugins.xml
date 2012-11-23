@@ -215,11 +215,14 @@
 				<include name="org/fife/rtext/plugins/macros/**"/>
 			</fileset>
 			<manifest>
-				<attribute name="Class-Path" value="plugins/groovy-all.jar"/>
+				<attribute name="Class-Path" value="plugins/groovy-all-1.8.8.jar"/>
 				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.macros.MacroPlugin"/>
 				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
 			</manifest>
 		</jar>
+		<!-- Needed by the Macros plugin. -->
+		<copy file="lib/groovy-all-1.8.8.jar"  todir="${dist-dir}/plugins"/>
+		<copy file="lib/groovy.LICENSE.txt"    todir="${dist-dir}/plugins"/>
 
 		<!-- Language support plugin. -->
 		<jar destfile="${dist-dir}/plugins/RTextLanguageSupport.jar">

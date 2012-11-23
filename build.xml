@@ -134,6 +134,7 @@
 			<fileset dir="extra"/>
 			<fileset dir="lib">
 				<!-- Skip those put into lib/plugins -->
+				<exclude name="groovy*"/>
 				<exclude name="language_support.jar"/>
 				<exclude name="jtidy*"/>
 				<exclude name="js-14.jar"/>

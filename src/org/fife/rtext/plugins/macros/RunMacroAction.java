@@ -115,6 +115,8 @@ public class RunMacroAction extends StandardAction {
 	 */
 	private static Object groovyEngine;
 
+	private static final String GROOVY_JAR = "plugins/groovy-all-1.8.8.jar";
+
 
 	/**
 	 * Constructor.
@@ -242,8 +244,7 @@ public class RunMacroAction extends StandardAction {
 	 */
 	private Object initGroovyEngine() {
 
-		File groovyJar = new File(getApplication().getInstallLocation(),
-				"plugins/groovy-all.jar");
+		File groovyJar = new File(getApplication().getInstallLocation(), GROOVY_JAR);
 		if (!groovyJar.isFile()) {
 			String message = plugin.getString("Error.NoGroovyJar",
 								groovyJar.getAbsolutePath());

@@ -61,7 +61,7 @@
 -->
 
 <ThirdPartyLookAndFeels>
-
+<!--
 <LookAndFeel name="Substance Autumn"
    class="org.pushingpixels.substance.api.skin.SubstanceAutumnLookAndFeel"
    dir="lnfs/substance/"
@@ -96,5 +96,5 @@
    class="org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel"
    dir="lnfs/substance/"
    minJavaVersion="1.6"/>
-
+-->
 </ThirdPartyLookAndFeels>
