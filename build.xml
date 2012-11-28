@@ -58,7 +58,7 @@
 	<property name="doc-dir"          location="javadoc"/>
 	<property name="compiler"         value="Robert Futrell"/>
 	<property name="debug"            value="true"/>
-	<property name="debuglevel"       value="lines,var,source"/>
+	<property name="debuglevel"       value="lines,vars,source"/>
 	<property name="java-level"       value="1.4"/>
 
 
@@ -261,7 +261,7 @@
 				<exclude name="*.dll"/>
 			</fileset>
 		</copy>
-		<exec executable="/Developer/Tools/SetFile">
+		<exec executable="/Applications/XCode.app/Contents/Developer/usr/bin/SetFile">
 			<arg value="-a"/>
 			<arg value="B"/>
 			<arg value="${appdir}"/>
