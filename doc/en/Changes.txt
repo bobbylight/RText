@@ -2,6 +2,29 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+2.0.5 (11/27/2012):
+-------------------
+   - Code folding added for HTML, JSP, and PHP.
+   - Added NSIS syntax highlighting and code folding.
+   - Added a "Projects" docked window.  Useful for organizing small programming
+     projects while working in RText.
+   - Added code folding and highlighting of multi-line strings for Scala.
+   - Added Java 7 features to Groovy highlighting (underscores in numeric
+     literals, binary literals, and new core classes/interfaces/enums).
+   - Fixed an issue with CompleteMarkupTagAction and ToggleLineCommentAction
+     conflicting with each other only on *nix (Windows and OS X didn't have
+     this issue).
+   - Fixed possible NPE when editing XML on Linux only (!).
+   - RText is now building on OS X once again.
+   - Now ships with Groovy 1.8.8, so you no longer have to drop in your own
+     groovy-all-xxx.jar to run Groovy macros in RText.
+   - Added keyboard shortcuts for moving through docked window groups
+     (Ctrl+Alt+arrow keys).
+   - Updated translations - Chinese (peter_barnes), Russian (Nadiya), Italian
+     (Argaar), German (Domenic), Korean (Changkyoon), Japanese (Josh), and
+     Hungarian (Zityi).
+
+
 2.0.4 (09/07/2012):
 -------------------
    - HTML, JSP, and PHP syntax highlighting now also highlight embedded CSS.

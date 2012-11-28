@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "RText"
-!define PRODUCT_VERSION "2.0.4"
+!define PRODUCT_VERSION "2.0.5"
 !define PRODUCT_WEB_SITE "http://fifesoft.com/rtext/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RText.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -130,12 +130,15 @@ Section Uninstall
   Delete /REBOOTOK "$INSTDIR\lnfs\trident.jar"
   Delete /REBOOTOK "plugins\Console.jar"
   Delete /REBOOTOK "plugins\FileSystemTree.jar"
+  Delete /REBOOTOK "plugins\groovy-all-1.8.8.jar"
+  Delete /REBOOTOK "plugins\groovy.LICENSE.txt"
   Delete /REBOOTOK "plugins\HeapIndicator.jar"
   Delete /REBOOTOK "plugins\js-14*.jar" ; Old and new versions
   Delete /REBOOTOK "plugins\jtidy-r938.jar"
   Delete /REBOOTOK "plugins\jtidy-r938.LICENSE.txt"
   Delete /REBOOTOK "plugins\language_support.jar"
   Delete /REBOOTOK "plugins\MacroSupport.jar"
+  Delete /REBOOTOK "plugins\ProjectSupport.jar"
   Delete /REBOOTOK "plugins\Rhino.build-date"
   Delete /REBOOTOK "plugins\Rhino.LICENSE.txt"
   Delete /REBOOTOK "plugins\RSTALanguageSupport.License.txt"

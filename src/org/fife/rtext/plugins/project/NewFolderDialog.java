@@ -123,7 +123,6 @@ public class NewFolderDialog extends EscapableDialog {
 	 *
 	 * @return The chosen directory.  If the user canceled the dialog, then
 	 *         <code>null</code> is returned.
-	 * @see #setChosenDirectory(File)
 	 */
 	public String getChosenDirectory() {
 		return chosenDirectory;

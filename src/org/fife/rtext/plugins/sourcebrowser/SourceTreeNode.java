@@ -20,8 +20,8 @@ import javax.swing.tree.TreeNode;
 
 
 /**
- * Base class for tree nodes in an {@link DefaultSourceTree}.  They can be
- * sorted and filtered based on user input.<p>
+ * Base class for tree nodes in an <code>DefaultSourceTree</code>.  They can
+ * be sorted and filtered based on user input.<p>
  * This class is a clone of the identical class in
  * <code>RSTALanguageSupport</code>, but unfortunately exists to prevent
  * a dependency on that library in this plugin.

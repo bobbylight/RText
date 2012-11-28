@@ -131,7 +131,9 @@
 			description="Builds the entire RText application.">
 		<!-- Copy "extra stuff." -->
 		<copy todir="${dist-dir}">
-			<fileset dir="extra"/>
+			<fileset dir="extra">
+				<exclude name="lnfs/substance/**"/>
+			</fileset>
 			<fileset dir="lib">
 				<!-- Skip those put into lib/plugins -->
 				<exclude name="groovy*"/>
@@ -170,6 +172,7 @@
 				<exclude name="RText/classes/**"/>
 				<exclude name="RText/ant-classes/**"/>
 				<exclude name="RText/dist/**"/>
+				<exclude name="RText/dist-mac/**"/>
 				<exclude name="RText/javadoc/**"/>
 				<exclude name="RText/*.dll"/>
 				<exclude name="RText/${app-name-small}_${version}_win32_setup.exe"/>
@@ -218,8 +221,11 @@
 	<!-- Builds the javadoc for all org.fife classes.  -->
 	<target name="make-javadoc" depends="compile-main-classes">
 		<javadoc  destdir="${doc-dir}" author="true" version="true"
-			 	breakiterator="yes"
-				classpathref="project.class.path">
+			 	breakiterator="yes">
+			<classpath>
+				<fileset dir="lib" includes="*.jar"/>
+				<pathelement path="${common-dir}/extra"/>
+			</classpath>
 			<packageset dir="${common-dir}/src" defaultexcludes="yes">
 				<include name="org/**"/>
 			</packageset>

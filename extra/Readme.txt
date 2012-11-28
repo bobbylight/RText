@@ -124,10 +124,10 @@ robert_futrell@users.sourceforge.net
 - kp200906, liou xiao:         Traditional Chinese Translation
 - Rogier, roel, sebastiaan:    Dutch Translation
 - pivwan:                      French Translation
-- bikerpete:                   German Translation
+- Domenic, bikerpete:          German Translation
 - Zityi, flatron:              Hungarian Translation
 - sonny, gri3fon:              Indonesian Translation
-- Luca, stepagweb:             Italian Translation
+- Argaar, Luca, stepagweb:     Italian Translation
 - Josh, tomoM:                 Japanese Translation
 - Changkyoon, Kwangsub:        Korean Translation
 - Chris, Maciej:               Polish Translation
