@@ -9,9 +9,12 @@
  */
 package org.fife.rtext.plugins.project;
 
+import java.awt.ComponentOrientation;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
+
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -86,6 +89,9 @@ public class ProjectPlugin extends GUIPlugin {
 
 		// Window MUST always be created for preference saving on shutdown
 		ProjectWindow window = new ProjectWindow(rtext, this, prefs);
+		ComponentOrientation o = ComponentOrientation.
+				getOrientation(Locale.getDefault());
+		window.applyComponentOrientation(o);
 		putDockableWindow(DOCKABLE_WINDOW_PROJECTS, window);
 
 	}

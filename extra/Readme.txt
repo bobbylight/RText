@@ -119,7 +119,7 @@ robert_futrell@users.sourceforge.net
 
 7. Contributors
 ---------------
-- linostar:                    Arabic Translation
+- Mawaheb, linostar:           Arabic Translation
 - peter barnes, Terrance:      Simplified Chinese Translation
 - kp200906, liou xiao:         Traditional Chinese Translation
 - Rogier, roel, sebastiaan:    Dutch Translation

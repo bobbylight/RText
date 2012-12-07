@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.project.tree;
 
+import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,8 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -109,6 +112,10 @@ public class WorkspaceTree extends JTree implements FileSelector {
 				}
 			}
 
+			ComponentOrientation o = ComponentOrientation.
+					getOrientation(Locale.getDefault());
+			popup.applyComponentOrientation(o);
+			
 		}
 
 	}
