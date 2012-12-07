@@ -134,7 +134,7 @@ robert_futrell@users.sourceforge.net
 - Pat, Marcos, leandro:        Portuguese Translation
 - Nadiya, Vladimir:            Russian Translation
 - Leonardo:                    Spanish Translation
-- burak:                       Turkish Translation
+- Cahit, burak:                Turkish Translation
 
 
 8. Special Thanks
