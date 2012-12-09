@@ -11,7 +11,6 @@ package org.fife.rtext.plugins.console;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
-import javax.swing.ImageIcon;
 
 import org.fife.rtext.RText;
 import org.fife.ui.app.StandardAction;
@@ -40,7 +39,7 @@ public class StopAction extends StandardAction {
 	 */
 	public StopAction(RText owner, ResourceBundle msg, Plugin plugin) {
 		super(owner, msg, "Action.StopProcess");
-		setIcon(new ImageIcon(getClass().getResource("stop.png")));
+		setIcon("stop.png");
 		setEnabled(false);
 		this.plugin = plugin;
 	}

@@ -333,9 +333,8 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 		public BackAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Back");
-			URL url = getClass().getResource("arrow_left.png");
 			setName(null); // We're only a toolbar icon
-			setIcon(new ImageIcon(url));
+			setIcon("arrow_left.png");
 			setEnabled(false);
 		}
 
@@ -371,9 +370,8 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 		public ForwardAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Forward");
-			URL url = getClass().getResource("arrow_right.png");
 			setName(null); // We're only a toolbar icon
-			setIcon(new ImageIcon(url));
+			setIcon("arrow_right.png");
 			setEnabled(false);
 		}
 

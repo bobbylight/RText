@@ -33,7 +33,7 @@ public class CapsLockAction extends StandardAction {
 	 * @param rtext The parent application.
 	 */
 	public CapsLockAction(RText rtext) {
-		super(rtext, "NotUsed");
+		super(rtext, rtext.getResourceBundle(), "NotUsed");
 	}
 
 

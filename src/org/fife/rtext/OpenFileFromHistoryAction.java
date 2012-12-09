@@ -11,8 +11,6 @@
 package org.fife.rtext;
 
 import java.awt.event.ActionEvent;
-import javax.swing.Icon;
-import javax.swing.KeyStroke;
 
 import org.fife.ui.app.StandardAction;
 
@@ -33,18 +31,10 @@ class OpenFileFromHistoryAction extends StandardAction {
 	 * Creates a new <code>OpenFileFromHistoryAction</code>.
 	 *
 	 * @param owner the main window of this rtext instance.
-	 * @param text The text associated with the action.
-	 * @param icon The icon associated with the action.
-	 * @param desc The description of the action.
-	 * @param mnemonic The mnemonic for the action.
-	 * @param accelerator The accelerator key for the action.
-	 * @param fileFullPath The name and path of the file to be opened.
+	 * @see #setFileFullPath(String)
 	 */
-	 public OpenFileFromHistoryAction(RText owner, String text, Icon icon,
-	 		String desc, int mnemonic, KeyStroke accelerator,
-	 		String fileFullPath) {
-		super(owner, text, icon, desc, mnemonic, accelerator);
-		this.fileFullPath = fileFullPath;
+	 public OpenFileFromHistoryAction(RText owner) {
+		super(owner);
 	}
 
 
@@ -65,6 +55,16 @@ class OpenFileFromHistoryAction extends StandardAction {
 		// "null" encoding means check for Unicode before using default.
 		mainView.openFile(fileFullPath, null);
 
+	}
+
+
+	/**
+	 * Sets the file to open.
+	 *
+	 * @param fileFullPath The full path of the file to open.
+	 */
+	public void setFileFullPath(String fileFullPath) {
+		this.fileFullPath = fileFullPath;
 	}
 
 

@@ -10,9 +10,7 @@
 package org.fife.rtext;
 
 import java.awt.event.ActionEvent;
-import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.KeyStroke;
 
 import org.fife.ui.app.StandardAction;
 
@@ -30,16 +28,10 @@ class SearchToolBarAction extends StandardAction {
 	/**
 	 * Constructor.
 	 *
-	 * @param rtext The <code>RText</code>.
-	 * @param text The text associated with the action.
-	 * @param icon The icon associated with the action.
-	 * @param desc The description of the action.
-	 * @param mnemonic The mnemonic for the action.
-	 * @param accelerator The accelerator key for the action.
+	 * @param rtext The parent <code>RText</code> application.
 	 */
-	public SearchToolBarAction(RText rtext, String text, Icon icon,
-				String desc, int mnemonic, KeyStroke accelerator) {
-		super(rtext, text, icon, desc, mnemonic, accelerator);
+	public SearchToolBarAction(RText rtext) {
+		super(rtext);
 	}
 
 

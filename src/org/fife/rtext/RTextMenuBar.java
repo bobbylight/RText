@@ -229,9 +229,11 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		recentFilesMenu = new RecentFilesMenu(menuMsg.getString("RecentFiles"),
 												initialContents) {
 			protected Action createOpenAction(String fileFullPath) {
-				return new OpenFileFromHistoryAction(rtext,
-						getDisplayPath(fileFullPath), null, null,
-						-1, null, fileFullPath);
+				OpenFileFromHistoryAction action =
+						new OpenFileFromHistoryAction(rtext);
+				action.setName(getDisplayPath(fileFullPath));
+				action.setFileFullPath(fileFullPath);
+				return action;
 			}
 		};
 		fileMenu.add(recentFilesMenu);
@@ -432,9 +434,9 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		toolbarItem.setToolTipText(null);
 		toolbarItem.setSelected(properties.toolbarVisible);
 		toolbarsMenu.add(toolbarItem);
-		searchToolbarMenuItem = new JCheckBoxMenuItem(new SearchToolBarAction(
-						rtext, menuMsg.getString("QuickSearchBar"), null,
-						null, -1, null));
+		SearchToolBarAction stba = new SearchToolBarAction(rtext);
+		stba.setName(menuMsg.getString("QuickSearchBar"));
+		searchToolbarMenuItem = new JCheckBoxMenuItem(stba);
 		searchToolbarMenuItem.setSelected(properties.searchToolBarVisible);
 		UIUtil.setDescription(searchToolbarMenuItem, menuMsg,"DescQuickSearch");
 		toolbarsMenu.add(searchToolbarMenuItem);

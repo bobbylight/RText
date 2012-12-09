@@ -708,7 +708,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		public SortAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Sort");
-			setIcon(new ImageIcon(getClass().getResource("alphab_sort_co.gif")));
+			setIcon("alphab_sort_co.gif");
 			setName(null); // No text on button
 		}
 

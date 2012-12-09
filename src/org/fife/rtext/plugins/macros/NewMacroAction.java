@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ResourceBundle;
-import javax.swing.ImageIcon;
 
 import org.fife.io.IOUtil;
 import org.fife.rtext.RText;
@@ -47,7 +46,7 @@ class NewMacroAction extends StandardAction {
 	 */
 	public NewMacroAction(MacroPlugin plugin, RText owner, ResourceBundle msg) {
 		super(owner, msg, "NewMacroAction");
-		setIcon(new ImageIcon(getClass().getResource("cog_add.png")));
+		setIcon("cog_add.png");
 		this.plugin = plugin;
 	}
 

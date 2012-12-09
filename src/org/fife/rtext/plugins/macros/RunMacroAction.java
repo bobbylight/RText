@@ -126,7 +126,8 @@ public class RunMacroAction extends StandardAction {
 	 * @param macro The macro to run.
 	 */
 	public RunMacroAction(RText app, MacroPlugin plugin, Macro macro) {
-		super(app, macro.getName());
+		super(app);
+		setName(macro.getName());
 		this.plugin = plugin;
 		String shortcut = macro.getAccelerator();
 		setAccelerator(shortcut==null ? null : KeyStroke.getKeyStroke(shortcut));

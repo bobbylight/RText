@@ -12,7 +12,6 @@ package org.fife.rtext.plugins.macros;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
-import javax.swing.ImageIcon;
 
 import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialog;
@@ -36,7 +35,7 @@ class EditMacrosAction extends StandardAction {
 	 */
 	public EditMacrosAction(RText owner, ResourceBundle msg) {
 		super(owner, msg, "EditMacrosAction");
-		setIcon(new ImageIcon(getClass().getResource("cog_edit.png")));
+		setIcon("cog_edit.png");
 	}
 
 
