@@ -102,9 +102,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 		// Panel for the indicator's refresh rate.
 		temp = new JPanel(new BorderLayout());
 		Box temp2 = new Box(BoxLayout.LINE_AXIS);
-		JLabel label = UIUtil.createLabel(msg,
-						"Plugin.OptionPanel.RefreshRate.text",
-						"Plugin.OptionPanel.RefreshRate.mnemonic");
+		JLabel label=UIUtil.createLabel(msg, "Plugin.OptionPanel.RefreshRate");
 		refreshRateSpinner = new JSpinner(new SpinnerNumberModel(1,1,600,1));
 		label.setLabelFor(refreshRateSpinner);
 		refreshRateSpinner.addChangeListener(this);
@@ -141,14 +139,11 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 				BorderFactory.createEmptyBorder(0,0,0,20);
 		temp.setBorder(indentBorder);
 		foregroundLabel = UIUtil.createLabel(msg,
-				"Plugin.OptionPanel.ForegroundColor.text",
-				"Plugin.OptionPanel.ForegroundColor.mnemonic");
+				"Plugin.OptionPanel.ForegroundColor");
 		foregroundButton = new RColorSwatchesButton();
 		foregroundButton.addPropertyChangeListener(this);
 		foregroundLabel.setLabelFor(foregroundButton);
-		borderLabel = UIUtil.createLabel(msg,
-				"Plugin.OptionPanel.BorderColor.text",
-				"Plugin.OptionPanel.BorderColor.mnemonic");
+		borderLabel = UIUtil.createLabel(msg, "Plugin.OptionPanel.BorderColor");
 		borderButton = new RColorSwatchesButton();
 		borderButton.addPropertyChangeListener(this);
 		borderLabel.setLabelFor(borderButton);

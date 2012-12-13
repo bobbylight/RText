@@ -609,8 +609,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			JPanel temp = new JPanel(new BorderLayout());
 			temp.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
 			JLabel label = UIUtil.createLabel(Plugin.msg,
-								"Options.Perl.Perl5LibItem.Text",
-								"Options.Perl.Perl5LibItem.Mnemonic");
+								"Options.Perl.Perl5LibItem");
 			JPanel temp2 = new JPanel(new BorderLayout());
 			temp2.add(label);
 			if (orientation.isLeftToRight()) { // Space between label and text field.

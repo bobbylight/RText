@@ -109,21 +109,21 @@ public class NewMacroDialog extends EscapableDialog {
 		// Panel for defining the macro
 		SpringLayout sl = new SpringLayout();
 		JPanel formPanel = new JPanel(sl);
-		JLabel nameLabel = UIUtil.createLabel(msg, "Label.Name", "Label.Name.Mnemonic");
+		JLabel nameLabel = UIUtil.createLabel(msg, "Label.Name");
 		nameField = new JTextField(40);
 		nameField.getDocument().addDocumentListener(l);
 		nameLabel.setLabelFor(nameField);
 		nameDIP = new DecorativeIconPanel();
 		JPanel namePanel = RTextUtilities.createAssistancePanel(nameField, nameDIP);
-		JLabel descLabel = UIUtil.createLabel(msg, "Label.Desc", "Label.Desc.Mnemonic");
+		JLabel descLabel = UIUtil.createLabel(msg, "Label.Desc");
 		descField = new JTextField(40);
 		descLabel.setLabelFor(descField);
 		JPanel descPanel = RTextUtilities.createAssistancePanel(descField, null);
-		JLabel shortcutLabel = UIUtil.createLabel(msg, "Label.Shortcut", "Label.Shortcut.Mnemonic");
+		JLabel shortcutLabel = UIUtil.createLabel(msg, "Label.Shortcut");
 		shortcutField = new KeyStrokeField();
 		shortcutLabel.setLabelFor(shortcutField);
 		JPanel shortcutPanel = RTextUtilities.createAssistancePanel(shortcutField, null);
-		JLabel typeLabel = UIUtil.createLabel(msg, "Label.Type", "Label.Type.Mnemonic");
+		JLabel typeLabel = UIUtil.createLabel(msg, "Label.Type");
 		String[] items = { "Rhino (JavaScript)", "Groovy" };
 		typeCombo = new JComboBox(items);
 		typeCombo.addActionListener(l);

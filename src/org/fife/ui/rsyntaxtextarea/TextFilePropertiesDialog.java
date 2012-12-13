@@ -114,8 +114,7 @@ public class TextFilePropertiesDialog extends EscapableDialog
 		wordsCountLabel = new JLabel(
 				Integer.toString(calculateWordCount(textArea)));
 
-		JLabel terminatorLabel = UIUtil.createLabel(msg,
-							"LineTerminator", "LineTerminatorMnemonic");
+		JLabel terminatorLabel = UIUtil.createLabel(msg, "LineTerminator");
 		terminatorCombo = new SpecialValueComboBox();
 		UIUtil.fixComboOrientation(terminatorCombo);
 		terminatorCombo.addSpecialItem(msg.getString("SysDef"), TERM_SYSTEM);
@@ -128,8 +127,7 @@ public class TextFilePropertiesDialog extends EscapableDialog
 		terminatorCombo.addActionListener(this);
 		terminatorLabel.setLabelFor(terminatorCombo);
 
-		JLabel encodingLabel = UIUtil.createLabel(msg,
-								"Encoding", "EncodingMnemonic");
+		JLabel encodingLabel = UIUtil.createLabel(msg, "Encoding");
 		encodingCombo = new JComboBox();
 		UIUtil.fixComboOrientation(encodingCombo);
 

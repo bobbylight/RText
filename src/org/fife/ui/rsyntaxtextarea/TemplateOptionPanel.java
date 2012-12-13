@@ -260,8 +260,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			contentPane.setLayout(new BorderLayout());
 			contentPane.setBorder(UIUtil.getEmpty5Border());
 
-			JLabel idLabel = UIUtil.createLabel(msg,
-									"ID", "IDMnemonic");
+			JLabel idLabel = UIUtil.createLabel(msg, "ID");
 			idField = new JTextField(20);
 			Document doc = idField.getDocument();
 			doc.addDocumentListener(this);
@@ -279,8 +278,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 
 			JPanel temp = new JPanel(new GridLayout(2,1, 5,5));
 			temp.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
-			JLabel label = UIUtil.createLabel(msg,
-							"BeforeCaretText", "BeforeCaretMnemonic");
+			JLabel label = UIUtil.createLabel(msg, "BeforeCaret");
 			bcTextArea = new RTextArea(4, 30);
 			bcTextArea.setHighlightCurrentLine(false);
 			label.setLabelFor(bcTextArea);
@@ -289,8 +287,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			temp2.add(label, BorderLayout.NORTH);
 			temp2.add(sp);
 			temp.add(temp2);
-			label = UIUtil.createLabel(msg, "AfterCaretText",
-							"AfterCaretMnemonic");
+			label = UIUtil.createLabel(msg, "AfterCaret");
 			acTextArea = new RTextArea(4, 30);
 			acTextArea.setHighlightCurrentLine(false);
 			label.setLabelFor(acTextArea);
