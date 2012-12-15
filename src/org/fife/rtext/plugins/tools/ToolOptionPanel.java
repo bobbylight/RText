@@ -40,10 +40,10 @@ import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplicationConstants;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.modifiabletable.AbstractRowHandler;
 import org.fife.ui.modifiabletable.ModifiableTable;
 import org.fife.ui.modifiabletable.ModifiableTableChangeEvent;
 import org.fife.ui.modifiabletable.ModifiableTableListener;
-import org.fife.ui.modifiabletable.RowHandler;
 
 
 /**
@@ -288,7 +288,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * Handles modification of tool table values.
 	 */
-	private class ToolTableRowHandler implements RowHandler {
+	private class ToolTableRowHandler extends AbstractRowHandler {
 
 		public Object[] getNewRowInfo(Object[] oldData) {
 			NewToolDialog toolDialog = new NewToolDialog(getOptionsDialog());
@@ -306,16 +306,6 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 						tool.getDescription() };
 			}
 			return null;
-		}
-
-		public boolean shouldRemoveRow(int row) {
-			return true;
-		}
-
-		/**
-		 * Not an override.  Implements <code>RowHandler#updateUI()</code>.
-		 */
-		public void updateUI() {
 		}
 
 	}

@@ -53,10 +53,10 @@ import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
+import org.fife.ui.modifiabletable.AbstractRowHandler;
 import org.fife.ui.modifiabletable.ModifiableTable;
 import org.fife.ui.modifiabletable.ModifiableTableChangeEvent;
 import org.fife.ui.modifiabletable.ModifiableTableListener;
-import org.fife.ui.modifiabletable.RowHandler;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 
@@ -382,22 +382,13 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Handler for editing jars/source attachments in the table.
 	 */
-	private class JarRowHandler implements RowHandler {
+	private class JarRowHandler extends AbstractRowHandler {
 
 		public Object[] getNewRowInfo(Object[] old) {
-			RowHandlerDialog rhd = new RowHandlerDialog(getOptionsDialog(),
-														old);
+			RowHandlerDialog rhd = new RowHandlerDialog(getOptionsDialog(),old);
 			rhd.setLocationRelativeTo(getOptionsDialog());
 			rhd.setVisible(true);
 			return rhd.newRowInfo;
-		}
-
-		public boolean shouldRemoveRow(int arg0) {
-			return true;
-		}
-
-		public void updateUI() {
-			// Nothing to do
 		}
 
 	}

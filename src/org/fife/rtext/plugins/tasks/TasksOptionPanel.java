@@ -40,10 +40,10 @@ import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
+import org.fife.ui.modifiabletable.AbstractRowHandler;
 import org.fife.ui.modifiabletable.ModifiableTable;
 import org.fife.ui.modifiabletable.ModifiableTableChangeEvent;
 import org.fife.ui.modifiabletable.ModifiableTableListener;
-import org.fife.ui.modifiabletable.RowHandler;
 
 
 /**
@@ -396,7 +396,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * Row handler for task identifiers.
 	 */
-	private class IdRowHandler implements RowHandler {
+	private class IdRowHandler extends AbstractRowHandler {
 
 		public Object[] getNewRowInfo(Object[] oldData) {
 			String oldValue = oldData==null ? null : (String)oldData[0];
@@ -407,14 +407,6 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 			return input!=null ? new Object[] { input } : null;
 		}
 
-		public boolean shouldRemoveRow(int row) {
-			return true; // Can remove any row
-		}
-
-		public void updateUI() {
-			// Nothing to update.
-		}
-		
 	}
 
 

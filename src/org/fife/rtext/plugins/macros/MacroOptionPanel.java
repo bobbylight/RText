@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
-
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -36,10 +35,10 @@ import org.fife.rtext.plugins.macros.NewMacroDialog;
 import org.fife.rtext.plugins.macros.Macro;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
+import org.fife.ui.modifiabletable.AbstractRowHandler;
 import org.fife.ui.modifiabletable.ModifiableTable;
 import org.fife.ui.modifiabletable.ModifiableTableChangeEvent;
 import org.fife.ui.modifiabletable.ModifiableTableListener;
-import org.fife.ui.modifiabletable.RowHandler;
 import org.fife.ui.rtextfilechooser.Utilities;
 
 
@@ -320,7 +319,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * Handles modification of macro table values.
 	 */
-	private class MacroTableRowHandler implements RowHandler {
+	private class MacroTableRowHandler extends AbstractRowHandler {
 
 		public Object[] getNewRowInfo(Object[] oldData) {
 			NewMacroDialog macroDialog = new NewMacroDialog(
@@ -339,16 +338,6 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 						macro.getDesc() };
 			}
 			return null;
-		}
-
-		public boolean shouldRemoveRow(int row) {
-			return true;
-		}
-
-		/**
-		 * Not an override.  Implements <code>RowHandler#updateUI()</code>.
-		 */
-		public void updateUI() {
 		}
 
 	}

@@ -46,10 +46,10 @@ import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
+import org.fife.ui.modifiabletable.AbstractRowHandler;
 import org.fife.ui.modifiabletable.ModifiableTable;
 import org.fife.ui.modifiabletable.ModifiableTableChangeEvent;
 import org.fife.ui.modifiabletable.ModifiableTableListener;
-import org.fife.ui.modifiabletable.RowHandler;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 
@@ -555,7 +555,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * The row handler for the PERL5LIB table.
 	 */
-	private class Perl5LibTableRowHandler implements RowHandler {
+	private class Perl5LibTableRowHandler extends AbstractRowHandler {
 
 		public Object[] getNewRowInfo(Object[] oldData) {
 			String oldValue = oldData==null ? null : (String)oldData[0];
@@ -567,14 +567,6 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 				return new String[] { newValue };
 			}
 			return null;
-		}
-
-		public boolean shouldRemoveRow(int row) {
-			return true;
-		}
-
-		public void updateUI() {
-			// Do nothing, no cached data
 		}
 
 	}

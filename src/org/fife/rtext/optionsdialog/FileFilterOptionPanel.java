@@ -329,7 +329,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	 * Handles the addition, removal, and modifying of rows in
 	 * the file filter table.
 	 */
-	private class FileFilterRowHandler implements RowHandler {
+	private class FileFilterRowHandler extends AbstractRowHandler {
 
 		public Object[] getNewRowInfo(Object[] oldData) {
 			String oldValue = (String)oldData[1];
@@ -358,15 +358,8 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 			return null;
 		}
 
-		public boolean shouldRemoveRow(int row) {
-			return false; // Cannot remove any rows.
-		}
-
-		/**
-		 * Not an override.  Implements <code>RowHandler#updateUI()</code>.
-		 */
-		public void updateUI() {
-			// Nothing to update.
+		public boolean canRemoveRow(int row) {
+			return false; // Can modify any row, but not remove any
 		}
 
 	}

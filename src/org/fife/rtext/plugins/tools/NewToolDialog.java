@@ -59,8 +59,8 @@ import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
+import org.fife.ui.modifiabletable.AbstractRowHandler;
 import org.fife.ui.modifiabletable.ModifiableTable;
-import org.fife.ui.modifiabletable.RowHandler;
 import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
@@ -627,7 +627,7 @@ ac.install(dirField);
 	/**
 	 * Row handler for the command line arguments table.
 	 */
-	private class ArgTableRowHandler implements RowHandler {
+	private class ArgTableRowHandler extends AbstractRowHandler {
 
 		public Object[] getNewRowInfo(Object[] oldData) {
 			ArgDialog dialog = new ArgDialog(NewToolDialog.this);
@@ -637,13 +637,6 @@ ac.install(dirField);
 			dialog.setModal(true);
 			dialog.setVisible(true);
 			return dialog.arg==null ? null : new String[] { dialog.arg };
-		}
-
-		public boolean shouldRemoveRow(int row) {
-			return true;
-		}
-
-		public void updateUI() {
 		}
 
 	}
@@ -780,7 +773,7 @@ ac.install(dirField);
 	/**
 	 * Row handler for the environment variable table.
 	 */
-	private class EnvVarTableRowHandler implements RowHandler {
+	private class EnvVarTableRowHandler extends AbstractRowHandler {
 
 		public Object[] getNewRowInfo(Object[] oldData) {
 			EnvVarDialog dialog = new EnvVarDialog(NewToolDialog.this);
@@ -790,13 +783,6 @@ ac.install(dirField);
 			dialog.setModal(true);
 			dialog.setVisible(true);
 			return dialog.getReturnValue();
-		}
-
-		public boolean shouldRemoveRow(int row) {
-			return true;
-		}
-
-		public void updateUI() {
 		}
 
 	}

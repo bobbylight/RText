@@ -419,7 +419,11 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			idField.setText(id);
 		}
 
-		public boolean shouldRemoveRow(int row) {
+		public boolean canModifyRow(int row) {
+			return true;
+		}
+
+		public boolean canRemoveRow(int row) {
 			return true;
 		}
 

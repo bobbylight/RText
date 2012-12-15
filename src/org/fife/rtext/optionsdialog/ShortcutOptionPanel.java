@@ -253,7 +253,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	/**
 	 * Handles modification of shortcut table values.
 	 */
-	private class ShortcutTableRowHandler implements RowHandler {
+	private class ShortcutTableRowHandler extends AbstractRowHandler {
 
 		private GetKeyStrokeDialog ksDialog;
 
@@ -276,12 +276,12 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 			return null;
 		}
 
-		public boolean shouldRemoveRow(int row) {
-			return false; // Cannot remove any rows.
+		public boolean canRemoveRow(int row) {
+			return false; // Can modify any row, but can't remove any
 		}
 
 		/**
-		 * Not an override.  Implements <code>RowHandler#updateUI()</code>.
+		 * Overridden to update the cached dialog, if necessary.
 		 */
 		public void updateUI() {
 			if (ksDialog!=null) {
