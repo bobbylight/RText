@@ -34,7 +34,7 @@
                should be relative to the RText installation directory.  If a
                Look and Feel requires more than one jar, they should be
                separated by commas.
-       <dirs>  An alternative to the <jars> attribute.  If you have a LaF with
+       <dir>   An alternative to the <jars> attribute.  If you have a LaF with
                lots of jars (e.g. Substance), you can point to a root directory
                containing them all.  This directory should be relative to the
                RText installation directory.
@@ -61,11 +61,6 @@
 -->
 
 <ThirdPartyLookAndFeels>
-<!--
-<LookAndFeel name="Substance Autumn"
-   class="org.pushingpixels.substance.api.skin.SubstanceAutumnLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
 
 <LookAndFeel name="Substance Business"
    class="org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel"
@@ -74,6 +69,41 @@
 
 <LookAndFeel name="Substance Business Black Steel"
    class="org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
+
+<LookAndFeel name="Substance Business Blue Steel"
+   class="org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
+
+<LookAndFeel name="Substance Cerulean"
+   class="org.pushingpixels.substance.api.skin.SubstanceCeruleanLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
+
+<LookAndFeel name="Substance Creme Coffee"
+   class="org.pushingpixels.substance.api.skin.SubstanceCremeCoffeeLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
+
+<LookAndFeel name="Substance Creme"
+   class="org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
+
+<LookAndFeel name="Substance Dust Coffee"
+   class="org.pushingpixels.substance.api.skin.SubstanceDustCoffeeLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
+
+<LookAndFeel name="Substance Dust"
+   class="org.pushingpixels.substance.api.skin.SubstanceDustLookAndFeel"
+   dir="lnfs/substance/"
+   minJavaVersion="1.6"/>
+
+<LookAndFeel name="Substance Graphite Aqua"
+   class="org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel"
    dir="lnfs/substance/"
    minJavaVersion="1.6"/>
 
@@ -96,5 +126,5 @@
    class="org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel"
    dir="lnfs/substance/"
    minJavaVersion="1.6"/>
--->
+
 </ThirdPartyLookAndFeels>

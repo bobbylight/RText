@@ -119,7 +119,6 @@
 				<!-- it doesn't hurt anything to have them on the  -->
 				<!-- classpath everywhere.                         -->
 				<attribute name="Class-Path" value="fife.common.jar rsyntaxtextarea.jar autocomplete.jar rstaui.jar rsta_spellchecker.jar lnfs/OfficeLnFs.jar"/>
-				<!--attribute name="Class-Path" value="fife.common.jar rsyntaxtextarea.jar autocomplete.jar rstaui.jar rsta_spellchecker.jar lnfs/OfficeLnFs.jar lnfs/substance/substance-7.2.jar lnfs/substance/laf-widget-7.2.jar lnfs/substance/laf-plugin-7.2.jar lnfs/substance/trident-7.2-base.jar lnfs/substance/trident-7.2-swing.jar lnfs/substance/trident-7.2.jar"/ -->
 			</manifest>
 		</jar>
 	</target>
@@ -131,9 +130,7 @@
 			description="Builds the entire RText application.">
 		<!-- Copy "extra stuff." -->
 		<copy todir="${dist-dir}">
-			<fileset dir="extra">
-				<exclude name="lnfs/substance/**"/>
-			</fileset>
+			<fileset dir="extra"/>
 			<fileset dir="lib">
 				<!-- Skip those put into lib/plugins -->
 				<exclude name="groovy*"/>

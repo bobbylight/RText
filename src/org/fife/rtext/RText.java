@@ -1717,7 +1717,7 @@ public class RText extends AbstractPluggableGUIApplication
 				// (200ms), looks bad moving through JMenuItems quickly.
 				if (SubstanceUtils.isSubstanceInstalled()) {
 					try {
-						SubstanceUtils.setAnimationSpeed(120);
+						SubstanceUtils.setAnimationSpeed(100);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

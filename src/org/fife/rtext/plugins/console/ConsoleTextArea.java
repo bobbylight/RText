@@ -10,6 +10,7 @@
 package org.fife.rtext.plugins.console;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -41,6 +42,7 @@ import javax.swing.text.TextAction;
 import javax.swing.text.Utilities;
 
 import org.fife.ui.OptionsDialog;
+import org.fife.ui.SubstanceUtils;
 import org.fife.ui.rtextarea.RTextArea;
 
 
@@ -97,7 +99,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	public ConsoleTextArea(Plugin plugin) {
 		this.plugin = plugin;
-		installDefaultStyles();
+		installDefaultStyles(false);
 		fixKeyboardShortcuts();
 		listener = new Listener();
 		addMouseListener(listener);
@@ -280,12 +282,24 @@ abstract class ConsoleTextArea extends JTextPane {
 
 	/**
 	 * Installs the styles used by this text component.
+	 * 
+	 * @param checkForSubstance Whether to work around a Substance oddity
+	 *        (Insubstantial 7.2.1).
 	 */
-	private void installDefaultStyles() {
+	private void installDefaultStyles(boolean checkForSubstance) {
 
-		setFont(RTextArea.getDefaultFont());
+		Font font = RTextArea.getDefaultFont();
+		if (!SubstanceUtils.isSubstanceInstalled()) {
+			// If we do this with a SubstanceLookAndFeel installed, we go into
+			// an infinite loop of updateUI()'s called (in calls to
+			// SwingUtilities.invokeLater()).  For some reason, Substance has
+			// to update JTextPaneUI's whenever the font changes.  Sigh...
+			setFont(font);
+		}
 
 		Style defaultStyle = getStyle(StyleContext.DEFAULT_STYLE);
+		StyleConstants.setFontFamily(defaultStyle, font.getFamily());
+		StyleConstants.setFontSize(defaultStyle, font.getSize());
 
 		Style prompt = addStyle(STYLE_PROMPT, defaultStyle);
 		StyleConstants.setForeground(prompt, DEFAULT_PROMPT_FG);
@@ -404,7 +418,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	public void updateUI() {
 		super.updateUI();
-		installDefaultStyles();
+		installDefaultStyles(true);
 		if (popup!=null) {
 			SwingUtilities.updateComponentTreeUI(popup);
 		}
