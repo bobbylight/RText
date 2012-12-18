@@ -336,11 +336,8 @@ ac.install(dirField);
 		JPanel envPanel = new JPanel(new BorderLayout());
 		envPanel.setBorder(UIUtil.getEmpty5Border());
 		ButtonGroup bg = new ButtonGroup();
-		appendRB = new JRadioButton(msg.getString("AppendEnvVars"));
-		bg.add(appendRB);
-		replaceRB = new JRadioButton(msg.getString("ReplaceEnvVars"));
-		bg.add(replaceRB);
-		appendRB.setSelected(true); // Default to "append".
+		appendRB = UIUtil.createRadio(msg, "AppendEnvVars", bg, null, true);
+		replaceRB = UIUtil.createRadio(msg, "ReplaceEnvVars", bg);
 		temp = new JPanel(new GridLayout(2,1, 5,0));
 		temp.add(appendRB);
 		temp.add(replaceRB);

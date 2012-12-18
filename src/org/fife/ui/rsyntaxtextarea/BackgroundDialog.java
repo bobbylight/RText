@@ -133,18 +133,18 @@ class BackgroundDialog extends JDialog implements ActionListener {
 		temp3.add(temp2, BorderLayout.LINE_START);
 		temp.add(temp3, BorderLayout.NORTH);
 
-		colorButton = new JRadioButton(msg.getString("Color"), true);
+		ButtonGroup bg = new ButtonGroup();
+
+		colorButton = UIUtil.createRadio(msg, "Color", bg, this, true);
 		colorButton.setActionCommand("ColorRadioButton");
-		colorButton.addActionListener(this);
 
 		colorBrowseButton = new RButton(msg.getString("BrowseColors"));
 		colorBrowseButton.setActionCommand("BrowseColors");
 		colorBrowseButton.addActionListener(this);
 		colorBrowseButton.setEnabled(true);
 
-		imageButton = new JRadioButton(msg.getString("Image"), false);
+		imageButton = UIUtil.createRadio(msg, "Image", bg, this);
 		imageButton.setActionCommand("ImageRadioButton");
-		imageButton.addActionListener(this);
 
 		imageBrowseButton = new RButton(msg.getString("BrowseImages"));
 		imageBrowseButton.setActionCommand("BrowseImages");
@@ -171,10 +171,6 @@ class BackgroundDialog extends JDialog implements ActionListener {
 		imageFileNameField = new JTextField(30);
 		imageFileNameField.setEditable(false);
 		temp.add(imageFileNameField, BorderLayout.SOUTH);
-
-		ButtonGroup buttonGroup = new ButtonGroup();
-		buttonGroup.add(colorButton);
-		buttonGroup.add(imageButton);
 
 		// Create a panel combining the first two.
 		JPanel topPanel = new JPanel(new BorderLayout());

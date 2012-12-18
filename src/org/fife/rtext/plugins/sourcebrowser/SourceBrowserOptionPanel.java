@@ -132,26 +132,17 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 		JLabel label = new JLabel(sbb.getString("OptionPanel.Label.CtagsType"));
 		label.setVerticalAlignment(JLabel.TOP);
 		JPanel typePanel = new JPanel(new BorderLayout());
-		exubCtagsRB = new JRadioButton(
-					sbb.getString("OptionPanel.CtagsType.Exuberant"));
-		exubCtagsRB.setActionCommand("ExuberantCtags");
-		exubCtagsRB.addActionListener(this);
+		ButtonGroup bg = new ButtonGroup();
+		exubCtagsRB = UIUtil.createRadio(sbb, "OptionPanel.CtagsType.Exuberant", bg, this, true);
 		Container temp2 = new JPanel(new BorderLayout());
 		temp2.add(exubCtagsRB, BorderLayout.LINE_START);
 		typePanel.add(temp2, BorderLayout.NORTH);
-		standardCtagsRB = new JRadioButton(
-					sbb.getString("OptionPanel.CtagsType.Standard"));
-		standardCtagsRB.setActionCommand("StandardCtags");
-		standardCtagsRB.addActionListener(this);
+		standardCtagsRB = UIUtil.createRadio(sbb, "OptionPanel.CtagsType.Standard", bg, this);
 		temp2 = new JPanel(new BorderLayout());
 		temp2.add(standardCtagsRB, BorderLayout.LINE_START);
 		typePanel.add(temp2, BorderLayout.SOUTH);
 		temp2 = new JPanel(new BorderLayout());
 		temp2.add(typePanel, BorderLayout.LINE_START);
-		ButtonGroup bg = new ButtonGroup();
-		bg.add(exubCtagsRB);
-		bg.add(standardCtagsRB);
-		exubCtagsRB.setSelected(true);
 		
 		Dimension filler = new Dimension(1,1);
 		if (ltr) {
@@ -227,9 +218,10 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 */
 	public void actionPerformed(ActionEvent e) {
 
+		Object source = e.getSource();
 		String command = e.getActionCommand();
 
-		if (visibleCB==e.getSource()) {
+		if (visibleCB==source) {
 			hasUnsavedChanges = true;
 			boolean visible = visibleCB.isSelected();
 			firePropertyChange(PROPERTY, !visible, visible);
@@ -252,7 +244,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 			}
 		}
 
-		else if ("ExuberantCtags".equals(command)) {
+		else if (exubCtagsRB==source) {
 			if (lastSelectedCtagsRB!=exubCtagsRB) {
 				lastSelectedCtagsRB = exubCtagsRB;
 				hasUnsavedChanges = true;
@@ -267,7 +259,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 			firePropertyChange(HTML_TOOLTIPS_PROPERTY, !value, value);
 		}
 
-		else if ("StandardCtags".equals(command)) {
+		else if (standardCtagsRB==source) {
 			if (lastSelectedCtagsRB!=standardCtagsRB) {
 				lastSelectedCtagsRB = standardCtagsRB;
 				hasUnsavedChanges = true;
