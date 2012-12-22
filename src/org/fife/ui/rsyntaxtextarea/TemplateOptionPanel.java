@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -242,8 +243,8 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 		private JTextField idField;
 		private RTextArea bcTextArea;
 		private RTextArea acTextArea;
-		private RButton okButton;
-		private RButton cancelButton;
+		private JButton okButton;
+		private JButton cancelButton;
 
 		private char[] id;
 		private String beforeCaret;
@@ -300,12 +301,12 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 
 			temp = new JPanel();
 			temp2 = new JPanel(new GridLayout(1,2, 5,5));
-			okButton = UIUtil.createRButton(msg,
+			okButton = UIUtil.createButton(msg,
 								"OK", "OKMnemonic");
 			okButton.addActionListener(this);
 			okButton.setEnabled(false);
 			temp2.add(okButton);
-			cancelButton = UIUtil.createRButton(msg,
+			cancelButton = UIUtil.createButton(msg,
 								"Cancel", "CancelMnemonic");
 			cancelButton.addActionListener(this);
 			temp2.add(cancelButton);

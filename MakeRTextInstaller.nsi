@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "RText"
-!define PRODUCT_VERSION "2.0.5"
+!define PRODUCT_VERSION "2.0.5.1"
 !define PRODUCT_WEB_SITE "http://fifesoft.com/rtext/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RText.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -126,8 +126,9 @@ Section Uninstall
   Delete /REBOOTOK "$INSTDIR\lnfs\lookandfeels.xml"
   Delete /REBOOTOK "$INSTDIR\lnfs\OfficeLnFs.jar"
   Delete /REBOOTOK "$INSTDIR\lnfs\OfficeLnFs.License.txt"
-  Delete /REBOOTOK "$INSTDIR\lnfs\substance.jar"
-  Delete /REBOOTOK "$INSTDIR\lnfs\trident.jar"
+  Delete /REBOOTOK "$INSTDIR\lnfs\substance\*jar"
+  Delete /REBOOTOK "$INSTDIR\lnfs\substance.jar" ; Possibly there from old releases
+  Delete /REBOOTOK "$INSTDIR\lnfs\trident.jar" ; Possibly there from old releases
   Delete /REBOOTOK "plugins\Console.jar"
   Delete /REBOOTOK "plugins\FileSystemTree.jar"
   Delete /REBOOTOK "plugins\groovy-all-1.8.8.jar"
@@ -159,6 +160,7 @@ Section Uninstall
   RMDir "$INSTDIR\doc"
   RMDir "$INSTDIR\exampleMacros"
   RMDir "$INSTDIR\icongroups"
+  RMDir "$INSTDIR\lnfs\substance"
   RMDir "$INSTDIR\lnfs"
   RMDir "$INSTDIR\plugins"
   SetOutPath "$TEMP" ; So we can remove the root dir if it's empty

@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -40,7 +41,6 @@ import org.fife.rtext.KeyStrokeField;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.EscapableDialog;
-import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
@@ -63,9 +63,9 @@ public class NewMacroDialog extends EscapableDialog {
 	private KeyStrokeField shortcutField;
 	private JComboBox typeCombo;
 	private SelectableLabel engineNotesLabel;
-	private RButton okButton;
-	private RButton editButton;
-	private RButton cancelButton;
+	private JButton okButton;
+	private JButton editButton;
+	private JButton cancelButton;
 	private Macro macro;
 	private boolean isNew;
 	private static Icon ERROR_ICON;
@@ -151,10 +151,10 @@ public class NewMacroDialog extends EscapableDialog {
 		topPanel.add(Box.createVerticalGlue());
 
 		// Panel for the buttons.
-		okButton = UIUtil.createRButton(parentMsg, "OKButtonLabel",
+		okButton = UIUtil.createButton(parentMsg, "OKButtonLabel",
 											"OKButtonMnemonic");
 		okButton.setEnabled(false);
-		cancelButton = UIUtil.createRButton(parentMsg, "Cancel",
+		cancelButton = UIUtil.createButton(parentMsg, "Cancel",
 											"CancelMnemonic");
 		okButton.addActionListener(l);
 		cancelButton.addActionListener(l);
@@ -402,7 +402,7 @@ public class NewMacroDialog extends EscapableDialog {
 		typeCombo.setSelectedIndex(index);
 		typeCombo.setEnabled(false); // Can't change language
 
-		editButton = UIUtil.createRButton(msg, "Button.Edit", "Button.Edit.Mnemonic");
+		editButton = UIUtil.createButton(msg, "Button.Edit", "Button.Edit.Mnemonic");
 		editButton.addActionListener(l);
 		Container buttonPanel = okButton.getParent();
 		Container bpParent = buttonPanel.getParent();

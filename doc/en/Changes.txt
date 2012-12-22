@@ -2,6 +2,16 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+2.0.5.1 (12/20/2012):
+---------------------
+   - Updated to RSTA 2.0.5.1; this fixes a keyboard bug experienced with
+     non-QWERTY keyboards.
+   - Several Substance skins are now available as LookAndFeels.  Thanks to the
+     Insubstantial project (https://github.com/Insubstantial/insubstantial).
+     Only works with Java 6+.
+   - Updated the Spanish (Leonardo) and Arabic (Mawaheb) translations.
+   
+   
 2.0.5 (11/27/2012):
 -------------------
    - Code folding added for HTML, JSP, and PHP.

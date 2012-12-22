@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.ResourceBundle;
 import javax.swing.*;
 
-import org.fife.ui.RButton;
 import org.fife.ui.TitledPanel;
 import org.fife.ui.UIUtil;
 
@@ -30,8 +29,8 @@ class SaveMacroDialog extends JDialog implements ActionListener {
 
 	private RText rtext;
 
-	private RButton okButton;
-	private RButton cancelButton;
+	private JButton okButton;
+	private JButton cancelButton;
 
 	private JTextField macroNameField;
 
@@ -60,9 +59,9 @@ class SaveMacroDialog extends JDialog implements ActionListener {
 		temp.add(namePanel, BorderLayout.NORTH);
 
 		// Panel for the buttons.
-		okButton = UIUtil.createRButton(bundle, "OKButtonLabel",
+		okButton = UIUtil.createButton(bundle, "OKButtonLabel",
 											"OKButtonMnemonic");
-		cancelButton = UIUtil.createRButton(bundle, "Cancel",
+		cancelButton = UIUtil.createButton(bundle, "Cancel",
 											"CancelMnemonic");
 		okButton.setActionCommand("OKButtonPressed");
 		okButton.addActionListener(this);

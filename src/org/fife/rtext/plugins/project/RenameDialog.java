@@ -97,10 +97,10 @@ public class RenameDialog extends EscapableDialog{
 		// Make a panel containing the OK and Cancel buttons.
 		JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,5));
 		//buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
-		okButton = UIUtil.createRButton(bundle, "OKButtonLabel", "OKButtonMnemonic");
+		okButton = UIUtil.createButton(bundle, "OKButtonLabel", "OKButtonMnemonic");
 		okButton.setActionCommand("OK");
 		okButton.addActionListener(listener);
-		cancelButton = UIUtil.createRButton(bundle, "Cancel", "CancelMnemonic");
+		cancelButton = UIUtil.createButton(bundle, "Cancel", "CancelMnemonic");
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(listener);
 		buttonPanel.add(okButton);

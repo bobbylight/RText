@@ -25,7 +25,7 @@ it to: Windows, Linux, UNIX, Mac OS X, etc.
 
 RText currently has many features, including (but not limited to):
 
-1.  Syntax highlighting for over 35 popular programming languages.
+1.  Syntax highlighting for over 30 popular programming languages.
 2.  Code folding.
 3.  Editing multiple documents at once.
 4.  Bracket matching.

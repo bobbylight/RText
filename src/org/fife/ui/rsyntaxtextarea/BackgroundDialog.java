@@ -179,10 +179,10 @@ class BackgroundDialog extends JDialog implements ActionListener {
 		topPanel.add(changePanel);
 
 		// Create a panel for the OK and Cancel buttons.
-		okButton = UIUtil.createRButton(msg, "OK", "OKMnemonic");
+		okButton = UIUtil.createButton(msg, "OK", "OKMnemonic");
 		okButton.setActionCommand("OK");
 		okButton.addActionListener(this);
-		cancelButton = UIUtil.createRButton(msg, "Cancel", "CancelMnemonic");
+		cancelButton = UIUtil.createButton(msg, "Cancel", "CancelMnemonic");
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(this);
 		JPanel buttonPanel = new JPanel();

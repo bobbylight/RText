@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,7 +37,6 @@ import javax.swing.text.Document;
 import javax.swing.text.Segment;
 
 import org.fife.ui.EscapableDialog;
-import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.SpecialValueComboBox;
 import org.fife.ui.UIUtil;
@@ -63,8 +63,7 @@ public class TextFilePropertiesDialog extends EscapableDialog
 	private JLabel wordsCountLabel;
 	private SpecialValueComboBox terminatorCombo;
 	private JComboBox encodingCombo;
-
-	private RButton okButton;
+	private JButton okButton;
 
 	private TextEditorPane textArea;
 
@@ -191,12 +190,12 @@ public class TextFilePropertiesDialog extends EscapableDialog
 		// Make a panel for OK and cancel buttons.
 		JPanel bottomPanel = new JPanel();
 		JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,0));
-		okButton = UIUtil.createRButton(msg, "OK", "OKMnemonic");
+		okButton = UIUtil.createButton(msg, "OK", "OKMnemonic");
 		okButton.setActionCommand("OKButton");
 		okButton.addActionListener(this);
 		okButton.setEnabled(false);
 		buttonPanel.add(okButton);
-		RButton cancelButton = UIUtil.createRButton(msg,
+		JButton cancelButton = UIUtil.createButton(msg,
 									"Cancel", "CancelMnemonic");
 		cancelButton.setActionCommand("CancelButton");
 		cancelButton.addActionListener(this);

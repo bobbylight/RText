@@ -152,8 +152,8 @@ panel.add(editor);
 				msg.getString("Desc.Jazzy"));
 		appendLibrary(sb, "JGoodies:", "http://jgoodies.com",
 				msg.getString("Desc.JGoodies"));
-		appendLibrary(sb, "Substance:",
-				"https://substance.dev.java.net/",
+		appendLibrary(sb, "Insubstantial:",
+				"https://github.com/Insubstantial/insubstantial",
 				msg.getString("Desc.Substance"));
 		appendLibrary(sb, "Groovy:",
 				"http://groovy.codehaus.org/",
