@@ -265,6 +265,7 @@ public class RTextUtilities {
 					new String[] { "htm", "html" });
 			addFilter(chooser, msg, "Java", "java");
 			addFilter(chooser, msg, "JavaScript", "js");
+			addFilter(chooser, msg, "JSON", "json");
 			addFilter(chooser, msg, "JSP", "jsp");
 			addFilter(chooser, msg, "LaTeX", new String[] { "tex", "ltx", "latex" });
 			addFilter(chooser, msg, "Lisp",
@@ -319,6 +320,7 @@ public class RTextUtilities {
 						"htm", "html",
 						"java",
 						"js",
+						"json",
 						"jsp",
 						"tex", "ltx", "latex",
 						"cl", "clisp", "el", "l", "lisp", "lsp", "ml",
@@ -940,6 +942,7 @@ public class RTextUtilities {
 	 *        thrown.
 	 * @param lnfClassName The class name of the Look and Feel to set.
 	 */
+	// TODO: Shouldn't this be in UIUtil somehow, for other GUIApplications?
 	public static void setLookAndFeel(final RText rtext, String lnfClassName) {
 
 		// Only set the Look and Feel if we're not already using that Look.

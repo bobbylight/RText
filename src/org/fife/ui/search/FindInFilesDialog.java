@@ -443,7 +443,7 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		// Make labels to go with the combo boxes/text fields.
 		JLabel findLabel = new JLabel(getString("FindWhat"));
 		findLabel.setLabelFor(findTextCombo);
-		findLabel.setDisplayedMnemonic((int)getString("FindWhatMnemonic").charAt(0));
+		findLabel.setDisplayedMnemonic((int)getString("FindWhat.Mnemonic").charAt(0));
 		JLabel inLabel = new JLabel(getString2("InFiles"));
 		inLabel.setLabelFor(inFilesComboBox);
 		inLabel.setDisplayedMnemonic((int)getString2("InFilesMnemonic").charAt(0));

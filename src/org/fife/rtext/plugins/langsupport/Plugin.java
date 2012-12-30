@@ -298,6 +298,9 @@ public class Plugin extends AbstractPlugin {
 		language = SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT;
 		view.setCodeFoldingEnabledFor(language, prefs.js_folding_enabled);
 
+		language = SyntaxConstants.SYNTAX_STYLE_JSON;
+		view.setCodeFoldingEnabledFor(language, prefs.json_folding_enabled);
+
 		language = SyntaxConstants.SYNTAX_STYLE_JSP;
 		ls = fact.getSupportFor(language);
 		JspLanguageSupport jspls = (JspLanguageSupport)ls;
@@ -439,6 +442,9 @@ public class Plugin extends AbstractPlugin {
 
 		language = SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT;
 		prefs.js_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_JSON;
+		prefs.json_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_JSP;
 		ls = fact.getSupportFor(language);

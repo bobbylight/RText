@@ -310,6 +310,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_JAVA,			createValue(new String[] { "*.java" }));
 		filters.put(SYNTAX_STYLE_JAVASCRIPT,		createValue(new String[] { "*.js" }));
 		filters.put(SYNTAX_STYLE_JSP,				createValue(new String[] { "*.jsp" }));
+		filters.put(SYNTAX_STYLE_JSON,				createValue(new String[] { "*.json" }));
 		filters.put(SYNTAX_STYLE_LATEX,				createValue(new String[] { "*.tex", "*.ltx", "*.latex" }));
 		filters.put(SYNTAX_STYLE_LISP, 				createValue(new String[] { "*.cl", "*.clisp", "*.el", "*.l", "*.lisp", "*.lsp", "*.ml" }));
 		filters.put(SYNTAX_STYLE_LUA,				createValue(new String[] { "*.lua" }));

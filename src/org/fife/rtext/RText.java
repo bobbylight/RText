@@ -109,8 +109,6 @@ public class RText extends AbstractPluggableGUIApplication
 
 	private SpellingErrorWindow spellingWindow;
 
-	private boolean aboutDialogCreated;
-
 	private SyntaxScheme colorScheme;
 
 	private IconGroup iconGroup;
@@ -289,9 +287,8 @@ public class RText extends AbstractPluggableGUIApplication
 	 *
 	 * @return The About dialog.
 	 */
-	protected org.fife.ui.AboutDialog createAboutDialog() {
-		aboutDialogCreated = true;
-		return new org.fife.rtext.AboutDialog(this);
+	protected JDialog createAboutDialog() {
+		return new AboutDialog(this);
 	}
 
 
@@ -1581,13 +1578,11 @@ public class RText extends AbstractPluggableGUIApplication
 
 
 	/**
-	 * Updates the look and feel for all components and windows in
-	 * this <code>RText</code> instance.  This method assumes that
-	 * <code>UIManager.setLookAndFeel(lnf)</code> has already been called.
-	 *
-	 * @param lnf The new look and feel.
+	 * {@inheritDoc}
 	 */
 	public void updateLookAndFeel(LookAndFeel lnf) {
+
+		super.updateLookAndFeel(lnf);
 
 		try {
 
@@ -1609,11 +1604,6 @@ public class RText extends AbstractPluggableGUIApplication
 			if (helpDialog != null) {
 				SwingUtilities.updateComponentTreeUI(helpDialog);
 				helpDialog.pack();
-			}
-			if (aboutDialogCreated) {
-				org.fife.ui.AboutDialog aboutDialog = getAboutDialog();
-				SwingUtilities.updateComponentTreeUI(aboutDialog);
-				aboutDialog.pack();
 			}
 
 			if (chooser!=null) {

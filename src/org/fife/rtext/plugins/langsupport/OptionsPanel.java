@@ -117,6 +117,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 		addChildPanel(new HtmlOptionsPanel());
 		addChildPanel(new JavaOptionsPanel());
 		addChildPanel(new JavaScriptOptionsPanel());
+		addChildPanel(new JsonOptionsPanel());
 		addChildPanel(new JspOptionsPanel());
 		addChildPanel(new LatexOptionsPanel());
 		addChildPanel(new MxmlOptionsPanel());

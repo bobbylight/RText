@@ -56,6 +56,8 @@ public class LangSupportPreferences extends Prefs {
 
 	public boolean js_folding_enabled;
 
+	public boolean json_folding_enabled;
+
 	public boolean jsp_enabled;
 	public boolean jsp_folding_enabled;
 
@@ -139,6 +141,8 @@ public class LangSupportPreferences extends Prefs {
 
 		js_folding_enabled = true;
 
+		json_folding_enabled = true;
+		
 		jsp_enabled = true;
 		jsp_folding_enabled = true;
 

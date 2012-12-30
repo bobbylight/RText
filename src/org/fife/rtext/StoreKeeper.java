@@ -72,19 +72,14 @@ public class StoreKeeper {
 	 * @param lnf The Look and Feel to change to.
 	 */
 	public static void updateLookAndFeels(final LookAndFeel lnf) {
-
-		Runnable updateUIRunnable = new Runnable() {
+		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				int count = getInstanceCount();
 				for (int i=0; i<count; i++) {
 					((RText)rtextInstances.get(i)).updateLookAndFeel(lnf);
 				}
 			}
-		};
-
-		// Ensure we update Look and Feels on event dispatch thread.
-		SwingUtilities.invokeLater(updateUIRunnable);
-
+		});
 	}
 
 
