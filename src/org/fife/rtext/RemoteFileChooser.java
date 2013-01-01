@@ -136,10 +136,10 @@ public class RemoteFileChooser extends EscapableDialog
 
 		// Make a panel containing the OK and Cancel buttons.
 		JPanel buttonPanel = new JPanel(new GridLayout(1,3, 5,5));
-		okButton = UIUtil.createButton(msg, "OK", "OKMnemonic");
+		okButton = UIUtil.newButton(msg, "OK", "OKMnemonic");
 		okButton.setActionCommand("OK");
 		okButton.addActionListener(this);
-		JButton cancelButton = UIUtil.createButton(msg, "Cancel",
+		JButton cancelButton = UIUtil.newButton(msg, "Cancel",
 											"CancelMnemonic");
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(this);

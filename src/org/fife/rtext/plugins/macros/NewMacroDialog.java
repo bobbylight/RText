@@ -109,21 +109,21 @@ public class NewMacroDialog extends EscapableDialog {
 		// Panel for defining the macro
 		SpringLayout sl = new SpringLayout();
 		JPanel formPanel = new JPanel(sl);
-		JLabel nameLabel = UIUtil.createLabel(msg, "Label.Name");
+		JLabel nameLabel = UIUtil.newLabel(msg, "Label.Name");
 		nameField = new JTextField(40);
 		nameField.getDocument().addDocumentListener(l);
 		nameLabel.setLabelFor(nameField);
 		nameDIP = new DecorativeIconPanel();
 		JPanel namePanel = RTextUtilities.createAssistancePanel(nameField, nameDIP);
-		JLabel descLabel = UIUtil.createLabel(msg, "Label.Desc");
+		JLabel descLabel = UIUtil.newLabel(msg, "Label.Desc");
 		descField = new JTextField(40);
 		descLabel.setLabelFor(descField);
 		JPanel descPanel = RTextUtilities.createAssistancePanel(descField, null);
-		JLabel shortcutLabel = UIUtil.createLabel(msg, "Label.Shortcut");
+		JLabel shortcutLabel = UIUtil.newLabel(msg, "Label.Shortcut");
 		shortcutField = new KeyStrokeField();
 		shortcutLabel.setLabelFor(shortcutField);
 		JPanel shortcutPanel = RTextUtilities.createAssistancePanel(shortcutField, null);
-		JLabel typeLabel = UIUtil.createLabel(msg, "Label.Type");
+		JLabel typeLabel = UIUtil.newLabel(msg, "Label.Type");
 		String[] items = { "Rhino (JavaScript)", "Groovy" };
 		typeCombo = new JComboBox(items);
 		typeCombo.addActionListener(l);
@@ -151,10 +151,10 @@ public class NewMacroDialog extends EscapableDialog {
 		topPanel.add(Box.createVerticalGlue());
 
 		// Panel for the buttons.
-		okButton = UIUtil.createButton(parentMsg, "OKButtonLabel",
+		okButton = UIUtil.newButton(parentMsg, "OKButtonLabel",
 											"OKButtonMnemonic");
 		okButton.setEnabled(false);
-		cancelButton = UIUtil.createButton(parentMsg, "Cancel",
+		cancelButton = UIUtil.newButton(parentMsg, "Cancel",
 											"CancelMnemonic");
 		okButton.addActionListener(l);
 		cancelButton.addActionListener(l);
@@ -402,7 +402,7 @@ public class NewMacroDialog extends EscapableDialog {
 		typeCombo.setSelectedIndex(index);
 		typeCombo.setEnabled(false); // Can't change language
 
-		editButton = UIUtil.createButton(msg, "Button.Edit", "Button.Edit.Mnemonic");
+		editButton = UIUtil.newButton(msg, "Button.Edit", "Button.Edit.Mnemonic");
 		editButton.addActionListener(l);
 		Container buttonPanel = okButton.getParent();
 		Container bpParent = buttonPanel.getParent();

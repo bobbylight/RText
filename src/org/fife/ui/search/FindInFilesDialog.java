@@ -441,9 +441,7 @@ public class FindInFilesDialog extends AbstractSearchDialog
 		JPanel inputPanel = new JPanel(new SpringLayout());
 
 		// Make labels to go with the combo boxes/text fields.
-		JLabel findLabel = new JLabel(getString("FindWhat"));
-		findLabel.setLabelFor(findTextCombo);
-		findLabel.setDisplayedMnemonic((int)getString("FindWhat.Mnemonic").charAt(0));
+		JLabel findLabel = UIUtil.newLabel(getBundle(), "FindWhat", findTextCombo);
 		JLabel inLabel = new JLabel(getString2("InFiles"));
 		inLabel.setLabelFor(inFilesComboBox);
 		inLabel.setDisplayedMnemonic((int)getString2("InFilesMnemonic").charAt(0));

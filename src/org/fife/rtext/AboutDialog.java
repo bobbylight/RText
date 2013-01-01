@@ -49,9 +49,9 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 
 
 		// Add a panel containing information about installed plugins.
-		JPanel temp = UIUtil.createTabbedPanePanel(new BorderLayout());
+		JPanel temp = UIUtil.newTabbedPanePanel(new BorderLayout());
 		temp.setBorder(UIUtil.getEmpty5Border());
-		JPanel panel = UIUtil.createTabbedPanePanel();
+		JPanel panel = UIUtil.newTabbedPanePanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
 		panel.add(new JLabel(msg.getString("Static.TableDescription")));
 		panel.add(Box.createHorizontalGlue());
@@ -94,7 +94,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 	protected JPanel createAboutApplicationPanel() {
 
 		// Create the picture.
-		JPanel temp = UIUtil.createTabbedPanePanel(new BorderLayout());
+		JPanel temp = UIUtil.newTabbedPanePanel(new BorderLayout());
 		temp.setBorder(UIUtil.getEmpty5Border());
 		ClassLoader cl = this.getClass().getClassLoader();
 		ResourceBundle msg = ResourceBundle.getBundle(MSG);
@@ -106,7 +106,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 		temp.add(label, BorderLayout.CENTER);
 
 		// Add a panel containing the rest of the stuff.
-		JPanel panel = UIUtil.createTabbedPanePanel();
+		JPanel panel = UIUtil.newTabbedPanePanel();
 		RText rtext = (RText)getOwner();
 		InfoPane editor = new InfoPane(rtext);
 //W3C_LENGTH_UNITS ="JEditorPane.w3cLengthUnits" in 1.5, but we're 1.4-compatible.
@@ -139,7 +139,7 @@ panel.add(editor);
 	 */
 	private JPanel createLibrariesPanel(ResourceBundle msg) {
 
-		JPanel panel = UIUtil.createTabbedPanePanel(new BorderLayout());
+		JPanel panel = UIUtil.newTabbedPanePanel(new BorderLayout());
 		panel.setBorder(UIUtil.getEmpty5Border());
 
 		StringBuffer sb = new StringBuffer("<html><table>");

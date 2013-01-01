@@ -261,7 +261,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			contentPane.setLayout(new BorderLayout());
 			contentPane.setBorder(UIUtil.getEmpty5Border());
 
-			JLabel idLabel = UIUtil.createLabel(msg, "ID");
+			JLabel idLabel = UIUtil.newLabel(msg, "ID");
 			idField = new JTextField(20);
 			Document doc = idField.getDocument();
 			doc.addDocumentListener(this);
@@ -279,7 +279,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 
 			JPanel temp = new JPanel(new GridLayout(2,1, 5,5));
 			temp.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
-			JLabel label = UIUtil.createLabel(msg, "BeforeCaret");
+			JLabel label = UIUtil.newLabel(msg, "BeforeCaret");
 			bcTextArea = new RTextArea(4, 30);
 			bcTextArea.setHighlightCurrentLine(false);
 			label.setLabelFor(bcTextArea);
@@ -288,7 +288,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			temp2.add(label, BorderLayout.NORTH);
 			temp2.add(sp);
 			temp.add(temp2);
-			label = UIUtil.createLabel(msg, "AfterCaret");
+			label = UIUtil.newLabel(msg, "AfterCaret");
 			acTextArea = new RTextArea(4, 30);
 			acTextArea.setHighlightCurrentLine(false);
 			label.setLabelFor(acTextArea);
@@ -301,12 +301,12 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 
 			temp = new JPanel();
 			temp2 = new JPanel(new GridLayout(1,2, 5,5));
-			okButton = UIUtil.createButton(msg,
+			okButton = UIUtil.newButton(msg,
 								"OK", "OKMnemonic");
 			okButton.addActionListener(this);
 			okButton.setEnabled(false);
 			temp2.add(okButton);
-			cancelButton = UIUtil.createButton(msg,
+			cancelButton = UIUtil.newButton(msg,
 								"Cancel", "CancelMnemonic");
 			cancelButton.addActionListener(this);
 			temp2.add(cancelButton);

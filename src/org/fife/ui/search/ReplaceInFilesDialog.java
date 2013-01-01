@@ -81,11 +81,10 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 
 		JPanel inputPanel = super.createInputPanel();
 
-		JLabel replaceLabel = new JLabel(getString("ReplaceWith"));
-		replaceLabel.setDisplayedMnemonic((int)getString("ReplaceWithMnemonic").charAt(0));
 		replaceCombo = createSearchComboBox(true);
 		getTextComponent(replaceCombo).addFocusListener(new FindInFilesFocusAdapter());
-		replaceLabel.setLabelFor(replaceCombo);
+		JLabel replaceLabel = UIUtil.newLabel(getBundle(), "ReplaceWith",
+				replaceCombo);
 
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(replaceCombo);

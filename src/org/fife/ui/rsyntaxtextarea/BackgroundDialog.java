@@ -135,7 +135,7 @@ class BackgroundDialog extends JDialog implements ActionListener {
 
 		ButtonGroup bg = new ButtonGroup();
 
-		colorButton = UIUtil.createRadio(msg, "Color", bg, this, true);
+		colorButton = UIUtil.newRadio(msg, "Color", bg, this, true);
 		colorButton.setActionCommand("ColorRadioButton");
 
 		colorBrowseButton = new RButton(msg.getString("BrowseColors"));
@@ -143,7 +143,7 @@ class BackgroundDialog extends JDialog implements ActionListener {
 		colorBrowseButton.addActionListener(this);
 		colorBrowseButton.setEnabled(true);
 
-		imageButton = UIUtil.createRadio(msg, "Image", bg, this);
+		imageButton = UIUtil.newRadio(msg, "Image", bg, this);
 		imageButton.setActionCommand("ImageRadioButton");
 
 		imageBrowseButton = new RButton(msg.getString("BrowseImages"));
@@ -179,10 +179,10 @@ class BackgroundDialog extends JDialog implements ActionListener {
 		topPanel.add(changePanel);
 
 		// Create a panel for the OK and Cancel buttons.
-		okButton = UIUtil.createButton(msg, "OK", "OKMnemonic");
+		okButton = UIUtil.newButton(msg, "OK", "OKMnemonic");
 		okButton.setActionCommand("OK");
 		okButton.addActionListener(this);
-		cancelButton = UIUtil.createButton(msg, "Cancel", "CancelMnemonic");
+		cancelButton = UIUtil.newButton(msg, "Cancel", "CancelMnemonic");
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(this);
 		JPanel buttonPanel = new JPanel();

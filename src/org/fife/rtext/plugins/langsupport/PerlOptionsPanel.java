@@ -600,7 +600,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			Box topPanel = Box.createVerticalBox();
 			JPanel temp = new JPanel(new BorderLayout());
 			temp.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
-			JLabel label = UIUtil.createLabel(Plugin.msg,
+			JLabel label = UIUtil.newLabel(Plugin.msg,
 								"Options.Perl.Perl5LibItem");
 			JPanel temp2 = new JPanel(new BorderLayout());
 			temp2.add(label);

@@ -51,7 +51,7 @@ class SaveMacroDialog extends JDialog implements ActionListener {
 
 		// Panel to input the action's name.
 		JPanel namePanel = new JPanel(new BorderLayout());
-		JLabel label = UIUtil.createLabel(bundle, "MacroNameLabel");
+		JLabel label = UIUtil.newLabel(bundle, "MacroNameLabel");
 		namePanel.add(label, BorderLayout.LINE_START);
 		macroNameField = new JTextField(30);
 		label.setLabelFor(macroNameField);
@@ -59,9 +59,9 @@ class SaveMacroDialog extends JDialog implements ActionListener {
 		temp.add(namePanel, BorderLayout.NORTH);
 
 		// Panel for the buttons.
-		okButton = UIUtil.createButton(bundle, "OKButtonLabel",
+		okButton = UIUtil.newButton(bundle, "OKButtonLabel",
 											"OKButtonMnemonic");
-		cancelButton = UIUtil.createButton(bundle, "Cancel",
+		cancelButton = UIUtil.newButton(bundle, "Cancel",
 											"CancelMnemonic");
 		okButton.setActionCommand("OKButtonPressed");
 		okButton.addActionListener(this);

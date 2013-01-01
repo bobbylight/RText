@@ -40,6 +40,7 @@ import org.fife.ui.EscapableDialog;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.SpecialValueComboBox;
 import org.fife.ui.UIUtil;
+import org.fife.ui.rtextfilechooser.Utilities;
 
 
 /**
@@ -95,11 +96,10 @@ public class TextFilePropertiesDialog extends EscapableDialog
 		content2.setLayout(new SpringLayout());
 		contentPane.add(content2, BorderLayout.NORTH);
 
-		JLabel filePathLabel = new JLabel(msg.getString("Path"));
 		JTextField filePathField = new JTextField(30);
 		filePathField.setText(textArea.getFileFullPath());
 		filePathField.setEditable(false);
-		filePathLabel.setLabelFor(filePathField);
+		JLabel filePathLabel = UIUtil.newLabel(msg, "Path", filePathField);
 
 		JLabel linesLabel = new JLabel(msg.getString("Lines"));
 		JLabel linesCountLabel = new JLabel(
@@ -113,7 +113,7 @@ public class TextFilePropertiesDialog extends EscapableDialog
 		wordsCountLabel = new JLabel(
 				Integer.toString(calculateWordCount(textArea)));
 
-		JLabel terminatorLabel = UIUtil.createLabel(msg, "LineTerminator");
+		JLabel terminatorLabel = UIUtil.newLabel(msg, "LineTerminator");
 		terminatorCombo = new SpecialValueComboBox();
 		UIUtil.fixComboOrientation(terminatorCombo);
 		terminatorCombo.addSpecialItem(msg.getString("SysDef"), TERM_SYSTEM);
@@ -126,7 +126,7 @@ public class TextFilePropertiesDialog extends EscapableDialog
 		terminatorCombo.addActionListener(this);
 		terminatorLabel.setLabelFor(terminatorCombo);
 
-		JLabel encodingLabel = UIUtil.createLabel(msg, "Encoding");
+		JLabel encodingLabel = UIUtil.newLabel(msg, "Encoding");
 		encodingCombo = new JComboBox();
 		UIUtil.fixComboOrientation(encodingCombo);
 
@@ -144,7 +144,7 @@ public class TextFilePropertiesDialog extends EscapableDialog
 		File file = new File(textArea.getFileFullPath());
 		String size = "";
 		if (file.exists() && !file.isDirectory()) {
-			size = Long.toString(file.length());
+			size = Utilities.getFileSizeStringFor(file);
 		}
 		JLabel sizeLabel2 = new JLabel(size);
 		
@@ -190,12 +190,12 @@ public class TextFilePropertiesDialog extends EscapableDialog
 		// Make a panel for OK and cancel buttons.
 		JPanel bottomPanel = new JPanel();
 		JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,0));
-		okButton = UIUtil.createButton(msg, "OK", "OKMnemonic");
+		okButton = UIUtil.newButton(msg, "OK", "OKMnemonic");
 		okButton.setActionCommand("OKButton");
 		okButton.addActionListener(this);
 		okButton.setEnabled(false);
 		buttonPanel.add(okButton);
-		JButton cancelButton = UIUtil.createButton(msg,
+		JButton cancelButton = UIUtil.newButton(msg,
 									"Cancel", "CancelMnemonic");
 		cancelButton.setActionCommand("CancelButton");
 		cancelButton.addActionListener(this);

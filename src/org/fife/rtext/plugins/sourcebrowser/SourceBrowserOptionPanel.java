@@ -133,11 +133,11 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 		label.setVerticalAlignment(JLabel.TOP);
 		JPanel typePanel = new JPanel(new BorderLayout());
 		ButtonGroup bg = new ButtonGroup();
-		exubCtagsRB = UIUtil.createRadio(sbb, "OptionPanel.CtagsType.Exuberant", bg, this, true);
+		exubCtagsRB = UIUtil.newRadio(sbb, "OptionPanel.CtagsType.Exuberant", bg, this, true);
 		Container temp2 = new JPanel(new BorderLayout());
 		temp2.add(exubCtagsRB, BorderLayout.LINE_START);
 		typePanel.add(temp2, BorderLayout.NORTH);
-		standardCtagsRB = UIUtil.createRadio(sbb, "OptionPanel.CtagsType.Standard", bg, this);
+		standardCtagsRB = UIUtil.newRadio(sbb, "OptionPanel.CtagsType.Standard", bg, this);
 		temp2 = new JPanel(new BorderLayout());
 		temp2.add(standardCtagsRB, BorderLayout.LINE_START);
 		typePanel.add(temp2, BorderLayout.SOUTH);
