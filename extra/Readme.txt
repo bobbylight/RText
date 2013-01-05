@@ -123,7 +123,7 @@ robert_futrell@users.sourceforge.net
 - peter barnes, Terrance:      Simplified Chinese Translation
 - kp200906, liou xiao:         Traditional Chinese Translation
 - Rogier, roel, sebastiaan:    Dutch Translation
-- pivwan:                      French Translation
+- Pat, pivwan:                 French Translation
 - Domenic, bikerpete:          German Translation
 - Zityi, flatron:              Hungarian Translation
 - sonny, gri3fon:              Indonesian Translation
