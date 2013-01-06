@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -35,7 +36,6 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.NumberDocumentFilter;
 import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
-import org.fife.ui.RButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
@@ -57,7 +57,7 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 	private JLabel aaHtmlKeysLabel;
 	private JTextField aaHtmlKeysField;
 	private JCheckBox foldingEnabledCB;
-	private RButton rdButton;
+	private JButton rdButton;
 
 	private static final String PROPERTY		= "Property";
 
@@ -160,7 +160,7 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 		addLeftAligned(box, foldingEnabledCB, 5);
 
 		cp.add(Box.createVerticalStrut(5));
-		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton, 5);
 

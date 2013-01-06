@@ -24,7 +24,6 @@ import javax.swing.text.Document;
 import org.fife.rtext.*;
 import org.fife.ui.FSATextField;
 import org.fife.ui.Hyperlink;
-import org.fife.ui.RButton;
 import org.fife.ui.RFileChooser;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplicationConstants;
@@ -57,7 +56,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	private JRadioButton standardCtagsRB;
 	private JRadioButton lastSelectedCtagsRB;
 	private FSATextField ctagsExecutableTextField;
-	private RButton exeBrowseButton;
+	private JButton exeBrowseButton;
 	private JCheckBox htmlToolTipCheckBox;
 
 	private RFileChooser exeFileChooser;
@@ -123,7 +122,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 		ctagsExecutableTextField.setColumns(30);
 		ctagsExecutableTextField.getDocument().addDocumentListener(this);
 		ctagsExecutableLocationLabel.setLabelFor(ctagsExecutableTextField);
-		exeBrowseButton = new RButton(sbb.getString(
+		exeBrowseButton = new JButton(sbb.getString(
 									"OptionPanel.Button.Browse"));
 		exeBrowseButton.setActionCommand("Browse");
 		exeBrowseButton.addActionListener(this);

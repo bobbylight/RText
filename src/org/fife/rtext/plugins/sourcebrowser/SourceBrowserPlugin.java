@@ -75,7 +75,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	static final String BUNDLE_NAME		=
 					"org.fife.rtext.plugins.sourcebrowser.SourceBrowser";
 
-	private static final String VERSION_STRING	= "2.0.5.1";
+	private static final String VERSION_STRING	= "2.0.6";
 
 	private static final String VIEW_SB_ACTION	= "ViewSourceBrowserAction";
 

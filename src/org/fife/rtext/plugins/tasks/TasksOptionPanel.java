@@ -20,6 +20,7 @@ import java.awt.event.ItemListener;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -35,7 +36,6 @@ import javax.swing.text.PlainDocument;
 import org.fife.rtext.RText;
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.PickyDocumentFilter;
-import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
@@ -128,7 +128,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 		table.setRowHandler(new IdRowHandler());
 		contentPane.add(table);
 
-		RButton defaultsButton = new RButton(
+		JButton defaultsButton = new JButton(
 								plugin.getString("Options.RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
@@ -291,7 +291,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 						implements ActionListener, DocumentListener {
 
 		private JTextField idField;
-		private RButton okButton;
+		private JButton okButton;
 		private boolean accepted;
 
 		public IdentifierDialog(JDialog parent) {
@@ -331,11 +331,11 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 
 			JPanel buttonPanel = new JPanel();
 			temp = new JPanel(new GridLayout(1,2, 5,5));
-			okButton = new RButton(plugin.getString("OK"));
+			okButton = new JButton(plugin.getString("OK"));
 			okButton.setActionCommand("OK");
 			okButton.addActionListener(this);
 			temp.add(okButton);
-			RButton cancelButton = new RButton(plugin.getString("Cancel"));
+			JButton cancelButton = new JButton(plugin.getString("Cancel"));
 			cancelButton.setActionCommand("Cancel");
 			cancelButton.addActionListener(this);
 			temp.add(cancelButton);

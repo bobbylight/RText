@@ -83,7 +83,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	private JCheckBox showTabLinesCheckBox;
 	private RColorSwatchesButton tabLineColorButton;
 
-	private RButton restoreDefaultsButton;
+	private JButton restoreDefaultsButton;
 
 	private static final String PROPERTY		= "property";
 
@@ -281,7 +281,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 		topPanel.add(bigOtherPanel);
 
-		restoreDefaultsButton = new RButton(msg.getString("RestoreDefaults"));
+		restoreDefaultsButton = new JButton(msg.getString("RestoreDefaults"));
 		restoreDefaultsButton.setActionCommand("RestoreDefaults");
 		restoreDefaultsButton.addActionListener(this);
 		addLeftAligned(topPanel, restoreDefaultsButton);

@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -26,7 +27,6 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 
-import org.fife.ui.RButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 
@@ -152,7 +152,7 @@ class OptionsPanel extends PluginOptionsDialogPanel implements ActionListener {
 		cp.add(temp);
 		cp.add(Box.createVerticalStrut(5));
 
-		RButton defaultsButton = new RButton(
+		JButton defaultsButton = new JButton(
 							msg.getString("Options.RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);

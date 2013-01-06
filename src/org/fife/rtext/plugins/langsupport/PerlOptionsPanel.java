@@ -43,7 +43,6 @@ import org.fife.rtext.RTextEditorPane;
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.FSATextField;
 import org.fife.ui.OptionsDialogPanel;
-import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
 import org.fife.ui.modifiabletable.AbstractRowHandler;
@@ -71,12 +70,12 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	private JCheckBox foldingEnabledCB;
 	private JLabel installLocLabel;
 	private FSATextField installLocField;
-	private RButton installBrowseButton;
+	private JButton installBrowseButton;
 	private JCheckBox warningsCB;
 	private JCheckBox taintModeCB;
 	private JCheckBox overridePerl5LibCB;
 	private ModifiableTable perl5Table;
-	private RButton rdButton;
+	private JButton rdButton;
 
 	private static final String PERL5LIB		= "PERL5LIB";
 	private static final String PROPERTY		= "Property";
@@ -161,7 +160,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		installLocField = new FSATextField(true, "");
 		installLocField.getDocument().addDocumentListener(listener);
 		installLocLabel.setLabelFor(installLocField);
-		installBrowseButton = new RButton(msg.getString("Browse"));
+		installBrowseButton = new JButton(msg.getString("Browse"));
 		installBrowseButton.addActionListener(listener);
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(installLocLabel, BorderLayout.LINE_START);
@@ -208,7 +207,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 
 		cp.add(Box.createVerticalStrut(10));
 
-		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton, 5);
 
@@ -634,10 +633,10 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			JPanel buttonPanel = new JPanel();
 			buttonPanel.setBorder(BorderFactory.createEmptyBorder(5,5,0,5));
 			temp = new JPanel(new GridLayout(1,2, 5,5));
-			okButton = new RButton(Plugin.msg.getString("Options.General.OK"));
+			okButton = new JButton(Plugin.msg.getString("Options.General.OK"));
 			okButton.addActionListener(this);
 			temp.add(okButton);
-			cancelButton = new RButton(Plugin.msg.
+			cancelButton = new JButton(Plugin.msg.
 										getString("Options.General.Cancel"));
 			cancelButton.addActionListener(this);
 			temp.add(cancelButton);

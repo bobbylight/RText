@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -30,7 +31,6 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.SyntaxFilters;
 import org.fife.ui.OptionsDialogPanel;
-import org.fife.ui.RButton;
 import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.modifiabletable.*;
@@ -107,7 +107,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 //		box.add(Box.createVerticalGlue());
 		bottomPanel.add(box, BorderLayout.NORTH);
 		
-		RButton defaultsButton = new RButton(msg.getString("RestoreDefaults"));
+		JButton defaultsButton = new JButton(msg.getString("RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
 		temp = new JPanel(new BorderLayout());

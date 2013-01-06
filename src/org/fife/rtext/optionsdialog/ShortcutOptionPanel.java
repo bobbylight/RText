@@ -84,7 +84,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 		table.setPreferredScrollableViewportSize(new Dimension(300,300));
 		contentPane.add(shortcutTable);
 
-		RButton defButton = new RButton(msg.getString("RestoreDefaults"));
+		JButton defButton = new JButton(msg.getString("RestoreDefaults"));
 		defButton.setActionCommand("RestoreDefaults");
 		defButton.addActionListener(this);
 		JPanel temp = new JPanel(new BorderLayout());

@@ -20,6 +20,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ResourceBundle;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -34,7 +35,6 @@ import javax.swing.event.ChangeListener;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
-import org.fife.ui.RButton;
 import org.fife.ui.RColorButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
@@ -142,7 +142,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		topPanel.add(createSecondaryLanguagesPanel(msg, o));
 		topPanel.add(Box.createVerticalStrut(10));
 
-		RButton rdButton = new RButton(msg.getString("RestoreDefaults"));
+		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
 		rdButton.setActionCommand("RestoreDefaults");
 		rdButton.addActionListener(this);
 		addLeftAligned(topPanel, rdButton);

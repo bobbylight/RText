@@ -46,7 +46,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import org.fife.ui.ImagePreviewPane;
-import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.RFileChooser;
 import org.fife.ui.UIUtil;
@@ -138,7 +137,7 @@ class BackgroundDialog extends JDialog implements ActionListener {
 		colorButton = UIUtil.newRadio(msg, "Color", bg, this, true);
 		colorButton.setActionCommand("ColorRadioButton");
 
-		colorBrowseButton = new RButton(msg.getString("BrowseColors"));
+		colorBrowseButton = new JButton(msg.getString("BrowseColors"));
 		colorBrowseButton.setActionCommand("BrowseColors");
 		colorBrowseButton.addActionListener(this);
 		colorBrowseButton.setEnabled(true);
@@ -146,7 +145,7 @@ class BackgroundDialog extends JDialog implements ActionListener {
 		imageButton = UIUtil.newRadio(msg, "Image", bg, this);
 		imageButton.setActionCommand("ImageRadioButton");
 
-		imageBrowseButton = new RButton(msg.getString("BrowseImages"));
+		imageBrowseButton = new JButton(msg.getString("BrowseImages"));
 		imageBrowseButton.setActionCommand("BrowseImages");
 		imageBrowseButton.addActionListener(this);
 		imageBrowseButton.setEnabled(false);

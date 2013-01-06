@@ -26,6 +26,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -52,7 +53,6 @@ import org.fife.rtext.RTextUtilities;
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.FSATextField;
 import org.fife.ui.MenuButton;
-import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -278,7 +278,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		JLabel programLabel = new JLabel(msg.getString("Program"));
 		programField = new FSATextField();
 		JPanel programFieldPanel = RTextUtilities.createAssistancePanel(programField, null);
-		RButton programBrowseButton = new RButton(msg.getString("Browse"));
+		JButton programBrowseButton = new JButton(msg.getString("Browse"));
 		programBrowseButton.setActionCommand("BrowseProgram");
 		programBrowseButton.addActionListener(this);
 		JLabel dirLabel = new JLabel(msg.getString("Directory"));
@@ -292,7 +292,7 @@ ac.install(dirField);
 		AssistanceIconPanel aip = new AssistanceIconPanel(dirField);
 		aip.setAssistanceEnabled(AbstractSearchDialog.getContentAssistImage());
 		JPanel dirFieldPanel = RTextUtilities.createAssistancePanel(dirField, aip);
-		RButton dirBrowseButton = UIUtil.newTabbedPaneButton(msg.getString("Browse"));
+		JButton dirBrowseButton = UIUtil.newTabbedPaneButton(msg.getString("Browse"));
 		dirBrowseButton.setActionCommand("BrowseDir");
 		dirBrowseButton.addActionListener(this);
 		JLabel shortcutLabel = new JLabel(msg.getString("Shortcut"));
@@ -359,11 +359,11 @@ ac.install(dirField);
 
 		JPanel buttonPanel = new JPanel();
 		temp = new JPanel(new GridLayout(1,2, 5,5));
-		RButton okButton = new RButton(msg.getString("OK"));
+		JButton okButton = new JButton(msg.getString("OK"));
 		okButton.setActionCommand("OK");
 		okButton.addActionListener(this);
 		temp.add(okButton);
-		RButton cancelButton = UIUtil.newTabbedPaneButton(msg.getString("Cancel"));
+		JButton cancelButton = UIUtil.newTabbedPaneButton(msg.getString("Cancel"));
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(this);
 		temp.add(cancelButton);
@@ -517,7 +517,7 @@ ac.install(dirField);
 									DocumentListener {
 
 		private JTextField argField;
-		private RButton okButton;
+		private JButton okButton;
 		private String arg;
 
 		public ArgDialog(JDialog parent) {
@@ -565,12 +565,12 @@ ac.install(dirField);
 
 			temp = new JPanel();
 			JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,5));
-			okButton = new RButton(msg.getString("OK"));
+			okButton = new JButton(msg.getString("OK"));
 			okButton.setEnabled(false);
 			okButton.setActionCommand("OK");
 			okButton.addActionListener(this);
 			buttonPanel.add(okButton);
-			RButton cancelButton = new RButton(msg.getString("Cancel"));
+			JButton cancelButton = new JButton(msg.getString("Cancel"));
 			cancelButton.setActionCommand("Cancel");
 			cancelButton.addActionListener(this);
 			buttonPanel.add(cancelButton);
@@ -647,7 +647,7 @@ ac.install(dirField);
 
 		private JTextField nameField;
 		private JTextField valueField;
-		private RButton okButton;
+		private JButton okButton;
 		private boolean escaped;
 
 		public EnvVarDialog(JDialog parent) {
@@ -706,12 +706,12 @@ ac.install(dirField);
 
 			temp = new JPanel();
 			JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,5));
-			okButton = new RButton(msg.getString("OK"));
+			okButton = new JButton(msg.getString("OK"));
 			okButton.setEnabled(false);
 			okButton.setActionCommand("OK");
 			okButton.addActionListener(this);
 			buttonPanel.add(okButton);
-			RButton cancelButton = new RButton(msg.getString("Cancel"));
+			JButton cancelButton = new JButton(msg.getString("Cancel"));
 			cancelButton.setActionCommand("Cancel");
 			cancelButton.addActionListener(this);
 			buttonPanel.add(cancelButton);

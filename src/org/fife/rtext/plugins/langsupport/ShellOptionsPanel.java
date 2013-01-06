@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
@@ -28,7 +29,6 @@ import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.sh.ShellLanguageSupport;
 import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
-import org.fife.ui.RButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
@@ -45,7 +45,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 	private JCheckBox enabledCB;
 	private JCheckBox showDescWindowCB;
 	private JCheckBox useSystemManCB;
-	private RButton rdButton;
+	private JButton rdButton;
 
 	private static final String PROPERTY		= "Property";
 
@@ -98,7 +98,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 		box2.add(Box.createVerticalGlue());
 
 		cp.add(Box.createVerticalStrut(5));
-		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton, 5);
 

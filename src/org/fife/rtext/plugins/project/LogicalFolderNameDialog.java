@@ -21,6 +21,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -35,7 +36,6 @@ import org.fife.rsta.ui.UIUtil;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.tree.LogicalFolderProjectEntryTreeNode;
 import org.fife.rtext.plugins.project.tree.NameChecker;
-import org.fife.ui.RButton;
 import org.fife.ui.SelectableLabel;
 
 
@@ -52,8 +52,8 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 	private DecorativeIconPanel nameDIP;
 	private NameChecker nameChecker;
 	private String logicalFolderName;
-	private RButton okButton;
-	private RButton cancelButton;
+	private JButton okButton;
+	private JButton cancelButton;
 
 
 	public LogicalFolderNameDialog(Frame parent, String prevName,
@@ -101,9 +101,9 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 	 * @param key The key for the button text and mnemonic.
 	 * @return The button.
 	 */
-	private RButton createButton(String key) {
+	private JButton createButton(String key) {
 		key = "Button." + key;
-		RButton button = new RButton(Messages.getString(key));
+		JButton button = new JButton(Messages.getString(key));
 		button.setMnemonic(Messages.getMnemonic(key + ".Mnemonic"));
 		return button;
 	}

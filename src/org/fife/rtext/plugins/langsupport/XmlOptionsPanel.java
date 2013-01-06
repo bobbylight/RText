@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 
@@ -25,7 +26,6 @@ import org.fife.rsta.ac.xml.XmlLanguageSupport;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
-import org.fife.ui.RButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.modes.XMLTokenMaker;
@@ -46,7 +46,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 	private JCheckBox codeCompletionEnabledCB;
 	private JCheckBox autoCompleteClosingTagsCB;
 	private JCheckBox foldingEnabledCB;
-	private RButton rdButton;
+	private JButton rdButton;
 
 	private static final String PROPERTY		= "property";
 
@@ -91,7 +91,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 		addLeftAligned(box, foldingEnabledCB, 5);
 
 		cp.add(Box.createVerticalStrut(5));
-		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(this);
 		addLeftAligned(cp, rdButton, 5);
 

@@ -10,7 +10,6 @@
 package org.fife.rtext.plugins.project;
 
 import java.net.URL;
-
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
@@ -31,8 +30,8 @@ public abstract class BaseAction extends AbstractAction {
 
 	protected BaseAction(String keyRoot, String image) {
 		putValue(NAME, Messages.getString(keyRoot));
-		String temp = Messages.getString(keyRoot + ".Mnemonic");
-		putValue(MNEMONIC_KEY, new Integer(temp.charAt(0)));
+		int mnemonic = Messages.getMnemonic(keyRoot + ".Mnemonic");
+		putValue(MNEMONIC_KEY, new Integer(mnemonic));
 		if (image!=null) {
 			URL url = getClass().getResource(image);
 			putValue(SMALL_ICON, new ImageIcon(url));

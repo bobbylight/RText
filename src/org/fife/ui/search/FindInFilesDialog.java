@@ -26,7 +26,6 @@ import org.fife.rsta.ui.AssistanceIconPanel;
 import org.fife.rsta.ui.RComboBoxModel;
 import org.fife.rsta.ui.search.AbstractSearchDialog;
 import org.fife.ui.FSATextField;
-import org.fife.ui.RButton;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.StatusBar;
 import org.fife.ui.UIUtil;
@@ -162,15 +161,15 @@ public class FindInFilesDialog extends AbstractSearchDialog
 
 		// Make a panel containing the buttons.
 		JPanel rightPanel2 = new JPanel(new GridLayout(3,1, 5,5));
-		findButton = new RButton(getString("Find"));
+		findButton = new JButton(getString("Find"));
 		findButton.setMnemonic((int)getString("FindMnemonic").charAt(0));
 		findButton.setActionCommand("FindInFiles");
 		findButton.addActionListener(this);
-		browseButton = new RButton(getString2("Browse"));
+		browseButton = new JButton(getString2("Browse"));
 		browseButton.setMnemonic((int)getString2("BrowseMnemonic").charAt(0));
 		browseButton.setActionCommand("Browse");
 		browseButton.addActionListener(this);
-		cancelButton = new RButton(getString2("Close"));
+		cancelButton = new JButton(getString2("Close"));
 		cancelButton.setMnemonic((int)getString2("CloseMnemonic").charAt(0));
 		cancelButton.setActionCommand("Close");
 		cancelButton.addActionListener(this);

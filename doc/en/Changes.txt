@@ -2,6 +2,12 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+2.0.6
+---------------------
+   - Added syntax highlighting and code folding for JSON files.
+   - Updated xxx
+   
+   
 2.0.5.1 (12/20/2012):
 ---------------------
    - Updated to RSTA 2.0.5.1; this fixes a keyboard bug experienced with

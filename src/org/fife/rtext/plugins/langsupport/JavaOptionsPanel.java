@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -50,7 +51,6 @@ import org.fife.rtext.RText;
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.FSATextField;
 import org.fife.ui.OptionsDialogPanel;
-import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
 import org.fife.ui.modifiabletable.AbstractRowHandler;
@@ -76,7 +76,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	private ModifiableTable bpt;
 	private DefaultTableModel model;
 	private JarRowHandler rowHandler;
-	private RButton addJREButton;
+	private JButton addJREButton;
 	private JCheckBox buildPathModsCB;
 	private JCheckBox autoActivateCB;
 	private JLabel aaDelayLabel;
@@ -85,7 +85,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	private JTextField aaJavaKeysField;
 	private JLabel aaDocKeysLabel;
 	private JTextField aaDocKeysField;
-	private RButton rdButton;
+	private JButton rdButton;
 
 	private static final String PROPERTY		= "Property";
 
@@ -212,7 +212,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		box.add(bpt);
 		box.add(Box.createVerticalStrut(5));
 
-		addJREButton = new RButton(msg.getString("Options.Java.AddJRE"));
+		addJREButton = new JButton(msg.getString("Options.Java.AddJRE"));
 		addJREButton.addActionListener(listener);
 		addLeftAligned(box, addJREButton, 5);
 
@@ -221,7 +221,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		box.add(Box.createVerticalGlue());
 
 		cp.add(Box.createVerticalStrut(5));
-		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton, 5);
 
@@ -399,8 +399,8 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 		private FSATextField jarField;
 		private FSATextField sourceField;
-		private RButton okButton;
-		private RButton cancelButton;
+		private JButton okButton;
+		private JButton cancelButton;
 		private Object[] newRowInfo;
 
 		private RowHandlerDialog(JDialog parent, Object[] old) {
@@ -438,10 +438,10 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 			JPanel buttonPanel = new JPanel();
 			JPanel temp = new JPanel(new GridLayout(1,2, 5,5));
-			okButton = new RButton(Plugin.msg.getString("Options.General.OK"));
+			okButton = new JButton(Plugin.msg.getString("Options.General.OK"));
 			okButton.addActionListener(this);
 			temp.add(okButton);
-			cancelButton = new RButton(Plugin.msg.
+			cancelButton = new JButton(Plugin.msg.
 								getString("Options.General.Cancel"));
 			cancelButton.addActionListener(this);
 			temp.add(cancelButton);

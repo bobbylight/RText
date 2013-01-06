@@ -24,6 +24,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -36,7 +37,6 @@ import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.model.FolderFilterInfo;
 import org.fife.rtext.plugins.project.model.FolderProjectEntry;
 import org.fife.ui.EscapableDialog;
-import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.SelectableLabel;
@@ -53,9 +53,9 @@ import org.fife.ui.rtextfilechooser.DirectoryTree;
 public class NewFolderDialog extends EscapableDialog {
 
 	private SelectableLabel descLabel;
-	private RButton backButton;
-	private RButton okButton;
-	private RButton cancelButton;
+	private JButton backButton;
+	private JButton okButton;
+	private JButton cancelButton;
 	private JPanel cp;
 	private CardLayout layout;
 	private int panelIndex;
@@ -105,8 +105,8 @@ public class NewFolderDialog extends EscapableDialog {
 	}
 
 
-	private RButton createButton(String keyRoot) {
-		RButton button = new RButton(Messages.getString(keyRoot));
+	private JButton createButton(String keyRoot) {
+		JButton button = new JButton(Messages.getString(keyRoot));
 		button.setMnemonic(Messages.getMnemonic(keyRoot + ".Mnemonic"));
 		return button;
 	}

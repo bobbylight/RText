@@ -46,8 +46,6 @@ public class ActionFactory implements RTextActionInfo {
 	 */
 	public static void addActions(RText rtext, RTextPreferences prefs) {
 
-		// We use a different resource bundle so we don't needlessly keep
-		// all of this stuff in memory in the main RText bundle.
 		ResourceBundle msg = ResourceBundle.getBundle(
 									"org.fife.rtext.actions.Actions");
 

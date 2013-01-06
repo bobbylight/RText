@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -39,7 +40,6 @@ import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.SpellingSupport;
 import org.fife.ui.FSATextField;
 import org.fife.ui.OptionsDialogPanel;
-import org.fife.ui.RButton;
 import org.fife.ui.RColorButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.SelectableLabel;
@@ -62,7 +62,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	private JLabel userDictLabel;
 	private FSATextField userDictField;
 	private SelectableLabel userDictDescField;
-	private RButton userDictBrowse;
+	private JButton userDictBrowse;
 	private RTextFileChooser chooser;
 	private JLabel colorLabel;
 	private RColorSwatchesButton spellingColorButton;
@@ -121,7 +121,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		userDictLabel = new JLabel(msg.getString("UserDictionary"));
 		userDictField = new FSATextField(35);
 		userDictField.getDocument().addDocumentListener(listener);
-		userDictBrowse = new RButton(msg.getString("Browse"));
+		userDictBrowse = new JButton(msg.getString("Browse"));
 		userDictBrowse.setActionCommand("BrowseUserDictionary");
 		userDictBrowse.addActionListener(listener);
 		JPanel userDictFieldPanel = new JPanel(new BorderLayout());
@@ -173,7 +173,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		addLeftAligned(temp, viewSpellingWindowCB);
 		temp.add(Box.createVerticalStrut(5));
 
-		RButton rdButton = new RButton(msg.getString("RestoreDefaults"));
+		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
 		rdButton.setActionCommand("RestoreDefaults");
 		rdButton.addActionListener(listener);
 		addLeftAligned(temp, rdButton);

@@ -31,7 +31,6 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.OptionsDialogPanel;
-import org.fife.ui.RButton;
 import org.fife.ui.SelectableLabel;
 import org.fife.ui.SpecialValueComboBox;
 import org.fife.ui.UIUtil;
@@ -50,7 +49,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 				implements ActionListener, DocumentListener, ChangeListener {
 
 	private JTextField dirField;
-	private RButton dirBrowseButton;
+	private JButton dirBrowseButton;
 	private SpecialValueComboBox terminatorCombo;
 	private JComboBox encCombo;
 	private JCheckBox utf8BomCB;
@@ -107,7 +106,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		dirField = new JTextField(40);
 		dirField.getDocument().addDocumentListener(this);
 		dirLabel.setLabelFor(dirField);
-		dirBrowseButton = new RButton(msg.getString("Browse"));
+		dirBrowseButton = new JButton(msg.getString("Browse"));
 		dirBrowseButton.setActionCommand("Browse");
 		dirBrowseButton.addActionListener(this);
 		if (orientation.isLeftToRight()) {
@@ -257,7 +256,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		expPanel.add(Box.createVerticalGlue());
 		topPanel.add(expPanel);
 
-		RButton defaultsButton = new RButton(msg.getString("RestoreDefaults"));
+		JButton defaultsButton = new JButton(msg.getString("RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
 		temp = new JPanel(new BorderLayout());

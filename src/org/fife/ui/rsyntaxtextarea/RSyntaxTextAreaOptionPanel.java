@@ -23,7 +23,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import org.fife.ui.FontSelector;
-import org.fife.ui.RButton;
 import org.fife.ui.RListSelectionModel;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
@@ -56,7 +55,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 	private FontSelector mainFontSelector;
 	private JTextField mainBackgroundField;
-	private RButton mainBackgroundButton;
+	private JButton mainBackgroundButton;
 	private BackgroundDialog backgroundDialog;
 	private Object background;
 	private String bgImageFileName; // null if background is a color.
@@ -121,7 +120,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		JLabel bgLabel = new JLabel(msg.getString("Background"));
 		mainBackgroundField = new JTextField(20);
 		mainBackgroundField.setEditable(false);
-		mainBackgroundButton = new RButton(msg.getString("Change"));
+		mainBackgroundButton = new JButton(msg.getString("Change"));
 		mainBackgroundButton.setActionCommand("BackgroundButton");
 		mainBackgroundButton.addActionListener(this);
 		bgLabel.setLabelFor(mainBackgroundButton);
@@ -255,7 +254,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		temp.add(Box.createVerticalStrut(3));
 
 		Box rdPanel = createHorizontalBox();
-		RButton rdButton = new RButton(msg.getString("RestoreDefaults"));
+		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
 		rdButton.setActionCommand("RestoreDefaults");
 		rdButton.addActionListener(this);
 		rdPanel.add(rdButton);

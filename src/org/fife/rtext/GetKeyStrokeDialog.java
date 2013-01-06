@@ -17,13 +17,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
-import org.fife.ui.RButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
 
@@ -67,11 +67,11 @@ public class GetKeyStrokeDialog extends JDialog implements ActionListener {
 		temp.add(textField);
 		contentPane.add(temp);
 		temp = new JPanel(new GridLayout(1,2, 5,5));
-		RButton ok = new RButton(msg.getString("OKButtonLabel"));
+		JButton ok = new JButton(msg.getString("OKButtonLabel"));
 		ok.setActionCommand("OK");
 		ok.addActionListener(this);
 		temp.add(ok);
-		RButton cancel = new RButton(msg.getString("Cancel"));
+		JButton cancel = new JButton(msg.getString("Cancel"));
 		cancel.setActionCommand("Cancel");
 		cancel.addActionListener(this);
 		temp.add(cancel);

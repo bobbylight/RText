@@ -23,6 +23,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -32,7 +33,6 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.ui.FontSelector;
 import org.fife.ui.OptionsDialogPanel;
-import org.fife.ui.RButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
 
@@ -133,7 +133,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 		topPanel.add(Box.createVerticalStrut(5));
 
 		temp = new Box(BoxLayout.LINE_AXIS);
-		RButton restoreDefaultsButton = new RButton(
+		JButton restoreDefaultsButton = new JButton(
 									msg.getString("RestoreDefaults"));
 		restoreDefaultsButton.setActionCommand("RestoreDefaults");
 		restoreDefaultsButton.addActionListener(this);

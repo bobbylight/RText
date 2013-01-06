@@ -20,6 +20,7 @@ import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
@@ -28,7 +29,6 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.event.HyperlinkEvent.EventType;
 
 import org.fife.rsta.ac.java.JavaCellRenderer;
-import org.fife.ui.RButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
@@ -51,7 +51,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 
 	private JCheckBox altColorCB;
 	private RColorSwatchesButton altColorButton;
-	private RButton rdButton;
+	private JButton rdButton;
 
 	private static final Color DEFAULT_ALT_ROW_COLOR	= new Color(0xf4f4f4);
 	private static final String PROPERTY				= "Property";
@@ -99,7 +99,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 		cp.add(temp);
 		cp.add(Box.createVerticalStrut(10));
 
-		rdButton = new RButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton, 5);
 

@@ -23,6 +23,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -30,7 +31,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
-import org.fife.ui.RButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
@@ -56,7 +56,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	private RColorSwatchesButton stderrButton;
 	private RColorSwatchesButton promptButton;
 	private RColorSwatchesButton exceptionsButton;
-	private RButton defaultsButton;
+	private JButton defaultsButton;
 
 	private static final String PROPERTY = "Property";
 
@@ -89,7 +89,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		topPanel.add(Box.createVerticalStrut(5));
 
 		// Add a "Restore Defaults" button
-		defaultsButton = new RButton(plugin.getString("RestoreDefaults"));
+		defaultsButton = new JButton(plugin.getString("RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
 		JPanel temp = new JPanel(new BorderLayout());
