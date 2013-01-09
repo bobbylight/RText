@@ -11,7 +11,6 @@
 package org.fife.rtext.optionsdialog;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -26,7 +25,6 @@ import javax.swing.table.*;
 import org.fife.rtext.GetKeyStrokeDialog;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextActionInfo;
-import org.fife.rtext.RTextUtilities;
 import org.fife.ui.*;
 import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.modifiabletable.*;
@@ -80,7 +78,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 		shortcutTable.setRowHandler(new ShortcutTableRowHandler());
 		JTable table = shortcutTable.getTable();
 		table.getColumn(msg.getString("OptSCCol2")).setCellRenderer(
-									new ShortcutCellRenderer());
+									new KeyStrokeCellRenderer());
 		table.setPreferredScrollableViewportSize(new Dimension(300,300));
 		contentPane.add(shortcutTable);
 
@@ -287,24 +285,6 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 			if (ksDialog!=null) {
 				SwingUtilities.updateComponentTreeUI(ksDialog);
 			}
-		}
-
-	}
-
-
-	/**
-	 * Renderer for shortcuts in the JTable.
-	 */
-	static class ShortcutCellRenderer extends DefaultTableCellRenderer {
-
-		public Component getTableCellRendererComponent(JTable table,
-								Object value, boolean isSelected,
-								boolean hasFocus, int row, int column) {
-			super.getTableCellRendererComponent(table, value, isSelected,
-										 hasFocus, row, column);
-			setText(RTextUtilities.getPrettyStringFor((KeyStroke)value));
-			setComponentOrientation(table.getComponentOrientation());
-			return this;
 		}
 
 	}

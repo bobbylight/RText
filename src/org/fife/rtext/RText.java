@@ -449,7 +449,8 @@ public class RText extends AbstractPluggableGUIApplication
 				if (chooser!=null) {
 					RTextUtilities.saveFileChooserFavorites(this);
 				}
-				System.exit(0);				// And quit.
+				AWTExceptionHandler.shutdown();
+				System.exit(0);
 			}
 
 			// If there will still be some RText instances running, just
@@ -1061,11 +1062,6 @@ public class RText extends AbstractPluggableGUIApplication
 
 		StatusBar statusBar = (StatusBar)getStatusBar();
 		mainView.addPropertyChangeListener(statusBar);
-
-//		// Initialize any actions.
-// NOW DONE IN AbstractGUIApplication
-//		splashScreen.updateStatus(getString("CreatingActions"), 30);
-//		createActions(properties);
 
 		loadPossibleIconGroups();
 		try {

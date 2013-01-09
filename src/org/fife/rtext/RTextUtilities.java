@@ -613,30 +613,6 @@ public class RTextUtilities {
 
 
 	/**
-	 * Returns a pretty string value for a KeyStroke, suitable for display as
-	 * the keystroke's value in a GUI.
-	 *
-	 * @param keyStroke The keystroke.
-	 * @return The string value of the keystroke.
-	 */
-	public static String getPrettyStringFor(KeyStroke keyStroke) {
-
-		if (keyStroke==null)
-			return "";
-
-		String string = KeyEvent.getKeyModifiersText(keyStroke.getModifiers());
-		if (string!=null && string.length()>0)
-			string += "+";
-		int keyCode = keyStroke.getKeyCode();
-		if (keyCode!=KeyEvent.VK_SHIFT && keyCode!=KeyEvent.VK_CONTROL &&
-			keyCode!=KeyEvent.VK_ALT && keyCode!=KeyEvent.VK_META)
-			string += KeyEvent.getKeyText(keyCode);
-		return  string;
-
-	}
-
-
-	/**
 	 * Converts a <code>String</code> representing a wildcard file filter into
 	 * a <code>Pattern</code> containing a regular expression good for
 	 * finding files that match the wildcard expression.<p>

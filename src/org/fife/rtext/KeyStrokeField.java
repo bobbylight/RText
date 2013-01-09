@@ -15,6 +15,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
+import org.fife.ui.UIUtil;
+
 
 
 /**
@@ -65,7 +67,7 @@ public class KeyStrokeField extends JTextField {
 
 	public void setKeyStroke(KeyStroke ks) {
 		stroke = ks;
-		setText(RTextUtilities.getPrettyStringFor(stroke));
+		setText(UIUtil.getPrettyStringFor(stroke));
 	}
 
 

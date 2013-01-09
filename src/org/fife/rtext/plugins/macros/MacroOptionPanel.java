@@ -29,10 +29,10 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import org.fife.rtext.KeyStrokeCellRenderer;
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.macros.NewMacroDialog;
 import org.fife.rtext.plugins.macros.Macro;
+import org.fife.ui.KeyStrokeCellRenderer;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.modifiabletable.AbstractRowHandler;

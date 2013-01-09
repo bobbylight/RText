@@ -11,6 +11,7 @@ package org.fife.rtext;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,18 +33,23 @@ import java.util.logging.Logger;
 // constructor for the EDT to use it.
 public class AWTExceptionHandler {
 
-	private Logger logger;
+	private static Logger logger;
 	private FileHandler fileHandler;
 
 
 	public AWTExceptionHandler() {
-		logger = Logger.getLogger("org.fife.rtext");
-		try {
-			fileHandler = new FileHandler(
-					"%h/uncaughtRTextAwtExceptions.log", true);
-			logger.addHandler(fileHandler);
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		// This code is rubbish, but we don't instantiate directly.  We should
+		// never actually have this constructor called twice, but just to make
+		// sure...
+		if (logger!=null) {
+			logger = Logger.getLogger("org.fife.rtext");
+			try {
+				fileHandler = new FileHandler(
+						"%h/uncaughtRTextAwtExceptions.log", true);
+				logger.addHandler(fileHandler);
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
 		}
 	}
 
@@ -56,7 +62,9 @@ public class AWTExceptionHandler {
 	public void handle(Throwable t) {
 		try {
 			t.printStackTrace();
-			logger.log(Level.SEVERE, "Uncaught exception in EDT", t);
+			if (logger!=null) {
+				logger.log(Level.SEVERE, "Uncaught exception in EDT", t);
+			}
 		} catch (Throwable t2) {
 			// don't let the exception get thrown out, will cause infinite
 			// looping!
@@ -70,6 +78,22 @@ public class AWTExceptionHandler {
 	public static void register() {
 		System.setProperty("sun.awt.exception.handler",
 								AWTExceptionHandler.class.getName());
+	}
+
+
+	/**
+	 * Cleans up this exception handler.  This should be called when the
+	 * application shuts down.
+	 */
+	public static void shutdown() {
+		if (logger!=null) {
+			// Manually close FileHandlers to remove .lck files.
+			Handler[] handlers = logger.getHandlers();
+			for (int i=0; i<handlers.length; i++) {
+				handlers[i].close();
+			}
+			logger = null;
+		}
 	}
 
 

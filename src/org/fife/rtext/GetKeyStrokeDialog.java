@@ -137,7 +137,7 @@ public class GetKeyStrokeDialog extends JDialog implements ActionListener {
 	 */
 	public void setKeyStroke(KeyStroke stroke) {
 		this.stroke = stroke;
-		textField.setText(RTextUtilities.getPrettyStringFor(stroke));
+		textField.setText(UIUtil.getPrettyStringFor(stroke));
 	}
 
 

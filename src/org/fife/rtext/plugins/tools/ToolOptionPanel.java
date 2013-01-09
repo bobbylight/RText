@@ -33,9 +33,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import org.fife.rtext.KeyStrokeCellRenderer;
 import org.fife.rtext.plugins.tools.NewToolDialog;
 import org.fife.rtext.plugins.tools.Tool;
+import org.fife.ui.KeyStrokeCellRenderer;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplicationConstants;
 import org.fife.ui.app.PluginOptionsDialogPanel;
