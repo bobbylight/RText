@@ -80,6 +80,7 @@ public interface RTextActionInfo {
 	 * action names MUST be kept in-synch with the default accelerators
 	 * array below.
 	 */
+	// TODO: Remove me; should no longer be needed with ActionRegistry
 	public static final String[] actionNames = {
 		NEW_ACTION,
 		OPEN_ACTION,
@@ -141,6 +142,7 @@ public interface RTextActionInfo {
 	 * array MUST be kept in-synch with the actionNames array
 	 * above.
 	 */
+	// TODO: Remove me; should no longer be needed with ActionRegistry
 	public static final KeyStroke[] defaultActionAccelerators = {
 		KeyStroke.getKeyStroke(KeyEvent.VK_N, defaultModifier),
 		KeyStroke.getKeyStroke(KeyEvent.VK_O, defaultModifier),
