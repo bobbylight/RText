@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import org.fife.rtext.GetKeyStrokeDialog;
+import org.fife.ui.GetKeyStrokeDialog;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextActionInfo;
 import org.fife.ui.*;
@@ -259,7 +259,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 			KeyStroke keyStroke = (KeyStroke)oldData[1];
 			String action = (String)oldData[0];
 			if (ksDialog==null) {
-				ksDialog = new GetKeyStrokeDialog(rtext, null);
+				ksDialog = new GetKeyStrokeDialog(getOptionsDialog(), null);
 			}
 			ksDialog.setKeyStroke(keyStroke);
 			ksDialog.setLocationRelativeTo(ShortcutOptionPanel.this);

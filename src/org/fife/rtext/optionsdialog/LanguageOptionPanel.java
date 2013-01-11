@@ -396,12 +396,9 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	static class CellRenderer extends DefaultListCellRenderer {
 
 		public Component getListCellRendererComponent(JList list,
-										Object value,
-										int index,
-										boolean isSelected,
-										boolean cellHasFocus) {
+				Object value, int index, boolean selected, boolean focused) {
 			super.getListCellRendererComponent(list, value, index,
-										isSelected, cellHasFocus);
+										selected, focused);
 			IconTextInfo iti = (IconTextInfo)value;
 			setIcon(iti.getIcon());
 			setText(iti.getText());

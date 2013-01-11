@@ -37,10 +37,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.fife.rsta.ui.DecorativeIconPanel;
-import org.fife.rtext.KeyStrokeField;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.EscapableDialog;
+import org.fife.ui.KeyStrokeField;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;

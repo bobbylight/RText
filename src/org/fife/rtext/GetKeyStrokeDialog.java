@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import org.fife.ui.KeyStrokeField;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
 

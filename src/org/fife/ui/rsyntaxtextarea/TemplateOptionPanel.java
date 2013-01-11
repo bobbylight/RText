@@ -11,7 +11,6 @@
 package org.fife.ui.rsyntaxtextarea;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -30,7 +29,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.Document;
@@ -85,8 +83,6 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 					msg.getString("Template"), msg.getString("Expansion") }, 0);
 		templateTable = new ModifiableTable(tableModel);
 		JTable table = templateTable.getTable();
-		table.getColumn(msg.getString("Expansion")).
-							setCellRenderer(new ExpansionCellRenderer());
 		table.setPreferredScrollableViewportSize(new Dimension(300, 300));
 		templateTable.addModifiableTableListener(listener);
 
@@ -144,7 +140,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	 * Sets the table's contents to be the templates known by the specified
 	 * template manager.
 	 */
-	public void setTemplates(CodeTemplateManager manager) {
+	private void setTemplates(CodeTemplateManager manager) {
 		tableModel.setRowCount(0);
 		if (manager!=null) {
 			CodeTemplate[] templates = manager.getTemplates();
@@ -153,11 +149,13 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 				tableModel.addRow(new Object[] {
 					new String(templates[i].getID()),
 					// Deep copy.
-					templates[i].clone()
+					new TemplateWrapper((CodeTemplate)templates[i].clone()),
 				});
 			}
 		}
 	}
+
+
 	/**
 	 * Sets the values displayed by this panel to reflect those in the
 	 * application.  Child panels are not handled.
@@ -176,7 +174,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	 * Updates <code>RSyntaxTextArea</code>'s code template manager
 	 * with the information entered here by the user.
 	 */
-	public void updateCodeTemplateManager() {
+	private void updateCodeTemplateManager() {
 
 		CodeTemplateManager ctm = RSyntaxTextArea.getCodeTemplateManager();
 		if (ctm!=null) {
@@ -184,8 +182,8 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			CodeTemplate[] templates = new CodeTemplate[count];
 			for (int i=0; i<count; i++) {
 				// Make deep copies in case they're clicking "Apply."
-				CodeTemplate t = (CodeTemplate)tableModel.getValueAt(i, 1);
-				templates[i] = (CodeTemplate)t.clone();
+				TemplateWrapper w = (TemplateWrapper)tableModel.getValueAt(i, 1);
+				templates[i] = (CodeTemplate)w.template.clone();
 			}
 			ctm.replaceTemplates(templates);
 		}
@@ -194,35 +192,9 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 
 
 	/**
-	 * Renders an "expansion" cell for the table.  This simply paints newlines
-	 * as "\n" and tabs as "\t".
-	 */
-	private static class ExpansionCellRenderer extends DefaultTableCellRenderer{
-
-		private static final long serialVersionUID = 1L;
-
-		public Component getTableCellRendererComponent(JTable table,
-					Object value, boolean isSelected,
-					boolean hasFocus, int row, int column) 
-		{
-			super.getTableCellRendererComponent(table, value, isSelected,
-										hasFocus, row, column);
-			StaticCodeTemplate template = (StaticCodeTemplate)value;
-			String foo = template.getBeforeCaretText() +
-						template.getAfterCaretText();
-			this.setText(foo.replaceAll("\\n", "\\\\n").
-							replaceAll("\\t", "\\\\t"));
-			setComponentOrientation(table.getComponentOrientation());
-			return this;
-		}
-
-	}
-
-
-	/**
 	 * Listens for events in this option panel.
 	 */
-	class Listener implements ModifiableTableListener {
+	private class Listener implements ModifiableTableListener {
 
 		// A row was added, removed or modified in the template table.
 		public void modifiableTableChanged(ModifiableTableChangeEvent e) {
@@ -379,7 +351,8 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			else { // Modifying a row.
 				setTitle(msg.getString("ModifyTemplateTitle"));
 				setID((String)oldData[0]);
-				StaticCodeTemplate template = (StaticCodeTemplate)oldData[1];
+				TemplateWrapper wrapper = (TemplateWrapper)oldData[1];
+				StaticCodeTemplate template = (StaticCodeTemplate)wrapper.template;
 				setBeforeCaretText(template.getBeforeCaretText());
 				setAfterCaretText(template.getAfterCaretText());
 			}
@@ -388,11 +361,9 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			Object[] objs = null;
 			if (id!=null) {
 				String idString = new String(id);
-				objs = new Object[] { idString,
-						new StaticCodeTemplate(idString,
-									getBeforeCaretText(),
-									getAfterCaretText())
-				};
+				CodeTemplate template = new StaticCodeTemplate(idString,
+						getBeforeCaretText(), getAfterCaretText());
+				objs = new Object[] { idString, new TemplateWrapper(template) };
 			}
 			return objs;
 		}
@@ -456,6 +427,29 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 				}
 			}
 			return text;
+		}
+
+	}
+
+
+	/**
+	 * A wrapper around RSTA's template objects for rendering purposes.
+	 * SubstanceLookAndFeel makes it impossible to subclass Default*Renderer
+	 * and still look "right," so we instead render wrapper classes.
+	 */
+	private static class TemplateWrapper {
+
+		public CodeTemplate template;
+
+		public TemplateWrapper(CodeTemplate template) {
+			this.template = template;
+		}
+
+		public String toString() {
+			StaticCodeTemplate template = (StaticCodeTemplate)this.template;
+			String temp = template.getBeforeCaretText() +
+						template.getAfterCaretText();
+			return temp.replaceAll("\\n", "\\\\n").replaceAll("\\t", "\\\\t");
 		}
 
 	}

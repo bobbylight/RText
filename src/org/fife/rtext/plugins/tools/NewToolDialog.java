@@ -48,10 +48,10 @@ import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ui.AssistanceIconPanel;
 import org.fife.rsta.ui.search.AbstractSearchDialog;
-import org.fife.rtext.KeyStrokeField;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.EscapableDialog;
 import org.fife.ui.FSATextField;
+import org.fife.ui.KeyStrokeField;
 import org.fife.ui.MenuButton;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.UIUtil;
