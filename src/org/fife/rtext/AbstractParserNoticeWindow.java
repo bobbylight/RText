@@ -97,22 +97,10 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 			}
 		});
 
-		model2.setColumnComparator(RTextEditorPane.class, new Comparator() {	
-			public int compare(Object o1, Object o2) {
-				RTextEditorPane ta1 = (RTextEditorPane)o1;
-				RTextEditorPane ta2 = (RTextEditorPane)o2;
-				return ta1.getFileName().compareTo(ta2.getFileName());
-			}
-		});
-
 		IconTableCellRenderer itcr = new IconTableCellRenderer();
 		ComponentOrientation o = ComponentOrientation.getOrientation(getLocale());
 		itcr.applyComponentOrientation(o);
 		table.setDefaultRenderer(Icon.class, itcr);
-
-		TextAreaTableCellRenderer tatcr = new TextAreaTableCellRenderer();
-		tatcr.applyComponentOrientation(o);
-		table.setDefaultRenderer(RTextEditorPane.class, tatcr);
 
 		table.setModel(model2);
 
@@ -214,7 +202,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 					clazz = Icon.class;
 					break;
 				case 1:
-					clazz = RTextEditorPane.class;
+					clazz = TextAreaWrapper.class;
 					break;
 				case 2:
 					clazz = Integer.class;
@@ -224,7 +212,14 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 			}
 			return clazz;
 		}
-			
+
+		public void addRow(Object[] data) {
+			if (data[1] instanceof RTextEditorPane) {
+				data[1] = new TextAreaWrapper((RTextEditorPane)data[1]);
+			}
+			super.addRow(data);
+		}
+
 		public boolean isCellEditable(int row, int col) {
 			return false;
 		}
@@ -232,7 +227,8 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 		public void update(RTextEditorPane textArea, List notices) {
 			//setRowCount(0);
 			for (int i=0; i<getRowCount(); i++) {
-				RTextEditorPane textArea2 = (RTextEditorPane)getValueAt(i, 1);
+				TextAreaWrapper wrapper = (TextAreaWrapper)getValueAt(i, 1);
+				RTextEditorPane textArea2 = wrapper.textArea;
 				if (textArea2==textArea) {
 					removeRow(i);
 					i--;
@@ -267,18 +263,24 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 
 
 	/**
-	 * Renders a text area in a table cell as just the file name.
+	 * A wrapper around text areas that overrides toString() appropriately, so
+	 * we don't have to create two separate custom renderers, one for Substance
+	 * and another for all other LookAndFeels.  Substance sucks.
 	 */
-	private static class TextAreaTableCellRenderer
-					extends DefaultTableCellRenderer {
+	private static class TextAreaWrapper implements Comparable {
 
-		public Component getTableCellRendererComponent(JTable table,
-			Object value, boolean selected, boolean focus, int row, int col) {
-			super.getTableCellRendererComponent(table, value, selected, focus,
-					row, col);
-			RTextEditorPane textArea = (RTextEditorPane)value;
-			setText(textArea.getFileName());
-			return this;
+		private RTextEditorPane textArea;
+
+		public TextAreaWrapper(RTextEditorPane textArea) {
+			this.textArea = textArea;
+		}
+
+		public int compareTo(Object o) {
+			return toString().compareTo(o.toString());
+		}
+
+		public String toString() {
+			return textArea.getFileName();
 		}
 
 	}
@@ -293,8 +295,9 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 				if (row>-1) {
 					// Get values from model since columns are re-orderable.
 					TableModel model = (TableModel)table.getModel();
-					RTextEditorPane textArea =
-						(RTextEditorPane)model.getValueAt(row, 1);
+					TextAreaWrapper wrapper = (TextAreaWrapper)model.
+							getValueAt(row, 1);
+					RTextEditorPane textArea = wrapper.textArea;
 					AbstractMainView mainView = rtext.getMainView();
 					if (mainView.setSelectedTextArea(textArea)) {
 						Integer i = (Integer)model.getValueAt(row, 2);
