@@ -14,7 +14,6 @@ import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
@@ -32,11 +31,11 @@ import javax.swing.event.DocumentListener;
 import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.rsta.ui.EscapableDialog;
 import org.fife.rsta.ui.ResizableFrameContentPane;
-import org.fife.rsta.ui.UIUtil;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.tree.LogicalFolderProjectEntryTreeNode;
 import org.fife.rtext.plugins.project.tree.NameChecker;
 import org.fife.ui.SelectableLabel;
+import org.fife.ui.UIUtil;
 
 
 /**
@@ -115,12 +114,7 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 		okButton.addActionListener(l);
 		cancelButton = createButton("Cancel");
 		cancelButton.addActionListener(l);
-		JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,0));
-		buttonPanel.add(okButton);
-		buttonPanel.add(cancelButton);
-		JPanel temp = new JPanel();
-		temp.add(buttonPanel);
-		return temp;
+		return UIUtil.createButtonFooter(okButton, cancelButton);
 	}
 
 

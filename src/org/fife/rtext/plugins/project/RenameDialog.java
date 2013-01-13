@@ -11,7 +11,7 @@ package org.fife.rtext.plugins.project;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
-import java.awt.GridLayout;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -95,22 +95,17 @@ public class RenameDialog extends EscapableDialog{
 		topPanel.add(box, BorderLayout.SOUTH);
 
 		// Make a panel containing the OK and Cancel buttons.
-		JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,5));
-		//buttonPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
 		okButton = UIUtil.newButton(bundle, "OKButtonLabel", "OKButtonMnemonic");
 		okButton.setActionCommand("OK");
 		okButton.addActionListener(listener);
 		cancelButton = UIUtil.newButton(bundle, "Cancel", "CancelMnemonic");
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(listener);
-		buttonPanel.add(okButton);
-		buttonPanel.add(cancelButton);
 
 		// Put everything into a neat little package.
 		cp.add(topPanel, BorderLayout.NORTH);
-		JPanel temp = new JPanel();
-		temp.add(buttonPanel);
-		cp.add(temp, BorderLayout.SOUTH);
+		Container buttons = UIUtil.createButtonFooter(okButton, cancelButton);
+		cp.add(buttons, BorderLayout.SOUTH);
 		JRootPane rootPane = getRootPane();
 		rootPane.setDefaultButton(okButton);
 		setTitle(Messages.getString("RenameDialog.Title", type));

@@ -357,17 +357,13 @@ ac.install(dirField);
 		envPanel.add(envTable);
 		tabPane.addTab(msg.getString("Tab.Environment"), envPanel);
 
-		JPanel buttonPanel = new JPanel();
-		temp = new JPanel(new GridLayout(1,2, 5,5));
 		JButton okButton = new JButton(msg.getString("OK"));
 		okButton.setActionCommand("OK");
 		okButton.addActionListener(this);
-		temp.add(okButton);
 		JButton cancelButton = UIUtil.newTabbedPaneButton(msg.getString("Cancel"));
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(this);
-		temp.add(cancelButton);
-		buttonPanel.add(temp);
+		Container buttonPanel=UIUtil.createButtonFooter(okButton, cancelButton);
 		cp.add(buttonPanel, BorderLayout.SOUTH);
 
 		setContentPane(cp);
@@ -563,19 +559,15 @@ ac.install(dirField);
 			}
 			cp.add(temp, BorderLayout.NORTH);
 
-			temp = new JPanel();
-			JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,5));
 			okButton = new JButton(msg.getString("OK"));
 			okButton.setEnabled(false);
 			okButton.setActionCommand("OK");
 			okButton.addActionListener(this);
-			buttonPanel.add(okButton);
 			JButton cancelButton = new JButton(msg.getString("Cancel"));
 			cancelButton.setActionCommand("Cancel");
 			cancelButton.addActionListener(this);
-			buttonPanel.add(cancelButton);
-			temp.add(buttonPanel);
-			cp.add(temp, BorderLayout.SOUTH);
+			Container buttons=UIUtil.createButtonFooter(okButton, cancelButton);
+			cp.add(buttons, BorderLayout.SOUTH);
 
 			setTitle(msg.getString("ArgumentDialog.Title"));
 			getRootPane().setDefaultButton(okButton);
@@ -704,19 +696,15 @@ ac.install(dirField);
 			}
 			cp.add(temp, BorderLayout.NORTH);
 
-			temp = new JPanel();
-			JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,5));
 			okButton = new JButton(msg.getString("OK"));
 			okButton.setEnabled(false);
 			okButton.setActionCommand("OK");
 			okButton.addActionListener(this);
-			buttonPanel.add(okButton);
 			JButton cancelButton = new JButton(msg.getString("Cancel"));
 			cancelButton.setActionCommand("Cancel");
 			cancelButton.addActionListener(this);
-			buttonPanel.add(cancelButton);
-			temp.add(buttonPanel);
-			cp.add(temp, BorderLayout.SOUTH);
+			Container buttons=UIUtil.createButtonFooter(okButton, cancelButton);
+			cp.add(buttons, BorderLayout.SOUTH);
 
 			setTitle(msg.getString("EnvVarDialog.Title"));
 			getRootPane().setDefaultButton(okButton);

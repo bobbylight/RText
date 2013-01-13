@@ -155,8 +155,7 @@ public class RemoteFileChooser extends EscapableDialog
 		// Put everything into a neat little package.
 		populateFormPanel();
 		portCombo.setSelectedItem(DEFAULT_FTP_PORT);
-		JPanel temp = new JPanel();
-		temp.add(buttonPanel);
+		Container temp = UIUtil.createButtonFooter(buttonPanel);
 		cp.add(temp, BorderLayout.SOUTH);
 		JRootPane rootPane = getRootPane();
 		rootPane.setDefaultButton(okButton);

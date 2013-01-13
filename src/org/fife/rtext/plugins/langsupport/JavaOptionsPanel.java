@@ -11,9 +11,9 @@ package org.fife.rtext.plugins.langsupport;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -436,17 +436,13 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 			UIUtil.makeSpringCompactGrid(topPanel, 2, 2, 5, 5, 5, 5);
 			cp.add(topPanel, BorderLayout.NORTH);
 
-			JPanel buttonPanel = new JPanel();
-			JPanel temp = new JPanel(new GridLayout(1,2, 5,5));
 			okButton = new JButton(Plugin.msg.getString("Options.General.OK"));
 			okButton.addActionListener(this);
-			temp.add(okButton);
 			cancelButton = new JButton(Plugin.msg.
 								getString("Options.General.Cancel"));
 			cancelButton.addActionListener(this);
-			temp.add(cancelButton);
-			buttonPanel.add(temp);
-			cp.add(buttonPanel, BorderLayout.SOUTH);
+			Container buttons=UIUtil.createButtonFooter(okButton, cancelButton);
+			cp.add(buttons, BorderLayout.SOUTH);
 
 			setContentPane(cp);
 			getRootPane().setDefaultButton(okButton);

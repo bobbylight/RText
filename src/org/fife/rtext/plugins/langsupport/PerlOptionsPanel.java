@@ -11,9 +11,9 @@ package org.fife.rtext.plugins.langsupport;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -630,18 +630,13 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			contentPane.add(topPanel, BorderLayout.NORTH);
 
 			// Panel containing buttons for the bottom.
-			JPanel buttonPanel = new JPanel();
-			buttonPanel.setBorder(BorderFactory.createEmptyBorder(5,5,0,5));
-			temp = new JPanel(new GridLayout(1,2, 5,5));
 			okButton = new JButton(Plugin.msg.getString("Options.General.OK"));
 			okButton.addActionListener(this);
-			temp.add(okButton);
 			cancelButton = new JButton(Plugin.msg.
 										getString("Options.General.Cancel"));
 			cancelButton.addActionListener(this);
-			temp.add(cancelButton);
-			buttonPanel.add(temp);
-			contentPane.add(buttonPanel, BorderLayout.SOUTH);
+			Container buttons=UIUtil.createButtonFooter(okButton, cancelButton);
+			contentPane.add(buttons, BorderLayout.SOUTH);
 
 			// Get ready to go.
 			setTitle(Plugin.msg.

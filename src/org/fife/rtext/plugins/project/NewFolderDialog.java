@@ -240,7 +240,6 @@ public class NewFolderDialog extends EscapableDialog {
 				"FolderDialog.FolderSelect.Desc"));
 		descLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		container.add(descLabel, BorderLayout.NORTH);
-		JPanel buttonPanel = new JPanel(new BorderLayout());
 		temp = new JPanel(new GridLayout(1,3, 5,0));
 		temp.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 		backButton = createButton("Button.Back");
@@ -254,7 +253,7 @@ public class NewFolderDialog extends EscapableDialog {
 		cancelButton = createButton("Button.Cancel");
 		cancelButton.addActionListener(listener);
 		temp.add(cancelButton);
-		buttonPanel.add(temp, BorderLayout.LINE_END);
+		Container buttonPanel = UIUtil.createButtonFooter(temp);
 		container.add(buttonPanel, BorderLayout.SOUTH);
 
 		// Get ready to go!

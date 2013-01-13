@@ -12,8 +12,8 @@ package org.fife.ui.rsyntaxtextarea;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
+import java.awt.Container;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -188,20 +188,16 @@ public class TextFilePropertiesDialog extends EscapableDialog
 									5,5);	// x-spacing, y-spacing.
 
 		// Make a panel for OK and cancel buttons.
-		JPanel bottomPanel = new JPanel();
-		JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,0));
 		okButton = UIUtil.newButton(msg, "OK", "OKMnemonic");
 		okButton.setActionCommand("OKButton");
 		okButton.addActionListener(this);
 		okButton.setEnabled(false);
-		buttonPanel.add(okButton);
 		JButton cancelButton = UIUtil.newButton(msg,
 									"Cancel", "CancelMnemonic");
 		cancelButton.setActionCommand("CancelButton");
 		cancelButton.addActionListener(this);
-		buttonPanel.add(cancelButton);
-		bottomPanel.add(buttonPanel);
-		contentPane.add(bottomPanel, BorderLayout.SOUTH);
+		Container buttons = UIUtil.createButtonFooter(okButton, cancelButton);
+		contentPane.add(buttons, BorderLayout.SOUTH);
 
 		setContentPane(contentPane);
 		setModal(true);

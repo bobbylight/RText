@@ -11,8 +11,8 @@ package org.fife.rtext.plugins.tasks;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
+import java.awt.Container;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -329,18 +329,14 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 			box.add(Box.createVerticalGlue());
 			cp.add(box, BorderLayout.NORTH);
 
-			JPanel buttonPanel = new JPanel();
-			temp = new JPanel(new GridLayout(1,2, 5,5));
 			okButton = new JButton(plugin.getString("OK"));
 			okButton.setActionCommand("OK");
 			okButton.addActionListener(this);
-			temp.add(okButton);
 			JButton cancelButton = new JButton(plugin.getString("Cancel"));
 			cancelButton.setActionCommand("Cancel");
 			cancelButton.addActionListener(this);
-			temp.add(cancelButton);
-			buttonPanel.add(temp);
-			cp.add(buttonPanel, BorderLayout.SOUTH);
+			Container buttons=UIUtil.createButtonFooter(okButton, cancelButton);
+			cp.add(buttons, BorderLayout.SOUTH);
 
 			setTitle(plugin.getString("Options.TaskIdentifierTitle"));
 			setModal(true);

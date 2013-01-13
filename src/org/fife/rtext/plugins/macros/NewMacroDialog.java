@@ -158,12 +158,8 @@ public class NewMacroDialog extends EscapableDialog {
 											"CancelMnemonic");
 		okButton.addActionListener(l);
 		cancelButton.addActionListener(l);
-		JPanel buttonPanel = new JPanel(new GridLayout(1,2, 5,0));
-		buttonPanel.add(okButton);
-		buttonPanel.add(cancelButton);
-		JPanel bottomPanel = new JPanel();
-		bottomPanel.add(buttonPanel);
-		cp.add(bottomPanel, BorderLayout.SOUTH);
+		Container buttonPanel= UIUtil.createButtonFooter(okButton,cancelButton);
+		cp.add(buttonPanel, BorderLayout.SOUTH);
 		
 		setContentPane(cp);
 		setTitle(msg.getString("Title.New"));
@@ -413,7 +409,8 @@ public class NewMacroDialog extends EscapableDialog {
 		bp2.add(buttonPanel);
 		bp2.add(Box.createHorizontalStrut(20));
 		bp2.add(editButton);
-		bpParent.add(bp2);
+		bpParent.add(UIUtil.createButtonFooter(bp2));
+		//bpParent.add(bp2);
 		okButton.setPreferredSize(editButton.getPreferredSize());
 		cancelButton.setPreferredSize(editButton.getPreferredSize());
 

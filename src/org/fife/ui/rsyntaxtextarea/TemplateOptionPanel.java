@@ -12,6 +12,7 @@ package org.fife.ui.rsyntaxtextarea;
 
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -271,19 +272,13 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			temp.add(temp2);
 			contentPane.add(temp);
 
-			temp = new JPanel();
-			temp2 = new JPanel(new GridLayout(1,2, 5,5));
-			okButton = UIUtil.newButton(msg,
-								"OK", "OKMnemonic");
+			okButton = UIUtil.newButton(msg, "OK", "OKMnemonic");
 			okButton.addActionListener(this);
 			okButton.setEnabled(false);
-			temp2.add(okButton);
-			cancelButton = UIUtil.newButton(msg,
-								"Cancel", "CancelMnemonic");
+			cancelButton = UIUtil.newButton(msg, "Cancel", "CancelMnemonic");
 			cancelButton.addActionListener(this);
-			temp2.add(cancelButton);
-			temp.add(temp2);
-			contentPane.add(temp, BorderLayout.SOUTH);
+			Container buttons=UIUtil.createButtonFooter(okButton, cancelButton);
+			contentPane.add(buttons, BorderLayout.SOUTH);
 
 			setContentPane(contentPane);
 			setLocationRelativeTo(TemplateOptionPanel.this);

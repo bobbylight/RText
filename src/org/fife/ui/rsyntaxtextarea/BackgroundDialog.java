@@ -14,10 +14,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
+import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
@@ -184,11 +184,7 @@ class BackgroundDialog extends JDialog implements ActionListener {
 		cancelButton = UIUtil.newButton(msg, "Cancel", "CancelMnemonic");
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(this);
-		JPanel buttonPanel = new JPanel();
-		temp = new JPanel(new GridLayout(1,2, 5,0));
-		temp.add(okButton);
-		temp.add(cancelButton);
-		buttonPanel.add(temp);
+		Container buttons = UIUtil.createButtonFooter(okButton, cancelButton);
 
 		// Arrange the dialog!
 		JPanel cp = new ResizableFrameContentPane(new BorderLayout());
@@ -196,7 +192,7 @@ class BackgroundDialog extends JDialog implements ActionListener {
 		cp.add(topPanel, BorderLayout.NORTH);
 		temp = new JPanel(new BorderLayout());
 		temp.add(new JSeparator(), BorderLayout.NORTH);
-		temp.add(buttonPanel, BorderLayout.SOUTH);
+		temp.add(buttons, BorderLayout.SOUTH);
 		cp.add(temp, BorderLayout.SOUTH);
 		setContentPane(cp);
 
