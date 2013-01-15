@@ -135,7 +135,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 		JTable table = toolTable.getTable();
 		TableColumnModel tcm = table.getColumnModel();
 		tcm.getColumn(0).setCellRenderer(new ToolCellRenderer());
-		tcm.getColumn(1).setCellRenderer(new KeyStrokeCellRenderer());
+		tcm.getColumn(1).setCellRenderer(KeyStrokeCellRenderer.create());
 		table.setPreferredScrollableViewportSize(new Dimension(300,300));
 		cp.add(toolTable);
 

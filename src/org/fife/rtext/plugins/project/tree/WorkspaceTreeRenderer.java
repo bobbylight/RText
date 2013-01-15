@@ -12,6 +12,9 @@ package org.fife.rtext.plugins.project.tree;
 import java.awt.Component;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeCellRenderer;
+
+import org.fife.ui.SubstanceUtils;
 
 
 /**
@@ -21,6 +24,31 @@ import javax.swing.tree.DefaultTreeCellRenderer;
  * @version 1.0
  */
 class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
+
+
+	/**
+	 * Returns a tree cell renderer for workspace trees.  This may not be
+	 * an instance of this class (or a subclass).  Some Look and Feels
+	 * unfortunately require inheritance to work properly...
+	 * 
+	 * @return The renderer.
+	 */
+	public static TreeCellRenderer create() {
+		if (SubstanceUtils.isSubstanceInstalled()) {
+			// Use reflection to avoid compile-time dependencies form this
+			// class to Substance.
+			String clazzName =
+				"org.fife.rtext.plugins.project.tree.SubstanceWorkspaceTreeRenderer";
+			try {
+				Class clazz = Class.forName(clazzName);
+				return (TreeCellRenderer)clazz.newInstance();
+			} catch (Exception e) {
+				e.printStackTrace();
+				// Fall through
+			}
+		}
+		return new WorkspaceTreeRenderer();
+	}
 
 
 	public Component getTreeCellRendererComponent(JTree tree, Object value,

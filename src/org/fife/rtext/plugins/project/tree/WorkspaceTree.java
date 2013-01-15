@@ -70,7 +70,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		installActions();
 		setModel(model);
 		setWorkspace(workspace);
-		setCellRenderer(new WorkspaceTreeRenderer());
+		setCellRenderer(WorkspaceTreeRenderer.create());
 
 		// Add a needed extra bit of space at the top.
 		setBorder(BorderFactory.createCompoundBorder(
@@ -424,7 +424,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		// Explicitly set DefaultTreeCellRenderers cache fonts, colors, etc.,
 		// and don't get updated by the JTree on LaF updates, so we must do
 		// so ourselves.
-		setCellRenderer(new WorkspaceTreeRenderer());
+		setCellRenderer(WorkspaceTreeRenderer.create());
 	}
 
 

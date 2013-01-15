@@ -118,7 +118,7 @@
 				<!-- OfficeLnFs are only available on Windows, but -->
 				<!-- it doesn't hurt anything to have them on the  -->
 				<!-- classpath everywhere.                         -->
-				<attribute name="Class-Path" value="fife.common.jar rsyntaxtextarea.jar autocomplete.jar rstaui.jar rsta_spellchecker.jar lnfs/OfficeLnFs.jar"/>
+				<attribute name="Class-Path" value="fife.common.jar rsyntaxtextarea.jar autocomplete.jar rstaui.jar rsta_spellchecker.jar lnfs/OfficeLnFs.jar lnfs/substance/laf-plugin-7.2.1.jar lnfs/substance/laf-widget-7.2.1.jar lnfs/substance/substance-7.2.1-tools.jar lnfs/substance/substance-7.2.1.jar lnfs/substance/trident-7.2.1-base.jar lnfs/substance/trident-7.2.1-swing.jar lnfs/substance/trident-7.2.1.jar"/>
 			</manifest>
 		</jar>
 	</target>
@@ -143,6 +143,13 @@
 			</fileset>
 			<fileset dir="${common-dir}/dist"/>
 			<fileset dir="${common-dir}/native"/>
+		</copy>
+		<!-- Copy the Substance revision the "extra" Common stuff was -->
+		<!-- built against.                                           -->
+		<copy todir="${dist-dir}/lnfs">
+			<fileset dir="${common-dir}/lib">
+				<include name="substance/*.jar"/>
+			</fileset>
 		</copy>
 		<!-- Build and create the plugin jars.  We do this separately -->
 		<!-- from the rest of RText in case one day we don't want to  -->

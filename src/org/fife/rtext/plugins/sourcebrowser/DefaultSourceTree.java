@@ -10,7 +10,6 @@
  */
 package org.fife.rtext.plugins.sourcebrowser;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -18,7 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
@@ -29,9 +28,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import org.fife.ctags.TagEntry;
@@ -58,7 +56,7 @@ class DefaultSourceTree extends JTree {
 	private SourceBrowserPlugin plugin;
 	private RText owner;
 	private Listener listener;
-	private SourceTreeCellRenderer treeRenderer;
+	private TreeCellRenderer treeRenderer;
 	private DefaultTreeModel treeModel;
 	private int mouseX;
 	private int mouseY;
@@ -69,9 +67,6 @@ class DefaultSourceTree extends JTree {
 	private String lineFoundText;
 	private String cantFindLineText;
 
-	private static final String YELLOW_BULLET	= "bullet_blue.gif";
-	private static final String GREEN_BULLET	= "bullet_green.gif";
-
 
 	public DefaultSourceTree(SourceBrowserPlugin plugin, RText owner) {
 
@@ -80,7 +75,7 @@ class DefaultSourceTree extends JTree {
 		listener = new Listener();
 
 		setToggleClickCount(1);
-		treeRenderer = new SourceTreeCellRenderer();
+		treeRenderer = SourceTreeCellRenderer.createTreeCellRenderer(this);
 		setCellRenderer(treeRenderer);
 		setSelectionModel(new RTreeSelectionModel());
 		addTreeSelectionListener(listener);
@@ -102,6 +97,18 @@ class DefaultSourceTree extends JTree {
 	 */
 	private void expandInitialNodes() {
 		UIUtil.expandAllNodes(this);
+	}
+
+
+	/**
+	 * Returns the icon to use for "root" nodes of source trees (typically
+	 * representing the type of source file).
+	 *
+	 * @return The icon to use.
+	 * @see #setRootIcon(Icon)
+	 */
+	public Icon getRootIcon() {
+		return fileIcon;
 	}
 
 
@@ -229,6 +236,13 @@ class DefaultSourceTree extends JTree {
 	}
 
 
+	/**
+	 * Sets the icon to use for "root" nodes of source trees (typically
+	 * representing the type of source file).
+	 *
+	 * @param icon The icon to use.
+	 * @see #getRootIcon()
+	 */
 	public void setRootIcon(Icon icon) {
 		fileIcon = icon;
 	}
@@ -255,7 +269,7 @@ class DefaultSourceTree extends JTree {
 
 	public void updateUI() {
 		super.updateUI();
-		treeRenderer = new SourceTreeCellRenderer();
+		treeRenderer = SourceTreeCellRenderer.createTreeCellRenderer(this);
 		setCellRenderer(treeRenderer); // So it picks up new LnF's colors??
 	}
 
@@ -392,7 +406,9 @@ class DefaultSourceTree extends JTree {
 			}
 
 			// Set the tooltip text.
-			treeRenderer.setToolTipText(text);
+			if (treeRenderer instanceof JComponent) {
+				((JComponent)treeRenderer).setToolTipText(text);
+			}
 
 		}
 
@@ -515,79 +531,6 @@ class DefaultSourceTree extends JTree {
 					editor.requestFocusInWindow();	// So we can see the highlighted line.
 				}
 			}
-		}
-
-	}
-
-
-	/**
-	 * Sets the appropriate icons for tree nodes (the '+' and '-' icons
-	 * for nodes that can be expanded/contracted).
-	 */
-	class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
-
-		private Icon yellowBullet;
-		private Icon greenBullet;
-
-		public SourceTreeCellRenderer() {
-			Class clazz = getClass();
-			yellowBullet = new ImageIcon(clazz.getResource(YELLOW_BULLET));
-			greenBullet = new ImageIcon(clazz.getResource(GREEN_BULLET));
-		}
-
-		public Component getTreeCellRendererComponent(JTree tree,
-							Object value, boolean sel, boolean expanded,
-							boolean leaf, int row, boolean hasFocus) {
-
-			super.getTreeCellRendererComponent(tree, value, sel,
-									expanded, leaf, row, hasFocus);
-
-			DefaultMutableTreeNode dmtn = (DefaultMutableTreeNode)value;
-			Object obj = dmtn.getUserObject();
-
-			if (obj instanceof String) { // As opposed to TagEntry.
-				String str = (String)obj;
-				int index = str.indexOf('(');
-				if (index>-1) { // Not true if ctags not found.
-					setText("<html>" + str.substring(0,index) + "<b>" +
-						str.substring(index) + "</b></html>");
-				}
-			}
-
-			// Determine what icon to use.
-			Icon icon = null;
-			if (dmtn instanceof GroupTreeNode) {
-				GroupTreeNode gtn = (GroupTreeNode)dmtn;
-				if (gtn.getIcon()!=null) {
-					icon = gtn.getIcon();
-				}
-			}
-			else {
-				TreeNode parent = dmtn.getParent();
-				if (parent instanceof GroupTreeNode) {
-					GroupTreeNode gtn = (GroupTreeNode)parent;
-					if (gtn.getIcon()!=null) {
-						icon = gtn.getIcon();
-					}
-				}
-			}
-			if (icon==null) { // Languages without custom icons.
-				if (leaf && value!=null) {
-					String strVal = value.toString();
-					if (strVal!=null && strVal.indexOf("(0)")==-1) {
-						setIcon(greenBullet);
-					}
-				}
-				if (getIcon()==null) {
-					setIcon(row==0 ? fileIcon : yellowBullet);
-				}
-			}
-			else {
-				setIcon(icon);
-			}
-
-			return this;
-
 		}
 
 	}

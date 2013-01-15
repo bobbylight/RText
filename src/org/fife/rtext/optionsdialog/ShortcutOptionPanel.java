@@ -78,7 +78,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 		shortcutTable.setRowHandler(new ShortcutTableRowHandler());
 		JTable table = shortcutTable.getTable();
 		table.getColumn(msg.getString("OptSCCol2")).setCellRenderer(
-									new KeyStrokeCellRenderer());
+									KeyStrokeCellRenderer.create());
 		table.setPreferredScrollableViewportSize(new Dimension(300,300));
 		contentPane.add(shortcutTable);
 
