@@ -14,17 +14,20 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.tree.TreeCellRenderer;
 
 import org.fife.ctags.TagEntry;
 import org.fife.rtext.*;
 import org.fife.rtext.optionsdialog.OptionsDialog;
 import org.fife.ui.RScrollPane;
+import org.fife.ui.SubstanceUtils;
 import org.fife.ui.app.*;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
@@ -79,6 +82,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 	private static final String VIEW_SB_ACTION	= "ViewSourceBrowserAction";
 
+	private static final String RENDERER_WRAPPER_CLASS_NAME =
+		"org.fife.rtext.plugins.sourcebrowser.SubstanceTreeCellRendererWrapper";
+
 
 	/**
 	 * Creates a new <code>SourceBrowserPlugin</code>.
@@ -110,6 +116,29 @@ public class SourceBrowserPlugin extends GUIPlugin
 		sourceBrowserThread = new SourceBrowserThread(this);
 		workingRoot = new SourceTreeNode(msg.getString("Working"));
 
+	}
+
+
+	/**
+	 * If the Substance Look and Feel is installed, wraps a tree's renderer in
+	 * a Substance-happy renderer.
+	 *
+	 * @param tree The tree whose renderer should be checked.
+	 */
+	private void checkTreeCellRenderer(JTree tree) {
+		if (SubstanceUtils.isSubstanceInstalled()) {
+			TreeCellRenderer renderer = tree.getCellRenderer();
+			try {
+				Class clazz = Class.forName(RENDERER_WRAPPER_CLASS_NAME);
+				Constructor cons = clazz.getConstructor(
+						new Class[] { TreeCellRenderer.class });
+				renderer = (TreeCellRenderer)cons.newInstance(
+						new Object[] { renderer });
+				tree.setCellRenderer(renderer);
+			} catch (Exception e) { // Never happens
+				e.printStackTrace();
+			}
+		}
 	}
 
 
@@ -204,6 +233,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 									new Class[] { RText.class });
 							sourceTree = (JTree)m.invoke(handler,
 									new Object[] { owner });
+							checkTreeCellRenderer(sourceTree);
 							wind.setPrimaryComponent(sourceTree);
 							RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
 							ensureSourceTreeSortedProperly();
@@ -689,7 +719,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 
 	/**
-	 * A tag entry with an extra field to cache the tooltip text.
+	 * A tag entry with an extra field to cache the tool tip text.
 	 */
 	static class ExtendedTagEntry extends TagEntry {
 

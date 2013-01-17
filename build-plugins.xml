@@ -18,13 +18,14 @@
 
 	<!-- Set global properties for this build. -->
 	<property name="app-name-small" value="rtext_standard_plugins"/>
-	<property name="version"        value="2.0.5"/>
+	<property name="version"        value="2.0.6"/>
 	<property name="source-dir"     location="src"/>
 	<property name="class-dir"      location="ant-classes"/>
 	<property name="dist-dir"       location="dist"/>
 	<property name="debug"          value="true"/>
 	<property name="debuglevel"     value="lines,vars,source"/>
 	<property name="java-level"     value="1.4"/>
+	<property file="build.properties"/>
 
 
 	<!-- Compiles all org.fife.rtext.plugin classes.  This target should -->
@@ -32,13 +33,32 @@
 	<!-- on plugins without having to recompile everything.              -->
 	<target name="compile-plugin-classes"
 			description="Compile the source without deleting classes dir.">
+		<!-- Most stuff only requires Java 1.4. -->
 		<javac srcdir="${source-dir}" destdir="${class-dir}" deprecation="yes"
 				includeantruntime="false"
 				debug="${debug}" debuglevel="${debuglevel}"
 				source="${java-level}" target="${java-level}">
 			<include name="org/fife/rtext/plugins/**"/>
+			<exclude name="**/*Substance*"/>
 			<classpath>
 				<fileset dir="${dist-dir}" includes="*.jar"/>
+				<fileset dir="lib">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+		<!-- Dynamically loaded stuff that requires Java 6. -->
+		<javac srcdir="${source-dir}" destdir="${class-dir}"
+				includeantruntime="false"
+				deprecation="yes" debug="${debug}" debuglevel="${debuglevel}"
+				fork="true" executable="${javac.16}"
+				source="${java-level}" target="${java-level}">
+			<include name="**/*Substance*.java"/>
+			<!-- Don't compile plugins; their own build script -->
+			<!-- does that.                                    -->
+			<include name="org/fife/rtext/plugins/**/*Substance*"/>
+			<classpath>
+				<fileset dir="${dist-dir}" includes="**/*.jar"/>
 				<fileset dir="lib">
 					<include name="**/*.jar"/>
 				</fileset>

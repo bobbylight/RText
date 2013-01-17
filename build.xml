@@ -48,7 +48,7 @@
 	<!-- Set global properties for this build. -->
 	<property name="app-name"         value="RText"/>
 	<property name="app-name-small"   value="rtext"/>
-	<property name="version"          value="2.0.5.1"/>
+	<property name="version"          value="2.0.6"/>
 	<property name="source-dir"       location="src"/>
 	<property name="common-dir"       location="../Common"/>
 	<property name="class-dir"        location="ant-classes"/>
@@ -60,6 +60,7 @@
 	<property name="debug"            value="true"/>
 	<property name="debuglevel"       value="lines,vars,source"/>
 	<property name="java-level"       value="1.4"/>
+	<property file="build.properties"/>
 
 
 	<!-- Compiles all classes except for plugin classes.  -->
@@ -68,6 +69,7 @@
 		<pathelement location="lib/autocomplete.jar"/>
 		<pathelement location="lib/rstaui.jar"/>
 		<pathelement location="lib/rsta_spellchecker.jar"/>
+		<pathelement location="lib/language_support.jar"/>
 		<pathelement location="${common-dir}/dist/fife.common.jar"/>
 	</path>
 	<target name="compile-main-classes" description="Compile the source.">
@@ -77,15 +79,34 @@
 		<!-- Build RText-specific classes. -->
 		<delete includeEmptyDirs="true" quiet="true" dir="${class-dir}"/>
 		<mkdir dir="${class-dir}"/>
+		<!-- Most stuff only requires Java 1.4. -->
 		<javac srcdir="${source-dir}" destdir="${class-dir}"
 				classpathref="project.class.path"
 				deprecation="yes"
 				includeantruntime="false"
 				debug="${debug}" debuglevel="${debuglevel}"
 				source="${java-level}" target="${java-level}">
+			<!-- Substance stuff is built with Java 6. -->
+			<exclude name="**/*Substance*.java"/>
 			<!-- Don't compile plugins; their own build script -->
 			<!-- does that.                                    -->
 			<exclude name="org/fife/rtext/plugins/**"/>
+		</javac>
+		<!-- Dynamically loaded stuff that requires Java 6. -->
+		<javac srcdir="${source-dir}" destdir="${class-dir}"
+				includeantruntime="false"
+				deprecation="yes" debug="${debug}" debuglevel="${debuglevel}"
+				fork="true" executable="${javac.16}"
+				source="${java-level}" target="${java-level}">
+			<include name="**/*Substance*.java"/>
+			<!-- Don't compile plugins; their own build script -->
+			<!-- does that.                                    -->
+			<exclude name="org/fife/rtext/plugins/**"/>
+			<classpath>
+				<path refid="project.class.path"/>
+				<path location="${class-dir}"/>
+				<path location="${common-dir}/lib/substance/substance-7.2.1.jar"/>
+			</classpath>
 		</javac>
 	</target>
 

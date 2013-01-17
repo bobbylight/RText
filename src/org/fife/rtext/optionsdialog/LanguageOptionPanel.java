@@ -11,7 +11,6 @@
 package org.fife.rtext.optionsdialog;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Frame;
 import java.io.BufferedInputStream;
@@ -23,7 +22,6 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -105,7 +103,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 
 		listModel = new DefaultListModel();
 		languageList = new JList(listModel);
-		languageList.setCellRenderer(new CellRenderer());
+		languageList.setCellRenderer(LanguageListCellRenderer.create());
 		languageMap = new HashMap(1);
 		try {
 			File file = new File(app.getInstallLocation(), FILE_NAME);
@@ -385,26 +383,6 @@ class LanguageOptionPanel extends OptionsDialogPanel
 		hasUnsavedChanges = true;
 		firePropertyChange(LANGUAGE_PROPERTY,
 						-1, languageList.getSelectedIndex());
-	}
-
-
-	/**
-	 * Cell renderer that knows how to display both an icon and text (as
-	 * <code>DefaultListCellRenderer</code> only knows how to display
-	 * either/or).
-	 */
-	static class CellRenderer extends DefaultListCellRenderer {
-
-		public Component getListCellRendererComponent(JList list,
-				Object value, int index, boolean selected, boolean focused) {
-			super.getListCellRendererComponent(list, value, index,
-										selected, focused);
-			IconTextInfo iti = (IconTextInfo)value;
-			setIcon(iti.getIcon());
-			setText(iti.getText());
-			return this;
-		}
-
 	}
 
 
