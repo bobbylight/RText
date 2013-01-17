@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
@@ -276,14 +277,22 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		UIUtil.fixComboOrientation(combo);
 		boolean osIsWindows = rtext.getOS()==RText.OS_WINDOWS;
 
-		// Add Look and Feels shipped with Swing.
-		UIManager.LookAndFeelInfo[] infos = UIManager.
-										getInstalledLookAndFeels();
+		// Get all Look and Feels, with the system default listed first.
+		LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
+		for (int i=1; i<infos.length; i++) {
+			String clazzName = infos[i].getClassName();
+			if (clazzName.equals(UIManager.getSystemLookAndFeelClassName())) {
+				LookAndFeelInfo temp = infos[0];
+				infos[0] = infos[i];
+				infos[i] = temp;
+				break;
+			}
+		}
+
 		for (int i=0; i<infos.length; i++) {
 			// NOTE: It would be nice if we could check the
 			// LookAndFeel.isSupportedLookAndFeel() method, but that would
-			// require loading each LnF class (and their required
-			// subclasses?), which we're trying to avoid.
+			// require loading each LnF class, which we're trying to avoid.
 			// We'll assume Windows supports all LnFs, and any other OS does
 			// NOT support a standard Look with "Windows" in the name.
 			String name = infos[i].getName();
@@ -306,8 +315,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		ExtendedLookAndFeelInfo[] info = rtext.get3rdPartyLookAndFeelInfo();
 		if (info!=null && info.length>0) {
 			for (int i=0; i<info.length; i++) {
-				combo.addSpecialItem(info[i].getName(),
-								info[i].getClassName());
+				combo.addSpecialItem(info[i].getName(),info[i].getClassName());
 			}
 		}
 
