@@ -10,7 +10,6 @@
 package org.fife.rtext.plugins.tools;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -29,7 +28,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -134,13 +132,27 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 		toolTable.setRowHandler(new ToolTableRowHandler());
 		JTable table = toolTable.getTable();
 		TableColumnModel tcm = table.getColumnModel();
-		tcm.getColumn(0).setCellRenderer(new ToolCellRenderer());
 		tcm.getColumn(1).setCellRenderer(KeyStrokeCellRenderer.create());
 		table.setPreferredScrollableViewportSize(new Dimension(300,300));
 		cp.add(toolTable);
 
 		applyComponentOrientation(orientation);
 
+	}
+
+
+	/**
+	 * Creates a row of data for our table based on a tool.
+	 *
+	 * @param tool The tool.
+	 * @return The row of data for the table model.
+	 */
+	private Object[] createRowData(Tool tool) {
+		return new Object[] {
+			new ToolWrapper(tool),
+			KeyStroke.getKeyStroke(tool.getAccelerator()),
+			tool.getDescription()
+		};
 	}
 
 
@@ -157,7 +169,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 		ToolManager tm = ToolManager.get();
 		tm.clearTools();
 		for (int i=0; i<model.getRowCount(); i++) {
-			Tool tool = (Tool)model.getValueAt(i, 0);
+			Tool tool = ((ToolWrapper)model.getValueAt(i, 0)).tool;
 			tm.addTool(tool);
 		}
 
@@ -229,10 +241,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 		model.setRowCount(0);
 		for (Iterator i=tm.getToolIterator(); i.hasNext(); ) {
 			Tool tool = (Tool)i.next();
-			model.addRow(new Object[] { tool,
-					KeyStroke.getKeyStroke(tool.getAccelerator()),
-					tool.getDescription()
-			});
+			model.addRow(createRowData(tool));
 		}
 
 	}
@@ -268,18 +277,20 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 
 
 	/**
-	 * Renderer for tools in the JTable.
+	 * Wrapper to renderer a Tool nicely in a table.  Needed since Substance
+	 * requires inheritance for renderers, so we can avoid a hard dependency
+	 * on any Substance classes.  What a pain in the ass.
 	 */
-	private static class ToolCellRenderer extends DefaultTableCellRenderer {
+	private static class ToolWrapper {
 
-		public Component getTableCellRendererComponent(JTable table,
-								Object value, boolean isSelected,
-								boolean hasFocus, int row, int column) {
-			super.getTableCellRendererComponent(table, value, isSelected,
-										 hasFocus, row, column);
-			setText(((Tool)value).getName());
-			setComponentOrientation(table.getComponentOrientation());
-			return this;
+		private Tool tool;
+
+		public ToolWrapper(Tool tool) {
+			this.tool = tool;
+		}
+
+		public String toString() {
+			return tool.getName();
 		}
 
 	}
@@ -294,16 +305,14 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 			NewToolDialog toolDialog = new NewToolDialog(getOptionsDialog());
 			Tool old = null;
 			if (oldData!=null) {
-				old = (Tool)oldData[0];
+				old = ((ToolWrapper)oldData[0]).tool;
 				toolDialog.setTool(old);
 			}
 			toolDialog.setLocationRelativeTo(ToolOptionPanel.this);
 			toolDialog.setVisible(true);
 			Tool tool = toolDialog.getTool();
 			if (tool!=null) {
-				return new Object[] { tool,
-						KeyStroke.getKeyStroke(tool.getAccelerator()),
-						tool.getDescription() };
+				return createRowData(tool);
 			}
 			return null;
 		}
