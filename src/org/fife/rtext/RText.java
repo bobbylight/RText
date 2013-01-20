@@ -1689,7 +1689,15 @@ public class RText extends AbstractPluggableGUIApplication
 					// Must set UIManager's ClassLoader before instantiating
 					// the LAF.  Substance is so high-maintenance!
 					UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
-					Class clazz = cl.loadClass(lafName);
+					Class clazz = null;
+					try {
+						clazz = cl.loadClass(lafName);
+					} catch (UnsupportedClassVersionError ucve) {
+						// Previously opened with e.g. Java 6/Substance, now
+						// restarting with Java 1.4 or 1.5.
+						lafName = UIManager.getSystemLookAndFeelClassName();
+						clazz = cl.loadClass(lafName);
+					}
 					LookAndFeel laf = (LookAndFeel)clazz.newInstance();
 					UIManager.setLookAndFeel(laf);
 					UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
