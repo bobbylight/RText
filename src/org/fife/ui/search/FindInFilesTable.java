@@ -32,6 +32,7 @@ import javax.swing.table.TableColumnModel;
 import org.fife.ui.FileExplorerTableModel;
 import org.fife.ui.RListSelectionModel;
 import org.fife.ui.FileExplorerTableModel.SortableHeaderRenderer;
+import org.fife.ui.autocomplete.Util;
 
 
 /**
@@ -353,7 +354,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 				// a little.
 				String value = (String)getValueAt(i, j);
 				if (rowCount>3000 && value.startsWith("<html>")) {
-					value = value.replaceAll("<[^>]+>", "");
+					value = Util.stripHtml(value);
 				}
 
 				Component comp = renderer.getTableCellRendererComponent(

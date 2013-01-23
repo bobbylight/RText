@@ -521,7 +521,8 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 						if (info.getSourceLocation()!=null) {
 							src = info.getSourceLocation().getLocationAsString();
 						}
-						model.addRow(new Object[] { info.getLocationAsString(), src });
+						File rtJar = new File(info.getLocationAsString());
+						model.addRow(new Object[] { rtJar, src });
 						hasUnsavedChanges = true;
 						firePropertyChange(PROPERTY, null, null);
 					}

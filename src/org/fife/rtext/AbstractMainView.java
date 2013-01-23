@@ -37,6 +37,7 @@ import org.fife.rsta.ui.search.*;
 import org.fife.rtext.actions.CapsLockAction;
 import org.fife.rtext.actions.ToggleTextModeAction;
 import org.fife.ui.UIUtil;
+import org.fife.ui.autocomplete.Util;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -851,6 +852,9 @@ public abstract class AbstractMainView extends JPanel
 		// Always visible, makes life easier
 		scrollPane.setIconRowHeaderEnabled(true);
 
+		Color activeLineRangeColor = getAppropriateActiveLineRangeColor();
+		gutter.setActiveLineRangeColor(activeLineRangeColor);
+
 		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(scrollPane);
 		return scrollPane;
 	}
@@ -947,6 +951,22 @@ public abstract class AbstractMainView extends JPanel
 											oldValue, newValue));
 			}
 		}
+	}
+
+
+	/**
+	 * Returns the color to use for the "active line range" of editors.  The
+	 * user currently cannot set this, but we try to be smart and pick a good
+	 * color based on the foreground/background colors of the current Look and
+	 * Feel.
+	 *
+	 * @return The color.  <code>null</code> means to use the default.
+	 */
+	private Color getAppropriateActiveLineRangeColor() {
+		Component c = owner.getJMenuBar()!=null ?
+				(Component)owner.getJMenuBar().getMenu(0) : new JLabel();
+		Color fg = c.getForeground();
+		return Util.isLightForeground(fg) ? fg : null;
 	}
 
 
@@ -2508,6 +2528,20 @@ public abstract class AbstractMainView extends JPanel
 			searchStrings = (Vector)e.getNewValue();
 		}
 
+	}
+
+
+	/**
+	 * Refreshes the color used for the "active line range" of editors.  The
+	 * user currently cannot set this, but we try to be smart and pick a good
+	 * color based on the foreground/background colors.
+	 */
+	private void refreshActiveLineRangeColors() {
+		Color activeLineRangeColor = getAppropriateActiveLineRangeColor();
+		for (int i=0; i<getNumDocuments(); i++) {
+			Gutter gutter = getRTextScrollPaneAt(i).getGutter();
+			gutter.setActiveLineRangeColor(activeLineRangeColor);
+		}
 	}
 
 
@@ -4079,6 +4113,8 @@ public abstract class AbstractMainView extends JPanel
 			findInFilesDialog.updateUI();
 			findInFilesDialog.pack();
 		}
+
+		refreshActiveLineRangeColors();
 
 		// Update all open files to ensure that they keep the "correct"
 		// background.  We need to do this because in RText's

@@ -18,6 +18,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import org.fife.ui.autocomplete.Util;
+
 
 /**
  * Base class for tree nodes in an <code>DefaultSourceTree</code>.  They can
@@ -227,9 +229,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 					TreeNode node = (TreeNode)i.next();
 					if (node.isLeaf()) {
 						String text = node.toString();
-						if (text.startsWith("<html>")) { // Strip out HTML
-							text = text.replaceAll("<[^>]+>", "");
-						}
+						text = Util.stripHtml(text);
 						if (!text.toLowerCase().startsWith(prefix)) {
 							//System.out.println("Removing tree node: " + text);
 							i.remove();
