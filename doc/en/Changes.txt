@@ -2,10 +2,16 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
-2.0.6
----------------------
+2.0.6 (01/25/2013):
+-------------------
    - Added syntax highlighting and code folding for JSON files.
-   - Updated xxx
+   - RText now looks much better when using a Substance Look and Feel.  Trees
+     and lists use Substance's fancy rendering, and a few custom colors in the
+     UI were tweaked to look better in this Look and Feel.
+   - Fixed bug: Adding or modifying a JRE for code completion in the Java
+     options panel threw a ClassCastException.
+   - Decent refactoring of the code, which shouldn't be noticeable for users.
+   - Updated the Turkish (Burak) and French (Pat) translations.
    
    
 2.0.5.1 (12/20/2012):

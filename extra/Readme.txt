@@ -44,16 +44,20 @@ a plugin API is being developed to add new functionality to RText with ease.
 
 2. Requirements
 ---------------
-RText requires only a 1.4 Java Runtime Environment (JRE) or higher.  No third
-party libraries are required.  I recommend using the most recent JRE available
-for optimum performance.  You can get the latest JRE for Microsoft Windows
-and other platforms here:  http://www.java.com
+RText requires only a 1.4 Java Runtime Environment (JRE) or higher; however,
+using the most recent JRE available always gives the best performance and most
+features.  You can get the latest JRE for Microsoft Windows and other platforms
+here:  http://www.java.com
 
 Using the Source Browser plugin (which comes standard with RText) requires
 either Exuberant Ctags, or the classic "ctags" UNIX command.  If you do not
 have either installed, RText will still work normally, but the Source Browser
 will be disabled.  You can download Exuberant CTags here:
 http://sourceforge.net/projects/ctags
+
+Code completion and syntax checking for some languages, such as Java and Perl,
+requires you to configure RText to know where the compiler and libraries live.
+This can be done from the Options dialog (Edit -> Options).
 
 
 3. Usage

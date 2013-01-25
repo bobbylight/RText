@@ -10,7 +10,6 @@
 package org.fife.rtext;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Toolkit;
@@ -32,7 +31,6 @@ import org.fife.ui.StatusBarPanel;
  *    <li>An overwrite (insert) mode indicator.
  *    <li>A Caps Lock indicator.
  *    <li>A file "Read Only" mode indicator.
- *    <li>A "Rec" panel indicating whether a macro is recording.
  * </ul>
  *
  * @author Robert Futrell
@@ -45,7 +43,6 @@ public class StatusBar extends org.fife.ui.StatusBar
 	private JLabel overwriteModeIndicator;
 	private JLabel capsLockIndicator;
 	private JLabel readOnlyIndicator;
-	private JLabel recIndicator;
 
 	private int row, column;
 
@@ -54,7 +51,6 @@ public class StatusBar extends org.fife.ui.StatusBar
 	private StatusBarPanel overwritePanel;
 	private StatusBarPanel capsLockPanel;
 	private StatusBarPanel readOnlyPanel;
-	private StatusBarPanel recPanel;
 
 	private String fileSaveSuccessfulText;
 	private String openedFileText;
@@ -101,8 +97,6 @@ public class StatusBar extends org.fife.ui.StatusBar
 		capsLockIndicator = createLabel(msg, "CapsLockIndicator");
 		overwriteModeIndicator = createLabel(msg, "OverwriteModeIndicator");
 		overwriteModeIndicator = createLabel(msg, "OverwriteModeIndicator");
-		recIndicator = createLabel(msg, "RecordingMacroIndicator");
-		recIndicator.setForeground(Color.RED);
 
 		// Make the layout such that different items can be different sizes.
 		GridBagConstraints c = new GridBagConstraints();
@@ -135,13 +129,6 @@ public class StatusBar extends org.fife.ui.StatusBar
 									overwriteModeIndicator);
 		setOverwriteModeIndicatorEnabled(overwriteModeEnabled);
 		addStatusBarComponent(overwritePanel, c);
-
-		// Create a "Rec" panel for macros.
-		c.weightx = 0.0;
-		recPanel = new StatusBarPanel(new BorderLayout(),
-								recIndicator);
-		setRecIndicatorEnabled(false);
-		addStatusBarComponent(recPanel, c);
 
 		// Create and add a panel containing the row and column.
 		c.weightx = 0.0;
@@ -244,17 +231,6 @@ public class StatusBar extends org.fife.ui.StatusBar
 
 
 	/**
-	 * Returns whether or not the "Rec" (macro recording) indicator is enabled.
-	 *
-	 * @return Whether or not the "Rec" indicator is enabled.
-	 * @see #setRecIndicatorEnabled
-	 */
-	public boolean isRecIndicatorEnabled() {
-		return recIndicator.isEnabled();
-	}
-
-
-	/**
 	 * Returns whether or not the row/column indicator is visible.
 	 */
 	public boolean isRowColumnIndicatorVisible() {
@@ -338,17 +314,6 @@ public class StatusBar extends org.fife.ui.StatusBar
 	 */
 	public void setReadOnlyIndicatorEnabled(boolean enabled) {
 		readOnlyIndicator.setEnabled(enabled);
-	}
-
-
-	/**
-	 * Sets whether or not the "Rec" (macro recording) indicator is enabled.
-	 *
-	 * @param enabled Whether or not the "Rec" indicator should be enabled.
-	 * @see #isRecIndicatorEnabled
-	 */
-	public void setRecIndicatorEnabled(boolean enabled) {
-		recIndicator.setEnabled(enabled);
 	}
 
 

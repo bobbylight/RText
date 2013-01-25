@@ -9,8 +9,6 @@
 	Date:     20jan2006
 
 -->
-
-
 <project name="RText-Plugins" default="make-plugin-jars" basedir=".">
 
 	<description>RText Standard Plugins Build File</description>
@@ -34,6 +32,7 @@
 	<target name="compile-plugin-classes"
 			description="Compile the source without deleting classes dir.">
 		<!-- Most stuff only requires Java 1.4. -->
+		<echo>Compiling most common classes with: ${java.version} (1.4 is recommended)</echo>
 		<javac srcdir="${source-dir}" destdir="${class-dir}" deprecation="yes"
 				includeantruntime="false"
 				debug="${debug}" debuglevel="${debuglevel}"
@@ -48,6 +47,7 @@
 			</classpath>
 		</javac>
 		<!-- Dynamically loaded stuff that requires Java 6. -->
+		<echo>Compiling dynamically loaded classes with compiler: ${javac.16}</echo>
 		<javac srcdir="${source-dir}" destdir="${class-dir}"
 				includeantruntime="false"
 				deprecation="yes" debug="${debug}" debuglevel="${debuglevel}"

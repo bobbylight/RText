@@ -38,8 +38,6 @@
 	Date:       02jun2009
 
 -->
-
-
 <project name="RText" default="make-rtext-app" basedir=".">
 
 	<description>RText build file</description>
@@ -80,6 +78,7 @@
 		<delete includeEmptyDirs="true" quiet="true" dir="${class-dir}"/>
 		<mkdir dir="${class-dir}"/>
 		<!-- Most stuff only requires Java 1.4. -->
+		<echo>Compiling required classes with: ${java.version} (1.4 is recommended)</echo>
 		<javac srcdir="${source-dir}" destdir="${class-dir}"
 				classpathref="project.class.path"
 				deprecation="yes"
@@ -93,6 +92,7 @@
 			<exclude name="org/fife/rtext/plugins/**"/>
 		</javac>
 		<!-- Dynamically loaded stuff that requires Java 6. -->
+		<echo>Compiling dynamically loaded classes with compiler: ${javac.16}</echo>
 		<javac srcdir="${source-dir}" destdir="${class-dir}"
 				includeantruntime="false"
 				deprecation="yes" debug="${debug}" debuglevel="${debuglevel}"

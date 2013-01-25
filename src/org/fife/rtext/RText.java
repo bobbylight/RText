@@ -48,7 +48,6 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.util.TranslucencyUtil;
 
 
-
 /**
  * An instance of the RText text editor.  <code>RText</code> is a programmer's
  * text editor with the following features:
@@ -170,7 +169,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 */
 	public static final String PROPERTY_PRINT_START_TIMES = "printStartTimes";
 
-	public static final String VERSION_STRING		= "2.0.6.????????-beta";
+	public static final String VERSION_STRING		= "2.0.6.20130125";
 
 
 	/**
