@@ -208,6 +208,7 @@
 				<include name="Common/src/**"/>
 				<include name="Common/i18n/**"/>
 				<include name="Common/extra/**"/>
+				<include name="Common/lib/**"/>
 				<include name="Common/native/**"/>
 			</fileset>
 		</zip>
