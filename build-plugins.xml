@@ -195,7 +195,7 @@
 				<include name="org/fife/rtext/plugins/tidy/**"/>
 			</fileset>
 			<manifest>
-				<attribute name="Class-Path" value="plugins/jtidy-r938.jar"/>
+				<attribute name="Class-Path" value="plugins/jtidy-r938.jar plugins/jsonbeans.jar"/>
 				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.tidy.Plugin"/>
 				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
 			</manifest>
@@ -203,6 +203,8 @@
 		<!-- Needed by tidy plugin -->
 		<copy file="lib/jtidy-r938.jar" todir="${dist-dir}/plugins"/>
 		<copy file="lib/jtidy-r938.LICENSE.txt" todir="${dist-dir}/plugins"/>
+		<copy file="lib/jsonbeans.jar" todir="${dist-dir}/plugins"/>
+		<copy file="lib/jsonbeans.LICENSE.txt" todir="${dist-dir}/plugins"/>
 
 		<!-- Tool support plugin. -->
 		<jar destfile="${dist-dir}/plugins/ToolSupport.jar">

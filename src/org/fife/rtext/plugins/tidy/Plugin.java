@@ -172,6 +172,20 @@ public class Plugin extends AbstractPlugin
 
 
 	/**
+	 * Returns whether the specified language can be pretty printed by this
+	 * plugin.
+	 *
+	 * @param style The language.
+	 * @return Whether the language can be pretty printed.
+	 */
+	private boolean isSupportedLanguage(String style) {
+		return SyntaxConstants.SYNTAX_STYLE_HTML.equals(style) ||
+				SyntaxConstants.SYNTAX_STYLE_XML.equals(style) ||
+				SyntaxConstants.SYNTAX_STYLE_JSON.equals(style);
+	}
+
+
+	/**
 	 * Loads our tidying preferences.
 	 */
 	private void loadPreferences() {
@@ -216,10 +230,7 @@ public class Plugin extends AbstractPlugin
 		if (AbstractMainView.CURRENT_DOCUMENT_PROPERTY.equals(name)) {
 			RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
 			String style = textArea.getSyntaxEditingStyle();
-			boolean supported =
-				SyntaxConstants.SYNTAX_STYLE_HTML.equals(style) ||
-				SyntaxConstants.SYNTAX_STYLE_XML.equals(style);
-			action.setEnabled(supported);
+			action.setEnabled(isSupportedLanguage(style));
 		}
 
 	}
