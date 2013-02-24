@@ -903,7 +903,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param splashScreen The "splash screen" for this application.  This
 	 *        value may be <code>null</code>.
 	 */
-	public void preDisplayInit(GUIApplicationPreferences prefs,
+	protected void preDisplayInit(GUIApplicationPreferences prefs,
 								SplashScreen splashScreen) {
 
 		long start = System.currentTimeMillis();

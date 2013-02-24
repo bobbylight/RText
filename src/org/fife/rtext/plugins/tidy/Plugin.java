@@ -9,11 +9,14 @@
  */
 package org.fife.rtext.plugins.tidy;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
@@ -21,7 +24,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import org.fife.rtext.AbstractMainView;
+import org.fife.rtext.CurrentTextAreaEvent;
+import org.fife.rtext.CurrentTextAreaListener;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextMenuBar;
@@ -30,6 +34,7 @@ import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextAreaOptionPanel;
 
 
 /**
@@ -40,7 +45,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @version 1.0
  */
 public class Plugin extends AbstractPlugin
-		implements PropertyChangeListener {
+		implements CurrentTextAreaListener {
 
 	private RText rtext;
 	private TidyAction action;
@@ -48,10 +53,12 @@ public class Plugin extends AbstractPlugin
 
 	private HtmlOptions htmlOptions;
 	private XmlOptions xmlOptions;
+	private JsonOptions jsonOptions;
 
 	private static final String PLUGIN_VERSION			= "2.0.6";
-	private static final String PREFS_DIR_NAME			= "tidy";
 
+	private static final String TIDY_ACTION = "PrettyPrintAction";
+	
 	private static final String MSG = "org.fife.rtext.plugins.tidy.Plugin";
 
 	/**
@@ -67,7 +74,48 @@ public class Plugin extends AbstractPlugin
 	 */
 	public Plugin(AbstractPluggableGUIApplication app) {
 		this.rtext = (RText)app; // Needed in loadPreferences if error
-		loadPreferences();
+	}
+
+
+	/**
+	 * Listens for text area events.  If the active text area changes, or the
+	 * active text area's syntax style changes, we re-evaluate whether this
+	 * action should be active.
+	 *
+	 * @param e The event.
+	 */
+	public void currentTextAreaPropertyChanged(CurrentTextAreaEvent e) {
+		if (e.getType()==CurrentTextAreaEvent.TEXT_AREA_CHANGED ||
+				e.getType()==CurrentTextAreaEvent.SYNTAX_STYLE_CNANGED) {
+			RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
+			String style = textArea.getSyntaxEditingStyle();
+			action.setEnabled(isSupportedLanguage(style));
+		}
+	}
+
+
+	/**
+	 * Attempts to delete older versions' preferences (&lt;= RText 2.06),
+	 * since this plugin has consolidated all preferences into a single file.
+	 */
+	private void deleteOldVersionTidyPreferenceFiles() {
+
+		File oldPrefsDir = new File(RTextUtilities.getPreferencesDirectory(),
+				"tidy");
+		if (oldPrefsDir.isDirectory()) {
+
+			boolean success = true;
+			File[] propFiles = oldPrefsDir.listFiles();
+			for (int i=0; i<propFiles.length; i++) {
+				success &= propFiles[i].delete();
+			}
+
+			if (success) {
+				oldPrefsDir.delete();
+			}
+
+		}
+
 	}
 
 
@@ -82,10 +130,30 @@ public class Plugin extends AbstractPlugin
 
 
 	/**
+	 * Returns the options related to tidying JSON.
+	 *
+	 * @return The JSON options.
+	 */
+	public JsonOptions getJsonOptions() {
+		return jsonOptions;
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new OptionsPanel(this);
+	}
+
+
+	/**
+	 * This panel should be parented under the main text editor panel.
+	 *
+	 * @return The parent panel ID.
+	 */
+	public String getOptionsDialogPanelParentPanelID() {
+		return RTextAreaOptionPanel.ID;
 	}
 
 
@@ -132,6 +200,27 @@ public class Plugin extends AbstractPlugin
 
 
 	/**
+	 * Returns the file preferences for this plugin are saved in.
+	 *
+	 * @return The file.
+	 */
+	private File getPrefsFile() {
+		return new File(RTextUtilities.getPreferencesDirectory(),
+						"tidy.properties");
+	}
+
+
+	/**
+	 * Returns the parent application.
+	 *
+	 * @return The parent application.
+	 */
+	RText getRText() {
+		return rtext;
+	}
+
+
+	/**
 	 * Returns the options related to tidying XML.
 	 *
 	 * @return The XML tidying-options.
@@ -146,10 +235,14 @@ public class Plugin extends AbstractPlugin
 	 */
 	public void install(AbstractPluggableGUIApplication app) {
 
+		PluginPrefs prefs = loadPreferences();
+
 		RTextMenuBar mb = (RTextMenuBar)rtext.getJMenuBar();
 		JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_EDIT);
 
 		action = new TidyAction(app, this);
+		action.setAccelerator(prefs.tidyActionAccelerator);
+		rtext.addAction(TIDY_ACTION, action);
 		action.setEnabled(false); // Gets enabled for appropriate files.
 		JMenuItem item = new JMenuItem(action);
 		item.setToolTipText(null);
@@ -166,8 +259,8 @@ public class Plugin extends AbstractPlugin
 			menu.insertSeparator(index);
 		}
 
-		rtext.getMainView().addPropertyChangeListener(
-							AbstractMainView.CURRENT_DOCUMENT_PROPERTY, this);
+		rtext.getMainView().addCurrentTextAreaListener(this);
+
 	}
 
 
@@ -188,50 +281,39 @@ public class Plugin extends AbstractPlugin
 	/**
 	 * Loads our tidying preferences.
 	 */
-	private void loadPreferences() {
+	private PluginPrefs loadPreferences() {
 
-		File prefsDir = new File(RTextUtilities.getPreferencesDirectory(),
-									PREFS_DIR_NAME);
+		PluginPrefs prefs = new PluginPrefs();
+		htmlOptions = new HtmlOptions();
+		xmlOptions = new XmlOptions();
+		jsonOptions = new JsonOptions();
 
-		if (!prefsDir.isDirectory()) {
-			prefsDir.mkdirs();
-		}
+		File prefsFile = getPrefsFile();
+		if (prefsFile.isFile()) {
 
-		if (prefsDir.isDirectory()) { // Always true, just being paranoid
-			htmlOptions = new HtmlOptions();
-			xmlOptions = new XmlOptions();
 			try {
-				File file = new File(prefsDir, "html.propeties");
-				if (file.isFile()) {
-					htmlOptions.load(file);
+
+				Properties props = new Properties();
+				BufferedInputStream bin = new BufferedInputStream(
+						new FileInputStream(prefsFile));
+				try {
+					props.load(bin);
+				} finally {
+					bin.close();
 				}
-				file = new File(prefsDir, "xml.propeties");
-				if (file.isFile()) {
-					xmlOptions.load(file);
-				}
+
+				htmlOptions.load(props);
+				xmlOptions.load(props);
+				jsonOptions.load(props);
+				prefs.load(props);
+
 			} catch (IOException ioe) {
 				rtext.displayException(ioe);
 			}
+
 		}
 
-	}
-
-
-	/**
-	 * Called whenever a change we're interested in occurs in RText.
-	 *
-	 * @param e The event.
-	 */
-	public void propertyChange(PropertyChangeEvent e) {
-
-		String name = e.getPropertyName();
-
-		// If the current file changed.
-		if (AbstractMainView.CURRENT_DOCUMENT_PROPERTY.equals(name)) {
-			RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
-			String style = textArea.getSyntaxEditingStyle();
-			action.setEnabled(isSupportedLanguage(style));
-		}
+		return prefs;
 
 	}
 
@@ -241,21 +323,35 @@ public class Plugin extends AbstractPlugin
 	 */
 	public void savePreferences() {
 
-		File prefsDir = new File(RTextUtilities.getPreferencesDirectory(),
-									PREFS_DIR_NAME);
-		if (!prefsDir.isDirectory()) {
-			prefsDir.mkdirs();
+		deleteOldVersionTidyPreferenceFiles();
+
+		File prefsFile = getPrefsFile();
+		if (!prefsFile.getParentFile().isDirectory()) {
+			prefsFile.getParentFile().mkdirs();
 		}
 
-		if (prefsDir.isDirectory()) { // Should always be true
+		try {
+
+			Properties props = new Properties();
+			getHtmlOptions().save(props);
+			getXmlOptions().save(props);
+			getJsonOptions().save(props);
+
+			PluginPrefs prefs = new PluginPrefs();
+			prefs.tidyActionAccelerator = action.getAccelerator();
+			prefs.save(props);
+
+			BufferedOutputStream out = new BufferedOutputStream(
+					new FileOutputStream(prefsFile));
 			try {
-				File file = new File(prefsDir, "html.propeties");
-				getHtmlOptions().save(file);
-				file = new File(prefsDir, "xml.propeties");
-				getXmlOptions().save(file);
-			} catch (IOException ioe) {
-				rtext.displayException(ioe);
+				props.store(out,
+						"Preferences for the tidy/pretty-print plugin");
+			} finally {
+				out.close();
 			}
+
+		} catch (IOException ioe) {
+			rtext.displayException(ioe);
 		}
 
 	}

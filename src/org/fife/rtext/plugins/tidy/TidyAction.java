@@ -77,6 +77,37 @@ class TidyAction extends StandardAction {
 
 
 	/**
+	 * Makes summary messages more palatable to JOptionPanes.
+	 */
+	private static final String cleanupSummary(String summary) {
+
+		// Single-line JSON streams shouldn't create super-long JOptionPanes.
+		final int MAX_SUMMARY_LENGTH = 200;
+		if (summary.length()>MAX_SUMMARY_LENGTH) {
+			summary = summary.substring(0, MAX_SUMMARY_LENGTH) + "...";
+		}
+
+		// jsonbeans will print arbitrarily-long JSON blocks in its exception
+		// messages, so keep it <= 5 lines.
+		final int MAX_SUMMARY_LINE_COUNT = 10;
+		int lineCount = 1;
+		int index = 0;
+		while ((index=summary.indexOf('\n', index))>-1) {
+			if (lineCount==MAX_SUMMARY_LINE_COUNT) {
+				summary = summary.substring(0, index) + "...";
+				break;
+			}
+			lineCount++;
+			index++;
+		}
+
+		// Tabs don't show up in JOptionPanes.
+		return summary.replaceAll("\t", "   ");
+
+	}
+
+
+	/**
 	 * Called when the pretty print operation completes.  If it was successful,
 	 * the text area's content is updated.  An optional summary message is
 	 * displayed.
@@ -107,9 +138,15 @@ class TidyAction extends StandardAction {
 
 		String summary = result.getSummary();
 		if (summary!=null) {
+			summary = cleanupSummary(summary);
 			String title = Plugin.msg.getString("Dialog.Result.Title");
 			RText app = (RText)getApplication();
 			JOptionPane.showMessageDialog(app, summary, title, icon);
+		}
+		else if (result.getResult()==PrettyPrinter.RESULT_ERRORS) {
+			// If somehow we didn't get an error message, but the tidy failed,
+			// still alert the user that something bad happened.
+			UIManager.getLookAndFeel().provideErrorFeedback(null);
 		}
 
 	}

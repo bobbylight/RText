@@ -63,7 +63,7 @@ public class ConsolePrefs extends Prefs {
 
 
 	/**
-	 * Overridden to validate the task identifiers value.
+	 * Overridden to validate the dockable window position value.
 	 */
 	public void load(InputStream in) throws IOException {
 		super.load(in);
