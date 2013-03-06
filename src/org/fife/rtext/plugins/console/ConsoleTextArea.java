@@ -132,6 +132,21 @@ abstract class ConsoleTextArea extends JTextPane {
 	 * @param style The style to apply to the appended text.
 	 */
 	protected void appendImpl(final String text, final String style) {
+		appendImpl(text, style, false);
+	}
+
+
+	/**
+	 * Handles updating of the text component.  This method is thread-safe.
+	 *
+	 * @param text The text to append.
+	 * @param style The style to apply to the appended text.
+	 * @param treatAsUserInput Whether to treat the text as user input.  This
+	 *        determine whether the user can use backspace to remove this text
+	 *        or not.
+	 */
+	protected void appendImpl(final String text, final String style,
+			final boolean treatAsUserInput) {
 
 		// Ensure the meat of this method is done on the EDT, to prevent
 		// concurrency errors.
@@ -145,7 +160,9 @@ abstract class ConsoleTextArea extends JTextPane {
 				ble.printStackTrace();
 			}
 			setCaretPosition(doc.getLength());
-			inputMinOffs = getCaretPosition();
+			if (!treatAsUserInput) {
+				inputMinOffs = getCaretPosition();
+			}
 
 			// Don't let the console's text get too long
 			Element root = doc.getDefaultRootElement();
@@ -165,7 +182,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		else {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					appendImpl(text, style);
+					appendImpl(text, style, treatAsUserInput);
 				}
 			});
 		}
@@ -197,7 +214,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 * Fixes the keyboard shortcuts for this text component so the user cannot
 	 * accidentally delete any stdout or stderr, only stdin.
 	 */
-	private void fixKeyboardShortcuts() {
+	protected void fixKeyboardShortcuts() {
 
 		InputMap im = getInputMap();
 		ActionMap am = getActionMap();
@@ -211,8 +228,8 @@ abstract class ConsoleTextArea extends JTextPane {
 		// Just remove "delete previous word" for now, since DefaultEditorKit
 		// doesn't expose the delegate for us to call into. 
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, ctrl),
-				"delevePreviousWord");
-		am.put("delevePreviousWord", new DeletePreviousWordAction());
+				"deletePreviousWord");
+		am.put("deletePreviousWord", new DeletePreviousWordAction());
 
 		// delete
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");
@@ -253,6 +270,24 @@ abstract class ConsoleTextArea extends JTextPane {
 		im.put(ks, "Submit");
 		am.put("Submit", new SubmitAction());
 
+	}
+
+
+	/**
+	 * Returns the currently entered text.
+	 *
+	 * @return The currently entered text.
+	 */
+	protected String getCurrentInput() {
+		int startOffs = inputMinOffs;
+		Document doc = getDocument();
+		int len = doc.getLength() - startOffs;
+		try {
+			return doc.getText(startOffs, len);
+		} catch (BadLocationException ble) {
+			ble.printStackTrace();
+			return null;
+		}
 	}
 
 
@@ -572,7 +607,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	private class DeletePreviousWordAction extends TextAction {
 
 		public DeletePreviousWordAction() {
-			super("delevePreviousWord");
+			super("deletePreviousWord");
 		}
 
 		public void actionPerformed(ActionEvent e) {

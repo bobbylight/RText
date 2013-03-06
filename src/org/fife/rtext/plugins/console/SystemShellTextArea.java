@@ -9,7 +9,10 @@
  */
 package org.fife.rtext.plugins.console;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -17,11 +20,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+import javax.swing.text.TextAction;
 
 import org.fife.io.ProcessRunner;
 import org.fife.io.ProcessRunnerOutputListener;
 import org.fife.rtext.RText;
+import org.fife.ui.rtextfilechooser.Utilities;
 
 
 /**
@@ -34,6 +45,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 
 	private File pwd;
 	private File prevDir;
+	private final boolean isWindows;
 	private transient Thread activeProcessThread;
 
 	private static final String CD						= "cd";
@@ -44,9 +56,13 @@ class SystemShellTextArea extends ConsoleTextArea {
 	private static final String OPEN					= "open";
 	private static final String PWD						= "pwd";
 
+	private static final boolean CASE_SENSITIVE =
+			Utilities.isCaseSensitiveFileSystem();
+
 
 	public SystemShellTextArea(Plugin plugin) {
 		super(plugin);
+		isWindows = plugin.getRText().getOS()==RText.OS_WINDOWS;
 	}
 
 
@@ -61,6 +77,19 @@ class SystemShellTextArea extends ConsoleTextArea {
 		}
 		prompt += File.separatorChar=='/' ? "$ " : "> ";
 		appendImpl(prompt, STYLE_PROMPT);
+	}
+
+
+	protected void fixKeyboardShortcuts() {
+
+		super.fixKeyboardShortcuts();
+		InputMap im = getInputMap();
+		ActionMap am = getActionMap();
+
+		// Tab should offer list of matching filenames, if any, like bash. 
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "completeFileName");
+		am.put("completeFileName", new CompleteFileNameAction());
+
 	}
 
 
@@ -342,6 +371,126 @@ class SystemShellTextArea extends ConsoleTextArea {
 			activeProcessThread.interrupt();
 			activeProcessThread = null;
 		}
+	}
+
+
+	/**
+	 * Completes the file name at the caret position, or displays a list of
+	 * possible matches if there is more than one.
+	 */
+	private class CompleteFileNameAction extends TextAction {
+
+		public CompleteFileNameAction() {
+			super("completeFileName");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+
+			String possibleFileName = getPossibleFileName();
+			final String fileNamePart = getFileNamePart(possibleFileName);
+
+			File file = new File(possibleFileName);
+			if (!file.isAbsolute()) {
+				file = new File(pwd, possibleFileName);
+			}
+
+			File parent = null;
+			// If they've just typed a file or folder name
+			if (fileNamePart.length()==0) {
+				parent = file;
+			}
+			else {
+				parent = file.getParentFile();
+				if (parent==null) {
+					return;
+				}
+			}
+
+			File[] siblings = parent.listFiles(new FilenameFilter() {
+				public boolean accept(File dir, String name) {
+					if (!CASE_SENSITIVE) {
+						name = name.toLowerCase();
+					}
+					return name.startsWith(fileNamePart);
+				}
+			});
+
+			if (siblings.length==0) {
+				return;
+			}
+			if (siblings.length==1) {
+				int dot = getCaretPosition();
+				setSelectionStart(dot-fileNamePart.length());
+				setSelectionEnd(dot);
+				replaceSelection(siblings[0].getName());
+			}
+			else {
+				showChoices(siblings, getCurrentInput());
+			}
+
+		}
+
+		private String getFileNamePart(String fileName) {
+			int lastSlash = fileName.lastIndexOf('/');
+			int lastBackslash = fileName.lastIndexOf('\\');
+			int lastSlashIndex = Math.max(lastSlash, lastBackslash);
+			String temp = fileName.substring(lastSlashIndex+1).toLowerCase();
+			if (!CASE_SENSITIVE) {
+				temp = temp.toLowerCase();
+			}
+			return temp;
+		}
+
+		private String getPossibleFileName() {
+
+			int dot = getCaretPosition();
+			Document doc = getDocument();
+			Element root = doc.getDefaultRootElement();
+			Element elem = root.getElement(root.getElementIndex(dot));
+			int start = elem.getStartOffset();
+			String text = null;
+			try {
+				text = doc.getText(start, dot-start);
+			} catch (BadLocationException ble) { // Never happens
+				ble.printStackTrace();
+				return "";
+			}
+
+			int pos = text.length();
+			while (pos>=0) {
+				char ch = text.charAt(pos-1);
+				// TODO: support spaces in paths - check for wrapping quotes.
+				if (isValidFilePathChar(ch)) {
+					pos--;
+				}
+				else {
+					break;
+				}
+			}
+
+			return text.substring(pos);
+
+		}
+
+		private final boolean isValidFilePathChar(char ch) {
+			return Character.isLetterOrDigit(ch) || ch=='-' || ch=='_' ||
+					ch=='/' || ch=='.' || (isWindows && (ch=='\\' || ch==':'));
+		}
+
+		private void showChoices(File[] choices, String input) {
+			StringBuffer sb = new StringBuffer("\n");
+			for (int i=0; i<choices.length; i++) {
+				sb.append(choices[i].getName());
+				if (i<choices.length-1) {
+					sb.append(", ");
+				}
+			}
+			sb.append('\n');
+			appendImpl(sb.toString(), STYLE_STDOUT);
+			appendPrompt();
+			appendImpl(input, STYLE_STDIN, true);
+		}
+
 	}
 
 
