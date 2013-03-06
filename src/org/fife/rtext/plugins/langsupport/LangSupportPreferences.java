@@ -42,6 +42,7 @@ public class LangSupportPreferences extends Prefs {
 	public boolean html_showDescWindow;
 	public boolean html_autoActivation;
 	public int html_autoActivationDelay;
+	public boolean html_autoAddClosingTags;
 	public boolean html_folding_enabled;
 
 	public boolean java_enabled;
@@ -117,6 +118,7 @@ public class LangSupportPreferences extends Prefs {
 		html_showDescWindow = true;
 		html_autoActivation = true;
 		html_autoActivationDelay = AUTO_ACTIVATION_DELAY;
+		html_autoAddClosingTags = true;
 		html_folding_enabled = true;
 
 		java_enabled = false;

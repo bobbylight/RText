@@ -32,6 +32,7 @@ import javax.swing.text.AbstractDocument;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
+import org.fife.rsta.ac.html.HtmlLanguageSupport;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.NumberDocumentFilter;
 import org.fife.rtext.RText;
@@ -51,6 +52,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 	private Listener listener;
 	private JCheckBox enabledCB;
 	private JCheckBox showDescWindowCB;
+	private JCheckBox autoAddClosingTagsCB;
 	private JCheckBox autoActivateCB;
 	private JLabel aaDelayLabel;
 	private JTextField aaDelayField;
@@ -103,6 +105,9 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 
 		showDescWindowCB = createCB("Options.General.ShowDescWindow");
 		addLeftAligned(box2, showDescWindowCB, 5);
+
+		autoAddClosingTagsCB = createCB("Options.Html.AutoAddClosingTags");
+		addLeftAligned(box, autoAddClosingTagsCB, 5);
 
 		box2.add(Box.createVerticalGlue());
 
@@ -188,6 +193,10 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
 		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_HTML);
 
+		// HTML-specific options
+		HtmlLanguageSupport hls = (HtmlLanguageSupport)ls;
+		hls.setAutoAddClosingTags(autoAddClosingTagsCB.isSelected());
+
 		// Options dealing with code completion.
 		ls.setAutoCompleteEnabled(enabledCB.isSelected());
 		ls.setShowDescWindow(showDescWindowCB.isSelected());
@@ -252,6 +261,10 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
 		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_HTML);
 
+		// HTML-specific options
+		HtmlLanguageSupport hls = (HtmlLanguageSupport)ls;
+		autoAddClosingTagsCB.setSelected(hls.getAutoAddClosingTags());
+
 		// Options dealing with code completion
 		setEnabledCBSelected(ls.isAutoCompleteEnabled());
 		showDescWindowCB.setSelected(ls.getShowDescWindow());
@@ -285,6 +298,11 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 				firePropertyChange(PROPERTY, null, null);
 			}
 
+			else if (autoAddClosingTagsCB==source) {
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
 			else if (autoActivateCB==source) {
 				setAutoActivateCBSelected(autoActivateCB.isSelected());
 				hasUnsavedChanges = true;
@@ -299,11 +317,13 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 
 			else if (rdButton==source) {
 				if (!enabledCB.isSelected() ||
+						!autoAddClosingTagsCB.isSelected() ||
 						!showDescWindowCB.isSelected() ||
 						!autoActivateCB.isSelected() ||
 						!"300".equals(aaDelayField.getText()) ||
 						!foldingEnabledCB.isSelected()) {
 					setEnabledCBSelected(true);
+					autoAddClosingTagsCB.setSelected(true);
 					showDescWindowCB.setSelected(true);
 					setAutoActivateCBSelected(true);
 					aaDelayField.setText("300");

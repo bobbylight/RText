@@ -27,6 +27,7 @@ import javax.swing.text.BadLocationException;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
+import org.fife.rsta.ac.html.HtmlLanguageSupport;
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
 import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
@@ -260,10 +261,12 @@ public class Plugin extends AbstractPlugin {
 
 		language = SyntaxConstants.SYNTAX_STYLE_HTML;
 		ls = fact.getSupportFor(language);
-		ls.setAutoCompleteEnabled(prefs.html_enabled);
-		ls.setShowDescWindow(prefs.html_showDescWindow);
-		ls.setAutoActivationDelay(prefs.html_autoActivationDelay);
-		ls.setAutoActivationEnabled(prefs.html_autoActivation);
+		HtmlLanguageSupport hls = (HtmlLanguageSupport)ls;
+		hls.setAutoCompleteEnabled(prefs.html_enabled);
+		hls.setShowDescWindow(prefs.html_showDescWindow);
+		hls.setAutoActivationDelay(prefs.html_autoActivationDelay);
+		hls.setAutoActivationEnabled(prefs.html_autoActivation);
+		hls.setAutoAddClosingTags(prefs.html_autoAddClosingTags);
 		view.setCodeFoldingEnabledFor(language, prefs.html_folding_enabled);
 
 		language = SyntaxConstants.SYNTAX_STYLE_JAVA;
@@ -404,10 +407,12 @@ public class Plugin extends AbstractPlugin {
 
 		language = SyntaxConstants.SYNTAX_STYLE_HTML;
 		ls = fact.getSupportFor(language);
-		prefs.html_enabled = ls.isAutoCompleteEnabled();
-		prefs.html_showDescWindow = ls.getShowDescWindow();
-		prefs.html_autoActivation = ls.isAutoActivationEnabled();
-		prefs.html_autoActivationDelay = ls.getAutoActivationDelay();
+		HtmlLanguageSupport hls = (HtmlLanguageSupport)ls;
+		prefs.html_enabled = hls.isAutoCompleteEnabled();
+		prefs.html_showDescWindow = hls.getShowDescWindow();
+		prefs.html_autoActivation = hls.isAutoActivationEnabled();
+		prefs.html_autoAddClosingTags = hls.getAutoAddClosingTags();
+		prefs.html_autoActivationDelay = hls.getAutoActivationDelay();
 		prefs.html_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_JAVA;
