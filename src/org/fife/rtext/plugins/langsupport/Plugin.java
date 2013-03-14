@@ -30,12 +30,14 @@ import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.html.HtmlLanguageSupport;
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
+import org.fife.rsta.ac.java.buildpath.DirSourceLocation;
 import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.buildpath.ZipSourceLocation;
 import org.fife.rsta.ac.jsp.JspLanguageSupport;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
+import org.fife.rsta.ac.php.PhpLanguageSupport;
 import org.fife.rsta.ac.sh.ShellLanguageSupport;
 import org.fife.rsta.ac.xml.XmlLanguageSupport;
 import org.fife.rtext.AbstractMainView;
@@ -289,7 +291,12 @@ public class Plugin extends AbstractPlugin {
 			JarLibraryInfo info = new JarLibraryInfo(jar);
 			if (prefs.java_classpath_src[i]!=null) {
 				File src = new File(prefs.java_classpath_src[i]);
-				info.setSourceLocation(new ZipSourceLocation(src));
+				if (src.isFile()) {
+					info.setSourceLocation(new ZipSourceLocation(src));
+				}
+				else { // Assume source folder
+					info.setSourceLocation(new DirSourceLocation(src));
+				}
 			}
 			try {
 				jarMan.addClassFileSource(info);
@@ -308,6 +315,7 @@ public class Plugin extends AbstractPlugin {
 		ls = fact.getSupportFor(language);
 		JspLanguageSupport jspls = (JspLanguageSupport)ls;
 		jspls.setAutoCompleteEnabled(prefs.jsp_enabled);
+		jspls.setAutoAddClosingTags(prefs.jsp_autoAddClosingTags);
 		view.setCodeFoldingEnabledFor(language, prefs.jsp_folding_enabled);
 
 		language = SyntaxConstants.SYNTAX_STYLE_LATEX;
@@ -348,6 +356,8 @@ public class Plugin extends AbstractPlugin {
 		ls.setShowDescWindow(prefs.php_showDescWindow);
 		ls.setAutoActivationEnabled(prefs.php_autoActivation);
 		ls.setAutoActivationDelay(prefs.php_autoActivationDelay);
+		PhpLanguageSupport phpls = (PhpLanguageSupport)ls;
+		phpls.setAutoAddClosingTags(prefs.php_autoAddClosingTags);
 		view.setCodeFoldingEnabledFor(language, prefs.php_folding_enabled);
 
 		language = SyntaxConstants.SYNTAX_STYLE_SCALA;
@@ -455,6 +465,7 @@ public class Plugin extends AbstractPlugin {
 		ls = fact.getSupportFor(language);
 		JspLanguageSupport jspls = (JspLanguageSupport)ls;
 		prefs.jsp_enabled = jspls.isAutoCompleteEnabled();
+		prefs.jsp_autoAddClosingTags = jspls.getAutoAddClosingTags();
 		prefs.jsp_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_LATEX;
@@ -487,6 +498,8 @@ public class Plugin extends AbstractPlugin {
 		prefs.php_showDescWindow = ls.getShowDescWindow();
 		prefs.php_autoActivation = ls.isAutoActivationEnabled();
 		prefs.php_autoActivationDelay = ls.getAutoActivationDelay();
+		PhpLanguageSupport phpls = (PhpLanguageSupport)ls;
+		prefs.php_autoAddClosingTags = phpls.getAutoAddClosingTags();
 		prefs.php_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_SCALA;

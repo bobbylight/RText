@@ -32,6 +32,7 @@ import javax.swing.text.AbstractDocument;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
+import org.fife.rsta.ac.php.PhpLanguageSupport;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.NumberDocumentFilter;
 import org.fife.rtext.RText;
@@ -51,6 +52,7 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 	private Listener listener;
 	private JCheckBox enabledCB;
 	private JCheckBox showDescWindowCB;
+	private JCheckBox autoAddClosingTagsCB;
 	private JCheckBox autoActivateCB;
 	private JLabel aaDelayLabel;
 	private JTextField aaDelayField;
@@ -103,6 +105,9 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 
 		showDescWindowCB = createCB("Options.General.ShowDescWindow");
 		addLeftAligned(box2, showDescWindowCB, 5);
+
+		autoAddClosingTagsCB = createCB("Options.Html.AutoAddClosingTags");
+		addLeftAligned(box, autoAddClosingTagsCB, 5);
 
 		box2.add(Box.createVerticalGlue());
 
@@ -189,6 +194,10 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
 		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PHP);
 
+		// HTML-specific options
+		PhpLanguageSupport phpls = (PhpLanguageSupport)ls;
+		phpls.setAutoAddClosingTags(autoAddClosingTagsCB.isSelected());
+
 		// Options dealing with code completion.
 		ls.setAutoCompleteEnabled(enabledCB.isSelected());
 		ls.setShowDescWindow(showDescWindowCB.isSelected());
@@ -254,6 +263,10 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
 		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_PHP);
 
+		// HTML-specific options
+		PhpLanguageSupport phpls = (PhpLanguageSupport)ls;
+		autoAddClosingTagsCB.setSelected(phpls.getAutoAddClosingTags());
+
 		// Options dealing with code completion
 		setEnabledCBSelected(ls.isAutoCompleteEnabled());
 		showDescWindowCB.setSelected(ls.getShowDescWindow());
@@ -293,6 +306,11 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 				firePropertyChange(PROPERTY, null, null);
 			}
 
+			else if (autoAddClosingTagsCB==source) {
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
 			else if (foldingEnabledCB==source ||
 					showDescWindowCB==source) {
 				hasUnsavedChanges = true;
@@ -301,11 +319,13 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 
 			else if (rdButton==source) {
 				if (!enabledCB.isSelected() ||
+						!autoAddClosingTagsCB.isSelected() ||
 						!showDescWindowCB.isSelected() ||
 						!autoActivateCB.isSelected() ||
 						!"300".equals(aaDelayField.getText()) ||
 						!foldingEnabledCB.isSelected()) {
 					setEnabledCBSelected(true);
+					autoAddClosingTagsCB.setSelected(true);
 					showDescWindowCB.setSelected(true);
 					setAutoActivateCBSelected(true);
 					aaDelayField.setText("300");

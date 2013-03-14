@@ -60,6 +60,7 @@ public class LangSupportPreferences extends Prefs {
 	public boolean json_folding_enabled;
 
 	public boolean jsp_enabled;
+	public boolean jsp_autoAddClosingTags;
 	public boolean jsp_folding_enabled;
 
 	public boolean latex_folding_enabled;
@@ -84,6 +85,7 @@ public class LangSupportPreferences extends Prefs {
 	public boolean php_showDescWindow;
 	public boolean php_autoActivation;
 	public int php_autoActivationDelay;
+	public boolean php_autoAddClosingTags;
 	public boolean php_folding_enabled;
 
 	public boolean scala_folding_enabled;
@@ -146,6 +148,7 @@ public class LangSupportPreferences extends Prefs {
 		json_folding_enabled = true;
 		
 		jsp_enabled = true;
+		jsp_autoAddClosingTags = true;
 		jsp_folding_enabled = true;
 
 		latex_folding_enabled = true;
@@ -177,6 +180,7 @@ public class LangSupportPreferences extends Prefs {
 		php_showDescWindow = true;
 		php_autoActivation = true;
 		php_autoActivationDelay = AUTO_ACTIVATION_DELAY;
+		php_autoAddClosingTags = true;
 		php_folding_enabled = true;
 
 		scala_folding_enabled = true;

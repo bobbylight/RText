@@ -42,6 +42,7 @@ class JspOptionsPanel extends OptionsDialogPanel {
 
 	private Listener listener;
 	private JCheckBox enabledCB;
+	private JCheckBox autoAddClosingTagsCB;
 	private JCheckBox foldingEnabledCB;
 	private JButton rdButton;
 
@@ -79,6 +80,10 @@ class JspOptionsPanel extends OptionsDialogPanel {
 		addLeftAligned(box, enabledCB);
 		cp.add(Box.createVerticalStrut(5));
 
+		autoAddClosingTagsCB = createCB("Options.Html.AutoAddClosingTags");
+		addLeftAligned(box, autoAddClosingTagsCB, 5);
+		cp.add(Box.createVerticalStrut(5));
+
 		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
 		addLeftAligned(box, foldingEnabledCB, 5);
 		cp.add(Box.createVerticalStrut(5));
@@ -112,6 +117,9 @@ class JspOptionsPanel extends OptionsDialogPanel {
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
 		JspLanguageSupport ls = (JspLanguageSupport)lsf.getSupportFor(
 				SyntaxConstants.SYNTAX_STYLE_JSP);
+
+		// HTML-specific options
+		ls.setAutoAddClosingTags(autoAddClosingTagsCB.isSelected());
 
 		// Options dealing with code completion.
 		ls.setAutoCompleteEnabled(enabledCB.isSelected());
@@ -156,6 +164,9 @@ class JspOptionsPanel extends OptionsDialogPanel {
 		JspLanguageSupport ls = (JspLanguageSupport)lsf.getSupportFor(
 				SyntaxConstants.SYNTAX_STYLE_JSP);
 
+		// HTML-specific options
+		autoAddClosingTagsCB.setSelected(ls.getAutoAddClosingTags());
+
 		// Options dealing with code completion
 		setEnabledCBSelected(ls.isAutoCompleteEnabled());
 
@@ -184,15 +195,22 @@ class JspOptionsPanel extends OptionsDialogPanel {
 				firePropertyChange(PROPERTY, null, null);
 			}
 
+			else if (autoAddClosingTagsCB==source) {
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
 			else if (foldingEnabledCB==source) {
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
 			}
 
 			else if (rdButton==source) {
-				if (enabledCB.isSelected() ||
+				if (!enabledCB.isSelected() ||
+						!autoAddClosingTagsCB.isSelected() ||
 						!foldingEnabledCB.isSelected()) {
-					enabledCB.setSelected(false);
+					enabledCB.setSelected(true);
+					autoAddClosingTagsCB.setSelected(true);
 					foldingEnabledCB.setSelected(true);
 					hasUnsavedChanges = true;
 					firePropertyChange(PROPERTY, null, null);

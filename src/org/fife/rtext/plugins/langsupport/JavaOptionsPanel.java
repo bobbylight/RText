@@ -40,6 +40,7 @@ import javax.swing.text.AbstractDocument;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
+import org.fife.rsta.ac.java.buildpath.DirSourceLocation;
 import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
@@ -285,7 +286,11 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 			LibraryInfo info = new JarLibraryInfo(jar);
 			String source = (String)model.getValueAt(i, 1);
 			if (source!=null && source.length()>0) {
-				info.setSourceLocation(new ZipSourceLocation(new File(source)));
+				File loc = new File(source);
+				SourceLocation sourceLoc = loc.isFile() ?
+						(SourceLocation)new ZipSourceLocation(loc) :
+							new DirSourceLocation(loc);
+				info.setSourceLocation(sourceLoc);
 			}
 			try {
 				jarMan.addClassFileSource(info);
