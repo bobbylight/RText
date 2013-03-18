@@ -117,7 +117,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		cp.add(Box.createVerticalStrut(5));
 
 		enabledCB = createCB("Options.General.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB, 5);
+		addLeftAligned(box, enabledCB, 3);
 
 		Box box2 = Box.createVerticalBox();
 		if (o.isLeftToRight()) {
@@ -129,13 +129,13 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		box.add(box2);
 
 		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box2, showDescWindowCB, 5);
+		addLeftAligned(box2, showDescWindowCB, 3);
 
 		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
-		addLeftAligned(box2, paramAssistanceCB, 5);
+		addLeftAligned(box2, paramAssistanceCB, 3);
 
 		useParensCB = createCB("UseParensInCodeCompletion");
-		addLeftAligned(box2, useParensCB, 5);
+		addLeftAligned(box2, useParensCB, 3);
 
 		box2.add(Box.createVerticalGlue());
 
@@ -145,7 +145,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		cp.add(box);
 
 		compileCB = createCB("Options.General.UnderlineErrors");
-		addLeftAligned(box, compileCB, 5);
+		addLeftAligned(box, compileCB, 3);
 
 		box2 = Box.createVerticalBox();
 		if (o.isLeftToRight()) {
@@ -177,7 +177,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			temp2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
 		}
 		box2.add(temp);
-		box2.add(Box.createVerticalStrut(5));
+		box2.add(Box.createVerticalStrut(3));
 		warningsCB = createCB("Warnings");
 		taintModeCB = createCB("TaintMode");
 		Box box3 = createHorizontalBox();
@@ -209,7 +209,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 
 		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
 		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton, 5);
+		addLeftAligned(cp, rdButton);
 
 //		cp.add(Box.createVerticalGlue());
 

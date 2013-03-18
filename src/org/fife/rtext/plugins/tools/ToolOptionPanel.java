@@ -19,7 +19,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -93,13 +92,9 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 		cp.add(topPanel, BorderLayout.NORTH);
 
 		// A check box toggling the plugin's visibility.
-		JPanel temp = new JPanel(new BorderLayout());
 		visibleCB = new JCheckBox(gpb.getString("Visible"));
 		visibleCB.addActionListener(listener);
-		temp.add(visibleCB, BorderLayout.LINE_START);
-		temp.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
-		topPanel.add(temp);
-		topPanel.add(Box.createVerticalStrut(5));
+		addLeftAligned(topPanel, visibleCB, 5);
 
 		// A combo in which to select the dockable window's placement.
 		Box locationPanel = createHorizontalBox();
@@ -117,8 +112,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 		locationPanel.add(Box.createHorizontalStrut(5));
 		locationPanel.add(locationCombo);
 		locationPanel.add(Box.createHorizontalGlue());
-		topPanel.add(locationPanel);
-		topPanel.add(Box.createVerticalStrut(20));
+		addLeftAligned(topPanel, locationPanel, 20);
 		topPanel.add(Box.createVerticalGlue());
 
 		model = new DefaultTableModel(new String[] {

@@ -182,7 +182,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		highlightCurrentLineCheckBox = new JCheckBox(msg.getString("HighlightCL"));
 		highlightCurrentLineCheckBox.setActionCommand("HighlightCurrentLineCheckBox");
 		highlightCurrentLineCheckBox.addActionListener(this);
-		hclColorButton = new RColorSwatchesButton(Color.BLACK, 50,15);
+		hclColorButton = new RColorSwatchesButton();
 		hclColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		otherPanel.add(highlightCurrentLineCheckBox);
 		otherPanel.add(hclColorButton);
@@ -199,7 +199,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		marginLinePositionField.setMaximumSize(size);
 		marginLinePositionField.setPreferredSize(size);
 		marginLineColorLabel = new JLabel(msg.getString("WithThisColor"));
-		marginLineColorButton = new RColorSwatchesButton(Color.BLACK, 50,15);
+		marginLineColorButton = new RColorSwatchesButton();
 		marginLineColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		marginLineColorLabel.setLabelFor(marginLineColorButton);
 		otherPanel.add(marginLineCheckBox);
@@ -247,10 +247,10 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		bracketMatchCheckBox.setActionCommand("BracketMatchCheckBox");
 		bracketMatchCheckBox.addActionListener(this);
 		bmBGColorLabel = new JLabel(msg.getString("BackgroundFill"));
-		bmBGColorButton = new RColorSwatchesButton(Color.BLACK, 50,15);
+		bmBGColorButton = new RColorSwatchesButton();
 		bmBGColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		bmBorderColorLabel = new JLabel(msg.getString("Border"));
-		bmBorderColorButton = new RColorSwatchesButton(Color.BLACK, 50,15);
+		bmBorderColorButton = new RColorSwatchesButton();
 		bmBorderColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		bracketMatchingPanel.add(bracketMatchCheckBox);
 		bracketMatchingPanel.add(bmBGColorLabel);
@@ -272,7 +272,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		box = createHorizontalBox();
 		box.add(showTabLinesCheckBox);
 		box.add(Box.createHorizontalStrut(5));
-		tabLineColorButton = new RColorSwatchesButton(Color.black, 50,15);
+		tabLineColorButton = new RColorSwatchesButton();
 		tabLineColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		box.add(tabLineColorButton);
 		box.add(Box.createHorizontalGlue());

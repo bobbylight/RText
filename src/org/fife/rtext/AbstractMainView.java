@@ -116,6 +116,8 @@ public abstract class AbstractMainView extends JPanel
 	private Font printFont;						// The font to use when printing a document.
 	private Color caretColor;					// The color used for carets.
 	private Color selectionColor;					// The color used for selections.
+	private Color selectedTextColor;
+	private boolean useSelectedTextColor;
 
 	private Object backgroundObject;				// Object used to draw text areas' backgrounds.
 	private float imageAlpha;					// Alpha value used to make the bg image translucent.
@@ -419,9 +421,8 @@ public abstract class AbstractMainView extends JPanel
 			// enough to get to and complete this line).
 			checkForModification = false;
 
-			int numDocuments = getNumDocuments();
 			StringBuffer sb = new StringBuffer();
-			for (int i=0; i<numDocuments; i++) {
+			for (int i=0; i<getNumDocuments(); i++) {
 				RTextEditorPane textArea = getRTextEditorPaneAt(i);
 				if (textArea.isModifiedOutsideEditor()) {
 					sb.append(' ').append(i);
@@ -548,8 +549,7 @@ public abstract class AbstractMainView extends JPanel
 	 * @see #convertOpenFilesTabsToSpaces
 	 */
 	public void convertOpenFilesSpacesToTabs() {
-		int numDocuments = getNumDocuments();
-		for (int i=0; i<numDocuments; i++)
+		for (int i=0; i<getNumDocuments(); i++)
 			getRTextEditorPaneAt(i).convertSpacesToTabs();
 	}
 
@@ -561,8 +561,7 @@ public abstract class AbstractMainView extends JPanel
 	 * @see #convertOpenFilesSpacesToTabs
 	 */
 	public void convertOpenFilesTabsToSpaces() {
-		int numDocuments = getNumDocuments();
-		for (int i=0; i<numDocuments; i++)
+		for (int i=0; i<getNumDocuments(); i++)
 			getRTextEditorPaneAt(i).convertTabsToSpaces();
 	}
 
@@ -597,6 +596,8 @@ public abstract class AbstractMainView extends JPanel
 		printFont			= fromPanel.printFont;
 		caretColor		= fromPanel.caretColor;
 		selectionColor		= fromPanel.selectionColor;
+		selectedTextColor	= fromPanel.selectedTextColor;
+		useSelectedTextColor = fromPanel.useSelectedTextColor;
 
 		backgroundObject	= fromPanel.backgroundObject;
 		imageAlpha		= fromPanel.imageAlpha;
@@ -780,6 +781,8 @@ public abstract class AbstractMainView extends JPanel
 		pane.setCloseCurlyBraces(autoInsertClosingCurlys);
 		pane.setCaretColor(getCaretColor());
 		pane.setSelectionColor(getSelectionColor());
+		pane.setSelectedTextColor(getSelectedTextColor());
+		pane.setUseSelectedTextColor(getUseSelectedTextColor());
 		pane.setSyntaxScheme(owner.getSyntaxScheme());
 		pane.setHyperlinksEnabled(getHyperlinksEnabled());
 		pane.setHyperlinkForeground(getHyperlinkColor());
@@ -1176,8 +1179,7 @@ public abstract class AbstractMainView extends JPanel
 	 *         is not being edited.
 	 */
 	public int getFileIndex(String fileFullPath) {
-		int numDocuments = getNumDocuments();
-		for (int i=0; i<numDocuments; i++) {
+		for (int i=0; i<getNumDocuments(); i++) {
 			if (getRTextEditorPaneAt(i).getFileFullPath().equals(fileFullPath))
 				return i;
 		}
@@ -1654,11 +1656,26 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns the color being used for selected text in all text areas in this
+	 * main view, if selected text is enabled.
+	 *
+	 * @return The <code>Color</code> being used for all selections in all text
+	 *         areas.
+	 * @see #getUseSelectedTextColor()
+	 * @see #setSelectedTextColor(Color)
+	 */
+	public Color getSelectedTextColor() {
+		return selectedTextColor;
+	}
+
+
+	/**
 	 * Returns the color being used for selections in all text areas in this
 	 * main view.
 	 *
-	 * @return The <code>java.awt.Color</code> being used for all selections in
-	 *         all text areas.
+	 * @return The <code>Color</code> being used for all selections in all text
+	 *         areas.
+	 * @see #setSelectionColor(Color)
 	 */
 	public Color getSelectionColor() {
 		return selectionColor;
@@ -1802,6 +1819,19 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public int getTextMode() {
 		return textMode;
+	}
+
+
+	/**
+	 * Returns whether text areas are honoring their "selected text color", as
+	 * opposed to just rendering token styles even for selected tokens.
+	 *
+	 * @return Whether the "selected text color" is being honored.
+	 * @see #setUseSelectedTextColor(boolean)
+	 * @see #getSelectedTextColor()
+	 */
+	public boolean getUseSelectedTextColor() {
+		return useSelectedTextColor;
 	}
 
 
@@ -2104,6 +2134,8 @@ public abstract class AbstractMainView extends JPanel
 		}
 		setCaretColor(prefs.caretColor);
 		setSelectionColor(prefs.selectionColor);
+		setSelectedTextColor(prefs.selectedTextColor);
+		setUseSelectedTextColor(prefs.useSelectedTextColor);
 		setLineWrap(prefs.wordWrap);
 		setCurrentLineHighlightEnabled(prefs.currentLineHighlightEnabled);
 		setCurrentLineHighlightColor(prefs.currentLineHighlightColor);
@@ -2639,8 +2671,7 @@ public abstract class AbstractMainView extends JPanel
 		int currentTab = getSelectedIndex();
 
 		// Cycle through each document, one by one.
-		int numDocuments = getNumDocuments();
-		for (int i=0; i<numDocuments; i++) {
+		for (int i=0; i<getNumDocuments(); i++) {
 			// Save this document, if it is not read-only
 			if (getRTextEditorPaneAt(i).isReadOnly()==false) {
 				setSelectedIndex(i);
@@ -2933,8 +2964,7 @@ public abstract class AbstractMainView extends JPanel
 		}
 
 		// Now, implement that background.
-		int numDocuments = getNumDocuments();
-		for (int i=0; i<numDocuments; i++)
+		for (int i=0; i<getNumDocuments(); i++)
 			getRTextEditorPaneAt(i).setBackgroundObject(backgroundObject);
 
 	}
@@ -3005,8 +3035,7 @@ public abstract class AbstractMainView extends JPanel
 	public void setCaretColor(final Color color) {
 		if (color!=null && color!=caretColor) {
 			caretColor = color;
-			int numDocuments = getNumDocuments();
-			for (int i=0; i<numDocuments; i++)
+			for (int i=0; i<getNumDocuments(); i++)
 				getRTextEditorPaneAt(i).setCaretColor(color);
 		}
 	}
@@ -3027,8 +3056,7 @@ public abstract class AbstractMainView extends JPanel
 			return;
 		if (carets[mode]!=style) {
 			carets[mode] = style;
-			int numDocuments = getNumDocuments();
-			for (int i=0; i<numDocuments; i++)
+			for (int i=0; i<getNumDocuments(); i++)
 				getRTextEditorPaneAt(i).setCaretStyle(mode, style);
 		}
 	}
@@ -3072,8 +3100,7 @@ public abstract class AbstractMainView extends JPanel
 		if (color==null)
 			throw new NullPointerException();
 		currentLineColor = color;
-		int numDocuments = getNumDocuments();
-		for (int i=0; i<numDocuments; i++) {
+		for (int i=0; i<getNumDocuments(); i++) {
 			RTextEditorPane textArea = getRTextEditorPaneAt(i);
 			textArea.setCurrentLineHighlightColor(currentLineColor);
 		}
@@ -3090,8 +3117,7 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public void setCurrentLineHighlightEnabled(boolean enabled) {
 		highlightCurrentLine = enabled;
-		int numDocuments = getNumDocuments();
-		for (int i=0; i<numDocuments; i++) {
+		for (int i=0; i<getNumDocuments(); i++) {
 			RTextEditorPane textArea = getRTextEditorPaneAt(i);
 			textArea.setHighlightCurrentLine(highlightCurrentLine);
 		}
@@ -3319,8 +3345,7 @@ public abstract class AbstractMainView extends JPanel
 	public void setHyperlinksEnabled(boolean enabled) {
 		if (enabled!=hyperlinksEnabled) {
 			hyperlinksEnabled = enabled;
-			int numDocuments = getNumDocuments();
-			for (int i=0; i<numDocuments; i++) {
+			for (int i=0; i<getNumDocuments(); i++) {
 				getRTextEditorPaneAt(i).setHyperlinksEnabled(enabled);
 			}
 		}
@@ -3341,8 +3366,7 @@ public abstract class AbstractMainView extends JPanel
 			ignoreBackupExtensions = ignore;
 
 			// Reset all open files' color schemes if necessary.
-			int numDocuments = getNumDocuments();
-			for (int i=0; i<numDocuments; i++) {
+			for (int i=0; i<getNumDocuments(); i++) {
 				RTextEditorPane textArea = getRTextEditorPaneAt(i);
 				String oldStyle = textArea.getSyntaxEditingStyle();
 				String newStyle = getSyntaxStyleForFile(textArea.getFileName());
@@ -3403,8 +3427,7 @@ public abstract class AbstractMainView extends JPanel
 	public void setLineNumbersEnabled(boolean enabled) {
 		if (enabled!=lineNumbersEnabled) {
 			lineNumbersEnabled = enabled;
-			int numDocuments = getNumDocuments();
-			for (int i=0; i<numDocuments; i++) {
+			for (int i=0; i<getNumDocuments(); i++) {
 				getRTextScrollPaneAt(i).setLineNumbersEnabled(enabled);
 			}
 		}
@@ -3434,8 +3457,7 @@ public abstract class AbstractMainView extends JPanel
 	public void setLineWrap(boolean enabled) {
 		if (enabled!=lineWrapEnabled) {
 			lineWrapEnabled = enabled;
-			int numDocuments = getNumDocuments();
-			for (int i=0; i<numDocuments; i++)
+			for (int i=0; i<getNumDocuments(); i++)
 				getRTextEditorPaneAt(i).setLineWrap(enabled);
 		}
 	}
@@ -3451,8 +3473,7 @@ public abstract class AbstractMainView extends JPanel
 	public void setMarginLineColor(Color color) {
 		if (!color.equals(marginLineColor)) {
 			marginLineColor = color;
-			int numDocuments = getNumDocuments();
-			for (int i=0; i<numDocuments; i++)
+			for (int i=0; i<getNumDocuments(); i++)
 				getRTextEditorPaneAt(i).setMarginLineColor(marginLineColor);
 		}
 	}
@@ -3468,8 +3489,7 @@ public abstract class AbstractMainView extends JPanel
 	public void setMarginLineEnabled(boolean enabled) {
 		if (marginLineEnabled != enabled) {
 			marginLineEnabled = enabled;
-			int numDocuments = getNumDocuments();
-			for (int i=0; i<numDocuments; i++)
+			for (int i=0; i<getNumDocuments(); i++)
 				getRTextEditorPaneAt(i).setMarginLineEnabled(enabled);
 		}
 	}
@@ -3485,8 +3505,7 @@ public abstract class AbstractMainView extends JPanel
 	public void setMarginLinePosition(int position) {
 		if (marginLinePosition!=position) {
 			marginLinePosition = position;
-			int numDocuments = getNumDocuments();
-			for (int i=0; i<numDocuments; i++)
+			for (int i=0; i<getNumDocuments(); i++)
 				getRTextEditorPaneAt(i).setMarginLinePosition(marginLinePosition);
 		}
 	}
@@ -3666,8 +3685,7 @@ public abstract class AbstractMainView extends JPanel
 	void setRecordingMacro(boolean recording) {
 		Cursor cursor = (recording ? getMacroCursor() :
 					Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-		int numDocuments = getNumDocuments();
-		for (int i=0; i<numDocuments; i++) {
+		for (int i=0; i<getNumDocuments(); i++) {
 			RTextEditorPane textArea = getRTextEditorPaneAt(i);
 			textArea.setCursor(cursor);
 		}
@@ -3764,17 +3782,39 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Sets the color to use for selected text in all text areas, if selected
+	 * text painting is enabled.
+	 *
+	 * @param color The color to use for the selected text.  If
+	 *        <code>null</code> is passed in, there is no change to the
+	 *        selected text color being used.
+	 * @see #getSelectedTextColor()
+	 * @see #setUseSelectedTextColor(boolean)
+	 * @see #setSelectionColor(Color)
+	 */
+	public void setSelectedTextColor(Color color) {
+		if (color!=null && color!=selectedTextColor) {
+			selectedTextColor = color;
+			for (int i=0; i<getNumDocuments(); i++)
+				getRTextEditorPaneAt(i).setSelectedTextColor(color);
+		}
+	}
+
+
+	/**
 	 * Sets the color of selections in all text areas in this tabbed pane.
 	 *
 	 * @param color The color to use for the selections.  If <code>null</code>
 	 *        is passed in, there is no change to the selection color being
 	 *        used.
+	 * @see #getSelectionColor()
+	 * @see #setSelectedTextColor(Color)
+	 * @see #setUseSelectedTextColor(boolean)
 	 */
 	public void setSelectionColor(Color color) {
 		if (color!=null && color!=selectionColor) {
 			selectionColor = color;
-			int numDocuments = getNumDocuments();
-			for (int i=0; i<numDocuments; i++)
+			for (int i=0; i<getNumDocuments(); i++)
 				getRTextEditorPaneAt(i).setSelectionColor(color);
 		}
 	}
@@ -3827,8 +3867,7 @@ public abstract class AbstractMainView extends JPanel
 		this.syntaxFilters.setPreservingPluginAdded(syntaxFilters);
 
 		// Reset all open files' color schemes if necessary.
-		int numDocuments = getNumDocuments();
-		for (int i=0; i<numDocuments; i++) {
+		for (int i=0; i<getNumDocuments(); i++) {
 			RTextEditorPane textArea = getRTextEditorPaneAt(i);
 			String oldStyle = textArea.getSyntaxEditingStyle();
 			String newStyle = getSyntaxStyleForFile(textArea.getFileName());
@@ -3952,8 +3991,7 @@ public abstract class AbstractMainView extends JPanel
 		// If the new tab size is different from the current one...
 		if (newSize!=tabSize) {
 			tabSize = newSize;
-			int numDocuments = getNumDocuments();
-			for (int i=0; i<numDocuments; i++)
+			for (int i=0; i<getNumDocuments(); i++)
 				getRTextEditorPaneAt(i).setTabSize(newSize);
 
 		}
@@ -4053,6 +4091,24 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Sets whether text areas should honor their "selected text color", as
+	 * opposed to just rendering token styles even for selected tokens.
+	 *
+	 * @param use Whether to use the selected text color.
+	 * @see #getUseSelectedTextColor()
+	 * @see #setSelectedTextColor(Color)
+	 */
+	public void setUseSelectedTextColor(boolean use) {
+		if (use!=useSelectedTextColor) {
+			useSelectedTextColor = use;
+			for (int i=0; i<getNumDocuments(); i++) {
+				getRTextEditorPaneAt(i).setUseSelectedTextColor(use);
+			}
+		}
+	}
+
+
+	/**
 	 * Sets whether whitespace is visible in all open text areas.<p>
 	 * This method will not change anything if the value of
 	 * <code>visible</code> is already the whitespace-visibility state.
@@ -4120,8 +4176,7 @@ public abstract class AbstractMainView extends JPanel
 		// background.  We need to do this because in RText's
 		// updateLookAndFeel(), each text area's updateUI() is called, which
 		// resets their background to white, evidently.
-		int numDocuments = getNumDocuments();
-		for (int i=0; i<numDocuments; i++)
+		for (int i=0; i<getNumDocuments(); i++)
 			getRTextEditorPaneAt(i).setBackgroundObject(backgroundObject);
 		if (currentTextArea != null)
 			currentTextArea.repaint();

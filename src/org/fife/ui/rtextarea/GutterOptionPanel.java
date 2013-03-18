@@ -159,7 +159,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 		String command = e.getActionCommand();
 
 		if ("RestoreDefaults".equals(command)) {
-			Font defaultFont = new Font("Monospaced", Font.PLAIN, 12);
+			Font defaultFont = RTextArea.getDefaultFont();
 			Color defBorderColor = new Color(221, 221, 221);
 			if (!lnEnabledCB.isSelected() ||
 					!defaultFont.equals(fontSelector.getDisplayedFont()) ||

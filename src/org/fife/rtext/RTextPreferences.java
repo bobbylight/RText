@@ -72,6 +72,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public boolean wordWrap;						// Whether or not word wrap is enabled.
 	public Color caretColor;
 	public Color selectionColor;
+	public Color selectedTextColor;
+	public boolean useSelectedTextColor;
 	public SyntaxScheme colorScheme;	// Color scheme used in syntax highlighting.
 	public String syntaxFiltersString;				// String representing the syntax filters.
 	public int maxFileHistorySize;
@@ -185,6 +187,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.wordWrap					= mainView.getLineWrap();
 		props.caretColor				= mainView.getCaretColor();
 		props.selectionColor			= mainView.getSelectionColor();
+		props.selectedTextColor			= mainView.getSelectedTextColor();
+		props.useSelectedTextColor		= mainView.getUseSelectedTextColor();
 		props.colorScheme				= rtext.getSyntaxScheme();
 		props.syntaxFiltersString		= mainView.getSyntaxFilters().toString();
 		props.maxFileHistorySize			= menuBar.getMaximumFileHistorySize();
@@ -437,6 +441,9 @@ public class RTextPreferences extends GUIApplicationPreferences
 				prefs.getInt("caretColor", props.caretColor.getRGB()));
 			props.selectionColor = new Color(
 				prefs.getInt("selectionColor", props.selectionColor.getRGB()), true);
+			props.selectedTextColor = new Color(
+					prefs.getInt("selectedTextColor", props.selectedTextColor.getRGB()), true);
+			props.useSelectedTextColor = prefs.getBoolean("useSelectedTextColor", props.useSelectedTextColor);
 			props.currentLineHighlightColor = new Color(
 				prefs.getInt("currentLineHighlightColor", props.currentLineHighlightColor.getRGB()), true);
 			props.modifiedDocumentNamesColor = new Color(
@@ -635,6 +642,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 													+ printFont.getSize() + "," + printFont.isBold() +
 													"," + printFont.isItalic());
 		prefs.putInt("selectionColor",				selectionColor.getRGB());
+		prefs.putInt("selectedTextColor",			selectedTextColor.getRGB());
+		prefs.putBoolean("useSelectedTextColor",	useSelectedTextColor);
 		prefs.put("syntaxFilters",					syntaxFiltersString);
 		prefs.putInt("tabSize",						tabSize);
 		prefs.putInt("tabPlacement",					tabPlacement);
@@ -725,6 +734,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 		wordWrap = false;
 		caretColor = RTextArea.getDefaultCaretColor();
 		selectionColor = RSyntaxTextArea.getDefaultSelectionColor();
+		selectedTextColor = Color.white;
+		useSelectedTextColor = false;
 		colorScheme = new SyntaxScheme(true);
 		SyntaxFilters syntaxFilters = new SyntaxFilters();
 		syntaxFilters.restoreDefaultFileFilters();

@@ -13,6 +13,7 @@ package org.fife.ui.rtextarea;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,9 +59,10 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	private RColorSwatchesButton caretColorButton;
 	private RColorSwatchesButton selColorButton;
 	private RColorSwatchesButton markAllColorButton;
+	private JCheckBox selectedTextColorCB;
+	private RColorSwatchesButton selectedTextColorButton;
 	private JCheckBox roundedSelCheckBox;
 	private JCheckBox enableMOCheckBox;
-	private JLabel moColorLabel;
 	private RColorSwatchesButton moColorButton;
 	private JCheckBox secLangCB;
 	private JLabel[] secLangLabels;
@@ -169,6 +171,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 			Color defaultSelectionColor = RSyntaxTextArea.getDefaultSelectionColor();
 			Color defaultMarkAllColor = RTextArea.getDefaultMarkAllHighlightColor();
 			Color defaultMarkOccurrencesColor = new Color(224, 224, 224);
+			Color defaultSelectedTextColor = Color.white;
 			int defaultInsertCaret = ConfigurableCaret.THICK_VERTICAL_LINE_STYLE;
 			int defaultOverwriteCaret = ConfigurableCaret.BLOCK_STYLE;
 			Integer defaultCaretBlinkRate = new Integer(500);
@@ -186,6 +189,8 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 				getRoundedSelection()==true ||
 				!enableMOCheckBox.isSelected() ||
 				!moColorButton.getColor().equals(defaultMarkOccurrencesColor) ||
+				selectedTextColorCB.isSelected() ||
+				!selectedTextColorButton.getColor().equals(defaultSelectedTextColor) ||
 				secLangCB.isSelected() ||
 				!defaultSecLangColor[0].equals(secLangButtons[0]) ||
 				!defaultSecLangColor[1].equals(secLangButtons[1]) ||
@@ -201,6 +206,8 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 				enableMOCheckBox.setSelected(true);
 				moColorButton.setEnabled(true);
 				moColorButton.setColor(defaultMarkOccurrencesColor);
+				setSelectedTextColorEnabled(false);
+				selectedTextColorButton.setColor(Color.white);
 				setHighlightSecondaryLanguages(false);
 				for (int i=0; i<SEC_LANG_COUNT; i++) {
 					secLangButtons[i].setColor(defaultSecLangColor[i]);
@@ -233,12 +240,18 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 			boolean selected = enableMOCheckBox.isSelected();
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, !selected, selected);
-			moColorLabel.setEnabled(selected);
 			moColorButton.setEnabled(selected);
 		}
 
+		else if (selectedTextColorCB==source) {
+			boolean selected = ((JCheckBox)source).isSelected();
+			setSelectedTextColorEnabled(selected);
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !selected, selected);
+		}
+
 		else if (secLangCB==source) {
-			boolean selected = secLangCB.isSelected();
+			boolean selected = ((JCheckBox)source).isSelected();
 			setHighlightSecondaryLanguages(selected);
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, !selected, selected);
@@ -299,21 +312,17 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 			temp.add(secLangLabels[0]);  temp.add(secLangButtons[0]);
 			temp.add(Box.createVerticalStrut(20));
 			temp.add(secLangLabels[1]);  temp.add(secLangButtons[1]);
+			temp.add(Box.createVerticalStrut(20));
 			temp.add(secLangLabels[2]);  temp.add(secLangButtons[2]);
-			temp.add(Box.createVerticalStrut(5));
-			temp.add(Box.createVerticalStrut(5));
-			temp.add(Box.createVerticalStrut(5));
 		}
 		else {
 			temp.add(secLangButtons[0]); temp.add(secLangLabels[0]);
 			temp.add(Box.createVerticalStrut(20));
 			temp.add(secLangButtons[1]);  temp.add(secLangLabels[1]);
+			temp.add(Box.createVerticalStrut(20));
 			temp.add(secLangButtons[2]);  temp.add(secLangLabels[2]);
-			temp.add(Box.createVerticalStrut(5));
-			temp.add(Box.createVerticalStrut(5));
-			temp.add(Box.createVerticalStrut(5));
 		}
-		UIUtil.makeSpringCompactGrid(temp, 2,5, 0,0, 5,5);
+		UIUtil.makeSpringCompactGrid(temp, 1,8, 0,0, 5,5);
 		addLeftAligned(p, temp, 0, 20);
 
 		return p;
@@ -346,22 +355,41 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		JLabel markAllLabel = new JLabel(msg.getString("MarkAllColor"));
 		markAllLabel.setLabelFor(markAllColorButton);
 
-		Box temp = createHorizontalBox();
-		temp.add(selLabel); temp.add(Box.createHorizontalStrut(5));
-		temp.add(selColorButton);
-		temp.add(Box.createHorizontalStrut(40));
-		temp.add(markAllLabel); temp.add(Box.createHorizontalStrut(5));
-		temp.add(markAllColorButton);
-		addLeftAligned(p, temp);
-		p.add(Box.createHorizontalStrut(3));
+		selectedTextColorCB = new JCheckBox(msg.getString("SelectedTextColor"));
+		selectedTextColorCB.addActionListener(this);
+		selectedTextColorButton = new RColorSwatchesButton();
+		selectedTextColorButton.addPropertyChangeListener(
+				RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
 
-		temp = createHorizontalBox();
+		JPanel contents = new JPanel(new SpringLayout());
+		Dimension d = new Dimension(5, 5);
+		if (o.isLeftToRight()) {
+			contents.add(selLabel); contents.add(selColorButton);
+			contents.add(Box.createHorizontalStrut(40));
+			contents.add(markAllLabel); contents.add(markAllColorButton);
+			contents.add(selectedTextColorCB);
+			contents.add(selectedTextColorButton);
+			contents.add(Box.createHorizontalStrut(40));
+			contents.add(Box.createRigidArea(d));
+			contents.add(Box.createRigidArea(d));
+		}
+		else {
+			contents.add(markAllColorButton); contents.add(markAllLabel);
+			contents.add(Box.createHorizontalStrut(40));
+			contents.add(selColorButton); contents.add(selLabel);
+			contents.add(selectedTextColorButton);
+			contents.add(selectedTextColorCB);
+			contents.add(Box.createHorizontalStrut(40));
+			contents.add(Box.createRigidArea(d));
+			contents.add(Box.createRigidArea(d));
+		}
+		UIUtil.makeSpringCompactGrid(contents, 2, 5, 0, 0, 5, 5);
+		addLeftAligned(p, contents);
+
 		roundedSelCheckBox = new JCheckBox(msg.getString("RoundSel"));
 		roundedSelCheckBox.setActionCommand("RoundedSelectionCheckBox");
 		roundedSelCheckBox.addActionListener(this);
-		temp.add(roundedSelCheckBox);
-		temp.add(Box.createHorizontalGlue());
-		p.add(temp);
+		addLeftAligned(p, roundedSelCheckBox);
 
 		return p;
 
@@ -385,16 +413,13 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 							msg.getString("EnableMarkOccurrences"));
 		enableMOCheckBox.setActionCommand("MarkOccurrences");
 		enableMOCheckBox.addActionListener(this);
-		addLeftAligned(p, enableMOCheckBox);
-		
+
 		moColorButton = new RColorSwatchesButton();
 		moColorButton.addPropertyChangeListener(
 					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		moColorLabel = new JLabel(msg.getString("Color"));
-		moColorLabel.setLabelFor(moColorButton);
+
 		Box box = createHorizontalBox();
-		box.add(Box.createHorizontalStrut(20));
-		box.add(moColorLabel);
+		box.add(enableMOCheckBox);
 		box.add(Box.createHorizontalStrut(5));
 		box.add(moColorButton);
 		box.add(Box.createHorizontalGlue());
@@ -420,6 +445,8 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		mainView.setCaretBlinkRate(getBlinkRate());
 		mainView.setMarkOccurrences(enableMOCheckBox.isSelected());
 		mainView.setMarkOccurrencesColor(moColorButton.getColor());
+		mainView.setSelectedTextColor(selectedTextColorButton.getColor());
+		mainView.setUseSelectedTextColor(selectedTextColorCB.isSelected());
 
 		mainView.setHighlightSecondaryLanguages(secLangCB.isSelected());
 		for (int i=0; i<SEC_LANG_COUNT; i++) {
@@ -626,10 +653,17 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	}
 
 
+	private void setSelectedTextColorEnabled(boolean enabled) {
+		selectedTextColorCB.setSelected(enabled);
+		selectedTextColorButton.setEnabled(enabled);
+	}
+
+
 	/**
 	 * {@inheritDoc}
 	 */
 	protected void setValuesImpl(Frame owner) {
+
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
 		setCaretColor(mainView.getCaretColor());
@@ -640,9 +674,10 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		setCaretStyle(RTextArea.OVERWRITE_MODE, mainView.getCaretStyle(RTextArea.OVERWRITE_MODE));
 		setBlinkRate(mainView.getCaretBlinkRate());
 		enableMOCheckBox.setSelected(mainView.getMarkOccurrences());
-		moColorLabel.setEnabled(enableMOCheckBox.isSelected());
 		moColorButton.setEnabled(enableMOCheckBox.isSelected());
 		moColorButton.setColor(mainView.getMarkOccurrencesColor());
+		setSelectedTextColorEnabled(mainView.getUseSelectedTextColor());
+		selectedTextColorButton.setColor(mainView.getSelectedTextColor());
 
 		setHighlightSecondaryLanguages(mainView.getHighlightSecondaryLanguages());
 		for (int i=0; i<SEC_LANG_COUNT; i++) {

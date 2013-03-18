@@ -12,6 +12,7 @@ package org.fife.rtext.plugins.tasks;
 import java.awt.BorderLayout;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +28,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -89,12 +91,9 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 				plugin.getString("Options.TaskWindow")));
 
 		// A check box toggling the plugin's visibility.
-		JPanel temp = new JPanel(new BorderLayout());
 		visibleCB = new JCheckBox(gpb.getString("Visible"));
 		visibleCB.addActionListener(this);
-		temp.add(visibleCB, BorderLayout.LINE_START);
-		topPanel.add(temp);
-		topPanel.add(Box.createVerticalStrut(10));
+		addLeftAligned(topPanel, visibleCB, 5);
 
 		// A combo in which to select the dockable window's placement.
 		Box locationPanel = createHorizontalBox();
@@ -112,8 +111,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 		locationPanel.add(Box.createHorizontalStrut(5));
 		locationPanel.add(locationCombo);
 		locationPanel.add(Box.createHorizontalGlue());
-		topPanel.add(locationPanel);
-		topPanel.add(Box.createVerticalStrut(5));
+		addLeftAligned(topPanel, locationPanel);
 		add(topPanel, BorderLayout.NORTH);
 
 		JPanel contentPane = new JPanel(new BorderLayout());
@@ -126,13 +124,16 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 		table.addModifiableTableListener(this);
 		table.getTable().setTableHeader(null);
 		table.setRowHandler(new IdRowHandler());
+		// Shrink default viewport size; default is too big
+		JTable realTable = table.getTable();
+		realTable.setPreferredScrollableViewportSize(new Dimension(300,200));
 		contentPane.add(table);
 
 		JButton defaultsButton = new JButton(
 								plugin.getString("Options.RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
-		temp = new JPanel(new BorderLayout());
+		JPanel temp = new JPanel(new BorderLayout());
 		temp.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 		temp.add(defaultsButton, BorderLayout.LINE_START);
 		add(temp, BorderLayout.SOUTH);
