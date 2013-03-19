@@ -119,7 +119,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		cp.add(Box.createVerticalStrut(5));
 
 		enabledCB = createCB("Options.Java.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB, 5);
+		addLeftAligned(box, enabledCB, 3);
 
 		Box box2 = Box.createVerticalBox();
 		if (o.isLeftToRight()) {
@@ -131,10 +131,10 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		box.add(box2);
 
 		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box2, showDescWindowCB, 5);
+		addLeftAligned(box2, showDescWindowCB, 3);
 
 		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
-		addLeftAligned(box2, paramAssistanceCB, 5);
+		addLeftAligned(box2, paramAssistanceCB);
 
 		box2.add(Box.createVerticalGlue());
 

@@ -28,6 +28,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SpringLayout;
 import javax.swing.event.ChangeEvent;
@@ -62,6 +63,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	private JCheckBox selectedTextColorCB;
 	private RColorSwatchesButton selectedTextColorButton;
 	private JCheckBox roundedSelCheckBox;
+	private JButton systemSelectionButton;
 	private JCheckBox enableMOCheckBox;
 	private RColorSwatchesButton moColorButton;
 	private JCheckBox secLangCB;
@@ -236,18 +238,35 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 			firePropertyChange(PROPERTY, !selected, selected);
 		}
 
-		else if ("MarkOccurrences".equals(command)) {
-			boolean selected = enableMOCheckBox.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
-			moColorButton.setEnabled(selected);
-		}
-
 		else if (selectedTextColorCB==source) {
 			boolean selected = ((JCheckBox)source).isSelected();
 			setSelectedTextColorEnabled(selected);
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, !selected, selected);
+		}
+
+		else if (systemSelectionButton==source) {
+			// The only foolproof, cross-LAF way to get these colors is to
+			// grab them from a component, unfortunately.
+			JTextArea textArea = new JTextArea();
+			Color systemSelectionColor = textArea.getSelectionColor();
+			Color selectedTextColor = textArea.getSelectedTextColor();
+			if (!systemSelectionColor.equals(selColorButton.getColor()) ||
+					!selectedTextColorCB.isSelected() ||
+					!selectedTextColorButton.equals(selectedTextColor)) {
+				selColorButton.setColor(systemSelectionColor);
+				setSelectedTextColorEnabled(true);
+				selectedTextColorButton.setColor(selectedTextColor);
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, false, true);
+			}
+		}
+
+		else if ("MarkOccurrences".equals(command)) {
+			boolean selected = enableMOCheckBox.isSelected();
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !selected, selected);
+			moColorButton.setEnabled(selected);
 		}
 
 		else if (secLangCB==source) {
@@ -384,7 +403,17 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 			contents.add(Box.createRigidArea(d));
 		}
 		UIUtil.makeSpringCompactGrid(contents, 2, 5, 0, 0, 5, 5);
-		addLeftAligned(p, contents);
+		//addLeftAligned(p, contents);
+
+		systemSelectionButton = new JButton(msg.getString("SystemSelection"));
+		systemSelectionButton.addActionListener(this);
+		JPanel temp2 = new JPanel(new BorderLayout());
+		temp2.add(systemSelectionButton, BorderLayout.NORTH);
+
+		JPanel temp = new JPanel(new BorderLayout());
+		temp.add(contents, BorderLayout.LINE_START);
+		temp.add(temp2, BorderLayout.LINE_END);
+		p.add(temp);
 
 		roundedSelCheckBox = new JCheckBox(msg.getString("RoundSel"));
 		roundedSelCheckBox.setActionCommand("RoundedSelectionCheckBox");
@@ -445,7 +474,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		mainView.setCaretBlinkRate(getBlinkRate());
 		mainView.setMarkOccurrences(enableMOCheckBox.isSelected());
 		mainView.setMarkOccurrencesColor(moColorButton.getColor());
-		mainView.setSelectedTextColor(selectedTextColorButton.getColor());
+		mainView.setSelectedTextColor(getColor(selectedTextColorButton));
 		mainView.setUseSelectedTextColor(selectedTextColorCB.isSelected());
 
 		mainView.setHighlightSecondaryLanguages(secLangCB.isSelected());
@@ -502,6 +531,19 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 
 
 	/**
+	 * Returns the color displayed, as a <code>Color</code> and not a
+	 * <code>ColorUIResource</code>, to prevent LookAndFeel changes from
+	 * overriding them when they are installed.
+	 *
+	 * @param button The button.
+	 * @return The color displayed by the button.
+	 */
+	private Color getColor(RColorSwatchesButton button) {
+		return new Color(button.getColor().getRGB());
+	}
+
+
+	/**
 	 * Returns the color selected by the user for "mark all."
 	 *
 	 * @return The color.
@@ -527,7 +569,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 * @return The selection color the user chose.
 	 */
 	public Color getSelectionColor() {
-		return selColorButton.getColor();
+		return getColor(selColorButton);
 	}
 
 

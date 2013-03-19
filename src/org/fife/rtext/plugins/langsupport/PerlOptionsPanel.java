@@ -108,7 +108,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		cp.add(Box.createVerticalStrut(5));
 
 		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
-		addLeftAligned(box, foldingEnabledCB, 5);
+		addLeftAligned(box, foldingEnabledCB);
 
 		box = Box.createVerticalBox();
 		box.setBorder(new OptionPanelBorder(msg.
@@ -135,7 +135,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		addLeftAligned(box2, paramAssistanceCB, 3);
 
 		useParensCB = createCB("UseParensInCodeCompletion");
-		addLeftAligned(box2, useParensCB, 3);
+		addLeftAligned(box2, useParensCB);
 
 		box2.add(Box.createVerticalGlue());
 
@@ -185,7 +185,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		box3.add(Box.createHorizontalStrut(40));
 		box3.add(taintModeCB);
 		box3.add(Box.createHorizontalGlue());
-		addLeftAligned(box2, box3, 5);
+		addLeftAligned(box2, box3);
 		box2.add(Box.createVerticalGlue());
 
 		box = Box.createVerticalBox();
@@ -201,7 +201,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		perl5Table.setRowHandler(new Perl5LibTableRowHandler());
 		perl5Table.getTable().setTableHeader(null);
 		Dimension s = perl5Table.getTable().getPreferredScrollableViewportSize();
-		s.height = 120; // JTable default is 400!
+		s.height = 110; // JTable default is 400!
 		perl5Table.getTable().setPreferredScrollableViewportSize(s);
 		box.add(perl5Table);
 

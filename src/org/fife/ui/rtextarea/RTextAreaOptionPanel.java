@@ -122,13 +122,10 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		inputPanel.add(tabSizeField);
 		inputPanel.add(Box.createHorizontalGlue());
 		tabPanel.add(inputPanel);
-		Box etPanel = createHorizontalBox();
 		emulateTabsCheckBox = new JCheckBox(msg.getString("EmulateTabs"));
 		emulateTabsCheckBox.setActionCommand("EmulateTabsCheckBox");
 		emulateTabsCheckBox.addActionListener(this);
-		etPanel.add(emulateTabsCheckBox);
-		etPanel.add(Box.createHorizontalGlue());
-		tabPanel.add(etPanel);
+		addLeftAligned(tabPanel, emulateTabsCheckBox);
 		tabPanel.add(Box.createVerticalGlue());
 		topPanel.add(tabPanel);
 
@@ -170,15 +167,12 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		Box bigOtherPanel = Box.createVerticalBox();
 		bigOtherPanel.setBorder(new OptionPanelBorder(msg.getString("Other")));
 
-		Box otherPanel = new Box(BoxLayout.LINE_AXIS);
 		wordWrapCheckBox = new JCheckBox(msg.getString("WordWrap"));
 		wordWrapCheckBox.setActionCommand("WordWrapCheckBox");
 		wordWrapCheckBox.addActionListener(this);
-		otherPanel.add(wordWrapCheckBox);
-		otherPanel.add(Box.createHorizontalGlue());
-		bigOtherPanel.add(otherPanel);
+		addLeftAligned(bigOtherPanel, wordWrapCheckBox);
 
-		otherPanel = new Box(BoxLayout.LINE_AXIS);
+		Box otherPanel = new Box(BoxLayout.LINE_AXIS);
 		highlightCurrentLineCheckBox = new JCheckBox(msg.getString("HighlightCL"));
 		highlightCurrentLineCheckBox.setActionCommand("HighlightCurrentLineCheckBox");
 		highlightCurrentLineCheckBox.addActionListener(this);
