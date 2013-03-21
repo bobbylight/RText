@@ -240,10 +240,9 @@ class ReplaceInFilesThread extends FindInFilesThread {
 	 *
 	 * @return The number of replacements.
 	 */
-	private int doSearchNoRegex(CharSequence sb, String searchString,
-							String replaceString, boolean matchCase,
-							boolean wholeWord, String fileFullPath,
-							StringBuffer replaceSB) {
+	private static final int doSearchNoRegex(CharSequence sb,
+			String searchString, String replaceString, boolean matchCase,
+			boolean wholeWord, String fileFullPath, StringBuffer replaceSB) {
 
 		String origBuffer = sb.toString();
 		String buffer = origBuffer;
@@ -302,10 +301,10 @@ class ReplaceInFilesThread extends FindInFilesThread {
 	 *
 	 * @return The number of replacements.
 	 */
-	private int doSearchRegex(StringBuffer sb, String searchString,
-							String replaceString, boolean matchCase,
-							boolean wholeWord, String fileFullPath,
-							StringBuffer replaceSB) {
+	private static final int doSearchRegex(StringBuffer sb, String searchString,
+					String replaceString, boolean matchCase,
+					boolean wholeWord, String fileFullPath,
+					StringBuffer replaceSB) {
 
 		int numMatches = 0;
 

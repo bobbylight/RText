@@ -125,7 +125,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 *
 	 * @param tree The tree whose renderer should be checked.
 	 */
-	private void checkTreeCellRenderer(JTree tree) {
+	private static final void checkTreeCellRenderer(JTree tree) {
 		if (SubstanceUtils.isSubstanceInstalled()) {
 			TreeCellRenderer renderer = tree.getCellRenderer();
 			try {
@@ -325,7 +325,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * @see #CTAGS_TYPE_EXUBERANT
 	 * @see #CTAGS_TYPE_STANDARD
 	 */
-	private String ensureValidCTagsType(String type) {
+	private static final String ensureValidCTagsType(String type) {
 		if (type==null) {
 			type = SourceBrowserPlugin.CTAGS_TYPE_EXUBERANT;
 		}
@@ -392,7 +392,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	}
 
 
-	private String getLanguageForStyle(String style) {
+	private static final String getLanguageForStyle(String style) {
 		String language = null;
 		if (style.equals(SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT)) {
 			language = "Flex"; // Same as MXML to Exuberant Ctags
@@ -520,7 +520,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 *
 	 * @return The file.
 	 */
-	private File getPrefsFile() {
+	private static final File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"sourceBrowser.properties");
 	}

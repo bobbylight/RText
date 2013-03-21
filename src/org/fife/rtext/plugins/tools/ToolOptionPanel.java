@@ -141,7 +141,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	 * @param tool The tool.
 	 * @return The row of data for the table model.
 	 */
-	private Object[] createRowData(Tool tool) {
+	private static final Object[] createRowData(Tool tool) {
 		return new Object[] {
 			new ToolWrapper(tool),
 			KeyStroke.getKeyStroke(tool.getAccelerator()),

@@ -100,7 +100,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	 * @return The file's root directory, or null if we're on Windows and
 	 *         this is an NFS path.
 	 */
-	private File getRootDir(File file) {
+	private static final File getRootDir(File file) {
 
 		File root = null;
 

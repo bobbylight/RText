@@ -183,7 +183,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	 * @param fg
 	 * @param textArea
 	 */
-	private void setForegroundImpl(String style, Color fg,
+	private static final void setForegroundImpl(String style, Color fg,
 									ConsoleTextArea textArea) {
 		Style s = textArea.getStyle(style);
 		if (s!=null) {

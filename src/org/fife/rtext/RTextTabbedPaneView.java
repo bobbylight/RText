@@ -498,11 +498,7 @@ inCloseCurrentDocument = false;
 			// have happened for requestFocusInWindow to work.
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					// We check for null because this is also called when
-					// we switch view styles, and will throw a NPE in that
-					// case as all of the text areas have been removed.
-					if (currentTextArea!=null)
-						currentTextArea.requestFocusInWindow();
+					currentTextArea.requestFocusInWindow();
 				}
 			});
 

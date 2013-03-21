@@ -115,7 +115,7 @@ public class Workspace implements ModelEntity {
 	}
 
 
-	private String getNameFromFile(File file) {
+	private static final String getNameFromFile(File file) {
 		String name = file.getName();
 		int lastDot = name.lastIndexOf('.');
 		if (lastDot>-1) {

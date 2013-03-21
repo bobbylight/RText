@@ -98,7 +98,7 @@ public class Plugin extends AbstractPlugin
 	 * Attempts to delete older versions' preferences (&lt;= RText 2.06),
 	 * since this plugin has consolidated all preferences into a single file.
 	 */
-	private void deleteOldVersionTidyPreferenceFiles() {
+	private static final void deleteOldVersionTidyPreferenceFiles() {
 
 		File oldPrefsDir = new File(RTextUtilities.getPreferencesDirectory(),
 				"tidy");
@@ -204,7 +204,7 @@ public class Plugin extends AbstractPlugin
 	 *
 	 * @return The file.
 	 */
-	private File getPrefsFile() {
+	private static final File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"tidy.properties");
 	}
@@ -271,7 +271,7 @@ public class Plugin extends AbstractPlugin
 	 * @param style The language.
 	 * @return Whether the language can be pretty printed.
 	 */
-	private boolean isSupportedLanguage(String style) {
+	private static final boolean isSupportedLanguage(String style) {
 		return SyntaxConstants.SYNTAX_STYLE_HTML.equals(style) ||
 				SyntaxConstants.SYNTAX_STYLE_XML.equals(style) ||
 				SyntaxConstants.SYNTAX_STYLE_JSON.equals(style);

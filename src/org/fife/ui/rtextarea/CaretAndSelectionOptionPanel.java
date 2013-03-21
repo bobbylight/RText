@@ -538,7 +538,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 * @param button The button.
 	 * @return The color displayed by the button.
 	 */
-	private Color getColor(RColorSwatchesButton button) {
+	private static final Color getColor(RColorSwatchesButton button) {
 		return new Color(button.getColor().getRGB());
 	}
 

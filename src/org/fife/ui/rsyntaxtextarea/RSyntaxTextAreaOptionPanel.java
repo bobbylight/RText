@@ -364,7 +364,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 *
 	 * @return The text area.
 	 */
-	private RSyntaxTextArea createSampleTextArea() {
+	private static final RSyntaxTextArea createSampleTextArea() {
 		RSyntaxTextArea textArea = new RSyntaxTextArea(10, 40);
 		textArea.setHighlightCurrentLine(false);
 		textArea.setAntiAliasingEnabled(true);
@@ -499,7 +499,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 * @param index An index into the <code>JList</code>.
 	 * @return The corresponding index into a <code>SyntaxScheme</code>.
 	 */
-	private int indexToStyle(int index) {
+	private static final int indexToStyle(int index) {
 		return index + 1;
 	}
 

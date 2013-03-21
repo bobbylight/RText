@@ -271,7 +271,8 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @param rtext The parent RText instance.
 	 * @return The combo box.
 	 */
-	private SpecialValueComboBox createLookAndFeelComboBox(final RText rtext) {
+	private static final SpecialValueComboBox createLookAndFeelComboBox(
+			RText rtext) {
 
 		SpecialValueComboBox combo = new SpecialValueComboBox();
 		UIUtil.fixComboOrientation(combo);

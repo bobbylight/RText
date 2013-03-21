@@ -129,7 +129,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * @param values An array of values to go into the value.
 	 * @return The value.
 	 */
-	private List createValue(String[] values) {
+	private static final List createValue(String[] values) {
 		List list = new ArrayList();
 		for (int i=0; i<values.length; i++) {
 			list.add(values[i]);
@@ -237,7 +237,8 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * @return The syntax style for the file, or <code>null</code> if not found
 	 *         in that map.
 	 */
-	private String getSyntaxStyleForFileImpl(String fileName, Map filters) {
+	private static final String getSyntaxStyleForFileImpl(String fileName,
+			Map filters) {
 		for (Iterator i=filters.entrySet().iterator(); i.hasNext(); ) {
 			Map.Entry entry = (Map.Entry)i.next();
 			Iterator it = ((List)entry.getValue()).iterator();

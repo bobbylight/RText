@@ -155,7 +155,7 @@ public class ProjectPlugin extends GUIPlugin {
 	 *
 	 * @return The preferences file for this plugin.
 	 */
-	private File getPrefsFile() {
+	private static final File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 				"projects.properties");
 	}

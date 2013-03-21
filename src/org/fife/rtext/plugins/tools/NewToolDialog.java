@@ -176,7 +176,8 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	 * @param p The completion provider to add to.
 	 * @param key The key for the localized tool variable.
 	 */
-	private void addToolVarCompletion(DefaultCompletionProvider p, String key) {
+	private static final void addToolVarCompletion(DefaultCompletionProvider p,
+			String key) {
 		String temp = msg.getString(key);
 		int split = temp.indexOf(" - ");
 		if (split>-1) { // Always true
@@ -382,7 +383,7 @@ ac.install(dirField);
 	 *
 	 * @return The completion provider.
 	 */
-	private CompletionProvider createToolVarCompletionProvider() {
+	private static final CompletionProvider createToolVarCompletionProvider() {
 		DefaultCompletionProvider p = new DefaultCompletionProvider();
 		addToolVarCompletion(p, "Variable.FileName");
 		addToolVarCompletion(p, "Variable.FileNameNoExt");
@@ -410,7 +411,7 @@ ac.install(dirField);
 	 * @param name The identifier to check.
 	 * @return Whether the identifier is a valid tool name.
 	 */
-	private boolean isValidName(String name) {
+	private static final boolean isValidName(String name) {
 
 		boolean valid = false;
 

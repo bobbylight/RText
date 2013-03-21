@@ -101,7 +101,7 @@ class JsonPrettyPrinter implements PrettyPrinter {
 	 * @return The first non-whitespace character, or <code>'\0'</code> if none
 	 *         is found.
 	 */
-	private char getFirstNonWhitespaceChar(String text) {
+	private static final char getFirstNonWhitespaceChar(String text) {
 		for (int i=0; i<text.length(); i++) {
 			char ch = text.charAt(i);
 			if (!Character.isWhitespace(ch)) {
@@ -134,7 +134,7 @@ class JsonPrettyPrinter implements PrettyPrinter {
 	 * @param indenter The text to use as the indention (a tab or spaces).
 	 * @return The indented text.
 	 */
-	private String indentFirstLevel(String text, String indenter) {
+	private static final String indentFirstLevel(String text, String indenter) {
 		String[] lines = text.split("\n");
 		for (int i=1; i<lines.length-1; i++) {
 			lines[i] = indenter + lines[i];

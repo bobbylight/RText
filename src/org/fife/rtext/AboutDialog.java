@@ -119,8 +119,8 @@ panel.add(editor);
 	}
 
 
-	private void appendLibrary(StringBuffer sb, String name, String url,
-								String desc) {
+	private static final void appendLibrary(StringBuffer sb, String name,
+			String url, String desc) {
 		sb.append("<tr><td><b>").append(name).append("</b></td>");
 		sb.append("<td><a href=\"").append(url).append("\">");
 		sb.append(url).append("</a></td></tr>");
@@ -137,7 +137,7 @@ panel.add(editor);
 	 * @param msg The resource bundle.
 	 * @return The panel.
 	 */
-	private JPanel createLibrariesPanel(ResourceBundle msg) {
+	private static final JPanel createLibrariesPanel(ResourceBundle msg) {
 
 		JPanel panel = UIUtil.newTabbedPanePanel(new BorderLayout());
 		panel.setBorder(UIUtil.getEmpty5Border());
@@ -183,7 +183,8 @@ panel.add(editor);
 	 * @param app The GUI Application containing plugins.
 	 * @return The contents for the "Plugins" About tab.
 	 */
-	private String[][] createTableData(AbstractPluggableGUIApplication app) {
+	private static final String[][] createTableData(
+			AbstractPluggableGUIApplication app) {
 
 		Plugin[] plugins = app.getPlugins(); // Guaranteed non-null.
 		int count = plugins.length;

@@ -709,7 +709,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 * @param metrics the font metrics to use for the calculation
 	 * @return  the width of the text
 	 */
-	private final int getTextWidth(String s, FontMetrics metrics) {
+	private static final int getTextWidth(String s, FontMetrics metrics) {
 
 		int textWidth = 0;
 

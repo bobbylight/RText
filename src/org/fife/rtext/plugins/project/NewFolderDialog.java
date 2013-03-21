@@ -98,14 +98,14 @@ public class NewFolderDialog extends EscapableDialog {
 	}
 
 
-	private void addLeftAligned(Container parent, Component toAdd) {
+	private static final void addLeftAligned(Container parent, Component toAdd){
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(toAdd, BorderLayout.LINE_START);
 		parent.add(temp);
 	}
 
 
-	private JButton createButton(String keyRoot) {
+	private static final JButton createButton(String keyRoot) {
 		JButton button = new JButton(Messages.getString(keyRoot));
 		button.setMnemonic(Messages.getMnemonic(keyRoot + ".Mnemonic"));
 		return button;

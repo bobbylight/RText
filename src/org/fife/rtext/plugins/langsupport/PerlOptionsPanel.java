@@ -562,7 +562,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			dialog.setPath(oldValue);
 			int rc = dialog.showDialog();
 			if (rc==Perl5ItemDialog.OK) {
-				String newValue = (String)dialog.getPath();
+				String newValue = dialog.getPath();
 				return new String[] { newValue };
 			}
 			return null;

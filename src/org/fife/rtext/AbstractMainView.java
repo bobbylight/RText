@@ -1852,7 +1852,7 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @param pane The pane to examine.
 	 */
-	private void guessContentType(RTextEditorPane pane) {
+	private static final void guessContentType(RTextEditorPane pane) {
 
 		String style = SyntaxConstants.SYNTAX_STYLE_NONE;
 
@@ -2378,7 +2378,7 @@ public abstract class AbstractMainView extends JPanel
 
 		String fileFullPath = loc.getFileFullPath();
 
-		// If opening is a local file that exists, or a remote file...
+		// If opening a local file that exists, or a remote file...
 		if (loc.isLocalAndExists() || loc.isRemote()) {
 
 			if (loc.isLocal() && getFileIsTooLarge(fileFullPath)) {
@@ -2401,20 +2401,19 @@ public abstract class AbstractMainView extends JPanel
 
 			return true;
 
-		} // End of if (loc.isLocalAndExists())
-
-		// If the file is local but doesn't exist...
-		else {//if (loc.isLocal()) {
-			String temp = owner.getString("FileNECreateItMsg", fileFullPath);
-			if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this, temp,
-								owner.getString("ConfDialogTitle"),
-								JOptionPane.YES_NO_OPTION)) {
-				addNewEmptyFile(fileFullPath, charSet);
-				return true;
-			}
-			ensureFilesAreOpened(); // Keep at least 1 document open.
-			return false; // Nothing was opened.
 		}
+
+		// Otherwise it's a local file that doesn't yet exist...
+		//else {//if (loc.isLocal()) {
+		String temp = owner.getString("FileNECreateItMsg", fileFullPath);
+		if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(this, temp,
+							owner.getString("ConfDialogTitle"),
+							JOptionPane.YES_NO_OPTION)) {
+			addNewEmptyFile(fileFullPath, charSet);
+			return true;
+		}
+		ensureFilesAreOpened(); // Keep at least 1 document open.
+		return false; // Nothing was opened.
 
 	}
 

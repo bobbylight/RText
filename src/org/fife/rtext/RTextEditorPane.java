@@ -14,7 +14,6 @@ import java.awt.Graphics;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.print.PageFormat;
-import java.awt.print.Printable;
 import java.io.IOException;
 import javax.swing.JComponent;
 
@@ -30,7 +29,7 @@ import org.fife.ui.rtextarea.RTATextTransferHandler;
  * @author Robert Futrell
  * @version 1.2
  */
-public class RTextEditorPane extends TextEditorPane implements Printable {
+public class RTextEditorPane extends TextEditorPane {
 
 	private RText rtext;
 

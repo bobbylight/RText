@@ -257,8 +257,8 @@ public class RemoteFileChooser extends EscapableDialog
 	 *        <code>msg</code>.
 	 * @return The label.
 	 */
-	private JLabel createLabel(JComponent labelFor, ResourceBundle msg,
-							String keyRoot) {
+	private static final JLabel createLabel(JComponent labelFor,
+			ResourceBundle msg, String keyRoot) {
 		JLabel label = new JLabel(msg.getString(keyRoot));
 		label.setDisplayedMnemonic(msg.getString(keyRoot + "Mnemonic").
 								charAt(0));
@@ -275,8 +275,9 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @return The URL
 	 * @throws MalformedURLException If something goes horribly wrong.
 	 */
-	private URL createURL(String protocol, String user, char[] pass,
-		String host, String port, String file) throws MalformedURLException {
+	private static final URL createURL(String protocol, String user,
+			char[] pass, String host, String port, String file)
+					throws MalformedURLException {
 		String urlStr = protocol + "://";
 		if ("ftp".equalsIgnoreCase(protocol)) {
 			if (file.charAt(0)=='/') { // Absolute path
@@ -334,7 +335,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @return The <code>Document</code>.
 	 * @see #getTextComponent(JComboBox)
 	 */
-	private Document getDocument(JComboBox combo) {
+	private static final Document getDocument(JComboBox combo) {
 		return getTextComponent(combo).getDocument();
 	}
 
@@ -364,7 +365,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @return The text component.
 	 * @see #getDocument(JComboBox)
 	 */
-	private JTextComponent getTextComponent(JComboBox combo) {
+	private static final JTextComponent getTextComponent(JComboBox combo) {
 		return (JTextComponent)combo.getEditor().getEditorComponent();
 	}
 
@@ -385,7 +386,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @param field The text field.
 	 * @return Whether there is text in the text field.
 	 */
-	private boolean hasContent(JTextComponent field) {
+	private static final boolean hasContent(JTextComponent field) {
 		return field.getDocument().getLength()>0;
 	}
 

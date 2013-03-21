@@ -100,7 +100,7 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 	 * @param key The key for the button text and mnemonic.
 	 * @return The button.
 	 */
-	private JButton createButton(String key) {
+	private static final JButton createButton(String key) {
 		key = "Button." + key;
 		JButton button = new JButton(Messages.getString(key));
 		button.setMnemonic(Messages.getMnemonic(key + ".Mnemonic"));
@@ -118,7 +118,7 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 	}
 
 
-	private Container createDescPanel(ComponentOrientation o) {
+	private static final Container createDescPanel(ComponentOrientation o) {
 		String descText = Messages.getString("LogicalFolderNameDialog.Header");
 		SelectableLabel desc = new SelectableLabel(descText);
 		Icon icon = LogicalFolderProjectEntryTreeNode.getLogicalFolderIcon();

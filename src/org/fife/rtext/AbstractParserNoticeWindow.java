@@ -294,7 +294,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 				int row = table.rowAtPoint(e.getPoint());
 				if (row>-1) {
 					// Get values from model since columns are re-orderable.
-					TableModel model = (TableModel)table.getModel();
+					TableModel model = table.getModel();
 					TextAreaWrapper wrapper = (TextAreaWrapper)model.
 							getValueAt(row, 1);
 					RTextEditorPane textArea = wrapper.textArea;

@@ -39,8 +39,7 @@ import org.fife.ui.rtextfilechooser.RDirectoryChooser;
  * @author Robert Futrell
  * @version 0.8
  */
-public class FindInFilesDialog extends AbstractSearchDialog
-									implements ActionListener {
+public class FindInFilesDialog extends AbstractSearchDialog {
 
 	/**
 	 * Property notification sent out when the user does a search.  This

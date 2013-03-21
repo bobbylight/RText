@@ -191,7 +191,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	 */
 	private void setActions(AbstractGUIApplication app) {
 
-		masterActionList = (Action[])app.getActions();
+		masterActionList = app.getActions();
 
 		Arrays.sort(masterActionList, new Comparator() {
 			public int compare(Object o1, Object o2) {
@@ -205,9 +205,6 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 				if (name2==null) // name1!=null && name2==null.
 					return 1;
 				return name1.compareTo(name2);
-			}
-			public boolean equals(Object o2) {
-				return o2==this;
 			}
 		});
 

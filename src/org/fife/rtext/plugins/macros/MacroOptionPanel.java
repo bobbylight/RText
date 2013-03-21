@@ -121,7 +121,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	 * @param toFile The new file.
 	 * @return Whether the operation was successful.
 	 */
-	private boolean copyFile(File fromFile, File toFile) {
+	private static final boolean copyFile(File fromFile, File toFile) {
 		boolean success = false;
 		try {
 			Utilities.copyFile(fromFile, toFile);

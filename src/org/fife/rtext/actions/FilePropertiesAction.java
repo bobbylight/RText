@@ -13,9 +13,9 @@ package org.fife.rtext.actions;
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 
+import org.fife.rsta.ui.TextFilePropertiesDialog;
 import org.fife.rtext.RText;
 import org.fife.ui.app.StandardAction;
-import org.fife.ui.rsyntaxtextarea.TextFilePropertiesDialog;
 
 
 /**
