@@ -44,6 +44,7 @@ import org.fife.jgoodies.looks.common.ShadowPopupBorder;
 import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.ui.SubstanceUtils;
 import org.fife.ui.UIUtil;
+import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
 import org.fife.ui.rsyntaxtextarea.PopupWindowDecorator;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -941,6 +942,12 @@ public class RTextUtilities {
 				// and the property value is reset to null.
 				ClassLoader cl = rtext.getLookAndFeelManager().
 													getLAFClassLoader();
+
+				// Set these properties before instantiating WebLookAndFeel.
+				if (WebLookAndFeelUtils.isWebLookAndFeel(lnfClassName)) {
+					WebLookAndFeelUtils.installWebLookAndFeelProperties(cl);
+				}
+
 				// Load the Look and Feel class.  Note that we cannot
 				// simply use its name for some reason (Exceptions are
 				// thrown).

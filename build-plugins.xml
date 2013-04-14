@@ -47,7 +47,7 @@
 			</classpath>
 		</javac>
 		<!-- Dynamically loaded stuff that requires Java 6. -->
-		<echo>Compiling dynamically loaded classes with compiler: ${javac.16}</echo>
+		<echo>Compiling dynamically loaded classes with compiler: ${javac.16} (1.6 is recommended)</echo>
 		<javac srcdir="${source-dir}" destdir="${class-dir}"
 				includeantruntime="false"
 				deprecation="yes" debug="${debug}" debuglevel="${debuglevel}"

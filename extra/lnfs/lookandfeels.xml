@@ -127,4 +127,9 @@
    dir="lnfs/substance/"
    minJavaVersion="1.6"/>
 
+<LookAndFeel name="Web"
+   class="com.alee.laf.WebLookAndFeel"
+   jars="lnfs/WebLookAndFeel.jar"
+   minJavaVersion="1.6"/>
+   
 </ThirdPartyLookAndFeels>

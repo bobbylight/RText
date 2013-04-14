@@ -46,7 +46,7 @@
 	<!-- Set global properties for this build. -->
 	<property name="app-name"         value="RText"/>
 	<property name="app-name-small"   value="rtext"/>
-	<property name="version"          value="2.0.6"/>
+	<property name="version"          value="2.0.7"/>
 	<property name="source-dir"       location="src"/>
 	<property name="common-dir"       location="../Common"/>
 	<property name="class-dir"        location="ant-classes"/>
@@ -92,7 +92,7 @@
 			<exclude name="org/fife/rtext/plugins/**"/>
 		</javac>
 		<!-- Dynamically loaded stuff that requires Java 6. -->
-		<echo>Compiling dynamically loaded classes with compiler: ${javac.16}</echo>
+		<echo>Compiling dynamically loaded classes with compiler: ${javac.16} (1.6 is recommended)</echo>
 		<javac srcdir="${source-dir}" destdir="${class-dir}"
 				includeantruntime="false"
 				deprecation="yes" debug="${debug}" debuglevel="${debuglevel}"
@@ -106,6 +106,7 @@
 				<path refid="project.class.path"/>
 				<path location="${class-dir}"/>
 				<path location="${common-dir}/lib/substance/substance-7.2.1.jar"/>
+				<!--<path location="${common-dir}/lib/substance/WebLookAndFeel.jar"/>-->
 			</classpath>
 		</javac>
 	</target>
@@ -170,6 +171,7 @@
 		<copy todir="${dist-dir}/lnfs">
 			<fileset dir="${common-dir}/lib">
 				<include name="substance/*.jar"/>
+				<!--<include name="WebLookAndFeel.jar"/>-->
 			</fileset>
 		</copy>
 		<!-- Build and create the plugin jars.  We do this separately -->

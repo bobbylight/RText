@@ -2,6 +2,11 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+2.0.7
+-------------------
+   -
+
+
 2.0.6 (01/25/2013):
 -------------------
    - Added syntax highlighting and code folding for JSON files.

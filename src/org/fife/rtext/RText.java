@@ -32,8 +32,10 @@ import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
 import org.fife.ui.SubstanceUtils;
 import org.fife.ui.UIUtil;
+import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
+import org.fife.ui.app.ExceptionDialog;
 import org.fife.ui.app.GUIApplicationPreferences;
 import org.fife.ui.app.Plugin;
 import org.fife.ui.app.ThirdPartyLookAndFeelManager;
@@ -77,7 +79,7 @@ import org.fife.util.TranslucencyUtil;
  * status bar.
  *
  * @author Robert Futrell
- * @version 2.0.6
+ * @version 2.0.7
  */
 public class RText extends AbstractPluggableGUIApplication
 			implements ActionListener, CaretListener, PropertyChangeListener,
@@ -1246,8 +1248,10 @@ public class RText extends AbstractPluggableGUIApplication
 			toolBar.checkForLargeIcons();
 
 		// Do this because the toolbar has changed it's size.
-		pack();
-		setSize(size);
+		if (isDisplayable()) {
+			pack();
+			setSize(size);
+		}
 
 		// Make the help dialog use appropriate "back" and "forward" icons.
 		if (helpDialog!=null) {
@@ -1685,6 +1689,10 @@ public class RText extends AbstractPluggableGUIApplication
 
 				try {
 					ClassLoader cl = lafManager.getLAFClassLoader();
+					// Set these properties before instantiating WebLookAndFeel
+					if (WebLookAndFeelUtils.isWebLookAndFeel(lafName)) {
+						WebLookAndFeelUtils.installWebLookAndFeelProperties(cl);
+					}
 					// Must set UIManager's ClassLoader before instantiating
 					// the LAF.  Substance is so high-maintenance!
 					UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
