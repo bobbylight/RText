@@ -179,6 +179,12 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		syntaxListModel.addElement(msg.getString("Style.MarkupTag.TagName"));
 		syntaxListModel.addElement(msg.getString("Style.MarkupTag.Attribute"));
 		syntaxListModel.addElement(msg.getString("Style.MarkupTag.AttributeValue"));
+		syntaxListModel.addElement(msg.getString("Style.MarkupTag.Comment"));
+		syntaxListModel.addElement(msg.getString("Style.MarkupTag.DTD"));
+		syntaxListModel.addElement(msg.getString("Style.MarkupTag.ProcessingInstruction"));
+		syntaxListModel.addElement(msg.getString("Style.MarkupTag.CDataDelimiter"));
+		syntaxListModel.addElement(msg.getString("Style.MarkupTag.CData"));
+		syntaxListModel.addElement(msg.getString("Style.MarkupTag.EntityReference"));
 		syntaxListModel.addElement(msg.getString("Style.Error.Identifier"));
 		syntaxListModel.addElement(msg.getString("Style.Error.Number"));
 		syntaxListModel.addElement(msg.getString("Style.Error.String"));

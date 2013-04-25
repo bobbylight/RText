@@ -160,16 +160,13 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 		// Make a panel containing the buttons.
 		JPanel rightPanel2 = new JPanel(new GridLayout(3,1, 5,5));
-		findButton = new JButton(getString("Find"));
-		findButton.setMnemonic((int)getString("FindMnemonic").charAt(0));
+		findButton = UIUtil.newButton(getBundle(), "Find");
 		findButton.setActionCommand("FindInFiles");
 		findButton.addActionListener(this);
-		browseButton = new JButton(getString2("Browse"));
-		browseButton.setMnemonic((int)getString2("BrowseMnemonic").charAt(0));
+		browseButton = UIUtil.newButton(msg, "Browse");
 		browseButton.setActionCommand("Browse");
 		browseButton.addActionListener(this);
-		cancelButton = new JButton(getString2("Close"));
-		cancelButton.setMnemonic((int)getString2("CloseMnemonic").charAt(0));
+		cancelButton = UIUtil.newButton(msg, "Close");
 		cancelButton.setActionCommand("Close");
 		cancelButton.addActionListener(this);
 		rightPanel2.add(findButton);
@@ -875,11 +872,11 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		browseButton.setEnabled(enabled);
 		if (searching) {
 			cancelButton.setText(getString2("Stop"));
-			cancelButton.setMnemonic((int)getString2("StopMnemonic").charAt(0));
+			cancelButton.setMnemonic((int)getString2("Stop.Mnemonic").charAt(0));
 		}
 		else {
 			cancelButton.setText(getString2("Close"));
-			cancelButton.setMnemonic((int)getString2("CloseMnemonic").charAt(0));
+			cancelButton.setMnemonic((int)getString2("Close.Mnemonic").charAt(0));
 		}
 		findTextCombo.setEnabled(enabled);
 		inFilesComboBox.setEnabled(enabled);
