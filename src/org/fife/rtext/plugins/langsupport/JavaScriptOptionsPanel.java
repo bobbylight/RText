@@ -150,7 +150,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		aaJavaKeysField.setEnabled(false);
 		aaDocKeysLabel = new JLabel(msg.getString("Options.JavaScript.AutoActionDocCommentKeys"));
 		aaDocKeysLabel.setEnabled(false);
-		aaDocKeysField = new JTextField("@", 10);
+		aaDocKeysField = new JTextField("@{", 10);
 		aaDocKeysField.setEnabled(false);
 		Dimension d = new Dimension(5, 5);
 		Dimension spacer = new Dimension(30, 5);

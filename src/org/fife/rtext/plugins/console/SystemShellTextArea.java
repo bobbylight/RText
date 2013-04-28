@@ -167,6 +167,13 @@ class SystemShellTextArea extends ConsoleTextArea {
 			}
 			dir = temp.getAbsolutePath();
 		}
+		else if (plugin.getRText().getOS()==RText.OS_WINDOWS &&
+				dir.length()==2 && Character.isLetter(dir.charAt(0)) &&
+				dir.charAt(1)==':') {
+			// e.g. "cd U:" converts to "cd U:\" so it actually does something;
+			// Windows does nothing when you type "cd U:" for some reason
+			dir += "\\";
+		}
 
 		// If the path entered is not absolute, it should be relative to the
 		// current working directory.
@@ -286,12 +293,22 @@ class SystemShellTextArea extends ConsoleTextArea {
 	protected void handleSubmit(String text) {
 
 		if (plugin.getRText().getOS()==RText.OS_WINDOWS) {
+
 			// On Windows, allow format e.g. "cd\temp" => "cd C:\temp".
 			if (text.startsWith(CD + '\\')) {
 				File root = getRootDir(pwd);
 				text = CD + " " + root.getAbsolutePath() +
 						text.substring(CD.length()+1);
 			}
+
+			// On Windows, allow typing a drive letter to switch to that drive
+			else if (text.matches("[A-Za-z]:\\\\?")) {
+				if (!text.endsWith("\\")) {
+					text += "\\";
+				}
+				text = CD + " " + text;
+			}
+
 		}
 
 		// Check for a built-in command first

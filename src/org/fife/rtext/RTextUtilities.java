@@ -289,6 +289,7 @@ public class RTextUtilities {
 			addFilter(chooser, msg, "Tcl", "tcl");
 			addFilter(chooser, msg, "UnixShell",
 					new String[] { "sh", "bsh", "csh", "ksh" });
+			addFilter(chooser, msg, "VisualBasic", "vb");
 			addFilter(chooser, msg, "WindowsBatch",
 					new String[] { "bat", "cmd" });
 			addFilter(chooser, msg, "XML",
@@ -339,6 +340,7 @@ public class RTextUtilities {
 						"tcl",
 						"txt",
 						"sh", "bsh", "csh", "ksh",
+						"vb",
 						"bat", "cmd",
 						"xml", "xsl", "xsd", "wsdl", "jnlp", "macro", "manifest",
 					},

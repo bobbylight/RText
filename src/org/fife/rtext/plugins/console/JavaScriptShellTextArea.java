@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.fife.rtext.RTextUtilities;
@@ -134,8 +135,13 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 			m.invoke(jsEngine, new Object[] { code });
 
 		} catch (Exception e) {
+			// Since we use reflection, remove wrapper InvocationTargetException
+			Throwable t = e;
+			if (t instanceof InvocationTargetException) {
+				t = t.getCause();
+			}
 			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
+			t.printStackTrace(new PrintWriter(sw));
 			append(sw.toString(), STYLE_EXCEPTION);
 		}
 
