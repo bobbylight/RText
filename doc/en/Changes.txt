@@ -2,9 +2,18 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
-2.0.7
+2.0.7 (04/28/2013):
 -------------------
-   -
+   - Pretty-printing now works for JSON in addition to XML and HTML.
+   - The system console plugin now auto-completes file names on pressing tab.
+   - HTML, PHP, and JSP have new option, "Automatically add closing tags for
+     HTML tags that require them."
+   - The text editor now includes an option to use the system selection colors
+     for selected text and its background.
+   - The file chooser and File System Tree plugin now include "Paste" option
+     to copy/paste file lists.
+   - Added Visual Basic syntax highlighting.
+   - Various code editor fixes and performance improvements.
 
 
 2.0.6 (01/25/2013):

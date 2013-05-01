@@ -55,7 +55,7 @@ public class Plugin extends AbstractPlugin
 	private XmlOptions xmlOptions;
 	private JsonOptions jsonOptions;
 
-	private static final String PLUGIN_VERSION			= "2.0.6";
+	private static final String PLUGIN_VERSION			= "2.0.7";
 
 	private static final String TIDY_ACTION = "PrettyPrintAction";
 	

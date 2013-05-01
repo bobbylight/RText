@@ -159,6 +159,7 @@
 				<exclude name="language_support.jar"/>
 				<exclude name="jtidy*"/>
 				<exclude name="js-14.jar"/>
+				<exclude name="jsonbeans*"/>
 				<exclude name="RSTALanguageSupport.License.txt"/>
 				<exclude name="Rhino.build-date"/>
 				<exclude name="Rhino.LICENSE.txt"/>
