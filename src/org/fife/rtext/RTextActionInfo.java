@@ -52,6 +52,8 @@ public interface RTextActionInfo {
 	public static final String OPTIONS_ACTION			= "optionsAction";
 	public static final String HOME_PAGE_ACTION			= "homePageAction";
 	public static final String UPDATES_ACTION			= "checkForUpdatesAction";
+	public static final String INC_FONT_SIZES_ACTION	= "incFontSizesAction";
+	public static final String DEC_FONT_SIZES_ACTION	= "decFontSizesAction";
 
 	public static final String FIND_ACTION				= "findAction";
 	public static final String FIND_NEXT_ACTION			= "findNextAction";
@@ -105,6 +107,8 @@ public interface RTextActionInfo {
 		OPTIONS_ACTION,
 		HOME_PAGE_ACTION,
 		UPDATES_ACTION,
+		DEC_FONT_SIZES_ACTION,
+		INC_FONT_SIZES_ACTION,
 
 		FIND_ACTION,
 		FIND_NEXT_ACTION,
@@ -167,6 +171,8 @@ public interface RTextActionInfo {
 		null,
 		null,
 		null,
+		KeyStroke.getKeyStroke(KeyEvent.VK_F6, defaultModifier),
+		KeyStroke.getKeyStroke(KeyEvent.VK_F7, defaultModifier),
 
 		KeyStroke.getKeyStroke(KeyEvent.VK_F, defaultModifier),
 		KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0),

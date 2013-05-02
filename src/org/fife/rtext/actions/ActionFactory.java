@@ -246,7 +246,13 @@ public class ActionFactory implements RTextActionInfo {
 		a.setAccelerator(prefs.getAccelerator(PREVIOUS_DOCUMENT_ACTION));
 		rtext.addAction(PREVIOUS_DOCUMENT_ACTION, a);
 
-		msg = null; // May help with GC.
+		a = new IncreaseFontSizeAction(rtext, msg);
+		a.setAccelerator(prefs.getAccelerator(INC_FONT_SIZES_ACTION));
+		rtext.addAction(INC_FONT_SIZES_ACTION, a);
+
+		a = new DecreaseFontSizeAction(rtext, msg);
+		a.setAccelerator(prefs.getAccelerator(DEC_FONT_SIZES_ACTION));
+		rtext.addAction(DEC_FONT_SIZES_ACTION, a);
 
 	}
 

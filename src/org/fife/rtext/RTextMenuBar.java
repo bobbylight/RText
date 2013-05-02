@@ -444,17 +444,11 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		// Font sizes submenu.
 		JMenu fontSizesMenu = createMenu(menuMsg, "MenuFontSizes");
-		a = new RSyntaxTextAreaEditorKit.DecreaseFontSizeAction();
-		decreaseFontSizesItem = createMenuItem(a, menuMsg,
-					"DecreaseFontSizes", "DecreaseFontSizesMnemonic",
-					KeyStroke.getKeyStroke(KeyEvent.VK_F6, defaultModifier));
-		UIUtil.setDescription(decreaseFontSizesItem,menuMsg,"DescDecFontSizes");
+		a = rtext.getAction(RText.DEC_FONT_SIZES_ACTION);
+		decreaseFontSizesItem = createMenuItem(a);
 		fontSizesMenu.add(decreaseFontSizesItem);
-		a = new RSyntaxTextAreaEditorKit.IncreaseFontSizeAction();
-		increaseFontSizesItem = createMenuItem(a, menuMsg,
-					"IncreaseFontSizes", "IncreaseFontSizesMnemonic",
-					KeyStroke.getKeyStroke(KeyEvent.VK_F7, defaultModifier));
-		UIUtil.setDescription(increaseFontSizesItem,menuMsg,"DescIncFontSizes");
+		a = rtext.getAction(RText.INC_FONT_SIZES_ACTION);
+		increaseFontSizesItem = createMenuItem(a);
 		fontSizesMenu.add(increaseFontSizesItem);
 		viewMenu.add(fontSizesMenu);
 /*

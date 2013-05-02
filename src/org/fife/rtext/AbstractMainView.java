@@ -4009,7 +4009,7 @@ public abstract class AbstractMainView extends JPanel
 	public void setTextAreaFont(Font font, boolean underline) {
 
 		if (font==null) {
-			font = new Font("Monospaced", Font.PLAIN, 13);
+			font = RTextEditorPane.getDefaultFont();
 		}
 
 		if (!font.equals(textAreaFont) || underline!=textAreaUnderline) {
