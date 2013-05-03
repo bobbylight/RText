@@ -253,6 +253,7 @@
 			 	breakiterator="yes">
 			<classpath>
 				<fileset dir="lib" includes="*.jar"/>
+				<fileset dir="${common-dir}/lib/substance" includes="*.jar"/>
 				<pathelement path="${common-dir}/extra"/>
 			</classpath>
 			<packageset dir="${common-dir}/src" defaultexcludes="yes">

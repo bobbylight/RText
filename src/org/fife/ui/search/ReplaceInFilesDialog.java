@@ -41,7 +41,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 		super(owner);
 		this.setTitle(getString2("ReplaceInFilesDialogTitle"));
 		findButton.setText(getString("Replace"));
-		findButton.setMnemonic((int)getString("ReplaceMnemonic").charAt(0));
+		findButton.setMnemonic((int)getString("Replace.Mnemonic").charAt(0));
 	}
 
 

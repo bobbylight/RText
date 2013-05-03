@@ -224,7 +224,7 @@ panel.add(editor);
 											rtext.getVersionString();
 			String text = "<html><body><center>" +
 				"Version " + version + "<br>" +
-				"Copyright (c) 2012 Robert Futrell<br>" +
+				"Copyright (c) 2013 Robert Futrell<br>" +
 				"<a href=\"http://rtext.fifesoft.com\">http://rtext.fifesoft.com</a>" +
 				"</font></center></body></html>";
 			return text;

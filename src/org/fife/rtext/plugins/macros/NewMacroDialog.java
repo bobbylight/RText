@@ -411,6 +411,10 @@ public class NewMacroDialog extends EscapableDialog {
 		bp2.add(editButton);
 		bpParent.add(UIUtil.createButtonFooter(bp2));
 		//bpParent.add(bp2);
+
+		UIUtil.ensureDefaultButtonWidth(okButton);
+		UIUtil.ensureDefaultButtonWidth(cancelButton);
+		UIUtil.ensureDefaultButtonWidth(editButton);
 		okButton.setPreferredSize(editButton.getPreferredSize());
 		cancelButton.setPreferredSize(editButton.getPreferredSize());
 
