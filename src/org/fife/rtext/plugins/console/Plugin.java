@@ -45,6 +45,7 @@ public class Plugin extends GUIPlugin {
 	private static final String DOCKABLE_WINDOW_CONSOLE	= "consoleDockableWindow";
 
 	private RText app;
+	private boolean highlightInput;
 	private ConsoleWindow window;
 	private Icon icon;
 
@@ -74,6 +75,7 @@ public class Plugin extends GUIPlugin {
 		}
 
 		ConsolePrefs prefs = loadPrefs();
+		setSyntaxHighlightInput(prefs.syntaxHighlightInput);
 
 		StandardAction a = new ViewConsoleAction(this.app, msg, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
@@ -208,6 +210,17 @@ public class Plugin extends GUIPlugin {
 	}
 
 
+	/**
+	 * Returns whether user input is syntax highlighted.
+	 *
+	 * @return Whether user input is syntax highlighted.
+	 * @see #setSyntaxHighlightInput(boolean)
+	 */
+	public boolean getSyntaxHighlightInput() {
+		return highlightInput;
+	}
+
+
 	public void install(AbstractPluggableGUIApplication app) {
 
 		RText rtext = (RText)app;
@@ -276,6 +289,7 @@ public class Plugin extends GUIPlugin {
 	public void savePreferences() {
 
 		ConsolePrefs prefs = new ConsolePrefs();
+		prefs.syntaxHighlightInput = getSyntaxHighlightInput();
 		prefs.windowPosition = window.getPosition();
 		StandardAction a = (StandardAction)app.getAction(VIEW_CONSOLE_ACTION);
 		prefs.windowVisibilityAccelerator = a.getAccelerator();
@@ -309,6 +323,22 @@ public class Plugin extends GUIPlugin {
 				app.addDockableWindow(window);
 			}
 			window.setActive(visible);
+		}
+	}
+
+
+	/**
+	 * Toggles whether user input should be syntax highlighted.
+	 *
+	 * @param highlightInput Whether to syntax highlight user input.
+	 * @see #getSyntaxHighlightInput()
+	 */
+	public void setSyntaxHighlightInput(boolean highlightInput) {
+		if (highlightInput!=this.highlightInput) {
+			this.highlightInput = highlightInput;
+			if (window!=null) {
+				window.setSyntaxHighlightInput(highlightInput);
+			}
 		}
 	}
 

@@ -198,6 +198,17 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 
 
 	/**
+	 * Toggles whether user input should be syntax highlighted.
+	 *
+	 * @param highlightInput Whether to syntax highlight user input.
+	 */
+	public void setSyntaxHighlightInput(boolean highlightInput) {
+		jsTextArea.refreshUserInputStyles();
+		shellTextArea.refreshUserInputStyles();
+	}
+
+
+	/**
 	 * Stops the currently running process, if any.
 	 */
 	public void stopCurrentProcess() {

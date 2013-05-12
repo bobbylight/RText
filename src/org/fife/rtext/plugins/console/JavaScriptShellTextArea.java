@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
 /**
@@ -70,6 +71,14 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	 */
 	public void appendPrompt() {
 		appendImpl("Rhino> ", STYLE_PROMPT);
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected String getSyntaxStyle() {
+		return SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT;
 	}
 
 
@@ -140,14 +149,51 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 			if (t instanceof InvocationTargetException) {
 				t = t.getCause();
 			}
-			StringWriter sw = new StringWriter();
-			t.printStackTrace(new PrintWriter(sw));
-			append(sw.toString(), STYLE_EXCEPTION);
+			// Also peel off wrapper javax.script.ScriptException.  Can't
+			// reference the class directly since we can run in Java 1.4.
+			//if (t instanceof ScriptException) {
+			if ("javax.script.ScriptException".equals(t.getClass().getName())) {
+				append(massageScriptException(t), STYLE_STDERR);
+			}
+			else {
+				StringWriter sw = new StringWriter();
+				t.printStackTrace(new PrintWriter(sw));
+				append(sw.toString(), STYLE_EXCEPTION);
+			}
 		}
 
 		if (appendPrompt) {
 			appendPrompt();
 		}
+
+	}
+
+
+	/**
+	 * Tries to strip the name of the exception that was wrapped by the
+	 * <code>javax.script.ScriptException</code>.
+	 *
+	 * @param t The ScriptException (can't reference that type directly since
+	 *        this code compiles with Java 1.4).
+	 * @return The error message to display for the Throwable in the console.
+	 */
+	private static final String massageScriptException(
+			/*ScriptException*/Throwable t) {
+
+		String text = t.getMessage();
+
+		String[] rhinoStarts = {
+			"sun.org.mozilla.javascript.internal.EcmaError: ",
+			"sun.org.mozilla.javascript.internal.EvaluatorException: ",
+		};
+		for (int i=0; i<rhinoStarts.length; i++) {
+			if (text.startsWith(rhinoStarts[i])) {
+				text = text.substring(rhinoStarts[i].length());
+				break;
+			}
+		}
+
+		return text;
 
 	}
 

@@ -42,6 +42,11 @@ public class ConsolePrefs extends Prefs {
 	public KeyStroke windowVisibilityAccelerator;
 
 	/**
+	 * Whether user input should be syntax highlighted.
+	 */
+	public boolean syntaxHighlightInput;
+
+	/**
 	 * The color used for stdout in consoles.
 	 */
 	public Color stdoutFG;
@@ -81,6 +86,7 @@ public class ConsolePrefs extends Prefs {
 		windowVisible = false;
 		windowPosition = DockableWindow.BOTTOM;
 		windowVisibilityAccelerator = null;
+		syntaxHighlightInput = true;
 		stdoutFG = ConsoleTextArea.DEFAULT_STDOUT_FG;
 		stderrFG = ConsoleTextArea.DEFAULT_STDERR_FG;
 		exceptionFG = ConsoleTextArea.DEFAULT_EXCEPTION_FG;

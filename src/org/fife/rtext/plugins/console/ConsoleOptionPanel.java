@@ -48,6 +48,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	private JCheckBox visibleCB;
 	private JLabel locationLabel;
 	private JComboBox locationCombo;
+	private JCheckBox highlightInputCB;
 	private JCheckBox stdoutCB;
 	private JCheckBox stderrCB;
 	private JCheckBox promptCB;
@@ -149,6 +150,12 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 			firePropertyChange(PROPERTY, !selected, selected);
 		}
 
+		else if (highlightInputCB==source) {
+			boolean selected = highlightInputCB.isSelected();
+			hasUnsavedChanges = true;
+			firePropertyChange(PROPERTY, !selected, selected);
+		}
+
 		else if (defaultsButton==source) {
 			if (notDefaults()) {
 				restoreDefaults();
@@ -173,6 +180,10 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		temp.setBorder(new OptionPanelBorder(
 									plugin.getString("Options.Colors")));
 
+		highlightInputCB = createColorActivateCB(
+				plugin.getString("Highlight.Input"));
+		addLeftAligned(temp, highlightInputCB);
+
 		stdoutCB = createColorActivateCB(plugin.getString("Color.Stdout"));
 		stdoutButton = createColorSwatchesButton();
 		stderrCB = createColorActivateCB(plugin.getString("Color.Stderr"));
@@ -195,7 +206,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 			sp.add(promptButton);     sp.add(promptCB);
 			sp.add(exceptionsButton); sp.add(exceptionsCB);
 		}
-		UIUtil.makeSpringCompactGrid(sp, 4,2, 5,5, 5,5);
+		UIUtil.makeSpringCompactGrid(sp, 4,2, 0,0, 5,5);
 
 		JPanel temp2 = new JPanel(new BorderLayout());
 		temp2.add(sp, BorderLayout.LINE_START);
@@ -291,6 +302,8 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		window.setActive(visibleCB.isSelected());
 		window.setPosition(locationCombo.getSelectedIndex());
 
+		plugin.setSyntaxHighlightInput(highlightInputCB.isSelected());
+
 		Color c = exceptionsCB.isSelected() ? exceptionsButton.getColor() : null;
 		window.setForeground(ConsoleTextArea.STYLE_EXCEPTION, c);
 		c = promptCB.isSelected() ? promptButton.getColor() : null;
@@ -347,6 +360,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	private boolean notDefaults() {
 		return !visibleCB.isSelected() ||
 			locationCombo.getSelectedIndex()!=2 ||
+			!highlightInputCB.isSelected() ||
 			!ConsoleTextArea.DEFAULT_STDOUT_FG.equals(stdoutButton.getColor()) ||
 			!ConsoleTextArea.DEFAULT_STDERR_FG.equals(stderrButton.getColor()) ||
 			!ConsoleTextArea.DEFAULT_PROMPT_FG.equals(promptButton.getColor()) ||
@@ -372,7 +386,9 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 
 		setVisibleCBSelected(true);
 		locationCombo.setSelectedIndex(2);
+		highlightInputCB.setSelected(true);
 
+		highlightInputCB.setSelected(true);
 		stdoutCB.setSelected(true);
 		stderrCB.setSelected(true);
 		promptCB.setSelected(true);
@@ -396,6 +412,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		visibleCB.setSelected(window.isActive());
 		locationCombo.setSelectedIndex(window.getPosition());
 
+		highlightInputCB.setSelected(plugin.getSyntaxHighlightInput());
 		stdoutCB.setSelected(window.isStyleUsed(ConsoleTextArea.STYLE_STDOUT));
 		stdoutButton.setEnabled(window.isStyleUsed(ConsoleTextArea.STYLE_STDOUT));
 		stderrCB.setSelected(window.isStyleUsed(ConsoleTextArea.STYLE_STDERR));

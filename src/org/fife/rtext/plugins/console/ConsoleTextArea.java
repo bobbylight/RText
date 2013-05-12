@@ -28,6 +28,8 @@ import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
@@ -36,6 +38,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
@@ -43,6 +46,9 @@ import javax.swing.text.Utilities;
 
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.SubstanceUtils;
+import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
+import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
+import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rtextarea.RTextArea;
 
 
@@ -84,6 +90,11 @@ abstract class ConsoleTextArea extends JTextPane {
 	private int cmdHistoryIndex;
 
 	/**
+	 * Used to syntax highlight the current text being entered by the user.
+	 */
+	private RSyntaxDocument shDoc;
+
+	/**
 	 * The maximum number of commands the user can recall.
 	 */
 	private static final int MAX_COMMAND_HISTORY_SIZE	= 50;
@@ -91,7 +102,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	/**
 	 * The maximum number of lines to display in the console.
 	 */
-	private static final int MAX_LINE_COUNT				= 2500;
+	private static final int MAX_LINE_COUNT				= 1500;
 
 
 	/**
@@ -103,6 +114,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		fixKeyboardShortcuts();
 		listener = new Listener();
 		addMouseListener(listener);
+		getDocument().addDocumentListener(listener);
 		init();
 		cmdHistory = new LinkedList();
 	}
@@ -292,6 +304,15 @@ abstract class ConsoleTextArea extends JTextPane {
 
 
 	/**
+	 * Returns the syntax style that should be used for syntax highlighting
+	 * input in this text area.
+	 *
+	 * @return The syntax style.
+	 */
+	protected abstract String getSyntaxStyle();
+
+
+	/**
 	 * Returns a usage note for this particular shell.
 	 *
 	 * @return The usage note.
@@ -378,7 +399,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	public void replaceSelection(String text) {
 
 		int start = getSelectionStart();
-		Document doc = getDocument();
+		StyledDocument doc = (StyledDocument)getDocument();
 
 		// Don't let the user remove any text they haven't typed (stdin).
 		if (start<inputMinOffs) {
@@ -444,6 +465,83 @@ abstract class ConsoleTextArea extends JTextPane {
 		}
 
 		popup.show(this, e.getX(), e.getY());
+
+	}
+
+
+	/**
+	 * Called when the user toggles whether or not to syntax highlight user
+	 * input in the options dialog.  This method changes the style of
+	 * <b>only</b> the current user input to match the new preference.  Any
+	 * previously submitted commands are not re-highlighted.
+	 */
+	void refreshUserInputStyles() {
+
+		// If there's no partial user input, bail early.
+		int start = inputMinOffs;
+		StyledDocument doc = getStyledDocument();
+		int end = doc.getLength();
+		if (end==start) {
+			return;
+		}
+
+		// If we're syntax highlighting now, do that
+		if (plugin.getSyntaxHighlightInput()) {
+			syntaxHighlightInput();
+			return;
+		}
+
+		// Otherwise, change all current input to default "input" color.
+		Style style = getStyle(STYLE_STDIN);
+		doc.setCharacterAttributes(start, end, style, true);
+
+	}
+
+
+	/**
+	 * Syntax highlights the current input being entered by the user.
+	 */
+	private void syntaxHighlightInput() {
+
+		if (shDoc==null) {
+			shDoc = new RSyntaxDocument(getSyntaxStyle());
+		}
+		StyledDocument doc = getStyledDocument();
+
+		try {
+
+			SyntaxScheme scheme = plugin.getRText().getSyntaxScheme();
+			shDoc.replace(0, shDoc.getLength(), getCurrentInput(), null);
+			Token t = shDoc.getTokenListForLine(0);
+			int offs = inputMinOffs;
+
+			while (t!=null && t.isPaintable()) {
+
+				int type = t.type;
+				org.fife.ui.rsyntaxtextarea.Style style = scheme.getStyle(type);
+				Style attrs = doc.addStyle(null, getStyle(STYLE_STDIN));
+
+				Color fg = style.foreground;
+				if (fg!=null) StyleConstants.setForeground(attrs, fg);
+				Color bg = style.background;
+				if (bg!=null) StyleConstants.setBackground(attrs, bg);
+
+				Font font = style.font;
+				if (font!=null) {
+					StyleConstants.setBold(attrs, font.isBold());
+					StyleConstants.setItalic(attrs, font.isItalic());
+				}
+				StyleConstants.setUnderline(attrs, style.underline);
+
+				doc.setCharacterAttributes(offs, t.textCount, attrs, true);
+				offs += t.textCount;
+				t = t.getNextToken();
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -671,12 +769,30 @@ abstract class ConsoleTextArea extends JTextPane {
 	/**
 	 * Listens for events in this text area.
 	 */
-	private class Listener extends MouseAdapter {
+	private class Listener extends MouseAdapter implements DocumentListener {
+
+		public void changedUpdate(DocumentEvent e) {
+		}
+
+		private void handleDocumentEvent(DocumentEvent e) {
+			if (plugin.getSyntaxHighlightInput()) {
+				// Can't update Document in DocumentListener directly
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						syntaxHighlightInput();
+					}
+				});
+			}
+		}
 
 		private void handleMouseEvent(MouseEvent e) {
 			if (e.isPopupTrigger()) {
 				showPopupMenu(e);
 			}
+		}
+
+		public void insertUpdate(DocumentEvent e) {
+			handleDocumentEvent(e);
 		}
 
 		public void mouseClicked(MouseEvent e) {
@@ -689,6 +805,10 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		public void mouseReleased(MouseEvent e) {
 			handleMouseEvent(e);
+		}
+
+		public void removeUpdate(DocumentEvent e) {
+			handleDocumentEvent(e);
 		}
 
 	}

@@ -32,6 +32,7 @@ import javax.swing.text.TextAction;
 import org.fife.io.ProcessRunner;
 import org.fife.io.ProcessRunnerOutputListener;
 import org.fife.rtext.RText;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextfilechooser.Utilities;
 
 
@@ -90,6 +91,16 @@ class SystemShellTextArea extends ConsoleTextArea {
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "completeFileName");
 		am.put("completeFileName", new CompleteFileNameAction());
 
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected String getSyntaxStyle() {
+		return plugin.getRText().getOS()==RText.OS_WINDOWS ?
+				SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH :
+				SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
 	}
 
 
