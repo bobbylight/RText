@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="i18n"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/FifeCommon"/>
+	<classpathentry kind="lib" path="lib/autocomplete.jar" sourcepath="C:/dev/rsta/RSyntaxTextArea/src"/>
+	<classpathentry kind="lib" path="lib/rsta_spellchecker.jar"/>
+	<classpathentry kind="lib" path="lib/rsyntaxtextarea.jar"/>
+	<classpathentry kind="lib" path="lib/language_support.jar"/>
+	<classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
+	<classpathentry kind="lib" path="lib/rstaui.jar"/>
+	<classpathentry kind="lib" path="/FifeCommon/extra"/>
+	<classpathentry kind="lib" path="/FifeCommon/lib/substance/laf-plugin-7.2.1.jar"/>
+	<classpathentry kind="lib" path="/FifeCommon/lib/substance/laf-widget-7.2.1.jar"/>
+	<classpathentry kind="lib" path="/FifeCommon/lib/substance/substance-7.2.1-tools.jar"/>
+	<classpathentry kind="lib" path="/FifeCommon/lib/substance/substance-7.2.1.jar"/>
+	<classpathentry kind="lib" path="/FifeCommon/lib/substance/trident-7.2.1-base.jar"/>
+	<classpathentry kind="lib" path="/FifeCommon/lib/substance/trident-7.2.1-swing.jar"/>
+	<classpathentry kind="lib" path="/FifeCommon/lib/substance/trident-7.2.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
