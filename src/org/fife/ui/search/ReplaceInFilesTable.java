@@ -34,8 +34,10 @@ public class ReplaceInFilesTable extends FindInFilesTable {
 	 * @param data The match data.
 	 * @return The vector.
 	 */
-	protected Vector createMatchDataVector(String fileName, MatchData data) {
-		Vector v = new Vector(2);
+	@Override
+	protected Vector<String> createMatchDataVector(String fileName,
+			MatchData data) {
+		Vector<String> v = new Vector<String>(2);
 		v.add(fileName);
 		v.add(data.getLineText());
 		return v;
@@ -48,6 +50,7 @@ public class ReplaceInFilesTable extends FindInFilesTable {
 	 * @param msg The resource bundle.
 	 * @return The table model.
 	 */
+	@Override
 	protected DefaultTableModel createTableModel(ResourceBundle msg) {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn(msg.getString("FindInFiles.Column.File"));
@@ -59,6 +62,7 @@ public class ReplaceInFilesTable extends FindInFilesTable {
 	/**
 	 * Initializes the column widths.
 	 */
+	@Override
 	protected void initColumnWidths() {
 		TableColumnModel columnModel = getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(100);

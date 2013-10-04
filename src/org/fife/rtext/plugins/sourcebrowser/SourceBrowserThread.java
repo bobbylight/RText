@@ -316,6 +316,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	 * @return A <code>TreeNode</code> object for the source browser tree.
 	 *         If something goes wrong, this value will be <code>null</code>.
 	 */
+	@Override
 	public Object construct() {
 
 		// Create data structures in which we can store the tags.
@@ -454,6 +455,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	 * This method should be overridden to do any work with the value
 	 * returned from <code>get</code> to prevent deadlock.
 	 */
+	@Override
 	public void finished() {
 		tree.setRoot((SourceTreeNode)get());
 	}

@@ -153,6 +153,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		ToolPlugin p = (ToolPlugin)getPlugin();
@@ -173,6 +174,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -192,6 +194,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return toolTable;
 	}
@@ -224,6 +227,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 
 		ToolPlugin p = (ToolPlugin)getPlugin();
@@ -283,6 +287,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 			this.tool = tool;
 		}
 
+		@Override
 		public String toString() {
 			return tool.getName();
 		}

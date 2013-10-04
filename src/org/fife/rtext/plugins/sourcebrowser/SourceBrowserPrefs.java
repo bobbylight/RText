@@ -57,6 +57,7 @@ public class SourceBrowserPrefs extends Prefs {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDefaults() {
 		active = true;
 		position = GUIPlugin.LEFT;

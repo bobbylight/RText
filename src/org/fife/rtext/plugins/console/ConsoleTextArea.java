@@ -396,6 +396,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 *
 	 * @param text The text to replace the selection with.
 	 */
+	@Override
 	public void replaceSelection(String text) {
 
 		int start = getSelectionStart();
@@ -549,6 +550,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	/**
 	 * Overridden to also update the UI of the popup menu.
 	 */
+	@Override
 	public void updateUI() {
 		super.updateUI();
 		installDefaultStyles(true);
@@ -795,14 +797,17 @@ abstract class ConsoleTextArea extends JTextPane {
 			handleDocumentEvent(e);
 		}
 
+		@Override
 		public void mouseClicked(MouseEvent e) {
 			handleMouseEvent(e);
 		}
 
+		@Override
 		public void mousePressed(MouseEvent e) {
 			handleMouseEvent(e);
 		}
 
+		@Override
 		public void mouseReleased(MouseEvent e) {
 			handleMouseEvent(e);
 		}

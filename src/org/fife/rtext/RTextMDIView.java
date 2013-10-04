@@ -85,6 +85,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 * @param component The scroll pane containing the text editor to add.
 	 * @param fileFullPath The full path to the document being added.
 	 */
+	@Override
 	protected void addTextAreaImpl(String title, Component component,
 							String fileFullPath) {
 
@@ -177,6 +178,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected synchronized boolean closeCurrentDocumentImpl() {
 
 		ResourceBundle msg = owner.getResourceBundle();
@@ -264,6 +266,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 *        <code>null</code> is returned.
 	 * @return The name being displayed for this document.
 	 */
+	@Override
 	public String getDocumentDisplayNameAt(int index) {
 		if (index>=0 && index<getNumDocuments()) {
 			return ((JInternalFrame)frames.get(index)).getTitle();
@@ -279,6 +282,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 *
 	 * @return The location of the document selection area.
 	 */
+	@Override
 	public int getDocumentSelectionPlacement() {
 		return documentSelectionPlacement;
 	}
@@ -289,6 +293,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 *
 	 * @return The number of open documents.
 	 */
+	@Override
 	public int getNumDocuments() {
 		return frames.size();
 	}
@@ -299,6 +304,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 *
 	 * @return The preferred size of this view.
 	 */
+	@Override
 	public Dimension getPreferredSize() {
 		Dimension preferredSize = new Dimension(300,300); // Default value.
 		int numDocuments = frames.size();
@@ -314,6 +320,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public RTextScrollPane getRTextScrollPaneAt(int index) {
 		if (index<0 || index>=getNumDocuments())
 			//throw new IndexOutOfBoundsException();
@@ -329,6 +336,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 *
 	 * @return The component.
 	 */
+	@Override
 	public Component getSelectedComponent() {
 		return desktopPane.getSelectedFrame();
 	}
@@ -339,6 +347,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 *
 	 * @return The index of the currently selected document.
 	 */
+	@Override
 	public int getSelectedIndex() {
 		return frames.indexOf(desktopPane.getSelectedFrame());
 	}
@@ -426,6 +435,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	/**
 	 * Repaints the display names for open documents.
 	 */
+	@Override
 	public void refreshDisplayNames() {
 		// Can't change MDI window color in JDesktopPane?
 	}
@@ -435,6 +445,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 * Removes a component from this container.  Note that this method does not
 	 * update currentTextArea, you must do that yourself.
 	 */
+	@Override
 	protected void removeComponentAt(int index) {
 		if (index>=0 && index<getNumDocuments()) {
 			((JInternalFrame)frames.get(index)).dispose();
@@ -452,6 +463,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 * @param displayName The name to display.
 	 * @see #getDocumentDisplayNameAt
 	 */
+	@Override
 	public void setDocumentDisplayNameAt(int index, String displayName) {
 		if (index>=0 && index<getNumDocuments()) {
 			((JInternalFrame)frames.get(index)).setTitle(displayName);
@@ -466,7 +478,8 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 *        <code>LEFT</code>, <code>BOTTOM</code>, or <code>RIGHT</code>.
 	 *        If this value is invalid, nothing happens.
 	 */
-	 public void setDocumentSelectionPlacement(int location) {
+	 @Override
+	public void setDocumentSelectionPlacement(int location) {
 		if (location==DOCUMENT_SELECT_TOP || location==DOCUMENT_SELECT_LEFT ||
 			location==DOCUMENT_SELECT_BOTTOM || location==DOCUMENT_SELECT_RIGHT)
 			documentSelectionPlacement = location;
@@ -479,6 +492,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 * @param index The index of the document to make the active document.  If this
 	 *        value is invalid, nothing happens.
 	 */
+	@Override
 	public void setSelectedIndex(int index) {
 		if (index>=0 && index<getNumDocuments()) {
 			JInternalFrame frame = (JInternalFrame)frames.get(index);
@@ -601,6 +615,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	/**
 	 * Overridden so we can update the right-click popup menu.
 	 */
+	@Override
 	public void updateUI() {
 		super.updateUI();
 		if (popupMenu!=null)
@@ -640,10 +655,12 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 */
 	class MDIMouseListener extends MouseAdapter {
 
+		@Override
 		public void mousePressed(MouseEvent e) {
 			maybeShowPopup(e);
 		}
 
+		@Override
 		public void mouseReleased(MouseEvent e) {
 			maybeShowPopup(e);
 		}

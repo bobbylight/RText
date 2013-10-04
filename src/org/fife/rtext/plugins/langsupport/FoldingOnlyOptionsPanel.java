@@ -118,6 +118,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	 *
 	 * @param owner The parent {@link RText} application.
 	 */
+	@Override
 	protected final void doApplyImpl(Frame owner) {
 		doApplyCodeFoldingPreference((RText)owner);
 	}
@@ -127,6 +128,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	 * The default implementation always returns <code>null</code>.  Subclasses
 	 * can override if they add more than just check boxes to the panel.
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -135,6 +137,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return enabledCB;
 	}
@@ -150,6 +153,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	 * Checks or unchecks the "enable code folding" check box.  Subclasses can
 	 * override this if they add more options to this panel.
 	 */
+	@Override
 	protected final void setValuesImpl(Frame owner) {
 		setCodeFoldingValueImpl((RText)owner); 
 	}

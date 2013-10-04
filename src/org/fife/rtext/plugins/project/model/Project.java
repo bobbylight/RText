@@ -23,24 +23,24 @@ import java.util.List;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Project implements Comparable, ProjectEntryParent {
+public class Project implements Comparable<Project>, ProjectEntryParent {
 
 	private Workspace workspace;
 	private String name;
-	private List entries;
+	private List<ProjectEntry> entries;
 
 
 	public Project(Workspace workspace, String name) {
 		this.workspace = workspace;
 		setName(name);
-		entries = new ArrayList();
+		entries = new ArrayList<ProjectEntry>();
 	}
 
 
 	public void accept(WorkspaceVisitor visitor) {
 		visitor.visit(this);
-		for (Iterator i=getEntryIterator(); i.hasNext(); ) {
-			((ProjectEntry)i.next()).accept(visitor);
+		for (ProjectEntry entry : entries) {
+			entry.accept(visitor);
 		}
 		visitor.postVisit(this);
 	}
@@ -51,19 +51,20 @@ public class Project implements Comparable, ProjectEntryParent {
 	}
 
 
-	public int compareTo(Object o) {
-		if (o instanceof Project) {
-			return getName().compareTo(((Project)o).getName());
-		}
-		return -1;
+	public int compareTo(Project p2) {
+		return getName().compareTo(p2.getName());
 	}
 
 
+	@Override
 	public boolean equals(Object o) {
 		if (o==this) {
 			return true;
 		}
-		return compareTo(o)==0;
+		if (o instanceof Project) {
+			return compareTo((Project)o)==0;
+		}
+		return false;
 	}
 
 
@@ -84,7 +85,7 @@ public class Project implements Comparable, ProjectEntryParent {
 	}
 
 
-	public Iterator getEntryIterator() {
+	public Iterator<ProjectEntry> getEntryIterator() {
 		return entries.iterator();
 	}
 
@@ -99,6 +100,7 @@ public class Project implements Comparable, ProjectEntryParent {
 	}
 
 
+	@Override
 	public int hashCode() {
 		return getName().hashCode();
 	}

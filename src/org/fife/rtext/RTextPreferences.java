@@ -590,6 +590,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	 *
 	 * @param rtext The rtext instance for which you are saving preferences.
 	 */
+	@Override
 	public void savePreferences(Object rtext) {
 
 		// Save all properties related to the RText class.
@@ -716,6 +717,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	/**
 	 * Sets this preferences instance to contain all default values.
 	 */
+	@Override
 	protected void setDefaults() {
 		location = new Point(0,0);
 		size = new Dimension(650,500);
@@ -831,6 +833,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	 *
 	 * @return A string representation of this object.
 	 */
+	@Override
 	public String toString() {
 		return "[Class: RTextPreferences]";
 	}

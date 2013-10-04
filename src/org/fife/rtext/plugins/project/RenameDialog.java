@@ -120,6 +120,7 @@ public class RenameDialog extends EscapableDialog{
 	/**
 	 * Overridden to set the name "the user entered" to <code>null</code>.
 	 */
+	@Override
 	public void escapePressed() {
 		nameField.setText(null); // So user gets back nothing
 		super.escapePressed();
@@ -158,6 +159,7 @@ public class RenameDialog extends EscapableDialog{
 	 *         cancelled.
 	 * @see #setName(String)
 	 */
+	@Override
 	public String getName() {
 		String name = nameField.getText();
 		return name.length()>0 ? name : null;
@@ -213,6 +215,7 @@ public class RenameDialog extends EscapableDialog{
 	 * @param name The name to display.
 	 * @see #getName()
 	 */
+	@Override
 	public void setName(String name) {
 		nameField.setText(name);
 		nameField.requestFocusInWindow();

@@ -194,6 +194,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 	 *
 	 * @param active Whether the task window should be active.
 	 */
+	@Override
 	public void setActive(boolean active) {
 		if (active!=isActive()) {
 			super.setActive(active);
@@ -252,6 +253,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 			super(lastColHeader);
 		}
 
+		@Override
 		protected void addNoticesImpl(RTextEditorPane textArea, List notices) {
 			for (Iterator i=notices.iterator(); i.hasNext(); ) {
 				ParserNotice notice = (ParserNotice)i.next();

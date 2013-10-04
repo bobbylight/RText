@@ -52,11 +52,13 @@ class SubstanceTreeCellRendererWrapper extends SubstanceDefaultTreeCellRenderer{
 	 * implementation of <code>DefaultTreeCellRenderer#getFont()</code> for
 	 * more information.
 	 */
+	@Override
 	public Font getFont() {
 		return delegate!=null ? ((JLabel)delegate).getFont() : super.getFont();
 	}
 
 
+	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 			boolean selected, boolean expanded, boolean leaf, int row,
 			boolean focused) {
@@ -121,6 +123,7 @@ class SubstanceTreeCellRendererWrapper extends SubstanceDefaultTreeCellRenderer{
 	/**
 	 * Overridden to update our delegate's UI.
 	 */
+	@Override
 	public void updateUI() {
 		super.updateUI();
 		if (delegate instanceof JComponent) {

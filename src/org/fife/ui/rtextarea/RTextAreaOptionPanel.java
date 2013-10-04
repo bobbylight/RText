@@ -491,6 +491,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		};
 		JComboBox combo = new JComboBox(items) {
 			// Force preferred size to prevent vertical stretching!
+			@Override
 			public Dimension getMaximumSize() {
 				return getPreferredSize();
 			}
@@ -508,6 +509,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param owner The application.
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		RText rtext = (RText)owner;
@@ -570,6 +572,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 
 		// Ensure the tab size specified is valid.
@@ -722,6 +725,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 * bonus, if this component is a <code>JTextComponent</code>, its
 	 * text is selected for easy changing.
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return tabSizeField;
 	}
@@ -991,6 +995,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 * @param owner The parent application.
 	 * @see #setValues(Frame)
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
@@ -1049,6 +1054,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	private static class ModKeyCellRenderer extends DefaultListCellRenderer {
 
+		@Override
 		public Component getListCellRendererComponent(JList list,
 			Object value, int index, boolean selected, boolean hasFocus) {
 			super.getListCellRendererComponent(list, value, index,

@@ -14,7 +14,6 @@ import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
@@ -65,7 +64,7 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 		// Start listening to any already-opened files.
 		for (int i=0; i<mainView.getNumDocuments(); i++) {
 			RTextEditorPane textArea = mainView.getRTextEditorPaneAt(i);
-			List notices = textArea.getParserNotices();
+			List<ParserNotice> notices = textArea.getParserNotices();
 			model.update(textArea, notices);
 			textArea.addPropertyChangeListener(
 						RSyntaxTextArea.PARSER_NOTICES_PROPERTY, this);
@@ -80,7 +79,7 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 
 		if (RSyntaxTextArea.PARSER_NOTICES_PROPERTY.equals(prop)) {
 			RTextEditorPane source = (RTextEditorPane)e.getSource();
-			List notices = source.getParserNotices();//(List)e.getNewValue();
+			List<ParserNotice> notices = source.getParserNotices();//(List)e.getNewValue();
 			model.update(source, notices);
 		}
 
@@ -105,11 +104,12 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 			super(lastColHeader);
 		}
 
-		protected void addNoticesImpl(RTextEditorPane textArea, List notices) {
+		@Override
+		protected void addNoticesImpl(RTextEditorPane textArea,
+				List<ParserNotice> notices) {
 			AbstractMainView view = getRText().getMainView();
 			SpellingParser parser = view.getSpellingSupport().getSpellingParser();
-			for (Iterator i=notices.iterator(); i.hasNext(); ) {
-				ParserNotice notice = (ParserNotice)i.next();
+			for (ParserNotice notice : notices) {
 				if (notice.getParser()==parser) {
 					Object[] data = { getIcon(), textArea,
 						// Integer.intValue(notice.getValue()+1) // TODO: 1.5

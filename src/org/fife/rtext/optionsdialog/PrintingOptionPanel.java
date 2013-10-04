@@ -99,6 +99,7 @@ class PrintingOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param owner The application.
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
@@ -128,6 +129,7 @@ class PrintingOptionPanel extends OptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		// They can't input invalid stuff on this options panel.
 		return null;
@@ -152,6 +154,7 @@ class PrintingOptionPanel extends OptionsDialogPanel
 	 * bonus, if this component is a <code>JTextComponent</code>, its
 	 * text is selected for easy changing.
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return fontSelector;
 	}
@@ -178,6 +181,7 @@ class PrintingOptionPanel extends OptionsDialogPanel
 	 * @param owner The parent application.
 	 * @see #setValues(Frame)
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();

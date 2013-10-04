@@ -169,6 +169,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	 * so that the node that is being expanded will be populated with its
 	 * subdirectories, if necessary.
 	 */
+	@Override
 	public void fireTreeWillExpand(TreePath e) throws ExpandVetoException {
 
 		super.fireTreeWillExpand(e);
@@ -233,6 +234,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	}
 
 
+	@Override
 	public String getToolTipText(MouseEvent e) {
 		TreePath path = getPathForLocation(e.getX(), e.getY());
 		if (path!=null) {
@@ -355,6 +357,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	 *
 	 * @param e The mouse event.
 	 */
+	@Override
 	protected void processMouseEvent(MouseEvent e) {
 		super.processMouseEvent(e);
 		if (e.isPopupTrigger()) {
@@ -416,6 +419,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	/**
 	 * Overridden to also update this tree's popup menu.
 	 */
+	@Override
 	public void updateUI() {
 		super.updateUI();
 		if (popup!=null) {

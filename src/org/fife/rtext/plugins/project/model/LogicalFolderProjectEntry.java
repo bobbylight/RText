@@ -27,20 +27,20 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 		implements ProjectEntryParent {
 
 	private String name;
-	private List entries;
+	private List<ProjectEntry> entries;
 
 
 	public LogicalFolderProjectEntry(ProjectEntryParent parent, String name) {
 		super(parent);
 		this.name = name;
-		entries = new ArrayList();
+		entries = new ArrayList<ProjectEntry>();
 	}
 
 
 	public void accept(WorkspaceVisitor visitor) {
 		visitor.visit(this);
-		for (Iterator i=getEntryIterator(); i.hasNext(); ) {
-			((ProjectEntry)i.next()).accept(visitor);
+		for (ProjectEntry entry : entries) {
+			entry.accept(visitor);
 		}
 		visitor.postVisit(this);
 	}
@@ -76,7 +76,7 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 	}
 
 
-	public Iterator getEntryIterator() {
+	public Iterator<ProjectEntry> getEntryIterator() {
 		return entries.iterator();
 	}
 
@@ -101,6 +101,7 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 	}
 
 
+	@Override
 	public int hashCode() {
 		return name.hashCode();
 	}

@@ -70,6 +70,7 @@ public class ConsolePrefs extends Prefs {
 	/**
 	 * Overridden to validate the dockable window position value.
 	 */
+	@Override
 	public void load(InputStream in) throws IOException {
 		super.load(in);
 		// Ensure window position is valid.
@@ -82,6 +83,7 @@ public class ConsolePrefs extends Prefs {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDefaults() {
 		windowVisible = false;
 		windowPosition = DockableWindow.BOTTOM;

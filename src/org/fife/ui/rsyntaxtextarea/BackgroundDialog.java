@@ -484,22 +484,26 @@ class BackgroundDialog extends JDialog implements ActionListener {
 			return color;
 		}
 
+		@Override
 		public int getIconHeight() {
 			return IMAGE_DIM;
 		}
 
+		@Override
 		public int getIconWidth() {
 			return IMAGE_DIM;
 		}
 
 		// Overridden to prevent "null" images (via setImage(null)) from
 		// throwing an exception.
+		@Override
 		protected void loadImage(Image image) {
 			if (image!=null) {
 				super.loadImage(image);
 			}
 		}
 
+		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			if (getColor()!=null) {
 				Color old = g.getColor();

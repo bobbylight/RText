@@ -51,6 +51,7 @@ class FindNextAction extends FindAction {
 	 *
 	 * @param e The action event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		ensureSearchDialogsCreated();

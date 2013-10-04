@@ -386,10 +386,12 @@ public class Workspace implements ModelEntity {
 	 */
 	private static class Handler extends DefaultHandler {
 
+		@Override
 		public void error(SAXParseException e) throws SAXException {
 			throw e;
 		}
 
+		@Override
 		public InputSource resolveEntity(String publicID,  String systemID)
 				throws SAXException {
 			return new InputSource(getClass().

@@ -889,6 +889,7 @@ public class RTextUtilities {
 				if (util!=null) {
 					if (util.isTranslucencySupported(true)) {
 						PopupWindowDecorator.set(new PopupWindowDecorator() {
+							@Override
 							public void decorate(JWindow window) {
 								Container cp = window.getContentPane();
 								if (cp instanceof JComponent) {

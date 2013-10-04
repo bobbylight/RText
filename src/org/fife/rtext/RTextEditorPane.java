@@ -67,6 +67,7 @@ public class RTextEditorPane extends TextEditorPane {
 	 * @param pageFormat The size and orientation of the page being drawn.
 	 * @param pageIndex The zero based index of the page to be drawn.
 	 */
+	@Override
 	public int print(Graphics g, PageFormat pageFormat, int pageIndex) {
 		Font printWithMeFont = rtext.getMainView().getPrintFont();
 		if (printWithMeFont==null)	// null => print with the current font.
@@ -83,11 +84,13 @@ public class RTextEditorPane extends TextEditorPane {
 	 */
 	class RTextEditorPaneTransferHandler extends RTATextTransferHandler {
 
+		@Override
 		public boolean canImport(JComponent c, DataFlavor[] flavors) {
 			return MainPanelTransferHandler.hasFileFlavor(flavors) ||
 					super.canImport(c, flavors);
 		}
 
+		@Override
 		public boolean importData(JComponent c, Transferable t) {
 			return MainPanelTransferHandler.
 				importDataImpl(rtext.getMainView(), c, t) ||

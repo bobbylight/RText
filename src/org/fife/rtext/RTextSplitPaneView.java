@@ -129,6 +129,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 * Adds a text area to this view, and places a number beside documents
 	 * opened multiple times.
 	 */
+	@Override
 	protected void addTextAreaImpl(String title, Component component,
 							String fileFullPath) {
 
@@ -174,6 +175,7 @@ class RTextSplitPaneView extends AbstractMainView
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected synchronized boolean closeCurrentDocumentImpl() {
 
 		ResourceBundle msg = owner.getResourceBundle();
@@ -214,6 +216,7 @@ class RTextSplitPaneView extends AbstractMainView
 	/**
 	 * Overridden to remove our file list dockable window.
 	 */
+	@Override
 	public void dispose() {
 		owner.removeDockableWindow(listWindow);
 	}
@@ -227,6 +230,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 *        invalid, <code>null</code> is returned.
 	 * @return The name being displayed for this document.
 	 */
+	@Override
 	public String getDocumentDisplayNameAt(int index) {
 		if (index>=0 && index<getNumDocuments()) {
 			return ((DocumentInfo)listModel.get(index)).text;
@@ -240,6 +244,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 *
 	 * @return The location of the document selection area.
 	 */
+	@Override
 	public int getDocumentSelectionPlacement() {
 		return listWindowPosition;
 	}
@@ -250,6 +255,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 *
 	 * @return The number of open documents.
 	 */
+	@Override
 	public int getNumDocuments() {
 		return scrollPanes.size();
 	}
@@ -258,6 +264,7 @@ class RTextSplitPaneView extends AbstractMainView
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public RTextScrollPane getRTextScrollPaneAt(int index) {
 		if (index<0 || index>=getNumDocuments())
 			//throw new IndexOutOfBoundsException();
@@ -271,6 +278,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 *
 	 * @return The component.
 	 */
+	@Override
 	public Component getSelectedComponent() {
 		return (Component)scrollPanes.get(getSelectedIndex());
 	}
@@ -283,6 +291,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 *
 	 * @return The index of the currently selected document.
 	 */
+	@Override
 	public int getSelectedIndex() {
 		return selectedIndex;
 	}
@@ -291,6 +300,7 @@ class RTextSplitPaneView extends AbstractMainView
 	/**
 	 * Repaints the display names for open documents.
 	 */
+	@Override
 	public void refreshDisplayNames() {
 		documentList.repaint();
 	}
@@ -303,6 +313,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 *        is done because of the way we select components to view (indexing).
 	 * PENDING:  Improve efficiency.
 	 */
+	@Override
 	protected void removeComponentAt(final int index) {
 		int numDocuments = getNumDocuments();
 		if (index>=0 && index<numDocuments) {
@@ -343,6 +354,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 * @param displayName The name to display.
 	 * @see #getDocumentDisplayNameAt
 	 */
+	@Override
 	public void setDocumentDisplayNameAt(int index, String displayName) {
 		if (index>=0 && index<getNumDocuments()) {
 			DocumentInfo info = (DocumentInfo)listModel.get(index);
@@ -361,7 +373,8 @@ class RTextSplitPaneView extends AbstractMainView
 	 *        <code>LEFT</code>, <code>BOTTOM</code>, or <code>RIGHT</code>).
 	 *        If this value is invalid, nothing happens.
 	 */
-	 public void setDocumentSelectionPlacement(int location) {
+	 @Override
+	public void setDocumentSelectionPlacement(int location) {
 
 		if (location==DOCUMENT_SELECT_TOP || location==DOCUMENT_SELECT_LEFT ||
 			location==DOCUMENT_SELECT_BOTTOM || location==DOCUMENT_SELECT_RIGHT) {
@@ -405,6 +418,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 * @param index The index of the document to make the active document.  If
 	 *        this value is invalid, nothing happens.
 	 */
+	@Override
 	public void setSelectedIndex(int index) {
 		// All we need to do is call the valueChanged() method below; it takes
 		// care of everything for us.
@@ -481,6 +495,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 */
 	private class DocumentListCellRenderer extends DefaultListCellRenderer {
 
+		@Override
 		public Component getListCellRendererComponent(JList list,
 							Object value, int index,
 							boolean isSelected, boolean cellHasFocus) {
@@ -566,14 +581,17 @@ class RTextSplitPaneView extends AbstractMainView
 
 		}
 
+		@Override
 		public void mouseClicked(MouseEvent e) {
 			handleMouseEvent(e);
 		}
 
+		@Override
 		public void mousePressed(MouseEvent e) {
 			handleMouseEvent(e);
 		}
 
+		@Override
 		public void mouseReleased(MouseEvent e) {
 			handleMouseEvent(e);
 		}

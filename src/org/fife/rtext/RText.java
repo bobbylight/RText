@@ -94,7 +94,7 @@ public class RText extends AbstractPluggableGUIApplication
 	public static final String ICON_STYLE_PROPERTY		= "RText.iconStyle";
 	public static final String MAIN_VIEW_STYLE_PROPERTY	= "RText.mainViewStyle";
 
-	private Map iconGroupMap;
+	private Map<String, IconGroup> iconGroupMap;
 
 	private RTextMenuBar menuBar;
 
@@ -288,6 +288,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 *
 	 * @return The About dialog.
 	 */
+	@Override
 	protected JDialog createAboutDialog() {
 		return new AboutDialog(this);
 	}
@@ -298,6 +299,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 *
 	 * @param prefs The RText properties for this RText instance.
 	 */
+	@Override
 	protected void createActions(GUIApplicationPreferences prefs) {
 		ActionFactory.addActions(this, (RTextPreferences)prefs);
 	}
@@ -309,6 +311,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param prefs This GUI application's preferences.
 	 * @return The menu bar.
 	 */
+	@Override
 	protected JMenuBar createMenuBar(GUIApplicationPreferences prefs) {
 
 		RTextPreferences properties = (RTextPreferences)prefs;
@@ -334,6 +337,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @return The splash screen.  If <code>null</code> is returned, no
 	 *         splash screen is displayed.
 	 */
+	@Override
 	protected SplashScreen createSplashScreen() {
 		String img = "org/fife/rtext/graphics/" + getString("Splash");
 		return new SplashScreen(img, getString("Initializing"));
@@ -346,6 +350,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param prefs This GUI application's preferences.
 	 * @return The status bar.
 	 */
+	@Override
 	protected org.fife.ui.StatusBar createStatusBar(
 							GUIApplicationPreferences prefs) {
 		RTextPreferences properties = (RTextPreferences)prefs;
@@ -363,6 +368,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param prefs This GUI application's preferences.
 	 * @return The toolbar.
 	 */
+	@Override
 	protected CustomizableToolBar createToolBar(
 						GUIApplicationPreferences prefs) {
 
@@ -386,6 +392,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param desc A short description of the error.  This can be
 	 *        <code>null</code>.
 	 */
+	@Override
 	public void displayException(Dialog owner, Throwable t, String desc) {
 		ExceptionDialog ed = new ExceptionDialog(owner, t);
 		if (desc!=null) {
@@ -405,6 +412,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param desc A short description of the error.  This can be
 	 *        <code>null</code>.
 	 */
+	@Override
 	public void displayException(Frame owner, Throwable t, String desc) {
 		ExceptionDialog ed = new ExceptionDialog(owner, t);
 		if (desc!=null) {
@@ -422,6 +430,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * means.  The user is prompted to save any dirty documents, and this
 	 * RText instance is closed.
 	 */
+	@Override
 	public void doExit() {
 
 		// Attempt to close all open documents.
@@ -495,6 +504,7 @@ public class RText extends AbstractPluggableGUIApplication
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public OptionsDialog getOptionsDialog() {
 
 		int pluginCount = getPlugins().length;
@@ -547,6 +557,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @return The Help dialog.
 	 * @see org.fife.ui.app.GUIApplication#getHelpDialog
 	 */
+	@Override
 	public HelpDialog getHelpDialog() {
 		// Create the help dialog if it hasn't already been.
 		if (helpDialog==null) {
@@ -599,7 +610,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 *
 	 * @return The icon groups.
 	 */
-	public Map getIconGroupMap() {
+	public Map<String, IconGroup> getIconGroupMap() {
 		return iconGroupMap;
 	}
 
@@ -636,6 +647,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @return The class name, or <code>null</code> if this GUI application
 	 *         does not save preferences.
 	 */
+	@Override
 	protected String getPreferencesClassName() {
 		return "org.fife.rtext.RTextPreferences";
 	}
@@ -663,6 +675,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @return The fully-qualified class name of the resource bundle.
 	 * @see #getResourceBundle()
 	 */
+	@Override
 	public String getResourceBundleClassName() {
 		return "org.fife.rtext.RText";
 	}
@@ -749,6 +762,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @return The title of this window.
 	 * @see #setTitle(String)
 	 */
+	@Override
 	public String getTitle() {
 		String title = super.getTitle();
 		int hyphen = title.indexOf("- ");
@@ -764,6 +778,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 *
 	 * @return The version string.
 	 */
+	@Override
 	public String getVersionString() {
 		return VERSION_STRING;
 	}
@@ -788,6 +803,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 *
 	 * @param plugin The plugin to install.
 	 */
+	@Override
 	protected void handleInstallPlugin(Plugin plugin) {
 		// Normally we don't have to check currentTextArea for null, but in
 		// this case, we do.  Plugins are installed at startup, after the main
@@ -905,6 +921,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param splashScreen The "splash screen" for this application.  This
 	 *        value may be <code>null</code>.
 	 */
+	@Override
 	protected void preDisplayInit(GUIApplicationPreferences prefs,
 								SplashScreen splashScreen) {
 
@@ -968,6 +985,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param splashScreen The "splash screen" for this application.  This
 	 *        value may be <code>null</code>.
 	 */
+	@Override
 	protected void preMenuBarInit(GUIApplicationPreferences prefs,
 							SplashScreen splashScreen) {
 
@@ -1001,6 +1019,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param splashScreen The "splash screen" for this application.  This
 	 *        value may be <code>null</code>.
 	 */
+	@Override
 	protected void preStatusBarInit(GUIApplicationPreferences prefs,
 							SplashScreen splashScreen) {
 
@@ -1054,6 +1073,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param splashScreen The "splash screen" for this application.  This
 	 *        value may be <code>null</code>.
 	 */
+	@Override
 	protected void preToolBarInit(GUIApplicationPreferences prefs,
 							final SplashScreen splashScreen) {
 
@@ -1189,9 +1209,9 @@ public class RText extends AbstractPluggableGUIApplication
 	 */
 	public void setIconGroupByName(String name) {
 
-		IconGroup newGroup = (IconGroup)iconGroupMap.get(name);
+		IconGroup newGroup = iconGroupMap.get(name);
 		if (newGroup==null)
-			newGroup = (IconGroup)iconGroupMap.get(
+			newGroup = iconGroupMap.get(
 							IconGroupLoader.DEFAULT_ICON_GROUP_NAME);
 		if (newGroup==null)
 			throw new InternalError("No icon groups!");
@@ -1469,6 +1489,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param title The new title.
 	 * @see #getTitle()
 	 */
+	@Override
 	public void setTitle(String title) {
 		if (getShowHostName()) {
 			title = "rtext (" + getHostName() + ") - " + title;
@@ -1579,6 +1600,7 @@ public class RText extends AbstractPluggableGUIApplication
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void updateLookAndFeel(LookAndFeel lnf) {
 
 		super.updateLookAndFeel(lnf);
@@ -1627,10 +1649,12 @@ public class RText extends AbstractPluggableGUIApplication
 	 * Apple application menu.  The "about()" OSX hook is in
 	 * AbstractGUIApplication.
 	 */
+	@Override
 	public void preferences() {
 		getAction(OPTIONS_ACTION).actionPerformed(new ActionEvent(this,0,"unused"));
 	}
 
+	@Override
 	public void openFile(final String filename) {
 		//gets called when we receive an open event from the finder on OS X
 		SwingUtilities.invokeLater(new Runnable() {
@@ -1696,7 +1720,7 @@ public class RText extends AbstractPluggableGUIApplication
 					// Must set UIManager's ClassLoader before instantiating
 					// the LAF.  Substance is so high-maintenance!
 					UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
-					Class clazz = null;
+					Class<?> clazz = null;
 					try {
 						clazz = cl.loadClass(lafName);
 					} catch (UnsupportedClassVersionError ucve) {

@@ -185,6 +185,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param owner The application.
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
@@ -199,6 +200,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -211,6 +213,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	 * bonus, if this component is a <code>JTextComponent</code>, its
 	 * text is selected for easy changing.
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return lnEnabledCB;
 	}
@@ -245,6 +248,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	 * @param owner The parent application.
 	 * @see #setValues(Frame)
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();

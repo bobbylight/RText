@@ -18,7 +18,6 @@ import java.net.URL;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JMenu;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -32,6 +31,7 @@ import org.fife.rtext.plugins.project.BaseAction;
 import org.fife.rtext.plugins.project.LogicalFolderNameDialog;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.NewFolderDialog;
+import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.FileProjectEntry;
 import org.fife.rtext.plugins.project.model.FolderProjectEntry;
@@ -95,7 +95,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	public abstract Icon getIcon();
 
 
-	public abstract List getPopupActions();
+	public abstract List<PopupContent> getPopupActions();
 
 
 	public abstract String getToolTipText();
@@ -145,10 +145,11 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 * @param actions The action list to add to.
 	 * @return Whether the actions were added.
 	 */
-	protected boolean possiblyAddOpenInActions(List actions) {
+	protected boolean possiblyAddOpenInActions(List<PopupContent> actions) {
 		if (!RTextUtilities.isPreJava6()) {
 			WorkspaceTree tree = plugin.getTree();
-			JMenu openInMenu = new JMenu(Messages.getString("Action.OpenIn"));
+			PopupContent.PopupSubMenu openInMenu = new PopupContent.PopupSubMenu(
+					Messages.getString("Action.OpenIn"));
 			openInMenu.add(new Actions.SystemOpenAction(tree, "edit"));
 			openInMenu.add(new Actions.SystemOpenAction(tree, "open"));
 			actions.add(openInMenu);
@@ -159,6 +160,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
+	@Override
 	public final String toString() {
 		return getDisplayName();
 	}

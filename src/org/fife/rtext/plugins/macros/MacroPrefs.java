@@ -36,6 +36,7 @@ public class MacroPrefs extends Prefs {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDefaults() {
 		newMacroAccelerator = null;
 		editMacrosAccelerator = null;

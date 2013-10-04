@@ -262,6 +262,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 *
 	 * @return The tooltip text.
 	 */
+	@Override
 	public String getToolTipText() {
 		long num = bytesToKb(getUsedMemory());
 		long denom = bytesToKb(getTotalMemory());
@@ -352,6 +353,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	}
 
 
+	@Override
 	protected void processMouseEvent(MouseEvent e) {
 		switch (e.getID()) {
 			case MouseEvent.MOUSE_CLICKED:
@@ -438,6 +440,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	}
 
 
+	@Override
 	public void setVisible(boolean visible) {
 		if (visible)
 			installTimer(getRefreshInterval());

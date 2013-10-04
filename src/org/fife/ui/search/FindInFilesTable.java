@@ -17,6 +17,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Vector;
 import javax.swing.JScrollPane;
@@ -46,7 +47,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 
 	private FileExplorerTableModel sorter;
 	private DefaultTableModel tableModel;
-	private ArrayList matchDatas;
+	private List<MatchData> matchDatas;
 
 	private StandardCellRenderer defaultRenderer;
 	private VerboseCellRenderer verboseRenderer;
@@ -76,7 +77,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 
 		initColumnWidths();
 
-		matchDatas = new ArrayList();
+		matchDatas = new ArrayList<MatchData>();
 		defaultRenderer = new StandardCellRenderer();
 
 		// By default, tables are registered to give tool tips.  This causes
@@ -118,7 +119,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 		// We create and pass a Vector since that's what DefaultTableModel
 		// uses internally anyway.  This saves, say, creating an Object[]
 		// array to pass in.
-		Vector v = createMatchDataVector(fileName, matchData);
+		Vector<String> v = createMatchDataVector(fileName, matchData);
 		tableModel.addRow(v);
 		matchDatas.add(matchData);
 
@@ -132,6 +133,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 *
 	 * @param o The new component orientation.
 	 */
+	@Override
 	public void applyComponentOrientation(ComponentOrientation o) {
 
 		super.applyComponentOrientation(o);
@@ -195,8 +197,9 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 * @param data The match data.
 	 * @return The vector.
 	 */
-	protected Vector createMatchDataVector(String fileName, MatchData data) {
-		Vector v = new Vector(3);
+	protected Vector<String> createMatchDataVector(String fileName,
+			MatchData data) {
+		Vector<String> v = new Vector<String>(3);
 		v.add(fileName);
 		v.add(data.getLineNumber());
 		v.add(data.getLineText());
@@ -226,6 +229,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 * @param column The column of the cell.
 	 * @return The renderer.
 	 */
+	@Override
 	public TableCellRenderer getCellRenderer(int row, int column) {
 		MatchData data = getMatchDataForRow(row);
 		if (data.isVerboseSearchInfo() || data.isError()) {
@@ -245,7 +249,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 */
 	public MatchData getMatchDataForRow(int row) {
 		row = sorter.modelIndex(row);
-		return (MatchData)matchDatas.get(row);
+		return matchDatas.get(row);
 	}
 
 
@@ -254,6 +258,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 *
 	 * @return The preferred size of this table.
 	 */
+	@Override
 	public Dimension getPreferredScrollableViewportSize() {
 		return new Dimension(100, getRowHeight()*8);
 	}
@@ -264,6 +269,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 * is sitting in.  Note in Java 6 this could be taken care of by the
 	 * method JTable#setFillsViewportHeight(boolean).
 	 */
+	@Override
 	public boolean getScrollableTracksViewportHeight() {
 		Component parent = getParent();
 		return parent instanceof JViewport ?
@@ -276,6 +282,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 * always at least as large as the enclosing <code>JScrollPane</code>'s
 	 * viewport.
 	 */
+	@Override
 	public boolean getScrollableTracksViewportWidth() {
  		Container parent = getParent();
 		if (parent instanceof JViewport) {
@@ -303,6 +310,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 * @param column The column of the cell.
 	 * @return <code>false</code> always.
 	 */
+	@Override
 	public boolean isCellEditable(int row, int column) {
 		return false;
 	}
@@ -377,6 +385,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 * This is because otherwise the viewport jumps to show the entire cell
 	 * selected.
 	 */
+	@Override
 	public void scrollRectToVisible(Rectangle r) {
 		r.x = 0; r.width = 0;
 		super.scrollRectToVisible(r);
@@ -386,6 +395,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	/**
 	 * Overridden to also update the UI of custom renderers.
 	 */
+	@Override
 	public void updateUI() {
 
 		/*
@@ -441,6 +451,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 */
 	private class StandardCellRenderer extends DefaultTableCellRenderer {
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table,
 								Object value, boolean selected,
 								boolean focused, int row, int column) {
@@ -470,6 +481,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 */
 	private class VerboseCellRenderer extends DefaultTableCellRenderer {
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table,
 								Object value, boolean isSelected,
 								boolean hasFocus, int row, int column) {

@@ -43,6 +43,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 	/**
 	 * Runs the search.
 	 */
+	@Override
 	public Object construct() {
 
 		// Get the string to search for and filters for the files to search.

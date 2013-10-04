@@ -250,10 +250,12 @@ class ToolBar extends CustomizableToolBar {
 		public void focusLost(FocusEvent e) {
 		}
 
+		@Override
 		public void mouseEntered(MouseEvent e) {
 			mouseInNewButton = true;
 		}
 
+		@Override
 		public void mouseExited(MouseEvent e) {
 			mouseInNewButton = false;
 		}

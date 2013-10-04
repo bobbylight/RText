@@ -162,6 +162,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param owner The application.
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
@@ -174,6 +175,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 
 		// Make sure each filter value in the table is valid.
@@ -214,6 +216,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	 * bonus, if this component is a <code>JTextComponent</code>, its
 	 * text is selected for easy changing.
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return filterTable;
 	}
@@ -265,6 +268,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	 * @param owner The parent application.
 	 * @see #setValues(Frame)
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
@@ -360,6 +364,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 			return null;
 		}
 
+		@Override
 		public boolean canRemoveRow(int row) {
 			return false; // Can modify any row, but not remove any
 		}

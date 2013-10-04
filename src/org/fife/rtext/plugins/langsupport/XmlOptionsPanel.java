@@ -138,6 +138,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		boolean closeClosingTags = autoCompleteClosingTagsCB.isSelected();
@@ -158,6 +159,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -166,6 +168,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return autoCompleteClosingTagsCB;
 	}
@@ -174,6 +177,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 
 		boolean close = XMLTokenMaker.getCompleteCloseMarkupTags();

@@ -69,6 +69,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void appendPrompt() {
 		appendImpl("Rhino> ", STYLE_PROMPT);
 	}
@@ -77,6 +78,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected String getSyntaxStyle() {
 		return SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT;
 	}
@@ -85,6 +87,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected String getUsageNote() {
 		return plugin.getString("Usage.Note.JsShell");
 	}
@@ -93,6 +96,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	/**
 	 * Submits the entered JavaScript code.
 	 */
+	@Override
 	protected void handleSubmit(String text) {
 		handleSubmitImpl(text, true);
 	}
@@ -279,14 +283,17 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 			this.style = style;
 		}
 
+		@Override
 		public void close() throws IOException {
 			// Do nothing
 		}
 
+		@Override
 		public void flush() throws IOException {
 			// Do nothing
 		}
 
+		@Override
 		public void write(char[] buf, int off, int len) {
 			// "JavaScriptShellTextArea.this." needed to
 			// compile in Java 5+, but but in Java 1.4.

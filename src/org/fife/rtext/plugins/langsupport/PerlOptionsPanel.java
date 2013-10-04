@@ -251,6 +251,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		RText app = (RText)owner;
@@ -316,6 +317,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 
 		OptionsPanelCheckResult res = null;
@@ -337,6 +339,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return foldingEnabledCB;
 	}
@@ -388,6 +391,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();

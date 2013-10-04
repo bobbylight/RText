@@ -236,6 +236,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	/**
 	 * Called whenever the user does something.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
@@ -685,6 +686,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 *
 	 * @return The search strings in the Find combo box's history.
 	 */
+	@Override
 	public Vector getSearchStrings() {
 		int itemCount = findTextCombo.getItemCount();
 		Vector vector = new Vector(itemCount);
@@ -737,6 +739,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 *
 	 * @return Whether the buttons should be enabled.
 	 */
+	@Override
 	protected EnableResult handleToggleButtons() {
 
 		EnableResult er = super.handleToggleButtons();
@@ -784,6 +787,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	/**
 	 * Overridden to initialize UI elements specific to this subclass.
 	 */
+	@Override
 	protected void refreshUIFromContext() {
 		super.refreshUIFromContext();
 		FindInFilesSearchContext fifsc = (FindInFilesSearchContext)context;
@@ -913,6 +917,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 *
 	 * @param visible Whether the dialog should be displayed or hidden.
 	 */
+	@Override
 	public void setVisible(boolean visible) {
 
 		super.setVisible(visible);
@@ -1010,6 +1015,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 */
 	protected class FindInFilesFocusAdapter extends FocusAdapter {
 
+		@Override
 		public void focusGained(FocusEvent e) {
 
 			Component component = e.getComponent();
@@ -1038,6 +1044,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 			this.comp = comp;
 		}
 
+		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (e.getButton()==MouseEvent.BUTTON1 && e.getClickCount()==2) {
 				int row = comp.getSelectedRow();
@@ -1076,6 +1083,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 */
 	private class FindInFilesKeyListener extends KeyAdapter {
 
+		@Override
 		public void keyReleased(KeyEvent e) {
 
 			// This is an ugly hack to get around JComboBox's

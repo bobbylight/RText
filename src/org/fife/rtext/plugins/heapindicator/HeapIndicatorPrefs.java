@@ -36,6 +36,7 @@ public class HeapIndicatorPrefs extends Prefs {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDefaults() {
 		visible         = DEFAULT_VISIBLE;
 		refreshInterval = DEFAULT_REFRESH_INTERVAL;

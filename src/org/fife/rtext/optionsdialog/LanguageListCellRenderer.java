@@ -61,6 +61,7 @@ class LanguageListCellRenderer extends DefaultListCellRenderer {
 	}
 
 
+	@Override
 	public Component getListCellRendererComponent(JList list,
 			Object value, int index, boolean selected, boolean focused) {
 		super.getListCellRendererComponent(list, value, index,

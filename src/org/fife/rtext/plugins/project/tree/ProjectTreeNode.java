@@ -18,6 +18,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
+import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.Project;
@@ -42,6 +43,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
+	@Override
 	public String getDisplayName() {
 		return project.getName();
 	}
@@ -50,13 +52,15 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Icon getIcon() {
 		return getProjectIcon();
 	}
 
 
-	public List getPopupActions() {
-		List actions = new ArrayList();
+	@Override
+	public List<PopupContent> getPopupActions() {
+		List<PopupContent> actions = new ArrayList<PopupContent>();
 		actions.add(new AddFileAction(project, this));
 		actions.add(new AddFolderAction(project, this));
 		actions.add(new AddLogicalFolderAction(project, this));
@@ -93,11 +97,13 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
+	@Override
 	public String getToolTipText() {
 		return null;
 	}
 
 
+	@Override
 	protected void handleDelete() {
 
 		String text = Messages.getString("Action.DeleteProject.Confirm",
@@ -116,11 +122,13 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
+	@Override
 	protected void handleProperties() {
 		// Do nothing
 	}
 
 
+	@Override
 	protected void handleRename() {
 		RText rtext = plugin.getRText();
 		String type = Messages.getString("ProjectPlugin.Project");
@@ -136,12 +144,14 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
+	@Override
 	public boolean moveProjectEntityDown() {
 		Workspace workspace = project.getWorkspace();
 		return workspace.moveProjectDown(project);
 	}
 
 
+	@Override
 	public boolean moveProjectEntityUp() {
 		Workspace workspace = project.getWorkspace();
 		return workspace.moveProjectUp(project);

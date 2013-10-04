@@ -75,6 +75,7 @@ public class FolderProjectEntry extends AbstractProjectEntry {
 	}
 
 
+	@Override
 	public int hashCode() {
 		return dir.hashCode();
 	}

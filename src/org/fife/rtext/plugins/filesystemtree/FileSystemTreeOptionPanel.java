@@ -129,6 +129,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 		FileSystemTreePlugin p = (FileSystemTreePlugin)getPlugin();
 		DockableWindow wind = p.getDockableWindow(p.getPluginName());
@@ -140,6 +141,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		// They can't input invalid stuff on this options panel.
 		return null;
@@ -164,6 +166,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	 * bonus, if this component is a <code>JTextComponent</code>, its
 	 * text is selected for easy changing.
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return locationCombo;
 	}
@@ -202,6 +205,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	 * Updates this panel's displayed parameter values to reflect those of
 	 * this plugin.
 	 */
+	@Override
 	protected void setValuesImpl(Frame frame) {
 		FileSystemTreePlugin p = (FileSystemTreePlugin)getPlugin();
 		DockableWindow wind = p.getDockableWindow(p.getPluginName());

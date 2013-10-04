@@ -129,8 +129,8 @@ public class SourceBrowserPlugin extends GUIPlugin
 		if (SubstanceUtils.isSubstanceInstalled()) {
 			TreeCellRenderer renderer = tree.getCellRenderer();
 			try {
-				Class clazz = Class.forName(RENDERER_WRAPPER_CLASS_NAME);
-				Constructor cons = clazz.getConstructor(
+				Class<?> clazz = Class.forName(RENDERER_WRAPPER_CLASS_NAME);
+				Constructor<?> cons = clazz.getConstructor(
 						new Class[] { TreeCellRenderer.class });
 				renderer = (TreeCellRenderer)cons.newInstance(
 						new Object[] { renderer });
@@ -226,7 +226,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						try {
-							Class clazz = Class.forName(customHandlerName);
+							Class<?> clazz = Class.forName(customHandlerName);
 							Object handler = clazz.newInstance();
 							java.lang.reflect.Method m = clazz.getMethod(
 									"constructSourceBrowserTree",
@@ -295,7 +295,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 */
 	protected void ensureSourceTreeSortedProperly() {
 
-		Class clazz = sourceTree.getClass();
+		Class<?> clazz = sourceTree.getClass();
 		Method sortMethod = null;
 		try {
 			sortMethod = clazz.getMethod("setSorted",

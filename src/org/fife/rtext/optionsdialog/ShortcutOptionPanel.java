@@ -115,6 +115,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param owner The application.
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		Action[] actions = getActions();
@@ -148,6 +149,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -168,6 +170,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	 * Returns the <code>JComponent</code> at the "top" of this Options
 	 * panel.
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return shortcutTable.getTable();
 	}
@@ -227,6 +230,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	 * @param owner The parent application.
 	 * @see #setValues(Frame)
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 		setActions((RText)owner);
 	}
@@ -271,6 +275,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 			return null;
 		}
 
+		@Override
 		public boolean canRemoveRow(int row) {
 			return false; // Can modify any row, but can't remove any
 		}
@@ -278,6 +283,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 		/**
 		 * Overridden to update the cached dialog, if necessary.
 		 */
+		@Override
 		public void updateUI() {
 			if (ksDialog!=null) {
 				SwingUtilities.updateComponentTreeUI(ksDialog);

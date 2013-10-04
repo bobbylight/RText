@@ -53,6 +53,7 @@ public class Macro implements Comparable, Cloneable {
 	 *
 	 * @return A clone of this macro.
 	 */
+	@Override
 	public Object clone() {
 		Macro m = null;
 		try {
@@ -88,6 +89,7 @@ public class Macro implements Comparable, Cloneable {
 	 *
 	 * @return Whether this macro and another have the same name.
 	 */
+	@Override
 	public boolean equals(Object o) {
 		return compareTo(o)==0;
 	}
@@ -119,6 +121,7 @@ public class Macro implements Comparable, Cloneable {
 	}
 
 
+	@Override
 	public int hashCode() {
 		return getName().hashCode();
 	}
@@ -156,6 +159,7 @@ public class Macro implements Comparable, Cloneable {
 	 *
 	 * @return The name of this macro.
 	 */
+	@Override
 	public String toString() {
 		return getName();
 	}

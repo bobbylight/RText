@@ -64,6 +64,7 @@ public class FileProjectEntry extends AbstractProjectEntry {
 	}
 
 
+	@Override
 	public int hashCode() {
 		return file.hashCode();
 	}

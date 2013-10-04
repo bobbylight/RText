@@ -4,6 +4,7 @@ import java.util.List;
 import javax.swing.Icon;
 import javax.swing.tree.TreeNode;
 
+import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 
 
@@ -48,22 +49,29 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 			super(plugin);
 		}
 
+		@Override
 		public String getDisplayName() { return null; }
 
+		@Override
 		public Icon getIcon() {
 			return null;
 		}
 
-		public List getPopupActions() { return null; }
+		@Override
+		public List<PopupContent> getPopupActions() { return null; }
 
+		@Override
 		public String getToolTipText() { return null; }
 
+		@Override
 		protected void handleDelete() {}
 
+		@Override
 		protected void handleProperties() {}
 
 		protected void handleRefresh() {}
 
+		@Override
 		protected void handleRename() {}
 		
 	}

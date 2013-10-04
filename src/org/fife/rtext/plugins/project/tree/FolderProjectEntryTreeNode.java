@@ -14,15 +14,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.plugins.project.BaseAction;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.NewFolderDialog;
+import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.FolderFilterInfo;
 import org.fife.rtext.plugins.project.model.FolderProjectEntry;
@@ -55,8 +54,8 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	private void addChildrenFilteredAndSorted(File[] files) {
 
 		int num = files.length;
-		ArrayList dirList = new ArrayList();
-		ArrayList fileList = new ArrayList();
+		ArrayList<File> dirList = new ArrayList<File>();
+		ArrayList<File> fileList = new ArrayList<File>();
 		FolderFilterInfo filterInfo = getFilterInfo();
 
 		// First, separate the directories from regular files so we can
@@ -73,26 +72,24 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		}
 
 		// On Windows and OS X, comparison is case-insensitive.
-		Comparator c = null;
+		Comparator<File> c = null;
 		String os = System.getProperty("os.name");
 		boolean isOSX = os!=null ? os.toLowerCase().indexOf("os x")>-1 : false;
 		if (File.separatorChar=='\\' || isOSX) {
-			c = new Comparator() {
-				public int compare(Object o1, Object o2) {
-					File f1 = (File)o1;
-					File f2 = (File)o2;
+			c = new Comparator<File>() {
+				public int compare(File f1, File f2) {
 					return f1.getName().compareToIgnoreCase(f2.getName());
 				}
 			};
 		}
 
 		Collections.sort(dirList, c);
-		for (Iterator i=dirList.iterator(); i.hasNext(); ) {
-			add(createFileTreeNode((File)i.next(), true));
+		for (File dir : dirList) {
+			add(createFileTreeNode(dir, true));
 		}
 		Collections.sort(fileList, c);
-		for (Iterator i=fileList.iterator(); i.hasNext(); ) {
-			add(createFileTreeNode((File)i.next(), false));
+		for (File file : fileList) {
+			add(createFileTreeNode(file, false));
 		}
 
 	}
@@ -107,11 +104,13 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
+	@Override
 	public String getDisplayName() {
 		return ((FolderProjectEntry)entry).getDisplayName();
 	}
 
 
+	@Override
 	protected NameChecker createNameChecker() {
 		return new FolderProjectEntryNameChecker();
 	}
@@ -126,13 +125,15 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	 * Overridden to add a menu item to configure the filters for this
 	 * project entry.
 	 */
-	public List getPopupActions() {
-		List actions = super.getPopupActions();
+	@Override
+	public List<PopupContent> getPopupActions() {
+		List<PopupContent> actions = super.getPopupActions();
 		actions.add(actions.size()-1, new ConfigureFiltersAction());
 		return actions;
 	}
 
 
+	@Override
 	public String getToolTipText() {
 		File file = getFile();
 		FolderFilterInfo filterInfo = getFilterInfo();
@@ -152,6 +153,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
+	@Override
 	protected void handleRenameImpl(String newName) {
 		setDisplayName(newName);
 		plugin.getTree().nodeChanged(this);

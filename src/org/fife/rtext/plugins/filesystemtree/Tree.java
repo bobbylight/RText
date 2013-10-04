@@ -62,6 +62,7 @@ class Tree extends FileSystemTree {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void configurePopupMenuActions() {
 
 		super.configurePopupMenuActions();
@@ -96,6 +97,7 @@ class Tree extends FileSystemTree {
 	 *
 	 * @return The popup menu for this file system tree.
 	 */
+	@Override
 	protected JPopupMenu createPopupMenu() {
 
 		JPopupMenu popup = super.createPopupMenu();
@@ -134,6 +136,7 @@ class Tree extends FileSystemTree {
 	/**
 	 * Overridden to install our extra actions.
 	 */
+	@Override
 	protected void installKeyboardActions() {
 
 		super.installKeyboardActions();
@@ -177,6 +180,7 @@ class Tree extends FileSystemTree {
 	private class Listener extends MouseAdapter implements
 									PropertyChangeListener {
 
+		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (e.getClickCount()==2) {
 				doOpenFile();

@@ -386,6 +386,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param owner The application.
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
@@ -404,6 +405,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 * @return This method always returns <code>null</code> as the user cannot
 	 *         mess up input in this panel.
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -480,6 +482,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return mainFontSelector;
 	}
@@ -742,6 +745,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 * @param owner The parent application.
 	 * @see #setValues(Frame)
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
@@ -759,6 +763,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	/**
 	 * Overridden to ensure the background dialog is updated as well.
 	 */
+	@Override
 	public void updateUI() {
 		super.updateUI();
 		if (backgroundDialog!=null) {

@@ -50,6 +50,7 @@ class ReplaceNextAction extends ReplaceAction {
 	 *
 	 * @param e The action event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		ensureSearchDialogsCreated();

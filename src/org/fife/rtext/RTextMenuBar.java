@@ -228,6 +228,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		}
 		recentFilesMenu = new RecentFilesMenu(menuMsg.getString("RecentFiles"),
 												initialContents) {
+			@Override
 			protected Action createOpenAction(String fileFullPath) {
 				OpenFileFromHistoryAction action =
 						new OpenFileFromHistoryAction(rtext);
@@ -921,6 +922,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 * Overridden to make sure that the "Window" menu gets its look-and-feel
 	 * updated too, even if it currently isn't visible.
 	 */
+	@Override
 	public void updateUI() {
 
 		super.updateUI();

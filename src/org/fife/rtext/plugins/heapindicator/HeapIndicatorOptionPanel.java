@@ -198,6 +198,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	 * Updates the heap indicator's parameters to reflect those in
 	 * this options panel.
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 		HeapIndicatorPlugin p = (HeapIndicatorPlugin)getPlugin();
 		p.setVisible(visibilityCheckBox.isSelected());
@@ -212,6 +213,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		OptionsPanelCheckResult res = null;
 		// I don't think JSpinner allows invalid input, but just in case...
@@ -236,6 +238,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	 * bonus, if this component is a <code>JTextComponent</code>, its
 	 * text is selected for easy changing.
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return foregroundButton;
 	}
@@ -260,6 +263,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	 * Updates this panel's displayed parameter values to reflect those of
 	 * the heap indicator.
 	 */
+	@Override
 	protected void setValuesImpl(Frame frame) {
 		HeapIndicatorPlugin p = (HeapIndicatorPlugin)getPlugin();
 		visibilityCheckBox.setSelected(p.isVisible());

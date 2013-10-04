@@ -108,6 +108,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	 *
 	 * @param owner The application.
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 		updateCodeTemplateManager();
 	}
@@ -120,6 +121,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	 * @return This method always returns <code>null</code> as the user cannot
 	 *         mess up input in this panel.
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -132,6 +134,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	 * bonus, if this component is a <code>JTextComponent</code>, its
 	 * text is selected for easy changing.
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return templateTable.getTable();
 	}
@@ -164,6 +167,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	 * @param owner The parent application.
 	 * @see #setValues(Frame)
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 		// Remove all old templates and load the new ones.
 		CodeTemplateManager ctm = RSyntaxTextArea.getCodeTemplateManager();
@@ -306,6 +310,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 		public void changedUpdate(DocumentEvent e) {
 		}
 
+		@Override
 		protected void escapePressed() {
 			id = null;
 			beforeCaret = afterCaret = null;
@@ -410,6 +415,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	 */
 	private static class TemplateNameDocumentFilter extends PickyDocumentFilter{
 
+		@Override
 		protected String cleanseImpl(String text) {
 			int length = text.length();
 			for (int i=0; i<length; i++) {
@@ -440,6 +446,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			this.template = template;
 		}
 
+		@Override
 		public String toString() {
 			StaticCodeTemplate template = (StaticCodeTemplate)this.template;
 			String temp = template.getBeforeCaretText() +

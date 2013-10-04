@@ -66,6 +66,7 @@ class MainPanelTransferHandler extends TransferHandler {
 	/**
 	 * Ensures that the data being imported can be read as a list of files.
 	 */
+	@Override
 	public boolean canImport(JComponent c, DataFlavor[] flavors) {
 		return hasFileFlavor(flavors);
 	}
@@ -79,6 +80,7 @@ class MainPanelTransferHandler extends TransferHandler {
 	 * @return <code>TransferHandler.NONE</code>, as we can only add data, not
 	 *         move it or copy it.
 	 */
+	@Override
 	public int getSourceActions(JComponent c) {
 		return TransferHandler.NONE;
 	}
@@ -108,6 +110,7 @@ class MainPanelTransferHandler extends TransferHandler {
 	 * @param t The data being transfered (information about the file).
 	 * @return Whether or not the import was successful.
 	 */
+	@Override
 	public boolean importData(JComponent c, Transferable t) {
 		return MainPanelTransferHandler.importDataImpl(mainView, c, t);
 	}

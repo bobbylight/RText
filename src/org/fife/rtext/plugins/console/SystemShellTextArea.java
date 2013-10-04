@@ -71,6 +71,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	 * Appends the prompt to the console, and resets the starting location
 	 * at which the user can input text.  This method is thread-safe.
 	 */
+	@Override
 	public void appendPrompt() {
 		String prompt = pwd.getName();
 		if (prompt.length()==0) { // Root directory
@@ -81,6 +82,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	}
 
 
+	@Override
 	protected void fixKeyboardShortcuts() {
 
 		super.fixKeyboardShortcuts();
@@ -97,6 +99,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected String getSyntaxStyle() {
 		return plugin.getRText().getOS()==RText.OS_WINDOWS ?
 				SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH :
@@ -134,6 +137,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected String getUsageNote() {
 		return plugin.getString("Usage.Note.SystemShell");
 	}
@@ -301,6 +305,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	 *
 	 * @param text The text entered by the user.
 	 */
+	@Override
 	protected void handleSubmit(String text) {
 
 		if (plugin.getRText().getOS()==RText.OS_WINDOWS) {
@@ -367,6 +372,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 
 			setEditable(false);
 			activeProcessThread = new Thread() {
+				@Override
 				public void run() {
 					ProcessRunner pr = new ProcessRunner(cmd);
 					pr.setDirectory(pwd);
@@ -385,6 +391,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void init() {
 		pwd = new File(System.getProperty("user.home"));
 		prevDir = pwd;

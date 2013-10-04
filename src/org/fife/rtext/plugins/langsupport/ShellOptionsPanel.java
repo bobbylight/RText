@@ -122,6 +122,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
@@ -140,6 +141,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -148,6 +150,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return enabledCB;
 	}
@@ -163,6 +166,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();

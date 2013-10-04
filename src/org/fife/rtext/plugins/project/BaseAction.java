@@ -20,7 +20,7 @@ import javax.swing.ImageIcon;
  * @author Robert Futrell
  * @version 1.0
  */
-public abstract class BaseAction extends AbstractAction {
+public abstract class BaseAction extends AbstractAction implements PopupContent{
 
 
 	protected BaseAction(String keyRoot) {

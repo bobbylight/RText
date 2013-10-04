@@ -295,6 +295,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		Plugin plugin = (Plugin)getPlugin();
@@ -322,6 +323,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @return <code>null</code> always.
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -330,6 +332,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return visibleCB;
 	}
@@ -405,6 +408,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 
 		Plugin plugin = (Plugin)getPlugin();

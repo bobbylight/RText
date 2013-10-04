@@ -133,6 +133,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 		Color c = altColorCB.isSelected() ? altColorButton.getColor() : null;
 		// All cell renderers except Java's are CompletionCellRenderers.
@@ -144,6 +145,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -152,6 +154,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return altColorCB;
 	}
@@ -160,6 +163,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 
 		Color altColor = CompletionCellRenderer.getAlternateBackground();

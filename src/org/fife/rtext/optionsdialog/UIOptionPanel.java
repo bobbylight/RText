@@ -20,7 +20,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
@@ -138,9 +137,8 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		UIUtil.fixComboOrientation(imageLnFCombo);
 		imageLnFCombo.setActionCommand("IconComboBox");
 		imageLnFCombo.addActionListener(this);
-		Collection iconGroups = rtext.getIconGroupMap().values();
-		for (Iterator i=iconGroups.iterator(); i.hasNext(); ) {
-			IconGroup group = (IconGroup)i.next();
+		Collection<IconGroup> iconGroups = rtext.getIconGroupMap().values();
+		for (IconGroup group : iconGroups) {
 			imageLnFCombo.addSpecialItem(group.getName(), group.getName());
 		}
 
@@ -331,6 +329,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 *
 	 * @param owner The application.
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
@@ -348,6 +347,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		// They can't input invalid stuff on this options panel.
 		return null;
@@ -443,6 +443,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * bonus, if this component is a <code>JTextComponent</code>, its
 	 * text is selected for easy changing.
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return viewCombo;
 	}
@@ -627,6 +628,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @param owner The parent application.
 	 * @see #setValues(Frame)
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
@@ -641,6 +643,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	}
 
 
+	@Override
 	public void updateUI() {
 		super.updateUI();
 		if (springPanel!=null) {

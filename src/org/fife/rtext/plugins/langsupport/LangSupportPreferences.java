@@ -99,6 +99,7 @@ public class LangSupportPreferences extends Prefs {
 	public boolean xml_showSyntaxErrors;
 
 
+	@Override
 	public void setDefaults() {
 
 		final int AUTO_ACTIVATION_DELAY = 300;

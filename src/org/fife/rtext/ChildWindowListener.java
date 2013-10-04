@@ -78,6 +78,7 @@ class ChildWindowListener extends ComponentAdapter
 	/**
 	 * Called when one of the child windows is moved.
 	 */
+	@Override
 	public void componentMoved(ComponentEvent e) {
 		if (translucencyRule==TRANSLUCENT_WHEN_OVERLAPPING_APP) {
 			Window w = (Window)e.getComponent();
@@ -101,6 +102,7 @@ class ChildWindowListener extends ComponentAdapter
 	/**
 	 * Called when one of the child windows is resized.
 	 */
+	@Override
 	public void componentShown(ComponentEvent e) {
 		// Need to do this always, in case the translucency rule changed since
 		// the window was last visible.
@@ -115,6 +117,7 @@ class ChildWindowListener extends ComponentAdapter
 	/**
 	 * Called when one of the child windows is resized.
 	 */
+	@Override
 	public void componentResized(ComponentEvent e) {
 		if (translucencyRule==TRANSLUCENT_WHEN_OVERLAPPING_APP) {
 			Window w = (Window)e.getComponent();

@@ -32,6 +32,7 @@ class IncreaseFontSizeAction extends AbstractFontSizeAction {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected Font updateFontSize(Font font) {
 		float size = font.getSize2D();
 		size = Math.min(size+1, MAXIMUM_SIZE);

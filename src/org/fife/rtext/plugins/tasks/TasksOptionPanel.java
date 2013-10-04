@@ -179,6 +179,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		plugin.setTaskWindowVisible(visibleCB.isSelected());
@@ -200,6 +201,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -208,6 +210,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return table;
 	}
@@ -257,6 +260,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 		visibleCB.setSelected(plugin.isTaskWindowVisible());
 		locationCombo.setSelectedIndex(plugin.getTaskWindowPosition());
@@ -269,6 +273,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	 */
 	private static class IdNameDocumentFilter extends PickyDocumentFilter {
 
+		@Override
 		protected String cleanseImpl(String text) {
 			int length = text.length();
 			for (int i=0; i<length; i++) {

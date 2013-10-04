@@ -132,16 +132,19 @@ public class SearchToolBar extends JToolBar {
 		add(label);
 
 		findField = new JTextField(20) {
+			@Override
 			public Dimension getMinimumSize() {
 				Dimension size = super.getMinimumSize();
 				size.width = 200;
 				return size;
 			}
+			@Override
 			public Dimension getPreferredSize() {
 				Dimension size = super.getPreferredSize();
 				size.width = 200;
 				return size;
 			}
+			@Override
 			public Dimension getMaximumSize() {
 				Dimension max = super.getMaximumSize();
 				max.width = 200;
@@ -246,6 +249,7 @@ public class SearchToolBar extends JToolBar {
 			super(icon);
 		}
 
+		@Override
 		public void setUI(ButtonUI ui) {
 			super.setUI(new FindButtonUI());
 		}
@@ -308,12 +312,14 @@ public class SearchToolBar extends JToolBar {
 		private static final Border BORDER =
 			BorderFactory.createEmptyBorder(3, 3, 3, 3);
 
+		@Override
 		protected void installDefaults(AbstractButton b) {
 			super.installDefaults(b);
 			b.setBorder(BORDER);
 			b.setOpaque(false);
 		}
 
+		@Override
 		protected void installListeners(AbstractButton b) {
 			super.installListeners(b);
 			mouseInputHandler = new MouseInputHandler(b);
@@ -328,6 +334,7 @@ public class SearchToolBar extends JToolBar {
 			return isMouseOver;
 		}
 
+		@Override
 		public void paint(Graphics g, JComponent c)  {
 
 			AbstractButton b = (AbstractButton) c;
@@ -398,6 +405,7 @@ public class SearchToolBar extends JToolBar {
 			}
 		}
 
+		@Override
 		protected void paintText(Graphics g, JComponent c, Rectangle textRect,
 								String text) {
 
@@ -427,6 +435,7 @@ public class SearchToolBar extends JToolBar {
 			isMouseOver = over;
 		}
 
+		@Override
 		protected void uninstallListeners(AbstractButton b) {
 			b.removeMouseListener(mouseInputHandler);
 			super.uninstallListeners(b);
@@ -440,17 +449,20 @@ public class SearchToolBar extends JToolBar {
 				button = b;
 			}
 
+			@Override
 			public void mousePressed(MouseEvent e) {
 				someButtonDepressed = true;
 				if (isMouseOver())
 					setArmed(true);
 			}
 
+			@Override
 			public void mouseReleased(MouseEvent e) {
 				someButtonDepressed = false;
 				setArmed(false);
 			}
 
+			@Override
 			public void mouseEntered(MouseEvent e) {
 				if (!someButtonDepressed) {
 					setMouseOver(true);
@@ -458,6 +470,7 @@ public class SearchToolBar extends JToolBar {
 				}
 			}
 
+			@Override
 			public void mouseExited(MouseEvent e) {
 				setMouseOver(false);
 				button.repaint();
@@ -491,12 +504,14 @@ public class SearchToolBar extends JToolBar {
 			}
 		}
 
+		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.getKeyCode()==KeyEvent.VK_ESCAPE) {
 				owner.getMainView().getCurrentTextArea().requestFocusInWindow();
 			}
 		}
 
+		@Override
 		public void keyTyped(KeyEvent e) {
 			if (e.getKeyChar()=='\n') {
 				int mod = e.getModifiers();

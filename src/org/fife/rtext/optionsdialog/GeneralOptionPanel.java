@@ -229,6 +229,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		slider.addChangeListener(this);
 		opacityDisplay = new JLabel("100%") { // will be replaced with real value
 			// hack to keep SpringLayout from shifting when # of digits changes in %
+			@Override
 			public Dimension getPreferredSize() {
 				Dimension size = super.getPreferredSize();
 				size.width = Math.max(50, size.width);
@@ -402,6 +403,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		RText rtext = (RText)owner;
@@ -429,6 +431,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		float maxFileSize = getMaxFileSize();
 		if (maxFileSize<0) {
@@ -489,6 +492,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return dirBrowseButton;
 	}
@@ -636,6 +640,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 
 		RText rtext = (RText)owner;

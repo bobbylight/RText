@@ -43,6 +43,7 @@ public class FileSystemTreePrefs extends Prefs {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDefaults() {
 		active = true;
 		position = GUIPlugin.LEFT;

@@ -36,7 +36,7 @@ public interface ProjectEntryParent extends ModelEntity {
 	 *
 	 * @return The child project entry iterator.
 	 */
-	Iterator getEntryIterator();
+	Iterator<ProjectEntry> getEntryIterator();
 
 
 	boolean moveProjectEntryDown(ProjectEntry entry);

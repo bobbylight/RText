@@ -249,6 +249,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
@@ -305,6 +306,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -313,6 +315,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return enabledCB;
 	}
@@ -361,6 +364,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();

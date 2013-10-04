@@ -117,6 +117,7 @@ public class CurrentTextAreaEvent extends EventObject {
 	 *
 	 * @return A string representation of this event.
 	 */
+	@Override
 	public String toString() {
 		return "[CurrentTextAreaEvent: " +
 			"type=" + getType() +

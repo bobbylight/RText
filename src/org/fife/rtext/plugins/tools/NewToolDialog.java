@@ -473,6 +473,7 @@ ac.install(dirField);
 	/**
 	 * Overridden to ensure that the first tab is always the selected one.
 	 */
+	@Override
 	public void setVisible(boolean visible) {
 		if (visible) {
 			tabPane.setSelectedIndex(0);

@@ -31,10 +31,12 @@ public class BottomLineBorder extends AbstractBorder {
 		this.horizInsets = horizInsets;
 	}
 
+	@Override
 	public Insets getBorderInsets(Component c) {
 		return getBorderInsets(c, new Insets(0, 0, 0, 0));
 	}
 
+	@Override
 	public Insets getBorderInsets(Component c, Insets insets) {
 		insets.top = 0;
 		insets.right = insets.left = horizInsets;
@@ -42,6 +44,7 @@ public class BottomLineBorder extends AbstractBorder {
 		return insets;
 	}
 
+	@Override
 	public void paintBorder(Component c, Graphics g, int x, int y,
 							int width, int height) {
 		g.setColor(UIManager.getColor("controlDkShadow"));

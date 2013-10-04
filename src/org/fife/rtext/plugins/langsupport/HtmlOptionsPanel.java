@@ -188,6 +188,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
@@ -225,6 +226,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -233,6 +235,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return enabledCB;
 	}
@@ -256,6 +259,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();

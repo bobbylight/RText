@@ -28,6 +28,7 @@ public class NumberDocumentFilter extends PickyDocumentFilter {
 	 * @param text The string the user is trying to insert.
 	 * @return The text, with any non-digit characters removed.
 	 */
+	@Override
 	protected String cleanseImpl(String text) {
 		int length = text.length();
 		for (int i=0; i<length; i++) {

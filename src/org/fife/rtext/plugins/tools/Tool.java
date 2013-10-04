@@ -181,6 +181,7 @@ public class Tool implements Comparable {
 	 *
 	 * @return Whether this tool and another have the same name.
 	 */
+	@Override
 	public boolean equals(Object o) {
 		return compareTo(o)==0;
 	}
@@ -218,6 +219,7 @@ public class Tool implements Comparable {
 		// Run this tool in a separate thread.
 		synchronized (RUN_THREAD_LOCK) {
 			runThread = new Thread() {
+				@Override
 				public void run() {
 					ProcessRunner pr = new ProcessRunner(cmd);
 					pr.setDirectory(new File(dir));
@@ -337,6 +339,7 @@ public class Tool implements Comparable {
 	 *
 	 * @return This tool's hash code.
 	 */
+	@Override
 	public int hashCode() {
 		return getName().hashCode();
 	}

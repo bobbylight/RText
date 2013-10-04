@@ -32,6 +32,7 @@ public class PluginPrefs extends Prefs {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDefaults() {
 		tidyActionAccelerator = null;
 	}

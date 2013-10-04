@@ -54,6 +54,7 @@ class ReplaceAction extends FindAction {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		ensureSearchDialogsCreated();

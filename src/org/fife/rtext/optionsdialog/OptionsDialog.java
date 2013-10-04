@@ -10,7 +10,6 @@
 package org.fife.rtext.optionsdialog;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.ImageIcon;
@@ -49,7 +48,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		ResourceBundle msg = ResourceBundle.getBundle(
 								"org.fife.rtext.OptionsDialog");
 
-		List panels = new ArrayList();
+		List<OptionsDialogPanel> panels = new ArrayList<OptionsDialogPanel>();
 
 		OptionsDialogPanel panel = new GeneralOptionPanel(rtext, msg);
 		setIcon(panel, "general.png");
@@ -117,7 +116,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		}
 
 		OptionsDialogPanel[] array = new OptionsDialogPanel[panels.size()];
-		array = (OptionsDialogPanel[])panels.toArray(array);
+		array = panels.toArray(array);
 		setOptionsPanels(array); // Calls pack().
 
 	}
@@ -130,9 +129,9 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 	 * @param id The panel ID to search for.  Should not be <code>null</code>.
 	 * @return The panel, or <code>null</code> if it wasn't found.
 	 */
-	private OptionsDialogPanel getPanelById(List panels, String id) {
-		for (Iterator i=panels.iterator(); i.hasNext(); ) {
-			OptionsDialogPanel panel = (OptionsDialogPanel)i.next();
+	private OptionsDialogPanel getPanelById(List<OptionsDialogPanel> panels,
+			String id) {
+		for (OptionsDialogPanel panel : panels) {
 			OptionsDialogPanel result = getPanelByIdImpl(panel, id);
 			if (result!=null) {
 				return result;

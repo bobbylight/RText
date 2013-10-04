@@ -112,6 +112,7 @@ public class NewFolderDialog extends EscapableDialog {
 	}
 
 
+	@Override
 	public void escapePressed() {
 		chosenDirectory = null;
 		super.escapePressed();

@@ -60,9 +60,11 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 					new String[] { msg.getString("Column.Plugin"),
 								msg.getString("Column.Version"),
 								msg.getString("Column.Author") }) {
+			@Override
 			public Dimension getPreferredScrollableViewportSize() {
 				return new Dimension(50, 50); //Will be bigger.
 			};
+			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
@@ -72,6 +74,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 			 * by the method JTable#setFillsViewportHeight(boolean).
 			 * 1.5: Change me to method call instead.
 			 */
+			@Override
 			public boolean getScrollableTracksViewportHeight() {
 				Component parent = getParent();
 				return parent instanceof JViewport ?
@@ -91,6 +94,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 	}
 
 
+	@Override
 	protected JPanel createAboutApplicationPanel() {
 
 		// Create the picture.
@@ -236,6 +240,7 @@ panel.add(editor);
 			}
 		}
 
+		@Override
 		public void updateUI() {
 			super.updateUI();
 			// Label font has been updated so we must update our HTML.

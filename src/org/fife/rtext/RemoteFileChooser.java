@@ -299,6 +299,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 * can override to handle any custom "Cancel" logic.  The default
 	 * implementation hides the dialog (via <code>setVisible(false);</code>).
 	 */
+	@Override
 	protected void escapePressed() {
 		cancelPressed();
 	}
@@ -532,6 +533,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 *
 	 * @param visible Whether the dialog is to be visible.
 	 */
+	@Override
 	public void setVisible(boolean visible) {
 		if (visible) {
 			userCombo.setSelectedItem(null);

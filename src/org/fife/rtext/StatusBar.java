@@ -133,9 +133,11 @@ public class StatusBar extends org.fife.ui.StatusBar
 		// Create and add a panel containing the row and column.
 		c.weightx = 0.0;
 		StatusBarPanel temp1 = new StatusBarPanel(new BorderLayout()) {
+			@Override
 			public Dimension getMinimumSize() {
 				return new Dimension(50, super.getMinimumSize().height);
 			}
+			@Override
 			public Dimension getPreferredSize() {
 				Dimension preferredSize = super.getPreferredSize();
 				return new Dimension(Math.max(50,preferredSize.width),

@@ -54,6 +54,7 @@ public class ProjectPluginPrefs extends Prefs {
 	/**
 	 * Overridden to validate the task identifiers value.
 	 */
+	@Override
 	public void load(InputStream in) throws IOException {
 		super.load(in);
 		// Ensure window position is valid.
@@ -66,6 +67,7 @@ public class ProjectPluginPrefs extends Prefs {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDefaults() {
 		windowVisible = true;
 		windowPosition = DockableWindow.LEFT;

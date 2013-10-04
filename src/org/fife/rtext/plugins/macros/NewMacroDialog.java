@@ -434,6 +434,7 @@ public class NewMacroDialog extends EscapableDialog {
 	 *
 	 * @param visible Whether this dialog is to be made visible.
 	 */
+	@Override
 	public void setVisible(boolean visible) {
 		if (visible) {
 			SwingUtilities.invokeLater(new Runnable() {

@@ -34,12 +34,12 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * One filter set for every file type except plain text.  This is a
 	 * mapping from styles to <code>List</code>s of filename patterns.
 	 */
-	private Map filters;
+	private Map<String, List<String>> filters;
 
 	/**
 	 * Filters added by plugins for additional languages.
 	 */
-	private Map addedFilters;
+	private Map<String, List<String>> addedFilters;
 
 	/**
 	 * Creates a new <code>SyntaxFilters</code> with default values for
@@ -60,7 +60,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	public SyntaxFilters(String filterStr) {
 
 		// One filter set for every file type except plain text.
-		filters = new HashMap();
+		filters = new HashMap<String, List<String>>();
 		restoreDefaultFileFilters();
 
 		if (filterStr!=null) {
@@ -129,10 +129,10 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * @param values An array of values to go into the value.
 	 * @return The value.
 	 */
-	private static final List createValue(String[] values) {
-		List list = new ArrayList();
-		for (int i=0; i<values.length; i++) {
-			list.add(values[i]);
+	private static final List<String> createValue(String[] values) {
+		List<String> list = new ArrayList<String>();
+		for (String value : values) {
+			list.add(value);
 		}
 		return list;
 	}
@@ -145,19 +145,19 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * @param style The style.
 	 * @return The list of filters.
 	 */
-	private List getFiltersForStyle(String style) {
-		List l = (List)filters.get(style);
+	private List<String> getFiltersForStyle(String style) {
+		List<String> l = filters.get(style);
 		if (l==null) {
 			// Allow plugins to add filters for new languages not built into
 			// RSyntaxTextArea.
 			if (addedFilters==null) {
-				addedFilters = new HashMap();
+				addedFilters = new HashMap<String, List<String>>();
 			}
 			else {
-				l = (List)addedFilters.get(style);
+				l = addedFilters.get(style);
 			}
 			if (l==null) {
-				l = new ArrayList();
+				l = new ArrayList<String>();
 				addedFilters.put(style, l);
 			}
 		}
@@ -177,9 +177,9 @@ public class SyntaxFilters implements SyntaxConstants {
 	 */
 	public String getFilterString(String style) {
 		StringBuffer filterString = new StringBuffer();
-		Iterator i = getFiltersForStyle(style).iterator();
-		while (i.hasNext()) {
-			filterString.append((String)i.next()).append(' ');
+		List<String> filters = getFiltersForStyle(style);
+		for (String filter : filters) {
+			filterString.append(filter).append(' ');
 		}
 		return filterString.toString();
 	}
@@ -238,15 +238,13 @@ public class SyntaxFilters implements SyntaxConstants {
 	 *         in that map.
 	 */
 	private static final String getSyntaxStyleForFileImpl(String fileName,
-			Map filters) {
-		for (Iterator i=filters.entrySet().iterator(); i.hasNext(); ) {
-			Map.Entry entry = (Map.Entry)i.next();
-			Iterator it = ((List)entry.getValue()).iterator();
-			while (it.hasNext()) {
+			Map<String, List<String>> filters) {
+		for (Map.Entry<String, List<String>> entry : filters.entrySet()) {
+			for (String filter : entry.getValue()) {
 				Pattern p = RTextUtilities.getPatternForFileFilter(
-									(String)it.next(), true);
+									filter, true);
 				if (p!=null && p.matcher(fileName).matches()) {
-					return (String)entry.getKey();
+					return entry.getKey();
 				}
 			}
 		}
@@ -347,7 +345,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	 */
 	public void setFiltersForSyntaxStyle(String style, String filterString) {
 
-		List filters = getFiltersForStyle(style);
+		List<String> filters = getFiltersForStyle(style);
 		filters.clear();
 		
 		int oldSpacePos = 0;
@@ -372,7 +370,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * @param filters The new values for filters.
 	 */
 	public void setPreservingPluginAdded(SyntaxFilters filters) {
-		this.filters = new HashMap(filters.filters);
+		this.filters = new HashMap<String, List<String>>(filters.filters);
 	}
 
 
@@ -382,6 +380,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	 *
 	 * @return A string representing this <code>SyntaxFilters</code>.
 	 */
+	@Override
 	public String toString() {
 		String retVal = "";
 		for (Iterator i=filters.keySet().iterator(); i.hasNext(); ) {

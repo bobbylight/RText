@@ -36,7 +36,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	private boolean sortable;
 	private boolean sorted;
 	private String prefix;
-	private Vector visibleChildren;
+	private Vector<Object> visibleChildren;
 	private int sortPriority;
 
 
@@ -47,12 +47,13 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 
 	public SourceTreeNode(Object userObject, boolean sorted) {
 		super(userObject);
-		visibleChildren = new Vector();
+		visibleChildren = new Vector<Object>();
 		setSortable(true);
 		setSorted(sorted);
 	}
 
 
+	@Override
 	public void add(MutableTreeNode child) {
 		//super.add(child);
 		if(child!=null && child.getParent()==this) {
@@ -67,7 +68,8 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
-	public Enumeration children() {
+	@Override
+	public Enumeration<?> children() {
 		return visibleChildren.elements();
 	}
 
@@ -93,8 +95,9 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @return A comparator.
 	 */
-	public Comparator createComparator() {
-		return new Comparator() {
+	// We can't be more specific with our type as Swing's not genericized
+	public Comparator<Object> createComparator() {
+		return new Comparator<Object>() {
 			public int compare(Object o1, Object o2) {
 				SourceTreeNode stn1 = (SourceTreeNode)o1;
 				SourceTreeNode stn2 = (SourceTreeNode)o2;
@@ -122,6 +125,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
+	@Override
 	public TreeNode getChildAfter(TreeNode child) {
 		if (child==null) {
 			throw new IllegalArgumentException("child cannot be null");
@@ -134,11 +138,13 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
+	@Override
 	public TreeNode getChildAt(int index) {
 		return (TreeNode)visibleChildren.get(index);
 	}
 
 
+	@Override
 	public TreeNode getChildBefore(TreeNode child) {
 		if (child==null) {
 			throw new IllegalArgumentException("child cannot be null");
@@ -151,11 +157,13 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
+	@Override
 	public int getChildCount() {
 		return visibleChildren.size();
 	}
 
 
+	@Override
 	public int getIndex(TreeNode child) {
 		if (child==null) {
 			throw new IllegalArgumentException("child cannot be null");
@@ -217,6 +225,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Refreshes what children are visible in the tree.
 	 */
+	@SuppressWarnings("unchecked")
 	private void refreshVisibleChildren() {
 		visibleChildren.clear();
 		if (children!=null) {
@@ -225,7 +234,8 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 				Collections.sort(visibleChildren, createComparator());
 			}
 			if (prefix!=null) {
-				for (Iterator i=visibleChildren.iterator(); i.hasNext(); ) {
+				Iterator<Object> i = visibleChildren.iterator();
+				while (i.hasNext()) {
 					TreeNode node = (TreeNode)i.next();
 					if (node.isLeaf()) {
 						String text = node.toString();

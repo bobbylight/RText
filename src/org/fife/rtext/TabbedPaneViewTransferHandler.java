@@ -51,6 +51,7 @@ class TabbedPaneViewTransferHandler extends TabbedPaneTransferHandler {
 	/**
 	 * Overridden to include a check for the file flavor.
 	 */
+	@Override
 	public boolean canImport(JComponent c, DataFlavor[] flavors) {
 		return MainPanelTransferHandler.hasFileFlavor(flavors) ||
 				super.canImport(c, flavors);
@@ -67,6 +68,7 @@ class TabbedPaneViewTransferHandler extends TabbedPaneTransferHandler {
 	 * @param t The data being transfered (information about the file).
 	 * @return Whether or not the import was successful.
 	 */
+	@Override
 	public boolean importData(JComponent c, Transferable t) {
 		return MainPanelTransferHandler.
 			importDataImpl(mainView, c, t) || super.importData(c, t);
@@ -81,6 +83,7 @@ class TabbedPaneViewTransferHandler extends TabbedPaneTransferHandler {
 	 * @param tabbedPane The tabbed pane.
 	 * @param index The index of the tab to select.
 	 */
+	@Override
 	protected void selectTab(final JTabbedPane tabbedPane, final int index) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

@@ -97,6 +97,7 @@ class FindInFilesThread extends GUIWorkerThread {
 	/**
 	 * Runs the search.
 	 */
+	@Override
 	public Object construct() {
 
 		RText parent = (RText)dialog.getOwner();

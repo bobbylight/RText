@@ -21,6 +21,7 @@ import org.fife.rsta.ac.java.DecoratableIcon;
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.LogicalFolderNameDialog;
 import org.fife.rtext.plugins.project.Messages;
+import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.LogicalFolderProjectEntry;
 
@@ -43,11 +44,13 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
+	@Override
 	public String getDisplayName() {
 		return ((LogicalFolderProjectEntry)entry).getName();
 	}
 	
 
+	@Override
 	public Icon getIcon() {
 		return getLogicalFolderIcon();
 	}
@@ -63,8 +66,9 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
-	public List getPopupActions() {
-		List actions = new ArrayList();
+	@Override
+	public List<PopupContent> getPopupActions() {
+		List<PopupContent> actions = new ArrayList<PopupContent>();
 		LogicalFolderProjectEntry entry = (LogicalFolderProjectEntry)this.entry;
 		actions.add(new AddFileAction(entry, this));
 		actions.add(new AddFolderAction(entry, this));
@@ -83,24 +87,28 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
+	@Override
 	public String getToolTipText() {
 		return Messages.getString("ProjectPlugin.ToolTip.LogicalFolderProjectEntry",
 				entry.getSaveData());
 	}
 
 
+	@Override
 	protected void handleDelete() {
 		// TODO Auto-generated method stub
 
 	}
 
 
+	@Override
 	protected void handleProperties() {
 		// TODO Auto-generated method stub
 
 	}
 
 
+	@Override
 	protected void handleRename() {
 		RText parent = plugin.getRText();
 		LogicalFolderNameDialog dialog = new LogicalFolderNameDialog(parent,

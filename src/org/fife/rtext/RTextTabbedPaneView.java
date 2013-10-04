@@ -118,6 +118,7 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 	 *
 	 * @param listener The container listener.
 	 */
+	@Override
 	public void addContainerListener(ContainerListener listener) {
 		tabbedPane.addContainerListener(listener);
 	}
@@ -131,6 +132,7 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 	 * @param component The scroll pane containing the text editor to add.
 	 * @param fileFullPath The path to the file this editor contains.
 	 */
+	@Override
 	protected void addTextAreaImpl(String title, Component component,
 							String fileFullPath) {
 
@@ -184,6 +186,7 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected synchronized boolean closeCurrentDocumentImpl() {
 
 		ResourceBundle msg = owner.getResourceBundle();
@@ -280,6 +283,7 @@ inCloseCurrentDocument = false;
 	 *        invalid, <code>null</code> is returned.
 	 * @return The name being displayed for this document.
 	 */
+	@Override
 	public String getDocumentDisplayNameAt(int index) {
 		if (index>=0 && index<tabbedPane.getTabCount()) {
 			return tabbedPane.getTitleAt(index);
@@ -293,6 +297,7 @@ inCloseCurrentDocument = false;
 	 *
 	 * @return The location of the document selection area.
 	 */
+	@Override
 	public int getDocumentSelectionPlacement() {
 		return tabbedPane.getTabPlacement();
 	}
@@ -303,6 +308,7 @@ inCloseCurrentDocument = false;
 	 *
 	 * @return The number of open documents.
 	 */
+	@Override
 	public int getNumDocuments() {
 		return tabbedPane.getTabCount();
 	}
@@ -311,6 +317,7 @@ inCloseCurrentDocument = false;
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public RTextScrollPane getRTextScrollPaneAt(int index) {
 		if (index<0 || index>=getNumDocuments())
 			//throw new IndexOutOfBoundsException();
@@ -325,6 +332,7 @@ inCloseCurrentDocument = false;
 	 *
 	 * @return The component.
 	 */
+	@Override
 	public Component getSelectedComponent() {
 		return tabbedPane.getComponentAt(tabbedPane.getSelectedIndex());
 	}
@@ -335,6 +343,7 @@ inCloseCurrentDocument = false;
 	 *
 	 * @return The index of the currently selected document.
 	 */
+	@Override
 	public int getSelectedIndex() {
 		return tabbedPane.getSelectedIndex();
 	}
@@ -343,6 +352,7 @@ inCloseCurrentDocument = false;
 	/**
 	 * Repaints the display names for open documents.
 	 */
+	@Override
 	public void refreshDisplayNames() {
 
 		Color defaultForeground = UIManager.getColor("tabbedpane.foreground");
@@ -381,6 +391,7 @@ inCloseCurrentDocument = false;
 	 * Removes a component from this container.  Note that this method does
 	 * not update currentTextArea, you must do that yourself.
 	 */
+	@Override
 	protected void removeComponentAt(int index) {
 		if (index>=0 && index<getNumDocuments()) {
 			tabbedPane.removeTabAt(index);
@@ -394,6 +405,7 @@ inCloseCurrentDocument = false;
 	 *
 	 * @param listener The listener to remove.
 	 */
+	@Override
 	public void removeContainerListener(ContainerListener listener) {
 		tabbedPane.removeContainerListener(listener);
 	}
@@ -407,6 +419,7 @@ inCloseCurrentDocument = false;
 	 * @param displayName The name to display.
 	 * @see #getDocumentDisplayNameAt
 	 */
+	@Override
 	public void setDocumentDisplayNameAt(int index, String displayName) {
 		if (index>=0 && index<getNumDocuments()) {
 			tabbedPane.setTitleAt(index, displayName);
@@ -438,7 +451,8 @@ inCloseCurrentDocument = false;
 	 *        <code>LEFT</code>, <code>BOTTOM</code>, or <code>RIGHT</code>.
 	 *        If this value is invalid, nothing happens.
 	 */
-	 public void setDocumentSelectionPlacement(int location) {
+	 @Override
+	public void setDocumentSelectionPlacement(int location) {
 		if (location==DOCUMENT_SELECT_TOP || location==DOCUMENT_SELECT_LEFT ||
 			location==DOCUMENT_SELECT_BOTTOM || location==DOCUMENT_SELECT_RIGHT)
 			tabbedPane.setTabPlacement(location);
@@ -451,6 +465,7 @@ inCloseCurrentDocument = false;
 	 * @param index The index of the document to make the active document.
 	 *        If this value is invalid, nothing happens.
 	 */
+	@Override
 	public void setSelectedIndex(int index) {
 		if (index>=0 && index<getNumDocuments()) {
 			tabbedPane.setSelectedIndex(index);
@@ -568,6 +583,7 @@ inCloseCurrentDocument = false;
 			return popup;
 		}
 
+		@Override
 		public String getToolTipText(MouseEvent e) {
 			TabbedPaneUI ui = getUI();
 			if (ui != null) {
@@ -579,6 +595,7 @@ inCloseCurrentDocument = false;
 			return super.getToolTipText(e);
 		}
 
+		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
 			if (x!=-1) {
@@ -594,6 +611,7 @@ inCloseCurrentDocument = false;
 			}
 		}
 
+		@Override
 		protected void processMouseEvent(MouseEvent e) {
 			// NOTE: We don't allow RMB clicks that aren't popup triggers
 			// to go into super.processMouseEvent() in the off-chance that
@@ -638,6 +656,7 @@ inCloseCurrentDocument = false;
 			repaint();
 		}
 
+		@Override
 		public void updateUI() {
 			super.updateUI();
 			if (popup!=null) {
@@ -730,6 +749,7 @@ inCloseCurrentDocument = false;
 		private JComponent draggedTab;
 		MouseEvent firstMouseEvent;
 
+		@Override
 		public void mouseDragged(MouseEvent e) {
 			if (draggedTab==null)
 				return;
@@ -750,6 +770,7 @@ inCloseCurrentDocument = false;
 			}
 		}
 
+		@Override
 		public void mousePressed(MouseEvent e) {
 			tab = tabbedPane.indexAtLocation(e.getX(), e.getY());
 			if (tab>-1) {
@@ -759,6 +780,7 @@ inCloseCurrentDocument = false;
 			}
 		}
 
+		@Override
 		public void mouseReleased(MouseEvent e) {
 			draggedTab = null;
 			firstMouseEvent = null;

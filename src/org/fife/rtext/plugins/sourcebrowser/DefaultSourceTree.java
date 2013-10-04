@@ -267,6 +267,7 @@ class DefaultSourceTree extends JTree {
 	}
 
 
+	@Override
 	public void updateUI() {
 		super.updateUI();
 		treeRenderer = SourceTreeCellRenderer.createTreeCellRenderer(this);
@@ -322,6 +323,7 @@ class DefaultSourceTree extends JTree {
 		/**
 		 * Called when the user clicks in the ctags tree.
 		 */
+		@Override
 		public void mouseClicked(MouseEvent e) {
 
 			// Double-clicking on "<ctags executable not configured" brings up
@@ -355,6 +357,7 @@ class DefaultSourceTree extends JTree {
 		/**
 		 * Called when the mouse enters the ctags tree.
 		 */
+		@Override
 		public void mouseEntered(MouseEvent e) {
 		}
 
@@ -362,6 +365,7 @@ class DefaultSourceTree extends JTree {
 		/**
 		 * Called when the mouse exits the ctags tree.
 		 */
+		@Override
 		public void mouseExited(MouseEvent e) {
 		}
 
@@ -471,6 +475,7 @@ class DefaultSourceTree extends JTree {
 		/**
 		 * Called when the user downclicks in the ctags tree.
 		 */
+		@Override
 		public void mousePressed(MouseEvent e) {
 			maybeShowPopup(e);
 		}
@@ -479,6 +484,7 @@ class DefaultSourceTree extends JTree {
 		/**
 		 * Called when the user up-clicks in the ctags tree.
 		 */
+		@Override
 		public void mouseReleased(MouseEvent e) {
 			maybeShowPopup(e);
 		}

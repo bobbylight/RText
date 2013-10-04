@@ -36,6 +36,7 @@ import org.fife.ui.FileExplorerTableModel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.FileExplorerTableModel.SortableHeaderRenderer;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 
 
 /**
@@ -63,6 +64,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 			 * method JTable#setFillsViewportHeight(boolean).
 			 * 1.6: Remove this and replace it with the method call.
 			 */
+			@Override
 			public boolean getScrollableTracksViewportHeight() {
 				Component parent = getParent();
 				return parent instanceof JViewport ?
@@ -89,10 +91,8 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 		FileExplorerTableModel model2 = new FileExplorerTableModel(model,
 				table.getTableHeader());
 
-		model2.setColumnComparator(Integer.class, new Comparator() {	
-			public int compare(Object o1, Object o2) {
-				Integer int1 = (Integer)o1;
-				Integer int2 = (Integer)o2;
+		model2.setColumnComparator(Integer.class, new Comparator<Integer>() {	
+			public int compare(Integer int1, Integer int2) {
 				return int1.compareTo(int2);
 			}
 		});
@@ -135,6 +135,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 	 * is actually visible during the LaF change.  See
 	 * <a href="http://bugs.sun.com/view_bug.do?bug_id=6429812">6429812</a>.
 	 */
+	@Override
 	public void updateUI() {
 
 		/*
@@ -193,10 +194,11 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 		}
 
 		protected abstract void addNoticesImpl(RTextEditorPane textArea,
-												List notices);
+												List<ParserNotice> notices);
 
-		public Class getColumnClass(int col) {
-			Class clazz = null;
+		@Override
+		public Class<?> getColumnClass(int col) {
+			Class<?> clazz = null;
 			switch (col) {
 				case 0:
 					clazz = Icon.class;
@@ -213,6 +215,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 			return clazz;
 		}
 
+		@Override
 		public void addRow(Object[] data) {
 			if (data[1] instanceof RTextEditorPane) {
 				data[1] = new TextAreaWrapper((RTextEditorPane)data[1]);
@@ -220,11 +223,13 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 			super.addRow(data);
 		}
 
+		@Override
 		public boolean isCellEditable(int row, int col) {
 			return false;
 		}
 
-		public void update(RTextEditorPane textArea, List notices) {
+		public void update(RTextEditorPane textArea,
+				List<ParserNotice> notices) {
 			//setRowCount(0);
 			for (int i=0; i<getRowCount(); i++) {
 				TextAreaWrapper wrapper = (TextAreaWrapper)getValueAt(i, 1);
@@ -249,6 +254,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 
 		static final Border b = BorderFactory.createEmptyBorder(0, 5, 0, 5);
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table,
 			Object value, boolean selected, boolean focus, int row, int col) {
 			super.getTableCellRendererComponent(table, value, selected, focus,
@@ -267,7 +273,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 	 * we don't have to create two separate custom renderers, one for Substance
 	 * and another for all other LookAndFeels.  Substance sucks.
 	 */
-	private static class TextAreaWrapper implements Comparable {
+	private static class TextAreaWrapper implements Comparable<TextAreaWrapper>{
 
 		private RTextEditorPane textArea;
 
@@ -275,10 +281,11 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 			this.textArea = textArea;
 		}
 
-		public int compareTo(Object o) {
+		public int compareTo(TextAreaWrapper o) {
 			return toString().compareTo(o.toString());
 		}
 
+		@Override
 		public String toString() {
 			return textArea.getFileName();
 		}
@@ -288,6 +295,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 
 	private class TableMouseListener extends MouseAdapter {
 
+		@Override
 		public void mouseClicked(MouseEvent e) {
 
 			if (e.getButton()==MouseEvent.BUTTON1 && e.getClickCount()==2) {

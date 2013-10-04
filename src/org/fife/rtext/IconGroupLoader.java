@@ -39,7 +39,7 @@ class IconGroupLoader extends DefaultHandler {
 	public static final String DEFAULT_ICON_GROUP_NAME = "Eclipse Icons";
 
 	private RText owner;
-	private HashMap iconGroupMap;
+	private Map<String, IconGroup> iconGroupMap;
 
 	private static final String GROUP				= "group";
 	private static final String NAME				= "name";
@@ -56,7 +56,7 @@ class IconGroupLoader extends DefaultHandler {
 	 */
 	private IconGroupLoader(RText owner) {
 		this.owner = owner;
-		iconGroupMap = new HashMap(3);
+		iconGroupMap = new HashMap<String, IconGroup>(3);
 	}
 
 
@@ -110,7 +110,7 @@ class IconGroupLoader extends DefaultHandler {
 	 *         icon group's name.  If no icon groups are available (which is
 	 *         an error), an empty map is returned.
 	 */
-	private Map doLoad(String iconGroupFile) {
+	private Map<String, IconGroup> doLoad(String iconGroupFile) {
 
 		//long start = System.currentTimeMillis();
 		try {
@@ -150,7 +150,8 @@ class IconGroupLoader extends DefaultHandler {
 	 * @return A map of icon groups.  The key to each icon group is that
 	 *         icon group's name.
 	 */
-	public static Map loadIconGroups(RText rtext, String iconGroupFile) {
+	public static Map<String, IconGroup> loadIconGroups(RText rtext,
+			String iconGroupFile) {
 		IconGroupLoader loader = new IconGroupLoader(rtext);
 		return loader.doLoad(iconGroupFile);
 	}
@@ -160,6 +161,7 @@ class IconGroupLoader extends DefaultHandler {
 	 * Callback when an XML element begins.  Our XML is simple, and we're
 	 * only interested in "group" elements and their attributes.
 	 */
+	@Override
 	public void startElement(String uri, String localName, String qName,
 							Attributes attributes) {
 		if (GROUP.equals(qName)) {

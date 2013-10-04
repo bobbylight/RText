@@ -40,7 +40,7 @@ public class MacroManager {
 	 */
 	public static final String PROPERTY_MACROS			= "macros";
 
-	private SortedSet macros;
+	private SortedSet<Macro> macros;
 	private PropertyChangeSupport support;
 
 	/**
@@ -63,7 +63,7 @@ public class MacroManager {
 	 * Private constructor to prevent instantiation.
 	 */
 	private MacroManager() {
-		macros = new TreeSet();
+		macros = new TreeSet<Macro>();
 		support = new PropertyChangeSupport(this);
 	}
 
@@ -106,8 +106,8 @@ public class MacroManager {
 	 * @return The macros that existed before the clear operation.  This may be
 	 *         empty, but will never be <code>null</code>.
 	 */
-	public SortedSet clearMacros() {
-		TreeSet copy = new TreeSet(macros);
+	public SortedSet<Macro> clearMacros() {
+		TreeSet<Macro> copy = new TreeSet<Macro>(macros);
 		macros.clear();
 		support.firePropertyChange(PROPERTY_MACROS, null, null);
 		return copy;
@@ -122,9 +122,8 @@ public class MacroManager {
 	 */
 	public boolean containsMacroNamed(String name) {
 		boolean found = false;
-		for (Iterator i=getMacroIterator(); i.hasNext(); ) {
-			Macro m = (Macro)i.next();
-			if (m.getName().equalsIgnoreCase(name)) {
+		for (Macro macro : macros) {
+			if (macro.getName().equalsIgnoreCase(name)) {
 				found = true;
 				break;
 			}
@@ -158,7 +157,7 @@ public class MacroManager {
 	 *
 	 * @return An iterator over the macros.
 	 */
-	public Iterator getMacroIterator() {
+	public Iterator<Macro> getMacroIterator() {
 		return macros.iterator();
 	}
 
@@ -183,9 +182,10 @@ public class MacroManager {
 		if (file.isFile()) {
 			XMLDecoder d = new XMLDecoder(new BufferedInputStream(
 					new FileInputStream(file)));
-			List macroList = (List)d.readObject();
-			for (Iterator i=macroList.iterator(); i.hasNext(); ) {
-				addMacro((Macro)i.next());
+			@SuppressWarnings("unchecked")
+			List<Macro> macroList = (List<Macro>)d.readObject();
+			for (Macro macro : macroList) {
+				addMacro(macro);
 			}
 		}
 
@@ -253,7 +253,7 @@ public class MacroManager {
 		try {
 
 			// Put our macros into a list.
-			List macroList = new ArrayList(macros);
+			List<Macro> macroList = new ArrayList<Macro>(macros);
 
 			// Save our list of macros as XML.
 			File file = new File(dir, MACRO_DEFINITION_FILE_NAME);

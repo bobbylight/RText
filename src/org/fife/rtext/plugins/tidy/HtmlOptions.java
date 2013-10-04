@@ -127,6 +127,7 @@ public class HtmlOptions extends Prefs {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDefaults() {
 		htmlSpaceCount = 4;
 		htmlClean = false;

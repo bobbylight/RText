@@ -19,6 +19,7 @@ import javax.swing.filechooser.FileSystemView;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
+import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.FolderProjectEntry;
@@ -52,6 +53,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
+	@Override
 	public String getDisplayName() {
 		return FileDisplayNames.get().getName(getFile());
 	}
@@ -68,13 +70,15 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return icon;
 	}
 
 
-	public List getPopupActions() {
-		List actions = new ArrayList();
+	@Override
+	public List<PopupContent> getPopupActions() {
+		List<PopupContent> actions = new ArrayList<PopupContent>();
 		boolean dir = getFile().isDirectory();
 		if (!dir) {
 			actions.add(new OpenAction());
@@ -99,6 +103,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
+	@Override
 	public String getToolTipText() {
 		return Messages.getString("ProjectPlugin.ToolTip.FileProjectEntry",
 				getFile().getAbsolutePath(),
@@ -106,6 +111,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
+	@Override
 	protected void handleDelete() {
 
 		final boolean hard = false;
@@ -145,11 +151,13 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
+	@Override
 	protected void handleProperties() {
 		FileTreeNode.handleProperties(plugin.getRText(), getFile());
 	}
 
 
+	@Override
 	protected void handleRename() {
 		RText rtext = plugin.getRText();
 		boolean directory = entry.getFile().isDirectory();

@@ -183,7 +183,7 @@ public abstract class AbstractMainView extends JPanel
 
 	private EventListenerList listenerList;
 
-	private Map codeFoldingEnabledStates;
+	private Map<String, Boolean> codeFoldingEnabledStates;
 
 	private Icon bookmarkIcon;
 	private boolean bookmarksEnabled;
@@ -220,6 +220,7 @@ public abstract class AbstractMainView extends JPanel
 		checkForModification = true;
 		Timer t = new Timer();
 		t.schedule(new TimerTask() {
+				@Override
 				public void run() {
 					checkFilesForOutsideModification();
 				}
@@ -381,6 +382,7 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @param o The new component orientation.
 	 */
+	@Override
 	public void applyComponentOrientation(ComponentOrientation o) {
 		super.applyComponentOrientation(o);
 		// Force a reset of textAreaOrientation since the
@@ -650,7 +652,7 @@ public abstract class AbstractMainView extends JPanel
 		roundedSelectionEdges = fromPanel.roundedSelectionEdges;
 		caretBlinkRate = fromPanel.caretBlinkRate;
 
-		carets = (int[])fromPanel.carets.clone();
+		carets = fromPanel.carets.clone();
 
 		doFileSizeCheck = fromPanel.doFileSizeCheck;
 		maxFileSize = fromPanel.maxFileSize;
@@ -665,7 +667,7 @@ public abstract class AbstractMainView extends JPanel
 		// "Move over" all current text area listeners.
 		// Remember "listeners" is guaranteed to be non-null.
 		Object[] listeners = fromPanel.listenerList.getListenerList();
-		Class ctalClass = CurrentTextAreaListener.class;
+		Class<CurrentTextAreaListener> ctalClass = CurrentTextAreaListener.class;
 		for (int i=0; i<listeners.length; i+=2) {
 			if (listeners[i]==ctalClass) {
 				CurrentTextAreaListener l =
@@ -685,13 +687,14 @@ public abstract class AbstractMainView extends JPanel
 
 		int numDocuments = fromPanel.getNumDocuments();
 		int fromSelectedIndex = fromPanel.getSelectedIndex();
-		ArrayList scrollPanes = new ArrayList(numDocuments);
+		ArrayList<RTextScrollPane> scrollPanes =
+				new ArrayList<RTextScrollPane>(numDocuments);
 		for (int i=0; i<numDocuments; i++) {
 			scrollPanes.add(fromPanel.getRTextScrollPaneAt(0));
 			fromPanel.removeComponentAt(0);
 		}
 		for (int i=0; i<numDocuments; i++) {
-			RTextScrollPane scrollPane = (RTextScrollPane)scrollPanes.get(i);
+			RTextScrollPane scrollPane = scrollPanes.get(i);
 			RTextEditorPane editorPane = (RTextEditorPane)scrollPane.getTextArea();
 			addTextAreaImpl(editorPane.getFileName(), scrollPane,
 							editorPane.getFileFullPath());
@@ -1079,9 +1082,9 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public String getCodeFoldingEnabledForString() {
 		StringBuffer sb = new StringBuffer();
-		Set entrySet = codeFoldingEnabledStates.entrySet();
-		for (Iterator i=entrySet.iterator(); i.hasNext(); ) {
-			Map.Entry entry = (Map.Entry)i.next();
+		Set<Map.Entry<String, Boolean>> entrySet =
+				codeFoldingEnabledStates.entrySet();
+		for (Map.Entry<String, Boolean> entry : entrySet) {
 			if (Boolean.TRUE.equals(entry.getValue())) {
 				sb.append(entry.getKey() + ",");
 			}
@@ -2200,7 +2203,7 @@ public abstract class AbstractMainView extends JPanel
 		capsLockAction = new CapsLockAction(owner);
 
 		// Get folding states before creating initial editors.
-		codeFoldingEnabledStates = new HashMap();
+		codeFoldingEnabledStates = new HashMap<String, Boolean>();
 		if (prefs.codeFoldingEnabledFor!=null) {
 			String[] languages = prefs.codeFoldingEnabledFor.split(",");
 			for (int i=0; i<languages.length; i++) {

@@ -48,6 +48,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected Box createDetailsPanel() {
 
 		// A panel containing the "Report detail" panel and some check boxes.
@@ -69,6 +70,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected Box createExtraOptionsPanel() {
 		return null;
 	}
@@ -77,6 +79,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected JPanel createInputPanel() {
 
 		JPanel inputPanel = super.createInputPanel();
@@ -115,6 +118,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected ResultsComponent createResultsComponent() {
 		ReplaceInFilesTable table = new ReplaceInFilesTable();
 		table.addMouseListener(new FindInFilesDialogMouseListener(table));
@@ -125,11 +129,13 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected FindInFilesThread createWorkerThread(File directory) {
 		return new ReplaceInFilesThread(this, directory);
 	}
 
 
+	@Override
 	protected void escapePressed() {
 		if (replaceCombo instanceof RegexAwareComboBox) {
 			RegexAwareComboBox racb = (RegexAwareComboBox)replaceCombo;
@@ -164,6 +170,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	/**
 	 * Called when the regex checkbox is clicked.
 	 */
+	@Override
 	protected void handleRegExCheckBoxClicked() {
 
 		super.handleRegExCheckBoxClicked();
@@ -182,6 +189,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void setSearching(boolean searching) {
 		super.setSearching(searching);
 		boolean enabled = !searching;
@@ -192,6 +200,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setVisible(boolean visible) {
 
 		// Make sure content assist is enabled (regex check box might have
@@ -213,6 +222,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	/**
 	 * Overridden to update the "Replace with" combo box updated also.
 	 */
+	@Override
 	public void updateUI() {
 
 		super.updateUI();

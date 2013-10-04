@@ -14,6 +14,8 @@ import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -32,12 +34,12 @@ public class FileTypeIconManager {
 	/**
 	 * The map of file extensions to icon names.
 	 */
-	private HashMap type2IconNameMap;
+	private Map<String, String> type2IconNameMap;
 
 	/**
 	 * The map of icon names to icons.
 	 */
-	private HashMap iconName2IconMap;
+	private Map<String, Icon> iconName2IconMap;
 
 	/**
 	 * The icon to use when no specific icon is found.
@@ -62,7 +64,7 @@ public class FileTypeIconManager {
 		ClassLoader cl = this.getClass().getClassLoader();
 		defaultIcon = new ImageIcon(cl.getResource(DEFAULT_ICON_PATH));
 
-		type2IconNameMap = new HashMap();
+		type2IconNameMap = new HashMap<String, String>();
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_C,				PATH + "c.gif");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_CLOJURE,			PATH + "clojure.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS,		PATH + "cpp.gif");
@@ -79,7 +81,7 @@ public class FileTypeIconManager {
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH,	PATH + "bat.gif");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_XML,				PATH + "xml.png");
 
-		iconName2IconMap = new HashMap();
+		iconName2IconMap = new HashMap<String, Icon>();
 
 	}
 
@@ -103,9 +105,9 @@ public class FileTypeIconManager {
 		else {
 
 			// Check whether there's a special icon for this file extension.
-			String iconName = (String)type2IconNameMap.get(style);
+			String iconName = type2IconNameMap.get(style);
 			if (iconName!=null) {
-				icon = (Icon)iconName2IconMap.get(iconName);
+				icon = iconName2IconMap.get(iconName);
 				// Load and cache the icon if it's not yet loaded.
 				if (icon==null) {
 					ClassLoader cl = this.getClass().getClassLoader();

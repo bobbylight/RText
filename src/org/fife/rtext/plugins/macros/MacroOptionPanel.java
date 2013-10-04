@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -83,7 +84,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 				plugin.getString("Options.TableHeader.Shortcut"),
 				plugin.getString("Options.TableHeader.Description") }, 0);
 
-		List customButtons = new ArrayList();
+		List<Action> customButtons = new ArrayList<Action>();
 		customButtons.add(new AddExampleMacrosAction(plugin));
 
 		macroTable = new ModifiableTable(model, ModifiableTable.BOTTOM,
@@ -136,13 +137,14 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		// Clear previous macros, but remember what they were.  We'll determine
 		// what macros were genuinely "removed" by the user, and delete their
 		// corresponding scripts.
 		MacroManager mm = MacroManager.get();
-		SortedSet oldMacros = mm.clearMacros();
+		SortedSet<Macro> oldMacros = mm.clearMacros();
 
 		for (int i=0; i<model.getRowCount(); i++) {
 
@@ -173,8 +175,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 		// copying an example macro into the user's macros directory (see
 		// above).
 		File exampleDir = getExampleMacrosDir();
-		for (Iterator i=oldMacros.iterator(); i.hasNext(); ) {
-			Macro deleted = (Macro)i.next();
+		for (Macro deleted : oldMacros) {
 			File file = new File(deleted.getFile());
 			File parentDir = file.getParentFile();
 			if (parentDir!=null && parentDir.equals(exampleDir)) {
@@ -193,6 +194,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
@@ -231,6 +233,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return macroTable;
 	}
@@ -248,11 +251,12 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void setValuesImpl(Frame owner) {
 		MacroManager tm = MacroManager.get();
 		model.setRowCount(0);
-		for (Iterator i=tm.getMacroIterator(); i.hasNext(); ) {
-			Macro macro = (Macro)i.next();
+		for (Iterator<Macro> i = tm.getMacroIterator(); i.hasNext(); ) {
+			Macro macro = i.next();
 			addTableRowForMacro(macro);
 		}
 	}

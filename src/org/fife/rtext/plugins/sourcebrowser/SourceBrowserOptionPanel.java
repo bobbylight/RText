@@ -282,6 +282,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 * Updates the source browser plugin's parameters to reflect those in
 	 * this options panel.
 	 */
+	@Override
 	protected void doApplyImpl(Frame frame) {
 		SourceBrowserPlugin p = (SourceBrowserPlugin)getPlugin();
 		DockableWindow wind = p.getDockableWindow(p.getPluginName());
@@ -314,6 +315,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		// They can't input invalid stuff on this options panel.
 		return null;
@@ -343,6 +345,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 * bonus, if this component is a <code>JTextComponent</code>, its
 	 * text is selected for easy changing.
 	 */
+	@Override
 	public JComponent getTopJComponent() {
 		return locationCombo;
 	}
@@ -459,6 +462,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 * Updates this panel's displayed parameter values to reflect those of
 	 * the source browser plugin.
 	 */
+	@Override
 	protected void setValuesImpl(Frame frame) {
 		SourceBrowserPlugin p = (SourceBrowserPlugin)getPlugin();
 		DockableWindow wind = p.getDockableWindow(p.getPluginName());

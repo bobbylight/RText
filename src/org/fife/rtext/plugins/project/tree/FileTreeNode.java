@@ -14,7 +14,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
@@ -25,6 +24,7 @@ import javax.swing.tree.TreeNode;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.Messages;
+import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.FolderFilterInfo;
@@ -70,8 +70,8 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	private void addChildrenFilteredAndSorted(File[] files) {
 
 		int num = files.length;
-		ArrayList dirList = new ArrayList();
-		ArrayList fileList = new ArrayList();
+		ArrayList<File> dirList = new ArrayList<File>();
+		ArrayList<File> fileList = new ArrayList<File>();
 
 		// First, separate the directories from regular files so we can
 		// sort them individually.  This part could be made more compact,
@@ -87,26 +87,24 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		}
 
 		// On Windows and OS X, comparison is case-insensitive.
-		Comparator c = null;
+		Comparator<File> c = null;
 		String os = System.getProperty("os.name");
 		boolean isOSX = os!=null ? os.toLowerCase().indexOf("os x")>-1 : false;
 		if (File.separatorChar=='\\' || isOSX) {
-			c = new Comparator() {
-				public int compare(Object o1, Object o2) {
-					File f1 = (File)o1;
-					File f2 = (File)o2;
+			c = new Comparator<File>() {
+				public int compare(File f1, File f2) {
 					return f1.getName().compareToIgnoreCase(f2.getName());
 				}
 			};
 		}
 
 		Collections.sort(dirList, c);
-		for (Iterator i=dirList.iterator(); i.hasNext(); ) {
-			add(createFileTreeNode((File)i.next(), true));
+		for (File dir : dirList) {
+			add(createFileTreeNode(dir, true));
 		}
 		Collections.sort(fileList, c);
-		for (Iterator i=fileList.iterator(); i.hasNext(); ) {
-			add(createFileTreeNode((File)i.next(), false));
+		for (File file : fileList) {
+			add(createFileTreeNode(file, false));
 		}
 
 	}
@@ -121,6 +119,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
+	@Override
 	public String getDisplayName() {
 		return FileDisplayNames.get().getName(getFile());
 	}
@@ -154,8 +153,9 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
-	public List getPopupActions() {
-		List actions = new ArrayList();
+	@Override
+	public List<PopupContent> getPopupActions() {
+		List<PopupContent> actions = new ArrayList<PopupContent>();
 		if (!getFile().isDirectory()) {
 			actions.add(new OpenAction());
 		}
@@ -173,11 +173,13 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return icon;
 	}
 
 
+	@Override
 	public String getToolTipText() {
 		File file = getFile();
 		if (file.isFile()) {
@@ -198,6 +200,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
+	@Override
 	protected void handleDelete() {
 
 		final boolean hard = false;
@@ -246,6 +249,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
+	@Override
 	protected void handleProperties() {
 		handleProperties(plugin.getRText(), getFile());
 	}
@@ -267,6 +271,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
+	@Override
 	protected void handleRename() {
 		RText rtext = plugin.getRText();
 		boolean directory = getFile().isDirectory();
