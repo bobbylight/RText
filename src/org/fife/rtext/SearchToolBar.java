@@ -9,7 +9,6 @@
  */
 package org.fife.rtext;
 
-import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -48,8 +47,10 @@ import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.plaf.basic.BasicGraphicsUtils;
 
+import org.fife.rsta.ui.UIUtil;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
+import org.fife.ui.rtextarea.SearchResult;
 
 
 /**
@@ -276,12 +277,12 @@ public class SearchToolBar extends JToolBar {
 			context.setSearchSelectionOnly(false);
 			context.setWholeWord(false);
 
-			boolean found = SearchEngine.find(textArea, context);
-			if (found) {
+			SearchResult result = SearchEngine.find(textArea, context);
+			if (result.wasFound()) {
 				infoLabel.setText("");
 			}
 			else {
-				infoLabel.setForeground(Color.RED);
+				infoLabel.setForeground(UIUtil.getErrorTextForeground());
 				infoLabel.setText(textNotFound);
 				UIManager.getLookAndFeel().provideErrorFeedback(findField);
 			}

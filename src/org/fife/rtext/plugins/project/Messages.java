@@ -56,48 +56,12 @@ public class Messages {
 	 * Returns a localized message.
 	 *
 	 * @param key The key for the message.
+	 * @param params Any arguments for the localized message string.
 	 * @return The localized message.
 	 */
-	public static String getString(String key) {
-		return msg.getString(key);
-	}
-
-
-	/**
-	 * Returns a localized message.
-	 *
-	 * @param key The key for the message.
-	 * @param param An argument in the message string.
-	 * @return The localized message.
-	 */
-	public static String getString(String key, String param) {
-		return getString(key, new String[] { param });
-	}
-
-
-	/**
-	 * Returns a localized message.
-	 *
-	 * @param key The key for the message.
-	 * @param param1 An argument in the message string.
-	 * @param param2 Another argument in the message string.
-	 * @return The localized message.
-	 */
-	public static String getString(String key, String param1, String param2) {
-		return getString(key, new String[] { param1, param2 });
-	}
-
-
-	/**
-	 * Returns a localized message.
-	 *
-	 * @param key The key for the message.
-	 * @param params Parameters for the message.
-	 * @return The localized message.
-	 */
-	public static String getString(String key, String[] params) {
+	public static String getString(String key, String... params) {
 		String temp = msg.getString(key);
-		return MessageFormat.format(temp, params);
+		return MessageFormat.format(temp, (Object[])params);
 	}
 
 

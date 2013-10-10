@@ -46,7 +46,7 @@ class SubstanceSourceTreeCellRenderer extends SubstanceDefaultTreeCellRenderer {
 	 */
 	public SubstanceSourceTreeCellRenderer(DefaultSourceTree tree) {
 		this.tree = tree;
-		Class clazz = getClass();
+		Class<?> clazz = getClass();
 		blueBullet = new ImageIcon(clazz.getResource(BLUE_BULLET));
 		greenBullet = new ImageIcon(clazz.getResource(GREEN_BULLET));
 	}

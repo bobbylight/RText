@@ -14,7 +14,6 @@ import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
@@ -156,7 +155,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 		// A text area has been re-parsed for tasks.
 		if (RSyntaxTextArea.PARSER_NOTICES_PROPERTY.equals(prop)) {
 			RTextEditorPane source = (RTextEditorPane)e.getSource();
-			List notices = source.getParserNotices();//(List)e.getNewValue();
+			List<ParserNotice> notices = source.getParserNotices();//(List)e.getNewValue();
 			model.update(source, notices);
 		}
 
@@ -254,9 +253,8 @@ class TaskWindow extends AbstractParserNoticeWindow
 		}
 
 		@Override
-		protected void addNoticesImpl(RTextEditorPane textArea, List notices) {
-			for (Iterator i=notices.iterator(); i.hasNext(); ) {
-				ParserNotice notice = (ParserNotice)i.next();
+		protected void addNoticesImpl(RTextEditorPane textArea, List<ParserNotice> notices) {
+			for (ParserNotice notice : notices) {
 				if (notice.getParser()==taskParser) {
 					Object[] data = {	getIcon(), textArea,
 							// Integer.intValue(notice.getValue()+1) // TODO: 1.5

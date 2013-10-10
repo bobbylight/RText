@@ -16,7 +16,7 @@ package org.fife.rtext.plugins.macros;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Macro implements Comparable, Cloneable {
+public class Macro implements Comparable<Macro>, Cloneable {
 
 	/**
 	 * Name of the macro.  Usually the same as the name of the file, without
@@ -71,14 +71,14 @@ public class Macro implements Comparable, Cloneable {
 	 * @param o The other macro.
 	 * @return The sort order of this macro, compared to another.
 	 */
-	public int compareTo(Object o) {
+	public int compareTo(Macro o) {
 		int val = -1;
 		if (o==this) {
 			return 0;
 		}
-		else if (o instanceof Macro) {
+		else if (o!=null) {
 			val = String.CASE_INSENSITIVE_ORDER.compare(
-					getName(), ((Macro)o).getName());
+					getName(), o.getName());
 		}
 		return val;
 	}
@@ -91,7 +91,7 @@ public class Macro implements Comparable, Cloneable {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		return compareTo(o)==0;
+		return o instanceof Macro && compareTo((Macro)o)==0;
 	}
 
 

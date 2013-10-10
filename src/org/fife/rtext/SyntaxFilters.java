@@ -13,7 +13,6 @@ package org.fife.rtext;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -176,7 +175,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * @throws IllegalArgumentException If <code>style</code> is invalid.
 	 */
 	public String getFilterString(String style) {
-		StringBuffer filterString = new StringBuffer();
+		StringBuilder filterString = new StringBuilder();
 		List<String> filters = getFiltersForStyle(style);
 		for (String filter : filters) {
 			filterString.append(filter).append(' ');
@@ -383,8 +382,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	@Override
 	public String toString() {
 		String retVal = "";
-		for (Iterator i=filters.keySet().iterator(); i.hasNext(); ) {
-			String style = (String)i.next();
+		for (String style : filters.keySet()) {
 			retVal += style + ":" + getFilterString(style) + ",";
 		}
 		// Get rid of the last comma.

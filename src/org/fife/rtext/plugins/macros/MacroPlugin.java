@@ -185,7 +185,7 @@ public class MacroPlugin extends AbstractPlugin
 	 */
 	String getString(String key, String param) {
 		String text = msg.getString(key);
-		text = MessageFormat.format(text, new String[] { param });
+		text = MessageFormat.format(text, param);
 		return text;
 	}
 
@@ -289,8 +289,9 @@ public class MacroPlugin extends AbstractPlugin
 		}
 
 		if (MacroManager.get().getMacroCount()>0) {
-			for (Iterator i=MacroManager.get().getMacroIterator(); i.hasNext(); ){
-				Macro macro = (Macro)i.next();
+			Iterator<Macro> i = MacroManager.get().getMacroIterator();
+			while (i.hasNext()) {
+				Macro macro = i.next();
 				RunMacroAction a = new RunMacroAction(app, this, macro);
 				macrosMenu.add(createMenuItem(a));
 			}

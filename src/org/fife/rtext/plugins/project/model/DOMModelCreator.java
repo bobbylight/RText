@@ -30,7 +30,7 @@ class DOMModelCreator implements WorkspaceVisitor {
 
 	private Document doc;
 	private Element projectsElem;
-	private Stack projEntryParentStack;
+	private Stack<Element> projEntryParentStack;
 
 
 	public DOMModelCreator() throws IOException {
@@ -47,7 +47,7 @@ class DOMModelCreator implements WorkspaceVisitor {
 
 
 	private Element getCurrentProjectEntryParentElem() {
-		return (Element)projEntryParentStack.peek();
+		return projEntryParentStack.peek();
 	}
 
 
@@ -83,7 +83,7 @@ class DOMModelCreator implements WorkspaceVisitor {
 		doc.appendChild(root);
 		projectsElem = doc.createElement("projects");
 		root.appendChild(projectsElem);
-		projEntryParentStack = new Stack();
+		projEntryParentStack = new Stack<Element>();
 	}
 
 

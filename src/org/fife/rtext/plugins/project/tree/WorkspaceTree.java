@@ -17,16 +17,13 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.InputMap;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -44,7 +41,9 @@ import javax.swing.tree.TreePath;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.plugins.project.Messages;
+import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
+import org.fife.rtext.plugins.project.PopupContent.PopupSubMenu;
 import org.fife.rtext.plugins.project.model.Workspace;
 import org.fife.ui.rtextfilechooser.FileSelector;
 
@@ -95,11 +94,10 @@ public class WorkspaceTree extends JTree implements FileSelector {
 
 			AbstractWorkspaceTreeNode treeNode =
 					(AbstractWorkspaceTreeNode)node;
-			List actions = treeNode.getPopupActions();
-			for (Iterator i=actions.iterator(); i.hasNext(); ) {
-				Object obj = i.next();
-				if (obj instanceof JMenu) {
-					popup.add((JMenu)obj);
+			List<PopupContent> actions = treeNode.getPopupActions();
+			for (PopupContent obj : actions) {
+				if (obj instanceof PopupSubMenu) {
+					popup.add((PopupSubMenu)obj);
 				}
 				else {
 					Action action = (Action)obj;

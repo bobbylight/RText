@@ -21,6 +21,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -62,7 +63,7 @@ class RTextSplitPaneView extends AbstractMainView
 	private DefaultListModel listModel;
 	private CardLayout layout;
 
-	private ArrayList scrollPanes;	// The scroll panes passed in.
+	private List<Component> scrollPanes;	// The scroll panes passed in.
 
 	private int selectedIndex;
 	private int listWindowPosition;	// Location of file list window
@@ -112,7 +113,7 @@ class RTextSplitPaneView extends AbstractMainView
 
 		// These are initialized when documents are added.
 		selectedIndex = -1;
-		scrollPanes = new ArrayList();
+		scrollPanes = new ArrayList<Component>();
 
 		// Add transfer handler to listen for files being drag-and-dropped
 		// into this main view.
@@ -280,7 +281,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 */
 	@Override
 	public Component getSelectedComponent() {
-		return (Component)scrollPanes.get(getSelectedIndex());
+		return scrollPanes.get(getSelectedIndex());
 	}
 
 

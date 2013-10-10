@@ -131,10 +131,11 @@ class MainPanelTransferHandler extends TransferHandler {
 
 		if (hasFileFlavor(t.getTransferDataFlavors())) {
 			try {
-				List files = (List)t.getTransferData(fileFlavor);
+				@SuppressWarnings("unchecked")
+				List<File> files = (List<File>)t.getTransferData(fileFlavor);
 				int count = files==null ? 0 : files.size();
 				for (int i=0; i<count; i++) {
-					File file = (File)files.get(i);
+					File file = files.get(i);
 					// "null" encoding means check for Unicode first.
 					mainView.openFile(file.getAbsolutePath(), null);
 				}

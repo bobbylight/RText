@@ -114,7 +114,7 @@ class FindInFilesThread extends GUIWorkerThread {
 		// Then, do the search.
 		dialog.clearSearchResults();
 		File[] files = directory.listFiles();
-		List fileList = new ArrayList();
+		List<File> fileList = new ArrayList<File>();
 		fileList.addAll(Arrays.asList(files));
 
 		boolean checkSubfolders = dialog.getCheckSubfolders();
@@ -142,7 +142,7 @@ class FindInFilesThread extends GUIWorkerThread {
 				return null;
 			}
 
-			File temp = (File)fileList.get(i);
+			File temp = fileList.get(i);
 			String fileFullPath = temp.getAbsolutePath();
 
 			// If temp is a regular file (i.e., non-directory) AND exists...
@@ -236,7 +236,7 @@ class FindInFilesThread extends GUIWorkerThread {
 
 				// Add any files in this subdirectory to the master list
 				// of files to search.
-				List moreFilesList = getFilesFromDirectory(temp);
+				List<File> moreFilesList = getFilesFromDirectory(temp);
 				int count = moreFilesList==null ? 0 : moreFilesList.size();
 				if (count>0) {
 					fileList.addAll(moreFilesList);
@@ -425,12 +425,12 @@ class FindInFilesThread extends GUIWorkerThread {
 	 * @param dir The directory.
 	 * @return The files in the directory, as a list.
 	 */
-	protected static final List getFilesFromDirectory(File dir) {
+	protected static final List<File> getFilesFromDirectory(File dir) {
 		// Get the list of files in this directory.
 		File[] moreFiles = dir.listFiles();
 		if (moreFiles==null) {
 			// Should never happen (as dirs return empty arrays).
-			return new ArrayList(0);
+			return new ArrayList<File>(0);
 		}
 		return Arrays.asList(moreFiles);
 	}
@@ -484,7 +484,7 @@ class FindInFilesThread extends GUIWorkerThread {
 		// table, so we'll limit how much we display.
 		final int maxLen = 1280;
 
-		StringBuffer sb = new StringBuffer("<html><nobr><font face=\"Monospaced\">");
+		StringBuilder sb = new StringBuilder("<html><nobr><font face=\"Monospaced\">");
 		boolean firstNonWhitespace = false; // Skip leading whitespace
 
 		while (t!=null && t.isPaintable() && sb.length()<maxLen) {

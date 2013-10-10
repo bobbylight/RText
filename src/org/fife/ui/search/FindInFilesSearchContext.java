@@ -9,7 +9,7 @@
  */
 package org.fife.ui.search;
 
-import org.fife.rsta.ui.search.SearchDialogSearchContext;
+import org.fife.ui.rtextarea.SearchContext;
 
 
 /**
@@ -19,7 +19,7 @@ import org.fife.rsta.ui.search.SearchDialogSearchContext;
  * @author Robert Futrell
  * @version 1.0
  */
-public class FindInFilesSearchContext extends SearchDialogSearchContext {
+public class FindInFilesSearchContext extends SearchContext {
 
 	private boolean searchSubfolders;
 	private boolean verbose;

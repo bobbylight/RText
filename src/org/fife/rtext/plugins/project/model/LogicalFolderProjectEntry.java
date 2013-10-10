@@ -51,11 +51,21 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 	}
 
 
-	public int compareTo(Object o) {
+	public int compareTo(ProjectEntry o) {
 		if (o instanceof LogicalFolderProjectEntry) {
 			return name.compareTo(((LogicalFolderProjectEntry)o).getName());
 		}
 		return -1;
+	}
+
+
+	@Override
+	public final boolean equals(Object o) {
+		if (o==this) {
+			return true;
+		}
+		return o instanceof LogicalFolderProjectEntry &&
+				compareTo((LogicalFolderProjectEntry)o)==0;
 	}
 
 

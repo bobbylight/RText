@@ -265,7 +265,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.codeFoldingEnabledFor		= mainView.getCodeFoldingEnabledForString();
 
 		// Save the actions.
-		props.accelerators = new HashMap();
+		props.accelerators = new HashMap<String, KeyStroke>();
 		for (int i=0; i<RText.actionNames.length; i++) {
 			String actionName = RText.actionNames[i];
 			Action a = rtext.getAction(actionName);
@@ -819,7 +819,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		dropShadowsInEditor = getDefaultDropShadowsInEditorValue();
 		codeFoldingEnabledFor = "";
 
-		accelerators = new HashMap();
+		accelerators = new HashMap<String, KeyStroke>();
 		for (int i=0; i<actionNames.length; i++) {
 			String actionName = actionNames[i];
 			accelerators.put(actionName, defaultActionAccelerators[i]);

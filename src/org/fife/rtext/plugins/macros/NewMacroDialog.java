@@ -203,12 +203,12 @@ public class NewMacroDialog extends EscapableDialog {
 		if (file.isFile()) { // Should always be true
 			rtext.openFile(macro.getFile());
 			text = msg.getString("Message.MacroOpened");
-			text = MessageFormat.format(text, new String[] { macro.getName() });
+			text = MessageFormat.format(text, macro.getName());
 		}
 
 		else { // Macro script was deleted outside of RText.
 			text = msg.getString("Error.ScriptDoesntExist");
-			text = MessageFormat.format(text, new String[] { file.getAbsolutePath() });
+			text = MessageFormat.format(text, file.getAbsolutePath());
 			messageType = JOptionPane.ERROR_MESSAGE;
 		}
 
@@ -291,7 +291,7 @@ public class NewMacroDialog extends EscapableDialog {
 			String name = nameField.getText();
 			if (MacroManager.get().containsMacroNamed(name)) {
 				String text = msg.getString("Prompt.MacroExists");
-				text = MessageFormat.format(text, new String[] { name });
+				text = MessageFormat.format(text, name);
 				String title = rtext.getString("ConfDialogTitle");
 				rc = JOptionPane.showConfirmDialog(NewMacroDialog.this,
 						text, title, JOptionPane.YES_NO_CANCEL_OPTION);
@@ -302,7 +302,7 @@ public class NewMacroDialog extends EscapableDialog {
 			// mucked with their macros).
 			else if (file.isFile()) {
 				String text = msg.getString("Prompt.OverwriteFile");
-				text = MessageFormat.format(text, new String[] { file.getName() });
+				text = MessageFormat.format(text, file.getName());
 				String title = rtext.getString("ConfDialogTitle");
 				rc = JOptionPane.showConfirmDialog(NewMacroDialog.this,
 						text, title, JOptionPane.YES_NO_CANCEL_OPTION);

@@ -38,7 +38,7 @@ public class ToolManager {
 	 */
 	public static final String PROPERTY_TOOLS			= "tools";
 
-	private SortedSet tools;
+	private SortedSet<Tool> tools;
 	private PropertyChangeSupport support;
 
 	/**
@@ -56,7 +56,7 @@ public class ToolManager {
 	 * Private constructor to prevent instantiation.
 	 */
 	private ToolManager() {
-		tools = new TreeSet();
+		tools = new TreeSet<Tool>();
 		support = new PropertyChangeSupport(this);
 	}
 
@@ -104,8 +104,7 @@ public class ToolManager {
 	 * @return Whether a tool with that name is already defined.
 	 */
 	public boolean containsToolWithName(String name) {
-		for (Iterator i=tools.iterator(); i.hasNext(); ) {
-			Tool tool = (Tool)i.next();
+		for (Tool tool : tools) {
 			if (name.equals(tool.getName())) {
 				return true;
 			}
@@ -139,7 +138,7 @@ public class ToolManager {
 	 *
 	 * @return An iterator over the tools.
 	 */
-	public Iterator getToolIterator() {
+	public Iterator<Tool> getToolIterator() {
 		return tools.iterator();
 	}
 
@@ -234,8 +233,7 @@ public class ToolManager {
 		Thread.currentThread().setContextClassLoader(Tool.class.getClassLoader());
 
 		// Now save the new ones.
-		for (Iterator i=getToolIterator(); i.hasNext(); ) {
-			Tool tool = (Tool)i.next();
+		for (Tool tool : tools) {
 			File file = new File(dir, tool.getName() + TOOL_FILE_EXTENSION);
 			XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
 										new FileOutputStream(file)));

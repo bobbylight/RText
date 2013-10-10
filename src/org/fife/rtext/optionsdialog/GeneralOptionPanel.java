@@ -16,10 +16,8 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Set;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -145,10 +143,10 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		encCombo = new JComboBox();
 		UIUtil.fixComboOrientation(encCombo);
 		// Populate the combo box with all available encodings.
-		Map availcs = Charset.availableCharsets();
-		Set keys = availcs.keySet();
-		for (Iterator i=keys.iterator(); i.hasNext(); )
-			encCombo.addItem(i.next());
+		Map<String, Charset> availcs = Charset.availableCharsets();
+		for (String key : availcs.keySet()) {
+			encCombo.addItem(key);
+		}
 		encCombo.setActionCommand("Encoding");
 		encCombo.addActionListener(this);
 

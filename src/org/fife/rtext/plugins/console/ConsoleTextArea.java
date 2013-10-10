@@ -86,7 +86,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	private JPopupMenu popup;
 	private Listener listener;
 	private int inputMinOffs;
-	private LinkedList cmdHistory;
+	private LinkedList<String> cmdHistory;
 	private int cmdHistoryIndex;
 
 	/**
@@ -116,7 +116,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		addMouseListener(listener);
 		getDocument().addDocumentListener(listener);
 		init();
-		cmdHistory = new LinkedList();
+		cmdHistory = new LinkedList<String>();
 	}
 
 
@@ -518,7 +518,7 @@ abstract class ConsoleTextArea extends JTextPane {
 
 			while (t!=null && t.isPaintable()) {
 
-				int type = t.type;
+				int type = t.getType();
 				org.fife.ui.rsyntaxtextarea.Style style = scheme.getStyle(type);
 				Style attrs = doc.addStyle(null, getStyle(STYLE_STDIN));
 
@@ -534,8 +534,8 @@ abstract class ConsoleTextArea extends JTextPane {
 				}
 				StyleConstants.setUnderline(attrs, style.underline);
 
-				doc.setCharacterAttributes(offs, t.textCount, attrs, true);
-				offs += t.textCount;
+				doc.setCharacterAttributes(offs, t.length(), attrs, true);
+				offs += t.length();
 				t = t.getNextToken();
 
 			}
@@ -610,7 +610,7 @@ abstract class ConsoleTextArea extends JTextPane {
 				return;
 			}
 			cmdHistoryIndex = temp;
-			String command = (String)cmdHistory.get(cmdHistoryIndex);
+			String command = cmdHistory.get(cmdHistoryIndex);
 			replaceCommandEntered(command);
 		}
 

@@ -86,7 +86,7 @@ class JsonPrettyPrinter implements PrettyPrinter {
 	 * @return The string of space characters.
 	 */
 	private static final String createSpacer(int spaceCount) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i=0; i<spaceCount; i++) {
 			sb.append(' ');
 		}
@@ -118,7 +118,7 @@ class JsonPrettyPrinter implements PrettyPrinter {
 	 * @return The output format.
 	 */
 	private Object getFormat(String format) throws Exception {
-		Class clazz = Class.forName(OUTPUT_TYPE_CLASS, true,
+		Class<?> clazz = Class.forName(OUTPUT_TYPE_CLASS, true,
 				plugin.getClass().getClassLoader());
 		Field field = clazz.getDeclaredField(format);
 		return field.get(null);
@@ -139,7 +139,7 @@ class JsonPrettyPrinter implements PrettyPrinter {
 		for (int i=1; i<lines.length-1; i++) {
 			lines[i] = indenter + lines[i];
 		}
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i=0; i<lines.length; i++) {
 			sb.append(lines[i]).append('\n');
 		}
@@ -175,13 +175,11 @@ class JsonPrettyPrinter implements PrettyPrinter {
 		Object format = getFormat(opts.getOutputStyle());
 
 		// We use reflection since jsonbeans is built with Java 6.
-		Class clazz = Class.forName(JSON_CLASS, true,
+		Class<?> clazz = Class.forName(JSON_CLASS, true,
 				plugin.getClass().getClassLoader());
 		Object obj = clazz.newInstance();
-		Method sotm = clazz.getMethod("setOutputType",
-				new Class[] { format.getClass() });
-		Method ppm  = clazz.getMethod("prettyPrint",
-				new Class[] { String.class });
+		Method sotm = clazz.getMethod("setOutputType", format.getClass());
+		Method ppm  = clazz.getMethod("prettyPrint", String.class);
 		try {
 
 			sotm.invoke(obj, new Object[] { format });

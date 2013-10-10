@@ -13,7 +13,6 @@ import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -35,14 +34,14 @@ import org.fife.rtext.RTextEditorPane;
  * NOTE: In 1.5, most of these fields could be replaced with a single
  * ProcessBuilder instance.
  */
-public class Tool implements Comparable {
+public class Tool implements Comparable<Tool> {
 
 	private String name;
 	private String desc;
 	private String dir; // Not File, to ease serialization.
 	private String program;
-	private List args;
-	private Map env;
+	private List<String> args;
+	private Map<String, String> env;
 	private boolean appendEnv;
 	private String accelerator; // String to ease serialization
 	private transient RText rtext;
@@ -113,8 +112,7 @@ public class Tool implements Comparable {
 		File file = new File(varSubstitute(program));
 		if (!file.isFile()) {
 			error = ToolPlugin.msg.getString("Error.ProgramNotFound");
-			error = MessageFormat.format(error,
-							new String[] { file.getAbsolutePath() });
+			error = MessageFormat.format(error, file.getAbsolutePath());
 		}
 
 		else {
@@ -123,8 +121,7 @@ public class Tool implements Comparable {
 			File dir = new File(varSubstitute(getDirectory()));
 			if (!dir.isDirectory()) {
 				error = ToolPlugin.msg.getString("Error.NoSuchDirectory");
-				error = MessageFormat.format(error,
-									new String[] { dir.getAbsolutePath() });
+				error = MessageFormat.format(error, dir.getAbsolutePath());
 			}
 
 		}
@@ -160,17 +157,16 @@ public class Tool implements Comparable {
 	/**
 	 * Compares this tool to another by name, lexicographically.
 	 *
-	 * @param o The other tool.
+	 * @param t2 The other tool.
 	 * @return The sort order of this tool, compared to another.
 	 */
-	public int compareTo(Object o) {
-		int val = -1;
-		if (o==this) {
+	public int compareTo(Tool t2) {
+		int val = 1;
+		if (t2==this) {
 			val = 0;
 		}
-		else if (o instanceof Tool) {
-			val = String.CASE_INSENSITIVE_ORDER.compare(
-					getName(), ((Tool)o).getName());
+		else if (t2!=null) {
+			val = String.CASE_INSENSITIVE_ORDER.compare(getName(),t2.getName());
 		}
 		return val;
 	}
@@ -183,7 +179,7 @@ public class Tool implements Comparable {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		return compareTo(o)==0;
+		return o instanceof Tool && compareTo((Tool)o)==0;
 	}
 
 
@@ -200,19 +196,18 @@ public class Tool implements Comparable {
 		final String[] cmd = new String[1 + args.size()];
 		cmd[0] = program;
 		for (int i=0; i<args.size(); i++) {
-			cmd[i+1] = varSubstitute((String)args.get(i));
+			cmd[i+1] = varSubstitute(args.get(i));
 		}
 
 		// Replace any ${file_XXX} "variables" in the working directory.
 		final String dir = varSubstitute(getDirectory());
 
 		// Replace any ${file_XXX} "variables" in the environment.
-		final Map env2 = env==null ? null : new HashMap(env);
+		final Map<String, String> env2 = env==null ? null :
+			new HashMap<String, String>(env);
 		if (env2!=null) {
-			for (Iterator i=env2.keySet().iterator(); i.hasNext(); ) {
-				Object key = i.next();
-				String value = (String)env2.get(key);
-				env2.put(key, varSubstitute(value));
+			for (String key : env2.keySet()) {
+				env2.put(key, varSubstitute(env2.get(key)));
 			}
 		}
 
@@ -271,7 +266,7 @@ public class Tool implements Comparable {
 	 */
 	public String[] getArgs() {
 		String[] args = new String[this.args.size()];
-		return (String[])this.args.toArray(args);
+		return this.args.toArray(args);
 	}
 
 
@@ -290,14 +285,11 @@ public class Tool implements Comparable {
 	/**
 	 * Returns a copy of the environment variable map for this tool.
 	 *
-	 * @return The environment variables.  This is a <code>Map</code> with both
-	 *         keys and values as Strings.
+	 * @return The environment variables.
 	 * @see #setEnvVars(Map)
 	 */
-	public Map getEnvVars() {
-		HashMap vars = new HashMap();
-		vars.putAll(env);
-		return vars;
+	public Map<String, String> getEnvVars() {
+		return new HashMap<String, String>(env);
 	}
 
 
@@ -349,8 +341,8 @@ public class Tool implements Comparable {
 	 * Initializes this tool.
 	 */
 	private void init() {
-		args = new ArrayList(3);
-		env = new HashMap();
+		args = new ArrayList<String>(3);
+		env = new HashMap<String, String>();
 	}
 
 
@@ -407,7 +399,7 @@ public class Tool implements Comparable {
 	private static String quoteReplacement(String s) {
 		if ((s.indexOf('\\') == -1) && (s.indexOf('$') == -1))
 			return s;
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			if (c == '\\') {
@@ -495,10 +487,10 @@ public class Tool implements Comparable {
 	/**
 	 * Sets the environment variables for this tool.
 	 *
-	 * @param vars A String-to-String mapping of environment variables.
+	 * @param vars The new environment variables for this tool.
 	 * @see #getEnvVars()
 	 */
-	public void setEnvVars(Map vars) {
+	public void setEnvVars(Map<String, String> vars) {
 		env.clear();
 		env.putAll(vars);
 	}

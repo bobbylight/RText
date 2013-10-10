@@ -356,7 +356,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 				return;
 			}
 
-			List cmdList = new ArrayList();
+			List<String> cmdList = new ArrayList<String>();
 			if (File.separatorChar=='/') {
 				cmdList.add("/bin/sh");
 				cmdList.add("-c");
@@ -368,7 +368,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 			text = "cd " + pwd.getAbsolutePath() + " && " + text;
 
 			cmdList.add(text);
-			final String[] cmd = (String[])cmdList.toArray(new String[] {});
+			final String[] cmd = cmdList.toArray(new String[cmdList.size()]);
 
 			setEditable(false);
 			activeProcessThread = new Thread() {
@@ -513,7 +513,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 		}
 
 		private void showChoices(File[] choices, String input) {
-			StringBuffer sb = new StringBuffer("\n");
+			StringBuilder sb = new StringBuilder("\n");
 			for (int i=0; i<choices.length; i++) {
 				sb.append(choices[i].getName());
 				if (i<choices.length-1) {

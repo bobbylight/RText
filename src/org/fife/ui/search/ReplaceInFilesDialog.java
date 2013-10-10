@@ -18,6 +18,7 @@ import javax.swing.text.JTextComponent;
 import org.fife.rsta.ui.AssistanceIconPanel;
 import org.fife.rsta.ui.MaxWidthComboBox;
 import org.fife.rsta.ui.search.RegexAwareComboBox;
+import org.fife.rsta.ui.search.SearchComboBox;
 import org.fife.ui.*;
 
 
@@ -84,7 +85,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 
 		JPanel inputPanel = super.createInputPanel();
 
-		replaceCombo = createSearchComboBox(true);
+		replaceCombo = new SearchComboBox(null, true);
 		getTextComponent(replaceCombo).addFocusListener(new FindInFilesFocusAdapter());
 		JLabel replaceLabel = UIUtil.newLabel(getBundle(), "ReplaceWith",
 				replaceCombo);
@@ -176,7 +177,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 		super.handleRegExCheckBoxClicked();
 
 		// "Content assist" support
-		boolean b = regExpCheckBox.isSelected();
+		boolean b = regexCheckBox.isSelected();
 		// Always true except when debugging.  findTextCombo done in parent
 		if (replaceCombo instanceof RegexAwareComboBox) {
 			RegexAwareComboBox racb = (RegexAwareComboBox)replaceCombo;
@@ -206,7 +207,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 		// Make sure content assist is enabled (regex check box might have
 		// been checked in a different search dialog).
 		if (visible) {
-			boolean regexEnabled = regExpCheckBox.isSelected();
+			boolean regexEnabled = regexCheckBox.isSelected();
 			// Always true except when debugging.  findTextCombo done in parent
 			if (replaceCombo instanceof RegexAwareComboBox) {
 				RegexAwareComboBox racb = (RegexAwareComboBox)replaceCombo;

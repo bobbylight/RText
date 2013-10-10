@@ -19,7 +19,7 @@ import java.io.File;
  * @author Robert Futrell
  * @version 1.0
  */
-public interface ProjectEntry extends ModelEntity, Comparable {
+public interface ProjectEntry extends ModelEntity, Comparable<ProjectEntry> {
 
 	/**
 	 * A project entry that's a single file somewhere on the file system.

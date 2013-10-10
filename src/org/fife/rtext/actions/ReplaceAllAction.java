@@ -23,6 +23,7 @@ import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.StandardAction;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
+import org.fife.ui.rtextarea.SearchResult;
 
 
 /**
@@ -59,18 +60,15 @@ class ReplaceAllAction extends StandardAction {
 		AbstractMainView mainView = rtext.getMainView();
 		RTextEditorPane textArea = mainView.getCurrentTextArea();
 
-		// First, remember that they've searched for this string.
-		mainView.searchStrings = mainView.replaceDialog.getSearchStrings();
-
 		// Next, initialize some variables for this action.
-		String searchString = mainView.replaceDialog.getSearchString();
+		SearchContext context = mainView.searchContext;
+		String searchString = context.getSearchFor();
 
 		// Do the replacement.
-		int count = 0;
 		try {
 
-			SearchContext context = mainView.searchContext;
-			count = SearchEngine.replaceAll(textArea, context);
+			SearchResult result = SearchEngine.replaceAll(textArea, context);
+			int count = result.getCount();
 
 			if (count==-1) {
 				// TODO: Display an error about bad regex.

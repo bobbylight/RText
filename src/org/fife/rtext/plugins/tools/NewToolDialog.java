@@ -18,7 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.MessageFormat;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javax.swing.AbstractAction;
@@ -461,9 +460,8 @@ ac.install(dirField);
 		}
 
 		envModel.setRowCount(0);
-		Map envVars = tool.getEnvVars();
-		for (Iterator i=envVars.entrySet().iterator(); i.hasNext(); ) {
-			Map.Entry entry = (Map.Entry)i.next();
+		Map<String, String> envVars = tool.getEnvVars();
+		for (Map.Entry<String, String> entry : envVars.entrySet()) {
 			envModel.addRow(new Object[] { entry.getKey(), entry.getValue() });
 		}
 

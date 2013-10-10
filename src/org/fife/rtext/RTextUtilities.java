@@ -380,7 +380,7 @@ public class RTextUtilities {
 	 * @return The regular expression.
 	 */
 	private static String createRegexForFileFilter(String filter) {
-		StringBuffer sb = new StringBuffer("^");
+		StringBuilder sb = new StringBuilder("^");
 		for (int i=0; i<filter.length(); i++) {
 			char ch = filter.charAt(i);
 			switch (ch) {
@@ -468,7 +468,7 @@ public class RTextUtilities {
 
 		// TODO: When updating to 1.5, replace with StringBuilder, and change
 		// loop to use new append(str, offs,len) method.
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		for (int i=0; i<s.length(); i++) {
 			char ch = s.charAt(i);
@@ -799,7 +799,7 @@ public class RTextUtilities {
 		if (array==null || array.length==0) {
 			return null;
 		}
-		StringBuffer sb = new StringBuffer(array[0]);
+		StringBuilder sb = new StringBuilder(array[0]);
 		for (int i=1; i<array.length; i++) {
 			sb.append(connector).append(array[i]);
 		}
@@ -954,7 +954,7 @@ public class RTextUtilities {
 				// Load the Look and Feel class.  Note that we cannot
 				// simply use its name for some reason (Exceptions are
 				// thrown).
-				Class c = cl.loadClass(lnfClassName);
+				Class<?> c = cl.loadClass(lnfClassName);
 				LookAndFeel lnf = (LookAndFeel)c.newInstance();
 
 				// If we're changing to a LAF that supports window decorations

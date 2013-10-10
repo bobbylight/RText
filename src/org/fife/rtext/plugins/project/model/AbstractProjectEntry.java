@@ -26,15 +26,6 @@ abstract class AbstractProjectEntry implements ProjectEntry {
 	}
 
 
-	@Override
-	public boolean equals(Object o) {
-		if (o==this) {
-			return true;
-		}
-		return compareTo(o)==0;
-	}
-
-
 	public final ProjectEntryParent getParent() {
 		return parent;
 	}

@@ -37,7 +37,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	private static int openFrameCount = 0;
 
 	private JDesktopPane desktopPane;
-	private ArrayList frames;
+	private java.util.List<InternalFrame> frames;
 
 	private JPopupMenu popupMenu;
 
@@ -58,7 +58,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	public RTextMDIView(RText owner, String[] filesToOpen,
 									RTextPreferences properties) {
 
-		frames = new ArrayList(5);
+		frames = new ArrayList<InternalFrame>(5);
 
 		setLayout(new GridLayout(1,1));
 		desktopPane = new JDesktopPane();
@@ -155,7 +155,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		for (int i=0; i<size; i++) {
 			if (i==selectedIndex)
 				continue;
-			JInternalFrame frame = (JInternalFrame)frames.get(i);
+			JInternalFrame frame = frames.get(i);
 			frame.setBounds(x,y, 300,300);
 			frame.toFront();
 			x += CASCADE_X_INCREMENT;
@@ -166,9 +166,9 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 			}
 		}
 
-		// Make it so current text area is "last" to be cascaded by swapping its place
-		// with the last frame's place.
-		JInternalFrame currentFrame = (JInternalFrame)frames.get(selectedIndex);
+		// Make it so current text area is "last" to be cascaded by swapping
+		// its place with the last frame's place.
+		JInternalFrame currentFrame = frames.get(selectedIndex);
 		currentFrame.setBounds(x,y, 300,300);
 		currentFrame.toFront();
 
@@ -197,7 +197,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		// correctly. If there are no open documents, add a new empty one.
 		if (getNumDocuments()>0) {
 			renumberDisplayNames();
-			JInternalFrame frame = (JInternalFrame)frames.get(0);
+			JInternalFrame frame = frames.get(0);
 			desktopPane.setSelectedFrame(frame);
 			try {
 				frame.setSelected(true); // Updates currentTextArea.
@@ -495,7 +495,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	@Override
 	public void setSelectedIndex(int index) {
 		if (index>=0 && index<getNumDocuments()) {
-			JInternalFrame frame = (JInternalFrame)frames.get(index);
+			JInternalFrame frame = frames.get(index);
 			try {
 				frame.setSelected(true); // Updates currentTextArea via internalFrameActivated.
 			} catch (PropertyVetoException e) { }
@@ -515,7 +515,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 
 		for (int i=0; i<numFrames; i++) {
 
-			JInternalFrame frame = (JInternalFrame)frames.get(i);
+			JInternalFrame frame = frames.get(i);
 
 			if (frame.isVisible() && !frame.isIcon()) {
 
@@ -544,7 +544,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 
 			for (int i=0; i<numFrames; i++) {
 
-				JInternalFrame frame = (JInternalFrame)frames.get(i);
+				JInternalFrame frame = frames.get(i);
 
 				if (frame.isVisible() && frame.isResizable() && !frame.isIcon()) {
 					frame.setSize(desktopWidth, fHeight);
@@ -569,7 +569,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 
 		for (int i=0; i<numFrames; i++) {
 
-			JInternalFrame frame = (JInternalFrame)frames.get(i);
+			JInternalFrame frame = frames.get(i);
 
 			if (frame.isVisible() && !frame.isIcon()) {
 
@@ -598,7 +598,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 
 			for (int i=0; i<numFrames; i++) {
 
-				JInternalFrame frame = (JInternalFrame)frames.get(i);
+				JInternalFrame frame = frames.get(i);
 
 				if (frame.isVisible() && frame.isResizable() && !frame.isIcon()) {
 					frame.setBounds(xPos,0, fWidth,desktopHeight);

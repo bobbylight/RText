@@ -123,9 +123,9 @@ class SaveAsWebPageAction extends StandardAction {
 
 	private void saveAs(String path) throws IOException {
 
-		String[] styles = new String[Token.NUM_TOKEN_TYPES];
-		StringBuffer temp = new StringBuffer();
-		StringBuffer sb = new StringBuffer();
+		String[] styles = new String[Token.DEFAULT_NUM_TOKEN_TYPES];
+		StringBuilder temp = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
 
 		PrintWriter out = new PrintWriter(new BufferedWriter(
 			new OutputStreamWriter(new FileOutputStream(path), "UTF-8")));
@@ -142,10 +142,10 @@ class SaveAsWebPageAction extends StandardAction {
 		for (int i=0; i<lineCount; i++) {
 			Token token = textArea.getTokenListForLine(i);
 			while (token!=null && token.isPaintable()) {
-				if (styles[token.type]==null) {
+				if (styles[token.getType()]==null) {
 					temp.setLength(0);
-					temp.append(".s").append(token.type).append(" {\n");
-					Font font = textArea.getFontForTokenType(token.type);
+					temp.append(".s").append(token.getType()).append(" {\n");
+					Font font = textArea.getFontForTokenType(token.getType());
 					if (font.isBold()) {
 						temp.append("font-weight: bold;\n");
 					}
@@ -155,9 +155,9 @@ class SaveAsWebPageAction extends StandardAction {
 					Color c = textArea.getForegroundForToken(token);
 					temp.append("color: ").append(UIUtil.getHTMLFormatForColor(c)).append(";\n");
 					temp.append("}");
-					styles[token.type] = temp.toString();
+					styles[token.getType()] = temp.toString();
 				}
-				sb.append("<span class=\"s" + token.type + "\">");
+				sb.append("<span class=\"s" + token.getType() + "\">");
 				sb.append(RTextUtilities.escapeForHTML(token.getLexeme(), "\n", true));
 				sb.append("</span>");
 				token = token.getNextToken();

@@ -22,6 +22,7 @@ import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
+import org.fife.ui.rtextarea.SearchResult;
 
 
 /**
@@ -60,32 +61,20 @@ class ReplaceNextAction extends ReplaceAction {
 
 		// If it's nothing (ie, they haven't searched yet), bring up the
 		// Replace dialog.
-		if (mainView.searchStrings.size()==0 && !replaceDialog.isVisible()
-				&& !mainView.findDialog.isVisible()) {
+		SearchContext context = mainView.searchContext;
+		String searchString = context.getSearchFor();
+		if (searchString==null || searchString.length()==0) {
 			replaceDialog.setVisible(true);
 			return;
 		}
 
 		// Otherwise, repeat the last Replace action.
 		RTextEditorPane textArea = mainView.getCurrentTextArea();
-		String searchString = "";
-
-		// Get the text to search for.
-		if (replaceDialog.isVisible()) {
-			mainView.searchStrings = replaceDialog.getSearchStrings();
-			searchString = replaceDialog.getSearchString();
-		}
-		// Otherwise, mainView.searchStrings already has a value, but we
-		// still need to give a value to searchString.
-		else {
-			searchString = (String)mainView.searchStrings.get(0);
-		}
 
 		try {
 
-			SearchContext context = mainView.searchContext;
-			boolean found = SearchEngine.replace(textArea, context);
-			if (!found) {
+			SearchResult result = SearchEngine.replace(textArea, context);
+			if (!result.wasFound()) {
 				searchString = RTextUtilities.escapeForHTML(searchString, null);
 				String temp = rtext.getString("CannotFindString", searchString);
 				// "null" parent returns focus to previously focused window,

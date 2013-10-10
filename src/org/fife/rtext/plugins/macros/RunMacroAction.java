@@ -81,12 +81,12 @@ public class RunMacroAction extends StandardAction {
 	/**
 	 * javax.script.ScriptEngine class.
 	 */
-	private static Class seClazz;
+	private static Class<?> seClazz;
 
 	/**
 	 * The javax.script.ScriptEngineManager class.
 	 */
-	private static Class semClazz;
+	private static Class<?> semClazz;
 
 	/**
 	 * The javax.script.ScriptEngineManager instance.
@@ -96,12 +96,12 @@ public class RunMacroAction extends StandardAction {
 	/**
 	 * the javax.script.Scriptcontext class.
 	 */
-	private static Class scriptContextClazz;
+	private static Class<?> scriptContextClazz;
 
 	/**
 	 * The javax.script.Bindings class.
 	 */
-	private static Class bindingsClazz;
+	private static Class<?> bindingsClazz;
 
 	/**
 	 * javax.script.ScriptEngine instance for JavaScript, shared across all
@@ -215,17 +215,16 @@ public class RunMacroAction extends StandardAction {
 		try {
 
 			// Create our bindings and cache them for later.
-			bindings = createBindingsMethod.invoke(engine, null);
-			setBindingsMethod.invoke(engine,
-					new Object[] { bindings, scopeFieldValue });
+			bindings = createBindingsMethod.invoke(engine);
+			setBindingsMethod.invoke(engine, bindings, scopeFieldValue);
 
 			// We always reset the value of "rtext" and "textArea", but
 			// all other variables they've modified are persistent.
-			bindingsPutMethod.invoke(bindings, new Object[] { "rtext", app });
-			bindingsPutMethod.invoke(bindings, new Object[] { "textArea",
-					app.getMainView().getCurrentTextArea() });
+			bindingsPutMethod.invoke(bindings, "rtext", app);
+			bindingsPutMethod.invoke(bindings, "textArea",
+						app.getMainView().getCurrentTextArea());
 
-			evalMethod.invoke(engine, new Object[] { r });
+			evalMethod.invoke(engine, r);
 
 		} catch (Throwable ex) {
 			// Since we launch via reflection, peel off top-level Exception
@@ -271,16 +270,16 @@ public class RunMacroAction extends StandardAction {
 
 				// Write stdout and stderr to this console.  Must wrap these in
 				// PrintWriters for standard print() and println() methods to work.
-				m = seClazz.getDeclaredMethod("getContext", null);
-				Object context = m.invoke(groovyEngine, null);
+				m = seClazz.getDeclaredMethod("getContext");
+				Object context = m.invoke(groovyEngine);
 				m = scriptContextClazz.getDeclaredMethod("setWriter",
-											new Class[] { Writer.class });
+											Writer.class);
 				PrintWriter w = new PrintWriter(new OutputStreamWriter(System.out));
-				m.invoke(context, new Object[] { w });
+				m.invoke(context, w);
 				m = scriptContextClazz.getDeclaredMethod("setErrorWriter",
-					new Class[] { Writer.class });
+					Writer.class);
 				w = new PrintWriter(new OutputStreamWriter(System.err));
-				m.invoke(context, new Object[] { w });
+				m.invoke(context, w);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -316,16 +315,16 @@ public class RunMacroAction extends StandardAction {
 
 				// Write stdout and stderr to this console.  Must wrap these in
 				// PrintWriters for standard print() and println() methods to work.
-				m = seClazz.getDeclaredMethod("getContext", null);
-				Object context = m.invoke(jsEngine, null);
+				m = seClazz.getDeclaredMethod("getContext");
+				Object context = m.invoke(jsEngine);
 				m = scriptContextClazz.getDeclaredMethod("setWriter",
-												new Class[] { Writer.class });
+												Writer.class);
 				PrintWriter w = new PrintWriter(new OutputStreamWriter(System.out));
-				m.invoke(context, new Object[] { w });
+				m.invoke(context, w);
 				m = scriptContextClazz.getDeclaredMethod("setErrorWriter",
-						new Class[] { Writer.class });
+						Writer.class);
 				w = new PrintWriter(new OutputStreamWriter(System.err));
-				m.invoke(context, new Object[] { w });
+				m.invoke(context, w);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -382,8 +381,7 @@ public class RunMacroAction extends StandardAction {
 				semClazz = Class.forName("javax.script.ScriptEngineManager");
 				// Pass the Plugin ClassLoader, since the Groovy jar won't be
 				// on the application's classpath
-				Constructor cons = semClazz.getConstructor(
-										new Class[] { ClassLoader.class });
+				Constructor<?> cons = semClazz.getConstructor(ClassLoader.class);
 				sem = cons.newInstance(
 						new Object[] { RunMacroAction.class.getClassLoader() });
 				seClazz = Class.forName("javax.script.ScriptEngine");
@@ -394,14 +392,12 @@ public class RunMacroAction extends StandardAction {
 				int scope = scopeField.getInt(scriptContextClazz);
 				scopeFieldValue = new Integer(scope);
 
-				createBindingsMethod = seClazz.getDeclaredMethod("createBindings",
-										null);
+				createBindingsMethod = seClazz.getDeclaredMethod("createBindings");
 				setBindingsMethod = seClazz.getDeclaredMethod("setBindings",
-						new Class[] { bindingsClazz, int.class });
+						bindingsClazz, int.class);
 				bindingsPutMethod = bindingsClazz.getDeclaredMethod("put",
-						new Class[] { String.class, Object.class });
-				evalMethod = seClazz.getDeclaredMethod("eval",
-						new Class[] { Reader.class });
+						String.class, Object.class);
+				evalMethod = seClazz.getDeclaredMethod("eval", Reader.class);
 
 			} catch (Exception e) {
 				e.printStackTrace();

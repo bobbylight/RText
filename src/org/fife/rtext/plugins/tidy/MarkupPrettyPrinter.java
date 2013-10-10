@@ -35,7 +35,7 @@ class MarkupPrettyPrinter implements PrettyPrinter, TidyMessageListener {
 	private RText rtext;
 	private Plugin plugin;
 	private int result;
-	private StringBuffer output;
+	private StringBuilder output;
 
 
 	MarkupPrettyPrinter(RText rtext, Plugin plugin) {
@@ -73,7 +73,7 @@ class MarkupPrettyPrinter implements PrettyPrinter, TidyMessageListener {
 		StringWriter sr = new StringWriter();
 
 		result = RESULT_OK;
-		output = new StringBuffer();
+		output = new StringBuilder();
 		Tidy tidy = new Tidy();
 		int spaces;
 
@@ -139,7 +139,7 @@ class MarkupPrettyPrinter implements PrettyPrinter, TidyMessageListener {
 	 */
 	private static final String replaceLeadingSpacesWithTabs(String text) {
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		BufferedReader r = new BufferedReader(new StringReader(text));
 		String line = null;

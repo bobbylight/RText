@@ -14,7 +14,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
@@ -433,7 +432,7 @@ public class Plugin extends AbstractPlugin {
 		prefs.java_showDescWindow = jls.getShowDescWindow();
 		prefs.java_autoActivation = jls.isAutoActivationEnabled();
 		prefs.java_autoActivationDelay = jls.getAutoActivationDelay();
-		List jars = jls.getJarManager().getClassFileSources();
+		List<LibraryInfo> jars = jls.getJarManager().getClassFileSources();
 		int count = jars==null ? 0 : jars.size();
 		if (count==0) {
 			prefs.java_classpath_jars = null;
@@ -443,7 +442,7 @@ public class Plugin extends AbstractPlugin {
 			prefs.java_classpath_jars = new String[count];
 			prefs.java_classpath_src = new String[count];
 			for (int i=0; i<count; i++) {
-				LibraryInfo info = (LibraryInfo)jars.get(i);
+				LibraryInfo info = jars.get(i);
 				String jarFile = info.getLocationAsString();
 				prefs.java_classpath_jars[i] = jarFile;
 				SourceLocation srcLocFile = info.getSourceLocation();
@@ -562,9 +561,8 @@ public class Plugin extends AbstractPlugin {
 				// component has added tracking icons to the gutter, this will
 				// remove those as well!
 				g.removeAllTrackingIcons();
-				List notices = textArea.getParserNotices();
-				for (Iterator i=notices.iterator(); i.hasNext(); ) {
-					ParserNotice notice = (ParserNotice)i.next();
+				List<ParserNotice> notices = textArea.getParserNotices();
+				for (ParserNotice notice : notices) {
 					int line = notice.getLine();
 					Icon icon = icons[notice.getLevel()];
 					try {

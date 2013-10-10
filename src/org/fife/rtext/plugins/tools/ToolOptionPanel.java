@@ -237,8 +237,8 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 
 		ToolManager tm = ToolManager.get();
 		model.setRowCount(0);
-		for (Iterator i=tm.getToolIterator(); i.hasNext(); ) {
-			Tool tool = (Tool)i.next();
+		for (Iterator<Tool> i=tm.getToolIterator(); i.hasNext(); ) {
+			Tool tool = i.next();
 			model.addRow(createRowData(tool));
 		}
 

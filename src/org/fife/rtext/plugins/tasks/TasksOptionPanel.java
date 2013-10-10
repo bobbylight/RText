@@ -185,7 +185,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 		plugin.setTaskWindowVisible(visibleCB.isSelected());
 		plugin.setTaskWindowPosition(locationCombo.getSelectedIndex());
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i=0; i<model.getRowCount(); i++) {
 			sb.append(model.getValueAt(i, 0));
 			if (i<model.getRowCount()-1) {

@@ -14,10 +14,8 @@ import java.awt.event.*;
 import java.net.*;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Set;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.Document;
@@ -119,10 +117,9 @@ public class RemoteFileChooser extends EscapableDialog
 		passLabel = createLabel(passField, msg, "Password");
 		encodingCombo = new JComboBox();
 		UIUtil.fixComboOrientation(encodingCombo);
-		Map availcs = Charset.availableCharsets();
-		Set keys = availcs.keySet();
-		for (Iterator i=keys.iterator(); i.hasNext(); ) {
-			encodingCombo.addItem(i.next());
+		Map<String, Charset> availcs = Charset.availableCharsets();
+		for (String key : availcs.keySet()) {
+			encodingCombo.addItem(key);
 		}
 		// Get the canonical name of the encoding, as that's what
 		// encodingCombo is populated with.

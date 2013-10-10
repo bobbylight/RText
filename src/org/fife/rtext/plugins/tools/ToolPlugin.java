@@ -343,8 +343,9 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 		}
 
 		if (ToolManager.get().getToolCount()>0) {
-			for (Iterator i=ToolManager.get().getToolIterator(); i.hasNext(); ){
-				Tool tool = (Tool)i.next();
+			for (Iterator<Tool> i=ToolManager.get().getToolIterator();
+					i.hasNext(); ){
+				Tool tool = i.next();
 				RunToolAction a = new RunToolAction(app, tool, getDockableWindow());
 				toolsMenu.add(createMenuItem(a));
 			}

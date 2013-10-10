@@ -41,11 +41,21 @@ public class FileProjectEntry extends AbstractProjectEntry {
 	}
 
 
-	public int compareTo(Object o) {
-		if (o instanceof FileProjectEntry) {
-			return file.compareTo(((FileProjectEntry)o).getFile());
+	public int compareTo(ProjectEntry entry) {
+		if (entry instanceof FileProjectEntry) {
+			return file.compareTo(entry.getFile());
 		}
 		return -1;
+	}
+
+
+	@Override
+	public final boolean equals(Object o) {
+		if (o==this) {
+			return true;
+		}
+		return o instanceof FileProjectEntry &&
+				compareTo((FileProjectEntry)o)==0;
 	}
 
 

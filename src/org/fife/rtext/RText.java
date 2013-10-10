@@ -12,6 +12,8 @@ package org.fife.rtext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -26,6 +28,9 @@ import javax.swing.text.Element;
 
 import org.fife.help.HelpDialog;
 import org.fife.jgoodies.looks.common.ShadowPopupFactory;
+import org.fife.rsta.ui.CollapsibleSectionPanel;
+import org.fife.rsta.ui.search.FindToolBar;
+import org.fife.rsta.ui.search.ReplaceToolBar;
 import org.fife.rtext.actions.ActionFactory;
 import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
@@ -1053,7 +1058,27 @@ public class RText extends AbstractPluggableGUIApplication
 				mainView = new RTextMDIView(RText.this, filesToOpen, properties);
 				break;
 		}
+
+//		CollapsibleSectionPanel csp = new CollapsibleSectionPanel();
+//		csp.add(mainView);
+//		mainView.findToolBar = new FindToolBar(mainView);
+//		mainView.findToolBar.setSearchContext(mainView.searchContext);
+//		mainView.replaceToolBar = new ReplaceToolBar(mainView);
+//		mainView.replaceToolBar.setSearchContext(mainView.searchContext);
+//		int ctrl = getToolkit().getMenuShortcutKeyMask();
+//		int shift = InputEvent.SHIFT_MASK;
+//		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_F, ctrl|shift);
+//		Action a = csp.addBottomComponent(ks, mainView.findToolBar);
+////		a.putValue(Action.NAME, "Show Find Search Bar");
+////		menu.add(new JMenuItem(a));
+//		ks = KeyStroke.getKeyStroke(KeyEvent.VK_H, ctrl|shift);
+//		a = csp.addBottomComponent(ks, mainView.replaceToolBar);
+////		a.putValue(Action.NAME, "Toggle Bottom Component 2");
+////		menu.add(new JMenuItem(a));
+
+
 		getContentPane().add(mainView);
+//getContentPane().add(csp);
 
 		splashScreen.updateStatus(getString("CreatingStatusBar"), 25);
 
@@ -1336,8 +1361,8 @@ public class RText extends AbstractPluggableGUIApplication
 			// in the copyData method below.
 			if (fromView.findDialog!=null) {
 
-				fromView.findDialog.changeActionListener(fromView, mainView);
-				fromView.replaceDialog.changeActionListener(fromView, mainView);
+				fromView.findDialog.changeSearchListener(fromView, mainView);
+				fromView.replaceDialog.changeSearchListener(fromView, mainView);
 
 				fromView.findDialog.addPropertyChangeListener(mainView);
 				fromView.replaceDialog.addPropertyChangeListener(mainView);

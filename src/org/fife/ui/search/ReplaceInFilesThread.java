@@ -57,7 +57,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 		// Then, do the search.
 		dialog.clearSearchResults();
 		File[] files = directory.listFiles();
-		List fileList = new ArrayList();
+		List<File> fileList = new ArrayList<File>();
 		fileList.addAll(Arrays.asList(files));
 
 		boolean checkSubfolders = dialog.getCheckSubfolders();
@@ -72,9 +72,9 @@ class ReplaceInFilesThread extends FindInFilesThread {
 			searchString = searchString.toLowerCase();
 
 		long startMillis = System.currentTimeMillis();
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		char[] buf = new char[4096];
-		StringBuffer replaceSB = new StringBuffer();
+		StringBuilder replaceSB = new StringBuilder();
 
 		// Keep looping while there are more files to search.
 		int numFiles = fileList.size();
@@ -86,7 +86,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 				return null;
 			}
 
-			File temp = (File)fileList.get(i);
+			File temp = fileList.get(i);
 			String fileFullPath = temp.getAbsolutePath();
 
 			// If temp is a regular file (i.e., non-directory) AND exists...
@@ -213,7 +213,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 
 				// Add any files in this subdirectory to the master list
 				// of files to search.
-				List moreFilesList = getFilesFromDirectory(temp);
+				List<File> moreFilesList = getFilesFromDirectory(temp);
 				int count = moreFilesList==null ? 0 : moreFilesList.size();
 				if (count>0) {
 					fileList.addAll(moreFilesList);
@@ -243,7 +243,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 	 */
 	private static final int doSearchNoRegex(CharSequence sb,
 			String searchString, String replaceString, boolean matchCase,
-			boolean wholeWord, String fileFullPath, StringBuffer replaceSB) {
+			boolean wholeWord, String fileFullPath, StringBuilder replaceSB) {
 
 		String origBuffer = sb.toString();
 		String buffer = origBuffer;
@@ -302,10 +302,10 @@ class ReplaceInFilesThread extends FindInFilesThread {
 	 *
 	 * @return The number of replacements.
 	 */
-	private static final int doSearchRegex(StringBuffer sb, String searchString,
+	private static final int doSearchRegex(StringBuilder sb, String searchString,
 					String replaceString, boolean matchCase,
 					boolean wholeWord, String fileFullPath,
-					StringBuffer replaceSB) {
+					StringBuilder replaceSB) {
 
 		int numMatches = 0;
 

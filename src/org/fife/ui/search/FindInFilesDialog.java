@@ -15,7 +15,6 @@ import java.awt.event.*;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
-import java.util.Vector;
 import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -25,10 +24,12 @@ import javax.swing.text.JTextComponent;
 import org.fife.rsta.ui.AssistanceIconPanel;
 import org.fife.rsta.ui.RComboBoxModel;
 import org.fife.rsta.ui.search.AbstractSearchDialog;
+import org.fife.rsta.ui.search.FindReplaceButtonsEnableResult;
 import org.fife.ui.FSATextField;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.StatusBar;
 import org.fife.ui.UIUtil;
+import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 
 
@@ -40,15 +41,6 @@ import org.fife.ui.rtextfilechooser.RDirectoryChooser;
  * @version 0.8
  */
 public class FindInFilesDialog extends AbstractSearchDialog {
-
-	/**
-	 * Property notification sent out when the user does a search.  This
-	 * notifies that the list of search strings in the "Find what" combo box
-	 * has changed.  Note that the "old" value will always be
-	 * <code>null</code>; the "new" value is a <code>Vector</code> of strings
-	 * containing the new values.
-	 */
-	public static final String	SEARCH_STRINGS_PROPERTY	= "FindInFilesDialog.searchStrings";
 
 	// Text fields in which the user enters parameters that are not
 	// defined in AbstractSearchDialog.
@@ -141,7 +133,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		conditionsPanel.setBorder(createTitledBorder(getString2("Conditions")));
 		conditionsPanel.add(caseCheckBox);
 		conditionsPanel.add(wholeWordCheckBox);
-		conditionsPanel.add(regExpCheckBox);
+		conditionsPanel.add(regexCheckBox);
 
 		// Make a "Report detail" panel.
 		Box detailEtcPanel = createDetailsPanel();
@@ -242,34 +234,29 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		String command = e.getActionCommand();
 
 		// If the user selects the "Find" button...
-		if (command.equals("FindInFiles")) {
+		if ("FindInFiles".equals(command)) {
 
 			// Add the "Find What" item to the combo box's list.  Then, if
 			// they just searched for an item that's already in the list
 			// other than the first, move it to the first position.
 			String item = getTextComponent(findTextCombo).getText();
 			findTextCombo.addItem(item); // Ensures item is at index 0.
-			findTextCombo.setSelectedIndex(0);
+			context.setSearchFor(getSearchString());
 
 			// Add the "In Files" item to the combo box's list.  Then, if
 			// they just searched for an item that's already in the list
 			// other than the first, move it to the first position.
 			item = getTextComponent(inFilesComboBox).getText();
 			inFilesComboBox.addItem(item); // Ensures item is at index 0.
-			inFilesComboBox.setSelectedIndex(0);
-
-			// Update our "master list" of search strings.
-			firePropertyChange(SEARCH_STRINGS_PROPERTY,
-							null, getSearchStrings());
 
 			// Actually perform the search.
 			doFindInFiles();
 
-		} // End of if (command.equals("FindInFiles")).
+		}
 
 
 		// If the user selects the "Browse..." button...
-		else if (command.equals("Browse")) {
+		else if ("Browse".equals(command)) {
 			RDirectoryChooser chooser = new RDirectoryChooser(this);
 			String dirName = inFolderTextField.getText().trim();
 			if (dirName.length()>0) {
@@ -286,7 +273,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		}
 
 		// If the user selects the Close/Stop button...
-		else if (command.equals("Close")) {
+		else if ("Close".equals(command)) {
 			FindInFilesThread workerThread = getWorkerThread();
 			if (workerThread!=null) { // Search going on => stop search.
 				workerThread.interrupt();
@@ -297,12 +284,12 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 			}
 		}
 
-		else if (command.equals("Subfolders")) {
+		else if ("Subfolders".equals(command)) {
 			boolean search = subfoldersCheckBox.isSelected();
 			((FindInFilesSearchContext)context).setSearchSubfolders(search);
 		}
 
-		else if (command.equals("Verbose")) {
+		else if ("Verbose".equals(command)) {
 			boolean verbose = verboseCheckBox.isSelected();
 			((FindInFilesSearchContext)context).setVerbose(verbose);
 		}
@@ -502,6 +489,17 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 
 	/**
+	 * Overridden to return the "find in files"-specific search context.
+	 *
+	 * @return The search context.
+	 */
+	@Override
+	protected SearchContext createDefaultSearchContext() {
+		return new FindInFilesSearchContext();
+	}
+
+
+	/**
 	 * Returns the thread that will do the searching.
 	 *
 	 * @param directory The directory to search in.
@@ -532,7 +530,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 		// Next, if we're doing a regex search, ensure we have a valid
 		// regex to search for.
-		if (regExpCheckBox.isSelected()) {
+		if (regexCheckBox.isSelected()) {
 			try {
 				Pattern.compile(getSearchString());
 			} catch (Exception e) {
@@ -597,6 +595,17 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 */
 	String getString2(String key) {
 		return msg.getString(key);
+	}
+
+
+	/**
+	 * Returns the text editor component for the specified combo box.
+	 *
+	 * @param combo The combo box.
+	 * @return The text component.
+	 */
+	protected static final JTextComponent getTextComponent(JComboBox combo) {
+		return org.fife.rsta.ui.UIUtil.getTextComponent(combo);
 	}
 
 
@@ -681,22 +690,6 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 
 	/**
-	 * Returns a <code>Vector</code> containing all of the search
-	 * strings in the "Find what" combo box's history.
-	 *
-	 * @return The search strings in the Find combo box's history.
-	 */
-	@Override
-	public Vector getSearchStrings() {
-		int itemCount = findTextCombo.getItemCount();
-		Vector vector = new Vector(itemCount);
-		for (int i=0; i<itemCount; i++)
-			vector.add(findTextCombo.getItemAt(i));
-		return vector;
-	}
-
-
-	/**
 	 * Returns whether each line that matched the search criteria should be
 	 * shown (as opposed to just a match count for each file).
 	 *
@@ -716,7 +709,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 * @see #getMatchWholeWord
 	 */
 	boolean getUseRegEx() {
-		return regExpCheckBox.isSelected();
+		return regexCheckBox.isSelected();
 	}
 
 
@@ -740,16 +733,16 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 * @return Whether the buttons should be enabled.
 	 */
 	@Override
-	protected EnableResult handleToggleButtons() {
+	protected FindReplaceButtonsEnableResult handleToggleButtons() {
 
-		EnableResult er = super.handleToggleButtons();
+		FindReplaceButtonsEnableResult er = super.handleToggleButtons();
 		boolean enable = er.getEnable();
 		findButton.setEnabled(enable && isEverythingFilledIn());
 		JTextComponent tc = getTextComponent(findTextCombo);
 		tc.setForeground(enable ?
 					UIManager.getColor("TextField.foreground") : Color.RED);
 
-		String tooltip = er.getToolTip();
+		String tooltip = er.getError();
 		String status = defaultStatusText;
 		if (tooltip!=null) {
 			status = tooltip;
@@ -790,6 +783,9 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	@Override
 	protected void refreshUIFromContext() {
 		super.refreshUIFromContext();
+		if (this.caseCheckBox==null) {
+			return; // First time through, UI not realized yet
+		}
 		FindInFilesSearchContext fifsc = (FindInFilesSearchContext)context;
 		subfoldersCheckBox.setSelected(fifsc.getSearchSubfolders());
 		verboseCheckBox.setSelected(fifsc.getVerbose());
@@ -920,6 +916,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	@Override
 	public void setVisible(boolean visible) {
 
+		refreshUIFromContext();
 		super.setVisible(visible);
 
 		// If they're making the dialog visible, make sure the status text

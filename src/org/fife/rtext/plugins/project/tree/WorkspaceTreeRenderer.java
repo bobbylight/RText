@@ -40,7 +40,7 @@ class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
 			String clazzName =
 				"org.fife.rtext.plugins.project.tree.SubstanceWorkspaceTreeRenderer";
 			try {
-				Class clazz = Class.forName(clazzName);
+				Class<?> clazz = Class.forName(clazzName);
 				return (TreeCellRenderer)clazz.newInstance();
 			} catch (Exception e) {
 				e.printStackTrace();

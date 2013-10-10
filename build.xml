@@ -46,7 +46,7 @@
 	<!-- Set global properties for this build. -->
 	<property name="app-name"         value="RText"/>
 	<property name="app-name-small"   value="rtext"/>
-	<property name="version"          value="2.0.7"/>
+	<property name="version"          value="2.5.1"/>
 	<property name="source-dir"       location="src"/>
 	<property name="common-dir"       location="../FifeCommon"/>
 	<property name="class-dir"        location="ant-classes"/>
@@ -57,7 +57,7 @@
 	<property name="compiler"         value="Robert Futrell"/>
 	<property name="debug"            value="true"/>
 	<property name="debuglevel"       value="lines,vars,source"/>
-	<property name="java-level"       value="1.4"/>
+	<property name="java-level"       value="1.5"/>
 	<property file="build.properties"/>
 
 
@@ -77,8 +77,8 @@
 		<!-- Build RText-specific classes. -->
 		<delete includeEmptyDirs="true" quiet="true" dir="${class-dir}"/>
 		<mkdir dir="${class-dir}"/>
-		<!-- Most stuff only requires Java 1.4. -->
-		<echo>Compiling required classes with: ${java.version} (1.4 is recommended)</echo>
+		<!-- Most stuff only requires Java 1.5. -->
+		<echo>Compiling required classes with: ${java.version} (1.5 is recommended)</echo>
 		<javac srcdir="${source-dir}" destdir="${class-dir}"
 				classpathref="project.class.path"
 				deprecation="yes"

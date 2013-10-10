@@ -123,7 +123,7 @@ panel.add(editor);
 	}
 
 
-	private static final void appendLibrary(StringBuffer sb, String name,
+	private static final void appendLibrary(StringBuilder sb, String name,
 			String url, String desc) {
 		sb.append("<tr><td><b>").append(name).append("</b></td>");
 		sb.append("<td><a href=\"").append(url).append("\">");
@@ -146,7 +146,7 @@ panel.add(editor);
 		JPanel panel = UIUtil.newTabbedPanePanel(new BorderLayout());
 		panel.setBorder(UIUtil.getEmpty5Border());
 
-		StringBuffer sb = new StringBuffer("<html><table>");
+		StringBuilder sb = new StringBuilder("<html><table>");
 		appendLibrary(sb, "RSyntaxTextArea:",
 				"http://fifesoft.com/rsyntaxtextarea",
 				msg.getString("Desc.RSyntaxTextArea"));

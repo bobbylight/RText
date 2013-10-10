@@ -236,7 +236,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	 * @return The new <code>PERL5LIB</code> value.
 	 */
 	private String createPerl5LibFromTable() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		int rowCount = perl5Table.getTable().getRowCount();
 		for (int row=0; row<rowCount; row++) {
 			sb.append(perl5Table.getTable().getValueAt(row, 0));

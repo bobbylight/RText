@@ -52,21 +52,21 @@ public class Workspace implements ModelEntity {
 	private ProjectPlugin plugin;
 	private File file;
 	private String name;
-	private List projects;
+	private List<Project> projects;
 
 
 	public Workspace(ProjectPlugin plugin, File file) {
 		this.plugin = plugin;
 		this.file = file;
 		this.name = getNameFromFile(file);//setName(getNameFromFile(file));
-		projects = new ArrayList();
+		projects = new ArrayList<Project>();
 	}
 
 
 	public void accept(WorkspaceVisitor visitor) {
 		visitor.visit(this);
-		for (Iterator i=getProjectIterator(); i.hasNext(); ) {
-			((Project)i.next()).accept(visitor);
+		for (Project project : projects) {
+			project.accept(visitor);
 		}
 		visitor.postVisit(this);
 	}
@@ -90,8 +90,7 @@ public class Workspace implements ModelEntity {
 	 * @return Whether a project with that name already exists.
 	 */
 	public boolean containsProjectNamed(String name) {
-		for (Iterator i=getProjectIterator(); i.hasNext(); ) {
-			Project project = (Project)i.next();
+		for (Project project : projects) {
 			if (name.equals(project.getName())) {
 				return true;
 			}
@@ -142,7 +141,7 @@ public class Workspace implements ModelEntity {
 	}
 
 
-	public Iterator getProjectIterator() {
+	public Iterator<Project> getProjectIterator() {
 		return projects.iterator();
 	}
 

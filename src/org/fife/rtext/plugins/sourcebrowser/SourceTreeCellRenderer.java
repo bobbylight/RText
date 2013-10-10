@@ -46,7 +46,7 @@ class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
 	 */
 	private SourceTreeCellRenderer(DefaultSourceTree tree) {
 		this.tree = tree;
-		Class clazz = getClass();
+		Class<?> clazz = getClass();
 		blueBullet = new ImageIcon(clazz.getResource(BLUE_BULLET));
 		greenBullet = new ImageIcon(clazz.getResource(GREEN_BULLET));
 	}
@@ -66,10 +66,10 @@ class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
 			String clazzName =
 				"org.fife.rtext.plugins.sourcebrowser.SubstanceSourceTreeCellRenderer";
 			try {
-				Class clazz = Class.forName(clazzName);
-				Constructor cons = clazz.getConstructor(
-						new Class[] { DefaultSourceTree.class });
-				return (TreeCellRenderer)cons.newInstance(new Object[] {tree});
+				Class<?> clazz = Class.forName(clazzName);
+				Constructor<?> cons = clazz.getConstructor(
+						DefaultSourceTree.class);
+				return (TreeCellRenderer)cons.newInstance(tree);
 			} catch (Exception e) {
 				e.printStackTrace();
 				// Fall through

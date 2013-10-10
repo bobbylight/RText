@@ -51,7 +51,7 @@ class LanguageListCellRenderer extends DefaultListCellRenderer {
 		if (SubstanceUtils.isSubstanceInstalled()) {
 			try {
 				// Use reflection to avoid hard dependency on Substance.
-				Class clazz = Class.forName(SUBSTANCE_RENDERER_CLASS);
+				Class<?> clazz = Class.forName(SUBSTANCE_RENDERER_CLASS);
 				return (ListCellRenderer)clazz.newInstance();
 			} catch (Exception e) { // Never happens
 				e.printStackTrace();

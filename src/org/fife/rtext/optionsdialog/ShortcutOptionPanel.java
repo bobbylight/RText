@@ -196,10 +196,10 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 
 		masterActionList = app.getActions();
 
-		Arrays.sort(masterActionList, new Comparator() {
-			public int compare(Object o1, Object o2) {
-				String name1 = (String)((Action)o1).getValue(Action.NAME);
-				String name2 = (String)((Action)o2).getValue(Action.NAME);
+		Arrays.sort(masterActionList, new Comparator<Action>() {
+			public int compare(Action a1, Action a2) {
+				String name1 = (String)a1.getValue(Action.NAME);
+				String name2 = (String)a2.getValue(Action.NAME);
 				if (name1==null) {
 					if (name2==null)
 						return 0;

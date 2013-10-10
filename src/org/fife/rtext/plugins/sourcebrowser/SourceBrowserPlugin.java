@@ -382,7 +382,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	protected String getHTMLForLine(int line) {
 		RSyntaxTextArea textArea = owner.getMainView().getCurrentTextArea();
 		Token t = textArea.getTokenListForLine(line);
-		StringBuffer text = new StringBuffer("<html>");
+		StringBuilder text = new StringBuilder("<html>");
 		while (t!=null && t.isPaintable()) {
 			t.appendHTMLRepresentation(text, textArea, true);
 			t = t.getNextToken();

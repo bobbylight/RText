@@ -49,7 +49,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	private JLabel dirLabel;
 	private BackAction backAction;
 	private ForwardAction forwardAction;
-	private List rootHistory;
+	private List<File> rootHistory;
 	private int rootHistoryOffs;
 
 	static final String BUNDLE_NAME			=
@@ -82,7 +82,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		DockableWindow wind = createDockableWindow(prefs);
 		putDockableWindow(name, wind);
 
-		rootHistory = new ArrayList();
+		rootHistory = new ArrayList<File>();
 		rootHistory.add(null);
 		rootHistoryOffs = 0;
 

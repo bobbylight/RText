@@ -38,9 +38,9 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  */
 class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 
-	private HashMap map;	// Hash map of array lists (tag type=>array list).
+	private Map<String, List<TagEntry>> map;
 	private SourceBrowserPlugin plugin;
-	private ArrayList[] arrayListBuffer;	// Cached array lists for performance.
+	private List<List<TagEntry>> arrayListBuffer;	// Cached array lists for performance.
 
 	private int maxTime;	// Milliseconds to wait for ctags to return.
 	private RTextEditorPane textArea;
@@ -49,11 +49,11 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	private DefaultSourceTree tree;
 
 	private static final int MAX_NUM_HASH_MAPS = 12;	// Longest string length in tagTypesMap.
-	private static final Map tagTypesMap;
+	private static final Map<String, String> tagTypesMap;
 
 	static {
 
-		tagTypesMap = new HashMap();
+		tagTypesMap = new HashMap<String, String>();
 		tagTypesMap.put(SYNTAX_STYLE_NONE,				"");
 		tagTypesMap.put(SYNTAX_STYLE_ACTIONSCRIPT,		"fcmpvx");
 		tagTypesMap.put(SYNTAX_STYLE_ASSEMBLER_X86,		"");
@@ -97,12 +97,12 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	public SourceBrowserThread(SourceBrowserPlugin plugin) {
 
 		this.plugin = plugin;
-		map = new HashMap();
+		map = new HashMap<String, List<TagEntry>>();
 
 		// Create a cache of array lists to use for performance.
-		arrayListBuffer = new ArrayList[MAX_NUM_HASH_MAPS];
+		arrayListBuffer = new ArrayList<List<TagEntry>>(MAX_NUM_HASH_MAPS);
 		for (int i=0; i<MAX_NUM_HASH_MAPS; i++) {
-			arrayListBuffer[i] = new ArrayList();
+			arrayListBuffer.add(new ArrayList<TagEntry>());
 		}
 
 	}
@@ -293,7 +293,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	private static void addTagTypeNode(SourceTreeNode root, String title,
 										Object contents, Icon icon) {
 
-		List contentsList = (List)contents;
+		List<?> contentsList = (List<?>)contents;
 		GroupTreeNode node = new GroupTreeNode(icon);
 
 		int size = 0;
@@ -321,12 +321,12 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 
 		// Create data structures in which we can store the tags.
 		map.clear();
-		String knownTagTypes = (String)tagTypesMap.get(style);
+		String knownTagTypes = tagTypesMap.get(style);
 		int count = knownTagTypes.length();
 		for (int i=0; i<count; i++) {
-			arrayListBuffer[i].clear();
+			arrayListBuffer.get(i).clear();
 			String tagType = knownTagTypes.substring(i,i+1);
-			map.put(tagType, arrayListBuffer[i]);
+			map.put(tagType, arrayListBuffer.get(i));
 		}
 
 		// Create a command line to run ctags.
@@ -396,7 +396,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 		try {
 			while ((line=r.readLine()) != null) {
 				TagEntry entry = new SourceBrowserPlugin.ExtendedTagEntry(line);
-				ArrayList list = (ArrayList)map.get(entry.kind);
+				List<TagEntry> list = map.get(entry.kind);
 				if (list!=null) {	// A supported tag type for this language.
 					list.add(entry);
 				}

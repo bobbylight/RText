@@ -48,6 +48,7 @@ import org.fife.ui.rtextarea.Macro;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextAreaEditorKit;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.ui.search.*;
 
@@ -70,7 +71,7 @@ import org.fife.ui.search.*;
  * @version 0.5
  */
 public abstract class AbstractMainView extends JPanel
-		implements PropertyChangeListener, ActionListener,
+		implements PropertyChangeListener, ActionListener, SearchListener,
 				FindInFilesListener, HyperlinkListener {
 
 	public static final int DOCUMENT_SELECT_TOP		= JTabbedPane.TOP;
@@ -96,9 +97,11 @@ public abstract class AbstractMainView extends JPanel
 	private RTextEditorPane currentTextArea;			// Currently active text area.
 
 	public FindInFilesSearchContext searchContext;
-	public FindDialog findDialog;					// The dialog that lets you search for text.
-	public ReplaceDialog replaceDialog;			// The dialog that lets you replace text.
-	public Vector searchStrings;					// The strings to go in the "Find What" combo boxes.
+	public FindDialog findDialog;
+	public ReplaceDialog replaceDialog;
+	public FindToolBar findToolBar;
+	public ReplaceToolBar replaceToolBar;
+
 	private boolean lineNumbersEnabled;			// If true, line numbers are visible on the documents.
 	private boolean lineWrapEnabled;				// If true, word wrap is enabled for all documents.
 	private String defaultLineTerminator;			// Line terminator of new text files.
@@ -237,23 +240,8 @@ public abstract class AbstractMainView extends JPanel
 
 		String command = e.getActionCommand();
 
-		// If they click the "Find" button on the Find/Replace dialog...
-		if (command.equals("FindNext")) {
-			owner.getAction(RText.FIND_NEXT_ACTION).actionPerformed(null);
-		}
-
-		// If they click on the "Replace" button on the Replace dialog...
-		else if (command.equals("Replace")) {
-			owner.getAction(RText.REPLACE_NEXT_ACTION).actionPerformed(null);
-		}
-
-		// If they clicked on the "Replace All" button on the Replace dialog...
-		else if (command.equals("ReplaceAll")) {
-			owner.getAction(RText.REPLACE_ALL_ACTION).actionPerformed(null);
-		}
-
 		// If a file was found to be modified outside of the editor...
-		else if (command.startsWith("FileModified. ")) {
+		if (command.startsWith("FileModified. ")) {
 			handleFileModifiedEvent(command);
 		}
 
@@ -423,7 +411,7 @@ public abstract class AbstractMainView extends JPanel
 			// enough to get to and complete this line).
 			checkForModification = false;
 
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			for (int i=0; i<getNumDocuments(); i++) {
 				RTextEditorPane textArea = getRTextEditorPaneAt(i);
 				if (textArea.isModifiedOutsideEditor()) {
@@ -575,7 +563,6 @@ public abstract class AbstractMainView extends JPanel
 		findDialog		= fromPanel.findDialog;
 		replaceDialog		= fromPanel.replaceDialog;
 		searchContext		= fromPanel.searchContext;
-		searchStrings		= fromPanel.searchStrings;
 		lineNumbersEnabled	= fromPanel.lineNumbersEnabled;
 		lineWrapEnabled	= fromPanel.lineWrapEnabled;
 
@@ -1081,7 +1068,7 @@ public abstract class AbstractMainView extends JPanel
 	 * @see #setCodeFoldingEnabledFor(String, boolean)
 	 */
 	public String getCodeFoldingEnabledForString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		Set<Map.Entry<String, Boolean>> entrySet =
 				codeFoldingEnabledStates.entrySet();
 		for (Map.Entry<String, Boolean> entry : entrySet) {
@@ -2161,7 +2148,6 @@ public abstract class AbstractMainView extends JPanel
 
 		syntaxFilters = new SyntaxFilters(prefs.syntaxFiltersString);
 
-		searchStrings = new Vector(0);
 		searchContext = new FindInFilesSearchContext();
 
 		setHighlightModifiedDocumentDisplayNames(prefs.highlightModifiedDocNames);
@@ -2553,15 +2539,6 @@ public abstract class AbstractMainView extends JPanel
 						e.getOldValue(), e.getNewValue());
 		}
 
-		else if (propertyName.equals(FindDialog.MARK_ALL_PROPERTY)) {
-			currentTextArea.clearMarkAllHighlights();
-		}
-
-		// This is exclusive to the FindInFilesDialog.
-		else if (propertyName.equals(FindInFilesDialog.SEARCH_STRINGS_PROPERTY)) {
-			searchStrings = (Vector)e.getNewValue();
-		}
-
 	}
 
 
@@ -2853,6 +2830,31 @@ public abstract class AbstractMainView extends JPanel
 
 		return true;
 
+	}
+
+
+	/**
+	 * Called when a search event is received from the Find/Replace dialogs or
+	 * tool bars.
+	 *
+	 * @param e The search event.
+	 */
+	public void searchEvent(SearchEvent e) {
+		switch (e.getType()) {
+			case MARK_ALL:
+				RTextEditorPane textArea = getCurrentTextArea();
+				SearchEngine.markAll(textArea, searchContext);
+				break;
+			case FIND:
+				owner.getAction(RText.FIND_NEXT_ACTION).actionPerformed(null);
+				break;
+			case REPLACE:
+				owner.getAction(RText.REPLACE_NEXT_ACTION).actionPerformed(null);
+				break;
+			case REPLACE_ALL:
+				owner.getAction(RText.REPLACE_ALL_ACTION).actionPerformed(null);
+				break;
+		}
 	}
 
 

@@ -129,7 +129,6 @@ class FindAction extends StandardAction {
 		RText rtext = (RText)getApplication();
 		AbstractMainView mainView = rtext.getMainView();
 		dialog.setSearchContext(mainView.searchContext);
-		dialog.addPropertyChangeListener(FindDialog.MARK_ALL_PROPERTY,mainView);
 		rtext.registerChildWindowListeners(dialog);
 	}
 

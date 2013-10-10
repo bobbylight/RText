@@ -64,7 +64,7 @@ public class StatusBar extends org.fife.ui.StatusBar
 	// once for performance.  Note that this assumes calls into this
 	// StatusBar that update the row/column indicator are all from the
 	// EDT thread.
-	private StringBuffer rcBuf;
+	private StringBuilder rcBuf;
 
 
 	/**
@@ -204,7 +204,7 @@ public class StatusBar extends org.fife.ui.StatusBar
 		rowColumnText1 = rowColumnText.substring(0, min);
 		rowColumnText2 = rowColumnText.substring(min+3, max);
 		rowColumnText3 = rowColumnText.substring(max+3);
-		rcBuf = new StringBuffer();
+		rcBuf = new StringBuilder();
 	}
 
 
@@ -365,7 +365,7 @@ public class StatusBar extends org.fife.ui.StatusBar
 	 */
 	private void updateRowColumnDisplay() {
 		if (rowColumnIndicatorVisible) {
-			//StringBuffer rcBuf = new StringBuffer(rowColumnText1);
+			//StringBuilder rcBuf = new StringBuilder(rowColumnText1);
 			rcBuf.setLength(0);
 			rcBuf.append(rowColumnText1).append(row).append(rowColumnText2);
 			rcBuf.append(column).append(rowColumnText3);

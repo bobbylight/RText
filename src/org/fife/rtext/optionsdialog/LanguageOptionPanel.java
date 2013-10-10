@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -57,7 +58,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 
 	private DefaultListModel listModel;
 	private JList languageList;	// Contains all available languages.
-	private HashMap languageMap;
+	private Map<String, String> languageMap;
 	private GUIApplication app;
 
 	private static final String LANGUAGE_PROPERTY	= "language";
@@ -104,7 +105,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 		listModel = new DefaultListModel();
 		languageList = new JList(listModel);
 		languageList.setCellRenderer(LanguageListCellRenderer.create());
-		languageMap = new HashMap(1);
+		languageMap = new HashMap<String, String>(1);
 		try {
 			File file = new File(app.getInstallLocation(), FILE_NAME);
 			getLocalizations(file);
@@ -211,7 +212,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	public final String getSelectedLanguage() {
 		IconTextInfo iti = (IconTextInfo)languageList.getSelectedValue();
 		String language = iti.getText();
-		String code = (String)languageMap.get(language);
+		String code = languageMap.get(language);
 		if (code==null) {
 			app.displayException(
 				new InternalError("Couldn't find language code for " +
@@ -344,7 +345,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 		for (int i=0; i<count; i++) {
 			Object obj = listModel.get(i);
 			String langName = ((IconTextInfo)obj).getText();
-			String langValue = (String)languageMap.get(langName);
+			String langValue = languageMap.get(langName);
 			if (language.startsWith(langValue)) {
 				languageList.setSelectedIndex(i);
 				return;
@@ -356,7 +357,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 		for (int i=0; i<count; i++) {
 			Object obj = listModel.get(i);
 			String langName = ((IconTextInfo)obj).getText();
-			String langValue = (String)languageMap.get(langName);
+			String langValue = languageMap.get(langName);
 			if (langValue.equals("en")) {
 				languageList.setSelectedIndex(i);
 				return;

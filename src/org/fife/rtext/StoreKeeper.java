@@ -11,6 +11,8 @@
 package org.fife.rtext;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 
@@ -24,7 +26,7 @@ import javax.swing.SwingUtilities;
  */
 public class StoreKeeper {
 
-	private static ArrayList rtextInstances;
+	private static List<RText> rtextInstances;
 
 
 	/**
@@ -34,7 +36,7 @@ public class StoreKeeper {
 	 */
 	public static void addRTextInstance(RText rtext) {
 		if (rtextInstances==null)
-			rtextInstances = new ArrayList(1);
+			rtextInstances = new ArrayList<RText>(1);
 		rtextInstances.add(rtext);
 	}
 
@@ -76,7 +78,7 @@ public class StoreKeeper {
 			public void run() {
 				int count = getInstanceCount();
 				for (int i=0; i<count; i++) {
-					((RText)rtextInstances.get(i)).updateLookAndFeel(lnf);
+					rtextInstances.get(i).updateLookAndFeel(lnf);
 				}
 			}
 		});

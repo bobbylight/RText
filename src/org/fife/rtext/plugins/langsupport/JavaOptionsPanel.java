@@ -18,7 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
@@ -330,9 +329,9 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 		model.setRowCount(0);
 
-		List jars = jarMan.getClassFileSources();
-		for (Iterator i=jars.iterator(); i.hasNext(); ) {
-			JarLibraryInfo info = (JarLibraryInfo)i.next();
+		List<LibraryInfo> jars = jarMan.getClassFileSources();
+		for (LibraryInfo li : jars) {
+			JarLibraryInfo info = (JarLibraryInfo)li;
 			File jar = info.getJarFile();
 			SourceLocation sourceLoc = info.getSourceLocation();
 			String source = sourceLoc!=null ? sourceLoc.getLocationAsString() : null;
