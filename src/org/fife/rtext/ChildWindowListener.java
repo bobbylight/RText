@@ -144,7 +144,7 @@ class ChildWindowListener extends ComponentAdapter
 	 *
 	 * @param window The window to refresh.
 	 */
-	private void refreshTranslucency(Window window) {
+	void refreshTranslucency(Window window) {
 
 		// The user has turned off this feature.
 		if (!app.isSearchWindowOpacityEnabled()) {
@@ -187,13 +187,7 @@ class ChildWindowListener extends ComponentAdapter
 	 */
 	public void refreshTranslucencies() {
 		AbstractMainView view = app.getMainView();
-		// A window must be showing for its bounds to be queried.
-		if (view.findDialog!=null && view.findDialog.isShowing()) {
-			refreshTranslucency(view.findDialog);
-		}
-		if (view.replaceDialog!=null && view.replaceDialog.isShowing()) {
-			refreshTranslucency(view.replaceDialog);
-		}
+		view.getSearchManager().refreshDialogTranslucencies(this);
 	}
 
 

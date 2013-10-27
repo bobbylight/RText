@@ -26,6 +26,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
+import org.fife.rtext.SearchManager.SearchingMode;
 import org.fife.ui.StatusBar;
 import org.fife.ui.app.GUIApplicationPreferences;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -140,6 +141,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public int searchWindowOpacityRule;
 	public boolean dropShadowsInEditor;
 	public String codeFoldingEnabledFor;
+	public boolean useSearchDialogs;
 
 	public KeyStroke[] mainViewActionAccelerators;
 
@@ -263,6 +265,9 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.searchWindowOpacityRule	= rtext.getSearchWindowOpacityRule();
 		props.dropShadowsInEditor		= RTextUtilities.getDropShadowsEnabledInEditor();
 		props.codeFoldingEnabledFor		= mainView.getCodeFoldingEnabledForString();
+
+		props.useSearchDialogs			= mainView.getSearchManager().
+								getSearchingMode()==SearchingMode.DIALOGS;
 
 		// Save the actions.
 		props.accelerators = new HashMap<String, KeyStroke>();
@@ -406,7 +411,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 			props.gutterBorderColor			= new Color(
 				prefs.getInt("gutterBorderColor", props.gutterBorderColor.getRGB()));
 
-			// Get all properties associated with the MainPanel class.
+			// Get all properties associated with the MainView class.
 			prefs = Preferences.userNodeForPackage(AbstractMainView.class);
 			props.bracketMatchingEnabled		= prefs.getBoolean("bracketMatchingEnabled", props.bracketMatchingEnabled);
 			props.matchBothBrackets				= prefs.getBoolean("matchBothBrackets", props.matchBothBrackets);
@@ -524,6 +529,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 			props.searchWindowOpacityRule = prefs.getInt("searchWindowOpacityRule", props.searchWindowOpacityRule);
 			props.dropShadowsInEditor = prefs.getBoolean("dropShadowsInEditor", getDefaultDropShadowsInEditorValue());
 			props.codeFoldingEnabledFor = prefs.get("codeFoldingEnabledFor", props.codeFoldingEnabledFor);
+			props.useSearchDialogs = prefs.getBoolean("useSearchDialogs", props.useSearchDialogs);
 
 			// Get all properties associated with the RTextMenuBar class.
 			prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -695,6 +701,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs.putInt("searchWindowOpacityRule",			searchWindowOpacityRule);
 		prefs.putBoolean("dropShadowsInEditor",			dropShadowsInEditor);
 		prefs.put("codeFoldingEnabledFor",				codeFoldingEnabledFor);
+		prefs.putBoolean("useSearchDialogs",			useSearchDialogs);
 
 		// Save all properties related to the RTextMenuBar class.
 		prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
@@ -818,6 +825,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 										TRANSLUCENT_WHEN_OVERLAPPING_APP;
 		dropShadowsInEditor = getDefaultDropShadowsInEditorValue();
 		codeFoldingEnabledFor = "";
+		useSearchDialogs = true;
 
 		accelerators = new HashMap<String, KeyStroke>();
 		for (int i=0; i<actionNames.length; i++) {

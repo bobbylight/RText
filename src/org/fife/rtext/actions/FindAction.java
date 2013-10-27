@@ -14,12 +14,8 @@ import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.JButton;
 
-import org.fife.rsta.ui.search.AbstractFindReplaceDialog;
-import org.fife.rsta.ui.search.FindDialog;
-import org.fife.rsta.ui.search.ReplaceDialog;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextEditorPane;
 import org.fife.ui.app.StandardAction;
 
 
@@ -66,7 +62,6 @@ class FindAction extends StandardAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		ensureSearchDialogsCreated();
 		RText rtext = (RText)getApplication();
 
 		// If the QuickSearch bar is visible, shift focus to that instead
@@ -80,56 +75,8 @@ class FindAction extends StandardAction {
 		}
 
 		AbstractMainView mainView = rtext.getMainView();
-		ensureSearchDialogsCreated();
-		FindDialog findDialog = mainView.findDialog;
-		ReplaceDialog replaceDialog = mainView.replaceDialog;
+		mainView.getSearchManager().showFindUI();
 
-		if (replaceDialog.isVisible()) {
-			replaceDialog.setVisible(false);
-		}
-
-		if (!findDialog.isVisible()) {
-			// If the current document has selected text, use the selection
-			// as the value to search for.
-			RTextEditorPane editor = mainView.getCurrentTextArea();
-			String selectedText = editor.getSelectedText();
-			if (selectedText!=null) {
-				findDialog.setSearchString(selectedText);
-			}
-			findDialog.setVisible(true);
-		}
-		else {
-			findDialog.requestFocus();
-		}
-
-	}
-
-
-	/**
-	 * Ensures the find and replace dialogs are created.
-	 */
-	protected void ensureSearchDialogsCreated() {
-		RText rtext = (RText)getApplication();
-		AbstractMainView mainView = rtext.getMainView();
-		if (mainView.replaceDialog==null) {
-			mainView.findDialog = new FindDialog(rtext, mainView);
-			configureSearchDialog(mainView.findDialog);
-			mainView.replaceDialog = new ReplaceDialog(rtext, mainView);
-			configureSearchDialog(mainView.replaceDialog);
-		}
-	}
-
-
-	/**
-	 * Configures the Find or Replace dialog.
-	 *
-	 * @param dialog Either the Find or Replace dialog.
-	 */
-	private void configureSearchDialog(AbstractFindReplaceDialog dialog) {
-		RText rtext = (RText)getApplication();
-		AbstractMainView mainView = rtext.getMainView();
-		dialog.setSearchContext(mainView.searchContext);
-		rtext.registerChildWindowListeners(dialog);
 	}
 
 

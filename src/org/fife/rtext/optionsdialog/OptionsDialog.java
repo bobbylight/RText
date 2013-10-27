@@ -72,6 +72,10 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		panel.addChildPanel(new SpellingOptionPanel());
 		panel.addChildPanel(new TemplateOptionPanel());
 
+		panel = new SearchOptionPanel(rtext, msg);
+		setIcon(panel, "search.png");
+		panels.add(panel);
+
 		panel = new RTextFileChooserOptionPanel();
 		setIcon(panel, "file_chooser.png");
 		panels.add(panel);

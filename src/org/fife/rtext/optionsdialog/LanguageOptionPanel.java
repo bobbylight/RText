@@ -125,10 +125,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Applies the settings entered into this dialog on the specified
-	 * application.
-	 *
-	 * @param owner The application.
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
@@ -224,11 +221,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 
 	
 	/**
-	 * Returns the <code>JComponent</code> at the "top" of this Options
-	 * panel.  This is the component that will receive focus if the user
-	 * switches to this Options panel in the Options dialog.  As an added
-	 * bonus, if this component is a <code>JTextComponent</code>, its
-	 * text is selected for easy changing.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public JComponent getTopJComponent() {
@@ -368,11 +361,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets the values displayed by this panel to reflect those in the
-	 * application.  Child panels are not handled.
-	 *
-	 * @param owner The parent application.
-	 * @see #setValues(Frame)
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {

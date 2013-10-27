@@ -636,7 +636,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 			RTextScrollPane sp = (RTextScrollPane)((JPanel)component).
 													getComponent(0);
 			this.setFrameIcon(getIconFor(sp));
-			java.awt.Container contentPane = getContentPane();
+			Container contentPane = getContentPane();
 			contentPane.setLayout(new GridLayout(1,1));
 			contentPane.add(component);
 			++openFrameCount;

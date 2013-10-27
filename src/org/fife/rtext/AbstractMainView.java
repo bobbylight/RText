@@ -34,6 +34,7 @@ import javax.swing.text.Caret;
 import org.fife.io.UnicodeWriter;
 import org.fife.rsta.ui.GoToDialog;
 import org.fife.rsta.ui.search.*;
+import org.fife.rtext.SearchManager.SearchingMode;
 import org.fife.rtext.actions.CapsLockAction;
 import org.fife.rtext.actions.ToggleTextModeAction;
 import org.fife.ui.UIUtil;
@@ -97,10 +98,7 @@ public abstract class AbstractMainView extends JPanel
 	private RTextEditorPane currentTextArea;			// Currently active text area.
 
 	public FindInFilesSearchContext searchContext;
-	public FindDialog findDialog;
-	public ReplaceDialog replaceDialog;
-	public FindToolBar findToolBar;
-	public ReplaceToolBar replaceToolBar;
+	private SearchManager searchManager;
 
 	private boolean lineNumbersEnabled;			// If true, line numbers are visible on the documents.
 	private boolean lineWrapEnabled;				// If true, word wrap is enabled for all documents.
@@ -560,8 +558,7 @@ public abstract class AbstractMainView extends JPanel
 
 		currentTextArea = fromPanel.currentTextArea;
 
-		findDialog		= fromPanel.findDialog;
-		replaceDialog		= fromPanel.replaceDialog;
+		searchManager		= fromPanel.searchManager;
 		searchContext		= fromPanel.searchContext;
 		lineNumbersEnabled	= fromPanel.lineNumbersEnabled;
 		lineWrapEnabled	= fromPanel.lineWrapEnabled;
@@ -1618,6 +1615,16 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns the search manager for this view.
+	 *
+	 * @return The search manager.
+	 */
+	public SearchManager getSearchManager() {
+		return searchManager;
+	}
+
+
+	/**
 	 * Returns the color to use for a secondary language.
 	 *
 	 * @param index The index of the secondary color.
@@ -2096,6 +2103,7 @@ public abstract class AbstractMainView extends JPanel
 
 		// Remember the owner of this tabbed pane.
 		this.owner = owner;
+		searchManager = new SearchManager(owner);
 
 		// Initialize some stuff from prefs.
 		printFont = prefs.printFont;
@@ -2196,6 +2204,10 @@ public abstract class AbstractMainView extends JPanel
 				codeFoldingEnabledStates.put(languages[i], Boolean.TRUE);
 			}
 		}
+
+		SearchingMode searchingMode = prefs.useSearchDialogs ?
+				SearchingMode.DIALOGS : SearchingMode.TOOLBARS;
+		getSearchManager().setSearchingMode(searchingMode);
 
 		// Start us out with whatever files they passed in.
 		if (filesToOpen==null) {
@@ -2608,6 +2620,21 @@ public abstract class AbstractMainView extends JPanel
 
 		} // End of if (numDocuments>0).
 
+	}
+
+
+	/**
+	 * Overridden to forward the focus request to the current text area.  This
+	 * is actually required for the Find/Replace tool bars.
+	 *
+	 * @return Whether the request is <em>likely</em> to succeed.
+	 */
+	@Override
+	public boolean requestFocusInWindow() {
+		if (currentTextArea!=null) {
+			return currentTextArea.requestFocusInWindow();
+		}
+		return super.requestFocusInWindow();
 	}
 
 
@@ -4148,17 +4175,7 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public void updateLookAndFeel() {
 
-		// Remember, the find and replace dialogs are created together.
-		if (findDialog != null) {
-			SwingUtilities.updateComponentTreeUI(findDialog);
-			// Unique to findDialog, NOT all JDialogs.
-			findDialog.updateUI();
-			findDialog.pack();
-			SwingUtilities.updateComponentTreeUI(replaceDialog);
-			// Also unique to replaceDialog, NOT all JDialogs.
-			replaceDialog.updateUI();
-			replaceDialog.pack();
-		}
+		searchManager.updateUI();
 
 		// Update the GoTo dialog, if it has been created yet.
 		if (goToDialog != null) {

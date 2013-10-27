@@ -14,13 +14,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.nio.charset.Charset;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -34,7 +31,6 @@ import org.fife.ui.SpecialValueComboBox;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
-import org.fife.util.TranslucencyUtil;
 
 
 /**
@@ -44,7 +40,7 @@ import org.fife.util.TranslucencyUtil;
  * @version 0.1
  */
 class GeneralOptionPanel extends OptionsDialogPanel
-				implements ActionListener, DocumentListener, ChangeListener {
+				implements ActionListener, DocumentListener {
 
 	private JTextField dirField;
 	private JButton dirBrowseButton;
@@ -53,16 +49,9 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	private JCheckBox utf8BomCB;
 	private JCheckBox sizeCheckCB;
 	private JFormattedTextField sizeField;
-	private JCheckBox translucentSearchDialogsCB;
-	private JLabel ruleLabel;
-	private SpecialValueComboBox ruleCombo;
-	private JLabel opacityLabel;
-	private JSlider slider;
-	private JLabel opacityDisplay;
 	private JCheckBox dropShadowsInEditorCB;
 
 	private String fileSizeError;
-	private DecimalFormat format;
 
 	public static final String TERM_CR		= "\r";
 	public static final String TERM_LF		= "\n";
@@ -82,7 +71,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 
 		super(msg.getString("OptGenName"));
 		fileSizeError = msg.getString("OptGenFileSizeError");
-		format = new DecimalFormat("0%");
 
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
@@ -206,48 +194,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 								msg.getString("ExperimentalDisclaimer"));
 		expPanel.add(label);
 		expPanel.add(Box.createVerticalStrut(10));
-		translucentSearchDialogsCB = new JCheckBox(
-								msg.getString("TranslucentSearchBoxes"));
-		translucentSearchDialogsCB.setActionCommand("TranslucentSearchDialogsCB");
-		translucentSearchDialogsCB.addActionListener(this);
-		addLeftAligned(expPanel, translucentSearchDialogsCB);
-		ruleLabel = new JLabel(msg.getString("TranslucencyRule"));
-		ruleCombo = new SpecialValueComboBox();
-		ruleCombo.addSpecialItem(msg.getString("Translucency.Never"), "0");
-		ruleCombo.addSpecialItem(msg.getString("Translucency.WhenNotFocused"), "1");
-		ruleCombo.addSpecialItem(msg.getString("Translucency.WhenOverlappingApp"), "2");
-		ruleCombo.addSpecialItem(msg.getString("Translucency.Always"), "3");
-		ruleCombo.setActionCommand("TranslucencyRuleChanged");
-		ruleCombo.addActionListener(this);
-		opacityLabel = new JLabel(msg.getString("Opacity"));
-		slider = new JSlider(0, 100);
-		slider.setMajorTickSpacing(20);
-		slider.setPaintTicks(true);
-		slider.setPaintLabels(false);
-		slider.addChangeListener(this);
-		opacityDisplay = new JLabel("100%") { // will be replaced with real value
-			// hack to keep SpringLayout from shifting when # of digits changes in %
-			@Override
-			public Dimension getPreferredSize() {
-				Dimension size = super.getPreferredSize();
-				size.width = Math.max(50, size.width);
-				return size;
-			}
-		};
-		// Small border for spacing in both LTR and RTL locales
-		opacityDisplay.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-		Component filler = Box.createRigidArea(new Dimension(1, 1)); // Must have real size!
-		temp2 = new JPanel(new SpringLayout());
-		if (orientation.isLeftToRight()) {
-			temp2.add(ruleLabel);    temp2.add(ruleCombo); temp2.add(filler);
-			temp2.add(opacityLabel); temp2.add(slider);    temp2.add(opacityDisplay);
-		}
-		else {
-			temp2.add(filler);         temp2.add(ruleCombo); temp2.add(ruleLabel);
-			temp2.add(opacityDisplay); temp2.add(slider);    temp2.add(opacityLabel);
-		}
-		UIUtil.makeSpringCompactGrid(temp2, 2,3, 5,5, 5,5);
-		addLeftAligned(expPanel, temp2, 5, 20);
 		dropShadowsInEditorCB = new JCheckBox(msg.getString("DropShadowsInEditor"));
 		dropShadowsInEditorCB.setEnabled(!RTextUtilities.isPreJava6());
 		dropShadowsInEditorCB.addActionListener(this);
@@ -262,12 +208,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		temp.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
 		temp.add(defaultsButton, BorderLayout.LINE_START);
 		topPanel.add(temp);
-
-		// Do this after everything else is created.
-		if (RTextUtilities.isPreJava6() ||
-				TranslucencyUtil.get().isTranslucencySupported(false)) {
-			setTranslucentSearchDialogsSelected(false);
-		}
 
 		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(orientation);
@@ -329,19 +269,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 			firePropertyChange(PROPERTY, !sizeCheck, sizeCheck);
 		}
 
-		else if ("TranslucentSearchDialogsCB".equals(command)) {
-			hasUnsavedChanges = true;
-			boolean selected = translucentSearchDialogsCB.isSelected();
-			setTranslucentSearchDialogsSelected(selected);
-			firePropertyChange(PROPERTY, !selected, selected);
-		}
-
-		else if ("TranslucencyRuleChanged".equals(command)) {
-			hasUnsavedChanges = true;
-			int value = ruleCombo.getSelectedIndex();
-			firePropertyChange(PROPERTY, -1, value);
-		}
-
 		else if (dropShadowsInEditorCB==e.getSource()) {
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, false, true);
@@ -353,7 +280,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 			String defaultEnc = Charset.forName(defaultEncName).name();
 			boolean defaultUtf8BomSelected = false;
 			final String defaultSizeFieldText = "10";
-			int defaultOpacity = 60;
 			// Only default to this experimental option if > Java 6 and running
 			// on Windows
 			boolean defaultDropShadowsInEditor =
@@ -365,9 +291,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 				utf8BomCB.isSelected()!=defaultUtf8BomSelected ||
 				!sizeCheckCB.isSelected() ||
 				!defaultSizeFieldText.equals(sizeField.getText()) ||
-				translucentSearchDialogsCB.isSelected() ||
-				ruleCombo.getSelectedIndex()!=2 ||
-				slider.getValue()!=defaultOpacity ||
 				dropShadowsInEditorCB.isSelected()!=defaultDropShadowsInEditor) {
 
 				dirField.setText(null);
@@ -377,9 +300,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 				utf8BomCB.setSelected(defaultUtf8BomSelected);
 				setDoFileSizeCheck(true);
 				sizeField.setText(defaultSizeFieldText);
-				setTranslucentSearchDialogsSelected(false);
-				ruleCombo.setSelectedIndex(2);
-				slider.setValue(defaultOpacity);
 				dropShadowsInEditorCB.setSelected(defaultDropShadowsInEditor);
 
 				hasUnsavedChanges = true;
@@ -415,13 +335,8 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		mainView.setMaxFileSize(getMaxFileSize());		// Ditto.
 
 		// Experimental options
-		rtext.setSearchWindowOpacityEnabled(translucentSearchDialogsCB.
-															isSelected());
-		int rule = Integer.parseInt(ruleCombo.getSelectedSpecialItem());
-		rtext.setSearchWindowOpacityRule(rule);
-		float opacity = slider.getValue() / 100f;
-		rtext.setSearchWindowOpacity(opacity);
-		RTextUtilities.setDropShadowsEnabledInEditor(dropShadowsInEditorCB.isSelected());
+		RTextUtilities.setDropShadowsEnabledInEditor(
+				dropShadowsInEditorCB.isSelected());
 
 	}
 
@@ -615,26 +530,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	}
 
 
-	private void setTranslucentSearchDialogsSelected(boolean selected) {
-
-		translucentSearchDialogsCB.setSelected(selected); // Probably already done
-
-		// The sub-options always stay disabled if we're not using Java 6u10+.
-		if (RTextUtilities.isPreJava6() ||
-				!TranslucencyUtil.get().isTranslucencySupported(false)) {
-			translucentSearchDialogsCB.setEnabled(false);
-			selected = false;
-		}
-
-		ruleLabel.setEnabled(selected);
-		ruleCombo.setEnabled(selected);
-		opacityLabel.setEnabled(selected);
-		opacityDisplay.setEnabled(selected);
-		slider.setEnabled(selected);
-
-	}
-
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -652,12 +547,8 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		setMaxFileSize(mainView.getMaxFileSize());
 
 		// Experimental options
-		setTranslucentSearchDialogsSelected(rtext.isSearchWindowOpacityEnabled());
-		ruleCombo.setSelectedIndex(rtext.getSearchWindowOpacityRule());
-		int percent = (int)(rtext.getSearchWindowOpacity()*100);
-		slider.setValue(percent);
-		opacityDisplay.setText(format.format(rtext.getSearchWindowOpacity()));
-		dropShadowsInEditorCB.setSelected(RTextUtilities.getDropShadowsEnabledInEditor());
+		dropShadowsInEditorCB.setSelected(RTextUtilities.
+						getDropShadowsEnabledInEditor());
 
 	}
 
@@ -680,19 +571,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 */
 	private void setWorkingDirectory(String directory) {
 		dirField.setText(directory);
-	}
-
-
-	/**
-	 * Called when the user plays with the opacity slider.
-	 *
-	 * @param e The change event.
-	 */
-	public void stateChanged(ChangeEvent e) {
-		float value = slider.getValue() / 100f;
-		opacityDisplay.setText(format.format(value));
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, -1, slider.getValue());
 	}
 
 
