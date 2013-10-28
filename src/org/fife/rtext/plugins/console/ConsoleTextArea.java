@@ -662,7 +662,10 @@ abstract class ConsoleTextArea extends JTextPane {
 			else if (start<=inputMinOffs) {
 				UIManager.getLookAndFeel().
 							provideErrorFeedback(ConsoleTextArea.this);
-				setCaretPosition(getDocument().getLength());
+				if (start<inputMinOffs) {
+					// Don't jump to the end of input if we were at the start
+					setCaretPosition(getDocument().getLength());
+				}
 			}
 			else {
 				delegate.actionPerformed(e);
