@@ -25,6 +25,7 @@ import javax.swing.event.PopupMenuListener;
 
 import org.fife.rtext.*;
 import org.fife.ui.RScrollPane;
+import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.*;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
@@ -45,6 +46,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	private FileSystemTreeOptionPanel optionPanel;
 	private Icon pluginIcon;
 	private ViewAction viewAction;
+	private JToolBar dockableWindowTB;
 
 	private JLabel dirLabel;
 	private BackAction backAction;
@@ -54,7 +56,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 	static final String BUNDLE_NAME			=
 					"org/fife/rtext/plugins/filesystemtree/FileSystemTree";
-	private static final String VERSION_STRING	= "2.5.1";
+	private static final String VERSION_STRING	= "2.5.2";
 
 	private static final String VIEW_FST_ACTION	= "ViewFileSystemTreeAction";
 
@@ -97,11 +99,19 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 */
 	private DockableWindow createDockableWindow(FileSystemTreePrefs prefs) {
 
-		DockableWindow wind = new DockableWindow(name, new BorderLayout());
+		DockableWindow wind = new DockableWindow(name, new BorderLayout()) {
+			@Override
+			public void updateUI() {
+				super.updateUI();
+				if (dockableWindowTB!=null) {
+					WebLookAndFeelUtils.fixToolbarButtons(dockableWindowTB);
+				}
+			}
+		};
 
-		JToolBar tb = new JToolBar();
-		tb.setFloatable(false);
-		wind.add(tb, BorderLayout.NORTH);
+		dockableWindowTB = new JToolBar();
+		dockableWindowTB.setFloatable(false);
+		wind.add(dockableWindowTB, BorderLayout.NORTH);
 
 		ResourceBundle msg = ResourceBundle.getBundle(BUNDLE_NAME);
 		backAction = new BackAction(getRText(), msg);
@@ -111,16 +121,17 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		dirLabel = new JLabel();
 		// Allow label to be resized very small so it doesn't hog space
 		dirLabel.setMinimumSize(new Dimension(8, 8));
-		tb.add(dirLabel);
-		tb.setMinimumSize(new Dimension(8, 8)); // ditto
-		tb.setBorder(new BottomLineBorder(3));
+		dockableWindowTB.add(dirLabel);
+		dockableWindowTB.setMinimumSize(new Dimension(8, 8)); // ditto
+		dockableWindowTB.setBorder(new BottomLineBorder(3));
 
-		tb.add(Box.createHorizontalGlue());
+		dockableWindowTB.add(Box.createHorizontalGlue());
 		JButton b = new JButton(backAction);
-		tb.add(b);
+		dockableWindowTB.add(b);
 		b = new JButton(forwardAction);
-		tb.add(b);
-
+		dockableWindowTB.add(b);
+		WebLookAndFeelUtils.fixToolbarButtons(dockableWindowTB);
+		
 		tree = new Tree(this);
 		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(tree);
 		RScrollPane scrollPane = new DockableWindowScrollPane(tree);

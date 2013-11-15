@@ -28,6 +28,7 @@ import org.fife.rtext.*;
 import org.fife.rtext.optionsdialog.OptionsDialog;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.SubstanceUtils;
+import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.*;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
@@ -64,6 +65,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private boolean useHTMLToolTips;
 	private SourceBrowserThread sourceBrowserThread;
 	private SourceTreeNode workingRoot;
+	private JToolBar dockableWindowTB;
 
 	private String ctagsExecutableLocation;
 	private File ctagsFile;				// Just for speed.
@@ -78,7 +80,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	static final String BUNDLE_NAME		=
 					"org.fife.rtext.plugins.sourcebrowser.SourceBrowser";
 
-	private static final String VERSION_STRING	= "2.5.1";
+	private static final String VERSION_STRING	= "2.5.2";
 
 	private static final String VIEW_SB_ACTION	= "ViewSourceBrowserAction";
 
@@ -152,17 +154,18 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		DockableWindow wind = new DockableWindow(this.name, new BorderLayout());
 
-		JToolBar tb = new JToolBar();
-		tb.setFloatable(false);
-		wind.add(tb, BorderLayout.NORTH);
+		dockableWindowTB = new JToolBar();
+		dockableWindowTB.setFloatable(false);
+		wind.add(dockableWindowTB, BorderLayout.NORTH);
 
-		tb.add(Box.createHorizontalGlue());
+		dockableWindowTB.add(Box.createHorizontalGlue());
 		sortAction = new SortAction(owner, msg);
 		sortButton = new JToggleButton(sortAction);
-		tb.add(sortButton);
+		dockableWindowTB.add(sortButton);
 		// Allow tool bar to be resized very small so we don't hog space
-		tb.setMinimumSize(new Dimension(8, 8));
-		tb.setBorder(new BottomLineBorder(3));
+		dockableWindowTB.setMinimumSize(new Dimension(8, 8));
+		dockableWindowTB.setBorder(new BottomLineBorder(3));
+		WebLookAndFeelUtils.fixToolbarButtons(dockableWindowTB);
 
 		sourceTree = new DefaultSourceTree(this, owner);
 		wind.setPrimaryComponent(sourceTree);
@@ -715,6 +718,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	public void updateUI() {
 		DockableWindow wind = getDockableWindow(getPluginName());
 		SwingUtilities.updateComponentTreeUI(wind);
+		WebLookAndFeelUtils.fixToolbarButtons(dockableWindowTB);
 	}
 
 

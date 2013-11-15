@@ -30,6 +30,7 @@ import javax.swing.text.StyledDocument;
 import org.fife.io.ProcessRunnerOutputListener;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.RScrollPane;
+import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.dockablewindows.DockableWindow;
 
 
@@ -61,6 +62,8 @@ public class ToolDockableWindow extends DockableWindow
 	 */
 	private OutputTextPane textArea;
 
+	private JToolBar toolbar;
+
 	/**
 	 * Used by toolbar button to stop the currently running tool.
 	 */
@@ -87,7 +90,7 @@ public class ToolDockableWindow extends DockableWindow
 		add(sp);
 
 		// Create a toolbar.
-		JToolBar toolbar = new JToolBar();
+		toolbar = new JToolBar();
 		toolbar.setFloatable(false);
 		toolbar.add(Box.createHorizontalGlue());
 
@@ -95,6 +98,7 @@ public class ToolDockableWindow extends DockableWindow
 		JButton b = new JButton(stopAction);
 		b.setText(null);
 		toolbar.add(b);
+		WebLookAndFeelUtils.fixToolbarButtons(toolbar);
 		add(toolbar, BorderLayout.NORTH);
 
 		ComponentOrientation o = ComponentOrientation.getOrientation(getLocale());
@@ -238,6 +242,15 @@ public class ToolDockableWindow extends DockableWindow
 		textArea.setText(null);
 		stopAction.setEnabled(true);
 		return true;
+	}
+
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		if (toolbar!=null) {
+			WebLookAndFeelUtils.fixToolbarButtons(toolbar);
+		}
 	}
 
 

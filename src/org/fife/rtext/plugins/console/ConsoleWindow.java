@@ -29,6 +29,7 @@ import javax.swing.text.StyleConstants;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.RScrollPane;
+import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.dockablewindows.DockableWindow;
 
 
@@ -102,6 +103,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 		JButton b = new JButton(stopAction);
 		b.setText(null);
 		toolbar.add(b);
+		WebLookAndFeelUtils.fixToolbarButtons(toolbar);
 		add(toolbar, BorderLayout.NORTH);
 
 	}
@@ -213,6 +215,15 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	 */
 	public void stopCurrentProcess() {
 		shellTextArea.stopCurrentProcess();
+	}
+
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		if (toolbar!=null) {
+			WebLookAndFeelUtils.fixToolbarButtons(toolbar);
+		}
 	}
 
 

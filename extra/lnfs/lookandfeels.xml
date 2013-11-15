@@ -62,6 +62,11 @@
 
 <ThirdPartyLookAndFeels>
 
+<LookAndFeel name="WebLaF"
+   class="com.alee.laf.WebLookAndFeel"
+   jars="lnfs/weblaf-1.26.jar"
+   minJavaVersion="1.6"/>
+
 <LookAndFeel name="Substance Business"
    class="org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel"
    dir="lnfs/substance/"

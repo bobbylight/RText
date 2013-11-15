@@ -41,6 +41,7 @@ import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
 
 import org.fife.jgoodies.looks.common.ShadowPopupBorder;
+import org.fife.jgoodies.looks.common.ShadowPopupFactory;
 import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.ui.SubstanceUtils;
 import org.fife.ui.UIUtil;
@@ -947,8 +948,13 @@ public class RTextUtilities {
 													getLAFClassLoader();
 
 				// Set these properties before instantiating WebLookAndFeel.
+				// Note it does its own menu shadowing
 				if (WebLookAndFeelUtils.isWebLookAndFeel(lnfClassName)) {
+					ShadowPopupFactory.uninstall();
 					WebLookAndFeelUtils.installWebLookAndFeelProperties(cl);
+				}
+				else {
+					ShadowPopupFactory.install();
 				}
 
 				// Load the Look and Feel class.  Note that we cannot

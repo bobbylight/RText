@@ -33,6 +33,7 @@ import org.fife.rtext.plugins.project.tree.PhysicalLocationTreeNode;
 import org.fife.rtext.plugins.project.tree.WorkspaceRootTreeNode;
 import org.fife.rtext.plugins.project.tree.WorkspaceTree;
 import org.fife.ui.MenuButton;
+import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
@@ -50,6 +51,7 @@ class ProjectWindow extends DockableWindow {
 	private ProjectPlugin plugin;
 	private JLabel workspaceNameLabel;
 	private WorkspaceTree tree;
+	private JToolBar toolbar;
 
 
 	public ProjectWindow(RText app, ProjectPlugin plugin, ProjectPluginPrefs prefs) {
@@ -60,7 +62,8 @@ class ProjectWindow extends DockableWindow {
 		setPosition(DockableWindow.LEFT);
 		setLayout(new BorderLayout());
 
-		add(createToolBar(prefs), BorderLayout.NORTH);
+		toolbar = createToolBar(prefs);
+		add(toolbar, BorderLayout.NORTH);
 
 		tree = new WorkspaceTree(plugin, plugin.getWorkspace());
 		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(tree);
@@ -100,6 +103,8 @@ class ProjectWindow extends DockableWindow {
 
 		toolbar.setMinimumSize(new Dimension(8, 8)); // Allow small resize
 		toolbar.setBorder(new BottomLineBorder(3));
+
+		WebLookAndFeelUtils.fixToolbarButtons(toolbar);
 		return toolbar;
 
 	}
@@ -150,6 +155,15 @@ class ProjectWindow extends DockableWindow {
 				model.reload();
 				//UIUtil.expandAllNodes(tree);
 			}
+		}
+	}
+
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		if (toolbar!=null) {
+			WebLookAndFeelUtils.fixToolbarButtons(toolbar);
 		}
 	}
 

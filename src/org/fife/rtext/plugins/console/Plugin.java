@@ -41,7 +41,7 @@ import org.fife.ui.app.StandardAction;
  */
 public class Plugin extends GUIPlugin {
 
-	private static final String VERSION					= "2.5.1";
+	private static final String VERSION					= "2.5.2";
 	private static final String DOCKABLE_WINDOW_CONSOLE	= "consoleDockableWindow";
 
 	private RText app;
