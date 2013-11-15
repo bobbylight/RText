@@ -104,7 +104,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 			public void updateUI() {
 				super.updateUI();
 				if (dockableWindowTB!=null) {
-					WebLookAndFeelUtils.fixToolbarButtons(dockableWindowTB);
+					WebLookAndFeelUtils.fixToolbar(dockableWindowTB);
 				}
 			}
 		};
@@ -130,7 +130,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		dockableWindowTB.add(b);
 		b = new JButton(forwardAction);
 		dockableWindowTB.add(b);
-		WebLookAndFeelUtils.fixToolbarButtons(dockableWindowTB);
+		WebLookAndFeelUtils.fixToolbar(dockableWindowTB);
 		
 		tree = new Tree(this);
 		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(tree);

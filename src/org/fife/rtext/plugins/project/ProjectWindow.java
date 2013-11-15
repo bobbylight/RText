@@ -104,7 +104,7 @@ class ProjectWindow extends DockableWindow {
 		toolbar.setMinimumSize(new Dimension(8, 8)); // Allow small resize
 		toolbar.setBorder(new BottomLineBorder(3));
 
-		WebLookAndFeelUtils.fixToolbarButtons(toolbar);
+		WebLookAndFeelUtils.fixToolbar(toolbar);
 		return toolbar;
 
 	}
@@ -163,7 +163,7 @@ class ProjectWindow extends DockableWindow {
 	public void updateUI() {
 		super.updateUI();
 		if (toolbar!=null) {
-			WebLookAndFeelUtils.fixToolbarButtons(toolbar);
+			WebLookAndFeelUtils.fixToolbar(toolbar);
 		}
 	}
 

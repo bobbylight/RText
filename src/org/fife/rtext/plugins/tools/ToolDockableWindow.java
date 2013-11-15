@@ -98,7 +98,7 @@ public class ToolDockableWindow extends DockableWindow
 		JButton b = new JButton(stopAction);
 		b.setText(null);
 		toolbar.add(b);
-		WebLookAndFeelUtils.fixToolbarButtons(toolbar);
+		WebLookAndFeelUtils.fixToolbar(toolbar);
 		add(toolbar, BorderLayout.NORTH);
 
 		ComponentOrientation o = ComponentOrientation.getOrientation(getLocale());
@@ -249,7 +249,7 @@ public class ToolDockableWindow extends DockableWindow
 	public void updateUI() {
 		super.updateUI();
 		if (toolbar!=null) {
-			WebLookAndFeelUtils.fixToolbarButtons(toolbar);
+			WebLookAndFeelUtils.fixToolbar(toolbar);
 		}
 	}
 

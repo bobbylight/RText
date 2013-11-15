@@ -165,7 +165,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 		// Allow tool bar to be resized very small so we don't hog space
 		dockableWindowTB.setMinimumSize(new Dimension(8, 8));
 		dockableWindowTB.setBorder(new BottomLineBorder(3));
-		WebLookAndFeelUtils.fixToolbarButtons(dockableWindowTB);
+		WebLookAndFeelUtils.fixToolbar(dockableWindowTB, false, true);
 
 		sourceTree = new DefaultSourceTree(this, owner);
 		wind.setPrimaryComponent(sourceTree);
@@ -718,7 +718,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	public void updateUI() {
 		DockableWindow wind = getDockableWindow(getPluginName());
 		SwingUtilities.updateComponentTreeUI(wind);
-		WebLookAndFeelUtils.fixToolbarButtons(dockableWindowTB);
+		WebLookAndFeelUtils.fixToolbar(dockableWindowTB);
 	}
 
 
