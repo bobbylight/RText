@@ -25,7 +25,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.text.Element;
 
 import org.fife.help.HelpDialog;
-import org.fife.jgoodies.looks.common.ShadowPopupFactory;
 import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.rtext.actions.ActionFactory;
 import org.fife.ui.CustomizableToolBar;

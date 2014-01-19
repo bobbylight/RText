@@ -1653,6 +1653,16 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Implements the <code>SearchListener</code> interface.
+	 *
+	 * @return The selected text in the active text area.
+	 */
+	public String getSelectedText() {
+		return getCurrentTextArea().getSelectedText();
+	}
+
+
+	/**
 	 * Returns the color being used for selected text in all text areas in this
 	 * main view, if selected text is enabled.
 	 *

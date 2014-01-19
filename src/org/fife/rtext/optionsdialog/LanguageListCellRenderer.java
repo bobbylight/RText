@@ -12,11 +12,14 @@ package org.fife.rtext.optionsdialog;
 import java.awt.Component;
 
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
+import javax.swing.UIManager;
 
 import org.fife.rtext.optionsdialog.LanguageOptionPanel.IconTextInfo;
 import org.fife.ui.SubstanceUtils;
+import org.fife.ui.WebLookAndFeelUtils;
 
 
 /**
@@ -29,6 +32,11 @@ import org.fife.ui.SubstanceUtils;
  */
 class LanguageListCellRenderer extends DefaultListCellRenderer {
 
+	/**
+	 * For certain LAFs, we delegate to their custom renderer for simplicity.
+	 */
+	private JLabel possibleDelegate;
+
 	private static final String SUBSTANCE_RENDERER_CLASS =
 			"org.fife.rtext.optionsdialog.SubstanceLanguageListCellRenderer";
 
@@ -36,7 +44,8 @@ class LanguageListCellRenderer extends DefaultListCellRenderer {
 	/**
 	 * Private constructor to prevent direct instantiation.
 	 */
-	private LanguageListCellRenderer() {
+	private LanguageListCellRenderer(JLabel delegate) {
+		this.possibleDelegate = delegate;
 	}
 
 
@@ -48,7 +57,12 @@ class LanguageListCellRenderer extends DefaultListCellRenderer {
 	 * @return The renderer to use.
 	 */
 	public static ListCellRenderer create() {
+
+		JLabel delegate = null;
+
 		if (SubstanceUtils.isSubstanceInstalled()) {
+			// Can't delegate with Substance, because it unfortunately
+			// has hard dependencies on renderer types.  Yuck.
 			try {
 				// Use reflection to avoid hard dependency on Substance.
 				Class<?> clazz = Class.forName(SUBSTANCE_RENDERER_CLASS);
@@ -57,19 +71,36 @@ class LanguageListCellRenderer extends DefaultListCellRenderer {
 				e.printStackTrace();
 			}
 		}
-		return new LanguageListCellRenderer();
+		else if (WebLookAndFeelUtils.isWebLookAndFeelInstalled()) {
+			delegate = (JLabel)UIManager.get("List.cellRenderer");
+		}
+
+		return new LanguageListCellRenderer(delegate);
+
 	}
 
 
 	@Override
 	public Component getListCellRendererComponent(JList list,
 			Object value, int index, boolean selected, boolean focused) {
-		super.getListCellRendererComponent(list, value, index,
-									selected, focused);
+
+		JLabel renderer = null;
+		if (possibleDelegate!=null) {
+			renderer = possibleDelegate;
+			((ListCellRenderer)possibleDelegate).getListCellRendererComponent(
+					list, value, index, selected, focused);
+		}
+		else {
+			renderer = this;
+			super.getListCellRendererComponent(list, value, index, selected,
+					focused);
+		}
+
 		IconTextInfo iti = (IconTextInfo)value;
-		setIcon(iti.getIcon());
-		setText(iti.getText());
-		return this;
+		renderer.setIcon(iti.getIcon());
+		renderer.setText(iti.getText());
+		return renderer;
+
 	}
 
 
