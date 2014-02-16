@@ -25,6 +25,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.text.Element;
 
 import org.fife.help.HelpDialog;
+import org.fife.jgoodies.looks.common.ShadowPopupFactory;
 import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.rtext.actions.ActionFactory;
 import org.fife.ui.CustomizableToolBar;
@@ -983,7 +984,6 @@ public class RText extends AbstractPluggableGUIApplication
 			System.err.println("preDisplayInit: " + (System.currentTimeMillis()-start));
 		}
 
-//		ShadowPopupFactory.install();
 		RTextUtilities.setDropShadowsEnabledInEditor(props.dropShadowsInEditor);
 
 	}
@@ -1721,6 +1721,9 @@ public class RText extends AbstractPluggableGUIApplication
 					// Set these properties before instantiating WebLookAndFeel
 					if (WebLookAndFeelUtils.isWebLookAndFeel(lafName)) {
 						WebLookAndFeelUtils.installWebLookAndFeelProperties(cl);
+					}
+					else {
+						ShadowPopupFactory.install();
 					}
 					// Must set UIManager's ClassLoader before instantiating
 					// the LAF.  Substance is so high-maintenance!
