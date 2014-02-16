@@ -385,7 +385,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 
 			// Get all properties associated with the RText class.
 			Preferences prefs = Preferences.userNodeForPackage(RText.class);
-			loadCommonPreferences(props, prefs);
+			props.loadCommonPreferences(prefs);
 			props.iconGroupName				= prefs.get("iconGroupName", props.iconGroupName);
 			props.lineNumbersVisible			= prefs.getBoolean("lineNumbersVisible", props.lineNumbersVisible);
 			props.tabSize					= prefs.getInt("tabSize", props.tabSize);
