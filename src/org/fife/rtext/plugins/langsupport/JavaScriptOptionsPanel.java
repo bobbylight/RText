@@ -15,15 +15,18 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ResourceBundle;
-import javax.swing.BorderFactory;
+
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.border.Border;
@@ -34,10 +37,15 @@ import javax.swing.text.AbstractDocument;
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.js.JavaScriptLanguageSupport;
+import org.fife.rsta.ac.js.JsErrorParser;
+import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.NumberDocumentFilter;
 import org.fife.rtext.RText;
+import org.fife.ui.FSATextField;
 import org.fife.ui.OptionsDialogPanel;
+import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -53,9 +61,14 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 	private JCheckBox enabledCB;
 	private JCheckBox paramAssistanceCB;
 	private JCheckBox showDescWindowCB;
+	private JCheckBox autoActivateCB;
+	private JRadioButton rhinoRB;
 	private JCheckBox strictCB;
 	private JCheckBox e4xCB;
-	private JCheckBox autoActivateCB;
+	private JRadioButton jshintRB;
+	private SelectableLabel jsHintDescLabel;
+	private JLabel jshintrcLabel;
+	private FSATextField jshintrcField;
 	private JLabel aaDelayLabel;
 	private JTextField aaDelayField;
 	private JLabel aaJavaKeysLabel;
@@ -77,9 +90,6 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		listener = new Listener();
 		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/script_code.png")));
 
-		ComponentOrientation o = ComponentOrientation.
-											getOrientation(getLocale());
-
 		setLayout(new BorderLayout());
 		Border empty5Border = UIUtil.getEmpty5Border();
 		setBorder(empty5Border);
@@ -88,54 +98,48 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		cp.setBorder(null);
 		add(cp, BorderLayout.NORTH);
 
-		Box box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.General.Section.General")));
-		cp.add(box);
+		cp.add(createGeneralPanel(msg));
 		cp.add(Box.createVerticalStrut(5));
 
-		enabledCB = createCB("Options.JavaScript.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB, 5);
+		cp.add(createSyntaxCheckingEnginePanel(msg));
+		cp.add(Box.createVerticalStrut(5));
 
-		Box box2 = Box.createVerticalBox();
-		if (o.isLeftToRight()) {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-		}
-		else {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-		}
-		box.add(box2);
+		cp.add(createAutoActivationPanel(msg));
+		cp.add(Box.createVerticalStrut(5));
 
-		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box2, showDescWindowCB, 5);
+		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton.addActionListener(listener);
+		addLeftAligned(cp, rdButton, 5);
 
-		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
-		addLeftAligned(box2, paramAssistanceCB, 5);
+		cp.add(Box.createVerticalGlue());
 
-		strictCB = createCB("Options.JavaScript.Strict");
-		addLeftAligned(box2, strictCB, 5);
+		ComponentOrientation o = ComponentOrientation.
+				getOrientation(getLocale());
+		applyComponentOrientation(o);
 
-		e4xCB = createCB("Options.JavaScript.E4x");
-		addLeftAligned(box2, e4xCB, 5);
+		addChildPanel(new FoldingOnlyOptionsPanel(null,
+						SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT));
 
-		box2.add(Box.createVerticalGlue());
+	}
 
-		box = Box.createVerticalBox();
+
+	/**
+	 * Returns the panel containing auto-activation options.
+	 *
+	 * @param msg The plugin resource bundle.
+	 * @return The panel.
+	 */
+	private Box createAutoActivationPanel(ResourceBundle msg) {
+
+		ComponentOrientation o = ComponentOrientation.
+						getOrientation(getLocale());
+
+		Box box = Box.createVerticalBox();
 		box.setBorder(new OptionPanelBorder(
 				msg.getString("Options.General.AutoActivation")));
-		cp.add(box);
 
 		autoActivateCB = createCB("Options.General.EnableAutoActivation");
 		addLeftAligned(box, autoActivateCB, 5);
-
-		box2 = Box.createVerticalBox();
-		if (o.isLeftToRight()) {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-		}
-		else {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-		}
-		box.add(box2);
 
 		SpringLayout sl = new SpringLayout();
 		JPanel temp = new JPanel(sl);
@@ -173,21 +177,9 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		UIUtil.makeSpringCompactGrid(temp, 2,5, 0,0, 5,5);
 		JPanel temp2 = new JPanel(new BorderLayout());
 		temp2.add(temp, BorderLayout.LINE_START);
-		box2.add(temp2);
+		addLeftAligned(box, temp2, 20);
 
-		box2.add(Box.createVerticalGlue());
-
-		cp.add(Box.createVerticalStrut(5));
-		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
-		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton, 5);
-
-		cp.add(Box.createVerticalGlue());
-
-		applyComponentOrientation(o);
-
-		addChildPanel(new FoldingOnlyOptionsPanel(null,
-						SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT));
+		return box;
 
 	}
 
@@ -203,21 +195,110 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 
 
 	/**
+	 * Returns the panel containing general JS options.
+	 *
+	 * @param msg The plugin resource bundle.
+	 * @return The panel.
+	 */
+	private Box createGeneralPanel(ResourceBundle msg) {
+
+		Box box = Box.createVerticalBox();
+		box.setBorder(new OptionPanelBorder(msg.
+				getString("Options.General.Section.General")));
+
+		enabledCB = createCB("Options.JavaScript.EnableCodeCompletion");
+		addLeftAligned(box, enabledCB, 5);
+
+		showDescWindowCB = createCB("Options.General.ShowDescWindow");
+		addLeftAligned(box, showDescWindowCB, 5, 20);
+
+		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
+		addLeftAligned(box, paramAssistanceCB, 5, 20);
+
+		return box;
+
+	}
+
+
+	private JRadioButton createRB(String key) {
+		if (key.indexOf('.')==-1) {
+			key = "Options.JavaScript." + key;
+		}
+		JRadioButton rb = new JRadioButton(Plugin.msg.getString(key));
+		rb.addActionListener(listener);
+		return rb;
+	}
+
+
+	/**
+	 * Returns the panel containing options pertaining to the error checking
+	 * library to use.
+	 *
+	 * @param msg The plugin resource bundle.
+	 * @return The panel.
+	 */
+	private Box createSyntaxCheckingEnginePanel(ResourceBundle msg) {
+
+		Box box = Box.createVerticalBox();
+		box.setBorder(new OptionPanelBorder(
+				msg.getString("Options.JavaScript.SyntaxCheckingEngine")));
+		ButtonGroup syntaxEngineBG = new ButtonGroup();
+		rhinoRB = createRB("Rhino");
+		syntaxEngineBG.add(rhinoRB);
+		addLeftAligned(box, rhinoRB, 5);
+
+		strictCB = createCB("Strict");
+		addLeftAligned(box, strictCB, 5, 20);
+
+		e4xCB = createCB("E4x");
+		addLeftAligned(box, e4xCB, 5, 20);
+
+		jshintRB = createRB("JSHint");
+		syntaxEngineBG.add(jshintRB);
+		addLeftAligned(box, jshintRB, 5);
+
+		jsHintDescLabel = new SelectableLabel(
+				msg.getString("Options.JavaScript.JSHint.Desc"));
+		addLeftAligned(box, jsHintDescLabel, 5, 20);
+
+		jshintrcLabel = UIUtil.newLabel(msg,
+				"Options.JavaScript.JSHint.JSHintrc");
+		jshintrcField = new FSATextField(40);
+		jshintrcField.getDocument().addDocumentListener(listener);
+		jshintrcLabel.setLabelFor(jshintrcField);
+		JPanel temp = new JPanel(new BorderLayout(5, 0));
+		temp.add(jshintrcLabel, BorderLayout.LINE_START);
+		temp.add(jshintrcField);
+		addLeftAligned(box, temp, 5, 20);
+
+		return box;
+
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
-		LanguageSupport ls=lsf.getSupportFor(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+		LanguageSupport ls = lsf.getSupportFor(
+				SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
 		JavaScriptLanguageSupport jls = (JavaScriptLanguageSupport)ls;
 
 		// Options dealing with code completion.
 		jls.setAutoCompleteEnabled(enabledCB.isSelected());
 		jls.setParameterAssistanceEnabled(paramAssistanceCB.isSelected());
 		jls.setShowDescWindow(showDescWindowCB.isSelected());
-		jls.setStrictMode(strictCB.isSelected());
-		jls.setXmlAvailable(e4xCB.isSelected());
+
+		// Options dealing with syntax checking.
+		boolean reparse = false;
+		reparse |= jls.setErrorParser(rhinoRB.isSelected() ?
+				JsErrorParser.RHINO : JsErrorParser.JSHINT);
+		reparse |= jls.setJsHintRCFile(jshintrcField.getSelectedFile()); // jshint
+		reparse |= jls.setStrictMode(strictCB.isSelected()); // rhino
+		reparse |= jls.setXmlAvailable(e4xCB.isSelected()); // rhino
 
 		// Options dealing with auto-activation.
 		jls.setAutoActivationEnabled(autoActivateCB.isSelected());
@@ -233,6 +314,16 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		jls.setAutoActivationDelay(delay);
 		// TODO: Trigger keys for JS and JSDoc?
 
+		// Some option related to syntax errors changed.
+		if (reparse) {
+			RText rtext = (RText)owner;
+			AbstractMainView mainView = rtext.getMainView();
+			for (int i=0; i<mainView.getNumDocuments(); i++) {
+				RSyntaxTextArea textArea = mainView.getRTextEditorPaneAt(i);
+				textArea.forceReparsing(jls.getParser(textArea));
+			}
+		}
+
 	}
 
 
@@ -241,7 +332,19 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
-		return null;
+
+		OptionsPanelCheckResult result = null;
+
+		if (jshintrcField.isEnabled()) {
+			File jshintrc = jshintrcField.getSelectedFile();
+			if (jshintrc!=null && !jshintrc.isFile()) {
+				String msg = Plugin.msg.getString(
+						"Options.JavaScirpt.Error.JSHint");
+				result = new OptionsPanelCheckResult(this, jshintrcField, msg);
+			}
+		}
+
+		return result;
 	}
 
 
@@ -269,8 +372,36 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		enabledCB.setSelected(selected);
 		paramAssistanceCB.setEnabled(selected);
 		showDescWindowCB.setEnabled(selected);
-		strictCB.setEnabled(selected);
-		e4xCB.setEnabled(selected);
+		//strictCB.setEnabled(selected);
+		//e4xCB.setEnabled(selected);
+	}
+
+
+	/**
+	 * Sets what syntax checking engine is selected to use.  This
+	 * enables/disables other fields as appropriate.
+	 *
+	 * @param errorParser The new syntax checking engine.
+	 */
+	private void setSyntaxCheckingEngine(JsErrorParser errorParser) {
+
+		boolean jshintFieldsEnabled = true;
+		boolean rhinoFieldsEnabled = true;
+		if (errorParser==JsErrorParser.JSHINT) {
+			rhinoFieldsEnabled = false;
+		}
+		else { // Null or RHINO
+			jshintFieldsEnabled = false;
+		}
+
+		rhinoRB.setSelected(rhinoFieldsEnabled);
+		strictCB.setEnabled(rhinoFieldsEnabled);
+		e4xCB.setEnabled(rhinoFieldsEnabled);
+		jshintRB.setSelected(jshintFieldsEnabled);
+		jsHintDescLabel.setEnabled(jshintFieldsEnabled);
+		jshintrcLabel.setEnabled(jshintFieldsEnabled);
+		jshintrcField.setEnabled(jshintFieldsEnabled);
+
 	}
 
 
@@ -290,6 +421,14 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		showDescWindowCB.setSelected(jls.getShowDescWindow());
 		strictCB.setSelected(jls.isStrictMode());
 		e4xCB.setSelected(jls.isXmlAvailable());
+
+		// Options dealing with syntax checking.
+		setSyntaxCheckingEngine(jls.getErrorParser());
+		File jshintrcFile = jls.getJsHintRCFile();
+		String jshint = jshintrcFile==null ? null : jshintrcFile.getAbsolutePath();
+		jshintrcField.setText(jshint); // jshint
+		strictCB.setSelected(jls.isStrictMode()); // rhino
+		e4xCB.setSelected(jls.isXmlAvailable()); // rhino
 
 		// Options dealing with auto-activation
 		setAutoActivateCBSelected(jls.isAutoActivationEnabled());
@@ -322,6 +461,18 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 				firePropertyChange(PROPERTY, null, null);
 			}
 
+			else if (rhinoRB==source) {
+				setSyntaxCheckingEngine(JsErrorParser.RHINO);
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
+			else if (jshintRB==source) {
+				setSyntaxCheckingEngine(JsErrorParser.JSHINT);
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
 			else if (autoActivateCB==source) {
 				// Trick related components to toggle enabled states
 				setAutoActivateCBSelected(autoActivateCB.isSelected());
@@ -334,15 +485,19 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 				if (!enabledCB.isSelected() ||
 						!paramAssistanceCB.isSelected() ||
 						!showDescWindowCB.isSelected() ||
+						!rhinoRB.isSelected() ||
 						strictCB.isSelected() ||
 						e4xCB.isSelected() ||
+						jshintrcField.getText().length()>0 ||
 						!autoActivateCB.isSelected() ||
 						!"300".equals(aaDelayField.getText())) {
 					setEnabledCBSelected(true);
 					paramAssistanceCB.setSelected(true);
 					showDescWindowCB.setSelected(true);
+					setSyntaxCheckingEngine(JsErrorParser.RHINO);
 					strictCB.setSelected(false);
 					e4xCB.setSelected(false);
+					jshintrcField.setText(null);
 					setAutoActivateCBSelected(true);
 					aaDelayField.setText("300");
 					hasUnsavedChanges = true;

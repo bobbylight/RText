@@ -304,6 +304,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_DTD,				createValue(new String[] { "*.dtd" }));
 		filters.put(SYNTAX_STYLE_FORTRAN,			createValue(new String[] { "*.f", "*.for", "*.fort", "*.f77", "*.f90" }));
 		filters.put(SYNTAX_STYLE_GROOVY,			createValue(new String[] { "*.groovy", "*.grv" }));
+		filters.put(SYNTAX_STYLE_HTACCESS,			createValue(new String[] { ".htaccess" }));
 		filters.put(SYNTAX_STYLE_HTML,			createValue(new String[] { "*.htm", "*.html" }));
 		filters.put(SYNTAX_STYLE_JAVA,			createValue(new String[] { "*.java" }));
 		filters.put(SYNTAX_STYLE_JAVASCRIPT,		createValue(new String[] { "*.js" }));

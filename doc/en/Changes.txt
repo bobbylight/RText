@@ -2,9 +2,23 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+2.5.2 (03/12/2014):
+-------------------
+   - You can now configure RText to use JSHint for squiggle underlining errors
+     and warnings in JavaScript files.
+   - Fixed a bug that prevented the XML outline tree from displaying in the
+     Source Browser for certain XML files (RSTALanguageSupport Issue #7).
+   - Added CSS code completion and folding.
+   - Improved CSS syntax highlighting.
+   - Smarter auto-indentation for file types with multiple "languages" in them,
+     for example, JavaScript and CSS in HTML files.
+   - Updated RSyntaxTextArea and sister libraries to 2.5.2.
+   - Added .htaccess file syntax highlighting
+
+
 2.5.1 (11/12/2013):
 -------------------
-   - Seaching now donw with Find/Replace tool bars by default.  You can
+   - Searching now done with Find/Replace tool bars by default.  You can
      configure RText to use the older dialogs instead in the Options dialog.
    - Updated RSyntaxTextArea and all of its sister libraries to 2.5.1.
    - Updated minimum JRE required to run RText from 1.4 to 1.5.
