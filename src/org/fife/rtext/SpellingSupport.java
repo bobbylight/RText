@@ -130,7 +130,7 @@ public class SpellingSupport implements SpellingParserListener {
 		if (rtext.getOS()==RText.OS_MAC_OSX) {
 			fileName = "RText.app/Contents/Resources/Java/" + fileName;
 		}
-		File file = new File(fileName).getAbsoluteFile();
+		File file = new File(rtext.getInstallLocation(), fileName);
 		boolean american = DICTIONARIES[1].equals(spellingDictionary);
 		spellingParser = SpellingParser.
 					createEnglishSpellingParser(file, american);
