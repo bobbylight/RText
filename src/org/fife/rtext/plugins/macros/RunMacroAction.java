@@ -115,7 +115,7 @@ public class RunMacroAction extends StandardAction {
 	 */
 	private static Object groovyEngine;
 
-	private static final String GROOVY_JAR = "plugins/groovy-all-1.8.8.jar";
+	private static final String GROOVY_JAR = "plugins/groovy-all-2.3.3.jar";
 
 
 	/**
