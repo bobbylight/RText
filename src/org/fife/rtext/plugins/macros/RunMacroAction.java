@@ -293,13 +293,12 @@ public class RunMacroAction extends StandardAction {
 
 
 	/**
-	 * Returns the Rhino engine, lazily creating it if necessary.
+	 * Returns the JS engine, lazily creating it if necessary.
 	 *
 	 * @return The script engine, or <code>null</code> if it cannot be created.
 	 */
 	private Object initJavaScriptEngine() {
 
-		// Get the Rhino engine.
 		if (jsEngine==null) {
 
 			try {

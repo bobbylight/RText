@@ -1,5 +1,5 @@
 /*
- * This is a Rhino (Javascript) macro for RText that sorts all lines in the
+ * This is a JavaScript macro for RText that sorts all lines in the
  * active editor.
  *
  * Global variables include:
@@ -13,12 +13,11 @@
  *   http://javadoc.fifesoft.com/rsyntaxtextarea/
  *
  */
-importPackage(java.lang, java.util);
 
 var removeDuplicates = true; // Change to "false" if you want to keep duplicates
 
 function join(lines) {
-	var sb = new StringBuffer();
+	var sb = new java.lang.StringBuffer();
 	if (lines!=null && lines.length>0) {
 		for (var i=0; i<lines.length; i++) {
 			//System.out.println(lines[i]);
@@ -38,14 +37,14 @@ try {
 	var lines = textArea.text.split("\n");
 
 	if (removeDuplicates) {
-		var ts = new TreeSet();
+		var ts = new java.util.TreeSet();
 		for (var i=0; i<lines.length; i++) {
 			ts.add(lines[i]);
 		}
 		lines = ts.toArray();
 	}
 
-	Arrays.sort(lines);
+	java.util.Arrays.sort(lines);
 	textArea.text = join(lines);
 
 } finally {

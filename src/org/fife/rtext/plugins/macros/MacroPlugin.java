@@ -203,9 +203,9 @@ public class MacroPlugin extends AbstractPlugin
 		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
 		macrosMenu = new JMenu(getString("Plugin.Name"));
 		Action a = rtext.getAction(MacroPlugin.NEW_MACRO_ACTION);
-		macrosMenu.add(createMenuItem(a));//createMenuItem(a));
+		macrosMenu.add(createMenuItem(a));
 		a = rtext.getAction(MacroPlugin.EDIT_MACROS_ACTION);
-		macrosMenu.add(createMenuItem(a));//createMenuItem(a));
+		macrosMenu.add(createMenuItem(a));
 		macrosMenu.addSeparator();
 		mb.addExtraMenu(macrosMenu);
 		mb.revalidate();

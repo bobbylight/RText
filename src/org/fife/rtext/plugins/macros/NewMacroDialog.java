@@ -71,7 +71,7 @@ public class NewMacroDialog extends EscapableDialog {
 	private static Icon ERROR_ICON;
 	private static Icon WARN_ICON;
 
-	private static final String[] NOTE_TYPES = { "Rhino", "Groovy", };
+	private static final String[] NOTE_TYPES = { "JS", "Groovy", };
 	private static final String[] EXTENSIONS = { ".js", ".groovy", };
 
 	private static final String MSG = "org.fife.rtext.plugins.macros.NewMacroDialog";

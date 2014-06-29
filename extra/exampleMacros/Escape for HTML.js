@@ -1,5 +1,5 @@
 /*
- * This is a Rhino (Javascript) macro for RText that replaces any selected text
+ * This is a JavaScript macro for RText that replaces any selected text
  * with a version of that text that is escaped for HTML.
  *
  * Global variables include:
@@ -13,13 +13,11 @@
  *   http://javadoc.fifesoft.com/rsyntaxtextarea/
  *
  */
-importPackage(java.lang, java.util.regex, javax.swing);
-importPackage(org.fife.rtext);
 
 function replaceMultipleSpaces(text) {
-	var p = Pattern.compile("  +");
+	var p = java.util.regex.Pattern.compile("  +");
 	var m = p.matcher(text);
-	var sb = new StringBuffer();
+	var sb = new java.lang.StringBuffer();
 	while (m.find()) {
 		var spaces = m.group();
 		m.appendReplacement(sb, spaces.replace(" ", "&nbsp;"));
@@ -33,10 +31,10 @@ try {
 
 	var text = textArea.selectedText;
 	if (text==null || text.length()==0) {
-		JOptionPane.showMessageDialog(rtext,
+		javax.swing.JOptionPane.showMessageDialog(rtext,
 				"Error:  No selection.\n" +
 				"Text must be selected to HTML-ify.",
-				"Error", JOptionPane.ERROR_MESSAGE);
+				"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
 	}
 	else {
 		text = text.replace("&", "&amp;").replace("\"", "&quot;").

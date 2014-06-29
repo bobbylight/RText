@@ -1,5 +1,5 @@
 /*
- * This is a Rhino (Javascript) macro for RText.
+ * This is a JavaScript macro for RText.
  *
  * Global variables include:
  *   - rtext:           The focused application window, an instance of
@@ -11,8 +11,7 @@
  *   http://javadoc.fifesoft.com/rtext/
  *   http://javadoc.fifesoft.com/rsyntaxtextarea/
  */
-importPackage(java.lang, javax.swing);
-
+ 
 textArea.append("\nThis is new text\n");
 textArea.caretPosition = textArea.document.length;
-JOptionPane.showMessageDialog(rtext, "Text has been appended!");
+javax.swing.JOptionPane.showMessageDialog(rtext, "Text has been appended!");

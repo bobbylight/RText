@@ -2,7 +2,7 @@
  * 12/22/2010
  *
  * JavaScriptShellTextArea.java - A shell allowing you to muck with RText's
- * innards via Rhino.
+ * innards via Java's JavaScript engine.
  * Copyright (C) 2010 Robert Futrell
  * http://fifesoft.com/rtext
  * Licensed under a modified BSD license.
@@ -19,11 +19,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
 /**
- * A shell allowing you to muck with RText's innards via Rhino.
+ * A shell allowing you to muck with RText's innards via Java's JavaScript
+ * engine.
  *
  * @author Robert Futrell
  * @version 1.0
@@ -71,7 +73,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	 */
 	@Override
 	public void appendPrompt() {
-		appendImpl("Rhino> ", STYLE_PROMPT);
+		appendImpl("JS> ", STYLE_PROMPT);
 	}
 
 
@@ -221,7 +223,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 				Class<?> semClazz = Class.forName("javax.script.ScriptEngineManager");
 				Object sem = semClazz.newInstance();
 
-				// Get the Rhino engine.
+				// Get the JS engine.
 				Method m = semClazz.getDeclaredMethod("getEngineByName",
 											String.class);
 				jsEngine = m.invoke(sem, "JavaScript");
@@ -259,9 +261,16 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 				// Import commonly-used packages.  Do this before stdout and
 				// stderr redirecting so the user won't see it in their console.
-				handleSubmitImpl("importPackage(java.lang, java.io, java.util, " +
-					"java.awt, java.swing, org.fife.rtext, org.fife.ui.rtextarea, " +
-					"org.fife.ui.rsyntaxtextarea)", false);
+				StringBuilder imports = new StringBuilder();
+				if (!UIUtil.isPreJava8()) {
+					// Nashorn requires this for Rhino compatibility functions
+					// such as importPackage
+					imports.append("load('nashorn:mozilla_compat.js');");
+				}
+				imports.append("importPackage(java.lang, java.io, " +
+						"java.util, java.awt, javax.swing, org.fife.rtext, " +
+						"org.fife.ui.rtextarea, org.fife.ui.rsyntaxtextarea)");
+				handleSubmitImpl(imports.toString(), false);
 
 			} catch (Exception e) {
 				e.printStackTrace();
