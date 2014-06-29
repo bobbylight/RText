@@ -174,8 +174,8 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 			Color defaultMarkAllColor = RTextArea.getDefaultMarkAllHighlightColor();
 			Color defaultMarkOccurrencesColor = new Color(224, 224, 224);
 			Color defaultSelectedTextColor = Color.white;
-			int defaultInsertCaret = ConfigurableCaret.THICK_VERTICAL_LINE_STYLE;
-			int defaultOverwriteCaret = ConfigurableCaret.BLOCK_STYLE;
+			CaretStyle defaultInsertCaret = CaretStyle.THICK_VERTICAL_LINE_STYLE;
+			CaretStyle defaultOverwriteCaret = CaretStyle.BLOCK_STYLE;
 			Integer defaultCaretBlinkRate = new Integer(500);
 			Color[] defaultSecLangColor = new Color[SEC_LANG_COUNT];
 			defaultSecLangColor[0] = new Color(0xfff0cc);
@@ -522,13 +522,18 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 * @param mode Either <code>RTextArea.INSERT_MODE</code> or
 	 *        <code>RTextArea.OVERWRITE_MODE</code>.
 	 * @return The style of that caret, such as
-	 *        <code>ConfigurableCaret.VERTICAL_LINE_STYLE</code>.
-	 * @see org.fife.ui.rtextarea.ConfigurableCaret
+	 *        <code>CaretStyle.VERTICAL_LINE_STYLE</code>.
+	 * @see ConfigurableCaret
 	 */
-	public int getCaretStyle(int mode) {
-		if (mode==RTextArea.INSERT_MODE)
-			return insCaretCombo.getSelectedIndex();
-		return overCaretCombo.getSelectedIndex(); // OVERWRITE_MODE
+	public CaretStyle getCaretStyle(int mode) {
+		int ordinal = 0;
+		if (mode==RTextArea.INSERT_MODE) {
+			ordinal = insCaretCombo.getSelectedIndex();
+		}
+		else {
+			ordinal = overCaretCombo.getSelectedIndex(); // OVERWRITE_MODE
+		}
+		return CaretStyle.values()[ordinal];
 	}
 
 
@@ -634,16 +639,16 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 * @param mode Either <code>RTextArea.INSERT_MODE</code> or
 	 *        <code>RTextArea.OVERWRITE_MODE</code>.
 	 * @param style The style for the specified caret, such as
-	 *        <code>ConfigurableCaret.VERTICAL_LINE_STYLE</code>.
+	 *        <code>CaretStyle.VERTICAL_LINE_STYLE</code>.
 	 * @see #getCaretStyle(int)
 	 */
-	private void setCaretStyle(int mode, int style) {
+	private void setCaretStyle(int mode, CaretStyle style) {
 		switch (mode) {
 			case RTextArea.INSERT_MODE:
-				insCaretCombo.setSelectedIndex(style);
+				insCaretCombo.setSelectedIndex(style.ordinal());
 				break;
 			case RTextArea.OVERWRITE_MODE:
-				overCaretCombo.setSelectedIndex(style);
+				overCaretCombo.setSelectedIndex(style.ordinal());
 				break;
 			default:
 				throw new IllegalArgumentException("mode must be " +

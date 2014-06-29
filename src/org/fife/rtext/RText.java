@@ -1067,7 +1067,7 @@ public class RText extends AbstractPluggableGUIApplication
 				break;
 		}
 
-		csp = new CollapsibleSectionPanel();
+		csp = new CollapsibleSectionPanel(false);
 		csp.add(mainView);
 		getContentPane().add(csp);
 

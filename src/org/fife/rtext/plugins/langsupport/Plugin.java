@@ -14,8 +14,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -68,7 +71,7 @@ public class Plugin extends AbstractPlugin {
 
 	private RText rtext;
 	private Listener listener;
-	private Icon[] icons;
+	private Map<ParserNotice.Level, Icon> icons;
 
 	private static final String PLUGIN_VERSION			= "2.5.2";
 	private static final String PREFS_FILE_NAME			= "langSupport.properties";
@@ -187,11 +190,11 @@ public class Plugin extends AbstractPlugin {
 	 */
 	public void install(AbstractPluggableGUIApplication app) {
 
-		icons = new Icon[3];
-		icons[0] = createIcon("error_obj.gif");
-		icons[1] = createIcon("warning_obj.gif");
+		icons = new HashMap<ParserNotice.Level, Icon>();
+		icons.put(ParserNotice.Level.ERROR, createIcon("error_obj.gif"));
+		icons.put(ParserNotice.Level.WARNING, createIcon("warning_obj.gif"));
 		// Informational icons are annoying - spelling errors, etc.
-		//icons[2] = createIcon("info_obj.gif");
+		//icons.put(ParserNotice.Level.INFO, createIcon("info_obj.gif"));
 
 		rtext = (RText)app;
 		listener = new Listener();
@@ -564,13 +567,16 @@ public class Plugin extends AbstractPlugin {
 				List<ParserNotice> notices = textArea.getParserNotices();
 				for (ParserNotice notice : notices) {
 					int line = notice.getLine();
-					Icon icon = icons[notice.getLevel()];
-					try {
-						g.addLineTrackingIcon(line, icon, notice.getMessage());
-					} catch (BadLocationException ble) { // Never happens
-						System.err.println("*** Error adding notice:\n" +
-								notice + ":");
-						ble.printStackTrace();
+					Icon icon = icons.get(notice.getLevel());
+					if (icon!=null) {
+						try {
+							g.addLineTrackingIcon(line, icon,
+									notice.getMessage());
+						} catch (BadLocationException ble) { // Never happens
+							System.err.println("*** Error adding notice:\n" +
+									notice + ":");
+							ble.printStackTrace();
+						}
 					}
 				}
 				

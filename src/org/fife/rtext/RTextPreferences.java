@@ -32,7 +32,7 @@ import org.fife.ui.app.GUIApplicationPreferences;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Style;
-import org.fife.ui.rtextarea.ConfigurableCaret;
+import org.fife.ui.rtextarea.CaretStyle;
 import org.fife.ui.rtextarea.RTextArea;
 
 
@@ -230,8 +230,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 		props.statusBarStyle			= rtext.getStatusBar().getStyle();
 		props.roundedSelectionEdges		= mainView.getRoundedSelectionEdges();
 		props.workingDirectory			= rtext.getWorkingDirectory();
-		props.carets[RTextArea.INSERT_MODE]= mainView.getCaretStyle(RTextArea.INSERT_MODE);
-		props.carets[RTextArea.OVERWRITE_MODE]= mainView.getCaretStyle(RTextArea.OVERWRITE_MODE);
+		props.carets[RTextArea.INSERT_MODE]= mainView.getCaretStyle(RTextArea.INSERT_MODE).ordinal();
+		props.carets[RTextArea.OVERWRITE_MODE]= mainView.getCaretStyle(RTextArea.OVERWRITE_MODE).ordinal();
 		props.caretBlinkRate			= mainView.getCaretBlinkRate();
 		props.searchToolBarVisible		= rtext.isSearchToolBarVisible();
 		props.dividerLocations[RText.TOP]	= rtext.getSplitPaneDividerLocation(RText.TOP);
@@ -788,8 +788,8 @@ public class RTextPreferences extends GUIApplicationPreferences
 		roundedSelectionEdges = false;
 		workingDirectory = System.getProperty("user.dir");
 		carets = new int[2];
-		carets[RTextArea.INSERT_MODE] = ConfigurableCaret.THICK_VERTICAL_LINE_STYLE;
-		carets[RTextArea.OVERWRITE_MODE] = ConfigurableCaret.BLOCK_STYLE;
+		carets[RTextArea.INSERT_MODE] = CaretStyle.THICK_VERTICAL_LINE_STYLE.ordinal();
+		carets[RTextArea.OVERWRITE_MODE] = CaretStyle.BLOCK_STYLE.ordinal();
 		caretBlinkRate	= 500;
 		searchToolBarVisible = false;
 		dividerLocations = new int[4];

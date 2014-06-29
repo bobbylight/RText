@@ -23,6 +23,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 import java.util.Timer;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
@@ -44,6 +45,7 @@ import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
+import org.fife.ui.rtextarea.CaretStyle;
 import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.Macro;
 import org.fife.ui.rtextarea.RTextArea;
@@ -170,7 +172,7 @@ public abstract class AbstractMainView extends JPanel
 	private boolean roundedSelectionEdges;
 	private int caretBlinkRate;
 
-	private int[] carets;					// index 0=>insert, 1=>overwrite.
+	private CaretStyle[] carets;			// index 0=>insert, 1=>overwrite.
 
 	private boolean doFileSizeCheck;
 	private float maxFileSize;				// In MB.
@@ -698,7 +700,7 @@ public abstract class AbstractMainView extends JPanel
 
 	protected ErrorStrip createErrorStrip(RTextEditorPane textArea) {
 		ErrorStrip strip = new ErrorStrip(textArea);
-		strip.setLevelThreshold(ParserNotice.WARNING);
+		strip.setLevelThreshold(ParserNotice.Level.WARNING);
 		return strip;
 	}
 
@@ -1048,11 +1050,11 @@ public abstract class AbstractMainView extends JPanel
 	 * @param mode Either <code>RTextArea.INSERT_MODE</code> or
 	 *        <code>RTextArea.OVERWRITE_MODE</code>.
 	 * @return The style of that caret, such as
-	 *        <code>ConfigurableCaret.VERTICAL_LINE_STYLE</code>.
-	 * @see #setCaretStyle
-	 * @see org.fife.ui.rtextarea.ConfigurableCaret
+	 *        <code>CaretStyle.VERTICAL_LINE_STYLE</code>.
+	 * @see #setCaretStyle(int, CaretStyle)
+	 * @see CaretStyle
 	 */
-	public int getCaretStyle(int mode) {
+	public CaretStyle getCaretStyle(int mode) {
 		return carets[mode];
 	}
 
@@ -2182,9 +2184,9 @@ public abstract class AbstractMainView extends JPanel
 		setMarkOccurrences(prefs.markOccurrences);
 		setMarkOccurrencesColor(prefs.markOccurrencesColor);
 		setRoundedSelectionEdges(prefs.roundedSelectionEdges);
-		carets = new int[2];
-		setCaretStyle(RTextArea.INSERT_MODE, prefs.carets[0]);
-		setCaretStyle(RTextArea.OVERWRITE_MODE, prefs.carets[1]);
+		carets = new CaretStyle[2];
+		setCaretStyle(RTextArea.INSERT_MODE, CaretStyle.values()[prefs.carets[0]]);
+		setCaretStyle(RTextArea.OVERWRITE_MODE, CaretStyle.values()[prefs.carets[1]]);
 		setCaretBlinkRate(prefs.caretBlinkRate);
 		setLineTerminator(prefs.defaultLineTerminator);
 		setDefaultEncoding(prefs.defaultEncoding);
@@ -3088,10 +3090,10 @@ public abstract class AbstractMainView extends JPanel
 	 * @param mode Either <code>RTextArea.INSERT_MODE</code> or
 	 *        <code>RTextArea.OVERWRITE_MODE</code>.
 	 * @param style The style for the specified caret, such as
-	 *        <code>ConfigurableCaret.VERTICAL_LINE_STYLE</code>.
-	 * @see #getCaretStyle
+	 *        <code>CaretStyle.VERTICAL_LINE_STYLE</code>.
+	 * @see #getCaretStyle(int)
 	 */
-	public void setCaretStyle(int mode, int style) {
+	public void setCaretStyle(int mode, CaretStyle style) {
 		if (mode!=RTextArea.INSERT_MODE &&
 				mode!=RTextArea.OVERWRITE_MODE)
 			return;
@@ -4173,8 +4175,7 @@ public abstract class AbstractMainView extends JPanel
 	 * @see #getWriteBOMInUtf8Files()
 	 */
 	public void setWriteBOMInUtf8Files(boolean write) {
-		System.setProperty(UnicodeWriter.PROPERTY_WRITE_UTF8_BOM,
-						Boolean.toString(write));
+		UnicodeWriter.setWriteUtf8BOM(write);
 	}
 
 
