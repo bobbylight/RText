@@ -10,6 +10,7 @@
 package org.fife.rtext.plugins.project.tree;
 
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +24,7 @@ import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.plugins.project.BaseAction;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
@@ -156,7 +158,14 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	@Override
 	public List<PopupContent> getPopupActions() {
 		List<PopupContent> actions = new ArrayList<PopupContent>();
-		if (!getFile().isDirectory()) {
+		if (getFile().isDirectory()) {
+			PopupContent.PopupSubMenu newMenu = new PopupContent.PopupSubMenu(
+					Messages.getString("Action.New"));
+			newMenu.add(new NewFileOrFolderAction(true));
+			newMenu.add(new NewFileOrFolderAction(false));
+			actions.add(newMenu);
+		}
+		else {
 			actions.add(new OpenAction());
 		}
 		possiblyAddOpenInActions(actions);
@@ -366,6 +375,34 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 				}
 			}
 			return null;
+		}
+
+	}
+
+
+	/**
+	 * Creates a new child file or folder whose parent is this node's file
+	 * (which must be a directory).
+	 */
+	private class NewFileOrFolderAction extends BaseAction {
+
+		private boolean isFile;
+
+		private NewFileOrFolderAction(boolean isFile) {
+			super(isFile ? "Action.NewFile": "Action.NewFolder",
+				isFile ? "page_white_add.png" : "folder_add.png");
+			this.isFile = isFile;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+
+			File parent = getFile();
+			if (parent==null || !parent.isDirectory()) {
+				UIManager.getLookAndFeel().provideErrorFeedback(null);
+				return;
+			}
+
+			UIManager.getLookAndFeel().provideErrorFeedback(null);
 		}
 
 	}

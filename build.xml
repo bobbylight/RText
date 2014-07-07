@@ -46,7 +46,7 @@
 	<!-- Set global properties for this build. -->
 	<property name="app-name"         value="RText"/>
 	<property name="app-name-small"   value="rtext"/>
-	<property name="version"          value="2.5.2"/>
+	<property name="version"          value="2.5.3"/>
 	<property name="source-dir"       location="src"/>
 	<property name="common-dir"       location="../FifeCommon"/>
 	<property name="class-dir"        location="ant-classes"/>
