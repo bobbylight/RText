@@ -9,6 +9,10 @@
  */
 package org.fife.rtext.plugins.tidy;
 
+import java.awt.Toolkit;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+
 import javax.swing.KeyStroke;
 
 import org.fife.ui.app.Prefs;
@@ -34,7 +38,9 @@ public class PluginPrefs extends Prefs {
 	 */
 	@Override
 	public void setDefaults() {
-		tidyActionAccelerator = null;
+		int defaultMod = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+		int defShift = defaultMod | InputEvent.SHIFT_MASK;
+		tidyActionAccelerator = KeyStroke.getKeyStroke(KeyEvent.VK_P, defShift);
 	}
 
 

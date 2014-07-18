@@ -37,6 +37,8 @@ import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.buildpath.ZipSourceLocation;
+import org.fife.rsta.ac.js.JavaScriptLanguageSupport;
+import org.fife.rsta.ac.js.JsErrorParser;
 import org.fife.rsta.ac.jsp.JspLanguageSupport;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 import org.fife.rsta.ac.php.PhpLanguageSupport;
@@ -308,6 +310,29 @@ public class Plugin extends AbstractPlugin {
 		}
 
 		language = SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT;
+		ls = fact.getSupportFor(language);
+		JavaScriptLanguageSupport jsls = (JavaScriptLanguageSupport)ls;
+		jsls.setAutoCompleteEnabled(prefs.js_enabled);
+		jsls.setParameterAssistanceEnabled(prefs.js_paramAssistance);
+		jsls.setShowDescWindow(prefs.js_showDescWindow);
+		jsls.setAutoActivationEnabled(prefs.js_autoActivation);
+		jsls.setAutoActivationDelay(prefs.js_autoActivationDelay);
+		JsErrorParser jsErrorParser = JsErrorParser.RHINO;
+		if (prefs.js_syntaxCheckingEngine!=null) {
+			try {
+				jsErrorParser = JsErrorParser.valueOf(
+						prefs.js_syntaxCheckingEngine);
+			} catch (Exception e) {
+				e.printStackTrace(); // Keep default
+			}
+		}
+		jsls.setErrorParser(jsErrorParser);
+		if (prefs.js_jshintRcFile!=null &&
+				prefs.js_jshintRcFile.isFile()) {
+			jsls.setJsHintRCFile(prefs.js_jshintRcFile);
+		}
+		jsls.setStrictMode(prefs.js_rhinoStrictSyntaxChecking);
+		jsls.setXmlAvailable(prefs.js_rhinoAllowE4x);
 		view.setCodeFoldingEnabledFor(language, prefs.js_folding_enabled);
 
 		language = SyntaxConstants.SYNTAX_STYLE_JSON;
@@ -458,6 +483,17 @@ public class Plugin extends AbstractPlugin {
 		prefs.java_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT;
+		ls = fact.getSupportFor(language);
+		JavaScriptLanguageSupport jsls = (JavaScriptLanguageSupport)ls;
+		prefs.js_enabled = jsls.isAutoCompleteEnabled();
+		prefs.js_paramAssistance = jsls.isParameterAssistanceEnabled();
+		prefs.js_showDescWindow = jsls.getShowDescWindow();
+		prefs.js_autoActivation = jsls.isAutoActivationEnabled();
+		prefs.js_autoActivationDelay = jsls.getAutoActivationDelay();
+		prefs.js_syntaxCheckingEngine = jsls.getErrorParser().name();
+		prefs.js_jshintRcFile = jsls.getJsHintRCFile();
+		prefs.js_rhinoStrictSyntaxChecking = jsls.isStrictMode();
+		prefs.js_rhinoAllowE4x = jsls.isXmlAvailable();
 		prefs.js_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_JSON;

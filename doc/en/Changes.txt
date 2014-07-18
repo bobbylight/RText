@@ -2,9 +2,18 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
-2.5.3 (
--------------------
-   - 
+2.5.3 (07/08/2014)
+------------------
+   - Improvements to PHP syntax highlighting.
+   - In HTML and XML, "mark occurrences" now matches tag names even when the
+     caret is in an attribute, not just when it is in the tag name itself.
+   - Java syntax highlighting updated for Java 8 classes, interfaces and enums.
+   - SQL now highlights matching opening/closing parens.
+   - Fixed error message about failing to find english_dic.zip on some OSes
+     in some instances.
+   - Updated Groovy macros to use 2.3.3 from 1.8.8.
+   - JavaScript macros and console now work with Java 8 (Nashorn) as well as
+     Java 6 and 7 (Rhino).
 
 
 2.5.2 (03/12/2014):

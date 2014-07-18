@@ -13,6 +13,7 @@ import java.io.File;
 
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
+import org.fife.rsta.ac.js.JsErrorParser;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 import org.fife.ui.app.Prefs;
 
@@ -55,6 +56,15 @@ public class LangSupportPreferences extends Prefs {
 	public boolean java_checkForBuildPathMods;
 	public boolean java_folding_enabled;
 
+	public boolean js_enabled;
+	public boolean js_paramAssistance;
+	public boolean js_showDescWindow;
+	public boolean js_autoActivation;
+	public int js_autoActivationDelay;
+	public String js_syntaxCheckingEngine;
+	public File js_jshintRcFile;
+	public boolean js_rhinoStrictSyntaxChecking;
+	public boolean js_rhinoAllowE4x;
 	public boolean js_folding_enabled;
 
 	public boolean json_folding_enabled;
@@ -144,6 +154,15 @@ public class LangSupportPreferences extends Prefs {
 		java_checkForBuildPathMods = true;
 		java_folding_enabled = true;
 
+		js_enabled = true;
+		js_paramAssistance = true;
+		js_showDescWindow = true;
+		js_autoActivation = true;
+		js_autoActivationDelay = AUTO_ACTIVATION_DELAY;
+		js_syntaxCheckingEngine = JsErrorParser.RHINO.name();
+		js_jshintRcFile = null;
+		js_rhinoStrictSyntaxChecking = false;
+		js_rhinoAllowE4x = false;
 		js_folding_enabled = true;
 
 		json_folding_enabled = true;
