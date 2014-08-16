@@ -30,7 +30,7 @@ import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.BaseAction;
 import org.fife.rtext.plugins.project.LogicalFolderNameDialog;
 import org.fife.rtext.plugins.project.Messages;
-import org.fife.rtext.plugins.project.NewFolderDialog;
+import org.fife.rtext.plugins.project.NewExistingFolderDialog;
 import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.FileProjectEntry;
@@ -93,6 +93,11 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 * @return The icon for this tree node.
 	 */
 	public abstract Icon getIcon();
+
+
+	public ProjectPlugin getPlugin() {
+		return plugin;
+	}
 
 
 	public abstract List<PopupContent> getPopupActions();
@@ -233,14 +238,14 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		private MutableTreeNode node;
 
 		public AddFolderAction(ProjectEntryParent parent, MutableTreeNode node) {
-			super("Action.NewFolder", "folder_add.png");
+			super("Action.AddFolder", "folder_add.png");
 			this.parent = parent;
 			this.node = node;
 		}
 
 		public void actionPerformed(ActionEvent e) {
 			RText rtext = plugin.getRText();
-			NewFolderDialog chooser = new NewFolderDialog(rtext);
+			NewExistingFolderDialog chooser = new NewExistingFolderDialog(rtext);
 			chooser.setVisible(true);
 			String dir = chooser.getChosenDirectory();
 			if (dir!=null) {

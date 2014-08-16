@@ -243,9 +243,9 @@ class ProjectWindow extends DockableWindow {
 			Icon icon = WorkspaceRootTreeNode.getWorkspaceIcon();
 			dialog.setDescription(icon, Messages.getString("NewWorkspaceDialog.Desc"));
 			dialog.setTitle(Messages.getString("NewWorkspaceDialog.Title"));
-			dialog.setName(null); // Move focus from desc SelectableLabel to field.
+			dialog.setFileName(null); // Move focus from desc SelectableLabel to field.
 			dialog.setVisible(true);
-			String newName = dialog.getName();
+			String newName = dialog.getFileName();
 
 			if (newName!=null) {
 				File newLoc = new File(plugin.getWorkspacesDir(), newName + ".xml");

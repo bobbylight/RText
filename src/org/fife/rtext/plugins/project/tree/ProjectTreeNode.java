@@ -134,9 +134,9 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 		String type = Messages.getString("ProjectPlugin.Project");
 		RenameDialog dialog = new RenameDialog(rtext, type,
 				new ProjectNameChecker(project.getWorkspace()));
-		dialog.setName(project.getName());
+		dialog.setFileName(project.getName());
 		dialog.setVisible(true);
-		String newName = dialog.getName();
+		String newName = dialog.getFileName();
 		if (newName!=null) {
 			project.setName(newName);
 			plugin.getTree().nodeChanged(this);

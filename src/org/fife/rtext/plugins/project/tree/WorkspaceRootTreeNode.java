@@ -107,9 +107,9 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 		RText rtext = plugin.getRText();
 		String type = Messages.getString("ProjectPlugin.Workspace");
 		RenameDialog dialog = new RenameDialog(rtext, type, new WorkspaceNameChecker());
-		dialog.setName(workspace.getName());
+		dialog.setFileName(workspace.getName());
 		dialog.setVisible(true);
-		String newName = dialog.getName();
+		String newName = dialog.getFileName();
 		if (newName!=null) {
 			if (workspace.setName(newName)) {
 				plugin.getTree().nodeChanged(this);
@@ -147,9 +147,9 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 			Icon icon = ProjectTreeNode.getProjectIcon();
 			dialog.setDescription(icon, Messages.getString("NewProjectDialog.Desc"));
 			dialog.setTitle(Messages.getString("NewProjectDialog.Title"));
-			dialog.setName(null); // Move focus from desc SelectableLabel to field.
+			dialog.setFileName(null); // Move focus from desc SelectableLabel to field.
 			dialog.setVisible(true);
-			String newName = dialog.getName();
+			String newName = dialog.getFileName();
 			if (newName!=null) {
 				Project project = new Project(workspace, newName);
 				workspace.addProject(project);

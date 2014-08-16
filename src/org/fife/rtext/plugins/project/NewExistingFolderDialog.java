@@ -50,7 +50,7 @@ import org.fife.ui.rtextfilechooser.DirectoryTree;
  * @author Robert Futrell
  * @version 0.1
  */
-public class NewFolderDialog extends EscapableDialog {
+public class NewExistingFolderDialog extends EscapableDialog {
 
 	private SelectableLabel descLabel;
 	private JButton backButton;
@@ -75,7 +75,7 @@ public class NewFolderDialog extends EscapableDialog {
 	 *
 	 * @param parent The window that owns this directory chooser.
 	 */
-	public NewFolderDialog(RText parent) {
+	public NewExistingFolderDialog(RText parent) {
 		this(parent, null);
 	}
 
@@ -87,7 +87,7 @@ public class NewFolderDialog extends EscapableDialog {
 	 * @param entry If non-<code>null</code>, this will be a dialog to edit
 	 *        the entry, instead of create a new one.
 	 */
-	public NewFolderDialog(RText parent, FolderProjectEntry entry) {
+	public NewExistingFolderDialog(RText parent, FolderProjectEntry entry) {
 		super(parent);
 		init(parent);
 		if (entry!=null) {
@@ -381,11 +381,11 @@ public class NewFolderDialog extends EscapableDialog {
 		public void propertyChange(PropertyChangeEvent e) {
 			String property = e.getPropertyName();
 			if (property.equals(DirectoryTree.WILL_EXPAND_PROPERTY)) {
-				NewFolderDialog.this.setCursor(
+				NewExistingFolderDialog.this.setCursor(
 					Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			}
 			else if (property.equals(DirectoryTree.EXPANDED_PROPERTY)) {
-				NewFolderDialog.this.setCursor(
+				NewExistingFolderDialog.this.setCursor(
 					Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
 		}

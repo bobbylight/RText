@@ -15,12 +15,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.plugins.project.BaseAction;
 import org.fife.rtext.plugins.project.Messages;
-import org.fife.rtext.plugins.project.NewFolderDialog;
+import org.fife.rtext.plugins.project.NewExistingFolderDialog;
 import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.FolderFilterInfo;
@@ -128,6 +129,11 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	@Override
 	public List<PopupContent> getPopupActions() {
 		List<PopupContent> actions = super.getPopupActions();
+		PopupContent.PopupSubMenu newMenu = new PopupContent.PopupSubMenu(
+				Messages.getString("Action.New"));
+		actions.add(0, newMenu);
+		newMenu.add(new NewFileOrFolderAction(this, true));
+		newMenu.add(new NewFileOrFolderAction(this, false));
 		actions.add(actions.size()-1, new ConfigureFiltersAction());
 		return actions;
 	}
@@ -209,7 +215,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		public void actionPerformed(ActionEvent e) {
 
 			FolderProjectEntry fpe = (FolderProjectEntry)entry;
-			NewFolderDialog dialog = new NewFolderDialog(plugin.getRText(),fpe);
+			NewExistingFolderDialog dialog = new NewExistingFolderDialog(plugin.getRText(),fpe);
 			dialog.setVisible(true);
 
 			FolderFilterInfo info = dialog.getFilterInfo();

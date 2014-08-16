@@ -12,6 +12,7 @@ package org.fife.rtext.plugins.project.tree;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -169,13 +170,13 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 			dialog.setDescription(getIcon(),
 					Messages.getString("RenameDialog.DisplayName.Desc"));
 			dialog.setNameLabel(Messages.getString("RenameDialog.DisplayName.Label"));
-			dialog.setName(fpe.getDisplayName());
+			dialog.setFileName(fpe.getDisplayName());
 		}
 		else {
-			dialog.setName(FileDisplayNames.get().getName(entry.getFile()));
+			dialog.setFileName(FileDisplayNames.get().getName(entry.getFile()));
 		}
 		dialog.setVisible(true);
-		String newName = dialog.getName();
+		String newName = dialog.getFileName();
 		if (newName!=null) {
 			handleRenameImpl(newName);
 		}

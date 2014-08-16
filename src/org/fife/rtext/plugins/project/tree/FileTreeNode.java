@@ -10,12 +10,12 @@
 package org.fife.rtext.plugins.project.tree;
 
 import java.awt.Window;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -24,7 +24,6 @@ import javax.swing.tree.TreeNode;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
-import org.fife.rtext.plugins.project.BaseAction;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
@@ -161,8 +160,8 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		if (getFile().isDirectory()) {
 			PopupContent.PopupSubMenu newMenu = new PopupContent.PopupSubMenu(
 					Messages.getString("Action.New"));
-			newMenu.add(new NewFileOrFolderAction(true));
-			newMenu.add(new NewFileOrFolderAction(false));
+			newMenu.add(new NewFileOrFolderAction(this, true));
+			newMenu.add(new NewFileOrFolderAction(this, false));
 			actions.add(newMenu);
 		}
 		else {
@@ -288,9 +287,9 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		String type = Messages.getString(key);
 		RenameDialog dialog = new RenameDialog(rtext, type,
 				new FileNameChecker(getFile().getParentFile(), directory));
-		dialog.setName(getFile().getName());
+		dialog.setFileName(getFile().getName());
 		dialog.setVisible(true);
-		String newName = dialog.getName();
+		String newName = dialog.getFileName();
 		if (newName!=null) {
 			File old = getFile();
 			File newFile = new File(old.getParentFile(), newName);
@@ -375,34 +374,6 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 				}
 			}
 			return null;
-		}
-
-	}
-
-
-	/**
-	 * Creates a new child file or folder whose parent is this node's file
-	 * (which must be a directory).
-	 */
-	private class NewFileOrFolderAction extends BaseAction {
-
-		private boolean isFile;
-
-		private NewFileOrFolderAction(boolean isFile) {
-			super(isFile ? "Action.NewFile": "Action.NewFolder",
-				isFile ? "page_white_add.png" : "folder_add.png");
-			this.isFile = isFile;
-		}
-
-		public void actionPerformed(ActionEvent e) {
-
-			File parent = getFile();
-			if (parent==null || !parent.isDirectory()) {
-				UIManager.getLookAndFeel().provideErrorFeedback(null);
-				return;
-			}
-
-			UIManager.getLookAndFeel().provideErrorFeedback(null);
 		}
 
 	}
