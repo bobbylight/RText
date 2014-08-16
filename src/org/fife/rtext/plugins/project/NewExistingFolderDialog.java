@@ -202,8 +202,7 @@ public class NewExistingFolderDialog extends EscapableDialog {
 		scrollPane.setVerticalScrollBarPolicy(
 							RScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		treePanel.add(scrollPane);
-		cp.add(treePanel);
-		layout.addLayoutComponent(treePanel, PANELS[0]);
+		cp.add(treePanel, PANELS[0]);
 
 		// The "enter filters" panel.
 		Box filterPanel = Box.createVerticalBox();
@@ -230,8 +229,7 @@ public class NewExistingFolderDialog extends EscapableDialog {
 		filterPanel.add(Box.createVerticalGlue());
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(filterPanel, BorderLayout.NORTH);
-		cp.add(temp);
-		layout.addLayoutComponent(temp, PANELS[1]);
+		cp.add(temp, PANELS[1]);
 
 		// Add a panel with the OK and Cancel buttons.
 		JPanel container = new ResizableFrameContentPane(new BorderLayout());
