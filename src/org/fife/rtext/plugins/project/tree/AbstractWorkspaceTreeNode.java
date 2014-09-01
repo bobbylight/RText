@@ -357,7 +357,6 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			WorkspaceTree tree = plugin.getTree();
 			Object selected = tree.getLastSelectedPathComponent();
 			File file = null;
-			System.out.println(selected);
 			if (selected instanceof FileTreeNode) {
 				file = ((FileTreeNode)selected).getFile();
 			}

@@ -127,7 +127,7 @@ class Tree extends FileSystemTree {
 				AbstractMainView mainView = plugin.getRText().getMainView();
 				// null encoding means check for Unicode first, and
 				// if it isn't, use system default encoding.
-				mainView.openFile(file.getAbsolutePath(), null);
+				mainView.openFile(file.getAbsolutePath(), null, true);
 			}
 		}
 	}

@@ -1666,7 +1666,7 @@ public class RText extends AbstractPluggableGUIApplication
 			public void run() {
 				// null encoding means check for Unicode before using
 				// system default encoding.
-				mainView.openFile(filename, null);
+				mainView.openFile(filename, null, true);
 			}
 		});
 	}

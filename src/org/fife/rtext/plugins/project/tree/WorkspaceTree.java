@@ -255,7 +255,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			// (as opposed to a directory) before attempting to open it.
 			if (file.isFile()) {
 				AbstractMainView mainView = plugin.getRText().getMainView();
-				mainView.openFile(file.getAbsolutePath(), null);
+				mainView.openFile(file.getAbsolutePath(), null, true);
 			}
 			else if (getLastSelectedPathComponent()
 					instanceof FileProjectEntryTreeNode) {
