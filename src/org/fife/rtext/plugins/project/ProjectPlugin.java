@@ -66,7 +66,7 @@ public class ProjectPlugin extends GUIPlugin {
 	private static final String VERSION_STRING = "2.5.3";
 
 
-	public ProjectPlugin(AbstractPluggableGUIApplication app) {
+	public ProjectPlugin(AbstractPluggableGUIApplication<?> app) {
 
 		rtext = (RText)app; // Needed now in case of XML errors below.
 
@@ -230,7 +230,7 @@ public class ProjectPlugin extends GUIPlugin {
 	}
 
 
-	public void install(AbstractPluggableGUIApplication app) {
+	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		File workspaceDir = getWorkspacesDir();
 		if (!workspaceDir.isDirectory()) {

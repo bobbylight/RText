@@ -221,8 +221,8 @@ class Tree extends FileSystemTree {
 		public void actionPerformed(ActionEvent e) {
 			if (newWindow) {
 				// Create a new RText window.
-				RText r= new RText(null, (RTextPreferences)RTextPreferences.
-						generatePreferences(plugin.getRText()));
+				RText r = new RText(null,
+						new RTextPrefs().populate(plugin.getRText()));
 				StoreKeeper.addRTextInstance(r);
 				String file = getSelectedFileName();
 				// Open the new RText's file chooser.  Do this in an

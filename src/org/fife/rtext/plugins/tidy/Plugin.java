@@ -72,7 +72,7 @@ public class Plugin extends AbstractPlugin
 	 *
 	 * @param app The parent application.
 	 */
-	public Plugin(AbstractPluggableGUIApplication app) {
+	public Plugin(AbstractPluggableGUIApplication<?> app) {
 		this.rtext = (RText)app; // Needed in loadPreferences if error
 	}
 
@@ -234,7 +234,7 @@ public class Plugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
-	public void install(AbstractPluggableGUIApplication app) {
+	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		PluginPrefs prefs = loadPreferences();
 

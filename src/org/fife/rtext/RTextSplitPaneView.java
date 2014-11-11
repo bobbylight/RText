@@ -82,7 +82,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 *        this view.
 	 */
 	public RTextSplitPaneView(RText owner, String[] filesToOpen,
-										RTextPreferences prefs) {
+										RTextPrefs prefs) {
 
 		setLayout(new GridLayout(1,1));	// So the split pane takes up the whole panel.
 

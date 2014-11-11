@@ -19,7 +19,7 @@ import javax.swing.SwingUtilities;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
-import org.fife.rtext.RTextPreferences;
+import org.fife.rtext.RTextPrefs;
 import org.fife.rtext.StoreKeeper;
 import org.fife.ui.app.StandardAction;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
@@ -59,8 +59,8 @@ class OpenInNewWindowAction extends StandardAction {
 	public synchronized void actionPerformed(ActionEvent e) {
 
 		// Create a new RText window.
-		newWindow = new RText(null, (RTextPreferences)RTextPreferences.
-					generatePreferences((RText)getApplication()));
+		newWindow = new RText(null,
+				new RTextPrefs().populate((RText)getApplication()));
 		StoreKeeper.addRTextInstance(newWindow);
 
 		// Open the new RText's file chooser.  Do this in an invokeLater()

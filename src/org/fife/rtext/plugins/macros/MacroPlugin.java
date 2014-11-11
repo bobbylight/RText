@@ -60,7 +60,7 @@ public class MacroPlugin extends AbstractPlugin
 	 *
 	 * @param app The parent RText application.
 	 */
-	public MacroPlugin(AbstractPluggableGUIApplication app) {
+	public MacroPlugin(AbstractPluggableGUIApplication<?> app) {
 
 		URL url = getClass().getResource("cog.png");
 		if (url!=null) { // Should always be true
@@ -193,7 +193,7 @@ public class MacroPlugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
-	public void install(AbstractPluggableGUIApplication app) {
+	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		MacroManager.get().addPropertyChangeListener(
 				MacroManager.PROPERTY_MACROS, this);

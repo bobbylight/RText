@@ -66,7 +66,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 *
 	 * @param app The RText instance.
 	 */
-	public FileSystemTreePlugin(AbstractPluggableGUIApplication app) {
+	public FileSystemTreePlugin(AbstractPluggableGUIApplication<?> app) {
 
 		this.owner = (RText)app;
 
@@ -262,7 +262,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void install(AbstractPluggableGUIApplication app) {
+	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		// Add a menu item to toggle the visibility of the dockable window
 		owner.addAction(VIEW_FST_ACTION, viewAction);

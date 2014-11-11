@@ -9,11 +9,6 @@
  */
 package org.fife.rtext;
 
-import java.awt.Toolkit;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import javax.swing.KeyStroke;
-
 
 /**
  * An interface containing all information about RText's actions.<p>
@@ -77,12 +72,6 @@ public interface RTextActionInfo {
 	public static final String VIEW_SPLIT_NONE_ACTION	= "viewSplitNoneAction";
 	public static final String VIEW_SPLIT_VERT_ACTION	= "viewSplitVerticallyAction";
 
-	/**
-	 * The names of all actions in an array.  Note that the order of these
-	 * action names MUST be kept in-synch with the default accelerators
-	 * array below.
-	 */
-	// TODO: Remove me; should no longer be needed with ActionRegistry
 	public static final String[] actionNames = {
 		NEW_ACTION,
 		OPEN_ACTION,
@@ -133,69 +122,4 @@ public interface RTextActionInfo {
 		VIEW_SPLIT_VERT_ACTION,
 
 	};
-
-	static final int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-	static final int alt = InputEvent.ALT_MASK;
-	static final int shift = InputEvent.SHIFT_MASK;
-	static final int defaultAlt = defaultModifier|alt;
-	static final int defaultShift = defaultModifier|shift;
-
-
-	/**
-	 * The default accelerator for all RText actions.  Note that this
-	 * array MUST be kept in-synch with the actionNames array
-	 * above.
-	 */
-	// TODO: Remove me; should no longer be needed with ActionRegistry
-	public static final KeyStroke[] defaultActionAccelerators = {
-		KeyStroke.getKeyStroke(KeyEvent.VK_N, defaultModifier),
-		KeyStroke.getKeyStroke(KeyEvent.VK_O, defaultModifier),
-		KeyStroke.getKeyStroke(KeyEvent.VK_I, defaultModifier),
-		null,
-		KeyStroke.getKeyStroke(KeyEvent.VK_S, defaultModifier),
-		null,
-		null,
-		null,
-		null,
-		null,
-		KeyStroke.getKeyStroke(KeyEvent.VK_C, defaultModifier|shift),
-		KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
-		null,
-		null,
-		KeyStroke.getKeyStroke(KeyEvent.VK_1, defaultModifier),
-		KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, defaultModifier),
-		KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, defaultModifier),
-		KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, alt),
-		KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0),
-		null,
-		null,
-		null,
-		null,
-		KeyStroke.getKeyStroke(KeyEvent.VK_F6, defaultModifier),
-		KeyStroke.getKeyStroke(KeyEvent.VK_F7, defaultModifier),
-
-		KeyStroke.getKeyStroke(KeyEvent.VK_F, defaultModifier),
-		KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0),
-		KeyStroke.getKeyStroke(KeyEvent.VK_H, defaultModifier),
-		KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0),
-		null,
-		KeyStroke.getKeyStroke(KeyEvent.VK_F, defaultShift),
-		null,
-		KeyStroke.getKeyStroke(KeyEvent.VK_P, defaultModifier),
-		null,
-		KeyStroke.getKeyStroke(KeyEvent.VK_W, defaultModifier),
-		null,
-		KeyStroke.getKeyStroke(KeyEvent.VK_L, defaultModifier),
-		null,
-		null,
-		KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, defaultAlt),
-		KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, defaultAlt),
-		KeyStroke.getKeyStroke(KeyEvent.VK_UP, defaultAlt),
-		KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, defaultAlt),
-		null,
-		null,
-		null,
-
-	};
-
 }

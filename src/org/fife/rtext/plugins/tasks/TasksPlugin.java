@@ -83,7 +83,7 @@ public class TasksPlugin extends GUIPlugin {
 	 *
 	 * @param app The parent RText application.
 	 */
-	public TasksPlugin(AbstractPluggableGUIApplication app) {
+	public TasksPlugin(AbstractPluggableGUIApplication<?> app) {
 
 		RText rtext = (RText)app;
 		this.app = rtext;
@@ -196,7 +196,7 @@ public class TasksPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void install(AbstractPluggableGUIApplication app) {
+	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		RText rtext = (RText)app;
 

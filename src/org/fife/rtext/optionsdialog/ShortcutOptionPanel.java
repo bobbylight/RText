@@ -120,7 +120,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 
 		Action[] actions = getActions();
 		int actionsLength = actions.length;
-		Action[] realActions = ((AbstractGUIApplication)owner).getActions();
+		Action[] realActions = ((AbstractGUIApplication<?>)owner).getActions();
 		int j;
 
 		for (int k=0; k<realActions.length; k++) {
@@ -192,7 +192,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param actions The actions of the application.
 	 */
-	private void setActions(AbstractGUIApplication app) {
+	private void setActions(AbstractGUIApplication<?> app) {
 
 		masterActionList = app.getActions();
 

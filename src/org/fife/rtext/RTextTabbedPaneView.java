@@ -77,7 +77,7 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 	 *        this tabbed pane.
 	 */
 	public RTextTabbedPaneView(RText owner, String[] filesToOpen,
-							RTextPreferences properties) {
+							RTextPrefs properties) {
 
 		setLayout(new GridLayout(1,1));
 		tabbedPane = new TabbedPane();

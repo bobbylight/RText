@@ -188,7 +188,7 @@ panel.add(editor);
 	 * @return The contents for the "Plugins" About tab.
 	 */
 	private static final String[][] createTableData(
-			AbstractPluggableGUIApplication app) {
+			AbstractPluggableGUIApplication<?> app) {
 
 		Plugin[] plugins = app.getPlugins(); // Guaranteed non-null.
 		int count = plugins.length;

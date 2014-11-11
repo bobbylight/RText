@@ -15,7 +15,7 @@ import javax.swing.ImageIcon;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextActionInfo;
-import org.fife.rtext.RTextPreferences;
+import org.fife.rtext.RTextPrefs;
 import org.fife.ui.app.StandardAction;
 import org.fife.ui.app.GUIApplication.AboutAction;
 import org.fife.ui.app.GUIApplication.HelpAction;
@@ -44,7 +44,7 @@ public class ActionFactory implements RTextActionInfo {
 	 *
 	 * @param rtext The application instance.
 	 */
-	public static void addActions(RText rtext, RTextPreferences prefs) {
+	public static void addActions(RText rtext, RTextPrefs prefs) {
 
 		ResourceBundle msg = ResourceBundle.getBundle(
 									"org.fife.rtext.actions.Actions");

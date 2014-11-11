@@ -21,14 +21,13 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.prefs.Preferences;
-import javax.swing.Action;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import org.fife.rtext.SearchManager.SearchingMode;
 import org.fife.ui.StatusBar;
-import org.fife.ui.app.GUIApplicationPreferences;
+import org.fife.ui.app.GUIApplicationPrefs;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Style;
@@ -44,8 +43,8 @@ import org.fife.ui.rtextarea.RTextArea;
  * @author Robert Futrell
  * @version 0.3
  */
-public class RTextPreferences extends GUIApplicationPreferences
-							implements RTextActionInfo {
+public class RTextPrefs extends GUIApplicationPrefs<RText>
+		implements RTextActionInfo {
 
 	/**
 	 * The default maximum number of spelling errors to display for a single
@@ -57,9 +56,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 	 * The default color used to underline spelling errors.
 	 */
 	public static final Color DEFAULT_SPELLING_ERROR_COLOR = new Color(255,128,64);
-
-	private static final String NOTHING_STRING = "-";
-
 
 	public String iconGroupName;
 	public boolean lineNumbersVisible;
@@ -143,25 +139,20 @@ public class RTextPreferences extends GUIApplicationPreferences
 	public String codeFoldingEnabledFor;
 	public boolean useSearchDialogs;
 
-	public KeyStroke[] mainViewActionAccelerators;
-
 
 	/**
 	 * Constructor; initializes all values to "defaults."
 	 */
-	private RTextPreferences() {
+	public RTextPrefs() {
 		setDefaults();
 	}
 
 
 	/**
-	 * Creates a properties object with all fields initialized to the values
-	 * that the specified RText instance is currently running with.
-	 *
-	 * @return An <code>RTextPreferences</code> object initialized to contain
-	 *         the properties the specified RText instance is running with.
+	 * {@inheritDoc}
 	 */
-	public static GUIApplicationPreferences generatePreferences(RText rtext) {
+	@Override
+	public RTextPrefs populate(RText rtext) {
 
 		AbstractMainView mainView = rtext.getMainView();
 		SpellingSupport spelling = mainView.getSpellingSupport();
@@ -170,120 +161,99 @@ public class RTextPreferences extends GUIApplicationPreferences
 		//String lnfString = UIManager.getLookAndFeel().getClass().getName();
 		String lnfString = RTextUtilities.getLookAndFeelToSave();
 
-		RTextPreferences props = new RTextPreferences();
-		props.location				= rtext.getLocation();
-		props.location.translate(15,15);
-		props.size					= rtext.isMaximized() ? new Dimension(-1,-1) : rtext.getSize();
-		props.lookAndFeel				= lnfString;
-		props.iconGroupName				= rtext.getIconGroup().getName();
-		props.toolbarVisible			= rtext.getToolBar().isVisible();
-		props.statusBarVisible			= rtext.getStatusBar().isVisible();
-		props.lineNumbersVisible			= mainView.getLineNumbersEnabled();
-		props.tabSize					= mainView.getTabSize();
-		props.emulateTabsWithSpaces		= mainView.areTabsEmulated();
-		props.textMode					= mainView.getTextMode();
-		props.tabPlacement				= mainView.getDocumentSelectionPlacement();
-		props.printFont				= mainView.getPrintFont();
-		props.backgroundObject			= mainView.getBackgroundObject();
-		props.imageAlpha				= mainView.getBackgroundImageAlpha();
-		props.wordWrap					= mainView.getLineWrap();
-		props.caretColor				= mainView.getCaretColor();
-		props.selectionColor			= mainView.getSelectionColor();
-		props.selectedTextColor			= mainView.getSelectedTextColor();
-		props.useSelectedTextColor		= mainView.getUseSelectedTextColor();
-		props.colorScheme				= rtext.getSyntaxScheme();
-		props.syntaxFiltersString		= mainView.getSyntaxFilters().toString();
-		props.maxFileHistorySize			= menuBar.getMaximumFileHistorySize();
-		props.fileHistoryString			= menuBar.getFileHistoryString();
-		props.currentLineHighlightEnabled	= mainView.isCurrentLineHighlightEnabled();
-		props.currentLineHighlightColor	= mainView.getCurrentLineHighlightColor();
-		props.mainView					= rtext.getMainViewStyle();
-		props.highlightModifiedDocNames	= mainView.highlightModifiedDocumentDisplayNames();
-		props.modifiedDocumentNamesColor	= mainView.getModifiedDocumentDisplayNamesColor();
-		props.language					= rtext.getLanguage();
-		props.bracketMatchingEnabled		= mainView.isBracketMatchingEnabled();
-		props.matchBothBrackets			= mainView.getMatchBothBrackets();
-		props.matchedBracketBGColor		= mainView.getMatchedBracketBGColor();
-		props.matchedBracketBorderColor	= mainView.getMatchedBracketBorderColor();
-		props.marginLineEnabled			= mainView.isMarginLineEnabled();
-		props.marginLinePosition			= mainView.getMarginLinePosition();
-		props.marginLineColor			= mainView.getMarginLineColor();
-		props.highlightSecondaryLanguages = mainView.getHighlightSecondaryLanguages();
-		props.secondaryLanguageColors = new Color[3];
-		for (int i=0; i<props.secondaryLanguageColors.length; i++) {
-			props.secondaryLanguageColors[i] = mainView.getSecondaryLanguageColor(i);
+		populateCommonPreferences(rtext, lnfString);
+		iconGroupName				= rtext.getIconGroup().getName();
+		lineNumbersVisible			= mainView.getLineNumbersEnabled();
+		tabSize					= mainView.getTabSize();
+		emulateTabsWithSpaces		= mainView.areTabsEmulated();
+		textMode					= mainView.getTextMode();
+		tabPlacement				= mainView.getDocumentSelectionPlacement();
+		printFont				= mainView.getPrintFont();
+		backgroundObject			= mainView.getBackgroundObject();
+		imageAlpha				= mainView.getBackgroundImageAlpha();
+		wordWrap					= mainView.getLineWrap();
+		caretColor				= mainView.getCaretColor();
+		selectionColor			= mainView.getSelectionColor();
+		selectedTextColor			= mainView.getSelectedTextColor();
+		useSelectedTextColor		= mainView.getUseSelectedTextColor();
+		colorScheme				= rtext.getSyntaxScheme();
+		syntaxFiltersString		= mainView.getSyntaxFilters().toString();
+		maxFileHistorySize			= menuBar.getMaximumFileHistorySize();
+		fileHistoryString			= menuBar.getFileHistoryString();
+		currentLineHighlightEnabled	= mainView.isCurrentLineHighlightEnabled();
+		currentLineHighlightColor	= mainView.getCurrentLineHighlightColor();
+		this.mainView				= rtext.getMainViewStyle();
+		highlightModifiedDocNames	= mainView.highlightModifiedDocumentDisplayNames();
+		modifiedDocumentNamesColor	= mainView.getModifiedDocumentDisplayNamesColor();
+		bracketMatchingEnabled		= mainView.isBracketMatchingEnabled();
+		matchBothBrackets			= mainView.getMatchBothBrackets();
+		matchedBracketBGColor		= mainView.getMatchedBracketBGColor();
+		matchedBracketBorderColor	= mainView.getMatchedBracketBorderColor();
+		marginLineEnabled			= mainView.isMarginLineEnabled();
+		marginLinePosition			= mainView.getMarginLinePosition();
+		marginLineColor			= mainView.getMarginLineColor();
+		highlightSecondaryLanguages = mainView.getHighlightSecondaryLanguages();
+		secondaryLanguageColors = new Color[3];
+		for (int i=0; i<secondaryLanguageColors.length; i++) {
+			secondaryLanguageColors[i] = mainView.getSecondaryLanguageColor(i);
 		}
-		props.hyperlinksEnabled			= mainView.getHyperlinksEnabled();
-		props.hyperlinkColor			= mainView.getHyperlinkColor();
-		props.hyperlinkModifierKey		= mainView.getHyperlinkModifierKey();
-		props.visibleWhitespace			= mainView.isWhitespaceVisible();
-		props.showEOLMarkers			= mainView.getShowEOLMarkers();
-		props.showTabLines				= mainView.getShowTabLines();
-		props.tabLinesColor				= mainView.getTabLinesColor();
-		props.rememberWhitespaceLines	= mainView.getRememberWhitespaceLines();
-		props.autoInsertClosingCurlys	= mainView.getAutoInsertClosingCurlys();
-		props.aaEnabled					= mainView.isAntiAliasEnabled();
-		props.fractionalMetricsEnabled	= mainView.isFractionalFontMetricsEnabled();
-		props.markAllHighlightColor		= mainView.getMarkAllHighlightColor();
-		props.markOccurrences			= mainView.getMarkOccurrences();
-		props.markOccurrencesColor		= mainView.getMarkOccurrencesColor();
-		props.statusBarStyle			= rtext.getStatusBar().getStyle();
-		props.roundedSelectionEdges		= mainView.getRoundedSelectionEdges();
-		props.workingDirectory			= rtext.getWorkingDirectory();
-		props.carets[RTextArea.INSERT_MODE]= mainView.getCaretStyle(RTextArea.INSERT_MODE).ordinal();
-		props.carets[RTextArea.OVERWRITE_MODE]= mainView.getCaretStyle(RTextArea.OVERWRITE_MODE).ordinal();
-		props.caretBlinkRate			= mainView.getCaretBlinkRate();
-		props.searchToolBarVisible		= rtext.isSearchToolBarVisible();
-		props.dividerLocations[RText.TOP]	= rtext.getSplitPaneDividerLocation(RText.TOP);
-		props.dividerLocations[RText.LEFT] = rtext.getSplitPaneDividerLocation(RText.LEFT);
-		props.dividerLocations[RText.BOTTOM] = rtext.getSplitPaneDividerLocation(RText.BOTTOM);
-		props.dividerLocations[RText.RIGHT]= rtext.getSplitPaneDividerLocation(RText.RIGHT);
-		props.defaultLineTerminator		= mainView.getLineTerminator();
-		props.defaultEncoding			= mainView.getDefaultEncoding();
-		props.guessFileContentType		= mainView.getGuessFileContentType();
-		props.doFileSizeCheck			= mainView.getDoFileSizeCheck();
-		props.maxFileSize				= mainView.getMaxFileSize();
-		props.ignoreBackupExtensions	= mainView.getIgnoreBackupExtensions();
-		props.textAreaFont				= mainView.getTextAreaFont();
-		props.textAreaUnderline			= mainView.getTextAreaUnderline();
-		props.textAreaForeground			= mainView.getTextAreaForeground();
-		props.textAreaOrientation		= mainView.getTextAreaOrientation();
-		props.showHostName				= rtext.getShowHostName();
-		props.bomInUtf8				= mainView.getWriteBOMInUtf8Files();
-		props.bookmarksEnabled			= mainView.getBookmarksEnabled();
-		props.lineNumberFont			= mainView.getLineNumberFont();
-		props.lineNumberColor			= mainView.getLineNumberColor();
-		props.gutterBorderColor			= mainView.getGutterBorderColor();
-		props.spellCheckingEnabled		= spelling.isSpellCheckingEnabled();
-		props.spellCheckingColor		= spelling.getSpellCheckingColor();
-		props.spellingDictionary		= spelling.getSpellingDictionary();
-		props.userDictionary			= spelling.getUserDictionary();
-		props.maxSpellingErrors			= spelling.getMaxSpellingErrors();
-		props.viewSpellingList			= rtext.isSpellingWindowVisible();
-		props.searchWindowOpacityEnabled= rtext.isSearchWindowOpacityEnabled();
-		props.searchWindowOpacity		= rtext.getSearchWindowOpacity();
-		props.searchWindowOpacityRule	= rtext.getSearchWindowOpacityRule();
-		props.dropShadowsInEditor		= RTextUtilities.getDropShadowsEnabledInEditor();
-		props.codeFoldingEnabledFor		= mainView.getCodeFoldingEnabledForString();
+		hyperlinksEnabled			= mainView.getHyperlinksEnabled();
+		hyperlinkColor			= mainView.getHyperlinkColor();
+		hyperlinkModifierKey		= mainView.getHyperlinkModifierKey();
+		visibleWhitespace			= mainView.isWhitespaceVisible();
+		showEOLMarkers			= mainView.getShowEOLMarkers();
+		showTabLines				= mainView.getShowTabLines();
+		tabLinesColor				= mainView.getTabLinesColor();
+		rememberWhitespaceLines	= mainView.getRememberWhitespaceLines();
+		autoInsertClosingCurlys	= mainView.getAutoInsertClosingCurlys();
+		aaEnabled					= mainView.isAntiAliasEnabled();
+		fractionalMetricsEnabled	= mainView.isFractionalFontMetricsEnabled();
+		markAllHighlightColor		= mainView.getMarkAllHighlightColor();
+		markOccurrences			= mainView.getMarkOccurrences();
+		markOccurrencesColor		= mainView.getMarkOccurrencesColor();
+		statusBarStyle			= rtext.getStatusBar().getStyle();
+		roundedSelectionEdges		= mainView.getRoundedSelectionEdges();
+		workingDirectory			= rtext.getWorkingDirectory();
+		carets[RTextArea.INSERT_MODE]= mainView.getCaretStyle(RTextArea.INSERT_MODE).ordinal();
+		carets[RTextArea.OVERWRITE_MODE]= mainView.getCaretStyle(RTextArea.OVERWRITE_MODE).ordinal();
+		caretBlinkRate			= mainView.getCaretBlinkRate();
+		searchToolBarVisible		= rtext.isSearchToolBarVisible();
+		dividerLocations[RText.TOP]	= rtext.getSplitPaneDividerLocation(RText.TOP);
+		dividerLocations[RText.LEFT] = rtext.getSplitPaneDividerLocation(RText.LEFT);
+		dividerLocations[RText.BOTTOM] = rtext.getSplitPaneDividerLocation(RText.BOTTOM);
+		dividerLocations[RText.RIGHT]= rtext.getSplitPaneDividerLocation(RText.RIGHT);
+		defaultLineTerminator		= mainView.getLineTerminator();
+		defaultEncoding			= mainView.getDefaultEncoding();
+		guessFileContentType		= mainView.getGuessFileContentType();
+		doFileSizeCheck			= mainView.getDoFileSizeCheck();
+		maxFileSize				= mainView.getMaxFileSize();
+		ignoreBackupExtensions	= mainView.getIgnoreBackupExtensions();
+		textAreaFont				= mainView.getTextAreaFont();
+		textAreaUnderline			= mainView.getTextAreaUnderline();
+		textAreaForeground			= mainView.getTextAreaForeground();
+		textAreaOrientation		= mainView.getTextAreaOrientation();
+		showHostName				= rtext.getShowHostName();
+		bomInUtf8				= mainView.getWriteBOMInUtf8Files();
+		bookmarksEnabled			= mainView.getBookmarksEnabled();
+		lineNumberFont			= mainView.getLineNumberFont();
+		lineNumberColor			= mainView.getLineNumberColor();
+		gutterBorderColor			= mainView.getGutterBorderColor();
+		spellCheckingEnabled		= spelling.isSpellCheckingEnabled();
+		spellCheckingColor		= spelling.getSpellCheckingColor();
+		spellingDictionary		= spelling.getSpellingDictionary();
+		userDictionary			= spelling.getUserDictionary();
+		maxSpellingErrors			= spelling.getMaxSpellingErrors();
+		viewSpellingList			= rtext.isSpellingWindowVisible();
+		searchWindowOpacityEnabled= rtext.isSearchWindowOpacityEnabled();
+		searchWindowOpacity		= rtext.getSearchWindowOpacity();
+		searchWindowOpacityRule	= rtext.getSearchWindowOpacityRule();
+		dropShadowsInEditor		= RTextUtilities.getDropShadowsEnabledInEditor();
+		codeFoldingEnabledFor		= mainView.getCodeFoldingEnabledForString();
 
-		props.useSearchDialogs			= mainView.getSearchManager().
+		useSearchDialogs			= mainView.getSearchManager().
 								getSearchingMode()==SearchingMode.DIALOGS;
 
-		// Save the actions.
-		props.accelerators = new HashMap<String, KeyStroke>();
-		for (int i=0; i<RText.actionNames.length; i++) {
-			String actionName = RText.actionNames[i];
-			Action a = rtext.getAction(actionName);
-			KeyStroke ks = null;
-			// Check for null action here as sometimes we have actions in
-			// RText that aren't yet "defined" but are "declared".
-			if (a!=null) {
-				ks = (KeyStroke)a.getValue(Action.ACCELERATOR_KEY);
-			}
-			props.accelerators.put(actionName, ks);
-		}
-
-		return props;
+		return this;
 
 	}
 
@@ -317,42 +287,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 
 
 	/**
-	 * Returns the keystroke from the passed-in string of the form
-	 * "&lt;keycode&gt; &lt;modifiers&gt;".
-	 *
-	 * @param string The string from which to get the keystroke.  This string
-	 *        was saved by a previous <code>RTextPreferences</code>.
-	 * @return The keystroke.
-	 * @see #getKeyStrokeString
-	 */
-	private static final KeyStroke getKeyStrokeFromString(String string) {
-		int space = string.indexOf(' ');
-		if (space>-1) {
-			return KeyStroke.getKeyStroke(
-						Integer.parseInt(string.substring(0,space)),
-						Integer.parseInt(string.substring(space+1)));
-		}
-		return null;
-	}
-
-
-	/**
-	 * Returns a string suitable for saving this keystroke via the Java
-	 * Preferences API of the form "<keycode> <modifiers>".
-	 *
-	 * @param stroke The keystroke for which to get the string.
-	 * @return A <code>String</code> representing the keystroke.
-	 * @see #getKeyStrokeFromString
-	 */
-	private static final String getKeyStrokeString(KeyStroke stroke) {
-		if (stroke!=null) {
-			return stroke.getKeyCode() + " " + stroke.getModifiers();
-		}
-		return NOTHING_STRING;
-	}
-
-
-	/**
 	 * Returns just the LookAndFeel saved in the application preferences.
 	 * This is so we can set the LAF before loading the application, to allow
 	 * finnicky LAF's like Substance to work properly (Substance only works if
@@ -370,190 +304,178 @@ public class RTextPreferences extends GUIApplicationPreferences
 
 
 	/**
-	 * Returns a preferences instance with data saved previously via the
-	 * Java Preferences API.  If the load fails, this preferences instance
-	 * will be populated with default values.
-	 *
-	 * @return If the load went okay, <code>true</code> is returned.  If the
-	 *         load failed default values will be set.
+	 * {@inheritDoc}
 	 */
-	public static GUIApplicationPreferences loadPreferences() {
-
-		RTextPreferences props = new RTextPreferences();
+	@Override
+	public RTextPrefs load() {
 
 		try {
 
 			// Get all properties associated with the RText class.
 			Preferences prefs = Preferences.userNodeForPackage(RText.class);
-			props.loadCommonPreferences(prefs);
-			props.iconGroupName				= prefs.get("iconGroupName", props.iconGroupName);
-			props.lineNumbersVisible			= prefs.getBoolean("lineNumbersVisible", props.lineNumbersVisible);
-			props.tabSize					= prefs.getInt("tabSize", props.tabSize);
-			props.mainView					= prefs.getInt("mainView", props.mainView);
+			loadCommonPreferences(prefs);
+			iconGroupName				= prefs.get("iconGroupName", iconGroupName);
+			lineNumbersVisible			= prefs.getBoolean("lineNumbersVisible", lineNumbersVisible);
+			tabSize					= prefs.getInt("tabSize", tabSize);
+			mainView					= prefs.getInt("mainView", mainView);
 			String temp					= prefs.get("colorScheme", null);
-			props.colorScheme				= SyntaxScheme.loadFromString(temp);
-			props.statusBarStyle			= prefs.getInt("statusBarStyle", props.statusBarStyle);
-			props.workingDirectory			= prefs.get("workingDirectory", props.workingDirectory);
-			props.searchToolBarVisible		= prefs.getBoolean("searchToolBarVisible", props.searchToolBarVisible);
-			props.dividerLocations[RText.TOP]	= prefs.getInt("pluginDividerLocation.top", props.dividerLocations[RText.TOP]);
-			props.dividerLocations[RText.LEFT] = prefs.getInt("pluginDividerLocation.left", props.dividerLocations[RText.LEFT]);
-			props.dividerLocations[RText.BOTTOM] = prefs.getInt("pluginDividerLocation.bottom", props.dividerLocations[RText.BOTTOM]);
-			props.dividerLocations[RText.RIGHT]= prefs.getInt("pluginDividerLocation.right", props.dividerLocations[RText.RIGHT]);
-			props.showHostName				= prefs.getBoolean("showHostName", props.showHostName);
-			props.bomInUtf8				= prefs.getBoolean("bomInUtf8", props.bomInUtf8);
-			props.bookmarksEnabled			= prefs.getBoolean("bookmarksEnabled", props.bookmarksEnabled);
+			colorScheme				= SyntaxScheme.loadFromString(temp);
+			statusBarStyle			= prefs.getInt("statusBarStyle", statusBarStyle);
+			workingDirectory			= prefs.get("workingDirectory", workingDirectory);
+			searchToolBarVisible		= prefs.getBoolean("searchToolBarVisible", searchToolBarVisible);
+			dividerLocations[RText.TOP]	= prefs.getInt("pluginDividerLocation.top", dividerLocations[RText.TOP]);
+			dividerLocations[RText.LEFT] = prefs.getInt("pluginDividerLocation.left", dividerLocations[RText.LEFT]);
+			dividerLocations[RText.BOTTOM] = prefs.getInt("pluginDividerLocation.bottom", dividerLocations[RText.BOTTOM]);
+			dividerLocations[RText.RIGHT]= prefs.getInt("pluginDividerLocation.right", dividerLocations[RText.RIGHT]);
+			showHostName				= prefs.getBoolean("showHostName", showHostName);
+			bomInUtf8				= prefs.getBoolean("bomInUtf8", bomInUtf8);
+			bookmarksEnabled			= prefs.getBoolean("bookmarksEnabled", bookmarksEnabled);
 			temp							= prefs.get("lineNumberFont", null);
 			if (temp!=null) {
-				props.lineNumberFont			= getFontImpl(temp);
+				lineNumberFont			= getFontImpl(temp);
 			}
-			props.lineNumberColor			= new Color(
-				prefs.getInt("lineNumberColor", props.lineNumberColor.getRGB()));
-			props.gutterBorderColor			= new Color(
-				prefs.getInt("gutterBorderColor", props.gutterBorderColor.getRGB()));
+			lineNumberColor			= new Color(
+				prefs.getInt("lineNumberColor", lineNumberColor.getRGB()));
+			gutterBorderColor			= new Color(
+				prefs.getInt("gutterBorderColor", gutterBorderColor.getRGB()));
 
 			// Get all properties associated with the MainView class.
 			prefs = Preferences.userNodeForPackage(AbstractMainView.class);
-			props.bracketMatchingEnabled		= prefs.getBoolean("bracketMatchingEnabled", props.bracketMatchingEnabled);
-			props.matchBothBrackets				= prefs.getBoolean("matchBothBrackets", props.matchBothBrackets);
-			props.currentLineHighlightEnabled	= prefs.getBoolean("currentLineHighlightEnabled", props.currentLineHighlightEnabled);
-			props.emulateTabsWithSpaces		= prefs.getBoolean("emulateTabs", props.emulateTabsWithSpaces);
-			props.highlightModifiedDocNames	= prefs.getBoolean("highlightModifiedDocNames", props.highlightModifiedDocNames);
-			props.imageAlpha				= prefs.getFloat("imageAlpha", props.imageAlpha);
-			props.marginLineEnabled			= prefs.getBoolean("marginLineEnabled", props.marginLineEnabled);
-			props.marginLinePosition			= prefs.getInt("marginLinePosition", props.marginLinePosition);
-			props.syntaxFiltersString		= prefs.get("syntaxFilters", props.syntaxFiltersString);
-			props.textMode					= prefs.getInt("textMode", props.textMode);
-			props.tabPlacement				= prefs.getInt("tabPlacement", props.tabPlacement);
-			props.wordWrap					= prefs.getBoolean("wordWrap", props.wordWrap);
+			bracketMatchingEnabled		= prefs.getBoolean("bracketMatchingEnabled", bracketMatchingEnabled);
+			matchBothBrackets				= prefs.getBoolean("matchBothBrackets", matchBothBrackets);
+			currentLineHighlightEnabled	= prefs.getBoolean("currentLineHighlightEnabled", currentLineHighlightEnabled);
+			emulateTabsWithSpaces		= prefs.getBoolean("emulateTabs", emulateTabsWithSpaces);
+			highlightModifiedDocNames	= prefs.getBoolean("highlightModifiedDocNames", highlightModifiedDocNames);
+			imageAlpha				= prefs.getFloat("imageAlpha", imageAlpha);
+			marginLineEnabled			= prefs.getBoolean("marginLineEnabled", marginLineEnabled);
+			marginLinePosition			= prefs.getInt("marginLinePosition", marginLinePosition);
+			syntaxFiltersString		= prefs.get("syntaxFilters", syntaxFiltersString);
+			textMode					= prefs.getInt("textMode", textMode);
+			tabPlacement				= prefs.getInt("tabPlacement", tabPlacement);
+			wordWrap					= prefs.getBoolean("wordWrap", wordWrap);
 			temp							= prefs.get("printFont", null);
 			if (temp!=null) {
-				props.printFont = getFontImpl(temp);
+				printFont = getFontImpl(temp);
 			}
 			temp						= prefs.get("backgroundObject", null);
 			if (temp!=null) {
 				StringTokenizer t2 = new StringTokenizer(temp, ",");
 				String temp2 = t2.nextToken();
 				if (temp2.equals("color"))
-					props.backgroundObject = new Color(
+					backgroundObject = new Color(
 						Integer.parseInt(temp.substring(temp.indexOf(',')+1)));
 				else if (temp2.equals("image"))
-					props.backgroundObject = t2.nextToken();
+					backgroundObject = t2.nextToken();
 				else
-					props.backgroundObject = Color.WHITE;
+					backgroundObject = Color.WHITE;
 			}
-			possiblyFixSyntaxSchemeBackground(props);
-			props.caretColor = new Color(
-				prefs.getInt("caretColor", props.caretColor.getRGB()));
-			props.selectionColor = new Color(
-				prefs.getInt("selectionColor", props.selectionColor.getRGB()), true);
-			props.selectedTextColor = new Color(
-					prefs.getInt("selectedTextColor", props.selectedTextColor.getRGB()), true);
-			props.useSelectedTextColor = prefs.getBoolean("useSelectedTextColor", props.useSelectedTextColor);
-			props.currentLineHighlightColor = new Color(
-				prefs.getInt("currentLineHighlightColor", props.currentLineHighlightColor.getRGB()), true);
-			props.modifiedDocumentNamesColor = new Color(
-				prefs.getInt("modifiedDocumentNamesColor", props.modifiedDocumentNamesColor.getRGB()));
-			props.matchedBracketBGColor = new Color(
-				prefs.getInt("matchedBracketBGColor", props.matchedBracketBGColor.getRGB()));
-			props.matchedBracketBorderColor = new Color(
-				prefs.getInt("matchedBracketBorderColor", props.matchedBracketBorderColor.getRGB()));
-			props.marginLineColor = new Color(
-				prefs.getInt("marginLineColor", props.marginLineColor.getRGB()));
-			props.highlightSecondaryLanguages = prefs.getBoolean("highlightSecondaryLanguages", props.highlightSecondaryLanguages);
-			for (int i=0; i<props.secondaryLanguageColors.length; i++) {
-				props.secondaryLanguageColors[i] = new Color(prefs.getInt(
-				"secondaryLanguageColor_" + i, props.secondaryLanguageColors[i].getRGB()));
+			possiblyFixSyntaxSchemeBackground(this);
+			caretColor = new Color(
+				prefs.getInt("caretColor", caretColor.getRGB()));
+			selectionColor = new Color(
+				prefs.getInt("selectionColor", selectionColor.getRGB()), true);
+			selectedTextColor = new Color(
+					prefs.getInt("selectedTextColor", selectedTextColor.getRGB()), true);
+			useSelectedTextColor = prefs.getBoolean("useSelectedTextColor", useSelectedTextColor);
+			currentLineHighlightColor = new Color(
+				prefs.getInt("currentLineHighlightColor", currentLineHighlightColor.getRGB()), true);
+			modifiedDocumentNamesColor = new Color(
+				prefs.getInt("modifiedDocumentNamesColor", modifiedDocumentNamesColor.getRGB()));
+			matchedBracketBGColor = new Color(
+				prefs.getInt("matchedBracketBGColor", matchedBracketBGColor.getRGB()));
+			matchedBracketBorderColor = new Color(
+				prefs.getInt("matchedBracketBorderColor", matchedBracketBorderColor.getRGB()));
+			marginLineColor = new Color(
+				prefs.getInt("marginLineColor", marginLineColor.getRGB()));
+			highlightSecondaryLanguages = prefs.getBoolean("highlightSecondaryLanguages", highlightSecondaryLanguages);
+			for (int i=0; i<secondaryLanguageColors.length; i++) {
+				secondaryLanguageColors[i] = new Color(prefs.getInt(
+				"secondaryLanguageColor_" + i, secondaryLanguageColors[i].getRGB()));
 			}
-			props.hyperlinksEnabled = prefs.getBoolean("hyperlinksEnabled", props.hyperlinksEnabled);
-			props.hyperlinkColor = new Color(
-				prefs.getInt("hyperlinkColor", props.hyperlinkColor.getRGB()));
-			props.hyperlinkModifierKey		= prefs.getInt("hyperlinkModifierKey", props.hyperlinkModifierKey);
-			props.visibleWhitespace			= prefs.getBoolean("visibleWhitespace", props.visibleWhitespace);
-			props.showEOLMarkers			= prefs.getBoolean("showEOL", props.showEOLMarkers);
-			props.showTabLines				= prefs.getBoolean("showTabLines", props.showTabLines);
-			props.tabLinesColor				= new Color(
-				prefs.getInt("tabLinesColor", props.tabLinesColor.getRGB()));
-			props.rememberWhitespaceLines	= prefs.getBoolean("rememberWhitespaceLines", props.rememberWhitespaceLines);
-			props.autoInsertClosingCurlys	= prefs.getBoolean("autoInsertClosingCurlys", props.autoInsertClosingCurlys);
-			props.aaEnabled					= prefs.getBoolean("editorAntiAlias", props.aaEnabled);
-			props.fractionalMetricsEnabled	= prefs.getBoolean("fractionalMetrics", props.fractionalMetricsEnabled);
-			props.markAllHighlightColor = new Color(
-				prefs.getInt("markAllHighlightColor", props.markAllHighlightColor.getRGB()));
-			props.markOccurrences		= prefs.getBoolean("markOccurrences", props.markOccurrences);
-			props.markOccurrencesColor	= new Color(
-				prefs.getInt("markOccurrencesColor", props.markOccurrencesColor.getRGB()));
-			props.roundedSelectionEdges	= prefs.getBoolean("roundedSelectionEdges", props.roundedSelectionEdges);
-			props.carets[RTextArea.INSERT_MODE]= prefs.getInt("insertCaretStyle", props.carets[RTextArea.INSERT_MODE]);
-			props.carets[RTextArea.OVERWRITE_MODE]= prefs.getInt("overwriteCaretStyle", props.carets[RTextArea.OVERWRITE_MODE]);
-			props.caretBlinkRate		= prefs.getInt("caretBlinkRate", props.caretBlinkRate);
-			props.defaultLineTerminator	= prefs.get("defaultLineTerminator", props.defaultLineTerminator);
-			if ("".equals(props.defaultLineTerminator)) {
-				props.defaultLineTerminator = null;
+			hyperlinksEnabled = prefs.getBoolean("hyperlinksEnabled", hyperlinksEnabled);
+			hyperlinkColor = new Color(
+				prefs.getInt("hyperlinkColor", hyperlinkColor.getRGB()));
+			hyperlinkModifierKey		= prefs.getInt("hyperlinkModifierKey", hyperlinkModifierKey);
+			visibleWhitespace			= prefs.getBoolean("visibleWhitespace", visibleWhitespace);
+			showEOLMarkers			= prefs.getBoolean("showEOL", showEOLMarkers);
+			showTabLines				= prefs.getBoolean("showTabLines", showTabLines);
+			tabLinesColor				= new Color(
+				prefs.getInt("tabLinesColor", tabLinesColor.getRGB()));
+			rememberWhitespaceLines	= prefs.getBoolean("rememberWhitespaceLines", rememberWhitespaceLines);
+			autoInsertClosingCurlys	= prefs.getBoolean("autoInsertClosingCurlys", autoInsertClosingCurlys);
+			aaEnabled					= prefs.getBoolean("editorAntiAlias", aaEnabled);
+			fractionalMetricsEnabled	= prefs.getBoolean("fractionalMetrics", fractionalMetricsEnabled);
+			markAllHighlightColor = new Color(
+				prefs.getInt("markAllHighlightColor", markAllHighlightColor.getRGB()));
+			markOccurrences		= prefs.getBoolean("markOccurrences", markOccurrences);
+			markOccurrencesColor	= new Color(
+				prefs.getInt("markOccurrencesColor", markOccurrencesColor.getRGB()));
+			roundedSelectionEdges	= prefs.getBoolean("roundedSelectionEdges", roundedSelectionEdges);
+			carets[RTextArea.INSERT_MODE]= prefs.getInt("insertCaretStyle", carets[RTextArea.INSERT_MODE]);
+			carets[RTextArea.OVERWRITE_MODE]= prefs.getInt("overwriteCaretStyle", carets[RTextArea.OVERWRITE_MODE]);
+			caretBlinkRate		= prefs.getInt("caretBlinkRate", caretBlinkRate);
+			defaultLineTerminator	= prefs.get("defaultLineTerminator", defaultLineTerminator);
+			if ("".equals(defaultLineTerminator)) {
+				defaultLineTerminator = null;
 			}
-			props.defaultEncoding		= prefs.get("defaultEncoding", props.defaultEncoding);
-			if ("".equals(props.defaultEncoding)) {
-				props.defaultEncoding = null;
+			defaultEncoding		= prefs.get("defaultEncoding", defaultEncoding);
+			if ("".equals(defaultEncoding)) {
+				defaultEncoding = null;
 			}
-			props.guessFileContentType	= prefs.getBoolean("guessFileContentType", props.guessFileContentType);
-			props.doFileSizeCheck		= prefs.getBoolean("fileSizeCheck", props.doFileSizeCheck);
-			props.maxFileSize			= prefs.getFloat("maxFileSize", props.maxFileSize);
-			props.ignoreBackupExtensions= prefs.getBoolean("ignoreBackupExtensions", props.ignoreBackupExtensions);
+			guessFileContentType	= prefs.getBoolean("guessFileContentType", guessFileContentType);
+			doFileSizeCheck		= prefs.getBoolean("fileSizeCheck", doFileSizeCheck);
+			maxFileSize			= prefs.getFloat("maxFileSize", maxFileSize);
+			ignoreBackupExtensions= prefs.getBoolean("ignoreBackupExtensions", ignoreBackupExtensions);
 			temp						= prefs.get("textAreaFont", null);
 			if (temp!=null) {
-				props.textAreaFont = getFontImpl(temp);
+				textAreaFont = getFontImpl(temp);
 			}
-			props.textAreaUnderline		= prefs.getBoolean("textAreaUnderline", props.textAreaUnderline);
-			props.textAreaForeground		= new Color(
-				prefs.getInt("textAreaForeground", props.textAreaForeground.getRGB()));
+			textAreaUnderline		= prefs.getBoolean("textAreaUnderline", textAreaUnderline);
+			textAreaForeground		= new Color(
+				prefs.getInt("textAreaForeground", textAreaForeground.getRGB()));
 			temp = prefs.get("textAreaOrientation", "ltr");
-			props.textAreaOrientation	= "rtl".equals(temp) ?
+			textAreaOrientation	= "rtl".equals(temp) ?
 						ComponentOrientation.RIGHT_TO_LEFT :
 						ComponentOrientation.LEFT_TO_RIGHT;
-			props.spellCheckingEnabled	= prefs.getBoolean("spellCheckingEnabled", props.spellCheckingEnabled);
-			props.spellCheckingColor	= new Color(
-				prefs.getInt("spellCheckingColor", props.spellCheckingColor.getRGB()));
-			props.spellingDictionary	= prefs.get("spellingDictionary", props.spellingDictionary);
+			spellCheckingEnabled	= prefs.getBoolean("spellCheckingEnabled", spellCheckingEnabled);
+			spellCheckingColor	= new Color(
+				prefs.getInt("spellCheckingColor", spellCheckingColor.getRGB()));
+			spellingDictionary	= prefs.get("spellingDictionary", spellingDictionary);
 			String tempVal = prefs.get("userDictionary", null);
 			if (tempVal!=null) { // No previous value => use default already set
 				if (tempVal.length()==0) { // Empty string => no user dictioanry
-					props.userDictionary = null;
+					userDictionary = null;
 				}
 				else {
-					props.userDictionary = new File(tempVal);
+					userDictionary = new File(tempVal);
 				}
 			}
-			props.maxSpellingErrors		= prefs.getInt("maxSpellingErrors", props.maxSpellingErrors);
-			props.viewSpellingList	= prefs.getBoolean("viewSpellingList", props.viewSpellingList);
-			props.searchWindowOpacityEnabled = prefs.getBoolean("searchWindowOpacityEnabled", props.searchWindowOpacityEnabled);
-			props.searchWindowOpacity = prefs.getFloat("searchWindowOpacity", props.searchWindowOpacity);
-			props.searchWindowOpacityRule = prefs.getInt("searchWindowOpacityRule", props.searchWindowOpacityRule);
-			props.dropShadowsInEditor = prefs.getBoolean("dropShadowsInEditor", getDefaultDropShadowsInEditorValue());
-			props.codeFoldingEnabledFor = prefs.get("codeFoldingEnabledFor", props.codeFoldingEnabledFor);
-			props.useSearchDialogs = prefs.getBoolean("useSearchDialogs", props.useSearchDialogs);
+			maxSpellingErrors		= prefs.getInt("maxSpellingErrors", maxSpellingErrors);
+			viewSpellingList	= prefs.getBoolean("viewSpellingList", viewSpellingList);
+			searchWindowOpacityEnabled = prefs.getBoolean("searchWindowOpacityEnabled", searchWindowOpacityEnabled);
+			searchWindowOpacity = prefs.getFloat("searchWindowOpacity", searchWindowOpacity);
+			searchWindowOpacityRule = prefs.getInt("searchWindowOpacityRule", searchWindowOpacityRule);
+			dropShadowsInEditor = prefs.getBoolean("dropShadowsInEditor", getDefaultDropShadowsInEditorValue());
+			codeFoldingEnabledFor = prefs.get("codeFoldingEnabledFor", codeFoldingEnabledFor);
+			useSearchDialogs = prefs.getBoolean("useSearchDialogs", useSearchDialogs);
 
 			// Get all properties associated with the RTextMenuBar class.
 			prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
-			props.fileHistoryString		= prefs.get("fileHistoryString", props.fileHistoryString);
-			props.maxFileHistorySize		= prefs.getInt("maxFileHistorySize", props.maxFileHistorySize);
+			fileHistoryString		= prefs.get("fileHistoryString", fileHistoryString);
+			maxFileHistorySize		= prefs.getInt("maxFileHistorySize", maxFileHistorySize);
 
 			// Get the accelerators for all actions.
-			for (int i=0; i<RText.actionNames.length; i++) {
-				String actionName = RText.actionNames[i];
-				temp = prefs.get(actionName, null);
-				if (temp!=null)
-					props.accelerators.put(actionName,
-								getKeyStrokeFromString(temp));
-			}
+			loadActionAccelerators(RText.actionNames, prefs);
 
 		// If anything at all goes wrong, just use default property values.
 		} catch (RuntimeException re) {
 			throw re; // Let RuntimeExceptions through (FindBugs warning)
 		} catch (Exception e) {
 			e.printStackTrace();
-			props.setDefaults();
+			setDefaults();
 		}
 
-		return props;
+		return this;
 
 	}
 
@@ -576,7 +498,7 @@ public class RTextPreferences extends GUIApplicationPreferences
 	 * @param props The preferences object to check.
 	 */
 	private static void possiblyFixSyntaxSchemeBackground(
-												RTextPreferences props) {
+												RTextPrefs props) {
 		Object bgObj = props.backgroundObject;
 		if (bgObj instanceof Color) {
 			Color color = (Color)bgObj;
@@ -592,12 +514,10 @@ public class RTextPreferences extends GUIApplicationPreferences
 
 
 	/**
-	 * Saves this preferences instance via the Java Preferences API.
-	 *
-	 * @param rtext The rtext instance for which you are saving preferences.
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void savePreferences(Object rtext) {
+	public void save() {
 
 		// Save all properties related to the RText class.
 		Preferences prefs = Preferences.userNodeForPackage(RText.class);
@@ -661,7 +581,9 @@ public class RTextPreferences extends GUIApplicationPreferences
 			prefs.put("backgroundObject",				"color," + c.getRGB());
 		}
 		else if (backgroundObject instanceof Image) {
-			prefs.put("backgroundObject",				"image," + ((RText)rtext).getMainView().getBackgroundImageFileName());
+			// TODO
+			//prefs.put("backgroundObject",				"image," + rtext.getMainView().getBackgroundImageFileName());
+			prefs.put("backgroundObject", "color," + Color.WHITE);
 		}
 		prefs.putBoolean("visibleWhitespace",			visibleWhitespace);
 		prefs.putBoolean("showEOL",						showEOLMarkers);
@@ -707,13 +629,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 		prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
 		prefs.put("fileHistoryString",				(fileHistoryString==null ? "-" : fileHistoryString));
 		prefs.putInt("maxFileHistorySize",				maxFileHistorySize);
-
-		// Save all accelerators.
-		for (int i=0; i<RText.actionNames.length; i++) {
-			String actionName = RText.actionNames[i];
-			prefs.put(actionName,
-				getKeyStrokeString(getAccelerator(actionName)));
-		}
 
 		//prefs.flush();
 		prefs = null;
@@ -828,10 +743,6 @@ public class RTextPreferences extends GUIApplicationPreferences
 		useSearchDialogs = true;
 
 		accelerators = new HashMap<String, KeyStroke>();
-		for (int i=0; i<actionNames.length; i++) {
-			String actionName = actionNames[i];
-			accelerators.put(actionName, defaultActionAccelerators[i]);
-		}
 
 	}
 

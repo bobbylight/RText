@@ -101,7 +101,7 @@ public class SpellingSupport implements SpellingParserListener {
 	 *
 	 * @param prefs The application preferences.
 	 */
-	void configure(RTextPreferences prefs) {
+	void configure(RTextPrefs prefs) {
 
 		setSpellCheckingEnabled(prefs.spellCheckingEnabled);
 		setSpellCheckingColor(prefs.spellCheckingColor);

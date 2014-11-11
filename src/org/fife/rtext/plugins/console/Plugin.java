@@ -60,7 +60,7 @@ public class Plugin extends GUIPlugin {
 	 *
 	 * @param app The parent application.
 	 */
-	public Plugin(AbstractPluggableGUIApplication app) {
+	public Plugin(AbstractPluggableGUIApplication<?> app) {
 
 		this.app = (RText)app;
 
@@ -190,7 +190,7 @@ public class Plugin extends GUIPlugin {
 	}
 
 
-	public void install(AbstractPluggableGUIApplication app) {
+	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		RText rtext = (RText)app;
 		RTextMenuBar mb = (RTextMenuBar)app.getJMenuBar();

@@ -56,7 +56,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 *        this view.
 	 */
 	public RTextMDIView(RText owner, String[] filesToOpen,
-									RTextPreferences properties) {
+									RTextPrefs properties) {
 
 		frames = new ArrayList<InternalFrame>(5);
 

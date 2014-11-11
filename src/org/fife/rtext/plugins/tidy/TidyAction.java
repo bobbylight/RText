@@ -40,7 +40,7 @@ class TidyAction extends StandardAction {
 	 * @param app The parent application.
 	 * @param plugin The tidying plugin.
 	 */
-	public TidyAction(AbstractPluggableGUIApplication app, Plugin plugin) {
+	public TidyAction(AbstractPluggableGUIApplication<?> app, Plugin plugin) {
 		super(app, Plugin.msg, "Action.Tidy");
 		this.plugin = plugin;
 	}

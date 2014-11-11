@@ -2111,7 +2111,7 @@ public abstract class AbstractMainView extends JPanel
 	 *        this main view.
 	 */
 	protected void initialize(RText owner, String[] filesToOpen,
-										RTextPreferences prefs) {
+										RTextPrefs prefs) {
 
 		// Remember the owner of this tabbed pane.
 		this.owner = owner;

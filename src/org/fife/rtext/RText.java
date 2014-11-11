@@ -37,8 +37,8 @@ import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.ExceptionDialog;
-import org.fife.ui.app.GUIApplicationPreferences;
 import org.fife.ui.app.Plugin;
+import org.fife.ui.app.StandardAction;
 import org.fife.ui.app.ThirdPartyLookAndFeelManager;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
@@ -82,7 +82,7 @@ import org.fife.util.TranslucencyUtil;
  * @author Robert Futrell
  * @version 2.5.3
  */
-public class RText extends AbstractPluggableGUIApplication
+public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			implements ActionListener, CaretListener, PropertyChangeListener,
 						RTextActionInfo, FileChooserOwner {
 
@@ -197,7 +197,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 *        <code>null</code> if no files are to be opened.
 	 * @param preferences The preferences with which to initialize this RText.
 	 */
-	public RText(String[] filesToOpen, RTextPreferences preferences) {
+	public RText(String[] filesToOpen, RTextPrefs preferences) {
 		super("rtext", "RText.jar", preferences);
 		init(filesToOpen);
 	}
@@ -302,8 +302,8 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @param prefs The RText properties for this RText instance.
 	 */
 	@Override
-	protected void createActions(GUIApplicationPreferences prefs) {
-		ActionFactory.addActions(this, (RTextPreferences)prefs);
+	protected void createActions(RTextPrefs prefs) {
+		ActionFactory.addActions(this, prefs);
 	}
 
 
@@ -314,18 +314,16 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @return The menu bar.
 	 */
 	@Override
-	protected JMenuBar createMenuBar(GUIApplicationPreferences prefs) {
-
-		RTextPreferences properties = (RTextPreferences)prefs;
+	protected JMenuBar createMenuBar(RTextPrefs prefs) {
 
 		//splashScreen.updateStatus(msg.getString("CreatingMenuBar"), 75);
 
 		// Create the menu bar.
 		menuBar = new RTextMenuBar(this, UIManager.getLookAndFeel().getName(),
-									properties);
+				prefs);
 		mainView.addPropertyChangeListener(menuBar);
 
-		menuBar.setWindowMenuVisible(properties.mainView==MDI_VIEW);
+		menuBar.setWindowMenuVisible(prefs.mainView==MDI_VIEW);
 
 		return menuBar;
 
@@ -353,13 +351,11 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @return The status bar.
 	 */
 	@Override
-	protected org.fife.ui.StatusBar createStatusBar(
-							GUIApplicationPreferences prefs) {
-		RTextPreferences properties = (RTextPreferences)prefs;
+	protected org.fife.ui.StatusBar createStatusBar(RTextPrefs prefs) {
 		StatusBar sb = new StatusBar(this, getString("Ready"),
-					!properties.wordWrap, 1,1,
-					properties.textMode==RTextEditorPane.OVERWRITE_MODE);
-		sb.setStyle(properties.statusBarStyle);
+					!prefs.wordWrap, 1,1,
+					prefs.textMode==RTextEditorPane.OVERWRITE_MODE);
+		sb.setStyle(prefs.statusBarStyle);
 		return sb;
 	}
 
@@ -371,8 +367,7 @@ public class RText extends AbstractPluggableGUIApplication
 	 * @return The toolbar.
 	 */
 	@Override
-	protected CustomizableToolBar createToolBar(
-						GUIApplicationPreferences prefs) {
+	protected CustomizableToolBar createToolBar(RTextPrefs prefs) {
 
 		ToolBar toolBar = new ToolBar("rtext - Toolbar", this,
 								(StatusBar)getStatusBar());
@@ -655,15 +650,11 @@ public class RText extends AbstractPluggableGUIApplication
 
 
 	/**
-	 * Returns the name of the preferences class for this application.  This
-	 * class must be a subclass of <code>GUIApplicationPreferences</code>.
-	 *
-	 * @return The class name, or <code>null</code> if this GUI application
-	 *         does not save preferences.
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected String getPreferencesClassName() {
-		return "org.fife.rtext.RTextPreferences";
+		return "org.fife.rtext.RTextPrefs";
 	}
 
 
@@ -927,17 +918,10 @@ public class RText extends AbstractPluggableGUIApplication
 
 
 	/**
-	 * This is called in the GUI application's constructor.  It is a chance
-	 * to do initialization of stuff that will be needed before RText is
-	 * displayed on-screen.
-	 *
-	 * @param prefs The preferences of the application.
-	 * @param splashScreen The "splash screen" for this application.  This
-	 *        value may be <code>null</code>.
+	 * {@inheritDoc}
 	 */
 	@Override
-	protected void preDisplayInit(GUIApplicationPreferences prefs,
-								SplashScreen splashScreen) {
+	protected void preDisplayInit(RTextPrefs prefs, SplashScreen splashScreen) {
 
 		long start = System.currentTimeMillis();
 
@@ -950,9 +934,7 @@ public class RText extends AbstractPluggableGUIApplication
 		// Install any plugins.
 		super.preDisplayInit(prefs, splashScreen);
 
-		RTextPreferences props = (RTextPreferences)prefs;
-
-		if (props.searchToolBarVisible) {
+		if (prefs.searchToolBarVisible) {
 			addToolBar(getSearchToolBar(), BorderLayout.SOUTH);
 			searchBar.setVisible(true);
 		}
@@ -964,7 +946,7 @@ public class RText extends AbstractPluggableGUIApplication
 		addWindowListener( new RTextWindowListener(this) );
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-		mainView.setLineNumbersEnabled(props.lineNumbersVisible);
+		mainView.setLineNumbersEnabled(prefs.lineNumbersVisible);
 
 		// Enable templates in text areas.
 		if (RTextUtilities.enableTemplates(this, true)) {
@@ -976,45 +958,37 @@ public class RText extends AbstractPluggableGUIApplication
 			}
 		}
 
-		setSearchWindowOpacityEnabled(props.searchWindowOpacityEnabled);
-		setSearchWindowOpacity(props.searchWindowOpacity);
-		setSearchWindowOpacityRule(props.searchWindowOpacityRule);
+		setSearchWindowOpacityEnabled(prefs.searchWindowOpacityEnabled);
+		setSearchWindowOpacity(prefs.searchWindowOpacity);
+		setSearchWindowOpacityRule(prefs.searchWindowOpacityRule);
 
 		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
 			System.err.println("preDisplayInit: " + (System.currentTimeMillis()-start));
 		}
 
-		RTextUtilities.setDropShadowsEnabledInEditor(props.dropShadowsInEditor);
+		RTextUtilities.setDropShadowsEnabledInEditor(prefs.dropShadowsInEditor);
 
 	}
 
 
 	/**
-	 * This is called in the GUI application's constructor.  It is a chance
-	 * to do initialization of stuff that will be needed by the menu bar
-	 * before it gets created.
-	 *
-	 * @param prefs The preferences of the application.
-	 * @param splashScreen The "splash screen" for this application.  This
-	 *        value may be <code>null</code>.
+	 * {@inheritDoc}
 	 */
 	@Override
-	protected void preMenuBarInit(GUIApplicationPreferences prefs,
-							SplashScreen splashScreen) {
+	protected void preMenuBarInit(RTextPrefs prefs, SplashScreen splashScreen) {
 
 		long start = System.currentTimeMillis();
 
 		// Make the split pane positions same as last time.
-		RTextPreferences rtp = (RTextPreferences)prefs;
-		setSplitPaneDividerLocation(TOP, rtp.dividerLocations[TOP]);
-		setSplitPaneDividerLocation(LEFT, rtp.dividerLocations[LEFT]);
-		setSplitPaneDividerLocation(BOTTOM, rtp.dividerLocations[BOTTOM]);
-		setSplitPaneDividerLocation(RIGHT, rtp.dividerLocations[RIGHT]);
+		setSplitPaneDividerLocation(TOP, prefs.dividerLocations[TOP]);
+		setSplitPaneDividerLocation(LEFT, prefs.dividerLocations[LEFT]);
+		setSplitPaneDividerLocation(BOTTOM, prefs.dividerLocations[BOTTOM]);
+		setSplitPaneDividerLocation(RIGHT, prefs.dividerLocations[RIGHT]);
 
 		// Show any docked windows
-		setSpellingWindowVisible(rtp.viewSpellingList);
+		setSpellingWindowVisible(prefs.viewSpellingList);
 
-		setShowHostName(rtp.showHostName);
+		setShowHostName(prefs.showHostName);
 
 		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
 			System.err.println("preMenuBarInit: " + (System.currentTimeMillis()-start));
@@ -1024,46 +998,39 @@ public class RText extends AbstractPluggableGUIApplication
 
 
 	/**
-	 * This is called in the GUI application's constructor.  It is a chance
-	 * to do initialization of stuff that will be needed by the status bar
-	 * bar before it gets created.
-	 *
-	 * @param prefs The preferences of the application.
-	 * @param splashScreen The "splash screen" for this application.  This
-	 *        value may be <code>null</code>.
+	 * {@inheritDoc}
 	 */
 	@Override
-	protected void preStatusBarInit(GUIApplicationPreferences prefs,
+	protected void preStatusBarInit(RTextPrefs prefs,
 							SplashScreen splashScreen) {
 
 		long start = System.currentTimeMillis();
 
-		final RTextPreferences properties = (RTextPreferences)prefs;
 		final String[] filesToOpen = null;
 
 		// Initialize our "new, empty text file" name.
 		newFileName = getString("NewFileName");
 
 		splashScreen.updateStatus(getString("SettingSHColors"), 10);
-		setSyntaxScheme(properties.colorScheme);
+		setSyntaxScheme(prefs.colorScheme);
 
-		setWorkingDirectory(properties.workingDirectory);
+		setWorkingDirectory(prefs.workingDirectory);
 
 		splashScreen.updateStatus(getString("CreatingView"), 20);
 
 		// Initialize our view object.
-		switch (properties.mainView) {
+		switch (prefs.mainView) {
 			case TABBED_VIEW:
 				mainViewStyle = TABBED_VIEW;
-				mainView = new RTextTabbedPaneView(RText.this, filesToOpen, properties);
+				mainView = new RTextTabbedPaneView(RText.this, filesToOpen, prefs);
 				break;
 			case SPLIT_PANE_VIEW:
 				mainViewStyle = SPLIT_PANE_VIEW;
-				mainView = new RTextSplitPaneView(RText.this, filesToOpen, properties);
+				mainView = new RTextSplitPaneView(RText.this, filesToOpen, prefs);
 				break;
 			default:
 				mainViewStyle = MDI_VIEW;
-				mainView = new RTextMDIView(RText.this, filesToOpen, properties);
+				mainView = new RTextMDIView(RText.this, filesToOpen, prefs);
 				break;
 		}
 
@@ -1081,28 +1048,19 @@ public class RText extends AbstractPluggableGUIApplication
 
 
 	/**
-	 * This is called in the GUI application's constructor.  It is a chance
-	 * for to do initialization of stuff that will be needed by the toolbar
-	 * before it gets created.
-	 *
-	 * @param prefs The preferences of the application.
-	 * @param splashScreen The "splash screen" for this application.  This
-	 *        value may be <code>null</code>.
+	 * {@inheritDoc}
 	 */
 	@Override
-	protected void preToolBarInit(GUIApplicationPreferences prefs,
-							final SplashScreen splashScreen) {
+	protected void preToolBarInit(RTextPrefs prefs, SplashScreen splashScreen) {
 
 		long start = System.currentTimeMillis();
-
-		final RTextPreferences properties = (RTextPreferences)prefs;
 
 		StatusBar statusBar = (StatusBar)getStatusBar();
 		mainView.addPropertyChangeListener(statusBar);
 
 		loadPossibleIconGroups();
 		try {
-			setIconGroupByName(properties.iconGroupName);
+			setIconGroupByName(prefs.iconGroupName);
 		} catch (InternalError ie) {
 			displayException(ie);
 			System.exit(0);
@@ -1173,19 +1131,12 @@ public class RText extends AbstractPluggableGUIApplication
 	 * Makes all actions use default accelerators.
 	 */
 	public void restoreDefaultAccelerators() {
-
-		int num = defaultActionAccelerators.length;
-		for (int i=0; i<num; i++) {
-			Action a = getAction(actionNames[i]);
-			// Check for a null action because sometimes we have new actions
-			// "declared" but not "defined" (e.g. OpenRemote).
-			if (a!=null) {
-				a.putValue(Action.ACCELERATOR_KEY,defaultActionAccelerators[i]);
+		for (Action a : getActions()) {
+			if (a instanceof StandardAction) {
+				((StandardAction)a).restoreDefaultAccelerator();
 			}
 		}
-
 		menuItemAcceleratorWorkaround();
-
 	}
 
 
@@ -1196,9 +1147,7 @@ public class RText extends AbstractPluggableGUIApplication
 	public void saveRTextPreferences() {
 
 		// Save preferences for RText itself.
-		RTextPreferences prefs = (RTextPreferences)RTextPreferences.
-										generatePreferences(this);
-		prefs.savePreferences(this);
+		new RTextPrefs().populate(this).save();
 
 		// Save preferences for any plugins.
 		Plugin[] plugins = getPlugins();
@@ -1317,21 +1266,20 @@ public class RText extends AbstractPluggableGUIApplication
 			mainViewStyle = viewStyle;
 			AbstractMainView fromView = mainView;
 
-			RTextPreferences props = (RTextPreferences)RTextPreferences.
-									generatePreferences(this);
+			RTextPrefs prefs = new RTextPrefs().populate(this);
 
 			// Create the new view.
 			switch (viewStyle) {
 				case TABBED_VIEW:
-					mainView = new RTextTabbedPaneView(this, null, props);
+					mainView = new RTextTabbedPaneView(this, null, prefs);
 					menuBar.setWindowMenuVisible(false);
 					break;
 				case SPLIT_PANE_VIEW:
-					mainView = new RTextSplitPaneView(this, null, props);
+					mainView = new RTextSplitPaneView(this, null, prefs);
 					menuBar.setWindowMenuVisible(false);
 					break;
 				case MDI_VIEW:
-					mainView = new RTextMDIView(this, null, props);
+					mainView = new RTextMDIView(this, null, prefs);
 					menuBar.setWindowMenuVisible(true);
 					break;
 			}
@@ -1699,7 +1647,7 @@ public class RText extends AbstractPluggableGUIApplication
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 
-				String lafName = RTextPreferences.getLookAndFeelToLoad();
+				String lafName = RTextPrefs.getLookAndFeelToLoad();
 
 				// Allow Substance to paint window titles, etc.  We don't allow
 				// Metal (for example) to do this, because setting these

@@ -93,7 +93,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 *
 	 * @param app The RText instance.
 	 */
-	public SourceBrowserPlugin(AbstractPluggableGUIApplication app) {
+	public SourceBrowserPlugin(AbstractPluggableGUIApplication<?> app) {
 
 		this.owner = (RText)app;
 
@@ -550,7 +550,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * @param app The application to which this plugin was just added.
 	 * @see #uninstall
 	 */
-	public void install(AbstractPluggableGUIApplication app) {
+	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		owner.getMainView().addCurrentTextAreaListener(this);
 

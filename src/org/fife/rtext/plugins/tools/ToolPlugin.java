@@ -64,7 +64,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	 *
 	 * @param app The parent RText application.
 	 */
-	public ToolPlugin(AbstractPluggableGUIApplication app) {
+	public ToolPlugin(AbstractPluggableGUIApplication<?> app) {
 
 		URL url = getClass().getResource("tools.png");
 		if (url!=null) { // Should always be true
@@ -216,7 +216,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void install(AbstractPluggableGUIApplication app) {
+	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		ToolManager.get().addPropertyChangeListener(ToolManager.PROPERTY_TOOLS,
 													this);

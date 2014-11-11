@@ -160,7 +160,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 *        bar.
 	 */
 	public RTextMenuBar(final RText rtext, String lnfName,
-							RTextPreferences properties) {
+							RTextPrefs properties) {
 
 		// Initialize some private variables.
 		this.rtext = rtext;

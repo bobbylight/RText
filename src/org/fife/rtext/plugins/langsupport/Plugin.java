@@ -91,7 +91,7 @@ public class Plugin extends AbstractPlugin {
 	 *
 	 * @param app The parent application.
 	 */
-	public Plugin(AbstractPluggableGUIApplication app) {
+	public Plugin(AbstractPluggableGUIApplication<?> app) {
 		setOptionsDialogPanelParentPanelID(RTextAreaOptionPanel.ID);
 	}
 
@@ -190,7 +190,7 @@ public class Plugin extends AbstractPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void install(AbstractPluggableGUIApplication app) {
+	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		icons = new HashMap<ParserNotice.Level, Icon>();
 		icons.put(ParserNotice.Level.ERROR, createIcon("error_obj.gif"));
