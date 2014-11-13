@@ -147,7 +147,15 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 			Method m = seClazz.getDeclaredMethod("eval",
 								new Class[] { String.class });
-			m.invoke(jsEngine, new Object[] { code });
+			Object obj = m.invoke(jsEngine, new Object[] { code });
+			if (obj!=null) {
+				String str = obj.toString();
+				if ((obj instanceof Double || obj instanceof Float) &&
+						str.endsWith(".0")) {
+					str = str.substring(0, str.length() - 2);
+				}
+				append(str, STYLE_STDOUT);
+			}
 
 		} catch (Exception e) {
 			// Since we use reflection, remove wrapper InvocationTargetException
