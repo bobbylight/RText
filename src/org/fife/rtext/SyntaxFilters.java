@@ -328,7 +328,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_UNIX_SHELL,		createValue(new String[] { "*.sh", "*.?sh" }));
 		filters.put(SYNTAX_STYLE_VISUAL_BASIC,		createValue(new String[] { "*.vb" }));
 		filters.put(SYNTAX_STYLE_WINDOWS_BATCH,		createValue(new String[] { "*.bat", "*.cmd" }));
-		filters.put(SYNTAX_STYLE_XML,				createValue(new String[] { "*.xml", "*.xsl", "*.xsd", "*.wsdl", "*.macro", "*.manifest" }));
+		filters.put(SYNTAX_STYLE_XML,				createValue(new String[] { "*.xml", "*.xsl", "*.xsd", "*.wsdl", "*.pom", "*.manifest" }));
 
 		// Keep any filters added by the user
 
