@@ -34,7 +34,6 @@ import javax.swing.event.ChangeListener;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.SearchManager.SearchingMode;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.SelectableLabel;
@@ -163,7 +162,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 		topPanel.add(temp);
 
 		// Do this after everything else is created.
-		if (RTextUtilities.isPreJava6() ||
+		if (UIUtil.isPreJava6() ||
 				TranslucencyUtil.get().isTranslucencySupported(false)) {
 			setTranslucentSearchDialogsSelected(false);
 		}
@@ -271,7 +270,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 		translucentSearchDialogsCB.setSelected(selected); // Probably already done
 
 		// The sub-options always stay disabled if we're not using Java 6u10+.
-		if (RTextUtilities.isPreJava6() ||
+		if (UIUtil.isPreJava6() ||
 				!TranslucencyUtil.get().isTranslucencySupported(false)) {
 			translucentSearchDialogsCB.setEnabled(false);
 			selected = false;

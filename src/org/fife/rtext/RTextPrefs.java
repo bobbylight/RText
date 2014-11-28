@@ -21,12 +21,14 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.prefs.Preferences;
+
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import org.fife.rtext.SearchManager.SearchingMode;
 import org.fife.ui.StatusBar;
+import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplicationPrefs;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
@@ -259,7 +261,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 
 
 	private static boolean getDefaultDropShadowsInEditorValue() {
-		return !RTextUtilities.isPreJava6() && File.separatorChar=='\\';
+		return !UIUtil.isPreJava6() && File.separatorChar=='\\';
 	}
 
 

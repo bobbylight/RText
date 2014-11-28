@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
@@ -38,6 +39,7 @@ import org.fife.rtext.plugins.project.model.FolderProjectEntry;
 import org.fife.rtext.plugins.project.model.LogicalFolderProjectEntry;
 import org.fife.rtext.plugins.project.model.ProjectEntry;
 import org.fife.rtext.plugins.project.model.ProjectEntryParent;
+import org.fife.ui.UIUtil;
 import org.fife.ui.rtextfilechooser.Actions;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
@@ -151,7 +153,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 * @return Whether the actions were added.
 	 */
 	protected boolean possiblyAddOpenInActions(List<PopupContent> actions) {
-		if (!RTextUtilities.isPreJava6()) {
+		if (!UIUtil.isPreJava6()) {
 			WorkspaceTree tree = plugin.getTree();
 			PopupContent.PopupSubMenu openInMenu = new PopupContent.PopupSubMenu(
 					Messages.getString("Action.OpenIn"));

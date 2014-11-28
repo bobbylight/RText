@@ -300,6 +300,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_CPLUSPLUS,		createValue(new String[] { "*.cpp", "*.cxx", "*.h" }));
 		filters.put(SYNTAX_STYLE_CSHARP,			createValue(new String[] { "*.cs" }));
 		filters.put(SYNTAX_STYLE_CSS,				createValue(new String[] { "*.css" }));
+		filters.put(SYNTAX_STYLE_D,					createValue(new String[] { "*.d" }));
 		filters.put(SYNTAX_STYLE_DELPHI,				createValue(new String[] { "*.pas" }));
 		filters.put(SYNTAX_STYLE_DTD,				createValue(new String[] { "*.dtd" }));
 		filters.put(SYNTAX_STYLE_FORTRAN,			createValue(new String[] { "*.f", "*.for", "*.fort", "*.f77", "*.f90" }));
@@ -328,7 +329,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_UNIX_SHELL,		createValue(new String[] { "*.sh", "*.?sh" }));
 		filters.put(SYNTAX_STYLE_VISUAL_BASIC,		createValue(new String[] { "*.vb" }));
 		filters.put(SYNTAX_STYLE_WINDOWS_BATCH,		createValue(new String[] { "*.bat", "*.cmd" }));
-		filters.put(SYNTAX_STYLE_XML,				createValue(new String[] { "*.xml", "*.xsl", "*.xsd", "*.wsdl", "*.pom", "*.manifest" }));
+		filters.put(SYNTAX_STYLE_XML,				createValue(new String[] { "*.xml", "*.xsl", "*.xsd", "*.wsdl", "*.pom", "*.manifest", "*.tmx", "*.tsx" }));
 
 		// Keep any filters added by the user
 

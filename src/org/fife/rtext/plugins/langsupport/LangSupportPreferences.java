@@ -36,6 +36,8 @@ public class LangSupportPreferences extends Prefs {
 	public boolean cs_folding_enabled;
 
 	public boolean css_folding_enabled;
+	
+	public boolean d_folding_enabled;
 
 	public boolean groovy_folding_enabled;
 
@@ -124,6 +126,8 @@ public class LangSupportPreferences extends Prefs {
 		cs_folding_enabled = true;
 
 		css_folding_enabled = true;
+
+		d_folding_enabled = true;
 
 		groovy_folding_enabled = true;
 

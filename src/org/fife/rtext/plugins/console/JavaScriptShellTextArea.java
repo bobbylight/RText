@@ -18,7 +18,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.fife.rtext.RTextUtilities;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
@@ -223,7 +222,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 		}
 		initialized = true;
 
-		if (!RTextUtilities.isPreJava6()) {
+		if (!UIUtil.isPreJava6()) {
 
 			// Run everything with reflection so we compile with Java 1.4.
 			try {

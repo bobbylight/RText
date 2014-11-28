@@ -256,6 +256,7 @@ public class RTextUtilities {
 			addFilter(chooser, msg, "Clojure", "clj");
 			addFilter(chooser, msg, "CSharp",	"cs");
 			addFilter(chooser, msg, "CSS", "css");
+			addFilter(chooser, msg, "D", "d");
 			addFilter(chooser, msg, "Delphi", "pas");
 			addFilter(chooser, msg, "DTD", "dtd");
 			addFilter(chooser, msg, "Flex", "mxml");
@@ -315,6 +316,7 @@ public class RTextUtilities {
 						"clj",
 						"cs",
 						"css",
+						"d",
 						"pas",
 						"dtd",
 						"mxml",
@@ -760,17 +762,6 @@ public class RTextUtilities {
 	 */
 	public static final boolean isFileSystemCaseSensitive() {
 		return CASE_SENSITIVE;
-	}
-
-
-	/**
-	 * Returns whether the Java Runtime that RText is running in is 1.4 or 1.5.
-	 * 
-	 * @return Whether the current JVM is pre-Java 6.
-	 */
-	public static final boolean isPreJava6() {
-		String version = System.getProperty("java.specification.version");
-		return "1.4".equals(version) || "1.5".equals(version);
 	}
 
 

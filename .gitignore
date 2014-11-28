@@ -7,4 +7,5 @@ rtext_*_win32_setup.exe
 javadoc
 .DS_Store
 dist-mac
+Thumbs.db
 

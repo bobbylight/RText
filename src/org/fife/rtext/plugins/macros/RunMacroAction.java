@@ -21,11 +21,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextUtilities;
+import org.fife.ui.UIUtil;
 import org.fife.ui.app.StandardAction;
 
 
@@ -341,7 +342,7 @@ public class RunMacroAction extends StandardAction {
 	 * to initialize.
 	 */
 	private void showErrorInitializingMessage() {
-		String key = RTextUtilities.isPreJava6() ?
+		String key = UIUtil.isPreJava6() ?
 				"Error.Java6Required" : "Error.Initializing";
 		String message = plugin.getString(key);
 		RText app = (RText)getApplication();
@@ -372,7 +373,7 @@ public class RunMacroAction extends StandardAction {
 	static {
 
 		// The scripting API was added in Java 6.
-		if (!RTextUtilities.isPreJava6()) {
+		if (!UIUtil.isPreJava6()) {
 
 			// Run everything with reflection so we compile with Java 1.4.
 			try {

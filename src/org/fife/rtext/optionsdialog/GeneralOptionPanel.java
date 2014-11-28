@@ -195,7 +195,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		expPanel.add(label);
 		expPanel.add(Box.createVerticalStrut(10));
 		dropShadowsInEditorCB = new JCheckBox(msg.getString("DropShadowsInEditor"));
-		dropShadowsInEditorCB.setEnabled(!RTextUtilities.isPreJava6());
+		dropShadowsInEditorCB.setEnabled(!UIUtil.isPreJava6());
 		dropShadowsInEditorCB.addActionListener(this);
 		addLeftAligned(expPanel, dropShadowsInEditorCB);
 		expPanel.add(Box.createVerticalGlue());
@@ -283,7 +283,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 			// Only default to this experimental option if > Java 6 and running
 			// on Windows
 			boolean defaultDropShadowsInEditor =
-				(!RTextUtilities.isPreJava6() && File.separatorChar=='\\');
+				(!UIUtil.isPreJava6() && File.separatorChar=='\\');
 
 			if (dirField.getDocument().getLength()>0 ||
 				terminatorCombo.getSelectedIndex()!=0 ||
