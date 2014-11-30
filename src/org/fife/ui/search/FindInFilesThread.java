@@ -10,6 +10,7 @@
  */
 package org.fife.ui.search;
 
+import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
 import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.Segment;
@@ -33,6 +35,7 @@ import org.fife.ui.GUIWorkerThread;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;
+import org.fife.ui.rtextarea.RTextArea;
 
 
 /**
@@ -484,7 +487,9 @@ class FindInFilesThread extends GUIWorkerThread {
 		// table, so we'll limit how much we display.
 		final int maxLen = 1280;
 
-		StringBuilder sb = new StringBuilder("<html><nobr><font face=\"Monospaced\">");
+		Font font = RTextArea.getDefaultFont();
+		String fontFamily = font.getFamily();
+		StringBuilder sb = new StringBuilder("<html><nobr><font face=\"" + fontFamily + "\">");
 		boolean firstNonWhitespace = false; // Skip leading whitespace
 
 		while (t!=null && t.isPaintable() && sb.length()<maxLen) {
