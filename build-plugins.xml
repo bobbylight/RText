@@ -16,7 +16,7 @@
 
 	<!-- Set global properties for this build. -->
 	<property name="app-name-small" value="rtext_standard_plugins"/>
-	<property name="version"        value="2.5.3"/>
+	<property name="version"        value="2.5.6"/>
 	<property name="source-dir"     location="src"/>
 	<property name="class-dir"      location="ant-classes"/>
 	<property name="dist-dir"       location="dist"/>
@@ -54,8 +54,6 @@
 				fork="true" executable="${javac.16}"
 				source="${java-level}" target="${java-level}">
 			<include name="**/*Substance*.java"/>
-			<!-- Don't compile plugins; their own build script -->
-			<!-- does that.                                    -->
 			<include name="org/fife/rtext/plugins/**/*Substance*"/>
 			<classpath>
 				<fileset dir="${dist-dir}" includes="**/*.jar"/>
@@ -237,7 +235,7 @@
 				<include name="org/fife/rtext/plugins/macros/**"/>
 			</fileset>
 			<manifest>
-				<attribute name="Class-Path" value="plugins/groovy-all-1.8.8.jar"/>
+				<attribute name="Class-Path" value="plugins/groovy-all-2.3.3.jar"/>
 				<attribute name="Fife-Plugin-Class" value="org.fife.rtext.plugins.macros.MacroPlugin"/>
 				<attribute name="Fife-Plugin-Load-Priority" value="normal"/>
 			</manifest>

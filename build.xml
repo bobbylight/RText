@@ -46,7 +46,7 @@
 	<!-- Set global properties for this build. -->
 	<property name="app-name"         value="RText"/>
 	<property name="app-name-small"   value="rtext"/>
-	<property name="version"          value="2.5.3"/>
+	<property name="version"          value="2.5.6"/>
 	<property name="source-dir"       location="src"/>
 	<property name="common-dir"       location="../FifeCommon"/>
 	<property name="class-dir"        location="ant-classes"/>
@@ -60,6 +60,15 @@
 	<property name="java-level"       value="1.5"/>
 	<property file="build.properties"/>
 
+    <condition property="is.windows">
+        <os family="windows"/>
+    </condition>
+    <condition property="is.unix">
+    	<not>
+        	<os family="windows"/>
+    	</not>
+    </condition>
+
 
 	<!-- Compiles all classes except for plugin classes.  -->
 	<path id="project.class.path">
@@ -68,12 +77,13 @@
 		<pathelement location="lib/rstaui.jar"/>
 		<pathelement location="lib/rsta_spellchecker.jar"/>
 		<pathelement location="lib/language_support.jar"/>
-		<pathelement location="${common-dir}/dist/fife.common.jar"/>
+		<pathelement location="${common-dir}/build/libs/fife.common-${version}.jar"/>
+		<pathelement location="extra/lnfs/substance/substance-7.2.1.jar"/>
 	</path>
 	<target name="compile-main-classes" description="Compile the source.">
 		<!-- Build all common classes. -->
-		<ant antfile="${common-dir}/build.xml" target="make-common-jar"
-				inheritall="false"/>
+		<antcall target="build-common-windows"/>
+		<antcall target="build-common-unix"/>
 		<!-- Build RText-specific classes. -->
 		<delete includeEmptyDirs="true" quiet="true" dir="${class-dir}"/>
 		<mkdir dir="${class-dir}"/>
@@ -105,13 +115,26 @@
 			<classpath>
 				<path refid="project.class.path"/>
 				<path location="${class-dir}"/>
-				<path location="${common-dir}/lib/substance/substance-7.2.1.jar"/>
 				<!--<path location="${common-dir}/lib/substance/WebLookAndFeel.jar"/>-->
 			</classpath>
 		</javac>
 	</target>
 
 
+	<target name="build-common-windows" if="is.windows">
+		<exec executable="cmd.exe" dir="${common-dir}">
+			<arg value="/c"/>
+			<arg value="${common-dir}/gradlew clean jar"/>
+		</exec>
+	</target>
+	<target name="build-common-unix" if="is.unix">
+		<exec executable="/bin/sh" dir="${common-dir}">
+			<arg value="-c"/>
+			<arg value="${common-dir}/gradlew clean jar"/>
+		</exec>
+	</target>
+	
+	
 	<!-- Build the main RText executable jar.  -->
 	<target name="make-rtext-jar" depends="compile-main-classes"
 			description="generate the RText distribution" >
@@ -164,16 +187,12 @@
 				<exclude name="Rhino.build-date"/>
 				<exclude name="Rhino.LICENSE.txt"/>
 			</fileset>
-			<fileset dir="${common-dir}/dist"/>
 			<fileset dir="${common-dir}/native"/>
 		</copy>
-		<!-- Copy the Substance revision the "extra" Common stuff was -->
-		<!-- built against.                                           -->
-		<copy todir="${dist-dir}/lnfs">
-			<fileset dir="${common-dir}/lib">
-				<include name="substance/*.jar"/>
-				<!--<include name="WebLookAndFeel.jar"/>-->
-			</fileset>
+		<copy todir="${dist-dir}">
+			<fileset dir="${common-dir}/build/libs"/>
+			<mapper type="regexp" from="fife\.common\-(\d\.\d\.\d)\.jar"
+			      to="fife.common.jar"/>
 		</copy>
 		<!-- Build and create the plugin jars.  We do this separately -->
 		<!-- from the rest of RText in case one day we don't want to  -->
@@ -253,7 +272,7 @@
 			 	breakiterator="yes">
 			<classpath>
 				<fileset dir="lib" includes="*.jar"/>
-				<fileset dir="${common-dir}/lib/substance" includes="*.jar"/>
+				<fileset dir="extra/lnfs/substance" includes="*.jar"/>
 				<pathelement path="${common-dir}/extra"/>
 			</classpath>
 			<packageset dir="${common-dir}/src" defaultexcludes="yes">
