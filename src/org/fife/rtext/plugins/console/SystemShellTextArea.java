@@ -31,9 +31,8 @@ import javax.swing.text.TextAction;
 
 import org.fife.io.ProcessRunner;
 import org.fife.io.ProcessRunnerOutputListener;
-import org.fife.rtext.RText;
+import org.fife.ui.OS;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rtextfilechooser.Utilities;
 
 
 /**
@@ -57,13 +56,12 @@ class SystemShellTextArea extends ConsoleTextArea {
 	private static final String OPEN					= "open";
 	private static final String PWD						= "pwd";
 
-	private static final boolean CASE_SENSITIVE =
-			Utilities.isCaseSensitiveFileSystem();
+	private static final boolean CASE_SENSITIVE = OS.get().isCaseSensitive();
 
 
 	public SystemShellTextArea(Plugin plugin) {
 		super(plugin);
-		isWindows = plugin.getRText().getOS()==RText.OS_WINDOWS;
+		isWindows = plugin.getRText().getOS()==OS.WINDOWS;
 	}
 
 
@@ -101,7 +99,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	 */
 	@Override
 	protected String getSyntaxStyle() {
-		return plugin.getRText().getOS()==RText.OS_WINDOWS ?
+		return plugin.getRText().getOS()==OS.WINDOWS ?
 				SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH :
 				SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
 	}
@@ -182,7 +180,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 			}
 			dir = temp.getAbsolutePath();
 		}
-		else if (plugin.getRText().getOS()==RText.OS_WINDOWS &&
+		else if (plugin.getRText().getOS()==OS.WINDOWS &&
 				dir.length()==2 && Character.isLetter(dir.charAt(0)) &&
 				dir.charAt(1)==':') {
 			// e.g. "cd U:" converts to "cd U:\" so it actually does something;
@@ -308,7 +306,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	@Override
 	protected void handleSubmit(String text) {
 
-		if (plugin.getRText().getOS()==RText.OS_WINDOWS) {
+		if (plugin.getRText().getOS()==OS.WINDOWS) {
 
 			// On Windows, allow format e.g. "cd\temp" => "cd C:\temp".
 			if (text.startsWith(CD + '\\')) {

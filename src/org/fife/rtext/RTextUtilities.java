@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.InputMap;
@@ -43,6 +44,7 @@ import javax.swing.text.BadLocationException;
 import org.fife.jgoodies.looks.common.ShadowPopupBorder;
 import org.fife.jgoodies.looks.common.ShadowPopupFactory;
 import org.fife.rsta.ui.DecorativeIconPanel;
+import org.fife.ui.OS;
 import org.fife.ui.SubstanceUtils;
 import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
@@ -85,8 +87,6 @@ public class RTextUtilities {
 	 * Whether the experimental "drop shadows" option is enabled.
 	 */
 	private static boolean dropShadowsEnabledInEditor;
-
-	private static final boolean CASE_SENSITIVE;
 
 
 	/**
@@ -643,7 +643,7 @@ public class RTextUtilities {
 										boolean showErrorDialog) {
 
 		String pattern = createRegexForFileFilter(fileFilter);
-		int flags = isFileSystemCaseSensitive() ? 0 :
+		int flags = OS.get().isCaseSensitive() ? 0 :
 				(Pattern.CASE_INSENSITIVE|Pattern.UNICODE_CASE);
 		try {
 			return Pattern.compile(pattern, flags);
@@ -752,16 +752,6 @@ public class RTextUtilities {
 
 		return bi;
 
-	}
-
-
-	/**
-	 * Returns whether the local file system is case-sensitive.
-	 *
-	 * @return Whether the local file system is case-sensitive.
-	 */
-	public static final boolean isFileSystemCaseSensitive() {
-		return CASE_SENSITIVE;
 	}
 
 
@@ -1014,13 +1004,6 @@ public class RTextUtilities {
 			}
 		}
 		return fileName;
-	}
-
-
-	static {
-		String os = System.getProperty("os.name").toLowerCase();
-		CASE_SENSITIVE = os.indexOf("windows")==-1 &&
-				os.indexOf("mac os x")==-1;
 	}
 
 

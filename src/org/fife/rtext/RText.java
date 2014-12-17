@@ -18,6 +18,7 @@ import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
+
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -304,6 +305,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	@Override
 	protected void createActions(RTextPrefs prefs) {
 		ActionFactory.addActions(this, prefs);
+		loadActionShortcuts(getShortcutsFile());
 	}
 
 
@@ -439,7 +441,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 			// If there will be no more rtext's running, stop the JVM.
 			if (StoreKeeper.getInstanceCount()==1) {
-				saveRTextPreferences();	// Save the user's running preferences.
+				savePreferences();
 				boolean saved = RTextEditorPane.saveTemplates();
 				if (!saved) {
 					String title = getString("ErrorDialogTitle");
@@ -724,6 +726,18 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 */
 	public int getSearchWindowOpacityRule() {
 		return searchWindowOpacityRule;
+	}
+
+
+	/**
+	 * Returns the file in which to load and save user-customized keyboard
+	 * shortcuts.
+	 *
+	 * @return The shortcuts file.
+	 */
+	private static final File getShortcutsFile() {
+		return new File(RTextUtilities.getPreferencesDirectory(),
+				"shortcuts.properties");
 	}
 
 
@@ -1141,13 +1155,13 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	/**
-	 * Attempts to write this RText instance's properties to wherever the OS
-	 * writes Java Preferences stuff.
+	 * Saves the uesr's preferences.
 	 */
-	public void saveRTextPreferences() {
+	public void savePreferences() {
 
 		// Save preferences for RText itself.
 		new RTextPrefs().populate(this).save();
+		saveActionShortcuts(getShortcutsFile());
 
 		// Save preferences for any plugins.
 		Plugin[] plugins = getPlugins();

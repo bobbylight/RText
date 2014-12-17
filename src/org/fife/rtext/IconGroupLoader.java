@@ -12,14 +12,15 @@ package org.fife.rtext;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
-
 import org.fife.io.UnicodeReader;
+import org.fife.ui.OS;
 import org.fife.ui.rtextarea.IconGroup;
 
 
@@ -132,7 +133,7 @@ class IconGroupLoader extends DefaultHandler {
 		//System.err.println("DEBUG: IconGroupLoader parsing: " + time + " ms");
 
 		// Add default icon groups.
-		if (owner.getOS()==RText.OS_WINDOWS) {
+		if (owner.getOS()==OS.WINDOWS) {
 			addOfficeLnFsIconGroups();
 		}
 

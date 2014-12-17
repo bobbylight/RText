@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.OS;
 
 
 /**
@@ -241,7 +242,7 @@ public class FolderFilterInfo {
 		}
 
 		public boolean matches(String text) {
-			return RTextUtilities.isFileSystemCaseSensitive() ?
+			return OS.get().isCaseSensitive() ?
 					literal.equals(text) : literal.equalsIgnoreCase(text);
 		}
 

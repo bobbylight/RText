@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.StatusBar;
+import org.fife.ui.OS;
 import org.fife.ui.app.StandardAction;
 
 
@@ -42,7 +43,7 @@ public class CapsLockAction extends StandardAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 		RText rtext = (RText)getApplication();
-		if (rtext.getOS()!=RText.OS_MAC_OSX) {
+		if (rtext.getOS()!=OS.MAC_OS_X) {
 			try {
 				boolean state = rtext.getToolkit().getLockingKeyState(
 										KeyEvent.VK_CAPS_LOCK);

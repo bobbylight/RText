@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
@@ -20,6 +21,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import org.fife.ui.OS;
 import org.fife.ui.app.StandardAction;
 import org.fife.ui.rsyntaxtextarea.spell.SpellingParser;
 import org.fife.ui.rsyntaxtextarea.spell.event.SpellingParserEvent;
@@ -127,7 +129,7 @@ public class SpellingSupport implements SpellingParserListener {
 	 */
 	private void createSpellingParser() throws IOException {
 		String fileName = "english_dic.zip";
-		if (rtext.getOS()==RText.OS_MAC_OSX) {
+		if (rtext.getOS()==OS.MAC_OS_X) {
 			fileName = "RText.app/Contents/Resources/Java/" + fileName;
 		}
 		File file = new File(rtext.getInstallLocation(), fileName);

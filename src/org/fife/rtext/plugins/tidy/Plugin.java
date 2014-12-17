@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 import java.util.ResourceBundle;
+
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -30,6 +31,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.OS;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
@@ -250,7 +252,7 @@ public class Plugin extends AbstractPlugin
 
 		// On OS X, the "Options" menu item is in the application menu, not
 		// in the Edit menu.
-		if (rtext.getOS()==RText.OS_MAC_OSX) {
+		if (rtext.getOS()==OS.MAC_OS_X) {
 			menu.addSeparator();
 			menu.add(item);
 		}

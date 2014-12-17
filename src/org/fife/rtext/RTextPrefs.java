@@ -18,12 +18,9 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.io.File;
-import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.prefs.Preferences;
-
 import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import org.fife.rtext.SearchManager.SearchingMode;
@@ -445,7 +442,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 			spellingDictionary	= prefs.get("spellingDictionary", spellingDictionary);
 			String tempVal = prefs.get("userDictionary", null);
 			if (tempVal!=null) { // No previous value => use default already set
-				if (tempVal.length()==0) { // Empty string => no user dictioanry
+				if (tempVal.length()==0) { // Empty string => no user dictionary
 					userDictionary = null;
 				}
 				else {
@@ -465,9 +462,6 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 			prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
 			fileHistoryString		= prefs.get("fileHistoryString", fileHistoryString);
 			maxFileHistorySize		= prefs.getInt("maxFileHistorySize", maxFileHistorySize);
-
-			// Get the accelerators for all actions.
-			loadActionAccelerators(RText.actionNames, prefs);
 
 		// If anything at all goes wrong, just use default property values.
 		} catch (RuntimeException re) {
@@ -743,8 +737,6 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		dropShadowsInEditor = getDefaultDropShadowsInEditorValue();
 		codeFoldingEnabledFor = "";
 		useSearchDialogs = true;
-
-		accelerators = new HashMap<String, KeyStroke>();
 
 	}
 

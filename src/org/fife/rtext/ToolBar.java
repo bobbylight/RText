@@ -14,10 +14,12 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.Icon;
 import javax.swing.JButton;
 
 import org.fife.ui.CustomizableToolBar;
+import org.fife.ui.OS;
 import org.fife.ui.rtextarea.IconGroup;
 import org.fife.ui.rtextarea.RTextArea;
 
@@ -211,7 +213,7 @@ class ToolBar extends CustomizableToolBar {
 	private final void configure(JButton button, StatusBar mouseListener) {
 		// Bug in Windows 1.4 and some 1.5 JRE's - changing LAF to
 		// windows LAF causes margin to become much too wide.
-		if (owner.getOS()==RText.OS_WINDOWS) {
+		if (owner.getOS()==OS.WINDOWS) {
 			button.setMargin(new Insets(0,0,0,0));
 		}
 		button.addMouseListener(mouseListener);

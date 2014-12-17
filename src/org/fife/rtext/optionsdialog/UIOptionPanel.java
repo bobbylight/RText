@@ -21,6 +21,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.ResourceBundle;
+
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -35,6 +36,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.OS;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.SpecialValueComboBox;
@@ -274,7 +276,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		SpecialValueComboBox combo = new SpecialValueComboBox();
 		UIUtil.fixComboOrientation(combo);
-		boolean osIsWindows = rtext.getOS()==RText.OS_WINDOWS;
+		boolean osIsWindows = rtext.getOS()==OS.WINDOWS;
 
 		// Get all Look and Feels, with the system default listed first.
 		LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
