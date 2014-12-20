@@ -68,6 +68,9 @@ public class ActionFactory implements RTextActionInfo {
 		a = new OpenInNewWindowAction(rtext, msg, null);
 		rtext.addAction(OPEN_NEWWIN_ACTION, a);
 
+		a = new OpenRecentAction(rtext, msg, null);
+		rtext.addAction(OPEN_RECENT_ACTION, a);
+
 		a = new OpenRemoteAction(rtext, msg, null);
 		rtext.addAction(OPEN_REMOTE_ACTION, a);
 

@@ -30,6 +30,7 @@ public interface RTextActionInfo {
 	public static final String NEW_ACTION				= "newAction";
 	public static final String OPEN_ACTION				= "openAction";
 	public static final String OPEN_NEWWIN_ACTION		= "openNewWinAction";
+	public static final String OPEN_RECENT_ACTION		= "openRecentAction";
 	public static final String OPEN_REMOTE_ACTION		= "openRemoteAction";
 	public static final String SAVE_ACTION				= "saveAction";
 	public static final String SAVE_AS_ACTION			= "saveAsAction";
@@ -76,6 +77,7 @@ public interface RTextActionInfo {
 		NEW_ACTION,
 		OPEN_ACTION,
 		OPEN_NEWWIN_ACTION,
+		OPEN_RECENT_ACTION,
 		OPEN_REMOTE_ACTION,
 		SAVE_ACTION,
 		SAVE_AS_ACTION,

@@ -45,6 +45,7 @@ import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.dockablewindows.DockableWindowPanel;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
+import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rtextarea.IconGroup;
 import org.fife.ui.rtextfilechooser.FileChooserOwner;
@@ -161,6 +162,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * directly; instead, use {@link #getHostName()}.
 	 */
 	private String hostName;
+
+	private RecentFileManager recentFileManager;
 
 	/**
 	 * Used as a "hack" to re-load the Options dialog if the user opens it
@@ -661,6 +664,18 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	/**
+	 * Returns the list of most recently opened files, least-recently opened
+	 * first.
+	 *
+	 * @return The list of files.  This may be empty but will never be
+	 *         <code>null</code>.
+	 */
+	public java.util.List<FileLocation> getRecentFiles() {
+		return recentFileManager.getRecentFiles();
+	}
+
+
+	/**
 	 * Returns the file chooser used to select remote files.
 	 *
 	 * @return The file chooser.
@@ -975,6 +990,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		setSearchWindowOpacityEnabled(prefs.searchWindowOpacityEnabled);
 		setSearchWindowOpacity(prefs.searchWindowOpacity);
 		setSearchWindowOpacityRule(prefs.searchWindowOpacityRule);
+
+		recentFileManager = new RecentFileManager(this);
 
 		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
 			System.err.println("preDisplayInit: " + (System.currentTimeMillis()-start));

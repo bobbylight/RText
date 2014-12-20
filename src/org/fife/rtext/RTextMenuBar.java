@@ -17,6 +17,7 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
@@ -91,6 +92,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	private JMenuItem newItem;
 	private JMenuItem openItem;
 	private JMenuItem openInNewWindowItem;
+	private JMenuItem openRecentItem;
 	private JMenuItem openRemoteItem;
 	private JMenuItem saveItem;
 	private JMenuItem saveAsItem;
@@ -187,6 +189,9 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		openInNewWindowItem = createMenuItem(rtext.getAction(RText.OPEN_NEWWIN_ACTION));
 		fileMenu.add(openInNewWindowItem);
+
+		openRecentItem = createMenuItem(rtext.getAction(RText.OPEN_RECENT_ACTION));
+		fileMenu.add(openRecentItem);
 
 		openRemoteItem = createMenuItem(rtext.getAction(RText.OPEN_REMOTE_ACTION));
 		fileMenu.add(openRemoteItem);
@@ -664,6 +669,16 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 
 	/**
+	 * Returns the list of files in the "recent files" menu.
+	 *
+	 * @return The list of files in the "recent files" menu.
+	 */
+	public List<String> getFileHistory() {
+		return recentFilesMenu.getFileHistory();
+	}
+
+
+	/**
 	 * Returns a string representing all files in the file history separated by
 	 * '<' characters.  This character was chosen as the separator because it
 	 * is a character that cannot be used in filenames in both Windows and
@@ -733,6 +748,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		updateAction(newItem, RText.NEW_ACTION);
 		updateAction(openItem, RText.OPEN_ACTION);
 		updateAction(openInNewWindowItem, RText.OPEN_NEWWIN_ACTION);
+		updateAction(openRecentItem, RText.OPEN_RECENT_ACTION);
 		updateAction(openRemoteItem, RText.OPEN_REMOTE_ACTION);
 		updateAction(closeItem, RText.CLOSE_ACTION);
 		updateAction(closeAllItem, RText.CLOSE_ALL_ACTION);
