@@ -57,7 +57,7 @@ import org.fife.util.TranslucencyUtil;
  * text editor with the following features:
  *
  * <ul>
- *   <li>Syntax highlighting for 30+ languages.
+ *   <li>Syntax highlighting for 35+ languages.
  *   <li>Code folding.
  *   <li>Edit multiple documents simultaneously.
  *   <li>Auto-indent.

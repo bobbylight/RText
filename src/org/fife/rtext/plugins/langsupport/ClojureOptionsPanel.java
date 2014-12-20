@@ -18,7 +18,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ClojureOptionsPanel extends FoldingOnlyOptionsPanel {
+class ClojureOptionsPanel extends FoldingOnlyOptionsPanel {
 
 
 	/**

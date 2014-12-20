@@ -257,6 +257,7 @@ public class RTextUtilities {
 			addFilter(chooser, msg, "CSharp",	"cs");
 			addFilter(chooser, msg, "CSS", "css");
 			addFilter(chooser, msg, "D", "d");
+			addFilter(chooser, msg, "Dart", "dart");
 			addFilter(chooser, msg, "Delphi", "pas");
 			addFilter(chooser, msg, "DTD", "dtd");
 			addFilter(chooser, msg, "Flex", "mxml");
@@ -317,6 +318,7 @@ public class RTextUtilities {
 						"cs",
 						"css",
 						"d",
+						"dart",
 						"pas",
 						"dtd",
 						"mxml",

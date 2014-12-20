@@ -18,7 +18,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-public class MxmlOptionsPanel extends FoldingOnlyOptionsPanel {
+class MxmlOptionsPanel extends FoldingOnlyOptionsPanel {
 
 
 	/**

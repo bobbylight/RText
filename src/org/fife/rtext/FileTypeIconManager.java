@@ -71,6 +71,7 @@ public class FileTypeIconManager {
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_CSHARP,			PATH + "cs.gif");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_CSS,				PATH + "css.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_D,				PATH + "d.png");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_DART,				PATH + "dart.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_HTML,				PATH + "html.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_JAVA,				PATH + "java.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT,		PATH + "script_code.png");

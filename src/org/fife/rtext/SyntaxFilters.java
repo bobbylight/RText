@@ -128,7 +128,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * @param values An array of values to go into the value.
 	 * @return The value.
 	 */
-	private static final List<String> createValue(String[] values) {
+	private static final List<String> createValue(String... values) {
 		List<String> list = new ArrayList<String>();
 		for (String value : values) {
 			list.add(value);
@@ -292,44 +292,45 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.clear();
 
 		//filters.put(SYNTAX_STYLE_NONE,			createValue());
-		filters.put(SYNTAX_STYLE_ACTIONSCRIPT,		createValue(new String[] { "*.as", "*.asc" }));
-		filters.put(SYNTAX_STYLE_ASSEMBLER_X86,		createValue(new String[] { "*.asm" }));
-		filters.put(SYNTAX_STYLE_BBCODE,			createValue(new String[] { "*.bbc" }));
-		filters.put(SYNTAX_STYLE_C,				createValue(new String[] { "*.c" }));
-		filters.put(SYNTAX_STYLE_CLOJURE,			createValue(new String[] { "*.clj" }));
-		filters.put(SYNTAX_STYLE_CPLUSPLUS,		createValue(new String[] { "*.cpp", "*.cxx", "*.h" }));
-		filters.put(SYNTAX_STYLE_CSHARP,			createValue(new String[] { "*.cs" }));
-		filters.put(SYNTAX_STYLE_CSS,				createValue(new String[] { "*.css" }));
-		filters.put(SYNTAX_STYLE_D,					createValue(new String[] { "*.d" }));
-		filters.put(SYNTAX_STYLE_DELPHI,				createValue(new String[] { "*.pas" }));
-		filters.put(SYNTAX_STYLE_DTD,				createValue(new String[] { "*.dtd" }));
-		filters.put(SYNTAX_STYLE_FORTRAN,			createValue(new String[] { "*.f", "*.for", "*.fort", "*.f77", "*.f90" }));
-		filters.put(SYNTAX_STYLE_GROOVY,			createValue(new String[] { "*.groovy", "*.grv" }));
-		filters.put(SYNTAX_STYLE_HTACCESS,			createValue(new String[] { ".htaccess" }));
-		filters.put(SYNTAX_STYLE_HTML,			createValue(new String[] { "*.htm", "*.html" }));
-		filters.put(SYNTAX_STYLE_JAVA,			createValue(new String[] { "*.java" }));
-		filters.put(SYNTAX_STYLE_JAVASCRIPT,		createValue(new String[] { "*.js" }));
-		filters.put(SYNTAX_STYLE_JSP,				createValue(new String[] { "*.jsp" }));
-		filters.put(SYNTAX_STYLE_JSON,				createValue(new String[] { "*.json", ".jshintrc" }));
-		filters.put(SYNTAX_STYLE_LATEX,				createValue(new String[] { "*.tex", "*.ltx", "*.latex" }));
-		filters.put(SYNTAX_STYLE_LISP, 				createValue(new String[] { "*.cl", "*.clisp", "*.el", "*.l", "*.lisp", "*.lsp", "*.ml" }));
-		filters.put(SYNTAX_STYLE_LUA,				createValue(new String[] { "*.lua" }));
-		filters.put(SYNTAX_STYLE_MAKEFILE,			createValue(new String[] { "Makefile", "makefile" }));
-		filters.put(SYNTAX_STYLE_MXML,				createValue(new String[] { "*.mxml" }));
-		filters.put(SYNTAX_STYLE_NSIS,				createValue(new String[] { "*.nsi" }));
-		filters.put(SYNTAX_STYLE_PERL,			createValue(new String[] { "*.perl", "*.pl", "*.pm" }));
-		filters.put(SYNTAX_STYLE_PHP,				createValue(new String[] { "*.php" }));
-		filters.put(SYNTAX_STYLE_PROPERTIES_FILE,	createValue(new String[] { "*.properties", "*.ini" }));
-		filters.put(SYNTAX_STYLE_PYTHON,			createValue(new String[] { "*.py" }));
-		filters.put(SYNTAX_STYLE_RUBY,			createValue(new String[] { "*.rb" }));
-		filters.put(SYNTAX_STYLE_SAS,				createValue(new String[] { "*.sas" }));
-		filters.put(SYNTAX_STYLE_SCALA,				createValue(new String[] { "*.scala" }));
-		filters.put(SYNTAX_STYLE_SQL,				createValue(new String[] { "*.sql" }));
-		filters.put(SYNTAX_STYLE_TCL,				createValue(new String[] { "*.tcl", "*.tk" }));
-		filters.put(SYNTAX_STYLE_UNIX_SHELL,		createValue(new String[] { "*.sh", "*.?sh" }));
-		filters.put(SYNTAX_STYLE_VISUAL_BASIC,		createValue(new String[] { "*.vb" }));
-		filters.put(SYNTAX_STYLE_WINDOWS_BATCH,		createValue(new String[] { "*.bat", "*.cmd" }));
-		filters.put(SYNTAX_STYLE_XML,				createValue(new String[] { "*.xml", "*.xsl", "*.xsd", "*.wsdl", "*.pom", "*.manifest", "*.tmx", "*.tsx" }));
+		filters.put(SYNTAX_STYLE_ACTIONSCRIPT,		createValue("*.as", "*.asc"));
+		filters.put(SYNTAX_STYLE_ASSEMBLER_X86,		createValue("*.asm"));
+		filters.put(SYNTAX_STYLE_BBCODE,			createValue("*.bbc"));
+		filters.put(SYNTAX_STYLE_C,				createValue("*.c"));
+		filters.put(SYNTAX_STYLE_CLOJURE,			createValue("*.clj"));
+		filters.put(SYNTAX_STYLE_CPLUSPLUS,		createValue("*.cpp", "*.cxx", "*.h"));
+		filters.put(SYNTAX_STYLE_CSHARP,			createValue("*.cs"));
+		filters.put(SYNTAX_STYLE_CSS,				createValue("*.css"));
+		filters.put(SYNTAX_STYLE_D,					createValue("*.d"));
+		filters.put(SYNTAX_STYLE_DART,				createValue("*.dart"));
+		filters.put(SYNTAX_STYLE_DELPHI,				createValue("*.pas"));
+		filters.put(SYNTAX_STYLE_DTD,				createValue("*.dtd"));
+		filters.put(SYNTAX_STYLE_FORTRAN,			createValue("*.f", "*.for", "*.fort", "*.f77", "*.f90"));
+		filters.put(SYNTAX_STYLE_GROOVY,			createValue("*.groovy", "*.grv"));
+		filters.put(SYNTAX_STYLE_HTACCESS,			createValue(".htaccess"));
+		filters.put(SYNTAX_STYLE_HTML,			createValue("*.htm", "*.html"));
+		filters.put(SYNTAX_STYLE_JAVA,			createValue("*.java"));
+		filters.put(SYNTAX_STYLE_JAVASCRIPT,		createValue("*.js"));
+		filters.put(SYNTAX_STYLE_JSP,				createValue("*.jsp"));
+		filters.put(SYNTAX_STYLE_JSON,				createValue("*.json", ".jshintrc"));
+		filters.put(SYNTAX_STYLE_LATEX,				createValue("*.tex", "*.ltx", "*.latex"));
+		filters.put(SYNTAX_STYLE_LISP, 				createValue("*.cl", "*.clisp", "*.el", "*.l", "*.lisp", "*.lsp", "*.ml"));
+		filters.put(SYNTAX_STYLE_LUA,				createValue("*.lua"));
+		filters.put(SYNTAX_STYLE_MAKEFILE,			createValue("Makefile", "makefile"));
+		filters.put(SYNTAX_STYLE_MXML,				createValue("*.mxml"));
+		filters.put(SYNTAX_STYLE_NSIS,				createValue("*.nsi"));
+		filters.put(SYNTAX_STYLE_PERL,			createValue("*.perl", "*.pl", "*.pm"));
+		filters.put(SYNTAX_STYLE_PHP,				createValue("*.php"));
+		filters.put(SYNTAX_STYLE_PROPERTIES_FILE,	createValue("*.properties", "*.ini"));
+		filters.put(SYNTAX_STYLE_PYTHON,			createValue("*.py"));
+		filters.put(SYNTAX_STYLE_RUBY,			createValue("*.rb"));
+		filters.put(SYNTAX_STYLE_SAS,				createValue("*.sas"));
+		filters.put(SYNTAX_STYLE_SCALA,				createValue("*.scala"));
+		filters.put(SYNTAX_STYLE_SQL,				createValue("*.sql"));
+		filters.put(SYNTAX_STYLE_TCL,				createValue("*.tcl", "*.tk"));
+		filters.put(SYNTAX_STYLE_UNIX_SHELL,		createValue("*.sh", "*.?sh"));
+		filters.put(SYNTAX_STYLE_VISUAL_BASIC,		createValue("*.vb"));
+		filters.put(SYNTAX_STYLE_WINDOWS_BATCH,		createValue("*.bat", "*.cmd"));
+		filters.put(SYNTAX_STYLE_XML,				createValue("*.xml", "*.xsl", "*.xsd", "*.wsdl", "*.pom", "*.manifest", "*.tmx", "*.tsx"));
 
 		// Keep any filters added by the user
 

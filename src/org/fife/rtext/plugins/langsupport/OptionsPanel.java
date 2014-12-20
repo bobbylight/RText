@@ -114,6 +114,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 		addChildPanel(new CssOptionsPanel());
 		addChildPanel(new ClojureOptionsPanel());
 		addChildPanel(new DOptionsPanel());
+		addChildPanel(new DartOptionsPanel());
 		addChildPanel(new GroovyOptionsPanel());
 		addChildPanel(new HtmlOptionsPanel());
 		addChildPanel(new JavaOptionsPanel());

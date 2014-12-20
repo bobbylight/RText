@@ -262,6 +262,12 @@ public class Plugin extends AbstractPlugin {
 		language = SyntaxConstants.SYNTAX_STYLE_CSS;
 		view.setCodeFoldingEnabledFor(language, prefs.css_folding_enabled);
 
+		language = SyntaxConstants.SYNTAX_STYLE_D;
+		view.setCodeFoldingEnabledFor(language, prefs.d_folding_enabled);
+
+		language = SyntaxConstants.SYNTAX_STYLE_DART;
+		view.setCodeFoldingEnabledFor(language, prefs.dart_folding_enabled);
+
 		language = SyntaxConstants.SYNTAX_STYLE_GROOVY;
 		view.setCodeFoldingEnabledFor(language, prefs.groovy_folding_enabled);
 
@@ -438,6 +444,12 @@ public class Plugin extends AbstractPlugin {
 
 		language = SyntaxConstants.SYNTAX_STYLE_CSS;
 		prefs.css_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_D;
+		prefs.d_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_DART;
+		prefs.dart_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_GROOVY;
 		prefs.groovy_folding_enabled = view.isCodeFoldingEnabledFor(language);

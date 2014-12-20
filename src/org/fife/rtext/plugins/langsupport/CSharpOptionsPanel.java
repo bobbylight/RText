@@ -18,7 +18,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-public class CSharpOptionsPanel extends FoldingOnlyOptionsPanel {
+class CSharpOptionsPanel extends FoldingOnlyOptionsPanel {
 
 
 	/**
