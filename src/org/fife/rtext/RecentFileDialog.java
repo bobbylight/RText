@@ -209,6 +209,7 @@ public class RecentFileDialog extends EscapableDialog {
 			int index = list.getSelectedIndex();
 			index = (index + 1) % model.size();
 			list.setSelectedIndex(index);
+			list.ensureIndexIsVisible(index);
 		}
 	}
 
@@ -226,6 +227,7 @@ public class RecentFileDialog extends EscapableDialog {
 				index = model.size() - 1;
 			}
 			list.setSelectedIndex(index);
+			list.ensureIndexIsVisible(index);
 		}
 	}
 
@@ -251,6 +253,7 @@ public class RecentFileDialog extends EscapableDialog {
 		boolean modelNotEmpty = model.size() > 0;
 		if (modelNotEmpty) {
 			list.setSelectedIndex(0);
+			list.ensureIndexIsVisible(0);
 		}
 		okButton.setEnabled(modelNotEmpty);
 

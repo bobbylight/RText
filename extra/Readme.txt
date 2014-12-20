@@ -75,7 +75,7 @@ Mac OS X: Drag and drop the RText application (RText.app) into your
 
 If you have problems getting RText to run, please ask for help in RText's
 support forums:
-http://sourceforge.net/tracker/?atid=610805&group_id=95266&func=browse
+https://github.com/bobbylight/RText
 
 
 4. License
@@ -118,7 +118,7 @@ reports, submit feature requests, etc.
 6. The Author
 -------------
 Robert Futrell
-robert_futrell@users.sourceforge.net
+robet@fifesoft.com
 
 
 7. Contributors
