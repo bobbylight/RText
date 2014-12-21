@@ -2,6 +2,19 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+2.5.6 (12/20/2014)
+------------------
+   - Improved performance on OS X.
+   - Added "Recent Files" dialog (Ctrl+Shift+R / Cmd+Shift+R) for easily
+     opening recent files.
+   - Added Dart syntax highlighting and code folding.
+   - Several enhancements to Projects and File System Tree views.
+   - JavaScript console now automatically prints results when the expression
+     entered returns a value.
+   - *.pom files are now highlighted as XML by default.
+   - Fixed several bugs.
+   
+   
 2.5.3 (07/08/2014)
 ------------------
    - Improvements to PHP syntax highlighting.
