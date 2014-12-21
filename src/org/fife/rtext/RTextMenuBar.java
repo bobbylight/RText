@@ -230,7 +230,8 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		fileMenu.addSeparator();
 
 		String[] initialContents = null;
-		if (properties.fileHistoryString!=null) {
+		if (properties.fileHistoryString!=null &&
+				properties.fileHistoryString.length()>0) {
 			initialContents = properties.fileHistoryString.split("<");
 		}
 		recentFilesMenu = new RecentFilesMenu(menuMsg.getString("RecentFiles"),
