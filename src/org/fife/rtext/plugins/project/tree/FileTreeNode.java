@@ -285,7 +285,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		boolean directory = getFile().isDirectory();
 		String key = "ProjectPlugin." + (directory ? "Folder" : "File");
 		String type = Messages.getString(key);
-		RenameDialog dialog = new RenameDialog(rtext, type,
+		RenameDialog dialog = new RenameDialog(rtext, !directory, type,
 				new FileNameChecker(getFile().getParentFile(), directory));
 		dialog.setFileName(getFile().getName());
 		dialog.setVisible(true);

@@ -164,7 +164,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 		boolean directory = entry.getFile().isDirectory();
 		String key = "ProjectPlugin." + (directory ? "Folder" : "File");
 		String type = Messages.getString(key);
-		RenameDialog dialog = new RenameDialog(rtext, type, createNameChecker());
+		RenameDialog dialog = new RenameDialog(rtext, !directory, type, createNameChecker());
 		if (this instanceof FolderProjectEntryTreeNode) {
 			FolderProjectEntry fpe = (FolderProjectEntry)entry;
 			dialog.setDescription(getIcon(),

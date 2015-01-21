@@ -28,10 +28,13 @@ public class RenameDialog extends AbstractEnterFileNameDialog {
 	 * Constructor.
 	 *
 	 * @param owner The rtext window that owns this dialog.
+	 * @param directory Whether this dialog is for a directory as opposed to
+	 *        a regular file.
 	 * @param type The type of node being renamed.
 	 */
-	public RenameDialog(RText owner, String type, NameChecker checker) {
-		super(owner, checker);
+	public RenameDialog(RText owner, boolean isForFile, String type,
+			NameChecker checker) {
+		super(owner, isForFile, checker);
 		setTitle(Messages.getString("RenameDialog.Title", type));
 	}
 

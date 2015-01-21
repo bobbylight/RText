@@ -106,7 +106,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	protected void handleRename() {
 		RText rtext = plugin.getRText();
 		String type = Messages.getString("ProjectPlugin.Workspace");
-		RenameDialog dialog = new RenameDialog(rtext, type, new WorkspaceNameChecker());
+		RenameDialog dialog = new RenameDialog(rtext, false, type, new WorkspaceNameChecker());
 		dialog.setFileName(workspace.getName());
 		dialog.setVisible(true);
 		String newName = dialog.getFileName();
@@ -142,7 +142,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 
 		public void actionPerformed(ActionEvent e) {
 			RText rtext = plugin.getRText();
-			RenameDialog dialog = new RenameDialog(rtext, "Project",
+			RenameDialog dialog = new RenameDialog(rtext, false, "Project",
 					new ProjectTreeNode.ProjectNameChecker(workspace));
 			Icon icon = ProjectTreeNode.getProjectIcon();
 			dialog.setDescription(icon, Messages.getString("NewProjectDialog.Desc"));

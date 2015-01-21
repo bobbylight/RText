@@ -238,7 +238,7 @@ class ProjectWindow extends DockableWindow {
 			}
 
 			// Get the name for the new workspace.
-			RenameDialog dialog = new RenameDialog(rtext, "Workspace",
+			RenameDialog dialog = new RenameDialog(rtext, false, "Workspace",
 					new WorkspaceRootTreeNode.WorkspaceNameChecker());
 			Icon icon = WorkspaceRootTreeNode.getWorkspaceIcon();
 			dialog.setDescription(icon, Messages.getString("NewWorkspaceDialog.Desc"));

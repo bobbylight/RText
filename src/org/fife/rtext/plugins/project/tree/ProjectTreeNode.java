@@ -132,7 +132,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	protected void handleRename() {
 		RText rtext = plugin.getRText();
 		String type = Messages.getString("ProjectPlugin.Project");
-		RenameDialog dialog = new RenameDialog(rtext, type,
+		RenameDialog dialog = new RenameDialog(rtext, false, type,
 				new ProjectNameChecker(project.getWorkspace()));
 		dialog.setFileName(project.getName());
 		dialog.setVisible(true);

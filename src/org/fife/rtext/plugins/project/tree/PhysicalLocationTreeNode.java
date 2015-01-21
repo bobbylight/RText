@@ -130,7 +130,7 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 			RText rtext = node.getPlugin().getRText();
 			NameChecker nameChecker = new FileNameChecker(parent, !isFile);
 			NewFileOrFolderDialog dialog = new NewFileOrFolderDialog(rtext,
-					isFile, nameChecker);
+					!isFile, nameChecker);
 			dialog.setFileName(null); // Force focus on the text field
 			dialog.setVisible(true);
 
@@ -142,22 +142,29 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 					return;
 				}
 				node.handleRefresh();
+				if (dialog.getOpenOnCreate()) {
+					rtext.openFile(createFileObject(newName).getAbsolutePath());
+				}
 			}
 			
+		}
+
+		private File createFileObject(String name) {
+			return new File(node.getFile(), name);
 		}
 
 		private boolean createFileOrFolderImpl(String name) {
 			boolean success = false;
 			if (isFile) {
 				try {
-					new File(node.getFile(), name).createNewFile();
+					createFileObject(name).createNewFile();
 					success = true;
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
 			}
 			else {
-				success = new File(node.getFile(), name).mkdir();
+				success = createFileObject(name).mkdir();
 			}
 			return success;
 		}

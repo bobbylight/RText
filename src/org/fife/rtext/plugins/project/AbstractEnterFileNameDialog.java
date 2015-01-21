@@ -40,6 +40,7 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 	private JTextField nameField;
 	private DecorativeIconPanel renameDIP;
 	private NameChecker nameChecker;
+	protected boolean isForFile;
 
 	private static Icon ERROR_ICON;
 
@@ -48,11 +49,15 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 	 * Constructor.
 	 *
 	 * @param owner The rtext window that owns this dialog.
+	 * @param directory Whether this dialog is for a directory as opposed to
+	 *        a regular file.
 	 * @param checker The validator for the entered file name.
 	 */
-	protected AbstractEnterFileNameDialog(RText owner, NameChecker checker) {
+	protected AbstractEnterFileNameDialog(RText owner,
+			boolean directory, NameChecker checker) {
 		super(owner);
 		this.nameChecker = checker;
+		this.isForFile = !directory;
 		construct();
 	}
 
@@ -85,8 +90,14 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 		box.add(Box.createHorizontalStrut(5));
 		box.add(RTextUtilities.createAssistancePanel(nameField, renameDIP));
 		box.add(Box.createHorizontalGlue());
+		JPanel mainContentPanel = new JPanel(new BorderLayout());
+		mainContentPanel.add(box, BorderLayout.NORTH);
+		Container extraContent = createExtraContent();
+		if (extraContent != null) {
+			mainContentPanel.add(extraContent, BorderLayout.SOUTH);
+		}
 		topPanel = new JPanel(new BorderLayout());
-		topPanel.add(box, BorderLayout.SOUTH);
+		topPanel.add(mainContentPanel, BorderLayout.SOUTH);
 
 		// Make a panel containing the OK and Cancel buttons.
 		okButton = UIUtil.newButton(bundle, "OKButtonLabel", "OKButtonMnemonic");
@@ -118,6 +129,18 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 	 * @return The panel, or <code>null</code> for none.
 	 */
 	protected abstract void addDescPanel();
+
+
+	/**
+	 * Creates extra content to be displayed after the file/folder name text
+	 * field.  The default implementation returns <code>null</code>, which
+	 * specifies no content.  Subclasses can override.
+	 *
+	 * @return The extra content.
+	 */
+	protected Container createExtraContent() {
+		return null;
+	}
 
 
 	/**
