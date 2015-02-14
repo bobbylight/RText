@@ -335,7 +335,7 @@ public class Plugin extends AbstractPlugin {
 		jsls.setErrorParser(jsErrorParser);
 		if (prefs.js_jshintRcFile!=null &&
 				prefs.js_jshintRcFile.isFile()) {
-			jsls.setJsHintRCFile(prefs.js_jshintRcFile);
+			jsls.setDefaultJsHintRCFile(prefs.js_jshintRcFile);
 		}
 		jsls.setStrictMode(prefs.js_rhinoStrictSyntaxChecking);
 		jsls.setXmlAvailable(prefs.js_rhinoAllowE4x);
@@ -503,7 +503,7 @@ public class Plugin extends AbstractPlugin {
 		prefs.js_autoActivation = jsls.isAutoActivationEnabled();
 		prefs.js_autoActivationDelay = jsls.getAutoActivationDelay();
 		prefs.js_syntaxCheckingEngine = jsls.getErrorParser().name();
-		prefs.js_jshintRcFile = jsls.getJsHintRCFile();
+		prefs.js_jshintRcFile = jsls.getDefaultJsHintRCFile();
 		prefs.js_rhinoStrictSyntaxChecking = jsls.isStrictMode();
 		prefs.js_rhinoAllowE4x = jsls.isXmlAvailable();
 		prefs.js_folding_enabled = view.isCodeFoldingEnabledFor(language);

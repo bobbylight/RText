@@ -296,7 +296,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		boolean reparse = false;
 		reparse |= jls.setErrorParser(rhinoRB.isSelected() ?
 				JsErrorParser.RHINO : JsErrorParser.JSHINT);
-		reparse |= jls.setJsHintRCFile(jshintrcField.getSelectedFile()); // jshint
+		reparse |= jls.setDefaultJsHintRCFile(jshintrcField.getSelectedFile()); // jshint
 		reparse |= jls.setStrictMode(strictCB.isSelected()); // rhino
 		reparse |= jls.setXmlAvailable(e4xCB.isSelected()); // rhino
 
@@ -424,7 +424,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 
 		// Options dealing with syntax checking.
 		setSyntaxCheckingEngine(jls.getErrorParser());
-		File jshintrcFile = jls.getJsHintRCFile();
+		File jshintrcFile = jls.getDefaultJsHintRCFile();
 		String jshint = jshintrcFile==null ? null : jshintrcFile.getAbsolutePath();
 		jshintrcField.setText(jshint); // jshint
 		strictCB.setSelected(jls.isStrictMode()); // rhino

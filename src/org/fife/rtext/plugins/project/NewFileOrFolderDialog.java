@@ -31,14 +31,12 @@ import org.fife.rtext.plugins.project.tree.NameChecker;
  */
 public class NewFileOrFolderDialog extends AbstractEnterFileNameDialog {
 
-	private RText rtext;
 	private JCheckBox openOnCreateCB;
 
 
 	public NewFileOrFolderDialog(RText parent, boolean directory,
 			NameChecker nameChecker) {
 		super(parent, directory, nameChecker);
-		rtext = parent;
 		String key = "NewFileOrFolderDialog.Title." +
 					(directory ? "Folder" : "File");
 		setTitle(Messages.getString(key));
