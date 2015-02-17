@@ -18,7 +18,9 @@ import java.io.Reader;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -32,6 +34,7 @@ import org.fife.rsta.ui.search.FindDialog;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.ui.GUIWorkerThread;
+import org.fife.ui.OS;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;
@@ -51,11 +54,13 @@ class FindInFilesThread extends GUIWorkerThread {
 
 	protected FindInFilesDialog dialog;
 	protected File directory;
+	private Set<String> folderNamesToSkip;
 
 	private String verboseLabelString;
 	private String errorLabelString;
 	protected String verboseNoFiltMatchString;
 	protected String dontSearchSubfoldersString;
+	protected String skipThisFolderString;
 	protected String newFilesToExamineString;	
 	protected String occurrencesString;
 
@@ -73,12 +78,24 @@ class FindInFilesThread extends GUIWorkerThread {
 		this.dialog = dialog;
 		this.directory = directory;
 
+		folderNamesToSkip = new HashSet<String>();
+		String[] tempFoldersToSkip = dialog.getSkipFolders();
+		if (tempFoldersToSkip != null) {
+			for (String folderName : tempFoldersToSkip) {
+				if (!OS.get().isCaseSensitive()) {
+					folderName = folderName.toLowerCase();
+				}
+				folderNamesToSkip.add(folderName);
+			}
+		}
+
 		verboseLabelString = "<html><em>" + dialog.getString2("VerboseLabel") +
 							"</em>";
 		errorLabelString = "<html><em>" + dialog.getString2("ErrorLabel") +
 							"</em>";
 		verboseNoFiltMatchString = dialog.getString2("VerboseNoFiltMatch");
 		dontSearchSubfoldersString = dialog.getString2("SearchSubFoldUnchecked");
+		skipThisFolderString = dialog.getString2("SkipThisFolder");
 		newFilesToExamineString = dialog.getString2("NewFilesToExamine");
 		occurrencesString = dialog.getString2("Occurrences");
 
@@ -232,6 +249,16 @@ class FindInFilesThread extends GUIWorkerThread {
 					if (doVerboseOutput) {
 						MatchData data = createVerboseMatchData(
 							fileFullPath, dontSearchSubfoldersString);
+						dialog.addMatchData(data);
+					}
+					continue;
+				}
+
+				// Ignore if this folder is one the user wants to skip.
+				else if (shouldSkipFolder(temp)) {
+					if (doVerboseOutput) {
+						MatchData data = createVerboseMatchData(
+							fileFullPath, skipThisFolderString);
 						dialog.addMatchData(data);
 					}
 					continue;
@@ -444,8 +471,7 @@ class FindInFilesThread extends GUIWorkerThread {
 		// Get the list of regular expressions to apply when deciding
 		// whether or not to look in a file.  If we're on Windows, or OS X,
 		// do case-insensitive regexes.
-		String[] tokens = dialog.getInFilesComboBoxContents().trim().
-									split("\\s*,?\\s+");
+		String[] tokens = dialog.getInFilesPatterns();
 		if (tokens==null || tokens.length==0) {
 			return null;
 		}
@@ -549,6 +575,21 @@ class FindInFilesThread extends GUIWorkerThread {
 			}
 		}
 		return true;
+	}
+
+
+	/**
+	 * Returns whether this folder is one the user wants to skip.
+	 *
+	 * @param folder The folder.
+	 * @return Whether the user wants to skip this folder.
+	 */
+	protected boolean shouldSkipFolder(File folder) {
+		String folderName = folder.getName();
+		if (!OS.get().isCaseSensitive()) {
+			folderName = folderName.toLowerCase();
+		}
+		return folderNamesToSkip.contains(folderName);
 	}
 
 

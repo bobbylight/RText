@@ -25,6 +25,11 @@ public class FindInFilesSearchContext extends SearchContext {
 	private boolean verbose;
 
 
+	public FindInFilesSearchContext() {
+		searchSubfolders = true;
+	}
+
+
 	/**
 	 * Returns whether subfolders should be searched.
 	 *

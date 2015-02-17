@@ -211,6 +211,16 @@ class ReplaceInFilesThread extends FindInFilesThread {
 					continue;
 				}
 
+				// Ignore if this folder is one the user wants to skip.
+				else if (shouldSkipFolder(temp)) {
+					if (doVerboseOutput) {
+						MatchData data = createVerboseMatchData(
+							fileFullPath, skipThisFolderString);
+						dialog.addMatchData(data);
+					}
+					continue;
+				}
+
 				// Add any files in this subdirectory to the master list
 				// of files to search.
 				List<File> moreFilesList = getFilesFromDirectory(temp);

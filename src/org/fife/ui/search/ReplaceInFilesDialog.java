@@ -107,7 +107,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 		}
 
 		UIUtil.makeSpringCompactGrid(inputPanel,
-									4,2,		// rows,cols,
+									5,2,		// rows,cols,
 									0,0,		// initial-x, initial-y,
 									5,5);	// x-spacing, y-spacing.
 

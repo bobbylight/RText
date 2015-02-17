@@ -46,6 +46,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	// defined in AbstractSearchDialog.
 	protected JComboBox inFilesComboBox;
 	protected FSATextField inFolderTextField;
+	protected JComboBox skipFoldersComboBox;
 
 	protected JCheckBox subfoldersCheckBox;
 
@@ -65,6 +66,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	// Enter press.
 	private String lastSearchString;
 	private String lastInFilesString;
+	private String lastSkipFoldersString;
 
 	// The listener list for FindInFilesEvents.
 	private EventListenerList eventListenerList;
@@ -124,6 +126,14 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		inFolderTextField.setText(System.getProperty("user.home"));
 		inFolderTextField.addFocusListener(focusAdapter);
 		inFolderTextField.getDocument().addDocumentListener(docListener);
+
+		skipFoldersComboBox = new JComboBox(new RComboBoxModel());
+		textField = getTextComponent(skipFoldersComboBox);
+		textField.addFocusListener(focusAdapter);
+		textField.addKeyListener(keyListener);
+		skipFoldersComboBox.addItem(getDefaultFoldersToSkip());
+		skipFoldersComboBox.setSelectedIndex(0);
+		skipFoldersComboBox.setEditable(true);
 
 		// Make a panel containing the edit boxes and their associated labels.
 		JPanel inputPanel = createInputPanel();
@@ -248,6 +258,12 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 			// other than the first, move it to the first position.
 			item = getTextComponent(inFilesComboBox).getText();
 			inFilesComboBox.addItem(item); // Ensures item is at index 0.
+
+			// Add the "Skip folders" item to the combo box's list.  Then, if
+			// they just searched for an item that's already in the list other
+			// than the first, move it to the first position.
+			item = getTextComponent(skipFoldersComboBox).getText();
+			skipFoldersComboBox.addItem(item); // Ensures item is at index 0.
 
 			// Actually perform the search.
 			doFindInFiles();
@@ -382,7 +398,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 		// Make a panel containing the "Report detail" panel and some check boxes.
 		Box panel = Box.createVerticalBox();
-		subfoldersCheckBox = new JCheckBox(getString2("SearchSubfolders"));
+		subfoldersCheckBox = new JCheckBox(getString2("SearchSubfolders"), true);
 		subfoldersCheckBox.setMnemonic((int)getString2("SearchSubfoldersMnemonic").charAt(0));
 		subfoldersCheckBox.setActionCommand("Subfolders");
 		subfoldersCheckBox.addActionListener(this);
@@ -431,6 +447,9 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		JLabel dirLabel = new JLabel(getString2("InDirectory"));
 		dirLabel.setLabelFor(inFolderTextField);
 		dirLabel.setDisplayedMnemonic((int)getString2("InDirectoryMnemonic").charAt(0));
+		JLabel skipLabel = new JLabel(getString2("SkipFolders"));
+		skipLabel.setLabelFor(skipFoldersComboBox);
+		skipLabel.setDisplayedMnemonic((int)getString2("SkipFoldersMnemonic").charAt(0));
 
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(findTextCombo);
@@ -445,6 +464,10 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		temp3.add(inFolderTextField);
 		temp3.add(Box.createHorizontalStrut(AssistanceIconPanel.WIDTH), BorderLayout.LINE_START);
 
+		JPanel temp4 = new JPanel(new BorderLayout());
+		temp4.add(skipFoldersComboBox);
+		temp4.add(Box.createHorizontalStrut(AssistanceIconPanel.WIDTH), BorderLayout.LINE_START);
+
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
 
@@ -456,6 +479,8 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 			inputPanel.add(temp2);
 			inputPanel.add(dirLabel);
 			inputPanel.add(temp3);
+			inputPanel.add(skipLabel);
+			inputPanel.add(temp4);
 		}
 		else {
 			inputPanel.add(temp);
@@ -464,9 +489,11 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 			inputPanel.add(inLabel);
 			inputPanel.add(temp3);
 			inputPanel.add(dirLabel);
+			inputPanel.add(temp4);
+			inputPanel.add(skipLabel);
 		}
 		UIUtil.makeSpringCompactGrid(inputPanel,
-									3,2,		// rows,cols,
+									4,2,		// rows,cols,
 									0,0,		// initial-x, initial-y,
 									5,5);	// x-spacing, y-spacing.
 
@@ -623,6 +650,17 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 
 	/**
+	 * Returns a comma-separated list of folders people typically want to skip
+	 * over when searching for matches in a directory tree.
+	 *
+	 * @return The list of folders to skip.
+	 */
+	private static final String getDefaultFoldersToSkip() {
+		return ".git, CVS, .svn, bower_components, node_modules";
+	}
+
+
+	/**
 	 * Returns whether the user wants verbose output about their search.
 	 *
 	 * @return Whether the user wants verbose output about their search.
@@ -633,12 +671,12 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 
 	/**
-	 * Returns the contents of the "In Files:" combo box.
+	 * Returns the patterns specified in the "In Files:" combo box.
 	 *
 	 * @return The contents.
 	 */
-	String getInFilesComboBoxContents() {
-		return (String)inFilesComboBox.getSelectedItem();
+	String[] getInFilesPatterns() {
+		return UIUtil.getCommaSeparatedValues(inFilesComboBox);
 	}
 
 
@@ -697,6 +735,16 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 */
 	boolean getShowMatchingLines() {
 		return matchingLinesRadioButton.isSelected();
+	}
+
+
+	/**
+	 * Returns the patterns specified in the "Skip Folders:" combo box.
+	 *
+	 * @return The names of folders to skip.
+	 */
+	String[] getSkipFolders() {
+		return UIUtil.getCommaSeparatedValues(skipFoldersComboBox);
 	}
 
 
@@ -1019,10 +1067,15 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 			((JTextField)component).selectAll();
 
 			// Remember what it originally was, in case they tabbed out.
-			if (component==getTextComponent(findTextCombo))
+			if (component==getTextComponent(findTextCombo)) {
 				lastSearchString = (String)findTextCombo.getSelectedItem();
-			else if (component==getTextComponent(inFilesComboBox))
+			}
+			else if (component==getTextComponent(inFilesComboBox)) {
 				lastInFilesString = (String)inFilesComboBox.getSelectedItem();
+			}
+			else if (component==getTextComponent(skipFoldersComboBox)) {
+				lastSkipFoldersString = (String)skipFoldersComboBox.getSelectedItem();
+			}
 
 		}
 
@@ -1112,6 +1165,18 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 						findButton.doClick(0);
 						lastInFilesString = inFilesString;
 						getTextComponent(inFilesComboBox).selectAll();
+					}
+				}
+
+				// If they pressed enter in the 'Skip Folders' combo box.
+				else if (source==getTextComponent(skipFoldersComboBox)) {
+					String searchString = (String)findTextCombo.getSelectedItem();
+					lastSearchString = searchString;	// Just in case it changed too.
+					String skipFoldersString = (String)skipFoldersComboBox.getSelectedItem();
+					if (!skipFoldersString.equals(lastSkipFoldersString)) {
+						findButton.doClick(0);
+						lastSkipFoldersString = skipFoldersString;
+						getTextComponent(skipFoldersComboBox).selectAll();
 					}
 				}
 
