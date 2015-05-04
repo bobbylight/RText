@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="i18n"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/main/dist"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/FifeCommon"/>
-	<classpathentry kind="lib" path="lib/autocomplete.jar" sourcepath="C:/dev/rsta/RSyntaxTextArea/src"/>
-	<classpathentry kind="lib" path="lib/rsta_spellchecker.jar"/>
-	<classpathentry kind="lib" path="lib/rsyntaxtextarea.jar"/>
-	<classpathentry kind="lib" path="lib/language_support.jar"/>
-	<classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
-	<classpathentry kind="lib" path="lib/rstaui.jar"/>
+	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

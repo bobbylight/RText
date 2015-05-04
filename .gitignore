@@ -8,4 +8,6 @@ javadoc
 .DS_Store
 dist-mac
 Thumbs.db
+.gradle
+build
 
