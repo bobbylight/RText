@@ -1,79 +1,325 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Rtext : A syntax highlighting, code folding, programmer&#39;s text editor written in Swing.  http://fifesoft.com/rtext">
+<head>
+   <title>RText</title>
+   
+<!--   <link href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/cerulean/bootstrap.min.css" rel="stylesheet">-->
+   <link rel="stylesheet" type="text/css" href="lib/fancybox/jquery.fancybox.css?v=2.1.5" media="screen" />
+   <link rel='stylesheet' type='text/css' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' />
+   <link href="css/app.css" rel="stylesheet">
+   
+   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+   <!--[if lt IE 9]>
+     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+   <![endif]-->
+   
+</head>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+<body>
+   
+   <a href="https://github.com/bobbylight/rtext">
+      <img style="position: absolute; top: 0; right: 0; border: 0; width: 149px; height: 149px;"
+            src="images/right-chocolate@2x.png" alt="Fork me on GitHub">
+   </a>
+   
+   <div class="panel title-bar">
+      <div class='title'>RText</div>
+      <div class='short-desc'>A syntax highlighting, code folding, programmer's text editor</div>
+   </div>
+   
+   <div class="panel">
+      
+      <h1>Overview</h1>
+      <div class="panel-body">
+         <p>
+            <b><em>Note:</em></b> This site is an archive of the original RText site's content.
+            Visit the project's <a href="http://github.com/bobbylight/RText">GitHub page</a> for
+            the most recent information.
+         </p>
+         <p>
+            RText is a powerful, cross-platform programmer's text editor written in Java.
+            It is designed to be easy to use, highly customizable and flexible.
+         </p>
+         <p>
+            RText is released under a <a href="License.txt">modified BSD license</a>.
+            Part of RText's design is for the source code to be simple, easy to understand, and
+            well documented, so that other programmers can look into its inner-workings and figure
+            out how RText ticks with ease. A good place to start (besides the source code) is
+            the <a href="http://javadoc.fifesoft.com/rtext/">Javadoc</a> for all
+            classes used in the project.
+         </p>
+         <p>
+            If you download and try out RText, I'd really love to hear your feedback, positive and
+            negative.  Please send your comments/bugs/feature requests through the project's
+            <a href="http://github.com/bobbylight/RText">GitHub page</a>.
+         </p>
+      </div>
+      
+   </div>
+   
+   <div class='panel alt-1'>
+      
+      <h1>Features</h1>
+      <div class='panel-body small-block-row-set'>
+         
+         <ul>
+            <li>Syntax highlighting for <b>over 40 programming languages</b>
+            <li><b>Multiple font support</b> - different token types can use different fonts and styles
+            <li><b>Macro record/playback</b> - Automate common editing tasks you do repeatedly
+            <li><b>Drag-and-drop</b> - Easily move code around in your document, or even into
+               another application
+            <li><b>Spell Checking</b> - Spell check plain text documents and comments of source
+               code.
+            <li><b>Bookmarking</b> - Mark and quickly navigate to important sections of code.
+            <li><b>Mark Occurrences</b> - Easily see the scope and usage of a variable or method.
+            <li><b>Code templates</b> - Create shortcut key sequences for common coding constructs
+               such as for-loops.
+            <li><b>Unlimited undo/redo</b> - Don't worry about making a mistake with the handy
+               smart undo &amp; redo.
+            <li><b>File encodings supported</b> - Edit and save files in ASCII, Unicode, or any
+               other encoding supported by your JVM.
+            <li><b>Current line highlighting</b> - Allows you to quickly locate your position in
+               a source file.
+            <li><b>Margin line</b> - Useful for keeping your lines from being too long, if you're
+               into that kind of thing.
+            <li><b>Drag-and-drop</b> files from the desktop to open them
+            <li><b>Edit multiple documents simultaneously</b>, using a (tabbed view or
+               traditional MDI)
+            <li><b>Find/Replace</b>, with <b>full regular expression</b> support
+            <li><b>Find in Files</b> and Replace in Files
+            <li><b>External Tool Support</b> for running things such as compilers, Ant, etc.
+            <li><b>Task List</b> highlights your  TODO items in source code comments
+            <li><b>Printing and Print Preview</b>, for when you need a hard copy
+            <li><b>Auto-reload of files</b> when they are modified outside of editor
+            <li><b>Customizable keyboard shortcuts</b> makes using the editor a little more
+               comfortable
+            <li><b>Completely customizable UI</b> - change the toolbar's icon set, the application's
+               look and feel, the colors and fonts used in the editor, what buttons are visible on
+               the toolbar, etc.
+            <li><b>Comprehensive Help documentation</b> comes with the application
+            <li><b>Cross-platform</b> - runs anywhere there is a JVM
+            <li><b>Localized into 15 languages</b>
+         </ul>
+         
+      </div>
+      
+   </div>
+   
+   <div class='panel'>
+      
+      <h1>Screenshots</h1>
+      
+      <div class='panel-body small-block-row-set'>
+      
+         <div class='small-block-row'>
+         
+            <div class='small-block'>
+               <a href="images/rtext_osx_1.jpg" class="fancybox" data-fancybox-group='screenshots' title='OS X 1' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_osx_1_thumb.jpg" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_osx_2.jpg" class="fancybox" data-fancybox-group='screenshots' title='OS X 2' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_osx_2_thumb.jpg" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_osx_3.jpg" class="fancybox" data-fancybox-group='screenshots' title='OS X 3' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_osx_3_thumb.jpg" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+         
+         </div>
+         
+      </div>
+      
+      <div class='panel-body small-block-row-set'>
+      
+         <div class='small-block-row'>
+         
+            <div class='small-block'>
+               <a href="images/rtext_osx_4.jpg" class="fancybox" data-fancybox-group='screenshots' title='OS X 4' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_osx_4_thumb.jpg" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_osx_5.jpg" class="fancybox" data-fancybox-group='screenshots' title='OS X 5' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_osx_5_thumb.jpg" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_osx_6.jpg" class="fancybox" data-fancybox-group='screenshots' title='OS X 6' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_osx_6_thumb.jpg" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+         
+         </div>
+         
+      </div>
+      
+      <div class='panel-body small-block-row-set'>
+      
+         <div class='small-block-row'>
+         
+            <div class='small-block'>
+               <a href="images/rtext_win_1.jpg" class="fancybox" data-fancybox-group='screenshots' title='Windows 1' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_win_1_thumb.jpg" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_win_2.jpg" class="fancybox" data-fancybox-group='screenshots' title='Windows 2' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_win_2_thumb.jpg" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_win_3.jpg" class="fancybox" data-fancybox-group='screenshots' title='Windows 3' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_win_3_thumb.jpg" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+         
+         </div>
+         
+      </div>
+      
+      <div class='panel-body small-block-row-set'>
+      
+         <div class='small-block-row'>
+         
+            <div class='small-block'>
+               <a href="images/rtext_win_4.jpg" class="fancybox" data-fancybox-group='screenshots' title='Windows 4' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_win_4_thumb.jpg" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_win_5.jpg" class="fancybox" data-fancybox-group='screenshots' title='Windows 5' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_win_5_thumb.jpg" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_win_6.jpg" class="fancybox" data-fancybox-group='screenshots' title='Windows 6' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_win_6_thumb.jpg" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+         
+         </div>
+         
+      </div>
+      
+      <div class='panel-body small-block-row-set'>
+      
+         <div class='small-block-row'>
+         
+            <div class='small-block'>
+               <a href="images/rtext_rh_1.png" class="fancybox" data-fancybox-group='screenshots' title='Linux 1' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_rh_1_thumb.png" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_rh_2.png" class="fancybox" data-fancybox-group='screenshots' title='Linux 2' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_rh_2_thumb.png" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_rh_3.png" class="fancybox" data-fancybox-group='screenshots' title='Linux 3' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_rh_3_thumb.png" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+         
+         </div>
+         
+      </div>
+      
+      <div class='panel-body small-block-row-set'>
+      
+         <div class='small-block-row'>
+         
+            <div class='small-block'>
+               <a href="images/rtext_rh_3.png" class="fancybox" data-fancybox-group='screenshots' title='Linux 4' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_rh_3_thumb.png" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_rh_5.png" class="fancybox" data-fancybox-group='screenshots' title='Linux 5' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_rh_5_thumb.png" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_rh_6.png" class="fancybox" data-fancybox-group='screenshots' title='Linux 6' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_rh_6_thumb.png" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+         
+         </div>
+         
+      </div>
+      
+      <div class='panel-body small-block-row-set'>
+      
+         <div class='small-block-row'>
+         
+            <div class='small-block'>
+               <a href="images/rtext_nw_1.png" class="fancybox" data-fancybox-group='screenshots' title='NetWare 1' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_nw_1_thumb.png" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_nw_2.png" class="fancybox" data-fancybox-group='screenshots' title='NetWare 2' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_nw_2_thumb.png" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_nw_3.png" class="fancybox" data-fancybox-group='screenshots' title='NetWare 3' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_nw_3_thumb.png" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+         
+         </div>
+         
+      </div>
+      
+      <div class='panel-body small-block-row-set'>
+      
+         <div class='small-block-row'>
+         
+            <div class='small-block'>
+               <a href="images/rtext_nw_4.png" class="fancybox" data-fancybox-group='screenshots' title='NetWare 4' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_nw_4_thumb.png" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_nw_5.png" class="fancybox" data-fancybox-group='screenshots' title='NetWare 5' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_nw_5_thumb.png" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+            
+            <div class='small-block'>
+               <a href="images/rtext_nw_6.png" class="fancybox" data-fancybox-group='screenshots' title='NetWare 6' alt=''>
+                  <img class='preview-ss' src="images/thumbs/rtext_nw_6_thumb.png" width="250" height="210" alt="Preview Image" title="Click to enlarge"/></a>
+            </div>
+         
+         </div>
+         
+      </div>
+      
+   </div>
+   
+   <div class='panel footer'>
+   
+      <div class='panel-body'>
+         2015 Fifesoft &nbsp;| &nbsp;<a href='http://github.com/bobbylight/rsyntaxtextarea'><i class="fa fa-github"></i></a>
+      </div>
+      
+   </div>
+   
+   <script src='lib/jquery-1.10.1.min.js'></script>
+   <script src='lib/fancybox/jquery.fancybox.pack.js'></script>
+   <script>
+   $(document).ready(function() {
+      $(".fancybox").fancybox({
+         helpers: {
+            overlay: { locked: false }
+         },
+         openEffect  : 'none',
+         closeEffect : 'none'
+      });
+   });
+   </script>
+   
+</body>
 
-    <title>Rtext</title>
-  </head>
-
-  <body>
-
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/bobbylight/RText">View on GitHub</a>
-
-          <h1 id="project_title">Rtext</h1>
-          <h2 id="project_tagline">A syntax highlighting, code folding, programmer&#39;s text editor written in Swing.  http://fifesoft.com/rtext</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/bobbylight/RText/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/bobbylight/RText/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>
-<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a id="rather-drive-stick" class="anchor" href="#rather-drive-stick" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="https://help.github.com/pages">https://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Rtext maintained by <a href="https://github.com/bobbylight">bobbylight</a></p>
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
 </html>
