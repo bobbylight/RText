@@ -75,7 +75,7 @@ public class Plugin extends AbstractPlugin {
 	private Listener listener;
 	private Map<ParserNotice.Level, Icon> icons;
 
-	private static final String PLUGIN_VERSION			= "2.5.6";
+	private static final String PLUGIN_VERSION			= "2.5.8";
 	private static final String PREFS_FILE_NAME			= "langSupport.properties";
 
 	private static final String MSG = "org.fife.rtext.plugins.langsupport.Plugin";

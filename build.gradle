@@ -20,9 +20,9 @@ dependencies {
 		
 		[ "net.sf.jtidy:jtidy:r938" ],
 		[ "org.codehaus.groovy:groovy-all:2.+" ],
-		files( "${projectDir.absolutePath}/lib/jsonbeans.jar" )
+		[ 'com.esotericsoftware:jsonbeans:0.7' ]
 		)
-	testCompile group: "junit", name: "junit", version: "4.11"
+	testCompile( [ 'junit:junit:4.11' ] )
 }
 repositories {
 	mavenCentral()
@@ -101,11 +101,23 @@ task consoleJar(type: Jar) {
 		include 'org/fife/rtext/plugins/console/**'
 		archiveName 'plugin-console.jar'
 	}
+	manifest {
+		attributes(
+			'Fife-Plugin-Class': 'org.fife.rtext.plugins.console.Plugin',
+			'Fife-Plugin-Load-Priority': 'normal'
+		)
+	}
 }
 task fileSystemTreeJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/filesystemtree/**'
 		archiveName 'plugin-fileSystemTree.jar'
+	}
+	manifest {
+		attributes(
+			'Fife-Plugin-Class': 'org.fife.rtext.plugins.filesystemtree.FileSystemTreePlugin',
+			'Fife-Plugin-Load-Priority': 'normal'
+		)
 	}
 }
 task heapIndicatorJar(type: Jar) {
@@ -113,11 +125,23 @@ task heapIndicatorJar(type: Jar) {
 		include 'org/fife/rtext/plugins/heapindicator/**'
 		archiveName 'plugin-heapIndicator.jar'
 	}
+	manifest {
+		attributes(
+			'Fife-Plugin-Class': 'org.fife.rtext.plugins.heapindicator.HeapIndicatorPlugin',
+			'Fife-Plugin-Load-Priority': 'low'
+		)
+	}
 }
 task macroSupportJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/macros/**'
 		archiveName 'plugin-macros.jar'
+	}
+	manifest {
+		attributes(
+			'Fife-Plugin-Class': 'org.fife.rtext.plugins.macros.MacroPlugin',
+			'Fife-Plugin-Load-Priority': 'normal'
+		)
 	}
 }
 task projectSupportJar(type: Jar) {
@@ -125,11 +149,23 @@ task projectSupportJar(type: Jar) {
 		include 'org/fife/rtext/plugins/project/**'
 		archiveName 'plugin-projects.jar'
 	}
+	manifest {
+		attributes(
+			'Fife-Plugin-Class': 'org.fife.rtext.plugins.project.ProjectPlugin',
+			'Fife-Plugin-Load-Priority': 'normal'
+		)
+	}
 }
 task languageSupportJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/langsupport/**'
 		archiveName 'plugin-languageSupport.jar'
+	}
+	manifest {
+		attributes(
+			'Fife-Plugin-Class': 'org.fife.rtext.plugins.langsupport.Plugin',
+			'Fife-Plugin-Load-Priority': 'normal'
+		)
 	}
 }
 task sourceBrowserJar(type: Jar) {
@@ -137,11 +173,23 @@ task sourceBrowserJar(type: Jar) {
 		include 'org/fife/rtext/plugins/sourcebrowser/**'
 		archiveName 'plugin-sourceBrowser.jar'
 	}
+	manifest {
+		attributes(
+			'Fife-Plugin-Class': 'org.fife.rtext.plugins.sourcebrowser.SourceBrowserPlugin',
+			'Fife-Plugin-Load-Priority': 'high'
+		)
+	}
 }
 task taskListJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/tasks/**'
 		archiveName 'plugin-tasks.jar'
+	}
+	manifest {
+		attributes(
+			'Fife-Plugin-Class': 'org.fife.rtext.plugins.tasks.TasksPlugin',
+			'Fife-Plugin-Load-Priority': 'normal'
+		)
 	}
 }
 task tidyJar(type: Jar) {
@@ -149,11 +197,23 @@ task tidyJar(type: Jar) {
 		include 'org/fife/rtext/plugins/tidy/**'
 		archiveName 'plugin-tidy.jar'
 	}
+	manifest {
+		attributes(
+			'Fife-Plugin-Class': 'org.fife.rtext.plugins.tidy.Plugin',
+			'Fife-Plugin-Load-Priority': 'normal'
+		)
+	}
 }
 task toolsJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/tools/**'
 		archiveName 'plugin-tools.jar'
+	}
+	manifest {
+		attributes(
+			'Fife-Plugin-Class': 'org.fife.rtext.plugins.tools.ToolPlugin',
+			'Fife-Plugin-Load-Priority': 'normal'
+		)
 	}
 }
 task javadocJar (type: Jar, dependsOn: javadoc) {
@@ -180,20 +240,25 @@ distributions {
 		contents {
 			exclude([ '**/*-sources.jar', '**/*-javadoc.jar' ])
 			from { [
-				'lib', // Dependencies not in Maven
+				//'lib', // Dependencies not in Maven
 				"build/libs", // The built jars
 				configurations.runtime // Gradle dependencies
 			] }
 			eachFile { details ->
 				def path = details.path
 				if (isSubstanceJar(path)) {
+					//println "Is a substance jar: ${path}"
 					details.path = "lnfs/substance/" + path
 				}
 				else if (isPluginJar(path)) {
+					//println "Is a plugin jar: ${path}"
 					details.path = "plugins/" + path
 				}
 				else if (path.contains("-javadoc.jar") || path.contains("-source.jar")) {
-					
+					// Ignore
+				}
+				else if (path.contains("RText-") && path.endsWith(".jar")) {
+					details.path = "RText.jar"
 				}
 			}
 //			rename 'substance\\-.+', 'lnfs/substance/$0'

@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "RText"
-!define PRODUCT_VERSION "2.5.6"
+!define PRODUCT_VERSION "2.5.8"
 !define PRODUCT_WEB_SITE "http://fifesoft.com/rtext/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RText.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -19,7 +19,7 @@
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
-!insertmacro MUI_PAGE_LICENSE "extra\License.txt"
+!insertmacro MUI_PAGE_LICENSE "src\main\dist\License.txt"
 ; Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
@@ -54,7 +54,7 @@ Section "MainSection" SEC01
   CreateShortCut "$DESKTOP\RText.lnk" "$INSTDIR\RText.exe"
   SetOverwrite on
   SetOutPath "$INSTDIR"
-  File /r "dist\*"
+  File /r "build\install\rtext\*"
 SectionEnd
 
 Section -AdditionalIcons
@@ -90,11 +90,11 @@ Section Uninstall
   Delete "$INSTDIR\RText.exe"
   Delete "$INSTDIR\RText.url"
   Delete "$INSTDIR\uninst.exe"
-  Delete /REBOOTOK "$INSTDIR\autocomplete.jar"
+  Delete /REBOOTOK "$INSTDIR\autocomplete*"
   Delete /REBOOTOK "$INSTDIR\AutoComplete.License.txt"
   Delete /REBOOTOK "$INSTDIR\english_dic.zip"
   Delete /REBOOTOK "$INSTDIR\ExtraFileChooserFilters.xml"
-  Delete /REBOOTOK "$INSTDIR\fife.common.jar"
+  Delete /REBOOTOK "$INSTDIR\fife.common*"
   Delete /REBOOTOK "$INSTDIR\Jazzy.LICENSE.txt"
   Delete /REBOOTOK "$INSTDIR\js-14*.jar" ; Shouldn't be there, but was put by older releases
   Delete /REBOOTOK "$INSTDIR\License.txt"
@@ -107,9 +107,10 @@ Section Uninstall
   Delete /REBOOTOK "$INSTDIR\Rhino.LICENSE.txt" ; Shouldn't be there, but was put by older releases
   Delete /REBOOTOK "$INSTDIR\RSTALanguageSupport.License.txt" ; Shouldn't be there, but was put by older releases
   Delete /REBOOTOK "$INSTDIR\RSTAUI.*.txt" ; License and readme
-  Delete /REBOOTOK "$INSTDIR\rstaui.jar"
+  Delete /REBOOTOK "$INSTDIR\rstaui*"
   Delete /REBOOTOK "$INSTDIR\rsta_spellchecker.jar"
-  Delete /REBOOTOK "$INSTDIR\rsyntaxtextarea.jar"
+  Delete /REBOOTOK "$INSTDIR\spellchecker*"
+  Delete /REBOOTOK "$INSTDIR\rsyntaxtextarea*"
   Delete /REBOOTOK "$INSTDIR\RSyntaxTextArea.License.txt"
   Delete /REBOOTOK "$INSTDIR\RText.jar"
   Delete /REBOOTOK "$INSTDIR\SpellChecker.License.txt"
@@ -129,27 +130,41 @@ Section Uninstall
   Delete /REBOOTOK "$INSTDIR\lnfs\substance\*jar"
   Delete /REBOOTOK "$INSTDIR\lnfs\substance.jar" ; Possibly there from old releases
   Delete /REBOOTOK "$INSTDIR\lnfs\trident.jar" ; Possibly there from old releases
-  Delete /REBOOTOK "plugins\Console.jar"
-  Delete /REBOOTOK "plugins\FileSystemTree.jar"
-  Delete /REBOOTOK "plugins\groovy-all-1.8.8.jar"
-  Delete /REBOOTOK "plugins\groovy.LICENSE.txt"
-  Delete /REBOOTOK "plugins\HeapIndicator.jar"
-  Delete /REBOOTOK "plugins\js-14*.jar" ; Old and new versions
-  Delete /REBOOTOK "plugins\jsonbeans.jar"
-  Delete /REBOOTOK "plugins\jsonbeans.LICENSE.txt"
-  Delete /REBOOTOK "plugins\jtidy-r938.jar"
-  Delete /REBOOTOK "plugins\jtidy-r938.LICENSE.txt"
-  Delete /REBOOTOK "plugins\language_support.jar"
-  Delete /REBOOTOK "plugins\MacroSupport.jar"
-  Delete /REBOOTOK "plugins\ProjectSupport.jar"
-  Delete /REBOOTOK "plugins\Rhino.build-date"
-  Delete /REBOOTOK "plugins\Rhino.LICENSE.txt"
-  Delete /REBOOTOK "plugins\RSTALanguageSupport.License.txt"
-  Delete /REBOOTOK "plugins\RTextLanguageSupport.jar"
-  Delete /REBOOTOK "plugins\SourceBrowser.jar"
-  Delete /REBOOTOK "plugins\TaskList.jar"
-  Delete /REBOOTOK "plugins\tidy.jar"
-  Delete /REBOOTOK "plugins\ToolSupport.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\groovy-all-*.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\groovy.LICENSE.txt"
+  Delete /REBOOTOK "$INSTDIR\plugins\js-14*.jar" ; Old and new versions
+  Delete /REBOOTOK "$INSTDIR\plugins\jsonbeans-*.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\jsonbeans.LICENSE.txt"
+  Delete /REBOOTOK "$INSTDIR\plugins\jtidy-r938.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\jtidy-r938.LICENSE.txt"
+  Delete /REBOOTOK "$INSTDIR\plugins\languagesupport-*.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\plugin-console.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\plugin-fileSystemTree.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\plugin-heapIndicator.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\plugin-languageSupport.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\plugin-macros.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\plugin-sourceBrowser.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\plugin-tasks.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\plugin-projects.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\plugin-tools.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\plugin-tidy.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\rhino-*.jar"
+  Delete /REBOOTOK "$INSTDIR\plugins\Rhino.build-date"
+  Delete /REBOOTOK "$INSTDIR\plugins\Rhino.LICENSE.txt"
+
+  Delete /REBOOTOK "$INSTDIR\plugins\Console.jar" ; Older name
+  Delete /REBOOTOK "$INSTDIR\plugins\FileSystemTree.jar" ; Older name
+  Delete /REBOOTOK "$INSTDIR\plugins\HeapIndicator.jar" ; Older name
+  Delete /REBOOTOK "$INSTDIR\plugins\language_support.jar" ; Older name
+  Delete /REBOOTOK "$INSTDIR\plugins\MacroSupport.jar" ; Older name
+  Delete /REBOOTOK "$INSTDIR\plugins\ProjectSupport.jar" ; Older name
+  Delete /REBOOTOK "$INSTDIR\plugins\RSTALanguageSupport.License.txt" ; Older name
+  Delete /REBOOTOK "$INSTDIR\plugins\RTextLanguageSupport.jar" ; Older name
+  Delete /REBOOTOK "$INSTDIR\plugins\SourceBrowser.jar" ; Older name
+  Delete /REBOOTOK "$INSTDIR\plugins\TaskList.jar" ; Older name
+  Delete /REBOOTOK "$INSTDIR\plugins\tidy.jar" ; Older name
+  Delete /REBOOTOK "$INSTDIR\plugins\ToolSupport.jar" ; Older name
+  Delete /REBOOTOK "$INSTDIR\plugins\language_support.jar" ; Older name
 
   Delete "$SMPROGRAMS\RText\Uninstall.lnk"
   Delete "$SMPROGRAMS\RText\Website.lnk"

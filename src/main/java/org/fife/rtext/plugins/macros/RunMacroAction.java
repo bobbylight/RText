@@ -21,7 +21,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
@@ -116,7 +116,8 @@ public class RunMacroAction extends StandardAction {
 	 */
 	private static Object groovyEngine;
 
-	private static final String GROOVY_JAR = "plugins/groovy-all-2.3.3.jar";
+	private static final Pattern GROOVY_JAR_NAME_PATTERN = 
+			Pattern.compile("^groovy-all-[\\d\\.]+\\.jar$");
 
 
 	/**
@@ -140,6 +141,27 @@ public class RunMacroAction extends StandardAction {
 
 	public void actionPerformed(ActionEvent e) {
 		handleSubmit(macro);
+	}
+
+
+	private File getGroovyJar() {
+		File[] pluginFiles = getPluginDir().listFiles();
+		for (File file : pluginFiles) {
+			if (GROOVY_JAR_NAME_PATTERN.matcher(file.getName()).matches()) {
+				return file;
+			}
+		}
+		return null;
+	}
+
+
+	/**
+	 * Returns the directory in which to look for plugin jars.
+	 *
+	 * @return The plugin jar directory.
+	 */
+	private final File getPluginDir() {
+		return new File(getApplication().getInstallLocation(), "plugins");
 	}
 
 
@@ -245,10 +267,10 @@ public class RunMacroAction extends StandardAction {
 	 */
 	private Object initGroovyEngine() {
 
-		File groovyJar = new File(getApplication().getInstallLocation(), GROOVY_JAR);
-		if (!groovyJar.isFile()) {
+		File groovyJar = getGroovyJar();
+		if (groovyJar==null || !groovyJar.isFile()) {
 			String message = plugin.getString("Error.NoGroovyJar",
-								groovyJar.getAbsolutePath());
+					getPluginDir().getAbsolutePath());
 			RText app = (RText)getApplication();
 			String title = app.getString("ErrorDialogTitle");
 			JOptionPane.showMessageDialog(app, message, title,
