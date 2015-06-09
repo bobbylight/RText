@@ -6,11 +6,9 @@ you would expect:
 * Regex search and replace
 * Find/replace in files
 * Varying degrees of code completion for C, Java, Perl, JavaScript, and more
-* Varying degrees of syntax checking for various languages (JSHint integration
-  for JavaScript, compiler checking for Perl, XML well-formedness checking, etc.)
+* Varying degrees of syntax checking for various languages ([JSHint](http://jshint.com/)
+  integration for JavaScript, compiler checking for Perl, XML well-formedness checking, etc.)
 * Programmatic macros, write them in either JavaScript or Groovy
-* 
-
 * Application lifecycle (bootstrap, plugin loading, cleanup, shutdown)
 * Preference loading and saving
 * User-configurable key bindings
