@@ -5,18 +5,18 @@ group = "com.fifesoft"
 dependencies {
 	compile(
 		
-		files( "${projectDir.absolutePath}/../FifeCommon/build/libs/fife.common-2.6.0-SNAPSHOT.jar" ),
+		files( "${projectDir.absolutePath}/../FifeCommon/build/libs/fife.common-2.5.7.jar" ),
 		// insubstantial dependencies would go away if we pulled FifeCommon from Maven
 		[ "com.github.insubstantial:laf-plugin:7.2.1" ],
 		[ "com.github.insubstantial:laf-widget:7.2.1" ],
 		[ "com.github.insubstantial:substance:7.2.1" ],
 		[ "com.github.insubstantial:trident:7.2.1" ],
 		
-		[ "com.fifesoft:rsyntaxtextarea:2.6.0-SNAPSHOT" ],
-		[ "com.fifesoft:autocomplete:2.6.0-SNAPSHOT" ],
-		[ "com.fifesoft:rstaui:2.6.0-SNAPSHOT" ],
-		[ "com.fifesoft:spellchecker:2.6.0-SNAPSHOT" ],
-		[ "com.fifesoft:languagesupport:2.6.0-SNAPSHOT" ],
+		[ "com.fifesoft:rsyntaxtextarea:2.5.7" ],
+		[ "com.fifesoft:autocomplete:2.5.7" ],
+		[ "com.fifesoft:rstaui:2.5.7" ],
+		[ "com.fifesoft:spellchecker:2.5.7" ],
+		[ "com.fifesoft:languagesupport:2.5.7" ],
 		
 		[ "net.sf.jtidy:jtidy:r938" ],
 		[ "org.codehaus.groovy:groovy-all:2.+" ],
