@@ -188,7 +188,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 *        <code>null</code> if no files are to be opened.
 	 */
 	public RText(String[] filesToOpen) {
-		super("rtext", "RText.jar");
+		super("rtext");
 		init(filesToOpen);
 	}
 
@@ -202,7 +202,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * @param preferences The preferences with which to initialize this RText.
 	 */
 	public RText(String[] filesToOpen, RTextPrefs preferences) {
-		super("rtext", "RText.jar", preferences);
+		super("rtext", preferences);
 		init(filesToOpen);
 	}
 
@@ -1690,8 +1690,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 					JDialog.setDefaultLookAndFeelDecorated(true);
 				}
 
-				String rootDir = AbstractGUIApplication.
-											getLocationOfJar("RText.jar");
+				String rootDir = AbstractGUIApplication.getLocationOfJar();
 				ThirdPartyLookAndFeelManager lafManager =
 					new ThirdPartyLookAndFeelManager(rootDir);
 

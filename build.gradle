@@ -1,3 +1,7 @@
+plugins {
+  id "edu.sc.seis.macAppBundle" version "2.1.1"
+}
+
 ["java", "distribution", "maven" ].each { apply plugin: it }
 
 group = "com.fifesoft"
@@ -33,7 +37,7 @@ repositories {
 
 // Regenerate local gradlew
 task wrapper(type: Wrapper) {
-	gradleVersion = '2.0'
+	gradleVersion = '2.4'
 }
 
 def isSubstanceJar(def jarName) {
@@ -265,4 +269,12 @@ distributions {
 //			rename "(.+)\\-${version}\\.jar", '$1.jar'
 		}
 	}
+}
+
+macAppBundle {
+    mainClassName = "org.fife.rtext.RText"
+    icon = "myIcon.icns"
+    bundleJRE = true
+    javaProperties.put("apple.laf.useScreenMenuBar", "true")
+//    backgroundImage = "doc/macbackground.png"
 }
