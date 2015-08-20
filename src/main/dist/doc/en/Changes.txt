@@ -2,9 +2,14 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
-2.5.8 (????????)
+2.5.7 (08/20/2015)
 ------------------
-   - 
+   - When creating files from the Project plugin's tree view, those files are
+     now automatically opened by default.
+   - Find in Files and Replace in Files dialogs now have an "ignore these
+     folders" field.  By default it is pre-populated with commonly-ignored
+     folders.
+   - The application now works with both Apple JREs and Oracle JREs on OS X.
    
    
 2.5.6 (12/20/2014)
