@@ -269,6 +269,29 @@ distributions {
 //			rename "(.+)\\-${version}\\.jar", '$1.jar'
 		}
 	}
+	src {
+		baseName = 'rtext'
+	}
+}
+
+srcDistZip.classifier = 'src'
+srcDistZip {
+	from projectDir
+	include '.classpath'
+	include '.gitignore'
+	include '.project'
+	include 'build.gradle'
+	include 'gradle.properties'
+	include 'gradle/**/*'
+	include 'gradlew*'
+	include 'lib/**'
+	include 'mac/**'
+	include 'README.md'
+	include '.settings/**'
+	include 'MakeRTextIntaller.nsi'
+	include 'RText.exe'
+	include 'src/**'
+	include 'TO-DO'
 }
 
 //macAppBundle {
