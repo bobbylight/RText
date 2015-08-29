@@ -34,7 +34,7 @@ import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginOptionsDialogPanel;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 
 
 /**
@@ -75,7 +75,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 		RText rtext = (RText)app;
 		this.app = rtext;
-		StandardAction a = new NewToolAction(rtext, msg, null);
+		AppAction a = new NewToolAction(rtext, msg, null);
 		a.setAccelerator(prefs.newToolAccelerator);
 		rtext.addAction(NEW_TOOL_ACTION, a);
 
@@ -370,14 +370,13 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 		ToolsPrefs prefs = new ToolsPrefs();
 		prefs.windowPosition = window.getPosition();
-		StandardAction a = (StandardAction)app.
-										getAction(VIEW_TOOL_OUTPUT_ACTION);
+		AppAction a = (AppAction)app.getAction(VIEW_TOOL_OUTPUT_ACTION);
 		prefs.windowVisibilityAccelerator = a.getAccelerator();
 		prefs.windowVisible = window.isActive();
 
-		a = (StandardAction)app.getAction(NEW_TOOL_ACTION);
+		a = (AppAction)app.getAction(NEW_TOOL_ACTION);
 		prefs.newToolAccelerator = a.getAccelerator();
-		a = (StandardAction)app.getAction(EDIT_TOOLS_ACTION);
+		a = (AppAction)app.getAction(EDIT_TOOLS_ACTION);
 		prefs.editToolsAccelerator = a.getAccelerator();
 
 		File prefsFile = getPrefsFile();

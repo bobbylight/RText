@@ -10,4 +10,5 @@ dist-mac
 Thumbs.db
 .gradle
 build
+rtext-*-src.zip
 

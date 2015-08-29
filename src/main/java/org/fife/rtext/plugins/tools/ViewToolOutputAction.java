@@ -13,7 +13,7 @@ import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 
 import org.fife.rtext.RText;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 
 
 /**
@@ -22,7 +22,7 @@ import org.fife.ui.app.StandardAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class ViewToolOutputAction extends StandardAction {
+class ViewToolOutputAction extends AppAction {
 
 	/**
 	 * The tools plugin.

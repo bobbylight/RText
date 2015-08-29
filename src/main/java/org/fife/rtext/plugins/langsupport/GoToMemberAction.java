@@ -23,7 +23,7 @@ import org.fife.rtext.CurrentTextAreaEvent;
 import org.fife.rtext.CurrentTextAreaListener;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -34,7 +34,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-public class GoToMemberAction extends StandardAction
+public class GoToMemberAction extends AppAction
 			implements CurrentTextAreaListener {
 
 

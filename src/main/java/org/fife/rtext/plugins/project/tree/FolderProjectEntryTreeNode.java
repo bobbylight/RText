@@ -13,9 +13,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.TreeNode;
 
@@ -72,23 +70,11 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 			}
 		}
 
-		// On Windows and OS X, comparison is case-insensitive.
-		Comparator<File> c = null;
-		String os = System.getProperty("os.name");
-		boolean isOSX = os!=null ? os.toLowerCase().indexOf("os x")>-1 : false;
-		if (File.separatorChar=='\\' || isOSX) {
-			c = new Comparator<File>() {
-				public int compare(File f1, File f2) {
-					return f1.getName().compareToIgnoreCase(f2.getName());
-				}
-			};
-		}
-
-		Collections.sort(dirList, c);
+		Collections.sort(dirList);
 		for (File dir : dirList) {
 			add(createFileTreeNode(dir, true));
 		}
-		Collections.sort(fileList, c);
+		Collections.sort(fileList);
 		for (File file : fileList) {
 			add(createFileTreeNode(file, false));
 		}
@@ -123,8 +109,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 
 
 	/**
-	 * Overridden to add a menu item to configure the filters for this
-	 * project entry.
+	 * Overridden to add a menu items specific to folders.
 	 */
 	@Override
 	public List<PopupContent> getPopupActions() {

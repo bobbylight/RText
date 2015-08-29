@@ -38,7 +38,7 @@ import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.plugins.sourcebrowser.SourceBrowserPlugin.ExtendedTagEntry;
 import org.fife.ui.RTreeSelectionModel;
 import org.fife.ui.UIUtil;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 import org.fife.ui.rtextarea.SearchEngine;
 
 
@@ -278,7 +278,7 @@ class DefaultSourceTree extends JTree {
 	/**
 	 * Displays the options for this plugin in the Options dialog.
 	 */
-	private class ConfigureAction extends StandardAction {
+	private class ConfigureAction extends AppAction {
 
 		public ConfigureAction() {
 			super(owner, plugin.getBundle(), "MenuItem.Configure");

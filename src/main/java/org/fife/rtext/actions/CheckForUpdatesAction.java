@@ -21,7 +21,7 @@ import javax.swing.UIManager;
 
 import org.fife.rtext.RText;
 import org.fife.ui.UIUtil;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 
 
 /**
@@ -30,7 +30,7 @@ import org.fife.ui.app.StandardAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class CheckForUpdatesAction extends StandardAction {
+public class CheckForUpdatesAction extends AppAction {
 
 	/**
 	 * The URL to contact to see if there is a newer RText release.

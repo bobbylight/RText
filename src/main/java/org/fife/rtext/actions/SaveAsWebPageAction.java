@@ -28,7 +28,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.UIUtil;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.ui.rtextfilechooser.filters.HTMLFileFilter;
 import org.fife.ui.rsyntaxtextarea.Token;
@@ -45,7 +45,7 @@ import org.fife.ui.rsyntaxtextarea.Token;
  * TODO: Use CSS; have one CSS class per token type and just do
  *    <div class=\"" + token.type + "\"> + text + "</div>"
  */
-class SaveAsWebPageAction extends StandardAction {
+class SaveAsWebPageAction extends AppAction {
 
 
 	/**

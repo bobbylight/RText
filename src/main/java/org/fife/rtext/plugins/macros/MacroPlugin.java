@@ -30,7 +30,7 @@ import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginOptionsDialogPanel;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 
 
 /**
@@ -75,7 +75,7 @@ public class MacroPlugin extends AbstractPlugin
 
 		RText rtext = (RText)app;
 		this.app = rtext;
-		StandardAction a = new NewMacroAction(this, rtext, msg);
+		AppAction a = new NewMacroAction(this, rtext, msg);
 		a.setAccelerator(prefs.newMacroAccelerator);
 		rtext.addAction(NEW_MACRO_ACTION, a);
 
@@ -332,9 +332,9 @@ public class MacroPlugin extends AbstractPlugin
 
 		MacroPrefs prefs = new MacroPrefs();
 
-		StandardAction a = (StandardAction)app.getAction(NEW_MACRO_ACTION);
+		AppAction a = (AppAction)app.getAction(NEW_MACRO_ACTION);
 		prefs.newMacroAccelerator = a.getAccelerator();
-		a = (StandardAction)app.getAction(EDIT_MACROS_ACTION);
+		a = (AppAction)app.getAction(EDIT_MACROS_ACTION);
 		prefs.editMacrosAccelerator = a.getAccelerator();
 
 		File prefsFile = getPrefsFile();

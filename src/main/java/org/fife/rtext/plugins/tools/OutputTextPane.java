@@ -17,7 +17,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -38,6 +37,7 @@ import javax.swing.text.TabSet;
 import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
 
+import org.fife.ui.StandardAction;
 import org.fife.ui.rtextarea.RTextArea;
 
 
@@ -249,10 +249,10 @@ class OutputTextPane extends JTextPane {
 	/**
 	 * Clears all text from this text area.
 	 */
-	private class ClearAllAction extends AbstractAction {
+	private class ClearAllAction extends StandardAction {
 
 		public ClearAllAction() {
-			putValue(NAME, plugin.getString("Action.ClearAll"));
+			setName(plugin.getString("Action.ClearAll"));
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -264,10 +264,10 @@ class OutputTextPane extends JTextPane {
 	/**
 	 * Copies all text from this text area.
 	 */
-	private class CopyAllAction extends AbstractAction {
+	private class CopyAllAction extends StandardAction {
 
 		public CopyAllAction() {
-			putValue(NAME, plugin.getString("Action.CopyAll"));
+			setName(plugin.getString("Action.CopyAll"));
 		}
 
 		public void actionPerformed(ActionEvent e) {

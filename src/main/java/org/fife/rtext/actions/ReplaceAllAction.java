@@ -20,7 +20,7 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextUtilities;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.rtextarea.SearchResult;
@@ -33,7 +33,7 @@ import org.fife.ui.rtextarea.SearchResult;
  * @author Robert Futrell
  * @version 1.0
  */
-class ReplaceAllAction extends StandardAction {
+class ReplaceAllAction extends AppAction {
 
 
 	/**

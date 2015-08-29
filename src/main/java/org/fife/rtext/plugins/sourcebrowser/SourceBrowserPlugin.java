@@ -738,7 +738,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	/**
 	 * Toggles whether the source tree is sorted alphabetically.
 	 */
-	private class SortAction extends StandardAction {
+	private class SortAction extends AppAction {
 
 		public SortAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Sort");
@@ -756,7 +756,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	/**
 	 * Toggles the visibility of this source browser.
 	 */
-	private class ViewAction extends StandardAction {
+	private class ViewAction extends AppAction {
 
 		public ViewAction(RText app, ResourceBundle msg) {
 			super(app, msg, "MenuItem.View");

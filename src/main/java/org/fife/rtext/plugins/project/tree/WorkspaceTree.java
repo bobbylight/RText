@@ -12,6 +12,8 @@ package org.fife.rtext.plugins.project.tree;
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -19,6 +21,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -116,6 +119,26 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			
 		}
 
+	}
+
+
+	/**
+	 * Copies the full path of the selected file to the clipboard.
+	 *
+	 * @return Whether the selected tree node was a file.  If this is
+	 *         <code>null</code>, the clipboard was not updated.
+	 */
+	protected boolean copySelectedFilePathToClipboard() {
+		File file = getSelectedFile();
+		if (file != null && file.exists()) {
+			StringSelection sel = new StringSelection(
+					file.getAbsolutePath());
+			Toolkit.getDefaultToolkit().getSystemClipboard().
+					setContents(sel, sel);
+			return true;
+		}
+		UIManager.getLookAndFeel().provideErrorFeedback(this);
+		return false;
 	}
 
 
@@ -286,6 +309,15 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			}
 		});
 
+		int mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |
+				InputEvent.SHIFT_MASK;
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, mods), "CopyPath");
+		am.put("CopyPath", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				copySelectedFilePathToClipboard();
+			}
+		});
+
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "Delete");
 		am.put("Delete", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -309,15 +341,8 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
 		am.put("Enter", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				File file = null;
-				Object selected = getLastSelectedPathComponent();
-				if (selected instanceof FileProjectEntryTreeNode) {
-					file = ((FileProjectEntryTreeNode)selected).getFile();
-				}
-				else if (selected instanceof FileTreeNode) {
-					file = ((FileTreeNode)selected).getFile();
-				}
-				if (file.isFile()) {
+				File file = getSelectedFile();
+				if (file != null && file.isFile()) {
 					plugin.getRText().openFile(file.getAbsolutePath());
 				}
 				else {

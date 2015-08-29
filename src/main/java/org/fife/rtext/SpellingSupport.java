@@ -22,7 +22,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import org.fife.ui.OS;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 import org.fife.ui.rsyntaxtextarea.spell.SpellingParser;
 import org.fife.ui.rsyntaxtextarea.spell.event.SpellingParserEvent;
 import org.fife.ui.rsyntaxtextarea.spell.event.SpellingParserListener;
@@ -480,7 +480,7 @@ public class SpellingSupport implements SpellingParserListener {
 	/**
 	 * Toggles the visibility of the spelling error window.
 	 */
-	private class ViewSpellingErrorWindowAction extends StandardAction {
+	private class ViewSpellingErrorWindowAction extends AppAction {
 
 		public ViewSpellingErrorWindowAction(RText app) {
 			super(app, app.getResourceBundle(), "SpellingErrorList.MenuItem");

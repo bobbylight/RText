@@ -10,13 +10,13 @@
 package org.fife.rtext.plugins.project.tree;
 
 import java.awt.Frame;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
-
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
@@ -304,6 +304,27 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 						new LogicalFolderProjectEntryTreeNode(plugin, entry);
 				plugin.insertTreeNodeInto(child, this.node);
 			}
+		}
+
+	}
+
+
+	/**
+	 * Copies the full path of this file or folder to the clipboard.  If this
+	 * tree node does not represent a file or folder, an error beep is played.
+	 */
+	protected class CopyFullPathAction extends BaseAction {
+
+		public CopyFullPathAction() {
+			super("Action.CopyFullPath");
+			int mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |
+					InputEvent.SHIFT_MASK;
+			putValue(ACCELERATOR_KEY,
+					KeyStroke.getKeyStroke(KeyEvent.VK_C, mods));
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			getPlugin().getTree().copySelectedFilePathToClipboard();
 		}
 
 	}

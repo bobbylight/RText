@@ -16,7 +16,7 @@ import javax.swing.UIManager;
 
 import org.fife.rtext.RText;
 import org.fife.ui.UIUtil;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 
 
 /**
@@ -25,7 +25,7 @@ import org.fife.ui.app.StandardAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class HomePageAction extends StandardAction {
+class HomePageAction extends AppAction {
 
 
 	/**

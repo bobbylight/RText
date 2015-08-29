@@ -16,7 +16,7 @@ import javax.swing.ImageIcon;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextActionInfo;
 import org.fife.rtext.RTextPrefs;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 import org.fife.ui.app.GUIApplication.AboutAction;
 import org.fife.ui.app.GUIApplication.HelpAction;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
@@ -60,7 +60,7 @@ public class ActionFactory implements RTextActionInfo {
 			ioe.printStackTrace();
 		}
 
-		StandardAction a = new NewAction(rtext, msg, null);
+		AppAction a = new NewAction(rtext, msg, null);
 		rtext.addAction(NEW_ACTION, a);
 
 		a = new OpenAction(rtext, msg, null);

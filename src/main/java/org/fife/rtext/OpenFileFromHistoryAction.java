@@ -12,7 +12,7 @@ package org.fife.rtext;
 
 import java.awt.event.ActionEvent;
 
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 
 
 /**
@@ -22,7 +22,7 @@ import org.fife.ui.app.StandardAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class OpenFileFromHistoryAction extends StandardAction {
+class OpenFileFromHistoryAction extends AppAction {
 
 	private String fileFullPath;
 

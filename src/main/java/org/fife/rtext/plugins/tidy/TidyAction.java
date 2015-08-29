@@ -16,7 +16,7 @@ import javax.swing.UIManager;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -26,7 +26,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-class TidyAction extends StandardAction {
+class TidyAction extends AppAction {
 
 	/**
 	 * The tidying plugin.

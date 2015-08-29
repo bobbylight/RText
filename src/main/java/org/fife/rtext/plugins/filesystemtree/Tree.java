@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 
 import org.fife.rtext.*;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 import org.fife.ui.rtextfilechooser.FileSystemTree;
 
 
@@ -155,7 +155,7 @@ class Tree extends FileSystemTree {
 	/**
 	 * Makes this tree drill down into the selected folder.
 	 */
-	private class GoIntoAction extends StandardAction {
+	private class GoIntoAction extends AppAction {
 
 		public GoIntoAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.GoInto");

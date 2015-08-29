@@ -16,7 +16,7 @@ import javax.swing.Icon;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 import org.fife.ui.search.FindInFilesDialog;
 
 
@@ -26,7 +26,7 @@ import org.fife.ui.search.FindInFilesDialog;
  * @author Robert Futrell
  * @version 1.0
  */
-class FindInFilesAction extends StandardAction {
+class FindInFilesAction extends AppAction {
 
 
 	/**

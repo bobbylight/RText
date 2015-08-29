@@ -15,7 +15,7 @@ import javax.swing.UIManager;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 import org.fife.ui.rtextarea.RecordableTextAction;
 
 
@@ -25,7 +25,7 @@ import org.fife.ui.rtextarea.RecordableTextAction;
  * @author Robert Futrell
  * @version 1.0
  */
-abstract class AbstractFontSizeAction extends StandardAction {
+abstract class AbstractFontSizeAction extends AppAction {
 
 	protected static final float MINIMUM_SIZE = 2f;
 	protected static final float MAXIMUM_SIZE = 40f;

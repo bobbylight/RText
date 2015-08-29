@@ -21,7 +21,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextPrefs;
 import org.fife.rtext.StoreKeeper;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
 
@@ -32,7 +32,7 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  * @author Robert Futrell
  * @version 1.0
  */
-class OpenInNewWindowAction extends StandardAction {
+class OpenInNewWindowAction extends AppAction {
 
 	private RText newWindow; // Only run on EDT so it's okay to cache this.
 

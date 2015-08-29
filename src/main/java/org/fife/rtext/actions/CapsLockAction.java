@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 import org.fife.rtext.RText;
 import org.fife.rtext.StatusBar;
 import org.fife.ui.OS;
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 
 
 /**
@@ -25,7 +25,7 @@ import org.fife.ui.app.StandardAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class CapsLockAction extends StandardAction {
+public class CapsLockAction extends AppAction {
 
 
 	/**

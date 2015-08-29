@@ -12,7 +12,7 @@ package org.fife.rtext;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBoxMenuItem;
 
-import org.fife.ui.app.StandardAction;
+import org.fife.ui.app.AppAction;
 
 
 /**
@@ -22,7 +22,7 @@ import org.fife.ui.app.StandardAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class SearchToolBarAction extends StandardAction {
+class SearchToolBarAction extends AppAction {
 
 
 	/**
