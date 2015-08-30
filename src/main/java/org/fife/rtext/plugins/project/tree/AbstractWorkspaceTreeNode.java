@@ -157,8 +157,10 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			WorkspaceTree tree = plugin.getTree();
 			PopupContent.PopupSubMenu openInMenu = new PopupContent.PopupSubMenu(
 					Messages.getString("Action.OpenIn"));
-			openInMenu.add(new Actions.SystemOpenAction(tree, "edit"));
-			openInMenu.add(new Actions.SystemOpenAction(tree, "open"));
+			openInMenu.add(new Actions.SystemOpenAction(tree,
+					Actions.SystemOpenAction.OpenMethod.EDIT));
+			openInMenu.add(new Actions.SystemOpenAction(tree,
+					Actions.SystemOpenAction.OpenMethod.OPEN));
 			actions.add(openInMenu);
 			actions.add(null);
 			return true;
