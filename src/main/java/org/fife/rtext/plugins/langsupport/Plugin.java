@@ -75,7 +75,7 @@ public class Plugin extends AbstractPlugin {
 	private Listener listener;
 	private Map<ParserNotice.Level, Icon> icons;
 
-	private static final String PLUGIN_VERSION			= "2.5.7";
+	private static final String PLUGIN_VERSION			= "2.5.8";
 	private static final String PREFS_FILE_NAME			= "langSupport.properties";
 
 	private static final String MSG = "org.fife.rtext.plugins.langsupport.Plugin";
@@ -341,6 +341,9 @@ public class Plugin extends AbstractPlugin {
 		jsls.setXmlAvailable(prefs.js_rhinoAllowE4x);
 		view.setCodeFoldingEnabledFor(language, prefs.js_folding_enabled);
 
+		language = SyntaxConstants.SYNTAX_STYLE_JSHINTRC;
+		view.setCodeFoldingEnabledFor(language, prefs.jshintrc_folding_enabled);
+
 		language = SyntaxConstants.SYNTAX_STYLE_JSON;
 		view.setCodeFoldingEnabledFor(language, prefs.json_folding_enabled);
 
@@ -353,6 +356,9 @@ public class Plugin extends AbstractPlugin {
 
 		language = SyntaxConstants.SYNTAX_STYLE_LATEX;
 		view.setCodeFoldingEnabledFor(language, prefs.latex_folding_enabled);
+
+		language = SyntaxConstants.SYNTAX_STYLE_LESS;
+		view.setCodeFoldingEnabledFor(language, prefs.less_folding_enabled);
 
 		language = SyntaxConstants.SYNTAX_STYLE_MXML;
 		view.setCodeFoldingEnabledFor(language, prefs.mxml_folding_enabled);
@@ -508,6 +514,9 @@ public class Plugin extends AbstractPlugin {
 		prefs.js_rhinoAllowE4x = jsls.isXmlAvailable();
 		prefs.js_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
+		language = SyntaxConstants.SYNTAX_STYLE_JSHINTRC;
+		prefs.jshintrc_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
 		language = SyntaxConstants.SYNTAX_STYLE_JSON;
 		prefs.json_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
@@ -520,6 +529,9 @@ public class Plugin extends AbstractPlugin {
 
 		language = SyntaxConstants.SYNTAX_STYLE_LATEX;
 		prefs.latex_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_LESS;
+		prefs.less_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_MXML;
 		prefs.mxml_folding_enabled = view.isCodeFoldingEnabledFor(language);

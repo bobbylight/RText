@@ -312,8 +312,10 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_JAVA,			createValue("*.java"));
 		filters.put(SYNTAX_STYLE_JAVASCRIPT,		createValue("*.js"));
 		filters.put(SYNTAX_STYLE_JSP,				createValue("*.jsp"));
-		filters.put(SYNTAX_STYLE_JSON,				createValue("*.json", ".jshintrc"));
+		filters.put(SYNTAX_STYLE_JSHINTRC,			createValue(".jshintrc"));
+		filters.put(SYNTAX_STYLE_JSON,				createValue("*.json"));
 		filters.put(SYNTAX_STYLE_LATEX,				createValue("*.tex", "*.ltx", "*.latex"));
+		filters.put(SYNTAX_STYLE_LESS, 				createValue("*.less"));
 		filters.put(SYNTAX_STYLE_LISP, 				createValue("*.cl", "*.clisp", "*.el", "*.l", "*.lisp", "*.lsp", "*.ml"));
 		filters.put(SYNTAX_STYLE_LUA,				createValue("*.lua"));
 		filters.put(SYNTAX_STYLE_MAKEFILE,			createValue("Makefile", "makefile"));

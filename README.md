@@ -32,10 +32,9 @@ This can be added to `<maven-home>/gradle.properties` if desired, to avoid diffs
 
 To build and run an installable image:
 
-    ./gradlew build
+    ./gradlew clean build
     ./gradlew installDist
-    cd ./build/install/rtext
-    java -jar RText.jar
+    java -jar ./build/instlal/rtext/RText.jar
 
 After building the installable image, you can create the win32 installer by
 running the `MakeRTextInstaller.nsi` [NSIS](http://nsis.sourceforge.net/Main_Page)
