@@ -910,6 +910,18 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 
 	/**
+	 * Sets the selected value of the "Search in" text field.
+	 *
+	 * @param dir The directory to search in.
+	 */
+	public void setSearchIn(File dir) {
+		inFolderTextField.setFileSystemAware(false);
+		inFolderTextField.setText(dir.getAbsolutePath());
+		inFolderTextField.setFileSystemAware(true);
+	}
+
+
+	/**
 	 * Enables or disables widgets in the dialog as appropriate.
 	 *
 	 * @param searching Whether searching is starting.

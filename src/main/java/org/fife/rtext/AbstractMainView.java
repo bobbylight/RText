@@ -23,7 +23,6 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 import java.util.Timer;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.EventListenerList;
@@ -1210,6 +1209,23 @@ public abstract class AbstractMainView extends JPanel
 			}
 		}
 		return false;
+	}
+
+
+	/**
+	 * Returns the Find in Files dialog, lazily creating it if necessary.
+	 *
+	 * @return The Find in Files dialog.
+	 */
+	public FindInFilesDialog getFindInFilesDialog() {
+		if (findInFilesDialog==null) {
+			findInFilesDialog = new FindInFilesDialog(owner);
+			findInFilesDialog.setSearchContext(searchContext);
+			RTextUtilities.configureFindInFilesDialog(findInFilesDialog);
+			findInFilesDialog.addPropertyChangeListener(this);
+			findInFilesDialog.addFindInFilesListener(this);
+		}
+		return findInFilesDialog;
 	}
 
 

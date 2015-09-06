@@ -12,12 +12,9 @@ package org.fife.rtext.actions;
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
-
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AppAction;
-import org.fife.ui.search.FindInFilesDialog;
 
 
 /**
@@ -43,21 +40,9 @@ class FindInFilesAction extends AppAction {
 
 
 	public void actionPerformed(ActionEvent e) {
-
 		RText rtext = (RText)getApplication();
 		AbstractMainView mainView = rtext.getMainView();
-
-		// Create the "Find in Files" dialog if it hasn't already been.
-		if (mainView.findInFilesDialog==null) {
-			mainView.findInFilesDialog = new FindInFilesDialog(rtext);
-			mainView.findInFilesDialog.setSearchContext(mainView.searchContext);
-			RTextUtilities.configureFindInFilesDialog(mainView.findInFilesDialog);
-			mainView.findInFilesDialog.addPropertyChangeListener(mainView);
-			mainView.findInFilesDialog.addFindInFilesListener(mainView);
-		}
-
-		mainView.findInFilesDialog.setVisible(true);
-
+		mainView.getFindInFilesDialog().setVisible(true);
 	}
 
 

@@ -176,32 +176,6 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 
 	/**
-	 * Action for deleting a tree node.
-	 */
-	protected class DeleteAction extends BaseAction {
-
-		public DeleteAction() {
-			this(true);
-		}
-
-		public DeleteAction(boolean enabled) {
-			super("Action.Delete");
-			setEnabled(enabled);
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			// Run later to allow popup to hide
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					handleDelete();
-				}
-			});
-		}
-
-	}
-
-
-	/**
 	 * Action for a menu item that adds a file to this project.
 	 */
 	protected class AddFileAction extends BaseAction {
@@ -288,7 +262,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			URL decorationRes = RText.class.
 					getResource("/org/fife/rsta/ui/search/lightbulb.png");
 			di.addDecorationIcon(new ImageIcon(decorationRes));
-			putValue(SMALL_ICON, di);
+			setIcon(di);
 
 		}
 
@@ -321,12 +295,57 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			super("Action.CopyFullPath");
 			int mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |
 					InputEvent.SHIFT_MASK;
-			putValue(ACCELERATOR_KEY,
-					KeyStroke.getKeyStroke(KeyEvent.VK_C, mods));
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, mods));
 		}
 
 		public void actionPerformed(ActionEvent e) {
 			getPlugin().getTree().copySelectedFilePathToClipboard();
+		}
+
+	}
+
+
+	/**
+	 * Action for deleting a tree node.
+	 */
+	protected class DeleteAction extends BaseAction {
+
+		public DeleteAction() {
+			this(true);
+		}
+
+		public DeleteAction(boolean enabled) {
+			super("Action.Delete");
+			setEnabled(enabled);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			// Run later to allow popup to hide
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					handleDelete();
+				}
+			});
+		}
+
+	}
+
+
+	/**
+	 * Opens the "Find in Files" dialog, starting in this folder.  If this
+	 * tree node does not represent a folder, an error beep is played.
+	 */
+	protected class FindInFilesFromHereAction extends BaseAction {
+
+		public FindInFilesFromHereAction() {
+			super("Action.FindInFilesFromHere");
+			int mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |
+					InputEvent.SHIFT_MASK;
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, mods));
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			getPlugin().getTree().findInFilesFromSelectedDir();
 		}
 
 	}
@@ -375,7 +394,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		public OpenAction() {
 			super("Action.Open");
 			int enter = KeyEvent.VK_ENTER;
-			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(enter, 0));
+			setAccelerator(KeyStroke.getKeyStroke(enter, 0));
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -411,8 +430,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		public PropertiesAction(boolean root, boolean enabled) {
 			super(root ? "Action.Properties.Workspace" : "Action.Properties");
 			int alt = InputEvent.ALT_MASK;
-			KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, alt);
-			putValue(ACCELERATOR_KEY, ks);
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, alt));
 			setEnabled(enabled);
 		}
 
@@ -430,7 +448,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 		public RefreshAction() {
 			super("Action.Refresh");
-			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -458,7 +476,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 		public RenameAction(boolean root) {
 			super(root ? "Action.Rename.Workspace" : "Action.Rename");
-			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 		}
 
 		public void actionPerformed(ActionEvent e) {

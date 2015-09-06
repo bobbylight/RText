@@ -43,6 +43,7 @@ import javax.swing.tree.TreePath;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextActionInfo;
 import org.fife.rtext.plugins.project.Messages;
 import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
@@ -182,6 +183,35 @@ public class WorkspaceTree extends JTree implements FileSelector {
 					root.getChildAt(i);
 			expandPath(new TreePath(node.getPath()));
 		}
+	}
+
+
+	protected void findInFilesFromSelectedDir() {
+
+		File dir = getSelectedFile();
+		Object sel = getLastSelectedPathComponent();
+
+		if (dir != null && dir.isDirectory()) {
+			RText rtext = plugin.getRText();
+			rtext.getMainView().getFindInFilesDialog().setSearchIn(dir);
+			// Note the ActionEvent isn't actually used; we're just doing
+			// this for completeness.
+			ActionEvent ae = new ActionEvent(this, 0, "ignored");
+			rtext.getAction(RTextActionInfo.FIND_IN_FILES_ACTION).
+					actionPerformed(ae);
+		}
+
+		else if (dir != null && !dir.exists() &&
+				sel instanceof FileProjectEntryTreeNode) {
+			// Directory was deleted out from under us
+			FileProjectEntryTreeNode fpetn = (FileProjectEntryTreeNode)sel;
+			promptForRemoval(fpetn);
+		}
+
+		else { // Directory changed to a file out from under us?
+			UIManager.getLookAndFeel().provideErrorFeedback(this);
+		}
+
 	}
 
 
@@ -325,6 +355,15 @@ public class WorkspaceTree extends JTree implements FileSelector {
 				if (selected instanceof ProjectEntryTreeNode) {
 					((ProjectEntryTreeNode)selected).handleRemove();
 				}
+			}
+		});
+
+		mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |
+				InputEvent.SHIFT_MASK;
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, mods), "FindInFilesFH");
+		am.put("FindInFilesFH", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				findInFilesFromSelectedDir();
 			}
 		});
 

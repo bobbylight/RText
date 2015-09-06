@@ -113,14 +113,24 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	 */
 	@Override
 	public List<PopupContent> getPopupActions() {
+
 		List<PopupContent> actions = super.getPopupActions();
+
+		// "Find in Files from here" strategically between copy/paste/delete
+		// action group and rename group
+		actions.add(11, new FindInFilesFromHereAction());
+		actions.add(12, null);
+
 		PopupContent.PopupSubMenu newMenu = new PopupContent.PopupSubMenu(
 				Messages.getString("Action.New"));
-		actions.add(0, newMenu);
 		newMenu.add(new NewFileOrFolderAction(this, true));
 		newMenu.add(new NewFileOrFolderAction(this, false));
+		actions.add(0, newMenu);
+
 		actions.add(actions.size()-1, new ConfigureFiltersAction());
+
 		return actions;
+
 	}
 
 

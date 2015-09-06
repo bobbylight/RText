@@ -142,8 +142,11 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 
 	@Override
 	public List<PopupContent> getPopupActions() {
+
 		List<PopupContent> actions = new ArrayList<PopupContent>();
-		if (getFile().isDirectory()) {
+		boolean isDir = getFile().isDirectory();
+
+		if (isDir) {
 			PopupContent.PopupSubMenu newMenu = new PopupContent.PopupSubMenu(
 					Messages.getString("Action.New"));
 			newMenu.add(new NewFileOrFolderAction(this, true));
@@ -157,14 +160,20 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		actions.add(new CopyFullPathAction());
 		actions.add(new DeleteAction());
 		actions.add(null);
+		if (isDir) {
+			actions.add(new FindInFilesFromHereAction());
+			actions.add(null);
+		}
 		actions.add(new RenameAction());
 		actions.add(null);
-		if (getFile().isDirectory()) {
+		if (isDir) {
 			actions.add(new RefreshAction());
 			actions.add(null);
 		}
 		actions.add(new PropertiesAction(true));
+
 		return actions;
+
 	}
 
 
