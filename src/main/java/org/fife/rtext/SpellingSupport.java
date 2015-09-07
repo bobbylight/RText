@@ -21,7 +21,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import org.fife.ui.OS;
 import org.fife.ui.app.AppAction;
 import org.fife.ui.rsyntaxtextarea.spell.SpellingParser;
 import org.fife.ui.rsyntaxtextarea.spell.event.SpellingParserEvent;
@@ -129,30 +128,34 @@ public class SpellingSupport implements SpellingParserListener {
 	 */
 	private void createSpellingParser() throws IOException {
 		String fileName = "english_dic.zip";
-		if (rtext.getOS()==OS.MAC_OS_X) {
-			fileName = "RText.app/Contents/Resources/Java/" + fileName;
-		}
 		File file = new File(rtext.getInstallLocation(), fileName);
-		boolean american = DICTIONARIES[1].equals(spellingDictionary);
-		spellingParser = SpellingParser.
-					createEnglishSpellingParser(file, american);
-		spellingParser.setSquiggleUnderlineColor(getSpellCheckingColor());
-		spellingParser.setMaxErrorCount(getMaxSpellingErrors());
-		spellingParser.setAllowAdd(true);//userDictionary!=null);
-		spellingParser.setAllowIgnore(true);
-		spellingParser.addSpellingParserListener(this);
 		try {
-			if (userDictionary!=null && !userDictionary.exists()) {
-				// First time running RText
-				userDictionary.getParentFile().mkdirs();
-				userDictionary.createNewFile();
+			boolean american = DICTIONARIES[1].equals(spellingDictionary);
+			spellingParser = SpellingParser.
+						createEnglishSpellingParser(file, american);
+			spellingParser.setSquiggleUnderlineColor(getSpellCheckingColor());
+			spellingParser.setMaxErrorCount(getMaxSpellingErrors());
+			spellingParser.setAllowAdd(true);//userDictionary!=null);
+			spellingParser.setAllowIgnore(true);
+			spellingParser.addSpellingParserListener(this);
+			try {
+				if (userDictionary!=null && !userDictionary.exists()) {
+					// First time running RText
+					userDictionary.getParentFile().mkdirs();
+					userDictionary.createNewFile();
+				}
+				spellingParser.setUserDictionary(userDictionary);
+			} catch (IOException ioe) {
+				String desc = rtext.getString("Error.LoadingUserDictionary.txt",
+					userDictionary==null ? "null" :userDictionary.getAbsolutePath(),
+					ioe.getMessage());
+				rtext.displayException(ioe, desc);
 			}
-			spellingParser.setUserDictionary(userDictionary);
 		} catch (IOException ioe) {
-			String desc = rtext.getString("Error.LoadingUserDictionary.txt",
-				userDictionary==null ? "null" :userDictionary.getAbsolutePath(),
-				ioe.getMessage());
-			rtext.displayException(ioe, desc);
+			// Unlocalized text is fine as this exception is caught and a
+			// better error is displayed to the user.
+			throw new IOException("Error opening zip file: " +
+					file.getAbsolutePath());
 		}
 	}
 
@@ -467,7 +470,7 @@ public class SpellingSupport implements SpellingParserListener {
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						String desc= rtext.getString(
-									"Error.LoadingSpellingParser.txt");
+							"Error.LoadingSpellingParser.txt");
 						rtext.displayException(ioe, desc);
 					}
 				});
