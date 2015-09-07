@@ -34,10 +34,22 @@ To build and run an installable image:
 
     ./gradlew clean build
     ./gradlew installDist
-    java -jar ./build/instlal/rtext/RText.jar
+    java -jar ./build/install/rtext/RText.jar
 
 After building the installable image, you can create the win32 installer by
 running the `MakeRTextInstaller.nsi` [NSIS](http://nsis.sourceforge.net/Main_Page)
 script at the root of the project.
 
-To build the OSX package, ... TODO ...
+Building the OS X package is a little wonky at the moment.  I am working
+on finding the best way to build an App bundle via Gradle.  For now, the
+easiest way to do so is:
+
+    ./gradlew clean build installDist
+    vi build.gradle
+    <un-comment the macAppBundle plugin at the top and config at the bottom>
+    ./gradlew createApp
+    cp -R ./build/install/rtext ./build/macApp/RText.app/Contents/
+    mv ./build/macApp/RText.app/Contents/rtext ./build/macApp/RText.app/Contents/Java
+
+This should create a functional `RText.app`, but note the application icon
+is not correct yet.

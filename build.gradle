@@ -1,7 +1,8 @@
-//plugins {
-//  id "edu.sc.seis.macAppBundle" version "2.1.1"
-//}
-
+/*
+plugins {
+  id "edu.sc.seis.macAppBundle" version "2.1.1"
+}
+*/
 ["java", "distribution", "maven" ].each { apply plugin: it }
 
 group = "com.fifesoft"
@@ -293,11 +294,17 @@ srcDistZip {
 	include 'src/**'
 	include 'TO-DO'
 }
+/* Mac .app plugin config.  Uncomment this and run './gradlew createApp'
+ * after './gradlew clean build installDist'.
+copyToResourcesJava {
+	include 'src/main/dist/**'
+}
 
-//macAppBundle {
-//    mainClassName = "org.fife.rtext.RText"
-//    icon = "myIcon.icns"
-//    bundleJRE = true
-//    javaProperties.put("apple.laf.useScreenMenuBar", "true")
-////    backgroundImage = "doc/macbackground.png"
-//}
+macAppBundle {
+    mainClassName = "org.fife.rtext.RText"
+    icon = "RText.icns"
+    bundleJRE = true
+    javaProperties.put("apple.laf.useScreenMenuBar", "true")
+//    backgroundImage = "doc/macbackground.png"
+}
+*/
