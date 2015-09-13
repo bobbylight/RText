@@ -2,6 +2,18 @@ RText Change Log
 http://rtext.sourceforge.net
 ----------------------------
 
+2.5.8 (09/12/2015)
+------------------
+   - Added syntax highlighting, code folding, and code completion for Less.
+   - Improved default key bindings on OS X.
+   - Find/Replace in Files dialogs have a "Ignore these folders" dropdown.
+   - New files created in Project Plugin tree are not automatically opened
+     by default.
+   - Added "Find in files from here..." to Project plugin tree.
+   - Fixed issue with Apple vs. Oracle JREs on OS X.
+   - Fixed several bugs.
+   
+   
 2.5.7 (08/20/2015)
 ------------------
    - When creating files from the Project plugin's tree view, those files are

@@ -12,8 +12,6 @@ package org.fife.rtext;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +33,7 @@ public class RecentFileManager implements PropertyChangeListener {
 	/**
 	 * The number of files we remember.
 	 */
-	private static final int MAX_FILE_COUNT = 50;
+	private static final int MAX_FILE_COUNT = 75;
 
 
 	/**
@@ -112,20 +110,17 @@ public class RecentFileManager implements PropertyChangeListener {
 		// Add our new file to the "top" of remembered files.
 		// TODO: Simplify when RSyntaxTextArea bug #94 is fixed
 		FileLocation loc = null;
-		if (file.startsWith("ftp://")) {
-			try {
-				loc = FileLocation.create(new URL(file));
-			} catch (MalformedURLException mue) {
-				mue.printStackTrace();
-			}
-		}
-		else {
+		try {
 			loc = FileLocation.create(file);
-			if (!loc.isLocalAndExists()) {
-				// When adding from saved history, some files may no longer
-				// exist
-				return;
-			}
+		} catch (IllegalArgumentException iae) {
+			iae.printStackTrace(); // Malformed URL, shouldn't happen.
+			return;
+		}
+
+		if (loc.isLocal() && !loc.isLocalAndExists()) {
+			// When adding from saved history, some files may no longer
+			// exist
+			return;
 		}
 		files.add(0, loc);
 
