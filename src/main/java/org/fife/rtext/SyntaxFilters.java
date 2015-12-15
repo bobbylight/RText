@@ -330,6 +330,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_SCALA,				createValue("*.scala"));
 		filters.put(SYNTAX_STYLE_SQL,				createValue("*.sql"));
 		filters.put(SYNTAX_STYLE_TCL,				createValue("*.tcl", "*.tk"));
+		filters.put(SYNTAX_STYLE_TYPESCRIPT,		createValue("*.ts"));
 		filters.put(SYNTAX_STYLE_UNIX_SHELL,		createValue("*.sh", "*.?sh"));
 		filters.put(SYNTAX_STYLE_VISUAL_BASIC,		createValue("*.vb"));
 		filters.put(SYNTAX_STYLE_WINDOWS_BATCH,		createValue("*.bat", "*.cmd"));

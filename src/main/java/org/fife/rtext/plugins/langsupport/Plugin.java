@@ -402,6 +402,9 @@ public class Plugin extends AbstractPlugin {
 		language = SyntaxConstants.SYNTAX_STYLE_SCALA;
 		view.setCodeFoldingEnabledFor(language, prefs.scala_folding_enabled);
 
+		language = SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT;
+		view.setCodeFoldingEnabledFor(language, prefs.ts_folding_enabled);
+
 		language = SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
 		ls = fact.getSupportFor(language);
 		ShellLanguageSupport sls = (ShellLanguageSupport)ls;
@@ -566,6 +569,9 @@ public class Plugin extends AbstractPlugin {
 
 		language = SyntaxConstants.SYNTAX_STYLE_SCALA;
 		prefs.scala_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT;
+		prefs.ts_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
 		ls = fact.getSupportFor(language);

@@ -289,7 +289,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 
 		public FilterTableModel(String fileTypeHeader, String filterHeader) {
 			super(new Object[] { fileTypeHeader, filterHeader }, 0);
-			styles = new String[40];
+			styles = new String[41];
 			addRow(new Object[] { "ActionScript",		null }); styles[0]  = SYNTAX_STYLE_ACTIONSCRIPT;
 			addRow(new Object[] { "Assembler (x86)",	null }); styles[1]  = SYNTAX_STYLE_ASSEMBLER_X86;
 			addRow(new Object[] { "BBCode",				null }); styles[2]  = SYNTAX_STYLE_BBCODE;
@@ -326,10 +326,11 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 			addRow(new Object[] { "Scala",				null }); styles[33] = SYNTAX_STYLE_SCALA;
 			addRow(new Object[] { "SQL",				null }); styles[34] = SYNTAX_STYLE_SQL;
 			addRow(new Object[] { "Tcl",				null }); styles[35] = SYNTAX_STYLE_TCL;
-			addRow(new Object[] { "UNIX shell scripts",	null }); styles[36] = SYNTAX_STYLE_UNIX_SHELL;
-			addRow(new Object[] { "Visual Basic",       null }); styles[37] = SYNTAX_STYLE_VISUAL_BASIC;
-			addRow(new Object[] { "Windows Batch",		null }); styles[38] = SYNTAX_STYLE_WINDOWS_BATCH;
-			addRow(new Object[] { "XML",				null }); styles[39] = SYNTAX_STYLE_XML;
+			addRow(new Object[] { "TypeScript",			null }); styles[36] = SYNTAX_STYLE_TYPESCRIPT;
+			addRow(new Object[] { "UNIX shell scripts",	null }); styles[37] = SYNTAX_STYLE_UNIX_SHELL;
+			addRow(new Object[] { "Visual Basic",       null }); styles[38] = SYNTAX_STYLE_VISUAL_BASIC;
+			addRow(new Object[] { "Windows Batch",		null }); styles[39] = SYNTAX_STYLE_WINDOWS_BATCH;
+			addRow(new Object[] { "XML",				null }); styles[40] = SYNTAX_STYLE_XML;
 		
 		}
 

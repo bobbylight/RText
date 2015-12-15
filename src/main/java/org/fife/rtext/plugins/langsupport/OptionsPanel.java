@@ -130,6 +130,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 		addChildPanel(new PhpOptionsPanel());
 		addChildPanel(new ScalaOptionsPanel());
 		addChildPanel(new ShellOptionsPanel());
+		addChildPanel(new TypeScriptOptionsPanel());
 		addChildPanel(new XmlOptionsPanel());
 	}
 

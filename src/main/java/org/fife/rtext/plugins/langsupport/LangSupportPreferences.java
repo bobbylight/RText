@@ -112,6 +112,8 @@ public class LangSupportPreferences extends Prefs {
 	public boolean sh_showDescWindow;
 	public boolean sh_useSystemManPages;
 
+	public boolean ts_folding_enabled;
+
 	public boolean xml_folding_enabled;
 	public boolean xml_autoCloseTags;
 	public boolean xml_showSyntaxErrors;
@@ -224,6 +226,8 @@ public class LangSupportPreferences extends Prefs {
 		sh_enabled = true;
 		sh_showDescWindow = File.separatorChar=='/';
 		sh_useSystemManPages = File.separatorChar=='/';
+
+		ts_folding_enabled = true;
 
 		xml_folding_enabled = true;
 		xml_autoCloseTags = true;

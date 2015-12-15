@@ -290,6 +290,7 @@ public class RTextUtilities {
 			addFilter(chooser, msg, "SQL", "sql");
 			addFilter(chooser, msg, "PlainText", "txt");
 			addFilter(chooser, msg, "Tcl", "tcl");
+			addFilter(chooser, msg, "TypeScript", "ts");
 			addFilter(chooser, msg, "UnixShell",
 					new String[] { "sh", "bsh", "csh", "ksh" });
 			addFilter(chooser, msg, "VisualBasic", "vb");
