@@ -10,7 +10,7 @@ group = "com.fifesoft"
 dependencies {
 	compile(
 		
-		files( "${projectDir.absolutePath}/../FifeCommon/build/libs/fife.common-2.5.8.jar" ),
+		files( "${projectDir.absolutePath}/../FifeCommon/build/libs/fife.common-2.6.0-SNAPSHOT.jar" ),
 		// insubstantial dependencies would go away if we pulled FifeCommon from Maven
 		[ "com.github.insubstantial:laf-plugin:7.2.1" ],
 		[ "com.github.insubstantial:laf-widget:7.2.1" ],

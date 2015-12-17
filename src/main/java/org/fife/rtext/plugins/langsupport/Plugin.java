@@ -48,11 +48,13 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.plugins.langsupport.typescript.TypeScriptSupport;
 import org.fife.rtext.plugins.sourcebrowser.SourceBrowserPlugin;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
-import org.fife.ui.app.AbstractPlugin;
+import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.autocomplete.CompletionXMLParser;
+import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.modes.XMLTokenMaker;
@@ -69,11 +71,12 @@ import org.fife.ui.rtextarea.RTextScrollPane;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Plugin extends AbstractPlugin {
+public class Plugin extends GUIPlugin {
 
 	private RText rtext;
 	private Listener listener;
 	private Map<ParserNotice.Level, Icon> icons;
+	private TypeScriptSupport typeScriptSupport;
 
 	private static final String PLUGIN_VERSION			= "2.5.8";
 	private static final String PREFS_FILE_NAME			= "langSupport.properties";
@@ -148,6 +151,30 @@ public class Plugin extends AbstractPlugin {
 
 
 	/**
+	 * Returns the resource bundle used by this plugin.
+	 *
+	 * @return The resource bundle.
+	 */
+	public ResourceBundle getBundle() {
+		return msg;
+	}
+
+
+	/**
+	 * Changing visibility to public so sub-packages can register dockable
+	 * windows.
+	 *
+	 * @param id The ID for the dockable window.
+	 * @return The dockable window.
+	 * @see #putDockableWindow(String, DockableWindow)
+	 */
+	@Override
+	public DockableWindow getDockableWindow(String id) {
+		return super.getDockableWindow(id);
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
@@ -188,6 +215,27 @@ public class Plugin extends AbstractPlugin {
 
 
 	/**
+	 * Returns the parent application.
+	 *
+	 * @return The parent application.
+	 */
+	public RText getRText() {
+		return rtext;
+	}
+
+
+	/**
+	 * Returns the TypeScript support object.  This has methods to control
+	 * TypeScript-specific features of this plugin.
+	 *
+	 * @return The TypeScript support object.
+	 */
+	public TypeScriptSupport getTypeScriptSupport() {
+		return typeScriptSupport;
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public void install(AbstractPluggableGUIApplication<?> app) {
@@ -210,7 +258,7 @@ public class Plugin extends AbstractPlugin {
 		CompletionXMLParser.setDefaultCompletionClassLoader(
 											getClass().getClassLoader());
 
-		loadPreferences();
+		LangSupportPreferences prefs = loadPreferences();
 
 		addActionsToMenus();
 
@@ -225,11 +273,14 @@ public class Plugin extends AbstractPlugin {
 				SourceBrowserPlugin.CUSTOM_HANDLER_PREFIX + RSyntaxTextArea.SYNTAX_STYLE_XML,
 				"org.fife.rtext.plugins.langsupport.XmlSourceBrowserTreeConstructor");
 
+		// Language-specific tweaks
+		typeScriptSupport = new TypeScriptSupport();
+		typeScriptSupport.install(rtext, this, prefs);
 
 	}
 
 
-	private void loadPreferences() {
+	private LangSupportPreferences loadPreferences() {
 
 		LangSupportPreferences prefs = new LangSupportPreferences();
 
@@ -419,7 +470,23 @@ public class Plugin extends AbstractPlugin {
 		XMLTokenMaker.setCompleteCloseTags(prefs.xml_autoCloseTags);
 		xls.setShowSyntaxErrors(prefs.xml_showSyntaxErrors);
 
+		return prefs;
 	}
+
+
+	/**
+	 * Changing visibility to public so sub-packages can register dockable
+	 * windows.
+	 *
+	 * @param id The ID for the dockable window.
+	 * @param window The dockable window to register.
+	 * @see #getDockableWindow(String)
+	 */
+	@Override
+	public void putDockableWindow(String id, DockableWindow window) {
+		super.putDockableWindow(id, window);
+	}
+
 
 	private void removeSupport(RSyntaxTextArea textArea) {
 
@@ -572,6 +639,7 @@ public class Plugin extends AbstractPlugin {
 
 		language = SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT;
 		prefs.ts_folding_enabled = view.isCodeFoldingEnabledFor(language);
+		typeScriptSupport.save(rtext, prefs);
 
 		language = SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
 		ls = fact.getSupportFor(language);

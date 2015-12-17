@@ -9,13 +9,19 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
+
+import javax.swing.KeyStroke;
 
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.js.JsErrorParser;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
+import org.fife.ui.OS;
 import org.fife.ui.app.Prefs;
+import org.fife.ui.dockablewindows.DockableWindow;
 
 
 /**
@@ -113,6 +119,10 @@ public class LangSupportPreferences extends Prefs {
 	public boolean sh_useSystemManPages;
 
 	public boolean ts_folding_enabled;
+	public boolean ts_build_output_window_visible;
+	public int ts_build_output_window_position;
+	public KeyStroke ts_build_accelerator;
+	public KeyStroke ts_build_window_visible_accelerator;
 
 	public boolean xml_folding_enabled;
 	public boolean xml_autoCloseTags;
@@ -228,6 +238,12 @@ public class LangSupportPreferences extends Prefs {
 		sh_useSystemManPages = File.separatorChar=='/';
 
 		ts_folding_enabled = true;
+		ts_build_output_window_visible = false;
+		ts_build_output_window_position = DockableWindow.BOTTOM;
+		int ctrlShift = InputEvent.SHIFT_MASK;
+		ctrlShift |= OS.get() == OS.MAC_OS_X ? InputEvent.META_MASK : InputEvent.CTRL_MASK;
+		ts_build_accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_F6, ctrlShift);
+		ts_build_window_visible_accelerator = null;
 
 		xml_folding_enabled = true;
 		xml_autoCloseTags = true;

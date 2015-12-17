@@ -257,8 +257,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 			for (ParserNotice notice : notices) {
 				if (notice.getParser()==taskParser) {
 					Object[] data = {	getIcon(), textArea,
-							// Integer.intValue(notice.getValue()+1) // TODO: 1.5
-							new Integer(notice.getLine()+1),
+							Integer.valueOf(notice.getLine()+1),
 							notice.getMessage() };
 					addRow(data);
 				}

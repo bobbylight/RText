@@ -15,13 +15,16 @@ import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.Comparator;
 import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -217,8 +220,13 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 
 		@Override
 		public void addRow(Object[] data) {
+			// NOTE: It's valid for data[1] to be Strings, in which case
+			// it's taken to be the full path of a file.
 			if (data[1] instanceof RTextEditorPane) {
 				data[1] = new TextAreaWrapper((RTextEditorPane)data[1]);
+			}
+			else if (data[1] instanceof String) {
+				data[1] = new TextAreaWrapper((String)data[1]);
 			}
 			super.addRow(data);
 		}
@@ -228,20 +236,34 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 			return false;
 		}
 
+		/**
+		 * Replaces notices in this window with new ones.
+		 *
+		 * @param textArea The text area whose notices should be replaced.
+		 *        If this is <code>null</code>, all notices are replaced.
+		 * @param notices The notices to add.  This may be <code>null</code>.
+		 */
 		public void update(RTextEditorPane textArea,
 				List<ParserNotice> notices) {
-			//setRowCount(0);
-			for (int i=0; i<getRowCount(); i++) {
-				TextAreaWrapper wrapper = (TextAreaWrapper)getValueAt(i, 1);
-				RTextEditorPane textArea2 = wrapper.textArea;
-				if (textArea2==textArea) {
-					removeRow(i);
-					i--;
+
+			if (textArea == null) {
+				setRowCount(0);
+			}
+			else {
+				for (int i=0; i<getRowCount(); i++) {
+					TextAreaWrapper wrapper = (TextAreaWrapper)getValueAt(i, 1);
+					RTextEditorPane textArea2 = wrapper.textArea;
+					if (textArea2==textArea) {
+						removeRow(i);
+						i--;
+					}
 				}
 			}
+
 			if (notices!=null) {
 				addNoticesImpl(textArea, notices);
 			}
+
 		}
 
 	}
@@ -275,10 +297,16 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 	 */
 	private static class TextAreaWrapper implements Comparable<TextAreaWrapper>{
 
+		// textArea and fileFullPath are mutually exclusive.
 		private RTextEditorPane textArea;
+		private String fileFullPath;
 
 		public TextAreaWrapper(RTextEditorPane textArea) {
 			this.textArea = textArea;
+		}
+
+		public TextAreaWrapper(String fileFullPath) {
+			this.fileFullPath = fileFullPath;
 		}
 
 		public int compareTo(TextAreaWrapper o) {
@@ -287,7 +315,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 
 		@Override
 		public String toString() {
-			return textArea.getFileName();
+			return textArea != null ? textArea.getFileName() : fileFullPath;
 		}
 
 	}
@@ -295,30 +323,58 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 
 	private class TableMouseListener extends MouseAdapter {
 
+		private void focusLine(RTextEditorPane textArea, int line) {
+			try {
+				textArea.setCaretPosition(textArea.getLineStartOffset(line));
+			} catch (BadLocationException ble) {
+				UIManager.getLookAndFeel().provideErrorFeedback(textArea);
+				ble.printStackTrace();
+			}
+			textArea.requestFocusInWindow();
+		}
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 
 			if (e.getButton()==MouseEvent.BUTTON1 && e.getClickCount()==2) {
-				int row = table.rowAtPoint(e.getPoint());
+				final int row = table.rowAtPoint(e.getPoint());
 				if (row>-1) {
+
 					// Get values from model since columns are re-orderable.
-					TableModel model = table.getModel();
+					final TableModel model = table.getModel();
 					TextAreaWrapper wrapper = (TextAreaWrapper)model.
 							getValueAt(row, 1);
+
 					RTextEditorPane textArea = wrapper.textArea;
-					AbstractMainView mainView = rtext.getMainView();
-					if (mainView.setSelectedTextArea(textArea)) {
-						Integer i = (Integer)model.getValueAt(row, 2);
-						int line = i.intValue() - 1; // 0-based
-						try {
-							textArea.setCaretPosition(
-								textArea.getLineStartOffset(line));
-						} catch (BadLocationException ble) {
-							UIManager.getLookAndFeel().
-										provideErrorFeedback(textArea);
+					if (textArea != null) {
+						AbstractMainView mainView = rtext.getMainView();
+						if (mainView.setSelectedTextArea(textArea)) {
+							Integer i = (Integer)model.getValueAt(row, 2);
+							int line = i.intValue() - 1; // 0-based
+							focusLine(textArea, line);
 						}
-						textArea.requestFocusInWindow();
 					}
+
+					else {
+						String fileFullPath = wrapper.fileFullPath;
+						File file = new File(fileFullPath);
+						if (file.isAbsolute() && file.isFile()) {
+							rtext.openFile(file.getAbsolutePath());
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									RTextEditorPane textArea2 = rtext.
+											getMainView().getCurrentTextArea();
+									Integer i = (Integer)model.getValueAt(row, 2);
+									int line = i.intValue() - 1; // 0-based
+									focusLine(textArea2, line);
+								}
+							});
+						}
+						else {
+							UIManager.getLookAndFeel().provideErrorFeedback(rtext);
+						}
+					}
+
 				}
 			}
 
