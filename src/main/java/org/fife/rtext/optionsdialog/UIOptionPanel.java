@@ -39,7 +39,7 @@ import org.fife.rtext.RTextUtilities;
 import org.fife.ui.OS;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RColorSwatchesButton;
-import org.fife.ui.SpecialValueComboBox;
+import org.fife.ui.LabelValueComboBox;
 import org.fife.ui.StatusBar;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.ExtendedLookAndFeelInfo;
@@ -56,6 +56,11 @@ import org.fife.ui.rtextarea.IconGroup;
 class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 										PropertyChangeListener {
 
+	/**
+	 * ID used to identify this option panel, so others can attach to it.
+	 */
+	public static final String OPTION_PANEL_ID = "UIOptionPanel";
+
 	private int mainViewStyle;
 	private int documentSelectionPlacement;
 	private int statusBarStyle;
@@ -63,8 +68,8 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	private JPanel springPanel, springPanel2;
 	private JComboBox viewCombo;
 	private JComboBox docSelCombo;
-	private SpecialValueComboBox lnfCombo;
-	private SpecialValueComboBox imageLnFCombo;
+	private LabelValueComboBox<String, String> lnfCombo;
+	private LabelValueComboBox<String, String> imageLnFCombo;
 	private JComboBox statusBarCombo;
 
 	private JCheckBox highlightModifiedCheckBox;
@@ -76,9 +81,10 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	/**
 	 * Constructor.
 	 */
-	public UIOptionPanel(final RText rtext, final ResourceBundle msg) {
+	public UIOptionPanel(RText rtext, ResourceBundle msg) {
 
 		super(msg.getString("OptUIName"));
+		setId(OPTION_PANEL_ID);
 
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
@@ -135,13 +141,13 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		lnfCombo.setActionCommand("LookAndFeelComboBox");
 		lnfCombo.addActionListener(this);
 
-		imageLnFCombo = new SpecialValueComboBox();
+		imageLnFCombo = new LabelValueComboBox<String, String>();
 		UIUtil.fixComboOrientation(imageLnFCombo);
 		imageLnFCombo.setActionCommand("IconComboBox");
 		imageLnFCombo.addActionListener(this);
 		Collection<IconGroup> iconGroups = rtext.getIconGroupMap().values();
 		for (IconGroup group : iconGroups) {
-			imageLnFCombo.addSpecialItem(group.getName(), group.getName());
+			imageLnFCombo.addLabelValuePair(group.getName(), group.getName());
 		}
 
 		statusBarCombo = new JComboBox();
@@ -231,13 +237,13 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		else if (actionCommand.equals("LookAndFeelComboBox")) {
 			hasUnsavedChanges = true;
-			String newLnF = lnfCombo.getSelectedSpecialItem();
+			String newLnF = lnfCombo.getSelectedValue();
 			firePropertyChange("UIOptionPanel.lookAndFeel", null, newLnF);
 		}
 
 		else if (actionCommand.equals("IconComboBox")) {
 			hasUnsavedChanges = true;
-			String name = imageLnFCombo.getSelectedSpecialItem();
+			String name = imageLnFCombo.getSelectedValue();
 			firePropertyChange("UIOptionPanel.iconStyle", null, name);
 		}
 
@@ -271,10 +277,10 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @param rtext The parent RText instance.
 	 * @return The combo box.
 	 */
-	private static final SpecialValueComboBox createLookAndFeelComboBox(
+	private static final LabelValueComboBox<String, String> createLookAndFeelComboBox(
 			RText rtext) {
 
-		SpecialValueComboBox combo = new SpecialValueComboBox();
+		LabelValueComboBox<String, String> combo = new LabelValueComboBox<String, String>();
 		UIUtil.fixComboOrientation(combo);
 		boolean osIsWindows = rtext.getOS()==OS.WINDOWS;
 
@@ -298,17 +304,17 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 			// NOT support a standard Look with "Windows" in the name.
 			String name = infos[i].getName();
 			if (osIsWindows || !(name.toLowerCase().indexOf("windows")>-1)) {
-				combo.addSpecialItem(name, infos[i].getClassName());
+				combo.addLabelValuePair(name, infos[i].getClassName());
 			}
 		}
 
 		// Add the Office Looks if we're on Windows.
 		if (osIsWindows) {
-			combo.addSpecialItem("MS Office XP",
+			combo.addLabelValuePair("MS Office XP",
 				"org.fife.plaf.OfficeXP.OfficeXPLookAndFeel");
-			combo.addSpecialItem("MS Office 2003",
+			combo.addLabelValuePair("MS Office 2003",
 				"org.fife.plaf.Office2003.Office2003LookAndFeel");
-			combo.addSpecialItem("Visual Studio 2005",
+			combo.addLabelValuePair("Visual Studio 2005",
 				"org.fife.plaf.VisualStudio2005.VisualStudio2005LookAndFeel");
 		}
 
@@ -316,7 +322,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		ExtendedLookAndFeelInfo[] info = rtext.get3rdPartyLookAndFeelInfo();
 		if (info!=null && info.length>0) {
 			for (int i=0; i<info.length; i++) {
-				combo.addSpecialItem(info[i].getName(),info[i].getClassName());
+				combo.addLabelValuePair(info[i].getName(),info[i].getClassName());
 			}
 		}
 
@@ -374,7 +380,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @see #setIconGroupByName
 	 */
 	public String getIconGroupName() {
-		return imageLnFCombo.getSelectedSpecialItem();
+		return imageLnFCombo.getSelectedValue();
 	}
 
 
@@ -385,7 +391,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @see #setLookAndFeelByClassName
 	 */
 	public String getLookAndFeelClassName() {
-		return lnfCombo.getSelectedSpecialItem();
+		return lnfCombo.getSelectedValue();
 	}
 
 
@@ -533,7 +539,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	public void setIconGroupByName(String name) {
 		int count = imageLnFCombo.getItemCount();
 		for (int i=0; i<count; i++) {
-			String specialValue = imageLnFCombo.getSpecialItemAt(i);
+			String specialValue = imageLnFCombo.getValueAt(i);
 			if (specialValue.equals(name)) {
 				imageLnFCombo.setSelectedIndex(i);
 				return;
@@ -552,7 +558,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	public void setLookAndFeelByClassName(String name) {
 		int count = lnfCombo.getItemCount();
 		for (int i=0; i<count; i++) {
-			String specialValue = lnfCombo.getSpecialItemAt(i);
+			String specialValue = lnfCombo.getValueAt(i);
 			if (specialValue.equals(name)) {
 				lnfCombo.setSelectedIndex(i);
 				return;

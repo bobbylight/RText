@@ -24,10 +24,10 @@ import javax.swing.event.DocumentListener;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.LabelValueComboBox;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.SelectableLabel;
-import org.fife.ui.SpecialValueComboBox;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
@@ -44,7 +44,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 
 	private JTextField dirField;
 	private JButton dirBrowseButton;
-	private SpecialValueComboBox terminatorCombo;
+	private LabelValueComboBox<String, String> terminatorCombo;
 	private JComboBox encCombo;
 	private JCheckBox utf8BomCB;
 	private JCheckBox sizeCheckCB;
@@ -106,13 +106,13 @@ class GeneralOptionPanel extends OptionsDialogPanel
 			newFilePanel.add(dirLabel);
 		}
 		JLabel newlineLabel = new JLabel(msg.getString("LineTerminator"));
-		terminatorCombo = new SpecialValueComboBox();
+		terminatorCombo = new LabelValueComboBox<String, String>();
 		UIUtil.fixComboOrientation(terminatorCombo);
-		terminatorCombo.addSpecialItem(msg.getString("SysDef"), TERM_SYSTEM);
-		terminatorCombo.addSpecialItem(msg.getString("CR"),     TERM_CR);
-		terminatorCombo.addSpecialItem(msg.getString("LF"),     TERM_LF);
-		terminatorCombo.addSpecialItem(msg.getString("CRLF"),   TERM_CRLF);
-		terminatorCombo.setSelectedSpecialItem(TERM_SYSTEM);
+		terminatorCombo.addLabelValuePair(msg.getString("SysDef"), TERM_SYSTEM);
+		terminatorCombo.addLabelValuePair(msg.getString("CR"),     TERM_CR);
+		terminatorCombo.addLabelValuePair(msg.getString("LF"),     TERM_LF);
+		terminatorCombo.addLabelValuePair(msg.getString("CRLF"),   TERM_CRLF);
+		terminatorCombo.setSelectedValue(TERM_SYSTEM);
 		terminatorCombo.setActionCommand("LineTerminator");
 		terminatorCombo.addActionListener(this);
 		if (orientation.isLeftToRight()) {
@@ -383,7 +383,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 * @see #setLineTerminator(String)
 	 */
 	public String getLineTerminator() {
-		return terminatorCombo.getSelectedSpecialItem();
+		return terminatorCombo.getSelectedValue();
 	}
 
 
@@ -512,7 +512,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 * @see #getLineTerminator()
 	 */
 	private void setLineTerminator(String terminator) {
-		terminatorCombo.setSelectedSpecialItem(terminator);
+		terminatorCombo.setSelectedValue(terminator);
 	}
 
 

@@ -57,10 +57,13 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		panel = new UIOptionPanel(rtext, msg);
 		setIcon(panel, "ui.png");
 		panels.add(panel);
-
+		
 		OptionsDialogPanel panel2 = new LanguageOptionPanel(rtext, msg);
 		setIcon(panel2, "language.png");
 		panel.addChildPanel(panel2);
+
+		panel = new ThemeOptionPanel(rtext, msg);
+		panels.add(panel);
 
 		panel = new RTextAreaOptionPanel();
 		setIcon(panel, "textarea.png");
@@ -133,8 +136,8 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 	 * @param id The panel ID to search for.  Should not be <code>null</code>.
 	 * @return The panel, or <code>null</code> if it wasn't found.
 	 */
-	private OptionsDialogPanel getPanelById(List<OptionsDialogPanel> panels,
-			String id) {
+	private static OptionsDialogPanel getPanelById(
+			List<OptionsDialogPanel> panels, String id) {
 		for (OptionsDialogPanel panel : panels) {
 			OptionsDialogPanel result = getPanelByIdImpl(panel, id);
 			if (result!=null) {
@@ -152,7 +155,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 	 * @param id The ID of the panel to search for.
 	 * @return The panel, or <code>null</code> if it wasn't found.
 	 */
-	private OptionsDialogPanel getPanelByIdImpl(OptionsDialogPanel panel,
+	private static OptionsDialogPanel getPanelByIdImpl(OptionsDialogPanel panel,
 			String id) {
 		if (id.equals(panel.getId())) {
 			return panel;

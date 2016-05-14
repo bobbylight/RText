@@ -42,7 +42,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	/**
 	 * ID used to identify this option panel.
 	 */
-	public static final String ID = "RTextAreaOptionPanel";
+	public static final String OPTION_PANEL_ID = "RTextAreaOptionPanel";
 
 	private JLabel tabSizeLabel;
 	private JTextField tabSizeField;
@@ -93,7 +93,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public RTextAreaOptionPanel() {
 
-		setId(ID);
+		setId(OPTION_PANEL_ID);
 
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());

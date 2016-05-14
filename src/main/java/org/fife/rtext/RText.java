@@ -772,6 +772,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * Returns the syntax highlighting color scheme being used.
 	 *
 	 * @return The syntax highlighting color scheme.
+	 * @see #setSyntaxScheme(SyntaxScheme)
 	 */
 	public SyntaxScheme getSyntaxScheme() {
 		return colorScheme;
@@ -1429,6 +1430,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 *
 	 * @param colorScheme The new color scheme to use.  If
 	 *        <code>null</code>, nothing changes.
+	 * @see #getSyntaxScheme()
 	 */
 	public void setSyntaxScheme(SyntaxScheme colorScheme) {
 		if (colorScheme!=null && !colorScheme.equals(this.colorScheme)) {
@@ -1735,6 +1737,13 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 					}
 				}
 
+				if (lafName.indexOf(".Darcula") > -1) {
+					UIManager.getLookAndFeelDefaults().put("Tree.rendererFillBackground", Boolean.FALSE);
+				}
+				else {
+					UIManager.getLookAndFeelDefaults().put("Tree.rendererFillBackground", null);
+				}
+				
 				RText rtext = new RText(args);
 				rtext.setLookAndFeelManager(lafManager);
 

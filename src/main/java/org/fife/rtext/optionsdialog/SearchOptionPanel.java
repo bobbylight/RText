@@ -37,7 +37,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.SearchManager.SearchingMode;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.SelectableLabel;
-import org.fife.ui.SpecialValueComboBox;
+import org.fife.ui.LabelValueComboBox;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplication;
 import org.fife.util.TranslucencyUtil;
@@ -56,7 +56,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 	private JRadioButton toolbarRB;
 	private JCheckBox translucentSearchDialogsCB;
 	private JLabel ruleLabel;
-	private SpecialValueComboBox ruleCombo;
+	private LabelValueComboBox<String, String> ruleCombo;
 	private JLabel opacityLabel;
 	private JSlider slider;
 	private JLabel opacityDisplay;
@@ -115,11 +115,11 @@ class SearchOptionPanel extends OptionsDialogPanel
 		translucentSearchDialogsCB.addActionListener(this);
 		addLeftAligned(expPanel, translucentSearchDialogsCB);
 		ruleLabel = new JLabel(msg.getString("TranslucencyRule"));
-		ruleCombo = new SpecialValueComboBox();
-		ruleCombo.addSpecialItem(msg.getString("Translucency.Never"), "0");
-		ruleCombo.addSpecialItem(msg.getString("Translucency.WhenNotFocused"), "1");
-		ruleCombo.addSpecialItem(msg.getString("Translucency.WhenOverlappingApp"), "2");
-		ruleCombo.addSpecialItem(msg.getString("Translucency.Always"), "3");
+		ruleCombo = new LabelValueComboBox<String, String>();
+		ruleCombo.addLabelValuePair(msg.getString("Translucency.Never"), "0");
+		ruleCombo.addLabelValuePair(msg.getString("Translucency.WhenNotFocused"), "1");
+		ruleCombo.addLabelValuePair(msg.getString("Translucency.WhenOverlappingApp"), "2");
+		ruleCombo.addLabelValuePair(msg.getString("Translucency.Always"), "3");
 		ruleCombo.setActionCommand("TranslucencyRuleChanged");
 		ruleCombo.addActionListener(this);
 		opacityLabel = new JLabel(msg.getString("Opacity"));
@@ -238,7 +238,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 		// Experimental options
 		rtext.setSearchWindowOpacityEnabled(translucentSearchDialogsCB.
 															isSelected());
-		int rule = Integer.parseInt(ruleCombo.getSelectedSpecialItem());
+		int rule = Integer.parseInt(ruleCombo.getSelectedValue());
 		rtext.setSearchWindowOpacityRule(rule);
 		float opacity = slider.getValue() / 100f;
 		rtext.setSearchWindowOpacity(opacity);

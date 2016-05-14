@@ -95,7 +95,7 @@ public class Plugin extends GUIPlugin {
 	 * @param app The parent application.
 	 */
 	public Plugin(AbstractPluggableGUIApplication<?> app) {
-		setOptionsDialogPanelParentPanelID(RTextAreaOptionPanel.ID);
+		setOptionsDialogPanelParentPanelID(RTextAreaOptionPanel.OPTION_PANEL_ID);
 	}
 
 

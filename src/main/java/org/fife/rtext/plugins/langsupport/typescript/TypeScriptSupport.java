@@ -80,7 +80,7 @@ public class TypeScriptSupport {
 	 * @param rtext The application.
 	 * @param plugin The language support plugin.
 	 * @param prefs Language support preferences.
-	 * @see #save(LangSupportPreferences)
+	 * @see #save(RText, LangSupportPreferences)
 	 */
 	public void install(RText rtext, Plugin plugin,
 			LangSupportPreferences prefs) {

@@ -156,7 +156,7 @@ public class Plugin extends AbstractPlugin
 	 */
 	@Override
 	public String getOptionsDialogPanelParentPanelID() {
-		return RTextAreaOptionPanel.ID;
+		return RTextAreaOptionPanel.OPTION_PANEL_ID;
 	}
 
 

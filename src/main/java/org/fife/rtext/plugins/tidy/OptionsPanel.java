@@ -31,7 +31,7 @@ import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.fife.ui.SpecialValueComboBox;
+import org.fife.ui.LabelValueComboBox;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 
@@ -62,7 +62,7 @@ class OptionsPanel extends PluginOptionsDialogPanel
 
 	// JSON properties
 	private JSpinner jsonSpaceSpinner;
-	private SpecialValueComboBox jsonStyleCombo;
+	private LabelValueComboBox<String, String> jsonStyleCombo;
 	private JCheckBox jsonIndentFirstLevelCB;
 
 	private static final String PROPERTY		= "Property";
@@ -141,7 +141,7 @@ class OptionsPanel extends PluginOptionsDialogPanel
 					jsonIndentFirstLevelCB.isSelected() ||
 					getIntValue(jsonSpaceSpinner)!=3 ||
 					!DEFAULT_JSON_STYLE.equals(
-							jsonStyleCombo.getSelectedSpecialItem())) {
+							jsonStyleCombo.getSelectedValue())) {
 				addXmlPiCB.setSelected(false);
 				dropEmptyParasCB.setSelected(false);
 				hideEndTagsCB.setSelected(false);
@@ -154,7 +154,7 @@ class OptionsPanel extends PluginOptionsDialogPanel
 				xmlWrapLenSpinner.setValue(new Integer(0));
 				jsonIndentFirstLevelCB.setSelected(false);
 				jsonSpaceSpinner.setValue(new Integer(3));
-				jsonStyleCombo.setSelectedSpecialItem(DEFAULT_JSON_STYLE);
+				jsonStyleCombo.setSelectedValue(DEFAULT_JSON_STYLE);
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
 			}
@@ -244,10 +244,10 @@ class OptionsPanel extends PluginOptionsDialogPanel
 		temp.add(temp2);
 		temp.add(Box.createVerticalStrut(5));
 
-		jsonStyleCombo = new SpecialValueComboBox();
-		jsonStyleCombo.addSpecialItem("JSON", "json");
-		jsonStyleCombo.addSpecialItem("JavaScript", "javascript");
-		jsonStyleCombo.addSpecialItem(
+		jsonStyleCombo = new LabelValueComboBox<String, String>();
+		jsonStyleCombo.addLabelValuePair("JSON", "json");
+		jsonStyleCombo.addLabelValuePair("JavaScript", "javascript");
+		jsonStyleCombo.addLabelValuePair(
 				msg.getString("Options.JSON.Style.Minimal"), "minimal");
 		jsonStyleCombo.addActionListener(this);
 		label = UIUtil.newLabel(msg, "Options.JSON.Style", jsonStyleCombo);
@@ -336,7 +336,7 @@ class OptionsPanel extends PluginOptionsDialogPanel
 
 		JsonOptions jsonOpts = plugin.getJsonOptions();
 		jsonOpts.setSpaceCount(getIntValue(jsonSpaceSpinner));
-		jsonOpts.setOutputStyle(jsonStyleCombo.getSelectedSpecialItem());
+		jsonOpts.setOutputStyle(jsonStyleCombo.getSelectedValue());
 		jsonOpts.setIndentFirstLevel(jsonIndentFirstLevelCB.isSelected());
 
 	}
@@ -409,7 +409,7 @@ class OptionsPanel extends PluginOptionsDialogPanel
 
 		JsonOptions jsonOpts = plugin.getJsonOptions();
 		jsonSpaceSpinner.setValue(new Integer(jsonOpts.getSpaceCount()));
-		jsonStyleCombo.setSelectedSpecialItem(jsonOpts.getOutputStyle());
+		jsonStyleCombo.setSelectedValue(jsonOpts.getOutputStyle());
 		jsonIndentFirstLevelCB.setSelected(jsonOpts.getIndentFirstLevel());
 
 	}

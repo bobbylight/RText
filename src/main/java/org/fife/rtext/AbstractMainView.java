@@ -3027,9 +3027,12 @@ public abstract class AbstractMainView extends JPanel
 		}
 
 		// Now, implement that background.
-		for (int i=0; i<getNumDocuments(); i++)
+		Color gutterBG = backgroundObject instanceof Color ?
+				(Color)backgroundObject : Color.WHITE;
+		for (int i=0; i<getNumDocuments(); i++) {
+			getRTextScrollPaneAt(i).getGutter().setBackground(gutterBG);
 			getRTextEditorPaneAt(i).setBackgroundObject(backgroundObject);
-
+		}
 	}
 
 

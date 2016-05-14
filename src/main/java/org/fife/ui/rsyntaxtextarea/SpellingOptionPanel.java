@@ -43,7 +43,7 @@ import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RColorButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.SelectableLabel;
-import org.fife.ui.SpecialValueComboBox;
+import org.fife.ui.LabelValueComboBox;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
@@ -58,7 +58,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 
 	private JCheckBox enabledCB;
 	private JLabel dictLabel;
-	private SpecialValueComboBox dictCombo;
+	private LabelValueComboBox<String, String> dictCombo;
 	private JLabel userDictLabel;
 	private FSATextField userDictField;
 	private SelectableLabel userDictDescField;
@@ -107,9 +107,9 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		temp.add(Box.createVerticalStrut(5));
 
 		dictLabel = new JLabel(msg.getString("Dictionary"));
-		dictCombo = new SpecialValueComboBox();
+		dictCombo = new LabelValueComboBox<String, String>();
 		for (int i=0; i<DICTIONARIES.length; i++) {
-			dictCombo.addSpecialItem(DICTIONARIES[i][0], DICTIONARIES[i][1]);
+			dictCombo.addLabelValuePair(DICTIONARIES[i][0], DICTIONARIES[i][1]);
 		}
 		dictCombo.setEditable(false);
 		dictCombo.setActionCommand("Dictionary");
@@ -194,7 +194,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		RText rtext = (RText)owner;
 		SpellingSupport support = rtext.getMainView().getSpellingSupport();
 		support.setSpellCheckingEnabled(enabledCB.isSelected());
-		support.setSpellingDictionary(dictCombo.getSelectedSpecialItem());
+		support.setSpellingDictionary(dictCombo.getSelectedValue());
 		support.setUserDictionary(getUserDictionary());
 		support.setSpellCheckingColor(spellingColorButton.getColor());
 		support.setMaxSpellingErrors(getMaxSpellingErrors());
@@ -307,7 +307,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		SpellingSupport support = rtext.getMainView().getSpellingSupport();
 		boolean enabled = support.isSpellCheckingEnabled();
 		setSpellCheckingEnabled(enabled);
-		dictCombo.setSelectedSpecialItem(support.getSpellingDictionary());
+		dictCombo.setSelectedValue(support.getSpellingDictionary());
 		userDictField.setFileSystemAware(false);
 		File temp = support.getUserDictionary();
 		userDictField.setText(temp==null ? "" : temp.getAbsolutePath());

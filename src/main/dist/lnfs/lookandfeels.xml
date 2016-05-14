@@ -67,6 +67,11 @@
    jars="lnfs/weblaf-1.27.jar"
    minJavaVersion="1.6"/>
 -->
+<LookAndFeel name="Darcula"
+   class="com.bulenkov.darcula.DarculaLaf"
+   jars="lnfs/darcula.jar"
+   minJavaVersion="1.6"/>
+   
 <LookAndFeel name="Substance Business"
    class="org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel"
    dir="lnfs/substance/"

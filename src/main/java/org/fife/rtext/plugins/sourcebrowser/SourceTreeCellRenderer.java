@@ -127,6 +127,7 @@ class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
 			setIcon(icon);
 		}
 
+		setOpaque(true);
 		return this;
 
 	}

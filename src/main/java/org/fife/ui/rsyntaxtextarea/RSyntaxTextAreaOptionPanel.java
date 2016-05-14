@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ResourceBundle;
+
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -52,6 +53,11 @@ import org.fife.ui.rtextarea.RTextArea;
 public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 					implements ActionListener, PropertyChangeListener,
 								ListSelectionListener{
+
+	/**
+	 * ID used to identify this option panel.
+	 */
+	public static final String OPTION_PANEL_ID = "RTextAreaOptionPanel";
 
 	private FontSelector mainFontSelector;
 	private JTextField mainBackgroundField;
@@ -95,6 +101,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public RSyntaxTextAreaOptionPanel() {
 
+		setId(OPTION_PANEL_ID);
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
 
