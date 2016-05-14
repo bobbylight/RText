@@ -325,7 +325,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_PHP,				createValue("*.php"));
 		filters.put(SYNTAX_STYLE_PROPERTIES_FILE,	createValue("*.properties", "*.ini"));
 		filters.put(SYNTAX_STYLE_PYTHON,			createValue("*.py"));
-		filters.put(SYNTAX_STYLE_RUBY,			createValue("*.rb"));
+		filters.put(SYNTAX_STYLE_RUBY,			createValue("*.rb", "Vagrantfile"));
 		filters.put(SYNTAX_STYLE_SAS,				createValue("*.sas"));
 		filters.put(SYNTAX_STYLE_SCALA,				createValue("*.scala"));
 		filters.put(SYNTAX_STYLE_SQL,				createValue("*.sql"));
