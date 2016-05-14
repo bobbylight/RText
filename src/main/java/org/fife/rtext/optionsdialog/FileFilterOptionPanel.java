@@ -107,12 +107,12 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 //		box.add(Box.createVerticalGlue());
 		bottomPanel.add(box, BorderLayout.NORTH);
 		
-		JButton defaultsButton = new JButton(msg.getString("RestoreDefaults"));
-		defaultsButton.setActionCommand("RestoreDefaults");
-		defaultsButton.addActionListener(this);
+		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
+		rdButton.setActionCommand("RestoreDefaults");
+		rdButton.addActionListener(this);
 		temp = new JPanel(new BorderLayout());
 		temp.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
-		temp.add(defaultsButton, BorderLayout.LINE_START);
+		temp.add(rdButton, BorderLayout.LINE_START);
 		bottomPanel.add(temp, BorderLayout.SOUTH);
 
 		add(bottomPanel, BorderLayout.SOUTH);

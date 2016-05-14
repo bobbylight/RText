@@ -132,14 +132,10 @@ public class GutterOptionPanel extends OptionsDialogPanel
 		topPanel.add(otherPanel);
 		topPanel.add(Box.createVerticalStrut(5));
 
-		temp = new Box(BoxLayout.LINE_AXIS);
-		JButton restoreDefaultsButton = new JButton(
-									msg.getString("RestoreDefaults"));
-		restoreDefaultsButton.setActionCommand("RestoreDefaults");
-		restoreDefaultsButton.addActionListener(this);
-		temp.add(restoreDefaultsButton);
-		temp.add(Box.createHorizontalGlue());
-		topPanel.add(temp);
+		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
+		rdButton.setActionCommand("RestoreDefaults");
+		rdButton.addActionListener(this);
+		addLeftAligned(topPanel, rdButton);
 
 		topPanel.add(Box.createVerticalGlue());
 		add(topPanel, BorderLayout.NORTH);

@@ -21,7 +21,6 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ResourceBundle;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -44,6 +43,11 @@ import org.fife.ui.app.PluginOptionsDialogPanel;
  */
 class ConsoleOptionPanel extends PluginOptionsDialogPanel
 			implements ActionListener, ItemListener, PropertyChangeListener {
+
+	/**
+	 * ID used to identify this option panel.
+	 */
+	public static final String OPTION_PANEL_ID = "ConsoleOptionPanel";
 
 	private JCheckBox visibleCB;
 	private JLabel locationLabel;
@@ -70,7 +74,9 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	public ConsoleOptionPanel(Plugin plugin) {
 
 		super(plugin);
+		setId(OPTION_PANEL_ID);
 		setName(plugin.getString("Options.Title"));
+		setId(OPTION_PANEL_ID);
 		ComponentOrientation o = ComponentOrientation.
 										getOrientation(getLocale());
 
@@ -93,10 +99,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		defaultsButton = new JButton(plugin.getString("RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
-		JPanel temp = new JPanel(new BorderLayout());
-		temp.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
-		temp.add(defaultsButton, BorderLayout.LINE_START);
-		topPanel.add(temp);
+		addLeftAligned(topPanel, defaultsButton);
 
 		// Put it all together!
 		topPanel.add(Box.createVerticalGlue());

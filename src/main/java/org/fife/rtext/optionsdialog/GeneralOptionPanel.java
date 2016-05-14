@@ -200,14 +200,12 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		addLeftAligned(expPanel, dropShadowsInEditorCB);
 		expPanel.add(Box.createVerticalGlue());
 		topPanel.add(expPanel);
+		topPanel.add(Box.createVerticalStrut(10));
 
-		JButton defaultsButton = new JButton(msg.getString("RestoreDefaults"));
-		defaultsButton.setActionCommand("RestoreDefaults");
-		defaultsButton.addActionListener(this);
-		temp = new JPanel(new BorderLayout());
-		temp.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
-		temp.add(defaultsButton, BorderLayout.LINE_START);
-		topPanel.add(temp);
+		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
+		rdButton.setActionCommand("RestoreDefaults");
+		rdButton.addActionListener(this);
+		addLeftAligned(topPanel, rdButton);
 
 		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(orientation);

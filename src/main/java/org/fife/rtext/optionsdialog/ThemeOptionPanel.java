@@ -43,6 +43,11 @@ import org.fife.ui.rtextarea.RTextAreaOptionPanel;
  */
 public class ThemeOptionPanel extends OptionsDialogPanel {
 
+	/**
+	 * ID used to identify this option panel.
+	 */
+	public static final String OPTION_PANEL_ID = "ThemeOptionPanel";
+
 	private LabelValueComboBox<String, String> themeCombo;
 	private JButton applyButton;
 
@@ -53,9 +58,9 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 	public ThemeOptionPanel(RText rtext, final ResourceBundle msg) {
 
 		super(msg.getString("OptThemeName"));
+		setId(OPTION_PANEL_ID);
 		Listener listener = new Listener();
 
-		// Set up our border and layout.
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
 		Box cp = Box.createVerticalBox();

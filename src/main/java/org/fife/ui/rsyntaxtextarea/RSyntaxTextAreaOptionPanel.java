@@ -25,9 +25,11 @@ import javax.swing.event.*;
 
 import org.fife.ui.FontSelector;
 import org.fife.ui.RListSelectionModel;
+import org.fife.ui.SelectableLabel;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.optionsdialog.ThemeOptionPanel;
 import org.fife.ui.*;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Style;
@@ -83,9 +85,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	private boolean isSettingStyle;
 
 	private static final String DEFAULTS_RESTORED			= "RSTAOpts.defaultsRestored";
-	private static final String SYNTAX_COLOR_PROPERTY			= "RSTAOpts.syntaxColor";
-	private static final String SYNTAX_FONT_PROPERTY			= "RSTAOpts.syntaxFont";
-	private static final String UNKNOWN_PROPERTY				= "RSTAOpts.unknown";
+	private static final String SYNTAX_COLOR_PROPERTY		= "RSTAOpts.syntaxColor";
+	private static final String SYNTAX_FONT_PROPERTY		= "RSTAOpts.syntaxFont";
+	private static final String UNKNOWN_PROPERTY			= "RSTAOpts.unknown";
 
 	private static final String[] SAMPLES = {
 		"previewJava.txt", "previewPerl.txt", "previewXml.txt",
@@ -112,8 +114,22 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
-		Box contentPane = Box.createVerticalBox();
-		add(contentPane, BorderLayout.NORTH);
+		Box cp = Box.createVerticalBox();
+		add(cp, BorderLayout.NORTH);
+
+		SelectableLabel label = new SelectableLabel();
+		label.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
+		label.setText(msg.getString("Note.UseThemesInstead"));
+		label.addHyperlinkListener(new HyperlinkListener() {
+			public void hyperlinkUpdate(HyperlinkEvent e) {
+				if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+					getOptionsDialog().setSelectedOptionsPanel(
+							ThemeOptionPanel.OPTION_PANEL_ID);
+				}
+			}
+		});
+		cp.add(label);
+		cp.add(Box.createVerticalStrut(5));
 
 		SpringLayout sl = new SpringLayout();
 		JPanel springPanel = new JPanel(sl);
@@ -144,8 +160,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			springPanel.add(bgRestPanel);  springPanel.add(bgLabel);
 		}
 		UIUtil.makeSpringCompactGrid(springPanel, 2, 2, 0, 0, 5, 5);
-		contentPane.add(springPanel);
-		contentPane.add(Box.createVerticalStrut(5));
+		cp.add(springPanel);
+		cp.add(Box.createVerticalStrut(5));
 
 		// Syntax panel contains all of the "syntax highlighting" stuff.
 		syntaxPanel = new JPanel(new BorderLayout());
@@ -157,7 +173,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		syntaxList = new JList(syntaxListModel);
 		syntaxList.setSelectionModel(new RListSelectionModel());
 		syntaxList.addListSelectionListener(this);
-		syntaxList.setVisibleRowCount(10);
+		syntaxList.setVisibleRowCount(8);
 		syntaxListModel.addElement(msg.getString("Style.Comment.EndOfLine"));
 		syntaxListModel.addElement(msg.getString("Style.Comment.Multiline"));
 		syntaxListModel.addElement(msg.getString("Style.Comment.Documentation"));
@@ -246,7 +262,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		syntaxPanel.add(temp2);
 
 		// Add the syntax panel to us.
-		contentPane.add(syntaxPanel);
+		cp.add(syntaxPanel);
 
 		// Now create a panel containing all checkbox properties in the
 		// bottom of this panel.
@@ -278,7 +294,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		advancedPanel.add(temp);
 		advancedPanel.add(rdPanel, BorderLayout.SOUTH);
 
-		contentPane.add(advancedPanel);
+		cp.add(advancedPanel);
 		//contentPane.add(Box.createVerticalGlue());
 		applyComponentOrientation(orientation);
 
@@ -378,11 +394,11 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 * @return The text area.
 	 */
 	private static final RSyntaxTextArea createSampleTextArea() {
-		RSyntaxTextArea textArea = new RSyntaxTextArea(10, 40);
+		RSyntaxTextArea textArea = new RSyntaxTextArea(9, 40);
 		textArea.setHighlightCurrentLine(false);
 		textArea.setAntiAliasingEnabled(true);
 		textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-		textArea.setPopupMenu(null); // Disable the popup menu.
+		textArea.setPopupMenu(null);
 		return textArea;
 	}
 
