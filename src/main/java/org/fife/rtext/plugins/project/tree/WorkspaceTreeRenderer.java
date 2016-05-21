@@ -14,7 +14,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-import org.fife.ui.SubstanceUtils;
+import org.fife.util.SubstanceUtil;
 
 
 /**
@@ -34,7 +34,7 @@ class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
 	 * @return The renderer.
 	 */
 	public static TreeCellRenderer create() {
-		if (SubstanceUtils.isSubstanceInstalled()) {
+		if (SubstanceUtil.isSubstanceInstalled()) {
 			// Use reflection to avoid compile-time dependencies form this
 			// class to Substance.
 			String clazzName =

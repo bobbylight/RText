@@ -33,7 +33,7 @@ import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
 import org.fife.ui.StandardAction;
-import org.fife.ui.SubstanceUtils;
+import org.fife.util.SubstanceUtil;
 import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.AbstractGUIApplication;
@@ -1665,6 +1665,9 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		// other Java implementations.
 		System.setProperty("apple.laf.useScreenMenuBar","true");
 
+		// Make Darcula and Metal not use bold fonts
+		UIManager.put("swing.boldMetal", Boolean.FALSE);
+
 		// Catch any uncaught Throwables on the EDT and log them.
 		AWTExceptionHandler.register();
 
@@ -1687,7 +1690,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 				// properties to "true", then toggling to a LAF that doesn't
 				// support this property, such as Windows, causes the
 				// OS-supplied frame to not appear (as of 6u20).
-				if (SubstanceUtils.isASubstanceLookAndFeel(lafName)) {
+				if (SubstanceUtil.isASubstanceLookAndFeel(lafName)) {
 					JFrame.setDefaultLookAndFeelDecorated(true);
 					JDialog.setDefaultLookAndFeelDecorated(true);
 				}
@@ -1729,9 +1732,9 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 				// The default speed of Substance animations is too slow
 				// (200ms), looks bad moving through JMenuItems quickly.
-				if (SubstanceUtils.isSubstanceInstalled()) {
+				if (SubstanceUtil.isSubstanceInstalled()) {
 					try {
-						SubstanceUtils.setAnimationSpeed(100);
+						SubstanceUtil.setAnimationSpeed(100);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

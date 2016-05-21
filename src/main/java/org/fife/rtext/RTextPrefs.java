@@ -690,7 +690,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		rememberWhitespaceLines = true;
 		autoInsertClosingCurlys = false;
 		aaEnabled = File.separatorChar=='\\' ||
-				System.getProperty("os.name").indexOf("mac os x")>-1;
+				System.getProperty("os.name").contains("mac os x");
 		fractionalMetricsEnabled = false;
 		markAllHighlightColor = RTextArea.getDefaultMarkAllHighlightColor();
 		markOccurrences = true;

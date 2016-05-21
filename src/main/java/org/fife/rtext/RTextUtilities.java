@@ -45,7 +45,7 @@ import org.fife.jgoodies.looks.common.ShadowPopupBorder;
 import org.fife.jgoodies.looks.common.ShadowPopupFactory;
 import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.ui.OS;
-import org.fife.ui.SubstanceUtils;
+import org.fife.util.SubstanceUtil;
 import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
@@ -956,8 +956,8 @@ public class RTextUtilities {
 				// seems to be the only troublemaker here (Metal, for example,
 				// supports window decorations, but works fine without special
 				// logic).
-				boolean curSubstance = SubstanceUtils.isSubstanceInstalled();
-				boolean nextSubstance = SubstanceUtils.
+				boolean curSubstance = SubstanceUtil.isSubstanceInstalled();
+				boolean nextSubstance = SubstanceUtil.
 											isASubstanceLookAndFeel(lnf);
 				if (curSubstance!=nextSubstance) {
 					String message = rtext.getString(

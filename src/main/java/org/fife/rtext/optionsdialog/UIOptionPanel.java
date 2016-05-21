@@ -303,7 +303,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 			// We'll assume Windows supports all LnFs, and any other OS does
 			// NOT support a standard Look with "Windows" in the name.
 			String name = infos[i].getName();
-			if (osIsWindows || !(name.toLowerCase().indexOf("windows")>-1)) {
+			if (osIsWindows || !(name.toLowerCase().contains("windows"))) {
 				combo.addLabelValuePair(name, infos[i].getClassName());
 			}
 		}

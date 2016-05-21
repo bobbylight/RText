@@ -35,7 +35,7 @@ import org.fife.ui.EscapableDialog;
 import org.fife.ui.RListSelectionModel;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.ResizableFrameContentPane;
-import org.fife.ui.SubstanceUtils;
+import org.fife.util.SubstanceUtil;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
@@ -90,7 +90,7 @@ public class RecentFileDialog extends EscapableDialog {
 	 * @return The cell renderer.
 	 */
 	private static final ListCellRenderer createCellRenderer() {
-		if (SubstanceUtils.isSubstanceInstalled()) {
+		if (SubstanceUtil.isSubstanceInstalled()) {
 			//  Use reflection to avoid compile-time dependencies form this
 			// class to Substance.
 			String clazzName = "org.fife.rtext.RecentFileListSubstanceCellRenderer";

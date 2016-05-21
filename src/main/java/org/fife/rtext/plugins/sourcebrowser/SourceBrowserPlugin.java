@@ -27,7 +27,7 @@ import org.fife.ctags.TagEntry;
 import org.fife.rtext.*;
 import org.fife.rtext.optionsdialog.OptionsDialog;
 import org.fife.ui.RScrollPane;
-import org.fife.ui.SubstanceUtils;
+import org.fife.util.SubstanceUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.*;
 import org.fife.ui.dockablewindows.DockableWindow;
@@ -128,7 +128,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * @param tree The tree whose renderer should be checked.
 	 */
 	private static final void checkTreeCellRenderer(JTree tree) {
-		if (SubstanceUtils.isSubstanceInstalled()) {
+		if (SubstanceUtil.isSubstanceInstalled()) {
 			TreeCellRenderer renderer = tree.getCellRenderer();
 			try {
 				Class<?> clazz = Class.forName(RENDERER_WRAPPER_CLASS_NAME);

@@ -63,6 +63,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		panel.addChildPanel(panel2);
 
 		panel = new ThemeOptionPanel(rtext, msg);
+		setIcon(panel, "theme.png");
 		panels.add(panel);
 
 		panel = new RTextAreaOptionPanel();

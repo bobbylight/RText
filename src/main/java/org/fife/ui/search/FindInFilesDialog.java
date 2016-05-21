@@ -794,13 +794,13 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		String status = defaultStatusText;
 		if (tooltip!=null) {
 			status = tooltip;
-			if (status.indexOf('\n')>-1) {
+			if (status.contains("\n")) {
 				status = status.substring(0, status.indexOf('\n'));
 			}
 		}
 		setStatusText(status);
 
-		if (tooltip!=null && tooltip.indexOf('\n')>-1) {
+		if (tooltip!=null && tooltip.contains("\n")) {
 			tooltip = tooltip.replaceFirst("\\\n", "</b><br><pre>");
 			tooltip = "<html><b>" + tooltip;
 		}
@@ -1123,7 +1123,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 				int line = -1;
 				if (!FindInFilesThread.NO_LINE_NUMBER.equals(lineStr)) {
 					// Should be in format "3" or "5-7".
-					if (lineStr.indexOf('-')>-1) {
+					if (lineStr.contains("-")) {
 						lineStr = lineStr.substring(0, lineStr.indexOf('-'));
 					}
 					try {

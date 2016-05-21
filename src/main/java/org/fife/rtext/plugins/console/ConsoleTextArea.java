@@ -45,7 +45,7 @@ import javax.swing.text.TextAction;
 import javax.swing.text.Utilities;
 
 import org.fife.ui.OptionsDialog;
-import org.fife.ui.SubstanceUtils;
+import org.fife.util.SubstanceUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Token;
@@ -345,7 +345,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	private void installDefaultStyles(boolean checkForSubstance) {
 
 		Font font = RTextArea.getDefaultFont();
-		if (!SubstanceUtils.isSubstanceInstalled()) {
+		if (!SubstanceUtil.isSubstanceInstalled()) {
 			// If we do this with a SubstanceLookAndFeel installed, we go into
 			// an infinite loop of updateUI()'s called (in calls to
 			// SwingUtilities.invokeLater()).  For some reason, Substance has

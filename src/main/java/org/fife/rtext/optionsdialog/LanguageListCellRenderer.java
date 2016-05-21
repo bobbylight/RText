@@ -18,7 +18,7 @@ import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 
 import org.fife.rtext.optionsdialog.LanguageOptionPanel.IconTextInfo;
-import org.fife.ui.SubstanceUtils;
+import org.fife.util.SubstanceUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 
 
@@ -60,7 +60,7 @@ class LanguageListCellRenderer extends DefaultListCellRenderer {
 
 		JLabel delegate = null;
 
-		if (SubstanceUtils.isSubstanceInstalled()) {
+		if (SubstanceUtil.isSubstanceInstalled()) {
 			// Can't delegate with Substance, because it unfortunately
 			// has hard dependencies on renderer types.  Yuck.
 			try {
