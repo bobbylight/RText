@@ -310,6 +310,8 @@ public class RTextUtilities {
 			// Add "all supported" filter, but keep "All files" the default.
 			chooser.addChoosableFileFilter(new ExtensionFileFilter(
 					msg.getString("AllSupported"),
+					ExtensionFileFilter.CaseCheck.SYSTEM_CASE_CHECK,
+					false,
 					new String[] {
 						"as", "asc",
 						"asm",
@@ -349,9 +351,7 @@ public class RTextUtilities {
 						"vb",
 						"bat", "cmd",
 						"xml", "xsl", "xsd", "wsdl", "jnlp", "macro", "manifest",
-					},
-					ExtensionFileFilter.SYSTEM_CASE_CHECK,
-					false
+					}
 			));
 			chooser.setFileFilter(null);
 
