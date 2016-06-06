@@ -34,7 +34,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-public class GoToMemberAction extends AppAction
+public class GoToMemberAction extends AppAction<RText>
 			implements CurrentTextAreaListener {
 
 
@@ -47,7 +47,7 @@ public class GoToMemberAction extends AppAction
 
 	public void actionPerformed(ActionEvent e) {
 
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
 		int c = textArea.getToolkit().getMenuShortcutKeyMask();
 		int shift = InputEvent.SHIFT_MASK;
@@ -110,7 +110,7 @@ public class GoToMemberAction extends AppAction
 	 */
 	private void refreshEnabledState() {
 		boolean enabled = false;
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
 		if (textArea!=null) {
 			String style = textArea.getSyntaxEditingStyle();

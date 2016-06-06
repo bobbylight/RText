@@ -29,7 +29,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class NewMacroAction extends AppAction {
+class NewMacroAction extends AppAction<RText> {
 
 	/**
 	 * The parent plugin.
@@ -56,7 +56,7 @@ class NewMacroAction extends AppAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		RText owner = (RText)getApplication();
+		RText owner = getApplication();
 		NewMacroDialog nmd = new NewMacroDialog(plugin, owner);
 		nmd.setVisible(true);
 
@@ -68,7 +68,7 @@ class NewMacroAction extends AppAction {
 				createInitialContentByExtension(file);
 			}
 
-			((RText)getApplication()).openFile(file.getAbsolutePath());
+			getApplication().openFile(file.getAbsolutePath());
 			MacroManager.get().addMacro(macro);
 
 		}

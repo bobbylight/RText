@@ -15,7 +15,6 @@ import javax.swing.UIManager;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
-import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.AppAction;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
@@ -26,7 +25,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-class TidyAction extends AppAction {
+class TidyAction extends AppAction<RText> {
 
 	/**
 	 * The tidying plugin.
@@ -40,7 +39,7 @@ class TidyAction extends AppAction {
 	 * @param app The parent application.
 	 * @param plugin The tidying plugin.
 	 */
-	public TidyAction(AbstractPluggableGUIApplication<?> app, Plugin plugin) {
+	public TidyAction(RText app, Plugin plugin) {
 		super(app, Plugin.msg, "Action.Tidy");
 		this.plugin = plugin;
 	}
@@ -53,7 +52,7 @@ class TidyAction extends AppAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		RText app = (RText)getApplication();
+		RText app = getApplication();
 		RTextEditorPane textArea = app.getMainView().getCurrentTextArea();
 		String style = textArea.getSyntaxEditingStyle();
 		PrettyPrintResult result = null;
@@ -140,7 +139,7 @@ class TidyAction extends AppAction {
 		if (summary!=null) {
 			summary = cleanupSummary(summary);
 			String title = Plugin.msg.getString("Dialog.Result.Title");
-			RText app = (RText)getApplication();
+			RText app = getApplication();
 			JOptionPane.showMessageDialog(app, summary, title, icon);
 		}
 		else if (result.getResult()==PrettyPrinter.RESULT_ERRORS) {
@@ -154,7 +153,7 @@ class TidyAction extends AppAction {
 
 	private PrettyPrintResult tidyJson() {
 
-		RText app = (RText)getApplication();
+		RText app = getApplication();
 		RTextEditorPane textArea = app.getMainView().getCurrentTextArea();
 		String json = textArea.getText();
 		PrettyPrinter printer = new JsonPrettyPrinter(plugin);
@@ -170,7 +169,7 @@ class TidyAction extends AppAction {
 
 
 	private PrettyPrintResult tidyMarkup() {
-		RText app = (RText)getApplication();
+		RText app = getApplication();
 		RTextEditorPane textArea = app.getMainView().getCurrentTextArea();
 		String text = textArea.getText();
 		return new MarkupPrettyPrinter(app, plugin).prettyPrint(text);

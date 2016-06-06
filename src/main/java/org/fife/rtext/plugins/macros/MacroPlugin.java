@@ -75,7 +75,7 @@ public class MacroPlugin extends AbstractPlugin
 
 		RText rtext = (RText)app;
 		this.app = rtext;
-		AppAction a = new NewMacroAction(this, rtext, msg);
+		AppAction<RText> a = new NewMacroAction(this, rtext, msg);
 		a.setAccelerator(prefs.newMacroAccelerator);
 		rtext.addAction(NEW_MACRO_ACTION, a);
 
@@ -332,9 +332,9 @@ public class MacroPlugin extends AbstractPlugin
 
 		MacroPrefs prefs = new MacroPrefs();
 
-		AppAction a = (AppAction)app.getAction(NEW_MACRO_ACTION);
+		AppAction<?> a = (AppAction<?>)app.getAction(NEW_MACRO_ACTION);
 		prefs.newMacroAccelerator = a.getAccelerator();
-		a = (AppAction)app.getAction(EDIT_MACROS_ACTION);
+		a = (AppAction<?>)app.getAction(EDIT_MACROS_ACTION);
 		prefs.editMacrosAccelerator = a.getAccelerator();
 
 		File prefsFile = getPrefsFile();

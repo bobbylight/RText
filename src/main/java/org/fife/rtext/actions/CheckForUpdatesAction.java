@@ -30,7 +30,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class CheckForUpdatesAction extends AppAction {
+public class CheckForUpdatesAction extends AppAction<RText> {
 
 	/**
 	 * The URL to contact to see if there is a newer RText release.
@@ -74,7 +74,7 @@ public class CheckForUpdatesAction extends AppAction {
 				throw new IOException("Unsupported file version: " + fileVersion);
 			}
 
-			RText rtext = (RText)getApplication();
+			RText rtext = getApplication();
 			String current = rtext.getVersionString();
 			String latest = props.getProperty("Latest.RText.Version");
 			String releaseDate = props.getProperty("Latest.Release.Date");

@@ -60,7 +60,7 @@ public class ActionFactory implements RTextActionInfo {
 			ioe.printStackTrace();
 		}
 
-		AppAction a = new NewAction(rtext, msg, null);
+		AppAction<RText> a = new NewAction(rtext, msg, null);
 		rtext.addAction(NEW_ACTION, a);
 
 		a = new OpenAction(rtext, msg, null);
@@ -90,7 +90,7 @@ public class ActionFactory implements RTextActionInfo {
 		a = new SaveAllAction(rtext, msg, null);
 		rtext.addAction(SAVE_ALL_ACTION, a);
 
-		a = new RText.ExitAction(rtext, msg, "ExitAction");
+		a = new RText.ExitAction<RText>(rtext, msg, "ExitAction");
 		rtext.addAction(RText.EXIT_ACTION_KEY, a);
 
 		String temp = msg.getString("CopyAsRtfAction");
@@ -107,10 +107,10 @@ public class ActionFactory implements RTextActionInfo {
 			new Integer(msg.getString("TimeAction.Mnemonic").charAt(0)),
 			null));
 
-		a = new RText.ToggleToolBarAction(rtext, msg, "ToolBarAction");
+		a = new RText.ToggleToolBarAction<RText>(rtext, msg, "ToolBarAction");
 		rtext.addAction(TOOL_BAR_ACTION, a);
 
-		a = new RText.ToggleStatusBarAction(rtext, msg, "StatusBarAction");
+		a = new RText.ToggleStatusBarAction<RText>(rtext, msg, "StatusBarAction");
 		rtext.addAction(STATUS_BAR_ACTION, a);
 
 		a = new LineNumberAction(rtext, msg, null);
@@ -119,10 +119,10 @@ public class ActionFactory implements RTextActionInfo {
 		a = new FilePropertiesAction(rtext, msg);
 		rtext.addAction(FILE_PROPERTIES_ACTION, a);
 
-		a = new HelpAction(rtext, msg, "HelpAction");
+		a = new HelpAction<RText>(rtext, msg, "HelpAction");
 		rtext.addAction(RText.HELP_ACTION_KEY, a);
 
-		a = new AboutAction(rtext, msg, "AboutAction");
+		a = new AboutAction<RText>(rtext, msg, "AboutAction");
 		rtext.addAction(RText.ABOUT_ACTION_KEY, a);
 
 		a = new OptionsAction(rtext, msg, null);

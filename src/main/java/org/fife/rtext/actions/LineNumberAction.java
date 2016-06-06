@@ -25,7 +25,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class LineNumberAction extends AppAction {
+class LineNumberAction extends AppAction<RText> {
 
 
 	/**
@@ -42,7 +42,7 @@ class LineNumberAction extends AppAction {
 
 
 	public void actionPerformed(ActionEvent e) {
-		RText owner = (RText)getApplication();
+		RText owner = getApplication();
 		AbstractMainView mainView = owner.getMainView();
 		mainView.setLineNumbersEnabled(!mainView.getLineNumbersEnabled());
 	}

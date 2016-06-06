@@ -32,7 +32,7 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  * @author Robert Futrell
  * @version 1.0
  */
-class OpenInNewWindowAction extends AppAction {
+class OpenInNewWindowAction extends AppAction<RText> {
 
 	private RText newWindow; // Only run on EDT so it's okay to cache this.
 
@@ -60,7 +60,7 @@ class OpenInNewWindowAction extends AppAction {
 
 		// Create a new RText window.
 		newWindow = new RText(null,
-				new RTextPrefs().populate((RText)getApplication()));
+				new RTextPrefs().populate(getApplication()));
 		StoreKeeper.addRTextInstance(newWindow);
 
 		// Open the new RText's file chooser.  Do this in an invokeLater()
@@ -103,7 +103,7 @@ class OpenInNewWindowAction extends AppAction {
 
 				// If the only document open is untitled and empty, remove
 				// (and thus replace) replace it.
-				RText owner = (RText)getApplication();
+				RText owner = getApplication();
 				if (newMainView.getNumDocuments()==1 &&
 					newCurrentTextArea.getFileName().equals(owner.getNewFileName()) &&
 					newCurrentTextArea.getDocument().getLength()==0)

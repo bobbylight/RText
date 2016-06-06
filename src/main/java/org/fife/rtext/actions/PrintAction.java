@@ -29,7 +29,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class PrintAction extends AppAction {
+class PrintAction extends AppAction<RText> {
 
 
 	/**
@@ -47,7 +47,7 @@ class PrintAction extends AppAction {
 
 	public void actionPerformed(ActionEvent e) {
 
-		RText owner = (RText)getApplication();
+		RText owner = getApplication();
 		RTextEditorPane textArea = owner.getMainView().getCurrentTextArea();
 
 		DocFlavor flavor = DocFlavor.SERVICE_FORMATTED.PRINTABLE;

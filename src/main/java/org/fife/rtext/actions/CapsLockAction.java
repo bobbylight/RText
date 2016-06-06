@@ -25,7 +25,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class CapsLockAction extends AppAction {
+public class CapsLockAction extends AppAction<RText> {
 
 
 	/**
@@ -42,7 +42,7 @@ public class CapsLockAction extends AppAction {
 	 * {@inheritDoc}
 	 */
 	public void actionPerformed(ActionEvent e) {
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		if (rtext.getOS()!=OS.MAC_OS_X) {
 			try {
 				boolean state = rtext.getToolkit().getLockingKeyState(

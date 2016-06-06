@@ -37,7 +37,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class RunMacroAction extends AppAction {
+public class RunMacroAction extends AppAction<RText> {
 
 	/**
 	 * The macro plugin.
@@ -172,7 +172,7 @@ public class RunMacroAction extends AppAction {
 		if (!file.isFile()) {
 			String text = plugin.getString("Error.ScriptDoesNotExist",
 									file.getAbsolutePath());
-			RText app = (RText)getApplication();
+			RText app = getApplication();
 			String title = app.getString("ErrorDialogTitle");
 			int rc = JOptionPane.showConfirmDialog(app, text, title,
 					JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
@@ -199,7 +199,7 @@ public class RunMacroAction extends AppAction {
 	private void handleSubmit(String sourceName, BufferedReader r) throws
 								Throwable {
 
-		RText app = (RText)getApplication();
+		RText app = getApplication();
 
 		// If we didn't initialize properly, no point in proceeding.
 		if (semClazz==null) {
@@ -271,7 +271,7 @@ public class RunMacroAction extends AppAction {
 		if (groovyJar==null || !groovyJar.isFile()) {
 			String message = plugin.getString("Error.NoGroovyJar",
 					getPluginDir().getAbsolutePath());
-			RText app = (RText)getApplication();
+			RText app = getApplication();
 			String title = app.getString("ErrorDialogTitle");
 			JOptionPane.showMessageDialog(app, message, title,
 					JOptionPane.ERROR_MESSAGE);
@@ -367,7 +367,7 @@ public class RunMacroAction extends AppAction {
 		String key = UIUtil.isPreJava6() ?
 				"Error.Java6Required" : "Error.Initializing";
 		String message = plugin.getString(key);
-		RText app = (RText)getApplication();
+		RText app = getApplication();
 		String title = app.getString("ErrorDialogTitle");
 		JOptionPane.showMessageDialog(app, message, title,
 				JOptionPane.ERROR_MESSAGE);
@@ -382,7 +382,7 @@ public class RunMacroAction extends AppAction {
 	 */
 	private void showLoadingEngineError(String engine) {
 		String message = plugin.getString("Error.LoadingEngine", engine);
-		RText app = (RText)getApplication();
+		RText app = getApplication();
 		String title = app.getString("ErrorDialogTitle");
 		JOptionPane.showMessageDialog(app, message, title,
 				JOptionPane.ERROR_MESSAGE);

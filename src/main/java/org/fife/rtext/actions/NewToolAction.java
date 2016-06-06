@@ -23,7 +23,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class NewToolAction extends AppAction {
+class NewToolAction extends AppAction<RText> {
 
 
 	/**

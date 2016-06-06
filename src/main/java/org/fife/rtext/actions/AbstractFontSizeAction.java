@@ -25,7 +25,7 @@ import org.fife.ui.rtextarea.RecordableTextAction;
  * @author Robert Futrell
  * @version 1.0
  */
-abstract class AbstractFontSizeAction extends AppAction {
+abstract class AbstractFontSizeAction extends AppAction<RText> {
 
 	protected static final float MINIMUM_SIZE = 2f;
 	protected static final float MAXIMUM_SIZE = 40f;
@@ -52,7 +52,7 @@ abstract class AbstractFontSizeAction extends AppAction {
 
 	public void actionPerformed(ActionEvent e) {
 
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		AbstractMainView view = rtext.getMainView();
 		RTextEditorPane textArea = view.getCurrentTextArea();
 

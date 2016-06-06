@@ -45,7 +45,7 @@ import org.fife.ui.rsyntaxtextarea.Token;
  * TODO: Use CSS; have one CSS class per token type and just do
  *    <div class=\"" + token.type + "\"> + text + "</div>"
  */
-class SaveAsWebPageAction extends AppAction {
+class SaveAsWebPageAction extends AppAction<RText> {
 
 
 	/**
@@ -63,7 +63,7 @@ class SaveAsWebPageAction extends AppAction {
 
 	public void actionPerformed(ActionEvent e) {
 
-		RText owner = (RText)getApplication();
+		RText owner = getApplication();
 
 		RTextFileChooser chooser = new RTextFileChooser();
 		chooser.setCustomTitle(owner.getString("SaveAsWebPage"));
@@ -136,7 +136,7 @@ class SaveAsWebPageAction extends AppAction {
 		out.println("<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />");
 		out.println("<title>" + path + "</title>");
 
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
 		int lineCount = textArea.getLineCount();
 		for (int i=0; i<lineCount; i++) {

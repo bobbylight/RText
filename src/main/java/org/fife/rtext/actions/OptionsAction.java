@@ -25,7 +25,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class OptionsAction extends AppAction {
+class OptionsAction extends AppAction<RText> {
 
 
 	/**
@@ -48,7 +48,7 @@ class OptionsAction extends AppAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		rtext.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		org.fife.ui.OptionsDialog od = null;
 

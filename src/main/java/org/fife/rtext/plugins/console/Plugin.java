@@ -77,7 +77,7 @@ public class Plugin extends GUIPlugin {
 		ConsolePrefs prefs = loadPrefs();
 		setSyntaxHighlightInput(prefs.syntaxHighlightInput);
 
-		AppAction a = new ViewConsoleAction(this.app, msg, this);
+		AppAction<RText> a = new ViewConsoleAction(this.app, msg, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
 		app.addAction(VIEW_CONSOLE_ACTION, a);
 
@@ -260,7 +260,7 @@ public class Plugin extends GUIPlugin {
 		ConsolePrefs prefs = new ConsolePrefs();
 		prefs.syntaxHighlightInput = getSyntaxHighlightInput();
 		prefs.windowPosition = window.getPosition();
-		AppAction a = (AppAction)app.getAction(VIEW_CONSOLE_ACTION);
+		AppAction<?> a = (AppAction<?>)app.getAction(VIEW_CONSOLE_ACTION);
 		prefs.windowVisibilityAccelerator = a.getAccelerator();
 		prefs.windowVisible = window.isActive();
 

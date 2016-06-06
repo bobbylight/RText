@@ -12,6 +12,7 @@ package org.fife.rtext.plugins.tools;
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 
+import org.fife.rtext.RText;
 import org.fife.ui.app.AppAction;
 
 
@@ -21,7 +22,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class StopAction extends AppAction {
+public class StopAction extends AppAction<RText> {
 
 	/**
 	 * The parent plugin.

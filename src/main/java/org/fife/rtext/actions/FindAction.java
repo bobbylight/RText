@@ -25,7 +25,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class FindAction extends AppAction {
+class FindAction extends AppAction<RText> {
 
 
 	/**
@@ -62,7 +62,7 @@ class FindAction extends AppAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 
 		// If the QuickSearch bar is visible, shift focus to that instead
 		// of displaying the Find dialog if they hit Ctrl+F or chose the

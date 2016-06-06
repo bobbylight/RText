@@ -23,7 +23,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class CloseAllAction extends AppAction {
+class CloseAllAction extends AppAction<RText> {
 
 
 	/**
@@ -40,7 +40,7 @@ class CloseAllAction extends AppAction {
 
 
 	public void actionPerformed(ActionEvent e) {
-		((RText)getApplication()).getMainView().closeAllDocuments();
+		getApplication().getMainView().closeAllDocuments();
 	}
 
 

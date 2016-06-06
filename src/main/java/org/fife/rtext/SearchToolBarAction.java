@@ -22,7 +22,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class SearchToolBarAction extends AppAction {
+class SearchToolBarAction extends AppAction<RText> {
 
 
 	/**
@@ -43,7 +43,7 @@ class SearchToolBarAction extends AppAction {
 	public void actionPerformed(ActionEvent e) {
 		// The source must be the "QuickSearch bar" menu item.
 		JCheckBoxMenuItem item = (JCheckBoxMenuItem)e.getSource();
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		rtext.getSearchToolBar().setVisible(item.isSelected());
 	}
 

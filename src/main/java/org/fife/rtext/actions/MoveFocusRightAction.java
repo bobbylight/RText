@@ -27,7 +27,7 @@ import org.fife.ui.dockablewindows.DockableWindowConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-class MoveFocusRightAction extends AppAction {
+class MoveFocusRightAction extends AppAction<RText> {
 
 
 	/**
@@ -46,7 +46,7 @@ class MoveFocusRightAction extends AppAction {
 			return;
 		}
 
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		int focusedGroup = rtext.getFocusedDockableWindowGroup();
 		int toFocus = -1;
 

@@ -45,7 +45,7 @@ class ReplaceNextAction extends ReplaceAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		AbstractMainView mainView = rtext.getMainView();
 		mainView.getSearchManager().replaceNext();
 	}

@@ -25,7 +25,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class EditToolsAction extends AppAction {
+class EditToolsAction extends AppAction<RText> {
 
 
 	/**
@@ -45,7 +45,7 @@ class EditToolsAction extends AppAction {
 	 * {@inheritDoc}
 	 */
 	public void actionPerformed(ActionEvent e) {
-		RText owner = (RText)getApplication();
+		RText owner = getApplication();
 		OptionsDialog od = owner.getOptionsDialog();
 		ResourceBundle msg = ResourceBundle.getBundle(ToolOptionPanel.MSG);
 		od.setSelectedOptionsPanel(msg.getString(ToolOptionPanel.TITLE_KEY));

@@ -22,7 +22,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class ViewToolOutputAction extends AppAction {
+class ViewToolOutputAction extends AppAction<RText> {
 
 	/**
 	 * The tools plugin.

@@ -25,7 +25,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class OpenRecentAction extends AppAction {
+class OpenRecentAction extends AppAction<RText> {
 
 
 	/**
@@ -42,7 +42,7 @@ class OpenRecentAction extends AppAction {
 
 
 	public void actionPerformed(ActionEvent e) {
-		RecentFileDialog rfd = new RecentFileDialog((RText)getApplication());
+		RecentFileDialog rfd = new RecentFileDialog(getApplication());
 		rfd.setVisible(true);
 	}
 

@@ -23,7 +23,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class FindInFilesAction extends AppAction {
+class FindInFilesAction extends AppAction<RText> {
 
 
 	/**
@@ -40,7 +40,7 @@ class FindInFilesAction extends AppAction {
 
 
 	public void actionPerformed(ActionEvent e) {
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		AbstractMainView mainView = rtext.getMainView();
 		mainView.getFindInFilesDialog().setVisible(true);
 	}

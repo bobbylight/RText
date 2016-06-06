@@ -26,7 +26,7 @@ import org.fife.ui.search.ReplaceInFilesDialog;
  * @author Robert Futrell
  * @version 1.0
  */
-class ReplaceInFilesAction extends AppAction {
+class ReplaceInFilesAction extends AppAction<RText> {
 
 
 	/**
@@ -49,7 +49,7 @@ class ReplaceInFilesAction extends AppAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		AbstractMainView mainView = rtext.getMainView();
 
 		// Create the "Replace in Files" dialog if it hasn't already been.

@@ -278,7 +278,7 @@ class DefaultSourceTree extends JTree {
 	/**
 	 * Displays the options for this plugin in the Options dialog.
 	 */
-	private class ConfigureAction extends AppAction {
+	private class ConfigureAction extends AppAction<RText> {
 
 		public ConfigureAction() {
 			super(owner, plugin.getBundle(), "MenuItem.Configure");

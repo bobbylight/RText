@@ -33,7 +33,7 @@ import org.fife.ui.rtextarea.SearchResult;
  * @author Robert Futrell
  * @version 1.0
  */
-class ReplaceAllAction extends AppAction {
+class ReplaceAllAction extends AppAction<RText> {
 
 
 	/**
@@ -56,7 +56,7 @@ class ReplaceAllAction extends AppAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		AbstractMainView mainView = rtext.getMainView();
 		RTextEditorPane textArea = mainView.getCurrentTextArea();
 

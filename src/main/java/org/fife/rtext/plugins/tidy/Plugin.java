@@ -243,7 +243,7 @@ public class Plugin extends AbstractPlugin
 		RTextMenuBar mb = (RTextMenuBar)rtext.getJMenuBar();
 		JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_EDIT);
 
-		action = new TidyAction(app, this);
+		action = new TidyAction((RText)app, this);
 		action.setAccelerator(prefs.tidyActionAccelerator);
 		rtext.addAction(TIDY_ACTION, action);
 		action.setEnabled(false); // Gets enabled for appropriate files.

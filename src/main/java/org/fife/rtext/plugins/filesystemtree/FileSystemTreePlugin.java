@@ -340,7 +340,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	/**
 	 * Changes the tree view's root to the previous one.
 	 */
-	private class BackAction extends AppAction {
+	private class BackAction extends AppAction<RText> {
 
 		public BackAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Back");
@@ -377,7 +377,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 * Changes the tree view's root to the next one (assuming they've gone
 	 * back at least once before).
 	 */
-	private class ForwardAction extends AppAction {
+	private class ForwardAction extends AppAction<RText> {
 
 		public ForwardAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Forward");
@@ -413,7 +413,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	/**
 	 * Toggles the visibility of this file system tree.
 	 */
-	private class ViewAction extends AppAction {
+	private class ViewAction extends AppAction<RText> {
 
 		public ViewAction(RText app, ResourceBundle msg) {
 			super(app, msg, "MenuItem.View");

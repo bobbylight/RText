@@ -24,7 +24,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class ViewSplitAction extends AppAction {
+class ViewSplitAction extends AppAction<RText> {
 
 	//private String splitType;
 

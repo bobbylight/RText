@@ -23,7 +23,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class NewToolAction extends AppAction {
+class NewToolAction extends AppAction<RText> {
 
 
 	/**
@@ -44,7 +44,7 @@ class NewToolAction extends AppAction {
 	 */
 	public void actionPerformed(ActionEvent e) {
 
-		RText owner = (RText)getApplication();
+		RText owner = getApplication();
 		NewToolDialog ntd = new NewToolDialog(owner);
 		ntd.setVisible(true);
 

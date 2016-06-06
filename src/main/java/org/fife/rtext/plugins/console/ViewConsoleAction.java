@@ -22,7 +22,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class ViewConsoleAction extends AppAction {
+class ViewConsoleAction extends AppAction<RText> {
 
 	/**
 	 * The parent plugin.

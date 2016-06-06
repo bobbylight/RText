@@ -23,7 +23,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class NextDocumentAction extends AppAction {
+public class NextDocumentAction extends AppAction<RText> {
 
 	private boolean forward;
 
@@ -43,7 +43,7 @@ public class NextDocumentAction extends AppAction {
 
 	public void actionPerformed(ActionEvent e) {
 
-		AbstractMainView view = ((RText)getApplication()).getMainView();
+		AbstractMainView view = getApplication().getMainView();
 		int currentTab = view.getSelectedIndex();
 
 		int tab = 0;

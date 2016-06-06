@@ -25,7 +25,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class OpenRemoteAction extends AppAction {
+class OpenRemoteAction extends AppAction<RText> {
 
 
 	/**
@@ -42,7 +42,7 @@ class OpenRemoteAction extends AppAction {
 
 
 	public void actionPerformed(ActionEvent e) {
-		RText owner = (RText)getApplication();
+		RText owner = getApplication();
 		RemoteFileChooser rfc = owner.getRemoteFileChooser();
 		rfc.setMode(RemoteFileChooser.OPEN_MODE);
 		rfc.setVisible(true);

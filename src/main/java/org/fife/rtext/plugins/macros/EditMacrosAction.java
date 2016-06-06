@@ -24,7 +24,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class EditMacrosAction extends AppAction {
+class EditMacrosAction extends AppAction<RText> {
 
 
 	/**
@@ -43,7 +43,7 @@ class EditMacrosAction extends AppAction {
 	 * {@inheritDoc}
 	 */
 	public void actionPerformed(ActionEvent e) {
-		RText owner = (RText)getApplication();
+		RText owner = getApplication();
 		OptionsDialog od = owner.getOptionsDialog();
 		ResourceBundle msg = MacroPlugin.msg;
 		od.setSelectedOptionsPanel(msg.getString(MacroOptionPanel.TITLE_KEY));

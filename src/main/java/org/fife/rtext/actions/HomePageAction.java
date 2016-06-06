@@ -25,7 +25,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class HomePageAction extends AppAction {
+class HomePageAction extends AppAction<RText> {
 
 
 	/**
@@ -43,7 +43,7 @@ class HomePageAction extends AppAction {
 
 	public void actionPerformed(ActionEvent e) {
 		if (!UIUtil.browse("http://fifesoft.com/rtext")) {
-			RText app = (RText)getApplication();
+			RText app = getApplication();
 			UIManager.getLookAndFeel().provideErrorFeedback(app);
 		}
 	}

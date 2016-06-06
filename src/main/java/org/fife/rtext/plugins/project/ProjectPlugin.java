@@ -74,7 +74,7 @@ public class ProjectPlugin extends GUIPlugin {
 		icon = new ImageIcon(res);
 		ProjectPluginPrefs prefs = loadPrefs();
 
-		AppAction a = new ViewProjectsAction((RText)app, this);
+		AppAction<RText> a = new ViewProjectsAction((RText)app, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
 		app.addAction(VIEW_CONSOLE_ACTION, a);
 
@@ -384,7 +384,7 @@ public class ProjectPlugin extends GUIPlugin {
 
 		ProjectPluginPrefs prefs = new ProjectPluginPrefs();
 		prefs.windowPosition = window.getPosition();
-		AppAction a = (AppAction)rtext.getAction(VIEW_CONSOLE_ACTION);
+		AppAction<?> a = (AppAction<?>)rtext.getAction(VIEW_CONSOLE_ACTION);
 		prefs.windowVisibilityAccelerator = a.getAccelerator();
 		prefs.windowVisible = window.isActive();
 		prefs.openWorkspaceName = workspace==null ? null :

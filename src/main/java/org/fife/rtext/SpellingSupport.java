@@ -483,7 +483,7 @@ public class SpellingSupport implements SpellingParserListener {
 	/**
 	 * Toggles the visibility of the spelling error window.
 	 */
-	private class ViewSpellingErrorWindowAction extends AppAction {
+	private class ViewSpellingErrorWindowAction extends AppAction<RText> {
 
 		public ViewSpellingErrorWindowAction(RText app) {
 			super(app, app.getResourceBundle(), "SpellingErrorList.MenuItem");

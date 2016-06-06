@@ -24,7 +24,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class PrintPreviewAction extends AppAction {
+class PrintPreviewAction extends AppAction<RText> {
 
 
 	/**
@@ -46,7 +46,7 @@ class PrintPreviewAction extends AppAction {
 	 * @param e The action event.
 	 */
 	public void actionPerformed(ActionEvent e) {
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		PrintPreviewDialog printPreviewDialog =
 				new PrintPreviewDialog(rtext,
 						rtext.getMainView().getCurrentTextArea());

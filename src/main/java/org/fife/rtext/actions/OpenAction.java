@@ -27,7 +27,7 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  * @author Robert Futrell
  * @version 1.0
  */
-class OpenAction extends AppAction {
+class OpenAction extends AppAction<RText> {
 
 
 	/**
@@ -46,7 +46,7 @@ class OpenAction extends AppAction {
 
 	public void actionPerformed(ActionEvent e) {
 
-		RText owner = (RText)getApplication();
+		RText owner = getApplication();
 		RTextFileChooser chooser = owner.getFileChooser();
 
 		// Without this, the user can press "Ctrl+O" twice really fast

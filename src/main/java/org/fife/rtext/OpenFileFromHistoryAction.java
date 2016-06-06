@@ -22,7 +22,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class OpenFileFromHistoryAction extends AppAction {
+class OpenFileFromHistoryAction extends AppAction<RText> {
 
 	private String fileFullPath;
 
@@ -40,7 +40,7 @@ class OpenFileFromHistoryAction extends AppAction {
 
 	public void actionPerformed(ActionEvent e) {
 
-		RText owner = (RText)getApplication();
+		RText owner = getApplication();
 		AbstractMainView mainView = owner.getMainView();
 		RTextEditorPane textArea = mainView.getCurrentTextArea();
 

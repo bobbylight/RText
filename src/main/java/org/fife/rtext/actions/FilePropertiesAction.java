@@ -24,7 +24,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class FilePropertiesAction extends AppAction {
+class FilePropertiesAction extends AppAction<RText> {
 
 
 	/**
@@ -44,7 +44,7 @@ class FilePropertiesAction extends AppAction {
 	 * @param e The action event.
 	 */
 	public void actionPerformed(ActionEvent e) {
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		TextFilePropertiesDialog dialog = new TextFilePropertiesDialog(
 							rtext, rtext.getMainView().getCurrentTextArea());
 		dialog.setVisible(true);

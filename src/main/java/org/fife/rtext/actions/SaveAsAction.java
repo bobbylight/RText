@@ -25,7 +25,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class SaveAsAction extends AppAction {
+class SaveAsAction extends AppAction<RText> {
 
 
 	/**
@@ -42,7 +42,7 @@ class SaveAsAction extends AppAction {
 
 
 	public void actionPerformed(ActionEvent e) {
-		((RText)getApplication()).getMainView().saveCurrentFileAs();
+		getApplication().getMainView().saveCurrentFileAs();
 	}
 
 

@@ -155,7 +155,7 @@ class Tree extends FileSystemTree {
 	/**
 	 * Makes this tree drill down into the selected folder.
 	 */
-	private class GoIntoAction extends AppAction {
+	private class GoIntoAction extends AppAction<RText> {
 
 		public GoIntoAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.GoInto");

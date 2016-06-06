@@ -29,7 +29,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class GoToAction extends AppAction {
+class GoToAction extends AppAction<RText> {
 
 
 	/**
@@ -47,7 +47,7 @@ class GoToAction extends AppAction {
 
 	public void actionPerformed(ActionEvent e) {
 
-		RText rtext = (RText)getApplication();
+		RText rtext = getApplication();
 		AbstractMainView mainView = rtext.getMainView();
 
 		if (mainView.goToDialog==null) {

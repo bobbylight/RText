@@ -27,7 +27,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class RunToolAction extends AppAction {
+class RunToolAction extends AppAction<RText> {
 
 	private Tool tool;
 	private ToolDockableWindow window;
@@ -57,10 +57,10 @@ class RunToolAction extends AppAction {
 	public void actionPerformed(ActionEvent e) {
 
 		// Make sure the program and working directory exist.
-		tool.setRText((RText)getApplication());
+		tool.setRText(getApplication());
 		String errorDesc = tool.checkForErrors();
 		if (errorDesc!=null) {
-			RText app = (RText)getApplication();
+			RText app = getApplication();
 			String title = app.getString("ErrorDialogTitle");
 			JOptionPane.showMessageDialog(app, errorDesc, title,
 										JOptionPane.ERROR_MESSAGE);
@@ -75,7 +75,7 @@ class RunToolAction extends AppAction {
 		// Call startingTool() before tool.execute() so threading doesn't
 		// cause the window's title to get hosed.
 		if (window.startingTool(tool)) {
-			tool.setRText((RText)getApplication());
+			tool.setRText(getApplication());
 			tool.execute(window);
 		}
 
@@ -91,7 +91,7 @@ class RunToolAction extends AppAction {
 	 */
 	private void showButDontFocus(JComponent comp) {
 
-		JComponent editor = ((RText)getApplication()).getMainView().
+		JComponent editor = getApplication().getMainView().
 				getCurrentTextArea();
 
 		// This is tricky, because the component cannot be focused unless
