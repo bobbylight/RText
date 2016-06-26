@@ -10,12 +10,14 @@ package org.fife.rtext.actions;
 import java.awt.ComponentOrientation;
 import java.io.IOException;
 import java.util.ResourceBundle;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextActionInfo;
 import org.fife.rtext.RTextPrefs;
+import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.app.AppAction;
 import org.fife.ui.app.GUIApplication.AboutAction;
 import org.fife.ui.app.GUIApplication.HelpAction;
@@ -125,7 +127,7 @@ public class ActionFactory implements RTextActionInfo {
 		a = new AboutAction<RText>(rtext, msg, "AboutAction");
 		rtext.addAction(RText.ABOUT_ACTION_KEY, a);
 
-		a = new OptionsAction(rtext, msg, null);
+		a = new AbstractGUIApplication.OptionsAction<RText>(rtext, msg, "OptionsAction");
 		rtext.addAction(OPTIONS_ACTION, a);
 
 		a = new HomePageAction(rtext, msg, null);
