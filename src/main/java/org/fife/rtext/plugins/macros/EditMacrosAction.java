@@ -42,6 +42,7 @@ class EditMacrosAction extends AppAction<RText> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		RText owner = getApplication();
 		OptionsDialog od = owner.getOptionsDialog();

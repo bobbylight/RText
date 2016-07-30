@@ -169,6 +169,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 			this.workspace = workspace;
 		}
 
+		@Override
 		public String isValid(String text) {
 			int length = text.length();
 			if (length==0) {

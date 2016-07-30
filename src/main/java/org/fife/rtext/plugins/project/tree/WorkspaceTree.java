@@ -253,6 +253,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	 *         if no file is selected.
 	 * @see #getSelectedFiles()
 	 */
+	@Override
 	public File getSelectedFile() {
 		TreePath path = getSelectionPath();
 		if (path!=null) {
@@ -276,6 +277,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	 * @return The selected files, or a zero-length array if no files are
 	 *         selected.
 	 */
+	@Override
 	public File[] getSelectedFiles() {
 		File file = getSelectedFile();
 		if (file!=null) {
@@ -331,6 +333,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "Rename");
 		am.put("Rename", new AbstractAction() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object selected = getLastSelectedPathComponent();
 				if (selected instanceof AbstractWorkspaceTreeNode) {
@@ -343,6 +346,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 				InputEvent.SHIFT_MASK;
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, mods), "CopyPath");
 		am.put("CopyPath", new AbstractAction() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				copySelectedFilePathToClipboard();
 			}
@@ -350,6 +354,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "Delete");
 		am.put("Delete", new AbstractAction() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object selected = getLastSelectedPathComponent();
 				if (selected instanceof ProjectEntryTreeNode) {
@@ -362,6 +367,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 				InputEvent.SHIFT_MASK;
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, mods), "FindInFilesFH");
 		am.put("FindInFilesFH", new AbstractAction() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				findInFilesFromSelectedDir();
 			}
@@ -369,6 +375,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "Refresh");
 		am.put("Refresh", new AbstractAction() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object selected = getLastSelectedPathComponent();
 				if (selected instanceof PhysicalLocationTreeNode) {
@@ -379,6 +386,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
 		am.put("Enter", new AbstractAction() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				File file = getSelectedFile();
 				if (file != null && file.isFile()) {
@@ -393,6 +401,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		int alt = InputEvent.ALT_MASK;
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, alt), "Properties");
 		am.put("Properties", new AbstractAction() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object selected = getLastSelectedPathComponent();
 				if (selected instanceof AbstractWorkspaceTreeNode) {

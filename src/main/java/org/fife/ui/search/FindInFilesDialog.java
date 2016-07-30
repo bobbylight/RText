@@ -332,6 +332,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	void addMatchData(final MatchData matchData) {
 		final String dirName = inFolderTextField.getText();
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				getResultsComponent().addMatchData(matchData, dirName);
 			}
@@ -370,6 +371,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		}
 		else {
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() { getResultsComponent().clear(); }
 			});
 		}
@@ -870,7 +872,8 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 */
 	void searchCompleted(final long time) {
 
-		SwingUtilities.invokeLater(new Runnable() { public void run() {
+		SwingUtilities.invokeLater(new Runnable() { @Override
+		public void run() {
 
 			setWorkerThread(null);
 
@@ -958,6 +961,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 			}
 			else {
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						statusBar.setStatusMessage(text);
 					}
@@ -995,6 +999,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		}
 		else {
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					handleToggleButtons();
 					findTextCombo.requestFocusInWindow();
@@ -1053,14 +1058,17 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 */
 	private class FindInFilesDocumentListener implements DocumentListener {
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			handleToggleButtons();
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			handleToggleButtons();
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
 

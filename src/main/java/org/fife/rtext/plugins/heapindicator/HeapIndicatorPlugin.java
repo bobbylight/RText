@@ -180,6 +180,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 *
 	 * @return The options panel.
 	 */
+	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		if (optionPanel==null)
 			optionPanel = new HeapIndicatorOptionPanel(app, this);
@@ -206,6 +207,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
@@ -214,6 +216,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Icon getPluginIcon() {
 		return pluginIcon;
 	}
@@ -222,6 +225,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginName() {
 		return msg.getString("Plugin.Name");
 	}
@@ -230,6 +234,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginVersion() {
 		return VERSION;
 	}
@@ -315,6 +320,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 * @param app The application to which this plugin was just added.
 	 * @see #uninstall
 	 */
+	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 	}
 
@@ -384,6 +390,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void savePreferences() {
 		HeapIndicatorPrefs prefs = new HeapIndicatorPrefs();
 		prefs.visible         = isVisible();
@@ -459,6 +466,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 * @return Whether the uninstall went cleanly.
 	 * @see #install
 	 */
+	@Override
 	public boolean uninstall() {
 		uninstallTimer();
 		return true;
@@ -480,6 +488,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 */
 	private class TimerEvent implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			getData();
 			repaint();

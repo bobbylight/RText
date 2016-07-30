@@ -130,6 +130,7 @@ public class ToolDockableWindow extends DockableWindow
 		}
 
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				textArea.setCaretPosition(doc.getLength());
 			}
@@ -169,6 +170,7 @@ public class ToolDockableWindow extends DockableWindow
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void outputWritten(Process p, String output, boolean stdout) {
 		Style style = textArea.getStyle(stdout ?
 				OutputTextPane.STYLE_STDOUT : OutputTextPane.STYLE_STDERR);
@@ -179,11 +181,13 @@ public class ToolDockableWindow extends DockableWindow
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void processCompleted(final Process p, final int rc,
 								final Throwable e) {
 
 		// Note that this isn't called on the EDT
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 
 				if (e==null) {

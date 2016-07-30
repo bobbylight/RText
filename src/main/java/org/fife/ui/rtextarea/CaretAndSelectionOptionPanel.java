@@ -162,6 +162,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	/**
 	 * Listens for actions in this panel.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
@@ -596,6 +597,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	/**
 	 * Called when a property changes in an object we're listening to.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		// We need to forward this on to the options dialog, whatever
 		// it is, so that the "Apply" button gets updated.
@@ -743,6 +745,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param e The change event.
 	 */
+	@Override
 	public void stateChanged(ChangeEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange(PROPERTY, null, blinkRateSpinner.getValue());

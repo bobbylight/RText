@@ -5,6 +5,7 @@ package org.fife.rtext.plugins.project.tree;
  */
 class LogicalFolderNameChecker implements NameChecker {
 
+	@Override
 	public String isValid(String text) {
 		int length = text.length();
 		if (length==0) {

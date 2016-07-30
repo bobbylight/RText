@@ -279,6 +279,7 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 	 */
 	private class Listener implements ActionListener, DocumentListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();
 			if (command.equals("OK")) {
@@ -289,6 +290,7 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 			}
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
 
@@ -310,10 +312,12 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}

@@ -291,6 +291,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	/**
 	 * Listens for actions in this panel.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
@@ -470,6 +471,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 * This doesn't get called but is here because this class implements
 	 * <code>DocumentListener</code>.
 	 */
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 	}
 
@@ -744,6 +746,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	/**
 	 * Called when a text field in this panel gets updated.
 	 */
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		doDocumentUpdated(e);
 	}
@@ -797,6 +800,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	/**
 	 * Called when a property changes in an object we're listening to.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		// We need to forward this on to the options dialog, whatever
 		// it is, so that the "Apply" button gets updated.
@@ -808,6 +812,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	/**
 	 * Called when a text field in this panel gets updated.
 	 */
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		doDocumentUpdated(e);
 	}

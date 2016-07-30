@@ -63,6 +63,7 @@ public class Workspace implements ModelEntity {
 	}
 
 
+	@Override
 	public void accept(WorkspaceVisitor visitor) {
 		visitor.visit(this);
 		for (Project project : projects) {

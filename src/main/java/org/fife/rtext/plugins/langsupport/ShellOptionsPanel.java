@@ -187,6 +187,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 	 */
 	private class Listener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			boolean defaultShowDescWindow = File.separatorChar=='/';

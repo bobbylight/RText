@@ -37,6 +37,7 @@ class MoveFocusUpAction extends AppAction<RText> {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		Component focused = KeyboardFocusManager.

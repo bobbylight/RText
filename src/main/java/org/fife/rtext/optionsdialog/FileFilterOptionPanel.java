@@ -124,6 +124,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	/**
 	 * Listens for actions in this panel.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
@@ -227,6 +228,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param e An event describing the change.
 	 */
+	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange("fileFilterChanged", null,
@@ -343,6 +345,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	 */
 	private class FileFilterRowHandler extends AbstractRowHandler {
 
+		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {
 			String oldValue = (String)oldData[1];
 			String filterType = (String)oldData[0];

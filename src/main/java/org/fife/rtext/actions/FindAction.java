@@ -60,6 +60,7 @@ class FindAction extends AppAction<RText> {
 	 *
 	 * @param e The action performed.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		RText rtext = getApplication();

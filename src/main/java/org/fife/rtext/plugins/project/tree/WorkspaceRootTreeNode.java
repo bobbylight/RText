@@ -140,6 +140,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 			super("Action.NewProject");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			RText rtext = plugin.getRText();
 			RenameDialog dialog = new RenameDialog(rtext, false, "Project",
@@ -170,6 +171,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	 */
 	public static class WorkspaceNameChecker implements NameChecker {
 
+		@Override
 		public String isValid(String text) {
 			int length = text.length();
 			if (length==0) {

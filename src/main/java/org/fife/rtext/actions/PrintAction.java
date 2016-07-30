@@ -45,6 +45,7 @@ class PrintAction extends AppAction<RText> {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		RText owner = getApplication();

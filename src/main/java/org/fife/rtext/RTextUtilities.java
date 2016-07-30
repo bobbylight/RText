@@ -860,8 +860,8 @@ public class RTextUtilities {
 
 	/**
 	 * Toggles whether the experimental "drop shadows" option is enabled.
-	 * Note that this may do nothing if we're running on Java 1.4 or 1.5, or
-	 * the current system does not support translucent windows.
+	 * Note that this will do nothing if the current system does not support
+	 * translucent windows.
 	 *
 	 * @param enabled Whether the option is enabled.
 	 * @see #getDropShadowsEnabledInEditor()

@@ -157,6 +157,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 *
 	 * @return The options panel.
 	 */
+	@Override
 	public synchronized PluginOptionsDialogPanel getOptionsDialogPanel() {
 		if (optionPanel==null) {
 			optionPanel = new FileSystemTreeOptionPanel(owner, this);
@@ -170,6 +171,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 *
 	 * @return The plugin's author.
 	 */
+	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
@@ -180,6 +182,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 *
 	 * @return The icon for this plugin.
 	 */
+	@Override
 	public Icon getPluginIcon() {
 		return pluginIcon;
 	}
@@ -190,6 +193,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 *
 	 * @return This plugin's name.
 	 */
+	@Override
 	public String getPluginName() {
 		return name;
 	}
@@ -198,6 +202,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	/**
 	 * Returns the plugin version.
 	 */
+	@Override
 	public String getPluginVersion() {
 		return VERSION_STRING;
 	}
@@ -262,6 +267,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		// Add a menu item to toggle the visibility of the dockable window
@@ -276,10 +282,13 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		popup.pack();
 		// Only needed for pre-1.6 support
 		popup.addPopupMenuListener(new PopupMenuListener() {
+			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				item.setSelected(getDockableWindow(getPluginName()).isActive());
 			}
@@ -312,6 +321,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void savePreferences() {
 		FileSystemTreePrefs prefs = new FileSystemTreePrefs();
 		prefs.active = getDockableWindow(name).isActive();
@@ -332,6 +342,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 *
 	 * @return Whether the uninstall went cleanly.
 	 */
+	@Override
 	public boolean uninstall() {
 		return true;
 	}
@@ -349,6 +360,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 			setEnabled(false);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (rootHistoryOffs>0) {
 				Object obj = rootHistory.get(--rootHistoryOffs);
@@ -386,6 +398,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 			setEnabled(false);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (rootHistoryOffs<rootHistory.size()-1) {
 				Object obj = rootHistory.get(++rootHistoryOffs);
@@ -419,6 +432,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 			super(app, msg, "MenuItem.View");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			DockableWindow wind = getDockableWindow(getPluginName());
 			wind.setActive(!wind.isActive());

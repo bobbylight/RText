@@ -86,6 +86,7 @@ class TabbedPaneViewTransferHandler extends TabbedPaneTransferHandler {
 	@Override
 	protected void selectTab(final JTabbedPane tabbedPane, final int index) {
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				Container parent = tabbedPane.getParent();
 				if (parent instanceof AbstractMainView) {

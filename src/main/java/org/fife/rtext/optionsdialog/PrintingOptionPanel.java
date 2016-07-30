@@ -112,6 +112,7 @@ class PrintingOptionPanel extends OptionsDialogPanel
 	/**
 	 * Listens for actions in this panel.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String propertyName = e.getPropertyName();

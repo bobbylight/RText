@@ -58,6 +58,7 @@ public class CheckForUpdatesAction extends AppAction<RText> {
 
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		try {

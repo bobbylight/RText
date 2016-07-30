@@ -223,6 +223,7 @@ public class FolderFilterInfo {
 			this.pattern = pattern;
 		}
 
+		@Override
 		public boolean matches(String text) {
 			return pattern.matcher(text).matches();
 		}
@@ -241,6 +242,7 @@ public class FolderFilterInfo {
 			this.literal = literal;
 		}
 
+		@Override
 		public boolean matches(String text) {
 			return OS.get().isCaseSensitive() ?
 					literal.equals(text) : literal.equalsIgnoreCase(text);

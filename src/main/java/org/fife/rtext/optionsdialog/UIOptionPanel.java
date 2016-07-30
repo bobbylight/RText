@@ -215,6 +215,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	/**
 	 * Listens for actions being performed in this panel.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String actionCommand = e.getActionCommand();
@@ -476,6 +477,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	/**
 	 * Called whenever a property change occurs in this panel.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String propName = e.getPropertyName();

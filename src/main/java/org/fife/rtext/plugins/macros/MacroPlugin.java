@@ -112,6 +112,7 @@ public class MacroPlugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new MacroOptionPanel(this);
 	}
@@ -120,6 +121,7 @@ public class MacroPlugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
@@ -128,6 +130,7 @@ public class MacroPlugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Icon getPluginIcon() {
 		return icon;
 	}
@@ -136,6 +139,7 @@ public class MacroPlugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginName() {
 		return getString("Plugin.Name");
 	}
@@ -144,6 +148,7 @@ public class MacroPlugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginVersion() {
 		return VERSION;
 	}
@@ -193,6 +198,7 @@ public class MacroPlugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		MacroManager.get().addPropertyChangeListener(
@@ -267,6 +273,7 @@ public class MacroPlugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String prop = e.getPropertyName();
@@ -326,6 +333,7 @@ public class MacroPlugin extends AbstractPlugin
 	}
 
 
+	@Override
 	public void savePreferences() {
 
 		saveMacros();
@@ -350,6 +358,7 @@ public class MacroPlugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean uninstall() {
 		return true;
 	}

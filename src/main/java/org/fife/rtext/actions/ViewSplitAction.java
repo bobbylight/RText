@@ -49,6 +49,7 @@ class ViewSplitAction extends AppAction<RText> {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO
 		//owner.setEditorSplitType(splitType);

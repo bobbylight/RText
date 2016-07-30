@@ -85,6 +85,7 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 		setLocationRelativeTo(parent);
 
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				nameField.requestFocusInWindow();
 				nameField.selectAll();
@@ -219,6 +220,7 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 	 */
 	private class Listener implements ActionListener, DocumentListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source==okButton) {
@@ -230,6 +232,7 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 			}
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
 
@@ -257,10 +260,12 @@ setGoodNameValue();
 
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}

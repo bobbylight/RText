@@ -41,6 +41,7 @@ public class CapsLockAction extends AppAction<RText> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		RText rtext = getApplication();
 		if (rtext.getOS()!=OS.MAC_OS_X) {

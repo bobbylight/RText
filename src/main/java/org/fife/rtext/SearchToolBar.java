@@ -119,6 +119,7 @@ public class SearchToolBar extends JToolBar {
 			e.printStackTrace(); // Never happens
 		}
 		hideButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				((RTextMenuBar)rtext.getJMenuBar()).
@@ -263,6 +264,7 @@ public class SearchToolBar extends JToolBar {
 	 */
 	class FindButtonListener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			boolean forward = "FindNext".equals(e.getActionCommand());
@@ -488,16 +490,20 @@ public class SearchToolBar extends JToolBar {
 	class FindFieldListener extends KeyAdapter
 					implements DocumentListener, FocusListener {
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
 
+		@Override
 		public void focusGained(FocusEvent e) {
 			findField.selectAll();
 		}
 
+		@Override
 		public void focusLost(FocusEvent e) {
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			if (!findButton.isEnabled()) {
 				findButton.setEnabled(true);
@@ -523,6 +529,7 @@ public class SearchToolBar extends JToolBar {
 			}
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			if (e.getDocument().getLength()==0) {
 				findButton.setEnabled(false);

@@ -150,6 +150,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
@@ -220,6 +221,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void itemStateChanged(ItemEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange(PROPERTY, false, true);
@@ -229,6 +231,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	/**
 	 * Called when a property changes in an object we're listening to.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		// We need to forward this on to the options dialog, whatever
 		// it is, so that the "Apply" button gets updated.

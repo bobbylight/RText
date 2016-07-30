@@ -49,6 +49,7 @@ public class StopAction extends AppAction<RText> {
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		Tool tool = plugin.getActiveTool();
 		if (tool!=null) { // Should always be true

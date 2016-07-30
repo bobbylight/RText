@@ -39,6 +39,7 @@ class CloseAllAction extends AppAction<RText> {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		getApplication().getMainView().closeAllDocuments();
 	}

@@ -112,6 +112,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		Object source = e.getSource();
@@ -177,6 +178,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource()==locationCombo &&
 				e.getStateChange()==ItemEvent.SELECTED) {

@@ -95,6 +95,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 				table.getTableHeader());
 
 		model2.setColumnComparator(Integer.class, new Comparator<Integer>() {	
+			@Override
 			public int compare(Integer int1, Integer int2) {
 				return int1.compareTo(int2);
 			}
@@ -309,6 +310,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 			this.fileFullPath = fileFullPath;
 		}
 
+		@Override
 		public int compareTo(TextAreaWrapper o) {
 			return toString().compareTo(o.toString());
 		}
@@ -361,6 +363,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 						if (file.isAbsolute() && file.isFile()) {
 							rtext.openFile(file.getAbsolutePath());
 							SwingUtilities.invokeLater(new Runnable() {
+								@Override
 								public void run() {
 									RTextEditorPane textArea2 = rtext.
 											getMainView().getCurrentTextArea();

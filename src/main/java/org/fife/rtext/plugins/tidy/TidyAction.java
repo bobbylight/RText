@@ -50,6 +50,7 @@ class TidyAction extends AppAction<RText> {
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		RText app = getApplication();

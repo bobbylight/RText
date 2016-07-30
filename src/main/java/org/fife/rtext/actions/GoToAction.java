@@ -45,6 +45,7 @@ class GoToAction extends AppAction<RText> {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		RText rtext = getApplication();

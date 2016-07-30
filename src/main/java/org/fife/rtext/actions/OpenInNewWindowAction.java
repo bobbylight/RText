@@ -56,6 +56,7 @@ class OpenInNewWindowAction extends AppAction<RText> {
 	 *
 	 * @param e The event that occurred.
 	 */
+	@Override
 	public synchronized void actionPerformed(ActionEvent e) {
 
 		// Create a new RText window.
@@ -82,6 +83,7 @@ class OpenInNewWindowAction extends AppAction<RText> {
 	 */
 	private class OpenFileChooserRunnable implements Runnable {
 
+		@Override
 		public void run() {
 
 			RTextFileChooser chooser = newWindow.getFileChooser();

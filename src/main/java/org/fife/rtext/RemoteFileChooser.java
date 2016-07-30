@@ -172,6 +172,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 *
 	 * @param e The action event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
@@ -225,6 +226,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 *
 	 * @param e The document event.
 	 */
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 		handleDocumentUpdate(e);
 	}
@@ -308,6 +310,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @param e The focus event.
 	 * @see #focusLost(FocusEvent)
 	 */
+	@Override
 	public void focusGained(FocusEvent e) {
 		Object source = e.getSource();
 		if (source instanceof JTextComponent) {
@@ -322,6 +325,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @param e The focus event.
 	 * @see #focusGained(FocusEvent)
 	 */
+	@Override
 	public void focusLost(FocusEvent e) {
 	}
 
@@ -394,6 +398,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 *
 	 * @param e The document event.
 	 */
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		handleDocumentUpdate(e);
 	}
@@ -498,6 +503,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 *
 	 * @param e The document event.
 	 */
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		handleDocumentUpdate(e);
 	}
@@ -536,6 +542,7 @@ public class RemoteFileChooser extends EscapableDialog
 			userCombo.setSelectedItem(null);
 			passField.setText(null);
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					hostCombo.requestFocusInWindow();
 				}

@@ -41,6 +41,7 @@ public class NextDocumentAction extends AppAction<RText> {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		AbstractMainView view = getApplication().getMainView();

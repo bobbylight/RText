@@ -33,16 +33,19 @@ class HeapIcon implements Icon {
 	}
 
 
+	@Override
 	public int getIconHeight() {
 		return plugin.getHeight() - 8;
 	}
 
 
+	@Override
 	public int getIconWidth() {
 		return 40;
 	}
 
 
+	@Override
 	public void paintIcon(Component c, Graphics g, int x, int y) {
 		int width = getIconWidth() - 1;
 		int height = getIconHeight() - 1;

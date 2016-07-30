@@ -116,6 +116,7 @@ class OptionsPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		Object source = e.getSource();
@@ -415,6 +416,7 @@ class OptionsPanel extends PluginOptionsDialogPanel
 	}
 
 
+	@Override
 	public void stateChanged(ChangeEvent e) {
 		firePropertyChange(PROPERTY, false, true);
 	}

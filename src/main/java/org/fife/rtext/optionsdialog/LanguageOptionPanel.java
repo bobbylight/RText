@@ -373,6 +373,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	 * Called when the user changes the language in the language list.
 	 * Do not override.
 	 */
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange(LANGUAGE_PROPERTY,

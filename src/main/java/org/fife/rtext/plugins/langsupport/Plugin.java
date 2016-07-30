@@ -177,6 +177,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new OptionsPanel(this);
 	}
@@ -185,6 +186,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
@@ -193,6 +195,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Icon getPluginIcon() {
 		return null;
 	}
@@ -201,6 +204,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginName() {
 		return msg.getString("Name");
 	}
@@ -209,6 +213,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginVersion() {
 		return PLUGIN_VERSION;
 	}
@@ -238,6 +243,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		icons = new HashMap<ParserNotice.Level, Icon>();
@@ -499,6 +505,7 @@ public class Plugin extends GUIPlugin {
 	}
 
 
+	@Override
 	public void savePreferences() {
 
 		LangSupportPreferences prefs = new LangSupportPreferences();
@@ -669,6 +676,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean uninstall() {
 		AbstractMainView view = rtext.getMainView();
 		for (int i=0; i<view.getNumDocuments(); i++) {
@@ -684,6 +692,7 @@ public class Plugin extends GUIPlugin {
 	 */
 	private class Listener implements PropertyChangeListener {
 
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 
 			String name = e.getPropertyName();

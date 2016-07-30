@@ -46,6 +46,7 @@ class ViewProjectsAction extends AppAction<RText> {
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		plugin.setProjectWindowVisible(!plugin.isProjectWindowVisible());
 	}

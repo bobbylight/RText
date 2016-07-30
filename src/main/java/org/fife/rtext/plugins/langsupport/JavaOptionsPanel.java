@@ -392,6 +392,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	 */
 	private class JarRowHandler extends AbstractRowHandler {
 
+		@Override
 		public Object[] getNewRowInfo(Object[] old) {
 			RowHandlerDialog rhd = new RowHandlerDialog(getOptionsDialog(),old);
 			rhd.setLocationRelativeTo(getOptionsDialog());
@@ -461,6 +462,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			Object source = e.getSource();
@@ -492,6 +494,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	private class Listener implements ActionListener, DocumentListener,
 								ModifiableTableListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			Object source = e.getSource();
@@ -575,6 +578,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
@@ -584,15 +588,18 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 			firePropertyChange(PROPERTY, null, null);
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
 
+		@Override
 		public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, null, null);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}

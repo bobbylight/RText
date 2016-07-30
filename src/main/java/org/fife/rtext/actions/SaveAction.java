@@ -44,6 +44,7 @@ class SaveAction extends AppAction<RText> {
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		getApplication().getMainView().saveCurrentFile();
 	}

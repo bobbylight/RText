@@ -40,6 +40,7 @@ class SearchToolBarAction extends AppAction<RText> {
 	 *
 	 * @param e The action event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		// The source must be the "QuickSearch bar" menu item.
 		JCheckBoxMenuItem item = (JCheckBoxMenuItem)e.getSource();

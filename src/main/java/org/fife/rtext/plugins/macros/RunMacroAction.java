@@ -15,24 +15,21 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.regex.Pattern;
+
+import javax.script.Bindings;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import org.fife.rtext.RText;
-import org.fife.ui.UIUtil;
 import org.fife.ui.app.AppAction;
 
 
 /**
- * Action that runs a macro (script).  <code>javax.script</code> classes
- * are referenced via reflection, since we support Java 1.4 and 1.5.
+ * Action that runs a macro (script).
  *
  * @author Robert Futrell
  * @version 1.0
@@ -50,71 +47,21 @@ public class RunMacroAction extends AppAction<RText> {
 	private Macro macro;
 
 	/**
-	 * The javax.script.Bindings instance.
+	 * The cached bindings instance.
 	 */
-	private Object bindings;
+	private Bindings bindings;
 
 	/**
-	 * The javax.script.ScriptContext#ENGINE_SCOPE field value.
+	 * The script engine for JavaScript, shared across all instances of this
+	 * action.
 	 */
-	private static Integer scopeFieldValue;
+	private static ScriptEngine jsEngine;
 
 	/**
-	 * The javax.script.ScriptEngine#createBindings() method.
+	 * The script engine for Groovy, shared across all instances of this
+	 * action.
 	 */
-	private static Method createBindingsMethod;
-
-	/**
-	 * The javax.script.ScriptEngine#setBindings() method.
-	 */
-	private static Method setBindingsMethod;
-
-	/**
-	 * The javax.script.Bindings#put() method.
-	 */
-	private static Method bindingsPutMethod;
-
-	/**
-	 * The javax.script.ScriptEngine#eval(Reader) method.
-	 */
-	private static Method evalMethod;
-
-	/**
-	 * javax.script.ScriptEngine class.
-	 */
-	private static Class<?> seClazz;
-
-	/**
-	 * The javax.script.ScriptEngineManager class.
-	 */
-	private static Class<?> semClazz;
-
-	/**
-	 * The javax.script.ScriptEngineManager instance.
-	 */
-	private static Object sem;
-
-	/**
-	 * the javax.script.Scriptcontext class.
-	 */
-	private static Class<?> scriptContextClazz;
-
-	/**
-	 * The javax.script.Bindings class.
-	 */
-	private static Class<?> bindingsClazz;
-
-	/**
-	 * javax.script.ScriptEngine instance for JavaScript, shared across all
-	 * instances of this action.
-	 */
-	private static Object jsEngine;
-
-	/**
-	 * javax.script.ScriptEngine instance for Groovy, shared across all
-	 * instances of this action.
-	 */
-	private static Object groovyEngine;
+	private static ScriptEngine groovyEngine;
 
 	private static final Pattern GROOVY_JAR_NAME_PATTERN = 
 			Pattern.compile("^groovy-all-[\\d\\.]+\\.jar$");
@@ -139,6 +86,7 @@ public class RunMacroAction extends AppAction<RText> {
 
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		handleSubmit(macro);
 	}
@@ -201,12 +149,6 @@ public class RunMacroAction extends AppAction<RText> {
 
 		RText app = getApplication();
 
-		// If we didn't initialize properly, no point in proceeding.
-		if (semClazz==null) {
-			showErrorInitializingMessage();
-			return;
-		}
-
 		/*
 		ScriptEngineManager sem = new ScriptEngineManager();
 		ScriptEngine jsEngine = sem.getEngineByName("JavaScript");
@@ -216,7 +158,7 @@ public class RunMacroAction extends AppAction<RText> {
 		jsEngine.eval("println(data.str); alert(data.str); data.i = 999");
 		 */
 
-		Object engine = null;
+		ScriptEngine engine = null;
 		if (sourceName.endsWith(".js")) {
 			engine = initJavaScriptEngine();
 			if (engine==null) { // An error message was already displayed
@@ -234,28 +176,16 @@ public class RunMacroAction extends AppAction<RText> {
 			return;
 		}
 
-		// Run everything with reflection so we compile with Java 1.4.
-		try {
+		// Create our bindings and cache them for later.
+		bindings = engine.createBindings();
+		engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
 
-			// Create our bindings and cache them for later.
-			bindings = createBindingsMethod.invoke(engine);
-			setBindingsMethod.invoke(engine, bindings, scopeFieldValue);
+		// We always reset the value of "rtext" and "textArea", but
+		// all other variables they've modified are persistent.
+		bindings.put("rtext", app);
+		bindings.put("textArea", app.getMainView().getCurrentTextArea());
 
-			// We always reset the value of "rtext" and "textArea", but
-			// all other variables they've modified are persistent.
-			bindingsPutMethod.invoke(bindings, "rtext", app);
-			bindingsPutMethod.invoke(bindings, "textArea",
-						app.getMainView().getCurrentTextArea());
-
-			evalMethod.invoke(engine, r);
-
-		} catch (Throwable ex) {
-			// Since we launch via reflection, peel off top-level Exception
-			if (ex instanceof InvocationTargetException) {
-				ex = ex.getCause();
-			}
-			throw ex;
-		}
+		engine.eval(r);
 
 	}
 
@@ -265,7 +195,7 @@ public class RunMacroAction extends AppAction<RText> {
 	 *
 	 * @return The script engine, or <code>null</code> if it cannot be created.
 	 */
-	private Object initGroovyEngine() {
+	private ScriptEngine initGroovyEngine() {
 
 		File groovyJar = getGroovyJar();
 		if (groovyJar==null || !groovyJar.isFile()) {
@@ -279,35 +209,7 @@ public class RunMacroAction extends AppAction<RText> {
 		}
 
 		if (groovyEngine==null) {
-
-			try {
-
-				Method m = semClazz.getDeclaredMethod("getEngineByName",
-						new Class[] { String.class });
-				String engine = "Groovy";
-				groovyEngine = m.invoke(sem, new Object[] { engine });
-				if (groovyEngine==null) {
-					showLoadingEngineError(engine);
-					return null;
-				}
-
-				// Write stdout and stderr to this console.  Must wrap these in
-				// PrintWriters for standard print() and println() methods to work.
-				m = seClazz.getDeclaredMethod("getContext");
-				Object context = m.invoke(groovyEngine);
-				m = scriptContextClazz.getDeclaredMethod("setWriter",
-											Writer.class);
-				PrintWriter w = new PrintWriter(new OutputStreamWriter(System.out));
-				m.invoke(context, w);
-				m = scriptContextClazz.getDeclaredMethod("setErrorWriter",
-					Writer.class);
-				w = new PrintWriter(new OutputStreamWriter(System.err));
-				m.invoke(context, w);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
+			groovyEngine = initScriptEngineImpl("Groovy");
 		}
 
 		return groovyEngine;
@@ -320,57 +222,42 @@ public class RunMacroAction extends AppAction<RText> {
 	 *
 	 * @return The script engine, or <code>null</code> if it cannot be created.
 	 */
-	private Object initJavaScriptEngine() {
-
+	private ScriptEngine initJavaScriptEngine() {
 		if (jsEngine==null) {
-
-			try {
-
-				Method m = semClazz.getDeclaredMethod("getEngineByName",
-										new Class[] { String.class });
-				String engine = "JavaScript";
-				jsEngine = m.invoke(sem, new Object[] { engine });
-				if (jsEngine==null) {
-					showLoadingEngineError(engine);
-					return null;
-				}
-
-				// Write stdout and stderr to this console.  Must wrap these in
-				// PrintWriters for standard print() and println() methods to work.
-				m = seClazz.getDeclaredMethod("getContext");
-				Object context = m.invoke(jsEngine);
-				m = scriptContextClazz.getDeclaredMethod("setWriter",
-												Writer.class);
-				PrintWriter w = new PrintWriter(new OutputStreamWriter(System.out));
-				m.invoke(context, w);
-				m = scriptContextClazz.getDeclaredMethod("setErrorWriter",
-						Writer.class);
-				w = new PrintWriter(new OutputStreamWriter(System.err));
-				m.invoke(context, w);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
+			jsEngine = initScriptEngineImpl("JavaScript");
 		}
-
 		return jsEngine;
-
 	}
 
 
-	/**
-	 * Displays an error message stating that the scripting engine failed
-	 * to initialize.
-	 */
-	private void showErrorInitializingMessage() {
-		String key = UIUtil.isPreJava6() ?
-				"Error.Java6Required" : "Error.Initializing";
-		String message = plugin.getString(key);
-		RText app = getApplication();
-		String title = app.getString("ErrorDialogTitle");
-		JOptionPane.showMessageDialog(app, message, title,
-				JOptionPane.ERROR_MESSAGE);
+	private ScriptEngine initScriptEngineImpl(String shortName) {
+
+		ScriptEngine engine = null;
+
+		try {
+
+			ScriptEngineManager sem = new ScriptEngineManager(
+					this.getClass().getClassLoader());
+			engine = sem.getEngineByName(shortName);
+			if (engine==null) {
+				showLoadingEngineError(shortName);
+				return null;
+			}
+
+			// Write stdout and stderr to this console.  Must wrap these in
+			// PrintWriters for standard print() and println() methods to work.
+			ScriptContext context = engine.getContext();
+			PrintWriter w = new PrintWriter(new OutputStreamWriter(System.out));
+			context.setWriter(w);
+			w = new PrintWriter(new OutputStreamWriter(System.err));
+			context.setErrorWriter(w);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return engine;
+
 	}
 
 
@@ -386,47 +273,6 @@ public class RunMacroAction extends AppAction<RText> {
 		String title = app.getString("ErrorDialogTitle");
 		JOptionPane.showMessageDialog(app, message, title,
 				JOptionPane.ERROR_MESSAGE);
-	}
-
-
-	/**
-	 * One-time initialization for this class; pre-loads all reflection stuff.
-	 */
-	static {
-
-		// The scripting API was added in Java 6.
-		if (!UIUtil.isPreJava6()) {
-
-			// Run everything with reflection so we compile with Java 1.4.
-			try {
-
-				semClazz = Class.forName("javax.script.ScriptEngineManager");
-				// Pass the Plugin ClassLoader, since the Groovy jar won't be
-				// on the application's classpath
-				Constructor<?> cons = semClazz.getConstructor(ClassLoader.class);
-				sem = cons.newInstance(
-						new Object[] { RunMacroAction.class.getClassLoader() });
-				seClazz = Class.forName("javax.script.ScriptEngine");
-				scriptContextClazz = Class.forName("javax.script.ScriptContext");
-				bindingsClazz = Class.forName("javax.script.Bindings");
-
-				Field scopeField = scriptContextClazz.getDeclaredField("ENGINE_SCOPE");             
-				int scope = scopeField.getInt(scriptContextClazz);
-				scopeFieldValue = new Integer(scope);
-
-				createBindingsMethod = seClazz.getDeclaredMethod("createBindings");
-				setBindingsMethod = seClazz.getDeclaredMethod("setBindings",
-						bindingsClazz, int.class);
-				bindingsPutMethod = bindingsClazz.getDeclaredMethod("put",
-						String.class, Object.class);
-				evalMethod = seClazz.getDeclaredMethod("eval", Reader.class);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-		}
-
 	}
 
 

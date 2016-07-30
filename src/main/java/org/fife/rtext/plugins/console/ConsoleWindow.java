@@ -152,6 +152,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	/**
 	 * Called whenever a process starts or completes.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String prop = e.getPropertyName();
@@ -232,6 +233,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	 */
 	private class Listener implements ItemListener {
 
+		@Override
 		public void itemStateChanged(ItemEvent e) {
 
 			JComboBox source = (JComboBox)e.getSource();

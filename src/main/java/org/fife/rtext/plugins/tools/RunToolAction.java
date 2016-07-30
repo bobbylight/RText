@@ -54,6 +54,7 @@ class RunToolAction extends AppAction<RText> {
 	 *
 	 * @param e The action event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		// Make sure the program and working directory exist.

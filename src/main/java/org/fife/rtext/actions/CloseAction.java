@@ -41,6 +41,7 @@ class CloseAction extends AppAction<RText> {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		RText owner = getApplication();
 		AbstractMainView mainView = owner.getMainView();

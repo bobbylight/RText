@@ -417,6 +417,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 			super("completeFileName");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			String possibleFileName = getPossibleFileName();
@@ -440,6 +441,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 			}
 
 			File[] siblings = parent.listFiles(new FilenameFilter() {
+				@Override
 				public boolean accept(File dir, String name) {
 					if (!CASE_SENSITIVE) {
 						name = name.toLowerCase();
@@ -533,13 +535,16 @@ class SystemShellTextArea extends ConsoleTextArea {
 	 */
 	private class ProcessOutputListener implements ProcessRunnerOutputListener{
 
+		@Override
 		public void outputWritten(Process p, String output, boolean stdout) {
 			append(output, stdout ? STYLE_STDOUT : STYLE_STDERR);
 		}
 
+		@Override
 		public void processCompleted(Process p, int rc, final Throwable e) {
 			// Required because of other Swing calls we make inside
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					if (e!=null) {
 						String text = null;

@@ -93,6 +93,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 		// Must create and set row handler later, after this option panel has
 		// been added to the parent Options dialog.
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				RowHandler rowHandler = new TemplateDialog();
 				templateTable.setRowHandler(rowHandler);
@@ -202,6 +203,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	private class Listener implements ModifiableTableListener {
 
 		// A row was added, removed or modified in the template table.
+		@Override
 		public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 			hasUnsavedChanges = true;
 			TemplateOptionPanel.this.firePropertyChange(TEMPLATE_PROPERTY,
@@ -293,6 +295,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			this.setVisible(false);
 			Object source = e.getSource();
@@ -307,6 +310,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			}
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
 
@@ -341,6 +345,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			return id;
 		}
 
+		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {
 			if (oldData==null) { // Adding a new row.
 				setTitle(msg.getString("AddTemplateTitle"));
@@ -368,11 +373,13 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			return objs;
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			if (!okButton.isEnabled())
 				okButton.setEnabled(true);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			int length = idField.getDocument().getLength();
 			if (length==0)
@@ -391,10 +398,12 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			idField.setText(id);
 		}
 
+		@Override
 		public boolean canModifyRow(int row) {
 			return true;
 		}
 
+		@Override
 		public boolean canRemoveRow(int row) {
 			return true;
 		}
@@ -402,6 +411,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 		/**
 		 * Not an override.  Implements <code>RowHandler#updateUI()</code>.
 		 */
+		@Override
 		public void updateUI() {
 			SwingUtilities.updateComponentTreeUI(this);
 		}

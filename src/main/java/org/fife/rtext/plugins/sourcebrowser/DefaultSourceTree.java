@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -284,6 +283,7 @@ class DefaultSourceTree extends JTree {
 			super(owner, plugin.getBundle(), "MenuItem.Configure");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			plugin.showOptions();
 		}
@@ -295,11 +295,12 @@ class DefaultSourceTree extends JTree {
 	 * Listens for events in this tree.
 	 */
 	private class Listener extends MouseAdapter implements ActionListener,
-						MouseMotionListener, TreeSelectionListener {
+			TreeSelectionListener {
 
 		/**
 		 * Listens for actions in this component.
 		 */
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			String command = e.getActionCommand();
@@ -349,6 +350,7 @@ class DefaultSourceTree extends JTree {
 		/**
 		 * Called when the mouse is dragged in the ctags tree.
 		 */
+		@Override
 		public void mouseDragged(MouseEvent e) {
 			mouseMovedImpl(e);
 		}
@@ -373,6 +375,7 @@ class DefaultSourceTree extends JTree {
 		/**
 		 * Called when the mouse is moved in the ctags tree.
 		 */
+		@Override
 		public void mouseMoved(MouseEvent e) {
 			mouseMovedImpl(e);
 		}
@@ -498,6 +501,7 @@ class DefaultSourceTree extends JTree {
 		 *
 		 * @param e The tree selection event.
 		 */
+		@Override
 		public void valueChanged(TreeSelectionEvent e) {
 			if (ignoreTreeSelections) {
 				return;

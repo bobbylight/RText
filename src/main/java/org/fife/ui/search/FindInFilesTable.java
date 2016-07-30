@@ -99,6 +99,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 *        to be relative to this directory.
 	 * @see #clear()
 	 */
+	@Override
 	public void addMatchData(MatchData matchData, String dirName) {
 
 		// Make the displayed filename be in a path relative to the
@@ -183,6 +184,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 *
 	 * @see #addMatchData(MatchData, String)
 	 */
+	@Override
 	public void clear() {
 		tableModel.setRowCount(0);
 		matchDatas.clear();
@@ -247,6 +249,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 * @param row The row.
 	 * @return The match data.
 	 */
+	@Override
 	public MatchData getMatchDataForRow(int row) {
 		row = sorter.modelIndex(row);
 		return matchDatas.get(row);
@@ -325,6 +328,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 * Allows the results component to update its appearance after
 	 * having lots of data added to it.
 	 */
+	@Override
 	public void prettyUp() {
 		refreshColumnWidths();
 		revalidate();

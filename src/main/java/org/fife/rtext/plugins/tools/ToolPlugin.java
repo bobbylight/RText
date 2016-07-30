@@ -135,6 +135,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new ToolOptionPanel(this);
 	}
@@ -143,6 +144,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
@@ -151,6 +153,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Icon getPluginIcon() {
 		return icon;
 	}
@@ -159,6 +162,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginName() {
 		return msg.getString("Plugin.Name");
 	}
@@ -166,6 +170,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginVersion() {
 		return VERSION;
 	}
@@ -216,6 +221,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		ToolManager.get().addPropertyChangeListener(ToolManager.PROPERTY_TOOLS,
@@ -244,10 +250,13 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 		popup.pack();
 		// Only needed for pre-1.6 support
 		popup.addPopupMenuListener(new PopupMenuListener() {
+			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				item.setSelected(isToolOutputWindowVisible());
 			}
@@ -321,6 +330,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String prop = e.getPropertyName();
@@ -363,6 +373,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void savePreferences() {
 
 		saveTools();
@@ -430,6 +441,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean uninstall() {
 		// TODO: Remove dockable window from application.
 		return true;

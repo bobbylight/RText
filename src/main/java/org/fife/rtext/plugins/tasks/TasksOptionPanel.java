@@ -148,6 +148,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
@@ -221,6 +222,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource()==locationCombo &&
 				e.getStateChange()==ItemEvent.SELECTED) {
@@ -234,6 +236,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange(PROPERTY, null, null);
@@ -357,6 +360,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			// Only called for OK and Cancel buttons
 			String command = e.getActionCommand();
@@ -366,6 +370,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 			escapePressed();
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
 
@@ -378,10 +383,12 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 			okButton.setEnabled(!empty);
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
@@ -400,6 +407,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	 */
 	private class IdRowHandler extends AbstractRowHandler {
 
+		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {
 			String oldValue = oldData==null ? null : (String)oldData[0];
 			IdentifierDialog dlg = new IdentifierDialog(getOptionsDialog());

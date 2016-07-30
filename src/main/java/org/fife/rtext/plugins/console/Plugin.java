@@ -108,6 +108,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new ConsoleOptionPanel(this);
 	}
@@ -116,6 +117,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
@@ -124,6 +126,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Icon getPluginIcon() {
 		return icon;
 	}
@@ -132,6 +135,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginName() {
 		return msg.getString("Plugin.Name");
 	}
@@ -140,6 +144,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginVersion() {
 		return VERSION;
 	}
@@ -190,6 +195,7 @@ public class Plugin extends GUIPlugin {
 	}
 
 
+	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		RText rtext = (RText)app;
@@ -206,10 +212,13 @@ public class Plugin extends GUIPlugin {
 		popup.pack();
 		// Only needed for pre-1.6 support
 		popup.addPopupMenuListener(new PopupMenuListener() {
+			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				item.setSelected(isConsoleWindowVisible());
 			}
@@ -255,6 +264,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void savePreferences() {
 
 		ConsolePrefs prefs = new ConsolePrefs();
@@ -323,6 +333,7 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean uninstall() {
 		return true;
 	}

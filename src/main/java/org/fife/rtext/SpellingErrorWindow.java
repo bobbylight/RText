@@ -73,6 +73,7 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 	}
 
 
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String prop = e.getPropertyName();

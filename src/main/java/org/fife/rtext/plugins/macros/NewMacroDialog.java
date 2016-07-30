@@ -438,6 +438,7 @@ public class NewMacroDialog extends EscapableDialog {
 	public void setVisible(boolean visible) {
 		if (visible) {
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					JTextField field = isNew ? nameField : descField;
 					field.requestFocusInWindow();
@@ -462,6 +463,7 @@ public class NewMacroDialog extends EscapableDialog {
 	 */
 	private class Listener implements ActionListener, DocumentListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source==typeCombo) {
@@ -480,6 +482,7 @@ public class NewMacroDialog extends EscapableDialog {
 
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
@@ -510,10 +513,12 @@ public class NewMacroDialog extends EscapableDialog {
 
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}

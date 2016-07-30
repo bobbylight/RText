@@ -85,10 +85,13 @@ public class SpellingSupport implements SpellingParserListener {
 		popup.pack();
 		// Only needed for pre-1.6 support
 		popup.addPopupMenuListener(new PopupMenuListener() {
+			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				item.setSelected(rtext.isSpellingWindowVisible());
 			}
@@ -112,6 +115,7 @@ public class SpellingSupport implements SpellingParserListener {
 
 		// Add menu item later since menu bar not yet created(!)
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				addViewErrorWindowMenuItem();
 			}
@@ -402,6 +406,7 @@ public class SpellingSupport implements SpellingParserListener {
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void spellingParserEvent(SpellingParserEvent e) {
 
 		int type = e.getType();
@@ -458,16 +463,19 @@ public class SpellingSupport implements SpellingParserListener {
 	 */
 	private class CreateParserRunnable implements Runnable {
 
+		@Override
 		public void run() {
 			try {
 				createSpellingParser();
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						toggleSpellingParserInstalled();
 					}
 				});
 			} catch (final IOException ioe) {
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						String desc= rtext.getString(
 							"Error.LoadingSpellingParser.txt");
@@ -489,6 +497,7 @@ public class SpellingSupport implements SpellingParserListener {
 			super(app, app.getResourceBundle(), "SpellingErrorList.MenuItem");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			rtext.setSpellingWindowVisible(!rtext.isSpellingWindowVisible());
 		}

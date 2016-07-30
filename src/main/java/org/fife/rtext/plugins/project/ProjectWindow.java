@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
+
+import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
@@ -209,6 +211,7 @@ class ProjectWindow extends DockableWindow {
 			super("Action.Help");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			RText rtext = plugin.getRText();
 			HelpDialog helpDialog = rtext.getHelpDialog();
@@ -228,6 +231,7 @@ class ProjectWindow extends DockableWindow {
 			super("Action.NewWorkspace");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			// Save the currently active workspace.
@@ -280,6 +284,7 @@ class ProjectWindow extends DockableWindow {
 			super("Action.OpenWorkspace");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			// Save the currently active workspace.
@@ -342,15 +347,13 @@ class ProjectWindow extends DockableWindow {
 			setSelected(selected);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			setSelected(plugin.toggleTreeRootVisible());
 		}
 
 		private void setSelected(boolean selected) {
-			// TODO: Use actual Action static field when we no longer require
-			// Java 1.4 & 1.5 compatibility.
-			final String ACTION_SELECTED_KEY = "SwingSelectedKey";
-			putValue(ACTION_SELECTED_KEY, Boolean.valueOf(selected));
+			putValue(Action.SELECTED_KEY, Boolean.valueOf(selected));
 		}
 
 	}

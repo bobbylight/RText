@@ -242,6 +242,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange(PROPERTY, null, new Integer(e.getRow()));
@@ -271,6 +272,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 			putValue(NAME, plugin.getString("Options.Button.AddExampleMacros"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			File exampleMacrosDir = getExampleMacrosDir();
 			if (exampleMacrosDir.isDirectory()) {
@@ -325,6 +327,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	 */
 	private class MacroTableRowHandler extends AbstractRowHandler {
 
+		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {
 			NewMacroDialog macroDialog = new NewMacroDialog(
 					(MacroPlugin)getPlugin(), getOptionsDialog());

@@ -97,6 +97,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	/**
 	 * Listens for actions in this panel.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String actionCommand = e.getActionCommand();
@@ -181,6 +182,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param e An event describing the change.
 	 */
+	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange(SHORTCUT_PROPERTY, null, new Integer(e.getRow()));
@@ -197,6 +199,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 		masterActionList = app.getActions();
 
 		Arrays.sort(masterActionList, new Comparator<Action>() {
+			@Override
 			public int compare(Action a1, Action a2) {
 				String name1 = (String)a1.getValue(Action.NAME);
 				String name2 = (String)a2.getValue(Action.NAME);
@@ -256,6 +259,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 
 		private GetKeyStrokeDialog ksDialog;
 
+		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {
 			KeyStroke keyStroke = (KeyStroke)oldData[1];
 			String action = (String)oldData[0];

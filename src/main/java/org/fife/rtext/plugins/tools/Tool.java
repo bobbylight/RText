@@ -160,6 +160,7 @@ public class Tool implements Comparable<Tool> {
 	 * @param t2 The other tool.
 	 * @return The sort order of this tool, compared to another.
 	 */
+	@Override
 	public int compareTo(Tool t2) {
 		int val = 1;
 		if (t2==this) {
@@ -388,35 +389,6 @@ public class Tool implements Comparable<Tool> {
 
 
 	/**
-	 * Copied from 1.5's Matcher.quoteReplacement() method, since we work in
-	 * 1.4.
-	 *
-	 * @param s The string to be used in a Matcher.appendReplacement() call.
-	 * @return The string, with slashes ('<tt>\</tt>') and dollar signs
-	 * ('<tt>$</tt>') quoted.
-	 */
-	// TODO: When we drop 1.4 support, remove this method.
-	private static String quoteReplacement(String s) {
-		if ((s.indexOf('\\') == -1) && (s.indexOf('$') == -1))
-			return s;
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if (c == '\\') {
-				sb.append('\\');
-				sb.append('\\');
-			} else if (c == '$') {
-				sb.append('\\');
-				sb.append('$');
-			} else {
-				sb.append(c);
-			}
-		}
-		return sb.toString();
-	}
-
-
-	/**
 	 * Sets the accelerator to use to activate this tool in a menu.
 	 *
 	 * @param accelerator The accelerator to use, or <code>null</code> for
@@ -573,7 +545,7 @@ public class Tool implements Comparable<Tool> {
 			else if ("${file_full_path}".equals(var)) {
 				temp = textArea.getFileFullPath();
 			}
-			m.appendReplacement(sb, quoteReplacement(temp));
+			m.appendReplacement(sb, Matcher.quoteReplacement(temp));
 		}
 
 		m.appendTail(sb);
@@ -586,9 +558,11 @@ public class Tool implements Comparable<Tool> {
 		Tool tool = new Tool("Name", "Desc");
 		tool.setProgram("C:/temp/test.bat");
 		tool.execute(new ProcessRunnerOutputListener() {
+			@Override
 			public void outputWritten(Process p, String output, boolean stdout){
 				System.out.println(output);
 			}
+			@Override
 			public void processCompleted(Process p, int rc, Throwable e) {
 				if (e!=null) {
 					System.out.println("Error completing process:");

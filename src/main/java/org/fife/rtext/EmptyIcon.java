@@ -41,6 +41,7 @@ public class EmptyIcon implements Icon {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getIconHeight() {
 		return height;
 	}
@@ -49,6 +50,7 @@ public class EmptyIcon implements Icon {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getIconWidth() {
 		return width;
 	}
@@ -57,6 +59,7 @@ public class EmptyIcon implements Icon {
 	/**
 	 * Paints nothing.
 	 */
+	@Override
 	public void paintIcon(Component c, Graphics g, int x, int y) {
 		// Do nothing
 	}

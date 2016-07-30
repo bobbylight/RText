@@ -194,6 +194,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * one of its properties changes.  We are looking for cues to update
 	 * our source browser tree.
 	 */
+	@Override
 	public void currentTextAreaPropertyChanged(CurrentTextAreaEvent e) {
 
 		// Don't worry about it if we're not visible.
@@ -227,6 +228,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 									CUSTOM_HANDLER_PREFIX + style);
 			if (customHandlerName!=null) {
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						try {
 							Class<?> clazz = Class.forName(customHandlerName);
@@ -472,6 +474,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 *
 	 * @return The options panel.
 	 */
+	@Override
 	public synchronized PluginOptionsDialogPanel getOptionsDialogPanel() {
 		if (optionPanel==null) {
 			optionPanel = new SourceBrowserOptionPanel(owner, this);
@@ -485,6 +488,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 *
 	 * @return The plugin's author.
 	 */
+	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
@@ -495,6 +499,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 *
 	 * @return The icon for this plugin.
 	 */
+	@Override
 	public Icon getPluginIcon() {
 		return pluginIcon;
 	}
@@ -505,6 +510,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 *
 	 * @return This plugin's name.
 	 */
+	@Override
 	public String getPluginName() {
 		return name;
 	}
@@ -513,6 +519,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	/**
 	 * Returns the plugin version.
 	 */
+	@Override
 	public String getPluginVersion() {
 		return VERSION_STRING;
 	}
@@ -550,6 +557,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * @param app The application to which this plugin was just added.
 	 * @see #uninstall
 	 */
+	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		owner.getMainView().addCurrentTextAreaListener(this);
@@ -566,10 +574,13 @@ public class SourceBrowserPlugin extends GUIPlugin
 		popup.pack();
 		// Only needed for pre-1.6 support
 		popup.addPopupMenuListener(new PopupMenuListener() {
+			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				item.setSelected(getDockableWindow(getPluginName()).isActive());
 			}
@@ -615,6 +626,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void savePreferences() {
 		SourceBrowserPrefs prefs = new SourceBrowserPrefs();
 		prefs.active = getDockableWindow(name).isActive();
@@ -705,6 +717,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 *
 	 * @return Whether the uninstall went cleanly.
 	 */
+	@Override
 	public boolean uninstall() {
 		owner.getMainView().removeCurrentTextAreaListener(this);
 		return true;
@@ -746,6 +759,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 			setName(null); // No text on button
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			ensureSourceTreeSortedProperly();
 		}
@@ -762,6 +776,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 			super(app, msg, "MenuItem.View");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			DockableWindow wind = getDockableWindow(getPluginName());
 			wind.setActive(!wind.isActive());

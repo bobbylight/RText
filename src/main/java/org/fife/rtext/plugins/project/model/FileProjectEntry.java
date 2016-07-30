@@ -35,12 +35,14 @@ public class FileProjectEntry extends AbstractProjectEntry {
 	}
 
 
+	@Override
 	public void accept(WorkspaceVisitor visitor) {
 		visitor.visit(this);
 		visitor.postVisit(this);
 	}
 
 
+	@Override
 	public int compareTo(ProjectEntry entry) {
 		if (entry instanceof FileProjectEntry) {
 			return file.compareTo(entry.getFile());
@@ -59,16 +61,19 @@ public class FileProjectEntry extends AbstractProjectEntry {
 	}
 
 
+	@Override
 	public File getFile() {
 		return file;
 	}
 
 
+	@Override
 	public String getSaveData() {
 		return getFile().getAbsolutePath();
 	}
 
 
+	@Override
 	public String getType() {
 		return FILE_PROJECT_ENTRY;
 	}

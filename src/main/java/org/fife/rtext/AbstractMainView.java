@@ -235,6 +235,7 @@ public abstract class AbstractMainView extends JPanel
 
 
 	// Callback for various actions.
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
@@ -427,6 +428,7 @@ public abstract class AbstractMainView extends JPanel
 			else {
 				final String actionCommand = "FileModified." + sb.toString();
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						actionPerformed(new ActionEvent(this,
 							ActionEvent.ACTION_PERFORMED, actionCommand));
@@ -877,6 +879,7 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @param e The event received from the <code>FindInFilesDialog</code>.
 	 */
+	@Override
 	public void findInFilesFileSelected(FindInFilesEvent e) {
 		String fileName = e.getFileName();
 		// "null" encoding means check for Unicode before using default.
@@ -906,6 +909,7 @@ public abstract class AbstractMainView extends JPanel
 
 				// The editor isn't visible initially, must wait to do this
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						RTextUtilities.centerSelectionVertically(currentTextArea);
 					}
@@ -1683,6 +1687,7 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @return The selected text in the active text area.
 	 */
+	@Override
 	public String getSelectedText() {
 		return getCurrentTextArea().getSelectedText();
 	}
@@ -2111,6 +2116,7 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @param e The hyperlink event.
 	 */
+	@Override
 	public void hyperlinkUpdate(HyperlinkEvent e) {
 		if (e.getEventType()==HyperlinkEvent.EventType.ACTIVATED) {
 			URL url = e.getURL();
@@ -2549,6 +2555,7 @@ public abstract class AbstractMainView extends JPanel
 	/**
 	 * Called whenever a property changes on a component we're listening to.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String propertyName = e.getPropertyName();
@@ -2898,6 +2905,7 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @param e The search event.
 	 */
+	@Override
 	public void searchEvent(SearchEvent e) {
 		switch (e.getType()) {
 			case MARK_ALL:

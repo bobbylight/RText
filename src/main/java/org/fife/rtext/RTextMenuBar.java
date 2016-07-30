@@ -792,6 +792,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	/**
 	 * Called whenever a property changes on a component we're listening to.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String prop = e.getPropertyName();
@@ -804,10 +805,12 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	}
 
 
+	@Override
 	public void popupMenuCanceled(PopupMenuEvent e) {
 	}
 
 
+	@Override
 	public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 	}
 
@@ -817,6 +820,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 *
 	 * @param e The popup menu event.
 	 */
+	@Override
 	public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 
 		Object source = e.getSource();
@@ -861,6 +865,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 				JRadioButtonMenuItem menuItem =
 					new JRadioButtonMenuItem(
 						new AbstractAction() {
+							@Override
 							public void actionPerformed(ActionEvent e) {
 								mdiView.setSelectedIndex(index);
 							}
@@ -889,6 +894,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 				String name = RTextUtilities.getMacroName(files[i]);
 				final File f = files[i];
 				AbstractAction a = new AbstractAction(name) {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							rtext.getMainView().loadMacro(f);
 						}

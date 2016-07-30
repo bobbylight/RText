@@ -162,8 +162,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 		topPanel.add(temp);
 
 		// Do this after everything else is created.
-		if (UIUtil.isPreJava6() ||
-				TranslucencyUtil.get().isTranslucencySupported(false)) {
+		if (TranslucencyUtil.get().isTranslucencySupported(false)) {
 			setTranslucentSearchDialogsSelected(false);
 		}
 
@@ -173,6 +172,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		Object source = e.getSource();
@@ -270,8 +270,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 		translucentSearchDialogsCB.setSelected(selected); // Probably already done
 
 		// The sub-options always stay disabled if we're not using Java 6u10+.
-		if (UIUtil.isPreJava6() ||
-				!TranslucencyUtil.get().isTranslucencySupported(false)) {
+		if (!TranslucencyUtil.get().isTranslucencySupported(false)) {
 			translucentSearchDialogsCB.setEnabled(false);
 			selected = false;
 		}
@@ -334,6 +333,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param e The change event.
 	 */
+	@Override
 	public void stateChanged(ChangeEvent e) {
 		float value = slider.getValue() / 100f;
 		opacityDisplay.setText(format.format(value));

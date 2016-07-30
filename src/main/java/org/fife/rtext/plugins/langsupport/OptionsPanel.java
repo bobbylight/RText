@@ -190,6 +190,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 	 */
 	private class Listener implements ActionListener, HyperlinkListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			Object source = e.getSource();
@@ -220,6 +221,7 @@ public class OptionsPanel extends PluginOptionsDialogPanel {
 
 		}
 
+		@Override
 		public void hyperlinkUpdate(HyperlinkEvent e) {
 			if (e.getEventType()==EventType.ACTIVATED) {
 				if (!UIUtil.browse(e.getURL().toExternalForm())) {

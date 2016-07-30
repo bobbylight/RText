@@ -440,6 +440,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	private class Listener implements ActionListener, DocumentListener,
 							ModifiableTableListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			Object source = e.getSource();
@@ -530,6 +531,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
@@ -539,15 +541,18 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			firePropertyChange(PROPERTY, null, null);
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
 
+		@Override
 		public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, null, null);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
@@ -560,6 +565,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	 */
 	private class Perl5LibTableRowHandler extends AbstractRowHandler {
 
+		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {
 			String oldValue = oldData==null ? null : (String)oldData[0];
 			Perl5ItemDialog dialog = new Perl5ItemDialog(getOptionsDialog());
@@ -653,6 +659,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (source==okButton) {
@@ -677,6 +684,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			}
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
 
@@ -684,10 +692,12 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			return field.getText();
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			okButton.setEnabled(true);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			okButton.setEnabled(field.getDocument().getLength()>0);
 		}
@@ -699,6 +709,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		public int showDialog() {
 			rc = CANCEL; // Set here in case they "X" the dialog out.
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					field.requestFocusInWindow();
 					field.selectAll();

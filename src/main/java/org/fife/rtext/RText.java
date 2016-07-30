@@ -208,6 +208,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	// What to do when user does something.
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
@@ -250,6 +251,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 *
 	 * @param e The caret event.
 	 */
+	@Override
 	public void caretUpdate(CaretEvent e) {
 
 		// NOTE: e may be "null"; we do this sometimes to force caret
@@ -544,6 +546,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * @return The file chooser.
 	 * @see #getRemoteFileChooser()
 	 */
+	@Override
 	public RTextFileChooser getFileChooser() {
 		if (chooser==null) {
 			chooser = RTextUtilities.createFileChooser(this);
@@ -1110,6 +1113,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * Called whenever a property changes for a component we are registered
 	 * as listening to.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String propertyName = e.getPropertyName();
@@ -1644,6 +1648,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	public void openFile(final String filename) {
 		//gets called when we receive an open event from the finder on OS X
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				// null encoding means check for Unicode before using
 				// system default encoding.
@@ -1681,6 +1686,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		// Swing stuff should always be done on the EDT...
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 
 				String lafName = RTextPrefs.getLookAndFeelToLoad();
@@ -1715,8 +1721,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 					try {
 						clazz = cl.loadClass(lafName);
 					} catch (UnsupportedClassVersionError ucve) {
-						// Previously opened with e.g. Java 6/Substance, now
-						// restarting with Java 1.4 or 1.5.
+						// A LookAndFeel requiring Java X or later, but we're
+						// now restarting with a Java version earlier than X
 						lafName = UIManager.getSystemLookAndFeelClassName();
 						clazz = cl.loadClass(lafName);
 					}

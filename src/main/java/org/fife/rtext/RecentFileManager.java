@@ -64,6 +64,7 @@ public class RecentFileManager implements PropertyChangeListener {
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String prop = e.getPropertyName();

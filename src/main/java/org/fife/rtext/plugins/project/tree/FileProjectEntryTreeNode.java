@@ -84,9 +84,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 		if (!dir) {
 			actions.add(new OpenAction());
 		}
-		if (!possiblyAddOpenInActions(actions) && dir) {
-			actions.add(null);
-		}
+		addOpenInActions(actions);
 		actions.add(new MoveUpAction());
 		actions.add(new MoveDownAction());
 		actions.add(null);

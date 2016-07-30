@@ -50,6 +50,7 @@ abstract class AbstractFontSizeAction extends AppAction<RText> {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		RText rtext = getApplication();

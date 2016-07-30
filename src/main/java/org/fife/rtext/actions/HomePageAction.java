@@ -41,6 +41,7 @@ class HomePageAction extends AppAction<RText> {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (!UIUtil.browse("http://fifesoft.com/rtext")) {
 			RText app = getApplication();

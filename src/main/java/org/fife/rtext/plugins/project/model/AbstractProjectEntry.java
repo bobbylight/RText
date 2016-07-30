@@ -26,11 +26,13 @@ abstract class AbstractProjectEntry implements ProjectEntry {
 	}
 
 
+	@Override
 	public final ProjectEntryParent getParent() {
 		return parent;
 	}
 
 
+	@Override
 	public final void removeFromParent() {
 		parent.removeEntry(this);
 	}

@@ -37,6 +37,7 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 	}
 
 
+	@Override
 	public void accept(WorkspaceVisitor visitor) {
 		visitor.visit(this);
 		for (ProjectEntry entry : entries) {
@@ -46,11 +47,13 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 	}
 
 
+	@Override
 	public void addEntry(ProjectEntry entry) {
 		entries.add(entry);
 	}
 
 
+	@Override
 	public int compareTo(ProjectEntry o) {
 		if (o instanceof LogicalFolderProjectEntry) {
 			return name.compareTo(((LogicalFolderProjectEntry)o).getName());
@@ -86,11 +89,13 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 	}
 
 
+	@Override
 	public Iterator<ProjectEntry> getEntryIterator() {
 		return entries.iterator();
 	}
 
 
+	@Override
 	public File getFile() {
 		return null;
 	}
@@ -101,11 +106,13 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 	}
 
 
+	@Override
 	public String getSaveData() {
 		return getName();
 	}
 
 
+	@Override
 	public String getType() {
 		return LOGICAL_DIR_PROJECT_ENTRY;
 	}
@@ -117,6 +124,7 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 	}
 
 
+	@Override
 	public boolean moveProjectEntryDown(ProjectEntry entry) {
 		int index = getEntryIndex(entry);
 		if (index>-1 && index<entries.size()-1) {
@@ -128,6 +136,7 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 	}
 
 
+	@Override
 	public boolean moveProjectEntryUp(ProjectEntry entry) {
 		int index = getEntryIndex(entry);
 		if (index>0) {
@@ -139,6 +148,7 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 	}
 
 
+	@Override
 	public void removeEntry(ProjectEntry entry) {
 		entries.remove(entry);
 	}

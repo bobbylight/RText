@@ -41,6 +41,7 @@ class OpenRecentAction extends AppAction<RText> {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		RecentFileDialog rfd = new RecentFileDialog(getApplication());
 		rfd.setVisible(true);

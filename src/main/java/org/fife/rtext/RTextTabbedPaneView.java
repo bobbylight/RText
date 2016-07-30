@@ -229,6 +229,7 @@ inCloseCurrentDocument = true;
 		// currentTextArea is not yet visible on this line of code, so
 		// calling requestFocusInWindow() now would do nothing.
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				// NOTE: This null check here is silly, but we have to do
 				// it because: Before this runnable runs, we are sure that
@@ -476,6 +477,7 @@ inCloseCurrentDocument = false;
 	}
 
 
+	@Override
 	public void stateChanged(ChangeEvent e) {
 
 		// Skip this stuff if we're called from closeCurrentDocument(), as
@@ -512,6 +514,7 @@ inCloseCurrentDocument = false;
 			// panel hasn't actually been made visible yet, and that must
 			// have happened for requestFocusInWindow to work.
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					currentTextArea.requestFocusInWindow();
 				}
@@ -554,6 +557,7 @@ inCloseCurrentDocument = false;
 			ToolTipManager.sharedInstance().registerComponent(this);
 		}
 
+		@Override
 		public void clearDnDIndicatorRect() {
 			x = y = -1;
 			repaint();
@@ -650,6 +654,7 @@ inCloseCurrentDocument = false;
 			}
 		}
 
+		@Override
 		public void setDnDIndicatorRect(int x, int y, int width, int height) {
 			this.x = x; this.y = y;
 			this.width = width; this.height = height;
@@ -679,6 +684,7 @@ inCloseCurrentDocument = false;
 			this.template = template;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (rightClickIndex>-1) {
 				RTextTabbedPaneView.this.setSelectedIndex(rightClickIndex);
@@ -705,6 +711,7 @@ inCloseCurrentDocument = false;
 			putValue(AbstractAction.NAME, text);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (rightClickIndex>-1) {
 				RTextTabbedPaneView.this.closeAllDocumentsExcept(
@@ -725,6 +732,7 @@ inCloseCurrentDocument = false;
 			putValue(AbstractAction.NAME, text);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (rightClickIndex>-1) {
 				RTextEditorPane textArea = RTextTabbedPaneView.this.

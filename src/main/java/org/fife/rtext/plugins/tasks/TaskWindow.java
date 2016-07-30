@@ -148,6 +148,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String prop = e.getPropertyName();

@@ -111,6 +111,7 @@ public class TasksPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new TasksOptionPanel(app, this);
 	}
@@ -119,6 +120,7 @@ public class TasksPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
@@ -127,6 +129,7 @@ public class TasksPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Icon getPluginIcon() {
 		return icon;
 	}
@@ -135,6 +138,7 @@ public class TasksPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginName() {
 		return msg.getString("PluginName");
 	}
@@ -143,6 +147,7 @@ public class TasksPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginVersion() {
 		return VERSION;
 	}
@@ -196,6 +201,7 @@ public class TasksPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		RText rtext = (RText)app;
@@ -213,10 +219,13 @@ public class TasksPlugin extends GUIPlugin {
 		popup.pack();
 		// Only needed for pre-1.6 support
 		popup.addPopupMenuListener(new PopupMenuListener() {
+			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				item.setSelected(isTaskWindowVisible());
 			}
@@ -278,6 +287,7 @@ public class TasksPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void savePreferences() {
 		TasksPrefs prefs = new TasksPrefs();
 		prefs.taskIdentifiers = taskIdentifiers;
@@ -367,6 +377,7 @@ public class TasksPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean uninstall() {
 		return true;
 	}

@@ -22,8 +22,7 @@ import org.fife.util.TranslucencyUtil;
 
 /**
  * Listens for events in child windows of RText, and toggles the opacity of
- * those child windows if desired.  This is done via reflection, since the
- * features we're using were added in Java 6 but RText supports 1.4+.
+ * those child windows if desired.
  *
  * @author Robert Futrell
  * @version 1.0
@@ -228,6 +227,7 @@ class ChildWindowListener extends ComponentAdapter
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void windowGainedFocus(WindowEvent e) {
 		if (translucencyRule==TRANSLUCENT_WHEN_NOT_FOCUSED) {
 			refreshTranslucency(e.getWindow());
@@ -240,6 +240,7 @@ class ChildWindowListener extends ComponentAdapter
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void windowLostFocus(WindowEvent e) {
 		if (translucencyRule==TRANSLUCENT_WHEN_NOT_FOCUSED) {
 			refreshTranslucency(e.getWindow());

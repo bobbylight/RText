@@ -113,9 +113,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 		JPanel panel = UIUtil.newTabbedPanePanel();
 		RText rtext = (RText)getOwner();
 		InfoPane editor = new InfoPane(rtext);
-//W3C_LENGTH_UNITS ="JEditorPane.w3cLengthUnits" in 1.5, but we're 1.4-compatible.
-//editor.putClientProperty("JEditorPane.w3cLengthUnits", Boolean.TRUE);
-panel.add(editor);
+		panel.add(editor);
 
 		temp.add(panel, BorderLayout.SOUTH);
 		return temp;
@@ -166,6 +164,7 @@ panel.add(editor);
 
 		final SelectableLabel label = new SelectableLabel(sb.toString());
 		label.addHyperlinkListener(new HyperlinkListener() {
+			@Override
 			public void hyperlinkUpdate(HyperlinkEvent e) {
 				if (HyperlinkEvent.EventType.ACTIVATED==e.getEventType()) {
 					if (!UIUtil.browse(e.getDescription())) {
@@ -234,6 +233,7 @@ panel.add(editor);
 			return text;
 		}
 
+		@Override
 		public void hyperlinkUpdate(HyperlinkEvent e) {
 			if (e.getEventType()==HyperlinkEvent.EventType.ACTIVATED) {
 				UIUtil.browse(e.getURL().toString());

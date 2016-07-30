@@ -277,6 +277,7 @@ public class MacroManager {
 	 */
 	private static class OldMacroFilenameFilter implements FileFilter {
 
+		@Override
 		public boolean accept(File file) {
 			return file.getName().endsWith(OLD_MACRO_FILE_EXTENSION);
 		}

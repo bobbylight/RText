@@ -112,6 +112,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 	
 
+	@Override
 	public File getFile() {
 		return (File)getUserObject();
 	}
@@ -156,7 +157,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		else {
 			actions.add(new OpenAction());
 		}
-		possiblyAddOpenInActions(actions);
+		addOpenInActions(actions);
 		actions.add(new CopyFullPathAction());
 		actions.add(new DeleteAction());
 		actions.add(null);
@@ -270,6 +271,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
+	@Override
 	public void handleRefresh() {
 		plugin.getTree().refreshChildren(this);
 	}
@@ -302,12 +304,14 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
+	@Override
 	public boolean isNotPopulated() {
 		int childCount = getChildCount();
 		return childCount==1 && (getFirstChild() instanceof NotYetPopulatedChild);
 	}
 
 
+	@Override
 	public void refreshChildren() {
 		File file = getFile();
 		if (file.isDirectory()) { // Should always be true
@@ -347,6 +351,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 			this.folder = folder;
 		}
 
+		@Override
 		public String isValid(String text) {
 			int length = text.length();
 			if (length==0) {

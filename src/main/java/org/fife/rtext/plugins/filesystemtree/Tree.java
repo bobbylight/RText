@@ -161,6 +161,7 @@ class Tree extends FileSystemTree {
 			super(app, msg, "Action.GoInto");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			File file = getSelectedFile();
 			if (file!=null && file.isDirectory()) {
@@ -187,6 +188,7 @@ class Tree extends FileSystemTree {
 			}
 		}
 
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 			String name = e.getPropertyName();
 			if (name.equals(FileSystemTree.WILL_EXPAND_PROPERTY)) {
@@ -218,6 +220,7 @@ class Tree extends FileSystemTree {
 			}
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (newWindow) {
 				// Create a new RText window.
@@ -254,6 +257,7 @@ class Tree extends FileSystemTree {
 			this.file = file;
 		}
 
+		@Override
 		public void run() {
 			AbstractMainView mainView = rtext.getMainView();
 			mainView.openFile(file, null);

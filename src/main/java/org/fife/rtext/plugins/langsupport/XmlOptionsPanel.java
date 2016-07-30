@@ -101,6 +101,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		Object source = e.getSource();

@@ -17,6 +17,7 @@ import java.nio.charset.Charset;
 import java.text.NumberFormat;
 import java.util.Map;
 import java.util.ResourceBundle;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -25,6 +26,7 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.LabelValueComboBox;
+import org.fife.ui.OS;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.SelectableLabel;
@@ -195,7 +197,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		expPanel.add(label);
 		expPanel.add(Box.createVerticalStrut(10));
 		dropShadowsInEditorCB = new JCheckBox(msg.getString("DropShadowsInEditor"));
-		dropShadowsInEditorCB.setEnabled(!UIUtil.isPreJava6());
 		dropShadowsInEditorCB.addActionListener(this);
 		addLeftAligned(expPanel, dropShadowsInEditorCB);
 		expPanel.add(Box.createVerticalGlue());
@@ -218,6 +219,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param e The action event that occurred.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
@@ -278,10 +280,8 @@ class GeneralOptionPanel extends OptionsDialogPanel
 			String defaultEnc = Charset.forName(defaultEncName).name();
 			boolean defaultUtf8BomSelected = false;
 			final String defaultSizeFieldText = "10";
-			// Only default to this experimental option if > Java 6 and running
-			// on Windows
-			boolean defaultDropShadowsInEditor =
-				(!UIUtil.isPreJava6() && File.separatorChar=='\\');
+			// Only default to this experimental option if running on Windows
+			boolean defaultDropShadowsInEditor = OS.get() == OS.WINDOWS;
 
 			if (dirField.getDocument().getLength()>0 ||
 				terminatorCombo.getSelectedIndex()!=0 ||
@@ -312,6 +312,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	/**
 	 * Never called since we don't have JEditorPanes.
 	 */
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 	}
 
@@ -435,6 +436,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param e The document event.
 	 */
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange(PROPERTY, null, "fake");
@@ -446,6 +448,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param e The document event.
 	 */
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange(PROPERTY, null, "fake");

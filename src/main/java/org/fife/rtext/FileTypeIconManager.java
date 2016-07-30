@@ -169,14 +169,17 @@ public class FileTypeIconManager {
 			this.icon = icon;
 		}
 
+		@Override
 		public int getIconHeight() {
 			return icon.getIconHeight();
 		}
 
+		@Override
 		public int getIconWidth() {
 			return icon.getIconWidth();
 		}
 
+		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			icon.paintIcon(c, g, x,y);
 			if (paintModifiedMarker) {
@@ -185,6 +188,7 @@ public class FileTypeIconManager {
 			}
 		}
 
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 			String propertyName = e.getPropertyName();
 			if (RTextEditorPane.DIRTY_PROPERTY.equals(propertyName)) {

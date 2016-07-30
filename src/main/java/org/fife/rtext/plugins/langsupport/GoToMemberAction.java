@@ -45,6 +45,7 @@ public class GoToMemberAction extends AppAction<RText>
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		RText rtext = getApplication();
@@ -81,6 +82,7 @@ public class GoToMemberAction extends AppAction<RText>
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void currentTextAreaPropertyChanged(CurrentTextAreaEvent e) {
 		if (e.getType()==CurrentTextAreaEvent.TEXT_AREA_CHANGED ||
 				e.getType()==CurrentTextAreaEvent.SYNTAX_STYLE_CNANGED) {

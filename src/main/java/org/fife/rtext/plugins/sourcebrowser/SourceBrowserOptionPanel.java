@@ -215,6 +215,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * Listens for actions being performed in this panel.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		Object source = e.getSource();
@@ -274,6 +275,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 * Called when a property of a document of a text field in this panel
 	 * gets changed (never happens).
 	 */
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 	}
 
@@ -365,6 +367,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * Called whenever text is inserted into the ctags executable text field.
 	 */
+	@Override
 	public void insertUpdate(DocumentEvent e) {
 		doDocumentUpdated(e);
 	}
@@ -375,6 +378,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource()==locationCombo &&
 				e.getStateChange()==ItemEvent.SELECTED) {
@@ -388,6 +392,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * Called when a text field in this panel gets updated.
 	 */
+	@Override
 	public void removeUpdate(DocumentEvent e) {
 		doDocumentUpdated(e);
 	}

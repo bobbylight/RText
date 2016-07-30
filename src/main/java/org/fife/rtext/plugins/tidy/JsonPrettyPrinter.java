@@ -147,6 +147,7 @@ class JsonPrettyPrinter implements PrettyPrinter {
 	}
 
 
+	@Override
 	public PrettyPrintResult prettyPrint(String json) throws Exception {
 
 		// First, do a sanity check to ensure everything is wrapped in curlys.

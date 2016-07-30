@@ -121,6 +121,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		label.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
 		label.setText(msg.getString("Note.UseThemesInstead"));
 		label.addHyperlinkListener(new HyperlinkListener() {
+			@Override
 			public void hyperlinkUpdate(HyperlinkEvent e) {
 				if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 					getOptionsDialog().setSelectedOptionsPanel(
@@ -304,6 +305,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	/**
 	 * Listens for actions in this panel.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
@@ -539,6 +541,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	/**
 	 * Called when a property changes in an object we're listening to.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		if (isSettingStyle)
@@ -801,6 +804,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param e The list selection event.
 	 */
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 
 		int index = syntaxList.getSelectedIndex();

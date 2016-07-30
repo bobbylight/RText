@@ -14,9 +14,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+
+import javax.script.Bindings;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -32,24 +35,14 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 class JavaScriptShellTextArea extends ConsoleTextArea {
 
 	/**
-	 * The javax.script.Bindings instance.
+	 * Cached script bindings.
 	 */
-	private Object bindings;
+	private Bindings bindings;
 
 	/**
-	 * The javax.script.Bindings#put() method.
+	 * Script Engine for JavaScript.
 	 */
-	private Method bindingsPut;
-
-	/**
-	 * javax.script.ScriptEngine class.
-	 */
-	private Class<?> seClazz;
-
-	/**
-	 * javax.script.ScriptEngine instance for JavaScript.
-	 */
-	private Object jsEngine;
+	private ScriptEngine jsEngine;
 
 	/**
 	 * Whether this engine has been initialized.
@@ -114,7 +107,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 		possiblyInitialize();
 
-		// Failed to initialize - likely Java 1.4 or 1.5
+		// Failed to initialize
 		if (jsEngine==null) {
 			if (appendPrompt) {
 				append(plugin.getString("Error.NotInitialized"), STYLE_EXCEPTION);
@@ -125,28 +118,14 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 		String code = text;
 
-		/*
-		ScriptEngineManager sem = new ScriptEngineManager();
-		ScriptEngine jsEngine = sem.getEngineByName("JavaScript");
-		Bindings bindings = jsEngine.createBindings();
-		bindings.put("data", data);
-		jsEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
-		jsEngine.eval("println(data.str); alert(data.str); data.i = 999");
-		 */
-
-		// Run everything with reflection so we compile with Java 1.4.
 		try {
 
 			// We always reset the value of "rtext" and "textArea", but
 			// all other variables they've modified are persistent.
-			bindingsPut.invoke(bindings,
-					new Object[] { "rtext", plugin.getRText() });
-			bindingsPut.invoke(bindings, new Object[] { "textArea",
-					plugin.getRText().getMainView().getCurrentTextArea() });
+			bindings.put("rtext", plugin.getRText());
+			bindings.put("textArea", plugin.getRText().getMainView().getCurrentTextArea());
 
-			Method m = seClazz.getDeclaredMethod("eval",
-								new Class[] { String.class });
-			Object obj = m.invoke(jsEngine, new Object[] { code });
+			Object obj = jsEngine.eval(code);
 			if (obj!=null) {
 				String str = obj.toString();
 				if ((obj instanceof Double || obj instanceof Float) &&
@@ -157,20 +136,13 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 			}
 
 		} catch (Exception e) {
-			// Since we use reflection, remove wrapper InvocationTargetException
-			Throwable t = e;
-			if (t instanceof InvocationTargetException) {
-				t = t.getCause();
-			}
-			// Also peel off wrapper javax.script.ScriptException.  Can't
-			// reference the class directly since we can run in Java 1.4.
-			//if (t instanceof ScriptException) {
-			if ("javax.script.ScriptException".equals(t.getClass().getName())) {
-				append(massageScriptException(t), STYLE_STDERR);
+			// Peel off wrapper ScriptException
+			if (e instanceof ScriptException) {
+				append(massageScriptException((ScriptException)e), STYLE_STDERR);
 			}
 			else {
 				StringWriter sw = new StringWriter();
-				t.printStackTrace(new PrintWriter(sw));
+				e.printStackTrace(new PrintWriter(sw));
 				append(sw.toString(), STYLE_EXCEPTION);
 			}
 		}
@@ -186,14 +158,12 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	 * Tries to strip the name of the exception that was wrapped by the
 	 * <code>javax.script.ScriptException</code>.
 	 *
-	 * @param t The ScriptException (can't reference that type directly since
-	 *        this code compiles with Java 1.4).
-	 * @return The error message to display for the Throwable in the console.
+	 * @param e The exception to massage.
+	 * @return The error message to display for the exception in the console.
 	 */
-	private static final String massageScriptException(
-			/*ScriptException*/Throwable t) {
+	private static final String massageScriptException(ScriptException e) {
 
-		String text = t.getMessage();
+		String text = e.getMessage();
 
 		String[] rhinoStarts = {
 			"sun.org.mozilla.javascript.internal.EcmaError: ",
@@ -222,68 +192,29 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 		}
 		initialized = true;
 
-		if (!UIUtil.isPreJava6()) {
+		ScriptEngineManager sem = new ScriptEngineManager();
+		jsEngine = sem.getEngineByName("JavaScript");
+		bindings = jsEngine.createBindings();
+		jsEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
 
-			// Run everything with reflection so we compile with Java 1.4.
-			try {
+		// Write stdout and stderr to this console.  Must wrap these in
+		// PrintWriters for standard print() and println() methods to work.
+		ScriptContext context = jsEngine.getContext();
+		context.setWriter(new PrintWriter(new OutputWriter(STYLE_STDOUT)));
+		context.setErrorWriter(new PrintWriter(new OutputWriter(STYLE_STDERR)));
 
-				Class<?> semClazz = Class.forName("javax.script.ScriptEngineManager");
-				Object sem = semClazz.newInstance();
-
-				// Get the JS engine.
-				Method m = semClazz.getDeclaredMethod("getEngineByName",
-											String.class);
-				jsEngine = m.invoke(sem, "JavaScript");
-				seClazz = Class.forName("javax.script.ScriptEngine");
-
-				// Create our bindings and cache them for later.
-				m = seClazz.getDeclaredMethod("createBindings");
-				bindings = m.invoke(jsEngine);
-				Class<?> bindingsClazz = Class.forName("javax.script.Bindings");
-				m = seClazz.getDeclaredMethod("setBindings",
-								bindingsClazz, int.class);
-				Class<?> scriptContextClazz = Class.forName(
-											"javax.script.ScriptContext");
-				Field scopeField = scriptContextClazz.
-											getDeclaredField("ENGINE_SCOPE");
-				int scope = scopeField.getInt(scriptContextClazz);
-				m.invoke(jsEngine, bindings, new Integer(scope));
-
-				// To be used in handleSubmit().
-				bindingsPut = bindingsClazz.getDeclaredMethod("put",
-								String.class, Object.class);
-
-				// Write stdout and stderr to this console.  Must wrap these in
-				// PrintWriters for standard print() and println() methods to work.
-				m = seClazz.getDeclaredMethod("getContext");
-				Object context = m.invoke(jsEngine);
-				m = scriptContextClazz.getDeclaredMethod("setWriter",
-						Writer.class);
-				PrintWriter w = new PrintWriter(new OutputWriter(STYLE_STDOUT));
-				m.invoke(context, w);
-				m = scriptContextClazz.getDeclaredMethod("setErrorWriter",
-						Writer.class);
-				w = new PrintWriter(new OutputWriter(STYLE_STDERR));
-				m.invoke(context, w);
-
-				// Import commonly-used packages.  Do this before stdout and
-				// stderr redirecting so the user won't see it in their console.
-				StringBuilder imports = new StringBuilder();
-				if (!UIUtil.isPreJava8()) {
-					// Nashorn requires this for Rhino compatibility functions
-					// such as importPackage
-					imports.append("load('nashorn:mozilla_compat.js');");
-				}
-				imports.append("importPackage(java.lang, java.io, " +
-						"java.util, java.awt, javax.swing, org.fife.rtext, " +
-						"org.fife.ui.rtextarea, org.fife.ui.rsyntaxtextarea)");
-				handleSubmitImpl(imports.toString(), false);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
+		// Import commonly-used packages.  Do this before stdout and
+		// stderr redirecting so the user won't see it in their console.
+		StringBuilder imports = new StringBuilder();
+		if (!UIUtil.isPreJava8()) {
+			// Nashorn requires this for Rhino compatibility functions
+			// such as importPackage
+			imports.append("load('nashorn:mozilla_compat.js');");
 		}
+		imports.append("importPackage(java.lang, java.io, " +
+				"java.util, java.awt, javax.swing, org.fife.rtext, " +
+				"org.fife.ui.rtextarea, org.fife.ui.rsyntaxtextarea)");
+		handleSubmitImpl(imports.toString(), false);
 
 	}
 
@@ -311,8 +242,6 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 		@Override
 		public void write(char[] buf, int off, int len) {
-			// "JavaScriptShellTextArea.this." needed to
-			// compile in Java 5+, but but in Java 1.4.
 			JavaScriptShellTextArea.this.
 							append(new String(buf, off, len), style);
 		}

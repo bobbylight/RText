@@ -342,6 +342,7 @@ public class NewExistingFolderDialog extends EscapableDialog {
 		setChosenDirectory(entry.getFile());
 		moveForwardOneStep();
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				inFilterField.selectAll();
 				inFilterField.requestFocusInWindow();
@@ -359,6 +360,7 @@ public class NewExistingFolderDialog extends EscapableDialog {
 	private class Listener implements ActionListener, TreeSelectionListener,
 							PropertyChangeListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
 			if (okButton==source) {
@@ -376,6 +378,7 @@ public class NewExistingFolderDialog extends EscapableDialog {
 			}
 		}
 
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 			String property = e.getPropertyName();
 			if (property.equals(DirectoryTree.WILL_EXPAND_PROPERTY)) {
@@ -388,6 +391,7 @@ public class NewExistingFolderDialog extends EscapableDialog {
 			}
 		}
 
+		@Override
 		public void valueChanged(TreeSelectionEvent e) {
 			okButton.setEnabled(e.getNewLeadSelectionPath()!=null);
 		}

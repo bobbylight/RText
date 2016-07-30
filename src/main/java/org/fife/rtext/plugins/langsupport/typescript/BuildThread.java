@@ -44,6 +44,7 @@ class BuildThread extends GUIWorkerThread {
 			tsConfig = getTsConfig();
 		} catch (final IllegalArgumentException iae) {
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					plugin.getRText().displayException(iae);
 				}
@@ -52,6 +53,7 @@ class BuildThread extends GUIWorkerThread {
 		}
 
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				window.setTitleWhileBuilding(tsConfig);
 			}

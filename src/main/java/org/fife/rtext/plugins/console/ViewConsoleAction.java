@@ -48,6 +48,7 @@ class ViewConsoleAction extends AppAction<RText> {
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		plugin.setConsoleWindowVisible(!plugin.isConsoleWindowVisible());
 	}

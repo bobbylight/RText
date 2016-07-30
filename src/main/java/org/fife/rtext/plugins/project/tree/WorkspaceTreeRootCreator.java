@@ -54,30 +54,37 @@ class WorkspaceTreeRootCreator implements WorkspaceVisitor {
 	}
 
 
+	@Override
 	public void postVisit(Workspace workspace) {}
 
 
+	@Override
 	public void postVisit(Project project) {
 		entryParentNodeStack.pop();
 	}
 
 
+	@Override
 	public void postVisit(FileProjectEntry entry) {}
 
 
+	@Override
 	public void postVisit(FolderProjectEntry entry) {}
 
 
+	@Override
 	public void postVisit(LogicalFolderProjectEntry entry) {
 		entryParentNodeStack.pop();
 	}
 
 
+	@Override
 	public void visit(Workspace workspace) {
 		root = new WorkspaceRootTreeNode(plugin, workspace);
 	}
 
 
+	@Override
 	public void visit(Project project) {
 		ProjectTreeNode node = new ProjectTreeNode(plugin, project);
 		root.add(node);
@@ -85,6 +92,7 @@ class WorkspaceTreeRootCreator implements WorkspaceVisitor {
 	}
 
 
+	@Override
 	public void visit(FileProjectEntry entry) {
 		FileProjectEntryTreeNode node = new FileProjectEntryTreeNode(
 															plugin, entry);
@@ -92,6 +100,7 @@ class WorkspaceTreeRootCreator implements WorkspaceVisitor {
 	}
 
 
+	@Override
 	public void visit(FolderProjectEntry entry) {
 		FolderProjectEntryTreeNode node = new FolderProjectEntryTreeNode(
 															plugin, entry);
@@ -99,6 +108,7 @@ class WorkspaceTreeRootCreator implements WorkspaceVisitor {
 	}
 
 
+	@Override
 	public void visit(LogicalFolderProjectEntry entry) {
 		LogicalFolderProjectEntryTreeNode node =
 				new LogicalFolderProjectEntryTreeNode(plugin, entry);

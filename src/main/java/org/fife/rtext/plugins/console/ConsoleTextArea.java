@@ -193,6 +193,7 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		else {
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					appendImpl(text, style, treatAsUserInput);
 				}
@@ -569,6 +570,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			putValue(NAME, plugin.getString("Action.ClearAll"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			clear();
 		}
@@ -584,6 +586,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			putValue(NAME, plugin.getString("Action.Configure"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			OptionsDialog od = plugin.getRText().getOptionsDialog();
 			od.initialize();
@@ -602,6 +605,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			this.amt = amt;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			int temp = cmdHistoryIndex + amt;
 			if (temp<0 || temp>=cmdHistory.size()) {
@@ -626,6 +630,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			putValue(NAME, plugin.getString("Action.CopyAll"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			int dot = getSelectionStart();
 			int mark = getSelectionEnd();
@@ -653,6 +658,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			this.delegate = delegate;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			int start = getSelectionStart();
 			int end = getSelectionEnd();
@@ -690,6 +696,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			this.delegate = delegate;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			int start = getSelectionStart();
 			if (start<inputMinOffs) {
@@ -713,6 +720,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			super("deletePreviousWord");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			int start = getSelectionStart();
 			int end = getSelectionEnd();
@@ -753,6 +761,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			this.select = select;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (select) {
 				int dot = getCaretPosition();
@@ -776,6 +785,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	private class Listener extends MouseAdapter implements DocumentListener {
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
 
@@ -783,6 +793,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			if (plugin.getSyntaxHighlightInput()) {
 				// Can't update Document in DocumentListener directly
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						syntaxHighlightInput();
 					}
@@ -796,6 +807,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			}
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
@@ -815,6 +827,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			handleMouseEvent(e);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
@@ -837,6 +850,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			this.delegate = delegate;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			int start = getSelectionStart();
 			if (start>=inputMinOffs) { // Select current command only
@@ -856,6 +870,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	private class SubmitAction extends AbstractAction {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			Document doc = getDocument();

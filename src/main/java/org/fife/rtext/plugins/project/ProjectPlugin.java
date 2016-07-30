@@ -110,6 +110,7 @@ public class ProjectPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		if (optionPanel==null) {
 			optionPanel = new ProjectPluginOptionPanel(this);
@@ -121,6 +122,7 @@ public class ProjectPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
@@ -129,6 +131,7 @@ public class ProjectPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Icon getPluginIcon() {
 		return icon;
 	}
@@ -137,6 +140,7 @@ public class ProjectPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginName() {
 		return Messages.getString("ProjectPlugin.Name");
 	}
@@ -145,6 +149,7 @@ public class ProjectPlugin extends GUIPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginVersion() {
 		return VERSION_STRING;
 	}
@@ -230,6 +235,7 @@ public class ProjectPlugin extends GUIPlugin {
 	}
 
 
+	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		File workspaceDir = getWorkspacesDir();
@@ -250,10 +256,13 @@ public class ProjectPlugin extends GUIPlugin {
 		popup.pack();
 		// Only needed for pre-1.6 support
 		popup.addPopupMenuListener(new PopupMenuListener() {
+			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				item.setSelected(isProjectWindowVisible());
 			}
@@ -378,6 +387,7 @@ public class ProjectPlugin extends GUIPlugin {
 	}
 
 
+	@Override
 	public void savePreferences() {
 
 		ProjectWindow window = getDockableWindow();
@@ -446,6 +456,7 @@ public class ProjectPlugin extends GUIPlugin {
 	}
 
 
+	@Override
 	public boolean uninstall() {
 		return false;
 	}

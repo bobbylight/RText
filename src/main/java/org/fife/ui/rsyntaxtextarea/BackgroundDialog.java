@@ -208,6 +208,7 @@ class BackgroundDialog extends JDialog implements ActionListener {
 
 
 	// Callback for when the user clicks a button, etc.
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();

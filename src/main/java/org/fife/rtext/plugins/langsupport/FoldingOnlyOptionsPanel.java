@@ -164,6 +164,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	 */
 	private class Listener implements ActionListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			Object source = e.getSource();

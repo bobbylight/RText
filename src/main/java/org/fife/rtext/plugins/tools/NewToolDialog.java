@@ -125,6 +125,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
@@ -578,6 +579,7 @@ ac.install(dirField);
 
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			String command = e.getActionCommand();
@@ -593,13 +595,16 @@ ac.install(dirField);
 
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			okButton.setEnabled(true);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			okButton.setEnabled(e.getDocument().getLength()>0);
 		}
@@ -618,6 +623,7 @@ ac.install(dirField);
 	 */
 	private class ArgTableRowHandler extends AbstractRowHandler {
 
+		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {
 			ArgDialog dialog = new ArgDialog(NewToolDialog.this);
 			if (oldData!=null) {
@@ -715,6 +721,7 @@ ac.install(dirField);
 
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			String command = e.getActionCommand();
@@ -730,6 +737,7 @@ ac.install(dirField);
 
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
 
@@ -738,10 +746,12 @@ ac.install(dirField);
 				new String[] { nameField.getText(), valueField.getText() };
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			okButton.setEnabled(true);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			okButton.setEnabled(e.getDocument().getLength()>0);
 		}
@@ -760,6 +770,7 @@ ac.install(dirField);
 	 */
 	private class EnvVarTableRowHandler extends AbstractRowHandler {
 
+		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {
 			EnvVarDialog dialog = new EnvVarDialog(NewToolDialog.this);
 			if (oldData!=null) {
@@ -788,6 +799,7 @@ ac.install(dirField);
 			this.replacement = replacement;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			field.replaceSelection(replacement);
 			field.requestFocusInWindow();

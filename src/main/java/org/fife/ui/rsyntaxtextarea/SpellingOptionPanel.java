@@ -325,6 +325,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	private class Listener implements DocumentListener, ActionListener,
 								PropertyChangeListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			String command = e.getActionCommand();
@@ -395,14 +396,17 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			hasUnsavedChanges = true;
 			firePropertyChange(MISC_PROPERTY, null, null);
 		}
 
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 
 			String prop = e.getPropertyName();
@@ -414,6 +418,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			hasUnsavedChanges = true;
 			firePropertyChange(MISC_PROPERTY, null, null);

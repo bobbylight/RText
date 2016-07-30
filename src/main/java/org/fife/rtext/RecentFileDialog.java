@@ -287,6 +287,7 @@ public class RecentFileDialog extends EscapableDialog {
 	private class Listener extends MouseAdapter implements ActionListener,
 			DocumentListener, KeyListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			String command = e.getActionCommand();
@@ -301,6 +302,7 @@ public class RecentFileDialog extends EscapableDialog {
 
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
@@ -309,10 +311,12 @@ public class RecentFileDialog extends EscapableDialog {
 			setFilter(filterField.getText());
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
 
+		@Override
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
 				case KeyEvent.VK_DOWN:
@@ -324,9 +328,11 @@ public class RecentFileDialog extends EscapableDialog {
 			}
 		}
 
+		@Override
 		public void keyReleased(KeyEvent e) {
 		}
 
+		@Override
 		public void keyTyped(KeyEvent e) {
 		}
 
@@ -337,6 +343,7 @@ public class RecentFileDialog extends EscapableDialog {
 			}
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}

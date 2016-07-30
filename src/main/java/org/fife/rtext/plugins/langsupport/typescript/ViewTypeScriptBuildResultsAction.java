@@ -49,6 +49,7 @@ public class ViewTypeScriptBuildResultsAction extends AppAction<RText> {
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		plugin.getTypeScriptSupport().toggleBuildResultsWindowVisible();
 	}

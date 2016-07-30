@@ -39,7 +39,6 @@ import org.fife.rtext.plugins.project.model.FolderProjectEntry;
 import org.fife.rtext.plugins.project.model.LogicalFolderProjectEntry;
 import org.fife.rtext.plugins.project.model.ProjectEntry;
 import org.fife.rtext.plugins.project.model.ProjectEntryParent;
-import org.fife.ui.UIUtil;
 import org.fife.ui.rtextfilechooser.Actions;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
@@ -58,6 +57,25 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 	public AbstractWorkspaceTreeNode(ProjectPlugin plugin) {
 		this.plugin = plugin;
+	}
+
+
+	/**
+	 * Adds menu items to open in the system's default editor and viewer
+	 * applications.
+	 *
+	 * @param actions The action list to add to.
+	 */
+	protected void addOpenInActions(List<PopupContent> actions) {
+		WorkspaceTree tree = plugin.getTree();
+		PopupContent.PopupSubMenu openInMenu = new PopupContent.PopupSubMenu(
+				Messages.getString("Action.OpenIn"));
+		openInMenu.add(new Actions.SystemOpenAction(tree,
+				Actions.SystemOpenAction.OpenMethod.EDIT));
+		openInMenu.add(new Actions.SystemOpenAction(tree,
+				Actions.SystemOpenAction.OpenMethod.OPEN));
+		actions.add(openInMenu);
+		actions.add(null);
 	}
 
 
@@ -145,30 +163,6 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
-	/**
-	 * Adds menu items to open in the system's default editor and viewer
-	 * applications, if we're running in Java 6 or later.
-	 *
-	 * @param actions The action list to add to.
-	 * @return Whether the actions were added.
-	 */
-	protected boolean possiblyAddOpenInActions(List<PopupContent> actions) {
-		if (!UIUtil.isPreJava6()) {
-			WorkspaceTree tree = plugin.getTree();
-			PopupContent.PopupSubMenu openInMenu = new PopupContent.PopupSubMenu(
-					Messages.getString("Action.OpenIn"));
-			openInMenu.add(new Actions.SystemOpenAction(tree,
-					Actions.SystemOpenAction.OpenMethod.EDIT));
-			openInMenu.add(new Actions.SystemOpenAction(tree,
-					Actions.SystemOpenAction.OpenMethod.OPEN));
-			actions.add(openInMenu);
-			actions.add(null);
-			return true;
-		}
-		return false;
-	}
-
-
 	@Override
 	public final String toString() {
 		return getDisplayName();
@@ -189,6 +183,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			this.node = node;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			RTextFileChooser chooser = getFileChooser();
 			int rc = chooser.showOpenDialog(plugin.getRText());
@@ -221,6 +216,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			this.node = node;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			RText rtext = plugin.getRText();
 			NewExistingFolderDialog chooser = new NewExistingFolderDialog(rtext);
@@ -266,6 +262,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			Frame parent = plugin.getRText();
 			LogicalFolderNameDialog dialog = new LogicalFolderNameDialog(
@@ -298,6 +295,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, mods));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			getPlugin().getTree().copySelectedFilePathToClipboard();
 		}
@@ -319,9 +317,11 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			setEnabled(enabled);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			// Run later to allow popup to hide
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					handleDelete();
 				}
@@ -344,6 +344,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, mods));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			getPlugin().getTree().findInFilesFromSelectedDir();
 		}
@@ -362,6 +363,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			setEnabled(index<getParent().getChildCount()-1);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			plugin.moveTreeNodeDown(AbstractWorkspaceTreeNode.this);
 		}
@@ -379,6 +381,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			setEnabled(getParent().getIndex(AbstractWorkspaceTreeNode.this)>0);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			plugin.moveTreeNodeUp(AbstractWorkspaceTreeNode.this);
 		}
@@ -397,6 +400,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			setAccelerator(KeyStroke.getKeyStroke(enter, 0));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			WorkspaceTree tree = plugin.getTree();
 			Object selected = tree.getLastSelectedPathComponent();
@@ -434,6 +438,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			setEnabled(enabled);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			handleProperties();
 		}
@@ -451,6 +456,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			WorkspaceTree tree = plugin.getTree();
 			Object obj = tree.getLastSelectedPathComponent();
@@ -479,6 +485,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			handleRename();
 		}

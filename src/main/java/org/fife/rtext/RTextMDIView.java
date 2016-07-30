@@ -232,6 +232,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		popupMenu = new JPopupMenu();
 
 		JMenuItem menuItem = new JMenuItem(new AbstractAction() {
+								@Override
 								public void actionPerformed(java.awt.event.ActionEvent e) {
 									tileWindowsVertically();
 								}
@@ -240,6 +241,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem(new AbstractAction() {
+								@Override
 								public void actionPerformed(java.awt.event.ActionEvent e) {
 									tileWindowsHorizontally();
 								}
@@ -248,6 +250,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem(new AbstractAction() {
+								@Override
 								public void actionPerformed(java.awt.event.ActionEvent e) {
 									cascadeWindows();
 								}
@@ -356,6 +359,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	/**
 	 * Called when an internal frame is activated.
 	 */
+	@Override
 	public void internalFrameActivated(InternalFrameEvent e) {
 
 		RTextEditorPane current = getRTextEditorPaneAt(getSelectedIndex());
@@ -384,6 +388,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	/**
 	 * Called when an internal frame is closed.
 	 */
+	@Override
 	public void internalFrameClosed(InternalFrameEvent e) {
 	}
 
@@ -391,6 +396,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	/**
 	 * Called when an internal frame is closing.
 	 */
+	@Override
 	public void internalFrameClosing(InternalFrameEvent e) {
 
 		// We must ensure that the frame closing is the selected frame, because
@@ -406,6 +412,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	/**
 	 * Called when an internal frame is deactivated.
 	 */
+	@Override
 	public void internalFrameDeactivated(InternalFrameEvent e) {
 		getCurrentTextArea().removeCaretListener(owner);
 	}
@@ -414,6 +421,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	/**
 	 * Called when an internal frame is de-iconified.
 	 */
+	@Override
 	public void internalFrameDeiconified(InternalFrameEvent e) {
 	}
 
@@ -421,6 +429,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	/**
 	 * Called when an internal frame is iconified.
 	 */
+	@Override
 	public void internalFrameIconified(InternalFrameEvent e) {
 	}
 
@@ -428,6 +437,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	/**
 	 * Called when an internal frame is opened.
 	 */
+	@Override
 	public void internalFrameOpened(InternalFrameEvent e) {
 	}
 

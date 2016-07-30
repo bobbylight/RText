@@ -62,10 +62,13 @@ public class TypeScriptSupport {
 		popup.pack();
 		// Only needed for pre-1.6 support
 		popup.addPopupMenuListener(new PopupMenuListener() {
+			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 			}
+			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				item.setSelected(isBuildResultsWindowVisible());
 			}
@@ -170,6 +173,7 @@ public class TypeScriptSupport {
 			setAccelerator(accelerator);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			TypeScriptNoticeWindow window = (TypeScriptNoticeWindow)
 					plugin.getDockableWindow(DOCKABLE_WINDOW_TS_ERRORS);

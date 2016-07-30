@@ -90,6 +90,7 @@ abstract class ProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 			putValue(ACCELERATOR_KEY, delete);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			handleRemove();
 		}

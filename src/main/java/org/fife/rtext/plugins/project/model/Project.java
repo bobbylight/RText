@@ -37,6 +37,7 @@ public class Project implements Comparable<Project>, ProjectEntryParent {
 	}
 
 
+	@Override
 	public void accept(WorkspaceVisitor visitor) {
 		visitor.visit(this);
 		for (ProjectEntry entry : entries) {
@@ -46,11 +47,13 @@ public class Project implements Comparable<Project>, ProjectEntryParent {
 	}
 
 
+	@Override
 	public void addEntry(ProjectEntry entry) {
 		entries.add(entry);
 	}
 
 
+	@Override
 	public int compareTo(Project p2) {
 		return getName().compareTo(p2.getName());
 	}
@@ -85,6 +88,7 @@ public class Project implements Comparable<Project>, ProjectEntryParent {
 	}
 
 
+	@Override
 	public Iterator<ProjectEntry> getEntryIterator() {
 		return entries.iterator();
 	}
@@ -106,6 +110,7 @@ public class Project implements Comparable<Project>, ProjectEntryParent {
 	}
 
 
+	@Override
 	public boolean moveProjectEntryDown(ProjectEntry entry) {
 		int index = getEntryIndex(entry);
 		if (index>-1 && index<entries.size()-1) {
@@ -117,6 +122,7 @@ public class Project implements Comparable<Project>, ProjectEntryParent {
 	}
 
 
+	@Override
 	public boolean moveProjectEntryUp(ProjectEntry entry) {
 		int index = getEntryIndex(entry);
 		if (index>0) {
@@ -128,6 +134,7 @@ public class Project implements Comparable<Project>, ProjectEntryParent {
 	}
 
 
+	@Override
 	public void removeEntry(ProjectEntry entry) {
 		entries.remove(entry);
 	}

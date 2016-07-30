@@ -174,6 +174,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param e The action event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		Object source = e.getSource();
@@ -249,6 +250,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param e The property change event.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		String name = e.getPropertyName();
 		if (name.equals(RColorSwatchesButton.COLOR_CHANGED_PROPERTY)) {
@@ -297,6 +299,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param e The change event.
 	 */
+	@Override
 	public void stateChanged(ChangeEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange(REFRESH_RATE_PROPERTY,

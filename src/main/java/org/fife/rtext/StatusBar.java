@@ -254,6 +254,7 @@ public class StatusBar extends org.fife.ui.StatusBar
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		String property = e.getPropertyName();

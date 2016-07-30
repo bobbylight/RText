@@ -255,6 +255,7 @@ class OutputTextPane extends JTextPane {
 			setName(plugin.getString("Action.ClearAll"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			setText(null);
 		}
@@ -270,6 +271,7 @@ class OutputTextPane extends JTextPane {
 			setName(plugin.getString("Action.CopyAll"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			int dot = getSelectionStart();
 			int mark = getSelectionEnd();
@@ -297,6 +299,7 @@ class OutputTextPane extends JTextPane {
 			this.delegate = delegate;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			int start = getSelectionStart();
 			int end = getSelectionEnd();
@@ -329,6 +332,7 @@ class OutputTextPane extends JTextPane {
 			this.delegate = delegate;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			int start = getSelectionStart();
 			int end = getSelectionEnd();

@@ -203,6 +203,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange(PROPERTY, null, new Integer(e.getRow()));
@@ -250,6 +251,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	 */
 	private class Listener implements ActionListener, ItemListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			Object source = e.getSource();
@@ -262,6 +264,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 
 		}
 
+		@Override
 		public void itemStateChanged(ItemEvent e) {
 			if (e.getSource()==locationCombo &&
 					e.getStateChange()==ItemEvent.SELECTED) {
@@ -300,6 +303,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	 */
 	private class ToolTableRowHandler extends AbstractRowHandler {
 
+		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {
 			NewToolDialog toolDialog = new NewToolDialog(getOptionsDialog());
 			Tool old = null;

@@ -242,6 +242,7 @@ class ToolBar extends CustomizableToolBar {
 	private class NewButtonListener extends MouseAdapter
 										implements FocusListener {
 
+		@Override
 		public void focusGained(FocusEvent e) {
 			RTextEditorPane textArea = owner.getMainView().getCurrentTextArea();
 			if (!mouseInNewButton && textArea!=null) {
@@ -249,6 +250,7 @@ class ToolBar extends CustomizableToolBar {
 			}
 		}
 
+		@Override
 		public void focusLost(FocusEvent e) {
 		}
 

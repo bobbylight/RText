@@ -15,7 +15,6 @@ import java.util.Map;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -81,29 +80,6 @@ class IconGroupLoader extends DefaultHandler {
 
 
 	/**
-	 * Creates the XML reader to use.  Note that in 1.4 JRE's, the reader
-	 * class wasn't defined by default, but in 1.5+ it is.
-	 *
-	 * @return The XML reader to use.
-	 */
-	private XMLReader createReader() {
-		XMLReader reader = null;
-		try {
-			reader = XMLReaderFactory.createXMLReader();
-		} catch (SAXException e) {
-			// Happens in JRE 1.4.x; 1.5+ define the reader class properly
-			try {
-				reader = XMLReaderFactory.createXMLReader(
-						"org.apache.crimson.parser.XMLReaderImpl");
-			} catch (SAXException se) {
-				owner.displayException(se);
-			}
-		}
-		return reader;
-	}
-
-
-	/**
 	 * Reads all icon groups from the specified XML file.
 	 *
 	 * @param iconGroupFile The file from which to read.
@@ -115,7 +91,7 @@ class IconGroupLoader extends DefaultHandler {
 
 		//long start = System.currentTimeMillis();
 		try {
-			XMLReader xr = createReader();
+			XMLReader xr = XMLReaderFactory.createXMLReader();
 			if (xr==null) {
 				return iconGroupMap; // Return the empty map
 			}

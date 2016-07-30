@@ -291,6 +291,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 	 */
 	private class Listener implements ActionListener, DocumentListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			Object source = e.getSource();
@@ -339,6 +340,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
@@ -348,10 +350,12 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 			firePropertyChange(PROPERTY, null, null);
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}

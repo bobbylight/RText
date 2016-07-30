@@ -431,6 +431,7 @@ class RTextSplitPaneView extends AbstractMainView
 	/**
 	 * Listens for the user to select values in the list.
 	 */
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 
 		// Remove old listeners.

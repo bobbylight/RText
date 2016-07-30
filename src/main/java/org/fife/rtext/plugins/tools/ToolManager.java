@@ -254,6 +254,7 @@ public class ToolManager {
 	 */
 	private static class ToolFilenameFilter implements FileFilter {
 
+		@Override
 		public boolean accept(File file) {
 			return file.getName().endsWith(TOOL_FILE_EXTENSION);
 		}

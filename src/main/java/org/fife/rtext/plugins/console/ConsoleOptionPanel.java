@@ -114,6 +114,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		Object source = e.getSource();
@@ -347,6 +348,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource()==locationCombo &&
 				e.getStateChange()==ItemEvent.SELECTED) {
@@ -379,6 +381,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange(PROPERTY, false, true);

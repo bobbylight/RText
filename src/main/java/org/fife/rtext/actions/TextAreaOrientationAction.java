@@ -49,6 +49,7 @@ class TextAreaOrientationAction extends AppAction<RText> {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		RText rtext = getApplication();
 		AbstractMainView mainView = rtext.getMainView();

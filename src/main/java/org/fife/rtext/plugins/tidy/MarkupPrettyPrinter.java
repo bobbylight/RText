@@ -49,6 +49,7 @@ class MarkupPrettyPrinter implements PrettyPrinter, TidyMessageListener {
 	 *
 	 * @param msg The message.
 	 */
+	@Override
 	public void messageReceived(TidyMessage msg) {
 
 		// Always remember the "worst" thing that has happened.
@@ -64,6 +65,7 @@ class MarkupPrettyPrinter implements PrettyPrinter, TidyMessageListener {
 	}
 
 
+	@Override
 	public PrettyPrintResult prettyPrint(String text) {
 
 		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();

@@ -149,6 +149,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
+	@Override
 	public void handleRefresh() {
 		plugin.getTree().refreshChildren(this);
 	}
@@ -161,12 +162,14 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
+	@Override
 	public boolean isNotPopulated() {
 		int childCount = getChildCount();
 		return childCount==1 && (getFirstChild() instanceof NotYetPopulatedChild);
 	}
 
 
+	@Override
 	public void refreshChildren() {
 		File file = getFile();
 		if (file.isDirectory()) { // Should always be true
@@ -207,6 +210,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 			super("Action.ConfigureFilters");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			FolderProjectEntry fpe = (FolderProjectEntry)entry;
@@ -226,6 +230,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 
 	private class FolderProjectEntryNameChecker implements NameChecker {
 
+		@Override
 		public String isValid(String text) {
 			int length = text.length();
 			if (length==0) {

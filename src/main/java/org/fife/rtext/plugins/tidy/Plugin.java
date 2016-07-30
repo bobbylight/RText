@@ -86,6 +86,7 @@ public class Plugin extends AbstractPlugin
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void currentTextAreaPropertyChanged(CurrentTextAreaEvent e) {
 		if (e.getType()==CurrentTextAreaEvent.TEXT_AREA_CHANGED ||
 				e.getType()==CurrentTextAreaEvent.SYNTAX_STYLE_CNANGED) {
@@ -144,6 +145,7 @@ public class Plugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new OptionsPanel(this);
 	}
@@ -163,6 +165,7 @@ public class Plugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
@@ -171,6 +174,7 @@ public class Plugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Icon getPluginIcon() {
 		if (icon==null) {
 			URL url = getClass().getResource("lightning.png");
@@ -189,6 +193,7 @@ public class Plugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginName() {
 		return msg.getString("Name");
 	}
@@ -197,6 +202,7 @@ public class Plugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getPluginVersion() {
 		return PLUGIN_VERSION;
 	}
@@ -236,6 +242,7 @@ public class Plugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		PluginPrefs prefs = loadPreferences();
@@ -324,6 +331,7 @@ public class Plugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void savePreferences() {
 
 		deleteOldVersionTidyPreferenceFiles();
@@ -363,6 +371,7 @@ public class Plugin extends AbstractPlugin
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean uninstall() {
 		return true;
 	}

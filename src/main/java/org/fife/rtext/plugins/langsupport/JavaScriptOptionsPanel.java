@@ -443,6 +443,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 	 */
 	private class Listener implements ActionListener, DocumentListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			Object source = e.getSource();
@@ -508,6 +509,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
@@ -517,10 +519,12 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 			firePropertyChange(PROPERTY, null, null);
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}

@@ -71,6 +71,7 @@ public class Macro implements Comparable<Macro>, Cloneable {
 	 * @param o The other macro.
 	 * @return The sort order of this macro, compared to another.
 	 */
+	@Override
 	public int compareTo(Macro o) {
 		int val = -1;
 		if (o==this) {

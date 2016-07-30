@@ -61,23 +61,29 @@ class DOMModelCreator implements WorkspaceVisitor {
 	}
 
 
+	@Override
 	public void postVisit(Workspace workspace) {}
 
 
+	@Override
 	public void postVisit(Project project) {
 		projEntryParentStack.pop();
 	}
 
 
+	@Override
 	public void postVisit(FileProjectEntry entry) {}
 
+	@Override
 	public void postVisit(FolderProjectEntry entry) {}
 
+	@Override
 	public void postVisit(LogicalFolderProjectEntry entry) {
 		projEntryParentStack.pop();
 	}
 
 
+	@Override
 	public void visit(Workspace workspace) {
 		Element root = doc.createElement("workspace");
 		doc.appendChild(root);
@@ -87,6 +93,7 @@ class DOMModelCreator implements WorkspaceVisitor {
 	}
 
 
+	@Override
 	public void visit(Project project) {
 		Element projElem = doc.createElement("project");
 		projElem.setAttribute("name", project.getName());
@@ -95,6 +102,7 @@ class DOMModelCreator implements WorkspaceVisitor {
 	}
 
 
+	@Override
 	public void visit(FileProjectEntry entry) {
 		Element entryElem = doc.createElement(entry.getType());
 		entryElem.setAttribute("path", entry.getSaveData());
@@ -102,6 +110,7 @@ class DOMModelCreator implements WorkspaceVisitor {
 	}
 
 
+	@Override
 	public void visit(FolderProjectEntry entry) {
 		Element entryElem = doc.createElement(entry.getType());
 		entryElem.setAttribute("path", entry.getSaveData());
@@ -117,6 +126,7 @@ class DOMModelCreator implements WorkspaceVisitor {
 	}
 
 
+	@Override
 	public void visit(LogicalFolderProjectEntry entry) {
 		Element entryElem = doc.createElement(entry.getType());
 		entryElem.setAttribute("name", entry.getSaveData());
