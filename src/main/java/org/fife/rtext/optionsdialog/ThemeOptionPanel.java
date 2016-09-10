@@ -54,6 +54,9 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param rtext The parent application.
+	 * @param msg The resource bundle to use when localizing this panel.
 	 */
 	public ThemeOptionPanel(RText rtext, final ResourceBundle msg) {
 

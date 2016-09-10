@@ -398,7 +398,7 @@ public class Plugin extends GUIPlugin {
 		jsls.setXmlAvailable(prefs.js_rhinoAllowE4x);
 		view.setCodeFoldingEnabledFor(language, prefs.js_folding_enabled);
 
-		language = SyntaxConstants.SYNTAX_STYLE_JSHINTRC;
+		language = SyntaxConstants.SYNTAX_STYLE_JSON_WITH_COMMENTS;
 		view.setCodeFoldingEnabledFor(language, prefs.jshintrc_folding_enabled);
 
 		language = SyntaxConstants.SYNTAX_STYLE_JSON;
@@ -591,7 +591,7 @@ public class Plugin extends GUIPlugin {
 		prefs.js_rhinoAllowE4x = jsls.isXmlAvailable();
 		prefs.js_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
-		language = SyntaxConstants.SYNTAX_STYLE_JSHINTRC;
+		language = SyntaxConstants.SYNTAX_STYLE_JSON_WITH_COMMENTS;
 		prefs.jshintrc_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_JSON;

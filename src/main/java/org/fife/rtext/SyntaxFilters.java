@@ -239,16 +239,25 @@ public class SyntaxFilters implements SyntaxConstants {
 	 */
 	private static final String getSyntaxStyleForFileImpl(String fileName,
 			Map<String, List<String>> filters) {
+
+		String syntaxStyle = null;
+
 		for (Map.Entry<String, List<String>> entry : filters.entrySet()) {
 			for (String filter : entry.getValue()) {
 				Pattern p = RTextUtilities.getPatternForFileFilter(
 									filter, true);
 				if (p!=null && p.matcher(fileName).matches()) {
-					return entry.getKey();
+					syntaxStyle = entry.getKey();
+					// Stop immediately if we find a non-wildcard match
+					if (!filter.contains("*") && !filter.contains("?")) {
+						break;
+					}
 				}
 			}
 		}
-		return null;
+
+		return syntaxStyle;
+
 	}
 
 
@@ -312,7 +321,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_JAVA,			createValue("*.java"));
 		filters.put(SYNTAX_STYLE_JAVASCRIPT,		createValue("*.js"));
 		filters.put(SYNTAX_STYLE_JSP,				createValue("*.jsp"));
-		filters.put(SYNTAX_STYLE_JSHINTRC,			createValue(".jshintrc"));
+		filters.put(SYNTAX_STYLE_JSON_WITH_COMMENTS,createValue(".jshintrc", "tslint.json"));
 		filters.put(SYNTAX_STYLE_JSON,				createValue("*.json"));
 		filters.put(SYNTAX_STYLE_LATEX,				createValue("*.tex", "*.ltx", "*.latex"));
 		filters.put(SYNTAX_STYLE_LESS, 				createValue("*.less"));

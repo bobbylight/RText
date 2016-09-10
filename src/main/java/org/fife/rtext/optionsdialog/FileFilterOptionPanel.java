@@ -310,9 +310,9 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 			addRow(new Object[] { "HTML",				null }); styles[15] = SYNTAX_STYLE_HTML;
 			addRow(new Object[] { "Java",				null }); styles[16] = SYNTAX_STYLE_JAVA;
 			addRow(new Object[] { "JavaScript",			null }); styles[17] = SYNTAX_STYLE_JAVASCRIPT;
-			addRow(new Object[] { ".jshintrc",			null }); styles[18] = SYNTAX_STYLE_JSHINTRC;
-			addRow(new Object[] { "JSP",				null }); styles[19] = SYNTAX_STYLE_JSP;
-			addRow(new Object[] { "JSON",				null }); styles[20] = SYNTAX_STYLE_JSON;
+			addRow(new Object[] { "JSP",				null }); styles[18] = SYNTAX_STYLE_JSP;
+			addRow(new Object[] { "JSON",				null }); styles[19] = SYNTAX_STYLE_JSON;
+			addRow(new Object[] { "JSON with comments",	null }); styles[20] = SYNTAX_STYLE_JSON_WITH_COMMENTS;
 			addRow(new Object[] { "LaTeX",				null }); styles[21] = SYNTAX_STYLE_LATEX;
 			addRow(new Object[] { "Less",				null }); styles[22] = SYNTAX_STYLE_LESS;
 			addRow(new Object[] { "Lisp",				null }); styles[23] = SYNTAX_STYLE_LISP;

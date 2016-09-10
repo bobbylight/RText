@@ -26,7 +26,7 @@ class JSHintOptionsPanel extends FoldingOnlyOptionsPanel {
 	 */
 	public JSHintOptionsPanel() {
 		super("Options.JSHint.Name", "jshint.png",
-				SyntaxConstants.SYNTAX_STYLE_JSHINTRC);
+				SyntaxConstants.SYNTAX_STYLE_JSON_WITH_COMMENTS);
 	}
 
 
