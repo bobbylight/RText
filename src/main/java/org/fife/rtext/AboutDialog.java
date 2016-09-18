@@ -227,7 +227,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 											rtext.getVersionString();
 			String text = "<html><body><center>" +
 				"Version " + version + "<br>" +
-				"Copyright (c) 2015 Robert Futrell<br>" +
+				"Copyright (c) 2016 Robert Futrell<br>" +
 				"<a href=\"http://rtext.fifesoft.com\">http://rtext.fifesoft.com</a>" +
 				"</font></center></body></html>";
 			return text;

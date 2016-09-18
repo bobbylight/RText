@@ -1,7 +1,25 @@
 RText Change Log
-http://rtext.sourceforge.net
-----------------------------
+http://bobbylight.github.io/RText/
+----------------------------------
 
+2.6.0 (09/16/2016)
+------------------
+   - Basic TypeScript language support (syntax highlighting, code folding,
+     building).
+   - Added "Themes" panel to Options dialog, allowing a fast way to toggle
+     between 3 canned themes:  Default, Eclipse, and Dark.
+   - Adding "matched bracket" popup, showing the line containing a matched
+     bracket if it is scrolled off-screen.
+   - Vagrantfile files will now be syntax highlighted as Ruby OOTB.
+   - Better support for Darcula Look and Feel.
+   - tsling.json files now syntax highlight C-style EOL comments.
+   - Ctrl+/ now correctly toggles commented lines for Less files.
+   - Unicode characters handled better when copying text as RTF.
+   - Added syntax highlighting for hosts files.
+   - Added syntax highlighting for Dockerfiles.
+   - Converted to Java 6.
+   
+   
 2.5.8 (09/12/2015)
 ------------------
    - Added syntax highlighting, code folding, and code completion for Less.
