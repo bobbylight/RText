@@ -19,11 +19,11 @@ dependencies {
 		[ "com.github.insubstantial:substance:7.2.1" ],
 		[ "com.github.insubstantial:trident:7.2.1" ],
 		
-		[ "com.fifesoft:rsyntaxtextarea:2.6.0-SNAPSHOT" ],
-		[ "com.fifesoft:autocomplete:2.6.0-SNAPSHOT" ],
-		[ "com.fifesoft:rstaui:2.6.0-SNAPSHOT" ],
-		[ "com.fifesoft:spellchecker:2.6.0-SNAPSHOT" ],
-		[ "com.fifesoft:languagesupport:2.6.0-SNAPSHOT" ],
+		[ "com.fifesoft:rsyntaxtextarea:2.6.0" ],
+		[ "com.fifesoft:autocomplete:2.6.0" ],
+		[ "com.fifesoft:rstaui:2.6.0" ],
+		[ "com.fifesoft:spellchecker:2.6.0" ],
+		[ "com.fifesoft:languagesupport:2.6.0" ],
 		
 		[ "net.sf.jtidy:jtidy:r938" ],
 		[ "org.codehaus.groovy:groovy-all:2.+" ],

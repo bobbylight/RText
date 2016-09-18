@@ -57,6 +57,7 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.ui.rtextfilechooser.Utilities;
 import org.fife.ui.rtextfilechooser.filters.ExtensionFileFilter;
 import org.fife.ui.search.FindInFilesDialog;
+import org.fife.util.DarculaUtil;
 import org.fife.util.DynamicIntArray;
 import org.fife.util.TranslucencyUtil;
 
@@ -959,7 +960,10 @@ public class RTextUtilities {
 				boolean curSubstance = SubstanceUtil.isSubstanceInstalled();
 				boolean nextSubstance = SubstanceUtil.
 											isASubstanceLookAndFeel(lnf);
-				if (curSubstance!=nextSubstance) {
+				boolean curDarcula = DarculaUtil.isDarculaInstalled();
+				boolean nextDarcula = DarculaUtil.isDarculaLookAndFeel(lnf);
+				System.out.println("curDarcula == " + curDarcula + ", " + nextDarcula);
+				if (curSubstance!=nextSubstance || curDarcula || nextDarcula) {
 					String message = rtext.getString(
 									"Info.LookAndFeel.LoadOnNextRestart");
 					String title = rtext.getString("InfoDialogHeader");
