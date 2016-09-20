@@ -87,6 +87,12 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 */
 	public static final String MENU_HELP		= "Help";
 
+	/**
+	 * This is cached only until {@code #addNotify()} is called, to work around
+	 * an issue in Darcula.
+	 */
+	private String initialFileHistoryString;
+
 	// These items correspond to actions belonging to RTextEditorPanes, and are
 	// changed in disableEditorActions() below, so we need to remember them.
 	private JMenuItem newItem;
@@ -229,13 +235,8 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		fileMenu.addSeparator();
 
-		String[] initialContents = null;
-		if (properties.fileHistoryString!=null &&
-				properties.fileHistoryString.length()>0) {
-			initialContents = properties.fileHistoryString.split("<");
-		}
-		recentFilesMenu = new RecentFilesMenu(menuMsg.getString("RecentFiles"),
-												initialContents) {
+		this.initialFileHistoryString = properties.fileHistoryString;
+		recentFilesMenu = new RecentFilesMenu(menuMsg.getString("RecentFiles")) {
 			@Override
 			protected Action createOpenAction(String fileFullPath) {
 				OpenFileFromHistoryAction action =
@@ -600,6 +601,22 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 			return;
 		}
 		recentFilesMenu.addFileToFileHistory(fileFullPath);
+	}
+
+
+	@Override
+	public void addNotify() {
+
+		super.addNotify();
+
+		// Populate file history here to avoid issue with Darcula
+		if (initialFileHistoryString!=null && initialFileHistoryString.length()>0) {
+			String[] initialContents = initialFileHistoryString.split("<");
+			for (String fileFullPath : initialContents) {
+				recentFilesMenu.addFileToFileHistory(fileFullPath);
+			}
+			initialFileHistoryString = null;
+		}
 	}
 
 

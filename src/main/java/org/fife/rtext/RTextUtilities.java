@@ -962,7 +962,6 @@ public class RTextUtilities {
 											isASubstanceLookAndFeel(lnf);
 				boolean curDarcula = DarculaUtil.isDarculaInstalled();
 				boolean nextDarcula = DarculaUtil.isDarculaLookAndFeel(lnf);
-				System.out.println("curDarcula == " + curDarcula + ", " + nextDarcula);
 				if (curSubstance!=nextSubstance || curDarcula || nextDarcula) {
 					String message = rtext.getString(
 									"Info.LookAndFeel.LoadOnNextRestart");
