@@ -41,7 +41,7 @@ public class CheckForUpdatesAction extends AppAction<RText> {
 	/**
 	 * Where the user is directed to download the latest version.
 	 */
-	private static final String DOWNLOAD_URL = "http://sourceforge.net/projects/rtext";
+	private static final String DOWNLOAD_URL = "https://github.com/bobbylight/RText";
 
 
 	/**

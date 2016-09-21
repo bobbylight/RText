@@ -2,6 +2,11 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
+2.6.1 (09/21/2016)
+------------------
+   - Fixed a bug in the modified Darcula theme used by RText that prevented it
+     from working on OS X and *nix.
+     
 2.6.0 (09/16/2016)
 ------------------
    - Basic TypeScript language support (syntax highlighting, code folding,
