@@ -355,20 +355,23 @@ public class Plugin extends GUIPlugin {
 						prefs.java_classpath_jars.length;
 		for (int i=0; i<count; i++) {
 			File jar = new File(prefs.java_classpath_jars[i]);
-			JarLibraryInfo info = new JarLibraryInfo(jar);
-			if (prefs.java_classpath_src[i]!=null) {
-				File src = new File(prefs.java_classpath_src[i]);
-				if (src.isFile()) {
-					info.setSourceLocation(new ZipSourceLocation(src));
+			// Just in case the file went away out from under us
+			if (jar.isFile()) {
+				JarLibraryInfo info = new JarLibraryInfo(jar);
+				if (prefs.java_classpath_src[i]!=null) {
+					File src = new File(prefs.java_classpath_src[i]);
+					if (src.isFile()) {
+						info.setSourceLocation(new ZipSourceLocation(src));
+					}
+					else { // Assume source folder
+						info.setSourceLocation(new DirSourceLocation(src));
+					}
 				}
-				else { // Assume source folder
-					info.setSourceLocation(new DirSourceLocation(src));
+				try {
+					jarMan.addClassFileSource(info);
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
 				}
-			}
-			try {
-				jarMan.addClassFileSource(info);
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
 			}
 		}
 
