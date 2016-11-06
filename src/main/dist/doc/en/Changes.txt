@@ -2,15 +2,22 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
+2.6.3
+------------------
+   - Added .ini file syntax highlighting.
+   
+   
 2.6.2 (09/28/2016)
 ------------------
    - Fixed a bug where missing jar files configured with Java language support
      threw an exception on startup, preventing RText from stopping.
      
+     
 2.6.1 (09/21/2016)
 ------------------
    - Fixed a bug in the modified Darcula theme used by RText that prevented it
      from working on OS X and *nix.
+     
      
 2.6.0 (09/16/2016)
 ------------------

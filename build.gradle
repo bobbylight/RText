@@ -6,6 +6,7 @@ plugins {
 ["java", "distribution", "maven" ].each { apply plugin: it }
 
 group = "com.fifesoft"
+sourceCompatibility = '1.6'
 
 assert org.gradle.api.JavaVersion.current().isJava6Compatible()
 
@@ -21,7 +22,7 @@ dependencies {
 		[ "com.github.insubstantial:substance:7.2.1" ],
 		[ "com.github.insubstantial:trident:7.2.1" ],
 		
-		[ "com.fifesoft:rsyntaxtextarea:2.6.0" ],
+		[ "com.fifesoft:rsyntaxtextarea:2.6.1-SNAPSHOT" ],
 		[ "com.fifesoft:autocomplete:2.6.0" ],
 		[ "com.fifesoft:rstaui:2.6.0" ],
 		[ "com.fifesoft:spellchecker:2.6.0" ],

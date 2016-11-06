@@ -318,6 +318,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_GROOVY,			createValue("*.groovy", "*.gradle", "*.grv"));
 		filters.put(SYNTAX_STYLE_HTACCESS,			createValue(".htaccess"));
 		filters.put(SYNTAX_STYLE_HTML,			createValue("*.htm", "*.html"));
+		filters.put(SYNTAX_STYLE_INI,			createValue("*.ini", ".editorconfig"));
 		filters.put(SYNTAX_STYLE_JAVA,			createValue("*.java"));
 		filters.put(SYNTAX_STYLE_JAVASCRIPT,		createValue("*.js"));
 		filters.put(SYNTAX_STYLE_JSP,				createValue("*.jsp"));
@@ -332,7 +333,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_NSIS,				createValue("*.nsi"));
 		filters.put(SYNTAX_STYLE_PERL,			createValue("*.perl", "*.pl", "*.pm"));
 		filters.put(SYNTAX_STYLE_PHP,				createValue("*.php"));
-		filters.put(SYNTAX_STYLE_PROPERTIES_FILE,	createValue("*.properties", "*.ini"));
+		filters.put(SYNTAX_STYLE_PROPERTIES_FILE,	createValue("*.properties"));
 		filters.put(SYNTAX_STYLE_PYTHON,			createValue("*.py"));
 		filters.put(SYNTAX_STYLE_RUBY,			createValue("*.rb", "Vagrantfile"));
 		filters.put(SYNTAX_STYLE_SAS,				createValue("*.sas"));

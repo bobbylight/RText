@@ -268,6 +268,8 @@ public class RTextUtilities {
 					new String[] { "groovy", "grv" });
 			addFilter(chooser, msg, "HTML",
 					new String[] { "htm", "html" });
+			addFilter(chooser, msg, "INI",
+					new String[] { "ini" });
 			addFilter(chooser, msg, "Java", "java");
 			addFilter(chooser, msg, "JavaScript", "js");
 			addFilter(chooser, msg, "JSON", "json");
@@ -329,6 +331,7 @@ public class RTextUtilities {
 						"f", "for", "fort", "f77", "f90",
 						"groovy", "grv",
 						"htm", "html",
+						"ini",
 						"java",
 						"js",
 						"json",

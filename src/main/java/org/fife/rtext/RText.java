@@ -58,7 +58,7 @@ import org.fife.util.TranslucencyUtil;
  * text editor with the following features:
  *
  * <ul>
- *   <li>Syntax highlighting for 35+ languages.
+ *   <li>Syntax highlighting for 40+ languages.
  *   <li>Code folding.
  *   <li>Edit multiple documents simultaneously.
  *   <li>Auto-indent.
@@ -82,7 +82,7 @@ import org.fife.util.TranslucencyUtil;
  * status bar.
  *
  * @author Robert Futrell
- * @version 2.6.0
+ * @version 2.6.3
  */
 public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			implements ActionListener, CaretListener, PropertyChangeListener,
@@ -177,7 +177,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 */
 	public static final String PROPERTY_PRINT_START_TIMES = "printStartTimes";
 
-	public static final String VERSION_STRING		= "2.6.2.20160928";
+	public static final String VERSION_STRING		= "2.6.3.BETA-????????";
 
 
 	/**
