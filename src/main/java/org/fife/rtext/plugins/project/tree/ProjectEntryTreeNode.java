@@ -66,16 +66,16 @@ abstract class ProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 
 
 	@Override
-	public boolean moveProjectEntityDown() {
+	public boolean moveProjectEntityDown(boolean toBottom) {
 		ProjectEntryParent parent = entry.getParent();
-		return parent.moveProjectEntryDown(entry);
+		return parent.moveProjectEntryDown(entry, toBottom);
 	}
 
 
 	@Override
-	public boolean moveProjectEntityUp() {
+	public boolean moveProjectEntityUp(boolean toTop) {
 		ProjectEntryParent parent = entry.getParent();
-		return parent.moveProjectEntryUp(entry);
+		return parent.moveProjectEntryUp(entry, toTop);
 	}
 
 

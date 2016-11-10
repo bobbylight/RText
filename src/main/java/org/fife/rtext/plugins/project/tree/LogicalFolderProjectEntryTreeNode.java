@@ -13,6 +13,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileSystemView;
@@ -74,8 +75,10 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 		actions.add(new AddFolderAction(entry, this));
 		actions.add(new AddLogicalFolderAction(entry, this));
 		actions.add(null);
+		actions.add(new MoveToTopAction());
 		actions.add(new MoveUpAction());
 		actions.add(new MoveDownAction());
+		actions.add(new MoveToBottomAction());
 		actions.add(null);
 		actions.add(new RemoveAction());
 		actions.add(new DeleteAction(false));

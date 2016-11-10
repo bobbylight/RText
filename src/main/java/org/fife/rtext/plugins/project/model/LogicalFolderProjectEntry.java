@@ -125,11 +125,12 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 
 
 	@Override
-	public boolean moveProjectEntryDown(ProjectEntry entry) {
+	public boolean moveProjectEntryDown(ProjectEntry entry, boolean toBottom) {
 		int index = getEntryIndex(entry);
 		if (index>-1 && index<entries.size()-1) {
 			entries.remove(index);
-			entries.add(index+1, entry);
+			int newIndex = toBottom ? entries.size() - 1 : index + 1;
+			entries.add(newIndex, entry);
 			return true;
 		}
 		return false;
@@ -137,11 +138,12 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 
 
 	@Override
-	public boolean moveProjectEntryUp(ProjectEntry entry) {
+	public boolean moveProjectEntryUp(ProjectEntry entry, boolean toTop) {
 		int index = getEntryIndex(entry);
 		if (index>0) {
 			entries.remove(index);
-			entries.add(index-1, entry);
+			int newIndex = toTop ? 0 : index - 1;
+			entries.add(newIndex, entry);
 			return true;
 		}
 		return false;

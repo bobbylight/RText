@@ -21,6 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -93,6 +94,8 @@ public class ProjectPlugin extends GUIPlugin {
 				getOrientation(Locale.getDefault());
 		window.applyComponentOrientation(o);
 		putDockableWindow(DOCKABLE_WINDOW_PROJECTS, window);
+
+		getTree().setExpandsSelectedPaths(true);
 
 	}
 
@@ -227,11 +230,19 @@ public class ProjectPlugin extends GUIPlugin {
 	 * @param index The index at which to insert the child node.
 	 * @see #insertTreeNodeInto(MutableTreeNode, MutableTreeNode)
 	 */
-	public void insertTreeNodeInto(MutableTreeNode child,
+	public void insertTreeNodeInto(final MutableTreeNode child,
 			MutableTreeNode parent, int index) {
-		DefaultTreeModel model = (DefaultTreeModel)getTree().getModel();
+		final DefaultTreeModel model = (DefaultTreeModel)getTree().getModel();
 		model.insertNodeInto(child, parent, index);
-		getTree().expandPath(new TreePath(model.getPathToRoot(parent)));
+		final TreePath path = new TreePath(model.getPathToRoot(parent));
+		getTree().expandPath(path);
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				getTree().setSelectionPath(new TreePath(model.getPathToRoot(child)));
+			}
+		});
 	}
 
 
@@ -340,7 +351,51 @@ public class ProjectPlugin extends GUIPlugin {
 		if (index<parent.getChildCount()-1) {
 			model.removeNodeFromParent(node);
 			insertTreeNodeInto(node, parent, index+1);
-			node.moveProjectEntityDown();
+			node.moveProjectEntityDown(false);
+		}
+		else {
+			UIManager.getLookAndFeel().provideErrorFeedback(rtext);
+		}
+	}
+
+
+	/**
+	 * Moves a tree node to the bottom of its parent's list of children, if
+	 * possible.
+	 *
+	 * @param node The node to move down.
+	 * @see #moveTreeNodeToTop(AbstractWorkspaceTreeNode)
+	 */
+	public void moveTreeNodeToBottom(AbstractWorkspaceTreeNode node) {
+		DefaultTreeModel model = (DefaultTreeModel)getTree().getModel();
+		MutableTreeNode parent = (MutableTreeNode)node.getParent();
+		int index = parent.getIndex(node);
+		if (index<parent.getChildCount()-1) {
+			model.removeNodeFromParent(node);
+			insertTreeNodeInto(node, parent, parent.getChildCount());
+			node.moveProjectEntityDown(true);
+		}
+		else {
+			UIManager.getLookAndFeel().provideErrorFeedback(rtext);
+		}
+	}
+
+
+	/**
+	 * Moves a tree node to the top of its parent's list of children, if
+	 * possible.
+	 *
+	 * @param node The node to move up.
+	 * @see #moveTreeNodeToBottom(AbstractWorkspaceTreeNode)
+	 */
+	public void moveTreeNodeToTop(AbstractWorkspaceTreeNode node) {
+		DefaultTreeModel model = (DefaultTreeModel)getTree().getModel();
+		MutableTreeNode parent = (MutableTreeNode)node.getParent();
+		int index = parent.getIndex(node);
+		if (index>0) {
+			model.removeNodeFromParent(node);
+			insertTreeNodeInto(node, parent, 0);
+			node.moveProjectEntityUp(true);
 		}
 		else {
 			UIManager.getLookAndFeel().provideErrorFeedback(rtext);
@@ -361,7 +416,7 @@ public class ProjectPlugin extends GUIPlugin {
 		if (index>0) {
 			model.removeNodeFromParent(node);
 			insertTreeNodeInto(node, parent, index-1);
-			node.moveProjectEntityUp();
+			node.moveProjectEntityUp(false);
 		}
 		else {
 			UIManager.getLookAndFeel().provideErrorFeedback(rtext);

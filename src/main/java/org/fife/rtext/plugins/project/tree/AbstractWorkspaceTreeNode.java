@@ -141,10 +141,12 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 * returns <code>false</code>, since for most entities this operation
 	 * does not make sense.
 	 *
+	 * @param toBottom Whether to move it all the way to the bottom, as opposed
+	 *        to just down one.
 	 * @return Whether the entity was moved down.
-	 * @see #moveProjectEntityUp()
+	 * @see #moveProjectEntityUp(boolean)
 	 */
-	public boolean moveProjectEntityDown() {
+	public boolean moveProjectEntityDown(boolean toBottom) {
 		return false;
 	}
 
@@ -155,10 +157,12 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 * returns <code>false</code>, since for most entities this operation
 	 * does not make sense.
 	 *
+	 * @param toTop Whether to move it all the way to the top, as opposed to
+	 *        just up one.
 	 * @return Whether the entity was moved up.
-	 * @see #moveProjectEntityDown()
+	 * @see #moveProjectEntityDown(boolean)
 	 */
-	public boolean moveProjectEntityUp() {
+	public boolean moveProjectEntityUp(boolean toTop) {
 		return false;
 	}
 
@@ -366,6 +370,43 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			plugin.moveTreeNodeDown(AbstractWorkspaceTreeNode.this);
+		}
+
+	}
+
+
+	/**
+	 * Moves this tree node to the "bottom" of the list of its parent's children.
+	 */
+	protected class MoveToBottomAction extends BaseAction {
+
+		public MoveToBottomAction() {
+			super("Action.MoveToBottom");
+			setEnabled(getParent().getIndex(AbstractWorkspaceTreeNode.this) <
+					getParent().getChildCount() - 1);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			plugin.moveTreeNodeToBottom(AbstractWorkspaceTreeNode.this);
+		}
+
+	}
+
+
+	/**
+	 * Moves this tree node to the "top" of the list of its parent's children.
+	 */
+	protected class MoveToTopAction extends BaseAction {
+
+		public MoveToTopAction() {
+			super("Action.MoveToTop");
+			setEnabled(getParent().getIndex(AbstractWorkspaceTreeNode.this)>0);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			plugin.moveTreeNodeToTop(AbstractWorkspaceTreeNode.this);
 		}
 
 	}

@@ -11,6 +11,7 @@ package org.fife.rtext.plugins.project.tree;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -65,8 +66,10 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 		actions.add(new AddFolderAction(project, this));
 		actions.add(new AddLogicalFolderAction(project, this));
 		actions.add(null);
+		actions.add(new MoveToTopAction());
 		actions.add(new MoveUpAction());
 		actions.add(new MoveDownAction());
+		actions.add(new MoveToBottomAction());
 		actions.add(null);
 		actions.add(new DeleteAction());
 		actions.add(null);
@@ -145,16 +148,16 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 
 	@Override
-	public boolean moveProjectEntityDown() {
+	public boolean moveProjectEntityDown(boolean toBottom) {
 		Workspace workspace = project.getWorkspace();
-		return workspace.moveProjectDown(project);
+		return workspace.moveProjectDown(project, toBottom);
 	}
 
 
 	@Override
-	public boolean moveProjectEntityUp() {
+	public boolean moveProjectEntityUp(boolean toTop) {
 		Workspace workspace = project.getWorkspace();
-		return workspace.moveProjectUp(project);
+		return workspace.moveProjectUp(project, toTop);
 	}
 
 

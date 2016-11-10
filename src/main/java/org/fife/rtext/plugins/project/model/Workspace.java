@@ -214,22 +214,24 @@ public class Workspace implements ModelEntity {
 	}
 
 
-	public boolean moveProjectDown(Project project) {
+	public boolean moveProjectDown(Project project, boolean toBottom) {
 		int index = getProjectIndex(project);
 		if (index>-1 && index<projects.size()-1) {
 			projects.remove(index);
-			projects.add(index+1, project);
+			int newIndex = toBottom ? projects.size() - 1 : index + 1;
+			projects.add(newIndex, project);
 			return true;
 		}
 		return false;
 	}
 
 
-	public boolean moveProjectUp(Project project) {
+	public boolean moveProjectUp(Project project, boolean toTop) {
 		int index = getProjectIndex(project);
 		if (index>0) {
 			projects.remove(index);
-			projects.add(index-1, project);
+			int newIndex = toTop ? 0 : index - 1;
+			projects.add(newIndex, project);
 			return true;
 		}
 		return false;

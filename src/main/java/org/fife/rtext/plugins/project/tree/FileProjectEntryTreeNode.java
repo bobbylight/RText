@@ -85,8 +85,10 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 			actions.add(new OpenAction());
 		}
 		addOpenInActions(actions);
+		actions.add(new MoveToTopAction());
 		actions.add(new MoveUpAction());
 		actions.add(new MoveDownAction());
+		actions.add(new MoveToBottomAction());
 		actions.add(null);
 		actions.add(new RemoveAction());
 		actions.add(new CopyFullPathAction());

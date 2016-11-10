@@ -39,10 +39,10 @@ public interface ProjectEntryParent extends ModelEntity {
 	Iterator<ProjectEntry> getEntryIterator();
 
 
-	boolean moveProjectEntryDown(ProjectEntry entry);
+	boolean moveProjectEntryDown(ProjectEntry entry, boolean toBottom);
 
 
-	boolean moveProjectEntryUp(ProjectEntry entry);
+	boolean moveProjectEntryUp(ProjectEntry entry, boolean toTop);
 
 
 	/**
