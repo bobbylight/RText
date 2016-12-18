@@ -12,8 +12,10 @@ package org.fife.rtext.plugins.console;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
+
 import javax.swing.KeyStroke;
 
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.Prefs;
 import org.fife.ui.dockablewindows.DockableWindow;
 
@@ -85,14 +87,25 @@ public class ConsolePrefs extends Prefs {
 	 */
 	@Override
 	public void setDefaults() {
+
 		windowVisible = false;
 		windowPosition = DockableWindow.BOTTOM;
 		windowVisibilityAccelerator = null;
 		syntaxHighlightInput = true;
-		stdoutFG = ConsoleTextArea.DEFAULT_STDOUT_FG;
-		stderrFG = ConsoleTextArea.DEFAULT_STDERR_FG;
-		exceptionFG = ConsoleTextArea.DEFAULT_EXCEPTION_FG;
-		promptFG = ConsoleTextArea.DEFAULT_PROMPT_FG;
+
+		boolean isDark = RTextUtilities.isDarkLookAndFeel();
+		if (isDark) {
+			stdoutFG = ConsoleTextArea.DEFAULT_DARK_STDOUT_FG;
+			stderrFG = ConsoleTextArea.DEFAULT_DARK_STDERR_FG;
+			exceptionFG = ConsoleTextArea.DEFAULT_EXCEPTION_FG;
+			promptFG = ConsoleTextArea.DEFAULT_DARK_PROMPT_FG;
+		}
+		else {
+			stdoutFG = ConsoleTextArea.DEFAULT_STDOUT_FG;
+			stderrFG = ConsoleTextArea.DEFAULT_STDERR_FG;
+			exceptionFG = ConsoleTextArea.DEFAULT_EXCEPTION_FG;
+			promptFG = ConsoleTextArea.DEFAULT_PROMPT_FG;
+		}
 	}
 
 

@@ -21,6 +21,7 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ResourceBundle;
+
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -30,6 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
@@ -41,7 +43,7 @@ import org.fife.ui.app.PluginOptionsDialogPanel;
  * @author Robert Futrell
  * @version 1.0
  */
-class ConsoleOptionPanel extends PluginOptionsDialogPanel
+public class ConsoleOptionPanel extends PluginOptionsDialogPanel
 			implements ActionListener, ItemListener, PropertyChangeListener {
 
 	/**
@@ -366,13 +368,36 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	 * value.
 	 */
 	private boolean notDefaults() {
+
+		boolean isDark = RTextUtilities.isDarkLookAndFeel();
+		Color defaultPrompt = isDark ? ConsoleTextArea.DEFAULT_DARK_PROMPT_FG :
+			ConsoleTextArea.DEFAULT_PROMPT_FG;
+		Color defaultStdout = isDark ? ConsoleTextArea.DEFAULT_DARK_STDOUT_FG :
+			ConsoleTextArea.DEFAULT_STDOUT_FG;
+		Color defaultStderr = isDark ? ConsoleTextArea.DEFAULT_DARK_STDERR_FG :
+			ConsoleTextArea.DEFAULT_STDERR_FG;
+
 		return !visibleCB.isSelected() ||
 			locationCombo.getSelectedIndex()!=2 ||
 			!highlightInputCB.isSelected() ||
-			!ConsoleTextArea.DEFAULT_STDOUT_FG.equals(stdoutButton.getColor()) ||
-			!ConsoleTextArea.DEFAULT_STDERR_FG.equals(stderrButton.getColor()) ||
+			!defaultPrompt.equals(promptButton.getColor()) ||
+			!defaultStdout.equals(stdoutButton.getColor()) ||
+			!defaultStderr.equals(stderrButton.getColor()) ||
 			!ConsoleTextArea.DEFAULT_PROMPT_FG.equals(promptButton.getColor()) ||
 			!ConsoleTextArea.DEFAULT_EXCEPTION_FG.equals(exceptionsButton.getColor());
+	}
+
+
+	/**
+	 * Overridden to set all colors to values appropriate for the current Look
+	 * and Feel.
+	 *
+	 * @param event the broadcasted event.
+	 */
+	@Override
+	public void optionsEvent(String event) {
+		restoreDefaultColors();
+		super.optionsEvent(event);
 	}
 
 
@@ -385,6 +410,17 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	public void propertyChange(PropertyChangeEvent e) {
 		hasUnsavedChanges = true;
 		firePropertyChange(PROPERTY, false, true);
+	}
+
+
+	/**
+	 * Changes all consoles to use the default colors for the current
+	 * application theme.
+	 */
+	private void restoreDefaultColors() {
+		Plugin plugin = (Plugin)getPlugin();
+		plugin.restoreDefaultColors();
+		setValues(((Plugin)getPlugin()).getRText());
 	}
 
 
@@ -403,10 +439,19 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		promptCB.setSelected(true);
 		exceptionsCB.setSelected(true);
 
-		stdoutButton.setColor(ConsoleTextArea.DEFAULT_STDOUT_FG);
-		stderrButton.setColor(ConsoleTextArea.DEFAULT_STDERR_FG);
-		promptButton.setColor(ConsoleTextArea.DEFAULT_PROMPT_FG);
-		exceptionsButton.setColor(ConsoleTextArea.DEFAULT_EXCEPTION_FG);
+		boolean isDark = RTextUtilities.isDarkLookAndFeel();
+		if (isDark) {
+			stdoutButton.setColor(ConsoleTextArea.DEFAULT_DARK_STDOUT_FG);
+			stderrButton.setColor(ConsoleTextArea.DEFAULT_DARK_STDERR_FG);
+			promptButton.setColor(ConsoleTextArea.DEFAULT_DARK_PROMPT_FG);
+			exceptionsButton.setColor(ConsoleTextArea.DEFAULT_EXCEPTION_FG);
+		}
+		else {
+			stdoutButton.setColor(ConsoleTextArea.DEFAULT_STDOUT_FG);
+			stderrButton.setColor(ConsoleTextArea.DEFAULT_STDERR_FG);
+			promptButton.setColor(ConsoleTextArea.DEFAULT_PROMPT_FG);
+			exceptionsButton.setColor(ConsoleTextArea.DEFAULT_EXCEPTION_FG);
+		}
 
 	}
 

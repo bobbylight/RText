@@ -18,6 +18,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -44,6 +45,7 @@ import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
 import javax.swing.text.Utilities;
 
+import org.fife.rtext.RTextUtilities;
 import org.fife.ui.OptionsDialog;
 import org.fife.util.SubstanceUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
@@ -68,6 +70,12 @@ abstract class ConsoleTextArea extends JTextPane {
 	public static final Color DEFAULT_STDERR_FG		= Color.red;
 
 	public static final Color DEFAULT_EXCEPTION_FG	= new Color(111, 49, 152);
+
+	public static final Color DEFAULT_DARK_PROMPT_FG	= new Color(0x30, 0xff, 0x2f);
+
+	public static final Color DEFAULT_DARK_STDOUT_FG	= new Color(0, 255, 255);
+
+	public static final Color DEFAULT_DARK_STDERR_FG	= new Color(0xff, 0x80, 0x80);
 
 
 	/**
@@ -354,24 +362,7 @@ abstract class ConsoleTextArea extends JTextPane {
 			setFont(font);
 		}
 
-		Style defaultStyle = getStyle(StyleContext.DEFAULT_STYLE);
-		StyleConstants.setFontFamily(defaultStyle, font.getFamily());
-		StyleConstants.setFontSize(defaultStyle, font.getSize());
-
-		Style prompt = addStyle(STYLE_PROMPT, defaultStyle);
-		StyleConstants.setForeground(prompt, DEFAULT_PROMPT_FG);
-
-		/*Style stdin = */addStyle(STYLE_STDIN, defaultStyle);
-
-		Style stdout = addStyle(STYLE_STDOUT, defaultStyle);
-		StyleConstants.setForeground(stdout, DEFAULT_STDOUT_FG);
-
-		Style stderr = addStyle(STYLE_STDERR, defaultStyle);
-		StyleConstants.setForeground(stderr, DEFAULT_STDERR_FG);
-
-		Style exception = addStyle(STYLE_EXCEPTION, defaultStyle);
-		StyleConstants.setForeground(exception, DEFAULT_EXCEPTION_FG);
-
+		restoreDefaultColors();
 		setTabSize(4); // Do last
 
 	}
@@ -496,6 +487,39 @@ abstract class ConsoleTextArea extends JTextPane {
 		// Otherwise, change all current input to default "input" color.
 		Style style = getStyle(STYLE_STDIN);
 		doc.setCharacterAttributes(start, end, style, true);
+
+	}
+
+
+	/**
+	 * Changes all consoles to use the default colors for the current
+	 * application theme.
+	 */
+	public void restoreDefaultColors() {
+
+		Font font = RTextArea.getDefaultFont();
+		boolean isDark = RTextUtilities.isDarkLookAndFeel();
+
+		Style defaultStyle = getStyle(StyleContext.DEFAULT_STYLE);
+		StyleConstants.setFontFamily(defaultStyle, font.getFamily());
+		StyleConstants.setFontSize(defaultStyle, font.getSize());
+
+		Style prompt = addStyle(STYLE_PROMPT, defaultStyle);
+		Color promptColor = isDark ? DEFAULT_DARK_PROMPT_FG : DEFAULT_PROMPT_FG;
+		StyleConstants.setForeground(prompt, promptColor);
+
+		/*Style stdin = */addStyle(STYLE_STDIN, defaultStyle);
+
+		Style stdout = addStyle(STYLE_STDOUT, defaultStyle);
+		Color stdoutColor = isDark ? DEFAULT_DARK_STDOUT_FG : DEFAULT_STDOUT_FG;
+		StyleConstants.setForeground(stdout, stdoutColor);
+
+		Style stderr = addStyle(STYLE_STDERR, defaultStyle);
+		Color stderrColor = isDark ? DEFAULT_DARK_STDERR_FG : DEFAULT_STDERR_FG;
+		StyleConstants.setForeground(stderr, stderrColor);
+
+		Style exception = addStyle(STYLE_EXCEPTION, defaultStyle);
+		StyleConstants.setForeground(exception, DEFAULT_EXCEPTION_FG);
 
 	}
 

@@ -766,6 +766,24 @@ public class RTextUtilities {
 
 
 	/**
+	 * Returns whether the current Look and Feel (the one that will be saved,
+	 * not necessarily the active one) is primarily dark.
+	 *
+	 * @return Whether the current Look and Feel is primarily dark.
+	 * @see #getLookAndFeelToSave()
+	 */
+	public static final boolean isDarkLookAndFeel() {
+
+		String laf = getLookAndFeelToSave();
+
+		return laf != null && (
+				laf.contains("Darcula") ||
+				laf.contains("SubstanceGraphite")
+				);
+	}
+
+
+	/**
 	 * Returns all elements in an array, joined by <code>", "</code>.
 	 *
 	 * @param array The array.  If this is <code>null</code> or has zero

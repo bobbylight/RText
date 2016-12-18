@@ -166,6 +166,16 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 
 
 	/**
+	 * Changes all consoles to use the default colors for the current
+	 * application theme.
+	 */
+	public void restoreDefaultColors() {
+		jsTextArea.restoreDefaultColors();
+		shellTextArea.restoreDefaultColors();
+	}
+
+
+	/**
 	 * Sets the color used for a given type of text in the consoles.
 	 *
 	 * @param style The style; e.g. {@link ConsoleTextArea#STYLE_STDOUT}.

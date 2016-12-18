@@ -262,6 +262,15 @@ public class Plugin extends GUIPlugin {
 
 
 	/**
+	 * Changes all consoles to use the default colors for the current
+	 * application theme.
+	 */
+	public void restoreDefaultColors() {
+		window.restoreDefaultColors();
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override

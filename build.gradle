@@ -13,8 +13,8 @@ assert org.gradle.api.JavaVersion.current().isJava6Compatible()
 dependencies {
 	compile(
 		
-		//files( "${projectDir.absolutePath}/../FifeCommon/build/libs/fife.common-2.6.1-SNAPSHOT.jar" ),
-		[ "com.fifesoft.rtext:fife.common:2.6.0" ],
+		files( "${projectDir.absolutePath}/../FifeCommon/build/libs/fife.common-2.6.1-SNAPSHOT.jar" ),
+		//[ "com.fifesoft.rtext:fife.common:2.6.1-SNAPSHOT" ],
 		
 		// insubstantial dependencies would go away if we pulled FifeCommon from Maven
 		[ "com.github.insubstantial:laf-plugin:7.2.1" ],

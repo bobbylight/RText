@@ -9,6 +9,7 @@
 package org.fife.rtext.optionsdialog;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.Frame;
@@ -25,6 +26,7 @@ import javax.swing.UIManager;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.plugins.console.ConsoleOptionPanel;
 import org.fife.ui.LabelValueComboBox;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.SelectableLabel;
@@ -137,13 +139,21 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 				return;
 			}
 		}
-		
+
+		// Any colors not specific to the LAF or the RSTA theme.
+		OtherColors otherColors = getOtherColorsForTheme(theme);
+		rtext.getMainView().setModifiedDocumentDisplayNamesColor(
+				otherColors.getModifiedDocumentNameColor());
+
 		// Refresh other option panels whose properties were affected
 		org.fife.ui.OptionsDialog dialog = getOptionsDialog();
 		dialog.getPanelById(UIOptionPanel.OPTION_PANEL_ID).setValues(rtext);
 		dialog.getPanelById(RTextAreaOptionPanel.OPTION_PANEL_ID).setValues(rtext);
 		dialog.getPanelById(RSyntaxTextAreaOptionPanel.OPTION_PANEL_ID).setValues(rtext);
-
+		// Options panels installed by plugins weren't loaded by the same
+		// ClassLoader, so we can't reference them directly, but we can
+		// broadcast events to them.
+		getOptionsDialog().broadcast("appTheme:" + theme);
 	}
 
 
@@ -156,6 +166,34 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
+	}
+
+
+	/**
+	 * Returns other colors to install that aren't tied to the LAF or the
+	 * RSTA theme.
+	 *
+	 * @param theme The selected theme.
+	 * @return The other colors.
+	 */
+	private static OtherColors getOtherColorsForTheme(String theme) {
+
+		OtherColors colors = new OtherColors();
+
+		if ("eclipse".equals(theme)) {
+			colors.setModifiedDocumentNameColor(Color.RED);
+		}
+
+		else if ("dark".equals(theme)) {
+			colors.setModifiedDocumentNameColor(new Color(255, 128, 128));
+		}
+
+		else {//if ("default".equals(theme)) {
+			colors.setModifiedDocumentNameColor(Color.RED);
+		}
+
+		return colors;
+
 	}
 
 
@@ -234,6 +272,24 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 			if (applyButton == source) {
 				applySelectedTheme();
 			}
+		}
+
+	}
+
+
+	/**
+	 * Miscellaneous extra colors set as part of an RText theme.
+	 */
+	private static class OtherColors {
+
+		private Color modifiedDocumentNameColor;
+
+		public Color getModifiedDocumentNameColor() {
+			return modifiedDocumentNameColor;
+		}
+
+		public void setModifiedDocumentNameColor(Color color) {
+			modifiedDocumentNameColor = color;
 		}
 
 	}
