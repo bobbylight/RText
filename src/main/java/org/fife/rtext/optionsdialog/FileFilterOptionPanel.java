@@ -291,7 +291,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 
 		public FilterTableModel(String fileTypeHeader, String filterHeader) {
 			super(new Object[] { fileTypeHeader, filterHeader }, 0);
-			styles = new String[42];
+			styles = new String[43];
 			addRow(new Object[] { "ActionScript",		null }); styles[0]  = SYNTAX_STYLE_ACTIONSCRIPT;
 			addRow(new Object[] { "Assembler (x86)",	null }); styles[1]  = SYNTAX_STYLE_ASSEMBLER_X86;
 			addRow(new Object[] { "BBCode",				null }); styles[2]  = SYNTAX_STYLE_BBCODE;
@@ -334,6 +334,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 			addRow(new Object[] { "Visual Basic",       null }); styles[39] = SYNTAX_STYLE_VISUAL_BASIC;
 			addRow(new Object[] { "Windows Batch",		null }); styles[40] = SYNTAX_STYLE_WINDOWS_BATCH;
 			addRow(new Object[] { "XML",				null }); styles[41] = SYNTAX_STYLE_XML;
+			addRow(new Object[] { "YAML",				null }); styles[42] = SYNTAX_STYLE_YAML;
 		
 		}
 

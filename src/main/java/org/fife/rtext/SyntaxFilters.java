@@ -345,6 +345,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_VISUAL_BASIC,		createValue("*.vb"));
 		filters.put(SYNTAX_STYLE_WINDOWS_BATCH,		createValue("*.bat", "*.cmd"));
 		filters.put(SYNTAX_STYLE_XML,				createValue("*.xml", "*.xsl", "*.xsd", "*.wsdl", "*.pom", "*.manifest", "*.tmx", "*.tsx"));
+		filters.put(SYNTAX_STYLE_YAML,				createValue("*.yml", "*.yaml"));
 
 		// Keep any filters added by the user
 
