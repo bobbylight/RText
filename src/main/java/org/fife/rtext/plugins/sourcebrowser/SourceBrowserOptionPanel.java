@@ -24,12 +24,12 @@ import javax.swing.text.Document;
 import org.fife.rtext.*;
 import org.fife.ui.FSATextField;
 import org.fife.ui.Hyperlink;
-import org.fife.ui.RFileChooser;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplicationConstants;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.Plugin;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
 
 /**
@@ -59,7 +59,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	private JButton exeBrowseButton;
 	private JCheckBox htmlToolTipCheckBox;
 
-	private RFileChooser exeFileChooser;
+	private RTextFileChooser exeFileChooser;
 
 	private static final String CTAGS_LOCATION_PROPERTY = "CTagsLocation";
 	private static final String CTAGS_TYPE_PROPERTY = "CTagsType";
@@ -229,13 +229,13 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 
 		else if ("Browse".equals(command)) {
 			if (exeFileChooser==null) {
-				exeFileChooser = new RFileChooser();
+				exeFileChooser = new RTextFileChooser(false);
 				//exeFileChooser.setFileFilter(new ExecutableFileFilter());
 				exeFileChooser.applyComponentOrientation(
 										getComponentOrientation());
 			}
-			int returnVal = exeFileChooser.showOpenDialog(this);
-			// If they selected a file and clicked "OK", open the flie!
+			int returnVal = exeFileChooser.showOpenDialog(getOptionsDialog());
+			// If they selected a file and clicked "OK", open the file!
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				ctagsExecutableTextField.setFileSystemAware(false);
 				ctagsExecutableTextField.setText(
