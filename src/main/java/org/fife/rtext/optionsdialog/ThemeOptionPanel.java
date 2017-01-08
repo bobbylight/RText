@@ -26,7 +26,6 @@ import javax.swing.UIManager;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
-import org.fife.rtext.plugins.console.ConsoleOptionPanel;
 import org.fife.ui.LabelValueComboBox;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.SelectableLabel;
@@ -142,7 +141,8 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 
 		// Any colors not specific to the LAF or the RSTA theme.
 		OtherColors otherColors = getOtherColorsForTheme(theme);
-		rtext.getMainView().setModifiedDocumentDisplayNamesColor(
+		AbstractMainView mainView = rtext.getMainView();
+		mainView.setModifiedDocumentDisplayNamesColor(
 				otherColors.getModifiedDocumentNameColor());
 
 		// Refresh other option panels whose properties were affected
@@ -249,6 +249,9 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 		}
 		mainView.setUseSelectedTextColor(theme.useSelctionFG);
 		mainView.setRoundedSelectionEdges(theme.selectionRoundedEdges);
+
+		mainView.setFoldBackground(theme.foldBG);
+		mainView.setArmedFoldBackground(theme.armedFoldBG);
 
 	}
 
