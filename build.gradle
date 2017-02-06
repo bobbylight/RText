@@ -22,8 +22,8 @@ dependencies {
 		[ "com.github.insubstantial:substance:7.2.1" ],
 		[ "com.github.insubstantial:trident:7.2.1" ],
 		
-		[ "com.fifesoft:rsyntaxtextarea:2.6.1-SNAPSHOT" ],
-		[ "com.fifesoft:autocomplete:2.6.0" ],
+		[ "com.fifesoft:rsyntaxtextarea:2.6.1" ],
+		[ "com.fifesoft:autocomplete:2.6.1" ],
 		[ "com.fifesoft:rstaui:2.6.0" ],
 		[ "com.fifesoft:spellchecker:2.6.0" ],
 		[ "com.fifesoft:languagesupport:2.6.0" ],
@@ -43,7 +43,7 @@ repositories {
 
 // Regenerate local gradlew
 task wrapper(type: Wrapper) {
-	gradleVersion = '2.14'
+	gradleVersion = '3.3'
 }
 
 def isSubstanceJar(def jarName) {

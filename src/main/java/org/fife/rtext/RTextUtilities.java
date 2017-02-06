@@ -330,6 +330,7 @@ public class RTextUtilities {
 						"mxml",
 						"f", "for", "fort", "f77", "f90",
 						"groovy", "grv",
+						"hosts",
 						"htm", "html",
 						"ini",
 						"java",

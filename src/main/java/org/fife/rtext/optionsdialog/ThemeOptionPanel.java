@@ -26,7 +26,6 @@ import javax.swing.UIManager;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
-import org.fife.rtext.plugins.console.ConsoleOptionPanel;
 import org.fife.ui.LabelValueComboBox;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.SelectableLabel;

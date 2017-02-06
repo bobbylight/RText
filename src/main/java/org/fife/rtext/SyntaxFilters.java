@@ -316,6 +316,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_DTD,				createValue("*.dtd"));
 		filters.put(SYNTAX_STYLE_FORTRAN,			createValue("*.f", "*.for", "*.fort", "*.f77", "*.f90"));
 		filters.put(SYNTAX_STYLE_GROOVY,			createValue("*.groovy", "*.gradle", "*.grv"));
+		filters.put(SYNTAX_STYLE_HOSTS,				createValue("hosts"));
 		filters.put(SYNTAX_STYLE_HTACCESS,			createValue(".htaccess"));
 		filters.put(SYNTAX_STYLE_HTML,			createValue("*.htm", "*.html"));
 		filters.put(SYNTAX_STYLE_INI,			createValue("*.ini", ".editorconfig"));
