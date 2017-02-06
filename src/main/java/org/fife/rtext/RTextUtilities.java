@@ -301,6 +301,8 @@ public class RTextUtilities {
 					new String[] { "bat", "cmd" });
 			addFilter(chooser, msg, "XML",
 					new String[] { "xml", "xsl", "xsd", "wsdl", "jnlp", "macro", "manifest" });
+			addFilter(chooser, msg, "Yaml",
+					new String[] { "yml", "yaml" });
 
 			// Add any user-defined file filters.
 			File file = new File(rtext.getInstallLocation(), FILE_FILTERS_FILE);
@@ -356,6 +358,7 @@ public class RTextUtilities {
 						"vb",
 						"bat", "cmd",
 						"xml", "xsl", "xsd", "wsdl", "jnlp", "macro", "manifest",
+						"yml", "yaml",
 					}
 			));
 			chooser.setFileFilter(null);

@@ -120,6 +120,8 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	public boolean textAreaUnderline;				// Is default font underlined?
 	public Color textAreaForeground;
 	public ComponentOrientation textAreaOrientation;
+	public Color foldBackground;
+	public Color armedFoldBackground;
 	public boolean showHostName;
 	public boolean bomInUtf8;
 	public boolean bookmarksEnabled;
@@ -232,6 +234,8 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		textAreaUnderline			= mainView.getTextAreaUnderline();
 		textAreaForeground			= mainView.getTextAreaForeground();
 		textAreaOrientation		= mainView.getTextAreaOrientation();
+		foldBackground			= mainView.getFoldBackground();
+		armedFoldBackground		= mainView.getArmedFoldBackground();
 		showHostName				= rtext.getShowHostName();
 		bomInUtf8				= mainView.getWriteBOMInUtf8Files();
 		bookmarksEnabled			= mainView.getBookmarksEnabled();
@@ -437,6 +441,10 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 			textAreaOrientation	= "rtl".equals(temp) ?
 						ComponentOrientation.RIGHT_TO_LEFT :
 						ComponentOrientation.LEFT_TO_RIGHT;
+			foldBackground			= new Color(
+				prefs.getInt("foldBackground", foldBackground.getRGB()));
+			armedFoldBackground		= new Color(
+				prefs.getInt("armedFoldBackground", armedFoldBackground.getRGB()));
 			spellCheckingEnabled	= prefs.getBoolean("spellCheckingEnabled", spellCheckingEnabled);
 			spellCheckingColor	= new Color(
 				prefs.getInt("spellCheckingColor", spellCheckingColor.getRGB()));
@@ -609,6 +617,8 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		prefs.putBoolean("textAreaUnderline",			textAreaUnderline);
 		prefs.putInt("textAreaForeground",				textAreaForeground.getRGB());
 		prefs.put("textAreaOrientation",				textAreaOrientation.isLeftToRight() ? "ltr" : "rtl");
+		prefs.putInt("foldBackground",					foldBackground.getRGB());
+		prefs.putInt("armedFoldBackground",				armedFoldBackground.getRGB());
 		prefs.putBoolean("spellCheckingEnabled",		spellCheckingEnabled);
 		prefs.putInt("spellCheckingColor",				spellCheckingColor.getRGB());
 		prefs.put("spellingDictionary", 				spellingDictionary);
@@ -718,6 +728,8 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		textAreaUnderline	= false;
 		textAreaForeground	= RTextArea.getDefaultForeground();
 		textAreaOrientation = ComponentOrientation.LEFT_TO_RIGHT;
+		foldBackground		= Color.WHITE;
+		armedFoldBackground	= Color.WHITE;
 		showHostName		= false;
 		bomInUtf8			= false;
 		bookmarksEnabled	= true;

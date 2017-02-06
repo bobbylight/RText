@@ -83,6 +83,7 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 		themeCombo.addLabelValuePair("Default", "default");
 		themeCombo.addLabelValuePair("Eclipse", "eclipse");
 		themeCombo.addLabelValuePair("Dark", "dark");
+		themeCombo.addLabelValuePair("Monokai", "monokai");
 		UIUtil.fixComboOrientation(themeCombo);
 		Box temp2 = createHorizontalBox();
 		temp2.add(themeCombo);
@@ -123,6 +124,11 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/dark.xml";
 		}
 
+		else if ("monokai".equals(theme)) {
+			laf = "com.bulenkov.darcula.DarculaLaf";
+			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/monokai.xml";
+		}
+
 		RText rtext = (RText)getOptionsDialog().getOwner();
 		if (laf != null) {
 			RTextUtilities.setLookAndFeel(rtext, laf); // Doesn't update if...
@@ -141,7 +147,8 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 
 		// Any colors not specific to the LAF or the RSTA theme.
 		OtherColors otherColors = getOtherColorsForTheme(theme);
-		rtext.getMainView().setModifiedDocumentDisplayNamesColor(
+		AbstractMainView mainView = rtext.getMainView();
+		mainView.setModifiedDocumentDisplayNamesColor(
 				otherColors.getModifiedDocumentNameColor());
 
 		// Refresh other option panels whose properties were affected
@@ -179,12 +186,18 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 
 		OtherColors colors = new OtherColors();
 
+		Color darkModifiedDocumentNameColor = new Color(255, 128, 128);
+
 		if ("eclipse".equals(theme)) {
 			colors.setModifiedDocumentNameColor(Color.RED);
 		}
 
 		else if ("dark".equals(theme)) {
-			colors.setModifiedDocumentNameColor(new Color(255, 128, 128));
+			colors.setModifiedDocumentNameColor(darkModifiedDocumentNameColor);
+		}
+
+		else if ("monokai".equals(theme)) {
+			colors.setModifiedDocumentNameColor(darkModifiedDocumentNameColor);
 		}
 
 		else {//if ("default".equals(theme)) {
@@ -248,6 +261,9 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 		}
 		mainView.setUseSelectedTextColor(theme.useSelctionFG);
 		mainView.setRoundedSelectionEdges(theme.selectionRoundedEdges);
+
+		mainView.setFoldBackground(theme.foldBG);
+		mainView.setArmedFoldBackground(theme.armedFoldBG);
 
 	}
 

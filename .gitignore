@@ -10,4 +10,6 @@ Thumbs.db
 .gradle
 build
 rtext-*-src.zip
-
+.settings/
+.project
+.classpath

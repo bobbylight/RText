@@ -182,6 +182,8 @@ public abstract class AbstractMainView extends JPanel
 	private boolean textAreaUnderline;
 	private Color textAreaForeground;
 	private ComponentOrientation textAreaOrientation;
+	private Color foldBackground;
+	private Color armedFoldBackground;
 
 	private EventListenerList listenerList;
 
@@ -651,6 +653,8 @@ public abstract class AbstractMainView extends JPanel
 		textAreaUnderline = fromPanel.textAreaUnderline;
 		textAreaForeground = fromPanel.textAreaForeground;
 		textAreaOrientation = fromPanel.textAreaOrientation;
+		foldBackground = fromPanel.foldBackground;
+		armedFoldBackground = fromPanel.armedFoldBackground;
 
 		// "Move over" all current text area listeners.
 		// Remember "listeners" is guaranteed to be non-null.
@@ -849,6 +853,9 @@ public abstract class AbstractMainView extends JPanel
 		Color activeLineRangeColor = getAppropriateActiveLineRangeColor();
 		gutter.setActiveLineRangeColor(activeLineRangeColor);
 
+		gutter.setFoldBackground(foldBackground);
+		gutter.setArmedFoldBackground(armedFoldBackground);
+
 		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(scrollPane);
 		return scrollPane;
 	}
@@ -963,6 +970,18 @@ public abstract class AbstractMainView extends JPanel
 				(Component)owner.getJMenuBar().getMenu(0) : new JLabel();
 		Color fg = c.getForeground();
 		return Util.isLightForeground(fg) ? fg : null;
+	}
+
+
+	/**
+	 * Returns the color to use for the background of armed fold icons
+	 *
+	 * @return The color.
+	 * @see #setArmedFoldBackground(Color)
+	 * @see #getFoldBackground()
+	 */
+	public Color getArmedFoldBackground() {
+		return armedFoldBackground;
 	}
 
 
@@ -1230,6 +1249,18 @@ public abstract class AbstractMainView extends JPanel
 			findInFilesDialog.addFindInFilesListener(this);
 		}
 		return findInFilesDialog;
+	}
+
+
+	/**
+	 * Returns the color to use for the background of fold icons.
+	 *
+	 * @return The color.
+	 * @see #setFoldBackground(Color)
+	 * @see #getArmedFoldBackground()
+	 */
+	public Color getFoldBackground() {
+		return foldBackground;
 	}
 
 
@@ -2229,6 +2260,8 @@ public abstract class AbstractMainView extends JPanel
 		setTextAreaFont(prefs.textAreaFont, prefs.textAreaUnderline);
 		setTextAreaForeground(prefs.textAreaForeground);
 		setTextAreaOrientation(prefs.textAreaOrientation);
+		setFoldBackground(prefs.foldBackground);
+		setArmedFoldBackground(prefs.armedFoldBackground);
 
 		setBookmarksEnabled(prefs.bookmarksEnabled);
 		setLineNumberFont(prefs.lineNumberFont);
@@ -2944,6 +2977,25 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Sets the color to use for the background of armed fold icons.
+	 *
+	 * @param armedFoldBackground The color.
+	 * @see #getArmedFoldBackground()
+	 * @see #setFoldBackground(Color)
+	 */
+	public void setArmedFoldBackground(Color armedFoldBackground) {
+		if (armedFoldBackground != this.armedFoldBackground) {
+			this.armedFoldBackground = armedFoldBackground;
+			for (int i=0; i<getNumDocuments(); i++) {
+				RTextScrollPane scrollPane = getRTextScrollPaneAt(i);
+				scrollPane.getGutter().
+					setArmedFoldBackground(armedFoldBackground);
+			}
+		}
+	}
+
+
+	/**
 	 * Toggles whether closing curly braces are auto-inserted for languages
 	 * where it makes sense.  This method fires a property change event of type
 	 * {@link #AUTO_INSERT_CLOSING_CURLYS}.
@@ -3269,6 +3321,24 @@ public abstract class AbstractMainView extends JPanel
 		if (doCheck!=doFileSizeCheck) {
 			doFileSizeCheck = doCheck;
 			firePropertyChange(FILE_SIZE_CHECK_PROPERTY, !doCheck, doCheck);
+		}
+	}
+
+
+	/**
+	 * Sets the color to use for the background of fold icons.
+	 *
+	 * @param foldBackground The color.
+	 * @see #getFoldBackground()
+	 * @see #setArmedFoldBackground(Color)
+	 */
+	public void setFoldBackground(Color foldBackground) {
+		if (foldBackground != this.foldBackground) {
+			this.foldBackground = foldBackground;
+			for (int i = 0; i < getNumDocuments(); i++) {
+				RTextScrollPane scrollPane = getRTextScrollPaneAt(i);
+				scrollPane.getGutter().setFoldBackground(foldBackground);
+			}
 		}
 	}
 
