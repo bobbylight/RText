@@ -3,18 +3,18 @@ plugins {
   id "edu.sc.seis.macAppBundle" version "2.1.1"
 }
 */
-["java", "distribution", "maven" ].each { apply plugin: it }
+["java", "distribution", "maven", "eclipse" ].each { apply plugin: it }
 
 group = "com.fifesoft"
 sourceCompatibility = '1.6'
 
-assert org.gradle.api.JavaVersion.current().isJava6Compatible()
+assert JavaVersion.current().isJava6Compatible()
 
 dependencies {
 	compile(
 		
-		files( "${projectDir.absolutePath}/../FifeCommon/build/libs/fife.common-2.6.1-SNAPSHOT.jar" ),
-		//[ "com.fifesoft.rtext:fife.common:2.6.1-SNAPSHOT" ],
+		//files( "${projectDir.absolutePath}/../FifeCommon/build/libs/fife.common-2.6.2-SNAPSHOT.jar" ),
+		[ "com.fifesoft.rtext:fife.common:2.6.2" ],
 		
 		// insubstantial dependencies would go away if we pulled FifeCommon from Maven
 		[ "com.github.insubstantial:laf-plugin:7.2.1" ],
@@ -24,7 +24,7 @@ dependencies {
 		
 		[ "com.fifesoft:rsyntaxtextarea:2.6.1" ],
 		[ "com.fifesoft:autocomplete:2.6.1" ],
-		[ "com.fifesoft:rstaui:2.6.0" ],
+		[ "com.fifesoft:rstaui:2.6.1" ],
 		[ "com.fifesoft:spellchecker:2.6.0" ],
 		[ "com.fifesoft:languagesupport:2.6.0" ],
 		
@@ -43,14 +43,14 @@ repositories {
 
 // Regenerate local gradlew
 task wrapper(type: Wrapper) {
-	gradleVersion = '3.3'
+	gradleVersion = '3.4'
 }
 
-def isSubstanceJar(def jarName) {
+static isSubstanceJar(jarName) {
 	return jarName.startsWith("substance-") || jarName.startsWith("trident-") ||
 		jarName.startsWith("laf-")
 }
-def isPluginJar(def jarName) {
+static isPluginJar(jarName) {
 	return jarName.startsWith('plugin-') ||
 		jarName.startsWith('groovy') || jarName.startsWith('jsonbeans') ||
 		jarName.startsWith('jtidy') || jarName.startsWith('languagesupport') ||
@@ -244,17 +244,29 @@ artifacts {
 			javadocJar, sourceJar
 }
 
+def getDistributionFiles(configurations) {
+
+	def distFiles = [
+			"build/libs", // The built jars
+			configurations.runtime // Gradle dependencies
+	]
+	
+	// Copy native libraries from FifeCommon, if it's checked out alongside this project
+	def fifeCommonNativesDir = new File("${projectDir.absolutePath}/../FifeCommon/native")
+	if (fifeCommonNativesDir.isDirectory()) {
+		distFiles += fifeCommonNativesDir.listFiles().collect { it.getAbsolutePath() }
+	}
+	
+	return distFiles
+}
+
 distributions {
 	main {
 		
 		baseName = 'rtext'
 		contents {
 			exclude([ '**/*-sources.jar', '**/*-javadoc.jar' ])
-			from { [
-				//'lib', // Dependencies not in Maven
-				"build/libs", // The built jars
-				configurations.runtime // Gradle dependencies
-			] }
+			from { getDistributionFiles(configurations) }
 			eachFile { details ->
 				def path = details.path
 				if (isSubstanceJar(path)) {

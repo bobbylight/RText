@@ -68,18 +68,6 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
-			/**
-			 * Overridden to ensure the table completely fills the JViewport
-			 * it is sitting in.  Note in Java 6 this could be taken care of
-			 * by the method JTable#setFillsViewportHeight(boolean).
-			 * 1.5: Change me to method call instead.
-			 */
-			@Override
-			public boolean getScrollableTracksViewportHeight() {
-				Component parent = getParent();
-				return parent instanceof JViewport ?
-					parent.getHeight()>getPreferredSize().height : false;
-			}
 		};
 		UIUtil.fixJTableRendererOrientations(pluginTable);
 		temp.add(new RScrollPane(pluginTable));
@@ -228,7 +216,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 			String text = "<html><body><center>" +
 				"Version " + version + "<br>" +
 				"Copyright (c) 2016 Robert Futrell<br>" +
-				"<a href=\"http://rtext.fifesoft.com\">http://rtext.fifesoft.com</a>" +
+				"<a href=\"http://bobbylight.github.io/RText/\">http://bobbylight.github.io/RText/</a>" +
 				"</font></center></body></html>";
 			return text;
 		}

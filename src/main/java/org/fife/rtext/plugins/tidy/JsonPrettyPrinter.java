@@ -59,7 +59,7 @@ class JsonPrettyPrinter implements PrettyPrinter {
 		StringWriter w = new StringWriter();
 
 		try {
-			String line = null;
+			String line;
 			while ((line=r.readLine())!=null) {
 				int index = 0;
 				while (index<line.length() && line.charAt(index)=='\t') {

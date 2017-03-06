@@ -23,7 +23,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -60,26 +59,14 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 
 
 	protected JTable createTable(TableModel model) {
-		table = new JTable() {
-			/**
-			 * Overridden to ensure the table completely fills the JViewport it
-			 * is sitting in.  Note in Java 6 this could be taken care of by the
-			 * method JTable#setFillsViewportHeight(boolean).
-			 * 1.6: Remove this and replace it with the method call.
-			 */
-			@Override
-			public boolean getScrollableTracksViewportHeight() {
-				Component parent = getParent();
-				return parent instanceof JViewport ?
-					parent.getHeight()>getPreferredSize().height : false;
-			}
-		};
+		table = new JTable();
 		setPrimaryComponent(table);
 		fixTableModel(model);
 		table.addMouseListener(new TableMouseListener());
 		Dimension size = table.getPreferredScrollableViewportSize();
 		size.height = 200;
 		table.setPreferredScrollableViewportSize(size);
+		table.setFillsViewportHeight(true);
 		UIUtil.fixJTableRendererOrientations(table);
 		UIUtil.possiblyFixGridColor(table);
 		return table;

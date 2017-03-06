@@ -1,5 +1,6 @@
 ant-classes
 bin
+.idea
 rtext_*_Source.zip
 rtext_*_unix_bin.tar.gz
 rtext_*_win32_setup.exe

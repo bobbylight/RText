@@ -62,7 +62,6 @@ public class NewMacroDialog extends EscapableDialog {
 	private JTextField descField;
 	private KeyStrokeField shortcutField;
 	private JComboBox typeCombo;
-	private SelectableLabel engineNotesLabel;
 	private JButton okButton;
 	private JButton editButton;
 	private JButton cancelButton;
@@ -71,7 +70,6 @@ public class NewMacroDialog extends EscapableDialog {
 	private static Icon ERROR_ICON;
 	private static Icon WARN_ICON;
 
-	private static final String[] NOTE_TYPES = { "JS", "Groovy", };
 	private static final String[] EXTENSIONS = { ".js", ".groovy", };
 
 	private static final String MSG = "org.fife.rtext.plugins.macros.NewMacroDialog";
@@ -146,8 +144,6 @@ public class NewMacroDialog extends EscapableDialog {
 										5, 5, 5, 5);
 		topPanel.add(formPanel);
 		topPanel.add(Box.createVerticalStrut(10));
-		engineNotesLabel = new SelectableLabel(getEngineNote(0));
-		topPanel.add(engineNotesLabel);
 		topPanel.add(Box.createVerticalGlue());
 
 		// Panel for the buttons.
@@ -193,7 +189,7 @@ public class NewMacroDialog extends EscapableDialog {
 	 */
 	private void editPressed() {
 
-		String text = null;
+		String text;
 		int messageType = JOptionPane.INFORMATION_MESSAGE;
 
 		// The "Edit" button is only visible when editing an existing macro, so
@@ -215,24 +211,6 @@ public class NewMacroDialog extends EscapableDialog {
 		String title = rtext.getString("InfoDialogHeader");
 		JOptionPane.showMessageDialog(this, text, title, messageType);
 
-	}
-
-
-	/**
-	 * Returns any notes about the specified scripting engine.
-	 *
-	 * @param index The index of the script engine in the combo box.
-	 * @return The notes.
-	 */
-	private String getEngineNote(int index) {
-		String note = "<html><table><tr><td valign='baseline'>" +
-				msg.getString("EngineNotes.Notes") +
-				"</td><td>" +//&nbsp;&nbsp;</td><td>" +
-				msg.getString("EngineNotes." + NOTE_TYPES[index]) +
-				"</td></table>";
-		note = MessageFormat.format(note,
-			new Object[] { rtext.getInstallLocation() + File.separator + "plugins" });
-		return note;
 	}
 
 
@@ -466,10 +444,7 @@ public class NewMacroDialog extends EscapableDialog {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Object source = e.getSource();
-			if (source==typeCombo) {
-				engineNotesLabel.setText(getEngineNote(typeCombo.getSelectedIndex()));
-			}
-			else if (source==okButton) {
+			if (source==okButton) {
 				okPressed();
 			}
 			else if (source==cancelButton) {
