@@ -35,17 +35,7 @@ class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
 	 */
 	public static TreeCellRenderer create() {
 		if (SubstanceUtil.isSubstanceInstalled()) {
-			// Use reflection to avoid compile-time dependencies form this
-			// class to Substance.
-			String clazzName =
-				"org.fife.rtext.plugins.project.tree.SubstanceWorkspaceTreeRenderer";
-			try {
-				Class<?> clazz = Class.forName(clazzName);
-				return (TreeCellRenderer)clazz.newInstance();
-			} catch (Exception e) {
-				e.printStackTrace();
-				// Fall through
-			}
+			return new SubstanceWorkspaceTreeRenderer();
 		}
 		return new WorkspaceTreeRenderer();
 	}

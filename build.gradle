@@ -13,14 +13,7 @@ assert JavaVersion.current().isJava6Compatible()
 dependencies {
 	compile(
 		
-		//files( "${projectDir.absolutePath}/../FifeCommon/build/libs/fife.common-2.6.2-SNAPSHOT.jar" ),
-		[ "com.fifesoft.rtext:fife.common:2.6.2" ],
-		
-		// insubstantial dependencies would go away if we pulled FifeCommon from Maven
-		[ "com.github.insubstantial:laf-plugin:7.2.1" ],
-		[ "com.github.insubstantial:laf-widget:7.2.1" ],
-		[ "com.github.insubstantial:substance:7.2.1" ],
-		[ "com.github.insubstantial:trident:7.2.1" ],
+		[ "com.fifesoft.rtext:fife.common:2.6.3" ],
 		
 		[ "com.fifesoft:rsyntaxtextarea:2.6.1" ],
 		[ "com.fifesoft:autocomplete:2.6.1" ],
@@ -32,10 +25,11 @@ dependencies {
 		[ "org.codehaus.groovy:groovy-all:2.+" ],
 		[ 'com.esotericsoftware:jsonbeans:0.7' ]
 		)
-	testCompile( [ 'junit:junit:4.11' ] )
+	testCompile( [ 'junit:junit:4.12' ] )
 }
 repositories {
 	mavenCentral()
+	mavenLocal()
 	maven {
 		url "https://oss.sonatype.org/content/repositories/snapshots"
 	}
@@ -43,7 +37,7 @@ repositories {
 
 // Regenerate local gradlew
 task wrapper(type: Wrapper) {
-	gradleVersion = '3.4'
+	gradleVersion = '3.4.1'
 }
 
 static isSubstanceJar(jarName) {

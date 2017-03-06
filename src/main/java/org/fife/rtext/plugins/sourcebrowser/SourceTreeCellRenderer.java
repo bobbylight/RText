@@ -10,7 +10,6 @@
 package org.fife.rtext.plugins.sourcebrowser;
 
 import java.awt.Component;
-import java.lang.reflect.Constructor;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -61,19 +60,7 @@ class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
 	 */
 	static TreeCellRenderer createTreeCellRenderer(DefaultSourceTree tree) {
 		if (SubstanceUtil.isSubstanceInstalled()) {
-			// Use reflection to avoid compile-time dependencies form this
-			// class to Substance.
-			String clazzName =
-				"org.fife.rtext.plugins.sourcebrowser.SubstanceSourceTreeCellRenderer";
-			try {
-				Class<?> clazz = Class.forName(clazzName);
-				Constructor<?> cons = clazz.getConstructor(
-						DefaultSourceTree.class);
-				return (TreeCellRenderer)cons.newInstance(tree);
-			} catch (Exception e) {
-				e.printStackTrace();
-				// Fall through
-			}
+			return new SubstanceSourceTreeCellRenderer(tree);
 		}
 		return new SourceTreeCellRenderer(tree);
 	}

@@ -91,16 +91,7 @@ public class RecentFileDialog extends EscapableDialog {
 	 */
 	private static final ListCellRenderer createCellRenderer() {
 		if (SubstanceUtil.isSubstanceInstalled()) {
-			//  Use reflection to avoid compile-time dependencies form this
-			// class to Substance.
-			String clazzName = "org.fife.rtext.RecentFileListSubstanceCellRenderer";
-			try {
-				Class<?> clazz = Class.forName(clazzName);
-				return (ListCellRenderer)clazz.newInstance();
-			} catch (Exception e) {
-				e.printStackTrace();
-				// Fall through
-			}
+			return new RecentFileListSubstanceCellRenderer();
 		}
 		return new RecentFileListCellRenderer();
 	}

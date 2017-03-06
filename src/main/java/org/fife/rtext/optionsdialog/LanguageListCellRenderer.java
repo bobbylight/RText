@@ -37,9 +37,6 @@ class LanguageListCellRenderer extends DefaultListCellRenderer {
 	 */
 	private JLabel possibleDelegate;
 
-	private static final String SUBSTANCE_RENDERER_CLASS =
-			"org.fife.rtext.optionsdialog.SubstanceLanguageListCellRenderer";
-
 
 	/**
 	 * Private constructor to prevent direct instantiation.
@@ -63,13 +60,7 @@ class LanguageListCellRenderer extends DefaultListCellRenderer {
 		if (SubstanceUtil.isSubstanceInstalled()) {
 			// Can't delegate with Substance, because it unfortunately
 			// has hard dependencies on renderer types.  Yuck.
-			try {
-				// Use reflection to avoid hard dependency on Substance.
-				Class<?> clazz = Class.forName(SUBSTANCE_RENDERER_CLASS);
-				return (ListCellRenderer)clazz.newInstance();
-			} catch (Exception e) { // Never happens
-				e.printStackTrace();
-			}
+			return new SubstanceLanguageListCellRenderer();
 		}
 		else if (WebLookAndFeelUtils.isWebLookAndFeelInstalled()) {
 			delegate = (JLabel)UIManager.get("List.cellRenderer");
@@ -84,7 +75,7 @@ class LanguageListCellRenderer extends DefaultListCellRenderer {
 	public Component getListCellRendererComponent(JList list,
 			Object value, int index, boolean selected, boolean focused) {
 
-		JLabel renderer = null;
+		JLabel renderer;
 		if (possibleDelegate!=null) {
 			renderer = possibleDelegate;
 			((ListCellRenderer)possibleDelegate).getListCellRendererComponent(
