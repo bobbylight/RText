@@ -2,10 +2,15 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
-2.6.3
+2.6.3 (04/30/2017)
 ------------------
    - Added .ini file syntax highlighting.
-   
+   - Added YAML syntax highlighting.
+   - Added hostfile syntax highlighting.
+   - Projects:  added "Move to top" and "Move to bottom" actions.
+   - Added another "dark" theme, Monokai.
+   - Improved the "dark" theme of the user interface.
+
    
 2.6.2 (09/28/2016)
 ------------------

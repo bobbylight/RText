@@ -150,6 +150,7 @@ class FindInFilesThread extends GUIWorkerThread {
 			searchString = searchString.toLowerCase();
 
 		RSyntaxTextArea textArea = new RSyntaxTextArea();
+		textArea.setSyntaxScheme(parent.getSyntaxScheme());
 		long startMillis = System.currentTimeMillis();
 
 		// Keep looping while there are more files to search.
@@ -356,11 +357,9 @@ class FindInFilesThread extends GUIWorkerThread {
 
 		// If we're only interested in the match count, not individual
 		// matches, add an entry for this file.
-		if (matchingLines==false && numMatches>0) {
-			String text = MessageFormat.format(occurrencesString,
-							new Object[] { new Integer(numMatches) });
-			MatchData data = new MatchData(fileFullPath, NO_LINE_NUMBER,
-									text);
+		if (!matchingLines && numMatches>0) {
+			String text = MessageFormat.format(occurrencesString, numMatches);
+			MatchData data = new MatchData(fileFullPath, NO_LINE_NUMBER, text);
 			dialog.addMatchData(data);
 		}
 
@@ -438,9 +437,8 @@ class FindInFilesThread extends GUIWorkerThread {
 
 		// If we're only interested in the match count, not individual
 		// matches, add an entry for this file.
-		if (matchingLines==false && numMatches>0) {
-			String text = MessageFormat.format(occurrencesString,
-							new Object[] { new Integer(numMatches) });
+		if (!matchingLines && numMatches>0) {
+			String text = MessageFormat.format(occurrencesString, numMatches);
 			MatchData data = new MatchData(fileFullPath,
 							NO_LINE_NUMBER, text);
 			dialog.addMatchData(data);
@@ -478,11 +476,8 @@ class FindInFilesThread extends GUIWorkerThread {
 		int tokenCount = tokens.length;
 		Pattern[] filterStrings = new Pattern[tokenCount];
 		int flags = 0;
-		String os = System.getProperty("os.name");
-		if (os!=null) { // Windows and OS X need case-insensitive searching.
-			os = os.toLowerCase();
-			if (os.indexOf("windows")>-1 || os.indexOf("mac")>-1)
-				flags = Pattern.CASE_INSENSITIVE;
+		if (!OS.get().isCaseSensitive()) {
+			flags = Pattern.CASE_INSENSITIVE;
 		}
 		try {
 			for (int i=0; i<tokenCount; i++) {
@@ -502,9 +497,9 @@ class FindInFilesThread extends GUIWorkerThread {
 	/**
 	 * Gets an HTML string for a token list, stripping off leading whitespace.
 	 *
-	 * @param t
-	 * @param textArea
-	 * @return
+	 * @param t The beginning of the token list.
+	 * @param textArea The text area to get the highlighting information from.
+	 * @return The HTML.
 	 */
 	private static final String getHtml(Token t, RSyntaxTextArea textArea) {
 
@@ -543,7 +538,7 @@ class FindInFilesThread extends GUIWorkerThread {
 	 * <br><br>
 	 * <code>regEx</code> will contain <code>^.*\.c$</code>.
 	 *
-	 * @param fileFilter The file filter for which to create equivalent
+	 * @param filter The file filter for which to create equivalent
 	 *        regular expressions.  This filter can currently only contain
 	 *        the wildcards '*' and '?'.
 	 * @return A <code>String</code> representing an equivalent regular
