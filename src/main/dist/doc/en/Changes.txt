@@ -2,6 +2,11 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
+2.6.4
+------------------
+   -
+
+
 2.6.3 (04/30/2017)
 ------------------
    - Added .ini file syntax highlighting.

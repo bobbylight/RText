@@ -94,14 +94,14 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	public static final int MDI_VIEW					= 2;
 
 	// Properties fired.
-	public static final String ICON_STYLE_PROPERTY		= "RText.iconStyle";
-	public static final String MAIN_VIEW_STYLE_PROPERTY	= "RText.mainViewStyle";
+	private static final String ICON_STYLE_PROPERTY		= "RText.iconStyle";
+	private static final String MAIN_VIEW_STYLE_PROPERTY	= "RText.mainViewStyle";
 
 	private Map<String, IconGroup> iconGroupMap;
 
 	private RTextMenuBar menuBar;
 
-	public OptionsDialog optionsDialog;
+	private OptionsDialog optionsDialog;
 
 	private CollapsibleSectionPanel csp; // Contains the AbstractMainView
 	private AbstractMainView mainView;	// Component showing all open documents.
@@ -175,9 +175,9 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * System property that, if set, causes RText to print timing information
 	 * while it is starting up.
 	 */
-	public static final String PROPERTY_PRINT_START_TIMES = "printStartTimes";
+	private static final String PROPERTY_PRINT_START_TIMES = "printStartTimes";
 
-	public static final String VERSION_STRING		= "2.6.3.20170430";
+	public static final String VERSION_STRING		= "2.6.4.BETA-????????";
 
 
 	/**
@@ -275,7 +275,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 *
 	 * @see #convertOpenFilesTabsToSpaces
 	 */
-	public void convertOpenFilesSpacesToTabs() {
+	private void convertOpenFilesSpacesToTabs() {
 		mainView.convertOpenFilesSpacesToTabs();
 	}
 
@@ -286,7 +286,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 *
 	 * @see #convertOpenFilesSpacesToTabs
 	 */
-	public void convertOpenFilesTabsToSpaces() {
+	private void convertOpenFilesTabsToSpaces() {
 		mainView.convertOpenFilesTabsToSpaces();
 	}
 
@@ -442,7 +442,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		// Assuming all documents closed okay (ie, the user
 		// didn't click "Cancel")...
-		if (allDocumentsClosed==true) {
+		if (allDocumentsClosed) {
 
 			// If there will be no more rtext's running, stop the JVM.
 			if (StoreKeeper.getInstanceCount()==1) {
@@ -535,7 +535,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * @return The collapsible section panel.
 	 * @see #getMainView()
 	 */
-	public CollapsibleSectionPanel getCollapsibleSectionPanel() {
+	CollapsibleSectionPanel getCollapsibleSectionPanel() {
 		return csp;
 	}
 
@@ -600,7 +600,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 *
 	 * @return The name of the local host.
 	 */
-	public synchronized String getHostName() {
+	private synchronized String getHostName() {
 		if (hostName==null) {
 			try {
 				hostName = InetAddress.getLocalHost().getHostName();
@@ -673,7 +673,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * @return The list of files.  This may be empty but will never be
 	 *         <code>null</code>.
 	 */
-	public java.util.List<FileLocation> getRecentFiles() {
+	java.util.List<FileLocation> getRecentFiles() {
 		return recentFileManager.getRecentFiles();
 	}
 
@@ -753,7 +753,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 *
 	 * @return The shortcuts file.
 	 */
-	private static final File getShortcutsFile() {
+	private static File getShortcutsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 				"shortcuts.properties");
 	}
@@ -788,7 +788,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * @return The tab size (in spaces) currently being used.
 	 * @see #setTabSize(int)
 	 */
-	public int getTabSize() {
+	private int getTabSize() {
 		return mainView.getTabSize();
 	}
 
@@ -890,7 +890,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * @see #getSearchToolBar
 	 */
 	public boolean isSearchToolBarVisible() {
-		return searchBar==null ? false : searchBar.isVisible();
+		return searchBar != null && searchBar.isVisible();
 	}
 
 
@@ -942,7 +942,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * @param filesToOpen The files to open.  This can be <code>null</code>.
 	 * @see #openFile
 	 */
-	public void openFiles(String[] filesToOpen) {
+	private void openFiles(String[] filesToOpen) {
 		int count = filesToOpen==null ? 0 : filesToOpen.length;
 		for (int i=0; i<count; i++) {
 			openFile(filesToOpen[i]);
@@ -1126,8 +1126,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		// If the file's modification status is changing...
 		else if (propertyName.equals(RTextEditorPane.DIRTY_PROPERTY)) {
 			String oldTitle = getTitle();
-			boolean newValue = ((Boolean)e.getNewValue()).booleanValue();
-			if (newValue==false) {
+			boolean newValue = (Boolean)e.getNewValue();
+			if (!newValue) {
 				setTitle(oldTitle.substring(0,oldTitle.length()-1));
 			}
 			else {
@@ -1138,7 +1138,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	}
 
 
-	public void registerChildWindowListeners(Window w) {
+	void registerChildWindowListeners(Window w) {
 
 		if (!windowListenersInited) {
 			windowListenersInited = true;
@@ -1158,7 +1158,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	// TODO
-	public void removeDockableWindow(DockableWindow wind) {
+	void removeDockableWindow(DockableWindow wind) {
 		((DockableWindowPanel)mainContentPanel).removeDockableWindow(wind);
 	}
 
@@ -1323,10 +1323,9 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			// Update property change listeners.
 			PropertyChangeListener[] propertyChangeListeners =
 								fromView.getPropertyChangeListeners();
-			int length = propertyChangeListeners.length;
-			for (int i=0; i<length; i++) {
-				fromView.removePropertyChangeListener(propertyChangeListeners[i]);
-				mainView.addPropertyChangeListener(propertyChangeListeners[i]);
+			for (PropertyChangeListener listener : propertyChangeListeners) {
+				fromView.removePropertyChangeListener(listener);
+				mainView.addPropertyChangeListener(listener);
 			}
 
 			// Keep find/replace dialogs working, if they've been created.
@@ -1354,7 +1353,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			csp.remove(fromView);
 			csp.add(mainView);
 			fromView.dispose();
-			fromView = null;
 			//contentPane.add(mainView, BorderLayout.CENTER);
 			pack();
 			setSize(size);
@@ -1467,7 +1465,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * @param newSize The tab size to use.
 	 * @see #getTabSize()
 	 */
-	public void setTabSize(int newSize) {
+	private void setTabSize(int newSize) {
 		mainView.setTabSize(newSize);
 	}
 
@@ -1717,7 +1715,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 					// Must set UIManager's ClassLoader before instantiating
 					// the LAF.  Substance is so high-maintenance!
 					UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
-					Class<?> clazz = null;
+					Class<?> clazz;
 					try {
 						clazz = cl.loadClass(lafName);
 					} catch (UnsupportedClassVersionError ucve) {
@@ -1746,13 +1744,13 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 					}
 				}
 
-				if (lafName.indexOf(".Darcula") > -1) {
+				if (lafName.contains(".Darcula")) {
 					UIManager.getLookAndFeelDefaults().put("Tree.rendererFillBackground", Boolean.FALSE);
 				}
 				else {
 					UIManager.getLookAndFeelDefaults().put("Tree.rendererFillBackground", null);
 				}
-				
+
 				RText rtext = new RText(args);
 				rtext.setLookAndFeelManager(lafManager);
 

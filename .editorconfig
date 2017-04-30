@@ -1,0 +1,10 @@
+# A minimal configuration for some of the formatting basics enforced by tslint.
+
+# This is the top-most EditorConfig file
+root = true
+
+[*.{java,properties,gradle}]
+indent_style=tab
+indent_size=4
+trim_trailing_whitespace=true
+charset=utf-8
