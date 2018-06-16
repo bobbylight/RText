@@ -12,17 +12,17 @@ assert JavaVersion.current().isJava6Compatible()
 
 dependencies {
 	compile(
-		
+
 		[ "com.fifesoft.rtext:fife.common:2.6.3" ],
-		
+
 		[ "com.fifesoft:rsyntaxtextarea:2.6.1" ],
 		[ "com.fifesoft:autocomplete:2.6.1" ],
 		[ "com.fifesoft:rstaui:2.6.1" ],
 		[ "com.fifesoft:spellchecker:2.6.0" ],
 		[ "com.fifesoft:languagesupport:2.6.0" ],
-		
+
 		[ "net.sf.jtidy:jtidy:r938" ],
-		[ "org.codehaus.groovy:groovy-all:2.+" ],
+		[ "org.codehaus.groovy:groovy-all:2.5.+" ],
 		[ 'com.esotericsoftware:jsonbeans:0.7' ]
 		)
 	testCompile( [ 'junit:junit:4.12' ] )
@@ -36,8 +36,8 @@ repositories {
 }
 
 // Regenerate local gradlew
-task wrapper(type: Wrapper) {
-	gradleVersion = '3.4.1'
+wrapper {
+	gradleVersion '4.8'
 }
 
 static isSubstanceJar(jarName) {
@@ -50,7 +50,7 @@ static isPluginJar(jarName) {
 		jarName.startsWith('jtidy') || jarName.startsWith('languagesupport') ||
 		jarName.startsWith('rhino') || jarName.startsWith('tidy')
 }
-	
+
 compileJava {
 	sourceCompatibility javaVersion
 	targetCompatibility javaVersion
@@ -61,7 +61,7 @@ compileJava {
 	if (project.hasProperty("java6CompileBootClasspath")) {
 		if (new File(java6CompileBootClasspath).isFile()) {
 			println "Bootstrap classpath when compiling Java: ${java6CompileBootClasspath}"
-			options.bootClasspath = java6CompileBootClasspath
+			options.bootstrapClasspath = files(java6CompileBootClasspath)
 		}
 		else {
 			println "Warning: Specified java6CompileBootClasspath does not exist: ${java6CompileBootClasspath}"
@@ -244,19 +244,19 @@ def getDistributionFiles(configurations) {
 			"build/libs", // The built jars
 			configurations.runtime // Gradle dependencies
 	]
-	
+
 	// Copy native libraries from FifeCommon, if it's checked out alongside this project
 	def fifeCommonNativesDir = new File("${projectDir.absolutePath}/../FifeCommon/native")
 	if (fifeCommonNativesDir.isDirectory()) {
 		distFiles += fifeCommonNativesDir.listFiles().collect { it.getAbsolutePath() }
 	}
-	
+
 	return distFiles
 }
 
 distributions {
 	main {
-		
+
 		baseName = 'rtext'
 		contents {
 			exclude([ '**/*-sources.jar', '**/*-javadoc.jar' ])
