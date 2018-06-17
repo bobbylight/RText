@@ -30,8 +30,6 @@ import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import org.fife.rtext.plugins.tools.NewToolDialog;
-import org.fife.rtext.plugins.tools.Tool;
 import org.fife.ui.KeyStrokeCellRenderer;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplicationConstants;
@@ -69,7 +67,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param plugin The plugin.
 	 */
-	public ToolOptionPanel(ToolPlugin plugin) {
+	ToolOptionPanel(ToolPlugin plugin) {
 
 		super(plugin);
 		listener = new Listener();
@@ -141,7 +139,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	 * @param tool The tool.
 	 * @return The row of data for the table model.
 	 */
-	private static final Object[] createRowData(Tool tool) {
+	private static Object[] createRowData(Tool tool) {
 		return new Object[] {
 			new ToolWrapper(tool),
 			KeyStroke.getKeyStroke(tool.getAccelerator()),
@@ -238,7 +236,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 
 		ToolManager tm = ToolManager.get();
 		model.setRowCount(0);
-		for (Iterator<Tool> i=tm.getToolIterator(); i.hasNext(); ) {
+		for (Iterator<Tool> i=tm.getToolIterator(); i.hasNext();) {
 			Tool tool = i.next();
 			model.addRow(createRowData(tool));
 		}
@@ -286,7 +284,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 
 		private Tool tool;
 
-		public ToolWrapper(Tool tool) {
+		ToolWrapper(Tool tool) {
 			this.tool = tool;
 		}
 

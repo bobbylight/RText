@@ -33,7 +33,7 @@ class NewToolAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public NewToolAction(RText owner, ResourceBundle msg, Icon icon) {
+	NewToolAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, "NewToolAction");
 		setIcon(icon);
 	}

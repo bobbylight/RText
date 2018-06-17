@@ -62,7 +62,7 @@ class OutputTextPane extends JTextPane {
 	/**
 	 * Constructor.
 	 */
-	public OutputTextPane(ToolPlugin plugin) {
+	OutputTextPane(ToolPlugin plugin) {
 		this.plugin = plugin;
 		installStyles();
 		setTabSize(4); // Do after installStyles()
@@ -87,7 +87,7 @@ class OutputTextPane extends JTextPane {
 		am.put("backspace", new BackspaceAction(delegate));
 
 		// Just remove "delete previous word" for now, since DefaultEditorKit
-		// doesn't expose the delegate for us to call into. 
+		// doesn't expose the delegate for us to call into.
 		int ctrl = InputEvent.CTRL_MASK;
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, ctrl), "invalid");
 
@@ -97,7 +97,7 @@ class OutputTextPane extends JTextPane {
 		am.put("delete", new DeleteAction(delegate));
 
 		// Just remove "delete next word" for now, since DefaultEditorKit
-		// doesn't expose the delegate for us to call into. 
+		// doesn't expose the delegate for us to call into.
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, ctrl), "invalid");
 
 	}
@@ -251,7 +251,7 @@ class OutputTextPane extends JTextPane {
 	 */
 	private class ClearAllAction extends StandardAction {
 
-		public ClearAllAction() {
+		ClearAllAction() {
 			setName(plugin.getString("Action.ClearAll"));
 		}
 
@@ -267,7 +267,7 @@ class OutputTextPane extends JTextPane {
 	 */
 	private class CopyAllAction extends StandardAction {
 
-		public CopyAllAction() {
+		CopyAllAction() {
 			setName(plugin.getString("Action.CopyAll"));
 		}
 
@@ -294,7 +294,7 @@ class OutputTextPane extends JTextPane {
 		 */
 		private Action delegate;
 
-		public BackspaceAction(Action delegate) {
+		BackspaceAction(Action delegate) {
 			super("backspace");
 			this.delegate = delegate;
 		}
@@ -318,7 +318,7 @@ class OutputTextPane extends JTextPane {
 
 
 	/**
-	 * Action performed when delete 
+	 * Action performed when delete.
 	 */
 	private class DeleteAction extends TextAction {
 
@@ -327,7 +327,7 @@ class OutputTextPane extends JTextPane {
 		 */
 		private Action delegate;
 
-		public DeleteAction(Action delegate) {
+		DeleteAction(Action delegate) {
 			super("delete");
 			this.delegate = delegate;
 		}

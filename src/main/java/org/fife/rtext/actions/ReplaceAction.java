@@ -33,7 +33,7 @@ class ReplaceAction extends FindAction {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public ReplaceAction(RText owner, ResourceBundle msg, Icon icon) {
+	ReplaceAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, icon, "ReplaceAction");
 	}
 

@@ -35,7 +35,7 @@ class HomePageAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public HomePageAction(RText owner, ResourceBundle msg, Icon icon) {
+	HomePageAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, "HomePageAction");
 		setIcon(icon);
 	}

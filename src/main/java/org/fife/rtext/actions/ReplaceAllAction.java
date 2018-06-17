@@ -43,7 +43,7 @@ class ReplaceAllAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public ReplaceAllAction(RText owner, ResourceBundle msg, Icon icon) {
+	ReplaceAllAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, "ReplaceAllAction");
 		setIcon(icon);
 	}

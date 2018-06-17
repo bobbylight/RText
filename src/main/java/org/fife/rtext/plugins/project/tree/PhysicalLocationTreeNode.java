@@ -1,3 +1,13 @@
+/*
+ * 01/02/2010
+ *
+ * PhysicalLocationTreeNode.java - Marker interface for a tree node
+ * representing a physical file or folder.
+ * Copyright (C) 2010 Robert Futrell
+ * http://fifesoft.com/rtext
+ * Licensed under a modified BSD license.
+ * See the included license file for details.
+ */
 package org.fife.rtext.plugins.project.tree;
 
 import java.awt.event.ActionEvent;
@@ -68,14 +78,16 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 	 * Dummy class signifying that this tree node has not yet had its children
 	 * calculated.
 	 */
-	static class NotYetPopulatedChild extends AbstractWorkspaceTreeNode {
+	class NotYetPopulatedChild extends AbstractWorkspaceTreeNode {
 
 		public NotYetPopulatedChild(ProjectPlugin plugin) {
 			super(plugin);
 		}
 
 		@Override
-		public String getDisplayName() { return null; }
+		public String getDisplayName() {
+			return null;
+		}
 
 		@Override
 		public Icon getIcon() {
@@ -83,10 +95,14 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 		}
 
 		@Override
-		public List<PopupContent> getPopupActions() { return null; }
+		public List<PopupContent> getPopupActions() {
+			return null;
+		}
 
 		@Override
-		public String getToolTipText() { return null; }
+		public String getToolTipText() {
+			return null;
+		}
 
 		@Override
 		protected void handleDelete() {}
@@ -98,7 +114,7 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 
 		@Override
 		protected void handleRename() {}
-		
+
 	}
 
 
@@ -106,7 +122,7 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 	 * Creates a new child file or folder whose parent is this node's file
 	 * (which must be a directory).
 	 */
-	public static class NewFileOrFolderAction extends BaseAction {
+	static class NewFileOrFolderAction extends BaseAction {
 
 		private PhysicalLocationTreeNode node;
 		private boolean isFile;
@@ -147,7 +163,7 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 					rtext.openFile(createFileObject(newName).getAbsolutePath());
 				}
 			}
-			
+
 		}
 
 		private File createFileObject(String name) {

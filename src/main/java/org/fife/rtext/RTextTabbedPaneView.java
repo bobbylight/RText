@@ -76,7 +76,7 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 	 * @param properties A properties object used to initialize some fields on
 	 *        this tabbed pane.
 	 */
-	public RTextTabbedPaneView(RText owner, String[] filesToOpen,
+	RTextTabbedPaneView(RText owner, String[] filesToOpen,
 							RTextPrefs properties) {
 
 		setLayout(new GridLayout(1,1));
@@ -176,10 +176,10 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 			owner.setMessages(fileFullPath + "*", "Opened document '" + fileFullPath + "'");
 		else
 			owner.setMessages(fileFullPath, "Opened document '" + fileFullPath + "'");
-		
+
 		// RText's listeners will be updated by stateChanged() for all
 		// addTextAreaImpl() calls.
-		
+
 	}
 
 
@@ -360,9 +360,9 @@ inCloseCurrentDocument = false;
 		Color modifiedColor = getModifiedDocumentDisplayNamesColor();
 		int numDocuments = getNumDocuments();
 
-		if (highlightModifiedDocumentDisplayNames()==true) {
+		if (highlightModifiedDocumentDisplayNames()) {
 			for (int i=0; i<numDocuments; i++) {
-				if (getRTextEditorPaneAt(i).isDirty()==true) {
+				if (getRTextEditorPaneAt(i).isDirty()) {
 					tabbedPane.setForegroundAt(i, modifiedColor);
 				}
 				else {
@@ -426,7 +426,7 @@ inCloseCurrentDocument = false;
 			tabbedPane.setTitleAt(index, displayName);
 			// Hack-of-a-way to tell if this document is modified.
 			if (displayName.charAt(displayName.length()-1)=='*') {
-				if (highlightModifiedDocumentDisplayNames()==true) {
+				if (highlightModifiedDocumentDisplayNames()) {
 					tabbedPane.setForegroundAt(index,
 							getModifiedDocumentDisplayNamesColor());
 				}
@@ -522,7 +522,7 @@ inCloseCurrentDocument = false;
 
 			// Update RText actions associated with the current currentTextArea.
 			currentTextArea.addCaretListener(owner);
-			
+
 			// Trick the parent RText into updating the row/column indicator.
 			// We have to check mainView for null because this is called in
 			// RText's constructor, before RText has a mainView.
@@ -551,7 +551,7 @@ inCloseCurrentDocument = false;
 		private JPopupMenu popup;
 		private TabbedPaneCloseAction closeAction;
 
-		public TabbedPane() {
+		TabbedPane() {
 			x = y = -1;
 			enableEvents(AWTEvent.MOUSE_EVENT_MASK);
 			ToolTipManager.sharedInstance().registerComponent(this);
@@ -680,7 +680,7 @@ inCloseCurrentDocument = false;
 
 		private String template;
 
-		public TabbedPaneCloseAction(String template) {
+		TabbedPaneCloseAction(String template) {
 			this.template = template;
 		}
 
@@ -707,7 +707,7 @@ inCloseCurrentDocument = false;
 	 */
 	private class TabbedPaneCloseOthersAction extends AbstractAction {
 
-		public TabbedPaneCloseOthersAction(String text) {
+		TabbedPaneCloseOthersAction(String text) {
 			putValue(AbstractAction.NAME, text);
 		}
 
@@ -728,7 +728,7 @@ inCloseCurrentDocument = false;
 	 */
 	private class TabbedPaneCopyPathAction extends AbstractAction {
 
-		public TabbedPaneCopyPathAction(String text) {
+		TabbedPaneCopyPathAction(String text) {
 			putValue(AbstractAction.NAME, text);
 		}
 

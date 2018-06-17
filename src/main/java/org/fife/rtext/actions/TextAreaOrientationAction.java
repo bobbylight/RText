@@ -41,7 +41,7 @@ class TextAreaOrientationAction extends AppAction<RText> {
 	 * @param icon The icon associated with the action.
 	 * @param o The orientation to give text areas.
 	 */
-	public TextAreaOrientationAction(RText owner, ResourceBundle msg,
+	TextAreaOrientationAction(RText owner, ResourceBundle msg,
 						String nameKey, Icon icon, ComponentOrientation o) {
 		super(owner, msg, nameKey);
 		setIcon(icon);

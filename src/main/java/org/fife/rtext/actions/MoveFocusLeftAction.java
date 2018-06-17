@@ -33,7 +33,7 @@ class MoveFocusLeftAction extends AppAction<RText> {
 	/**
 	 * Constructor.
 	 */
-	public MoveFocusLeftAction(RText app, ResourceBundle msg) {
+	MoveFocusLeftAction(RText app, ResourceBundle msg) {
 		super(app, msg, "MoveFocusLeftAction");
 	}
 

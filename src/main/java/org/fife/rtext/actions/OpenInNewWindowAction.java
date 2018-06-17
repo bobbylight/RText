@@ -44,7 +44,7 @@ class OpenInNewWindowAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public OpenInNewWindowAction(RText owner, ResourceBundle msg, Icon icon) {
+	OpenInNewWindowAction(RText owner, ResourceBundle msg, Icon icon) {
 		//super(owner, text, icon, desc, mnemonic, accelerator);
 		super(owner, msg, "OpenInNewWindowAction");
 		setIcon(icon);

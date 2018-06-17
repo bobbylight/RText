@@ -35,7 +35,7 @@ class SaveAsRemoteAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public SaveAsRemoteAction(RText owner, ResourceBundle msg, Icon icon) {
+	SaveAsRemoteAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, "SaveAsRemoteAction");
 		setIcon(icon);
 	}

@@ -39,7 +39,7 @@ class PrintAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public PrintAction(RText owner, ResourceBundle msg, Icon icon) {
+	PrintAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, "PrintAction");
 		setIcon(icon);
 	}

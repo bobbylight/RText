@@ -32,7 +32,7 @@ class MoveFocusDownAction extends AppAction<RText> {
 	/**
 	 * Constructor.
 	 */
-	public MoveFocusDownAction(RText app, ResourceBundle msg) {
+	MoveFocusDownAction(RText app, ResourceBundle msg) {
 		super(app, msg, "MoveFocusBelowAction");
 	}
 

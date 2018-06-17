@@ -33,7 +33,7 @@ class FindNextAction extends FindAction {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public FindNextAction(RText owner, ResourceBundle msg, Icon icon) {
+	FindNextAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, icon, "FindNextAction");
 	}
 

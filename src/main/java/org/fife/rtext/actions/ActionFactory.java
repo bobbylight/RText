@@ -31,7 +31,7 @@ import org.fife.ui.rtextarea.RTextAreaEditorKit;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ActionFactory implements RTextActionInfo {
+public final class ActionFactory implements RTextActionInfo {
 
 
 	/**

@@ -55,7 +55,7 @@ class SaveAsWebPageAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public SaveAsWebPageAction(RText owner, ResourceBundle msg, Icon icon) {
+	SaveAsWebPageAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, "SaveAsWebPageAction");
 		setIcon(icon);
 	}

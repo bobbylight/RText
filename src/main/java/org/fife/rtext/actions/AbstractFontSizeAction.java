@@ -43,7 +43,7 @@ abstract class AbstractFontSizeAction extends AppAction<RText> {
 	 * @param delegate The RSTA version of this increase/decrease font size
 	 *        action.
 	 */
-	protected AbstractFontSizeAction(RText app, RecordableTextAction delegate,
+	AbstractFontSizeAction(RText app, RecordableTextAction delegate,
 			ResourceBundle msg, String keyRoot) {
 		super(app, msg, keyRoot);
 		this.delegate = delegate;

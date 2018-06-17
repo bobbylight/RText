@@ -51,7 +51,7 @@ public class CheckForUpdatesAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public CheckForUpdatesAction(RText owner, ResourceBundle msg, Icon icon) {
+	CheckForUpdatesAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, "CheckForUpdates");
 		setIcon(icon);
 	}
@@ -79,7 +79,7 @@ public class CheckForUpdatesAction extends AppAction<RText> {
 			String current = rtext.getVersionString();
 			String latest = props.getProperty("Latest.RText.Version");
 			String releaseDate = props.getProperty("Latest.Release.Date");
-			
+
 			if (current.startsWith(latest)) {
 				String msg = rtext.getString("UpdateStatus.UpToDate");
 				String title = rtext.getString("InfoDialogHeader");

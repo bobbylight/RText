@@ -41,7 +41,7 @@ class ViewSplitAction extends AppAction<RText> {
 	 *        {@link RTextActionInfo#VIEW_SPLIT_NONE_ACTION}, or
 	 *        {@link RTextActionInfo#VIEW_SPLIT_VERT_ACTION}.
 	 */
-	public ViewSplitAction(RText owner, ResourceBundle msg, Icon icon,
+	ViewSplitAction(RText owner, ResourceBundle msg, Icon icon,
 							String nameKey, String splitType) {
 		super(owner, msg, nameKey);
 		setIcon(icon);

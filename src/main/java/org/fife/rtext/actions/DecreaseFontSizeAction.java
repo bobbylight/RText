@@ -23,7 +23,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
 class DecreaseFontSizeAction extends AbstractFontSizeAction {
 
 
-	public DecreaseFontSizeAction(RText app, ResourceBundle msg) {
+	DecreaseFontSizeAction(RText app, ResourceBundle msg) {
 		super(app, new RSyntaxTextAreaEditorKit.DecreaseFontSizeAction(),
 				msg, "DecreaseFontSizesAction");
 	}

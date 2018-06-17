@@ -36,7 +36,7 @@ class ReplaceInFilesAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public ReplaceInFilesAction(RText owner, ResourceBundle msg, Icon icon) {
+	ReplaceInFilesAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, "ReplaceInFilesAction");
 		setIcon(icon);
 	}

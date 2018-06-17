@@ -33,7 +33,7 @@ class SaveAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public SaveAction(RText owner, ResourceBundle msg, Icon icon) {
+	SaveAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, "SaveAction");
 		setIcon(icon);
 	}

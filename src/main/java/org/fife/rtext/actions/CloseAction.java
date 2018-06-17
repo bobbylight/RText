@@ -35,7 +35,7 @@ class CloseAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public CloseAction(RText owner, ResourceBundle msg, Icon icon) {
+	CloseAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, "CloseAction");
 		setIcon(icon);
 	}

@@ -176,7 +176,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 	 * @param p The completion provider to add to.
 	 * @param key The key for the localized tool variable.
 	 */
-	private static final void addToolVarCompletion(DefaultCompletionProvider p,
+	private static void addToolVarCompletion(DefaultCompletionProvider p,
 			String key) {
 		String temp = msg.getString(key);
 		int split = temp.indexOf(" - ");
@@ -230,7 +230,7 @@ public class NewToolDialog extends EscapableDialog implements ActionListener {
 		}
 
 		KeyStroke accelerator = shortcutField.getKeyStroke();
-		
+
 		// If we get here, all the parameters are valid, so create the tool!
 		Tool tool = new Tool(name, desc);
 		tool.setProgram(program);
@@ -383,7 +383,7 @@ ac.install(dirField);
 	 *
 	 * @return The completion provider.
 	 */
-	private static final CompletionProvider createToolVarCompletionProvider() {
+	private static CompletionProvider createToolVarCompletionProvider() {
 		DefaultCompletionProvider p = new DefaultCompletionProvider();
 		addToolVarCompletion(p, "Variable.FileName");
 		addToolVarCompletion(p, "Variable.FileNameNoExt");
@@ -411,7 +411,7 @@ ac.install(dirField);
 	 * @param name The identifier to check.
 	 * @return Whether the identifier is a valid tool name.
 	 */
-	private static final boolean isValidName(String name) {
+	private static boolean isValidName(String name) {
 
 		boolean valid = false;
 
@@ -517,7 +517,7 @@ ac.install(dirField);
 		private JButton okButton;
 		private String arg;
 
-		public ArgDialog(JDialog parent) {
+		ArgDialog(JDialog parent) {
 
 			super(parent);
 			ComponentOrientation o = parent.getComponentOrientation();
@@ -648,7 +648,7 @@ ac.install(dirField);
 		private JButton okButton;
 		private boolean escaped;
 
-		public EnvVarDialog(JDialog parent) {
+		EnvVarDialog(JDialog parent) {
 
 			super(parent);
 			ComponentOrientation o = parent.getComponentOrientation();
@@ -792,7 +792,7 @@ ac.install(dirField);
 		private JTextField field;
 		private String replacement;
 
-		public VariableAction(String nameKey, String replacement,
+		VariableAction(String nameKey, String replacement,
 								JTextField field) {
 			putValue(NAME, msg.getString(nameKey));
 			this.field = field;
@@ -814,7 +814,7 @@ ac.install(dirField);
 	 */
 	private static class VariableButton extends MenuButton {
 
-		public VariableButton(JTextField field) {
+		VariableButton(JTextField field) {
 			super(null);
 			setText(msg.getString("Variables"));
 			setHorizontalTextPosition(SwingConstants.LEADING);

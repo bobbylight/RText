@@ -33,7 +33,7 @@ class FilePropertiesAction extends AppAction<RText> {
 	 * @param rtext The parent application.
 	 * @param msg The resource bundle to use for localization.
 	 */
-	public FilePropertiesAction(RText rtext, ResourceBundle msg) {
+	FilePropertiesAction(RText rtext, ResourceBundle msg) {
 		super(rtext, msg, "FilePropertiesAction");
 	}
 

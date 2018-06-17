@@ -103,7 +103,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	 * @param a The action.
 	 * @return The menu item.
 	 */
-	private static final JMenuItem createMenuItem(Action a) {
+	private static JMenuItem createMenuItem(Action a) {
 		JMenuItem item = new JMenuItem(a);
 		item.setToolTipText(null);
 		return item;
@@ -181,7 +181,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	 *
 	 * @return The file.
 	 */
-	private static final File getPrefsFile() {
+	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"tools.properties");
 	}
@@ -354,7 +354,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 		if (ToolManager.get().getToolCount()>0) {
 			for (Iterator<Tool> i=ToolManager.get().getToolIterator();
-					i.hasNext(); ){
+					i.hasNext();){
 				Tool tool = i.next();
 				RunToolAction a = new RunToolAction(app, tool, getDockableWindow());
 				toolsMenu.add(createMenuItem(a));

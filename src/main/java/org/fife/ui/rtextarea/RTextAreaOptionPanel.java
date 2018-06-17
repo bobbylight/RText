@@ -27,7 +27,6 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.ui.*;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rtextarea.RTextArea;
 
 
 /**
@@ -306,11 +305,11 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			Color defaultBMBGColor = RSyntaxTextArea.getDefaultBracketMatchBGColor();
 			Color defaultBMBorderColor = RSyntaxTextArea.getDefaultBracketMatchBorderColor();
 
-			if ( wordWrapCheckBox.isSelected() ||
+			if (wordWrapCheckBox.isSelected() ||
 				!highlightCurrentLineCheckBox.isSelected() ||
 				!getCurrentLineHighlightColor().equals(defaultCurrentLineHighlightColor) ||
 				getTabSize()!=defaultTabSize ||
-				getEmulateTabs()==true ||
+				getEmulateTabs() ||
 				!linkCB.isSelected() ||
 				modKeyCombo.getSelectedIndex()!=0 ||
 				!linkColorButton.getColor().equals(Color.BLUE) ||
@@ -328,8 +327,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				!bmBorderColorButton.getColor().equals(defaultBMBorderColor) ||
 				bothBracketsCB.isSelected() ||
 				showTabLinesCheckBox.isSelected() ||
-				!Color.gray.equals(tabLineColorButton.getColor()))
-			{
+				!Color.gray.equals(tabLineColorButton.getColor())) {
 				wordWrapCheckBox.setSelected(false);
 				highlightCurrentLineCheckBox.setSelected(true);
 				hclColorButton.setEnabled(true);
@@ -366,7 +364,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, !ww, ww);
 		}
-	
+
 		else if ("HighlightCurrentLineCheckBox".equals(command)) {
 			boolean selected = highlightCurrentLineCheckBox.isSelected();
 			hclColorButton.setEnabled(selected);
@@ -519,7 +517,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 		mainView.setLineWrap(getWordWrap());
 		rtext.setRowColumnIndicatorVisible(!mainView.getLineWrap());
-		if (isCurrentLineHighlightCheckboxSelected()==true) {
+		if (isCurrentLineHighlightCheckboxSelected()) {
 			mainView.setCurrentLineHighlightEnabled(true);
 			mainView.setCurrentLineHighlightColor(getCurrentLineHighlightColor());
 		}
@@ -567,7 +565,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			firePropertyChange(PROPERTY,
 							null, marginLinePositionField.getText());
 		}
-			
+
 	}
 
 
@@ -753,7 +751,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Returns whether or not the bracketMatch checkbox is selected
+	 * Returns whether or not the bracketMatch checkbox is selected.
 	 *
 	 * @return Whether or not the checkbox is selected.
 	 * @see #setBracketMatchCheckboxSelected

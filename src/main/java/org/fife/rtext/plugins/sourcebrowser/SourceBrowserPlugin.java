@@ -127,7 +127,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 *
 	 * @param tree The tree whose renderer should be checked.
 	 */
-	private static final void checkTreeCellRenderer(JTree tree) {
+	private static void checkTreeCellRenderer(JTree tree) {
 		if (SubstanceUtil.isSubstanceInstalled()) {
 			TreeCellRenderer renderer = tree.getCellRenderer();
 			try {
@@ -203,9 +203,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 			return;
 
 		int type = e.getType();
-		boolean doChange = 
+		boolean doChange =
 				(type==CurrentTextAreaEvent.TEXT_AREA_CHANGED &&
-					((RTextEditorPane)e.getNewValue()!=null)) ||
+					(e.getNewValue()!=null)) ||
 				(type==CurrentTextAreaEvent.IS_MODIFIED_CHANGED &&
 					(Boolean.FALSE.equals(e.getNewValue()))) ||
 				(type==CurrentTextAreaEvent.SYNTAX_STYLE_CNANGED);
@@ -248,7 +248,8 @@ public class SourceBrowserPlugin extends GUIPlugin
 						} catch (Exception ex) {
 							owner.displayException(ex);
 						}
-					}});
+					}}
+				);
 				return;
 			}
 
@@ -330,7 +331,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * @see #CTAGS_TYPE_EXUBERANT
 	 * @see #CTAGS_TYPE_STANDARD
 	 */
-	private static final String ensureValidCTagsType(String type) {
+	private static String ensureValidCTagsType(String type) {
 		if (type==null) {
 			type = SourceBrowserPlugin.CTAGS_TYPE_EXUBERANT;
 		}
@@ -397,7 +398,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	}
 
 
-	private static final String getLanguageForStyle(String style) {
+	private static String getLanguageForStyle(String style) {
 		String language = null;
 		if (style.equals(SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT)) {
 			language = "Flex"; // Same as MXML to Exuberant Ctags
@@ -530,7 +531,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 *
 	 * @return The file.
 	 */
-	private static final File getPrefsFile() {
+	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"sourceBrowser.properties");
 	}
@@ -679,7 +680,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	/**
 	 * Makes the "tags tree" display an error message.
 	 *
-	 * @param errorMessage The message to display.
+	 * @param message The message to display.
 	 */
 	private void setErrorMessage(String message) {
 		SourceTreeNode root = new SourceTreeNode(null, false);
@@ -740,9 +741,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 */
 	static class ExtendedTagEntry extends TagEntry {
 
-		public String cachedToolTipText;
+		String cachedToolTipText;
 
-		public ExtendedTagEntry(String line) {
+		ExtendedTagEntry(String line) {
 			super(line);
 		}
 	}
@@ -753,7 +754,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 */
 	private class SortAction extends AppAction<RText> {
 
-		public SortAction(RText app, ResourceBundle msg) {
+		SortAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Sort");
 			setIcon("alphab_sort_co.gif");
 			setName(null); // No text on button
@@ -772,7 +773,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 */
 	private class ViewAction extends AppAction<RText> {
 
-		public ViewAction(RText app, ResourceBundle msg) {
+		ViewAction(RText app, ResourceBundle msg) {
 			super(app, msg, "MenuItem.View");
 		}
 

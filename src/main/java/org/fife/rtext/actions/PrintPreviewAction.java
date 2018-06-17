@@ -34,7 +34,7 @@ class PrintPreviewAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param icon The icon associated with the action.
 	 */
-	public PrintPreviewAction(RText owner, ResourceBundle msg, Icon icon) {
+	PrintPreviewAction(RText owner, ResourceBundle msg, Icon icon) {
 		super(owner, msg, "PrintPreviewAction");
 		setIcon(icon);
 	}

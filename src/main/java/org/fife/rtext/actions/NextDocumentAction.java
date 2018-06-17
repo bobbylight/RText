@@ -35,7 +35,7 @@ public class NextDocumentAction extends AppAction<RText> {
 	 * @param msg The resource bundle to localize from.
 	 * @param forward Whether we're going to the next or previous document.
 	 */
-	public NextDocumentAction(RText app, ResourceBundle msg, boolean forward) {
+	NextDocumentAction(RText app, ResourceBundle msg, boolean forward) {
 		super(app, msg, forward ? "NextDocumentAction" : "PrevDocumentAction");
 		this.forward = forward;
 	}

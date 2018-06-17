@@ -31,7 +31,7 @@ import java.util.TreeSet;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ToolManager {
+public final class ToolManager {
 
 	/**
 	 * Event fired when a tool is added or removed.
