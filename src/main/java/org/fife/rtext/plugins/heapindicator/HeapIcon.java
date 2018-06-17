@@ -28,7 +28,7 @@ class HeapIcon implements Icon {
 	private HeapIndicatorPlugin plugin;
 
 
-	public HeapIcon(HeapIndicatorPlugin plugin) {
+	HeapIcon(HeapIndicatorPlugin plugin) {
 		this.plugin = plugin;
 	}
 

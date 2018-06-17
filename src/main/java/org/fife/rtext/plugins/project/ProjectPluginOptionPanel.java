@@ -53,7 +53,7 @@ class ProjectPluginOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param plugin The plugin whose options we're displaying.
 	 */
-	public ProjectPluginOptionPanel(ProjectPlugin plugin) {
+	ProjectPluginOptionPanel(ProjectPlugin plugin) {
 
 		super(plugin);
 		setName(Messages.getString("ProjectPlugin.Name"));

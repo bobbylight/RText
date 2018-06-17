@@ -73,7 +73,7 @@ public class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param plugin The plugin.
 	 */
-	public ConsoleOptionPanel(Plugin plugin) {
+	ConsoleOptionPanel(Plugin plugin) {
 
 		super(plugin);
 		setId(OPTION_PANEL_ID);

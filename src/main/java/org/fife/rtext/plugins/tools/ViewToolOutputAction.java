@@ -37,7 +37,7 @@ class ViewToolOutputAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param plugin The tools plugin.
 	 */
-	public ViewToolOutputAction(RText owner, ResourceBundle msg,
+	ViewToolOutputAction(RText owner, ResourceBundle msg,
 								ToolPlugin plugin) {
 		super(owner, msg, "ViewToolOutputAction");
 		this.plugin = plugin;

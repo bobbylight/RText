@@ -100,7 +100,7 @@ public abstract class ContentAssistField extends JTextField
 	 * Toggles whether regex auto-complete is enabled.  This method will fire
 	 * a property change event of type
 	 * {@link ContentAssistable#ASSISTANCE_IMAGE}.
-	 * 
+	 *
 	 * @param enabled Whether regex auto complete should be enabled.
 	 * @see #isAutoCompleteEnabled()
 	 */

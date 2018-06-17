@@ -53,7 +53,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Constructor.
 	 */
-	public ShellOptionsPanel() {
+	ShellOptionsPanel() {
 
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Sh.Name"));

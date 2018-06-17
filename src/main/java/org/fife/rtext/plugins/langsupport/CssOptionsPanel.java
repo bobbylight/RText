@@ -24,7 +24,7 @@ class CssOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public CssOptionsPanel() {
+	CssOptionsPanel() {
 		super("Options.CSS.Name", "css.png",
 				SyntaxConstants.SYNTAX_STYLE_CSS);
 	}

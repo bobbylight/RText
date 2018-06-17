@@ -1,3 +1,12 @@
+/*
+ * 09/08/2012
+ *
+ * LogicalFolderNameChecker.java - Ensures that proposed project names are valid.
+ * Copyright (C) 2012 Robert Futrell
+ * http://fifesoft.com/rtext
+ * Licensed under a modified BSD license.
+ * See the included license file for details.
+ */
 package org.fife.rtext.plugins.project.tree;
 
 /**

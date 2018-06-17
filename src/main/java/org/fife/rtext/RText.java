@@ -996,7 +996,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		// If the user clicks the "X" in the top-right of the window, do nothing.
 		// (We'll clean up in our window listener).
-		addWindowListener( new RTextWindowListener(this) );
+		addWindowListener(new RTextWindowListener(this));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		mainView.setLineNumbersEnabled(prefs.lineNumbersVisible);

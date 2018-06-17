@@ -206,7 +206,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	 */
 	private class ConfigureFiltersAction extends BaseAction {
 
-		public ConfigureFiltersAction() {
+		ConfigureFiltersAction() {
 			super("Action.ConfigureFilters");
 		}
 
@@ -228,6 +228,9 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
+	/**
+	 * Checks the name of a folder project entry.
+	 */
 	private class FolderProjectEntryNameChecker implements NameChecker {
 
 		@Override
@@ -238,7 +241,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 			}
 			return null;
 		}
-		
+
 	}
 
 

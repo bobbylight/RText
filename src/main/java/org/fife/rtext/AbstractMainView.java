@@ -404,7 +404,7 @@ public abstract class AbstractMainView extends JPanel
 
 		// If we're currently not waiting on the user to decide about a
 		// previous "another program modified..." message...
-		if (checkForModification==true) {
+		if (checkForModification) {
 
 			// Flag so that if the user takes to long deciding, messages
 			// don't pile up about the same file being modified.
@@ -434,7 +434,8 @@ public abstract class AbstractMainView extends JPanel
 					public void run() {
 						actionPerformed(new ActionEvent(this,
 							ActionEvent.ACTION_PERFORMED, actionCommand));
-					}});
+					}}
+				);
 			}
 
 
@@ -967,14 +968,14 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	private Color getAppropriateActiveLineRangeColor() {
 		Component c = owner.getJMenuBar()!=null ?
-				(Component)owner.getJMenuBar().getMenu(0) : new JLabel();
+				owner.getJMenuBar().getMenu(0) : new JLabel();
 		Color fg = c.getForeground();
 		return Util.isLightForeground(fg) ? fg : null;
 	}
 
 
 	/**
-	 * Returns the color to use for the background of armed fold icons
+	 * Returns the color to use for the background of armed fold icons.
 	 *
 	 * @return The color.
 	 * @see #setArmedFoldBackground(Color)
@@ -1149,7 +1150,7 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @return The new, empty file's name.
 	 */
-	private final String getDefaultFileName() {
+	private String getDefaultFileName() {
 		return owner.getWorkingDirectory() +
 			System.getProperty("file.separator") + owner.getNewFileName();
 	}
@@ -1420,7 +1421,7 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @return The cursor for text areas when a macro is being recorded.
 	 */
-	private static synchronized final Cursor getMacroCursor() {
+	private static synchronized Cursor getMacroCursor() {
 
 		if (macroCursor==null) {
 
@@ -1489,7 +1490,7 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns the color selected by the user for "mark all."
+	 * Returns the color selected by the user for "mark all".
 	 *
 	 * @return The color.
 	 * @see #setMarkAllHighlightColor
@@ -1511,7 +1512,7 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns the color to use to "mark occurrences."
+	 * Returns the color to use to "mark occurrences".
 	 *
 	 * @return The color.
 	 * @see #setMarkOccurrencesColor(Color)
@@ -1921,7 +1922,7 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @param pane The pane to examine.
 	 */
-	private static final void guessContentType(RTextEditorPane pane) {
+	private static void guessContentType(RTextEditorPane pane) {
 
 		String style = SyntaxConstants.SYNTAX_STYLE_NONE;
 
@@ -1948,7 +1949,7 @@ public abstract class AbstractMainView extends JPanel
 					if (space2==-1) { // Never happens in "correct" #!'s
 						space2 = firstLine.length();
 					}
-					firstLine = firstLine.substring(space+1, space2);	
+					firstLine = firstLine.substring(space+1, space2);
 				}
 				else {
 					firstLine = firstLine.substring(2, space);
@@ -2365,7 +2366,7 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns whether or not the margin line is enabled
+	 * Returns whether or not the margin line is enabled.
 	 *
 	 * @return Whether or not the margin line is enabled.
 	 * @see #setMarginLineEnabled
@@ -2434,7 +2435,7 @@ public abstract class AbstractMainView extends JPanel
 		if (getNumDocuments()==1 &&
 			currentTextArea.getFileName().equals(owner.getNewFileName()) &&
 			currentTextArea.getDocument().getLength()==0 &&
-				currentTextArea.isDirty()==false) {
+				!currentTextArea.isDirty()) {
 				removeComponentAt(0);
 		}
 
@@ -2605,7 +2606,7 @@ public abstract class AbstractMainView extends JPanel
 		else if (propertyName.equals(RTextEditorPane.DIRTY_PROPERTY)) {
 			int selectedIndex = getSelectedIndex();
 			String oldTitle = getDocumentDisplayNameAt(selectedIndex);
-			if ( ((Boolean)e.getNewValue()).booleanValue()==true )
+			if (((Boolean)e.getNewValue()).booleanValue())
 				setDocumentDisplayNameAt(selectedIndex, oldTitle+"*");
 			else {
 				setDocumentDisplayNameAt(selectedIndex,
@@ -2660,7 +2661,7 @@ public abstract class AbstractMainView extends JPanel
 			boolean[] doneYet = new boolean[numDocuments];
 
 			for (int i=0; i<numDocuments; i++) {
-				if (doneYet[i]==true)
+				if (doneYet[i])
 					continue;
 				RTextEditorPane pane_I = getRTextEditorPaneAt(i);
 				String fileFullPath = pane_I.getFileFullPath();
@@ -2669,7 +2670,7 @@ public abstract class AbstractMainView extends JPanel
 					RTextEditorPane pane = getRTextEditorPaneAt(j);
 					if (!doneYet[j] && pane.getFileFullPath().equals(fileFullPath)) {
 						String title = pane.getFileName() + " (" + (++count) + ")";
-						if (pane.isDirty()==true)
+						if (pane.isDirty())
 							title = title + "*";
 						setDocumentDisplayNameAt(j, title);
 						doneYet[j] = true;
@@ -2677,13 +2678,13 @@ public abstract class AbstractMainView extends JPanel
 				}
 				if (count>1) {
 					String title = pane_I.getFileName() + " (1)";
-					if (pane_I.isDirty()==true)
+					if (pane_I.isDirty())
 						title = title + "*";
 					setDocumentDisplayNameAt(i, title);
 				}
 				else {
 					String title = pane_I.getFileName();
-					if (pane_I.isDirty()==true)
+					if (pane_I.isDirty())
 						title = title + "*";
 					setDocumentDisplayNameAt(i, title);
 				}
@@ -2751,7 +2752,7 @@ public abstract class AbstractMainView extends JPanel
 		// Cycle through each document, one by one.
 		for (int i=0; i<getNumDocuments(); i++) {
 			// Save this document, if it is not read-only
-			if (getRTextEditorPaneAt(i).isReadOnly()==false) {
+			if (!getRTextEditorPaneAt(i).isReadOnly()) {
 				setSelectedIndex(i);
 				allSaved |= saveCurrentFile();
 			}
@@ -3840,7 +3841,7 @@ public abstract class AbstractMainView extends JPanel
 	 * Toggles whether whitespace lines should be remembered (vs. cleared out
 	 * on Enter presses).  This method fires a property change event of type
 	 * {@link #REMEMBER_WS_LINES_PROPERTY}.
-	 * 
+	 *
 	 * @param remember Whether to remember whitespace lines.
 	 * @see #getRememberWhitespaceLines()
 	 */

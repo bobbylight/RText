@@ -36,7 +36,7 @@ public class StopAction extends AppAction<RText> {
 	 * @param plugin The parent plugin.
 	 * @param msg The resource bundle to use for localization.
 	 */
-	public StopAction(ToolPlugin plugin, ResourceBundle msg) {
+	StopAction(ToolPlugin plugin, ResourceBundle msg) {
 		super(plugin.getRText(), msg, "Action.StopTool");
 		setIcon("stop.png");
 		setEnabled(false);

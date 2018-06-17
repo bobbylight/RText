@@ -35,7 +35,7 @@ class ViewProjectsAction extends AppAction<RText> {
 	 * @param owner The parent RText instance.
 	 * @param plugin The parent plugin.
 	 */
-	public ViewProjectsAction(RText owner, ProjectPlugin plugin) {
+	ViewProjectsAction(RText owner, ProjectPlugin plugin) {
 		super(owner, Messages.getBundle(), "Action.ViewProjects");
 		this.plugin = plugin;
 	}

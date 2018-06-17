@@ -84,7 +84,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Constructor.
 	 */
-	public PerlOptionsPanel() {
+	PerlOptionsPanel() {
 
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Perl.Name"));
@@ -326,7 +326,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		if (text.length()>0) { // Empty field == okay
 			File file = new File(text);
 			if (!file.isDirectory()) {
-				res = new OptionsPanelCheckResult(this, installLocField, 
+				res = new OptionsPanelCheckResult(this, installLocField,
 					Plugin.msg.getString("Options.Perl.Error.InvalidPerlHome"));
 			}
 		}

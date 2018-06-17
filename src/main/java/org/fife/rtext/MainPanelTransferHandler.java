@@ -43,8 +43,7 @@ class MainPanelTransferHandler extends TransferHandler {
 	/**
 	 * Data flavor for importing files.
 	 */
-	private static final DataFlavor fileFlavor = DataFlavor.javaFileListFlavor;
-
+	private static final DataFlavor FILE_FLAVOR = DataFlavor.javaFileListFlavor;
 
 
 	/**
@@ -53,11 +52,11 @@ class MainPanelTransferHandler extends TransferHandler {
 	 * You must pass in the main view that will receive the files because this
 	 * transfer handler is often registered on child components of the actual
 	 * main view component (such as the "file list" of the split pane view or
-	 * the "desktop pane" of the MDI view).  
+	 * the "desktop pane" of the MDI view).
 	 *
 	 * @param mainView The main view.
 	 */
-	public MainPanelTransferHandler(AbstractMainView mainView) {
+	MainPanelTransferHandler(AbstractMainView mainView) {
 		this.mainView = mainView;
 	}
 
@@ -85,7 +84,7 @@ class MainPanelTransferHandler extends TransferHandler {
 		return TransferHandler.NONE;
 	}
 
-	
+
 	/**
 	 * Does the flavor list have the file flavor?
 	 *
@@ -94,7 +93,7 @@ class MainPanelTransferHandler extends TransferHandler {
 	 */
 	public static boolean hasFileFlavor(DataFlavor[] flavors) {
 		for (int i=0; i<flavors.length; i++) {
-			if (fileFlavor.equals(flavors[i]))
+			if (FILE_FLAVOR.equals(flavors[i]))
 				return true;
 		}
 		return false;
@@ -132,7 +131,7 @@ class MainPanelTransferHandler extends TransferHandler {
 		if (hasFileFlavor(t.getTransferDataFlavors())) {
 			try {
 				@SuppressWarnings("unchecked")
-				List<File> files = (List<File>)t.getTransferData(fileFlavor);
+				List<File> files = (List<File>)t.getTransferData(FILE_FLAVOR);
 				int count = files==null ? 0 : files.size();
 				for (int i=0; i<count; i++) {
 					File file = files.get(i);

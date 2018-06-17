@@ -48,7 +48,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Constructor.
 	 */
-	public FoldingOnlyOptionsPanel(String icon, String language) {
+	FoldingOnlyOptionsPanel(String icon, String language) {
 		this("Options.General.Folding.Name", icon, language);
 	}
 
@@ -56,7 +56,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Constructor.
 	 */
-	public FoldingOnlyOptionsPanel(String nameKey, String icon,
+	FoldingOnlyOptionsPanel(String nameKey, String icon,
 			String language) {
 
 		this.language = language;
@@ -155,7 +155,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	 */
 	@Override
 	protected final void setValuesImpl(Frame owner) {
-		setCodeFoldingValueImpl((RText)owner); 
+		setCodeFoldingValueImpl((RText)owner);
 	}
 
 

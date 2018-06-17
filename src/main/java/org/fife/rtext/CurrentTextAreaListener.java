@@ -28,7 +28,7 @@ public interface CurrentTextAreaListener extends EventListener {
 	 *
 	 * @param e The event.
 	 */
-	public void currentTextAreaPropertyChanged(CurrentTextAreaEvent e);
+	void currentTextAreaPropertyChanged(CurrentTextAreaEvent e);
 
 
 }

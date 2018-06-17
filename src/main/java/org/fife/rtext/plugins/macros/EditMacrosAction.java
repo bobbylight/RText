@@ -33,7 +33,7 @@ class EditMacrosAction extends AppAction<RText> {
 	 * @param owner The parent RText instance.
 	 * @param msg The resource bundle to use for localization.
 	 */
-	public EditMacrosAction(RText owner, ResourceBundle msg) {
+	EditMacrosAction(RText owner, ResourceBundle msg) {
 		super(owner, msg, "EditMacrosAction");
 		setIcon("cog_edit.png");
 	}

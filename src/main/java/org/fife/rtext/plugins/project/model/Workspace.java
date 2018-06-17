@@ -115,7 +115,7 @@ public class Workspace implements ModelEntity {
 	}
 
 
-	private static final String getNameFromFile(File file) {
+	private static String getNameFromFile(File file) {
 		String name = file.getName();
 		int lastDot = name.lastIndexOf('.');
 		if (lastDot>-1) {
@@ -344,7 +344,7 @@ public class Workspace implements ModelEntity {
 	/**
 	 * Gives this workspace a new name.  Immediately creates a new XML file
 	 * in the same directory containing the previous workspace file.
-	 * 
+	 *
 	 * @param name The new workspace name.
 	 * @return Whether the operation was successful.
 	 */
@@ -370,7 +370,7 @@ public class Workspace implements ModelEntity {
 		// name and location.
 		try {
 			saveImpl(tempFile);
-			file.delete(); // Don't leave outdated workspace files laying around 
+			file.delete(); // Don't leave outdated workspace files laying around
 			file = tempFile;
 			this.name = name;
 		} catch (IOException ioe) {

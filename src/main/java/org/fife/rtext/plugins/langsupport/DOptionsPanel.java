@@ -24,7 +24,7 @@ class DOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public DOptionsPanel() {
+	DOptionsPanel() {
 		super("Options.D.Name", "/org/fife/rtext/graphics/file_icons/d.png",
 				SyntaxConstants.SYNTAX_STYLE_D);
 	}

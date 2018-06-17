@@ -36,9 +36,6 @@ import javax.swing.text.Document;
 
 import org.fife.ui.*;
 import org.fife.ui.modifiabletable.*;
-import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 import org.fife.ui.rsyntaxtextarea.templates.CodeTemplate;
 import org.fife.ui.rsyntaxtextarea.templates.StaticCodeTemplate;
 import org.fife.ui.rtextarea.RTextArea;
@@ -229,7 +226,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 		private String beforeCaret;
 		private String afterCaret;
 
-		public TemplateDialog() {
+		TemplateDialog() {
 
 			super(getOptionsDialog());
 
@@ -452,7 +449,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 
 		public CodeTemplate template;
 
-		public TemplateWrapper(CodeTemplate template) {
+		TemplateWrapper(CodeTemplate template) {
 			this.template = template;
 		}
 

@@ -54,7 +54,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 	/**
 	 * Constructor.
 	 */
-	public XmlOptionsPanel() {
+	XmlOptionsPanel() {
 
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Xml.Name"));

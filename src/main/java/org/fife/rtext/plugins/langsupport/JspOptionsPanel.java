@@ -52,7 +52,7 @@ class JspOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Constructor.
 	 */
-	public JspOptionsPanel() {
+	JspOptionsPanel() {
 
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Jsp.Name"));

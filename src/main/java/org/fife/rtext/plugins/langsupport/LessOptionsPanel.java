@@ -24,7 +24,7 @@ class LessOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public LessOptionsPanel() {
+	LessOptionsPanel() {
 		super("Options.Less.Name", "less.png",
 				SyntaxConstants.SYNTAX_STYLE_LESS);
 	}

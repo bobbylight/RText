@@ -29,7 +29,7 @@ interface ResultsComponent {
 	 *        relative to this directory.
 	 * @see #clear()
 	 */
-	public void addMatchData(MatchData matchData, String dirName);
+	void addMatchData(MatchData matchData, String dirName);
 
 
 	/**
@@ -37,7 +37,7 @@ interface ResultsComponent {
 	 *
 	 * @see #addMatchData(MatchData, String)
 	 */
-	public void clear();
+	void clear();
 
 
 	/**
@@ -46,7 +46,7 @@ interface ResultsComponent {
 	 * @param row The row.
 	 * @return The match data.
 	 */
-	public MatchData getMatchDataForRow(int row);
+	MatchData getMatchDataForRow(int row);
 
 
 	/**
@@ -54,7 +54,7 @@ interface ResultsComponent {
 	 *
 	 * @return The number of rows displayed.
 	 */
-	public int getRowCount();
+	int getRowCount();
 
 
 	/**
@@ -62,14 +62,14 @@ interface ResultsComponent {
 	 *
 	 * @return The row selected.
 	 */
-	public int getSelectedRow();
+	int getSelectedRow();
 
 
 	/**
 	 * Allows the results component to update its appearance after
 	 * having lots of data added to it.
 	 */
-	public void prettyUp();
+	void prettyUp();
 
 
 }

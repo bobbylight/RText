@@ -66,7 +66,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * Constructor.
 	 */
-	public HeapIndicatorOptionPanel(AbstractPluggableGUIApplication<?> app,
+	HeapIndicatorOptionPanel(AbstractPluggableGUIApplication<?> app,
 								Plugin plugin) {
 
 		super(plugin);

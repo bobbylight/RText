@@ -139,7 +139,7 @@ class MarkupPrettyPrinter implements PrettyPrinter, TidyMessageListener {
 	 * @param text The text.
 	 * @return The text, with leading spaces replaced with leading tabs.
 	 */
-	private static final String replaceLeadingSpacesWithTabs(String text) {
+	private static String replaceLeadingSpacesWithTabs(String text) {
 
 		StringBuilder sb = new StringBuilder();
 

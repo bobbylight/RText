@@ -41,8 +41,6 @@ import org.fife.ui.RColorButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rtextarea.ConfigurableCaret;
-import org.fife.ui.rtextarea.RTextArea;
 
 
 /**
@@ -183,13 +181,13 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 			defaultSecLangColor[1] = new Color(0xdafeda);
 			defaultSecLangColor[2] = new Color(0xffe0f0);
 
-			if ( !getCaretColor().equals(defaultCaretColor) ||
+			if (!getCaretColor().equals(defaultCaretColor) ||
 				!getSelectionColor().equals(defaultSelectionColor) ||
 				!getMarkAllHighlightColor().equals(defaultMarkAllColor) ||
 				getCaretStyle(RTextArea.INSERT_MODE)!=defaultInsertCaret ||
 				getCaretStyle(RTextArea.OVERWRITE_MODE)!=defaultOverwriteCaret ||
 				!blinkRateSpinner.getValue().equals(defaultCaretBlinkRate) ||
-				getRoundedSelection()==true ||
+				getRoundedSelection() ||
 				!enableMOCheckBox.isSelected() ||
 				!moColorButton.getColor().equals(defaultMarkOccurrencesColor) ||
 				selectedTextColorCB.isSelected() ||
@@ -197,8 +195,8 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 				secLangCB.isSelected() ||
 				!defaultSecLangColor[0].equals(secLangButtons[0]) ||
 				!defaultSecLangColor[1].equals(secLangButtons[1]) ||
-				!defaultSecLangColor[2].equals(secLangButtons[2]))
-			{
+				!defaultSecLangColor[2].equals(secLangButtons[2])) {
+
 				setCaretColor(defaultCaretColor);
 				setSelectionColor(defaultSelectionColor);
 				setMarkAllHighlightColor(defaultMarkAllColor);
@@ -546,13 +544,13 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 * @param button The button.
 	 * @return The color displayed by the button.
 	 */
-	private static final Color getColor(RColorSwatchesButton button) {
+	private static Color getColor(RColorSwatchesButton button) {
 		return new Color(button.getColor().getRGB());
 	}
 
 
 	/**
-	 * Returns the color selected by the user for "mark all."
+	 * Returns the color selected by the user for "mark all".
 	 *
 	 * @return The color.
 	 */
@@ -670,7 +668,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets the color selected for "mark all."
+	 * Sets the color selected for "mark all".
 	 *
 	 * @param color The color to have selected.
 	 * @see #getMarkAllHighlightColor()

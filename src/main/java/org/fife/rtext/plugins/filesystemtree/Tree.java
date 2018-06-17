@@ -44,7 +44,7 @@ class Tree extends FileSystemTree {
 	 *
 	 * @param plugin The plugin.
 	 */
-	public Tree(FileSystemTreePlugin plugin) {
+	Tree(FileSystemTreePlugin plugin) {
 
 		this.plugin = plugin;
 		Listener listener = new Listener();
@@ -157,7 +157,7 @@ class Tree extends FileSystemTree {
 	 */
 	private class GoIntoAction extends AppAction<RText> {
 
-		public GoIntoAction(RText app, ResourceBundle msg) {
+		GoIntoAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.GoInto");
 		}
 
@@ -211,7 +211,7 @@ class Tree extends FileSystemTree {
 
 		private boolean newWindow;
 
-		public OpenAction(String name, boolean newWindow) {
+		OpenAction(String name, boolean newWindow) {
 			putValue(NAME, name);
 			this.newWindow = newWindow;
 			if (!newWindow) {
@@ -252,7 +252,7 @@ class Tree extends FileSystemTree {
 		private RText rtext;
 		private String file;
 
-		public OpenInNewWindowRunnable(RText rtext, String file) {
+		OpenInNewWindowRunnable(RText rtext, String file) {
 			this.rtext = rtext;
 			this.file = file;
 		}

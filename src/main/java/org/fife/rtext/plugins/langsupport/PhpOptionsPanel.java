@@ -67,7 +67,7 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Constructor.
 	 */
-	public PhpOptionsPanel() {
+	PhpOptionsPanel() {
 
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Php.Name"));

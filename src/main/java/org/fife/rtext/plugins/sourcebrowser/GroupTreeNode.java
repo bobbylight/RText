@@ -30,7 +30,7 @@ class GroupTreeNode extends SourceTreeNode {
 	 * @param icon The icon for this node's children.  This may be
 	 *        <code>null</code>.
 	 */
-	public GroupTreeNode(Icon icon) {
+	GroupTreeNode(Icon icon) {
 		super(null, false);
 		setIcon(icon);
 	}

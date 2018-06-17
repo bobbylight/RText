@@ -24,7 +24,7 @@ class JsonOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public JsonOptionsPanel() {
+	JsonOptionsPanel() {
 		super("Options.JSON.Name", "json.png",
 				SyntaxConstants.SYNTAX_STYLE_JSON);
 	}

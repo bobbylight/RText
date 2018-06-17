@@ -32,7 +32,7 @@ public class FolderFilterInfo {
 	private NameMatcher[] disallowedFilePatterns;
 	private NameMatcher[] disallowedDirPatterns;
 
-	
+
 	public FolderFilterInfo() {
 	}
 
@@ -118,7 +118,7 @@ public class FolderFilterInfo {
 	 * @param filter The filter.
 	 * @return Whether a string literal comparison can be used for the filter.
 	 */
-	private static final boolean isStringLiteral(String filter) {
+	private static boolean isStringLiteral(String filter) {
 		for (int i=0; i<filter.length(); i++) {
 			char ch = filter.charAt(i);
 			if (!(Character.isLetterOrDigit(ch) || ch=='.' || ch==' ' ||
@@ -137,7 +137,7 @@ public class FolderFilterInfo {
 	 * @param matchers The array of matchers to check against.
 	 * @return Whether the file name matched any of the matchers.
 	 */
-	private static final boolean matches(String fileName,
+	private static boolean matches(String fileName,
 			NameMatcher[] matchers) {
 		for (int i=0; i<matchers.length; i++) {
 			if (matchers[i].matches(fileName)) {
@@ -183,7 +183,7 @@ public class FolderFilterInfo {
 	 * @param filters The file filters.
 	 * @return The equivalent matchers
 	 */
-	private static final NameMatcher[] wildcardToMatcher(String[] filters) {
+	private static NameMatcher[] wildcardToMatcher(String[] filters) {
 		NameMatcher[] matchers = null;
 		if (filters!=null && filters.length>0) {
 			matchers = new NameMatcher[filters.length];
@@ -205,7 +205,7 @@ public class FolderFilterInfo {
 	/**
 	 * Returns whether a file name is acceptable by some criteria.
 	 */
-	private static interface NameMatcher {
+	private interface NameMatcher {
 
 		boolean matches(String text);
 
@@ -219,7 +219,7 @@ public class FolderFilterInfo {
 
 		private Pattern pattern;
 
-		public RegexNameMatcher(Pattern pattern) {
+		RegexNameMatcher(Pattern pattern) {
 			this.pattern = pattern;
 		}
 
@@ -238,7 +238,7 @@ public class FolderFilterInfo {
 
 		private String literal;
 
-		public StringLiteralNameMatcher(String literal) {
+		StringLiteralNameMatcher(String literal) {
 			this.literal = literal;
 		}
 

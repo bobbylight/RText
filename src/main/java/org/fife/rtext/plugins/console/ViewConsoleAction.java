@@ -37,7 +37,7 @@ class ViewConsoleAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param plugin The parent plugin.
 	 */
-	public ViewConsoleAction(RText owner, ResourceBundle msg, Plugin plugin) {
+	ViewConsoleAction(RText owner, ResourceBundle msg, Plugin plugin) {
 		super(owner, msg, "Action.ViewConsole");
 		this.plugin = plugin;
 	}

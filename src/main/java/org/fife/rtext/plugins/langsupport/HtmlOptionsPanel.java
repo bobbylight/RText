@@ -67,7 +67,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Constructor.
 	 */
-	public HtmlOptionsPanel() {
+	HtmlOptionsPanel() {
 
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Html.Name"));

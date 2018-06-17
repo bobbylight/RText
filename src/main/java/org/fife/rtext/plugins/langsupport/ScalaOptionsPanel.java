@@ -24,7 +24,7 @@ class ScalaOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public ScalaOptionsPanel() {
+	ScalaOptionsPanel() {
 		super("Options.Scala.Name", "scala.png",
 				SyntaxConstants.SYNTAX_STYLE_SCALA);
 	}

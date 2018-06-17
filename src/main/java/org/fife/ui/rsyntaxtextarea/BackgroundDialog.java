@@ -86,7 +86,7 @@ class BackgroundDialog extends JDialog implements ActionListener {
 	 *
 	 * @param owner The owner of this dialog.
 	 */
-	public BackgroundDialog(Dialog owner) {
+	BackgroundDialog(Dialog owner) {
 
 		// Call parent's constructor and set the dialog's title.
 		super(owner);

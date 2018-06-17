@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * <code>Thread.UncaughtExceptionHandler</code>, since it didn't exist in
  * 1.4 (and it doesn't work for exceptions thrown while modal dialogs are
  * visible on the EDT anyway).<p>
- * 
+ *
  * To use this class, call
  * <code>AWTExceptionHandler.register()</code>.
  *

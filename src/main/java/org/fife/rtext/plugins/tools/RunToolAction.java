@@ -39,7 +39,7 @@ class RunToolAction extends AppAction<RText> {
 	 * @param app The parent application.
 	 * @param tool The tool to run.
 	 */
-	public RunToolAction(RText app, Tool tool, ToolDockableWindow l) {
+	RunToolAction(RText app, Tool tool, ToolDockableWindow l) {
 		super(app);
 		setName(tool.getName());
 		setAccelerator(KeyStroke.getKeyStroke(tool.getAccelerator()));

@@ -24,7 +24,7 @@ class GroovyOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public GroovyOptionsPanel() {
+	GroovyOptionsPanel() {
 		super("Options.Groovy.Name", "page_white_groovy.png",
 				SyntaxConstants.SYNTAX_STYLE_GROOVY);
 	}

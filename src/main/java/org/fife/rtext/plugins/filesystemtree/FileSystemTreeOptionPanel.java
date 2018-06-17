@@ -53,7 +53,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * Constructor.
 	 */
-	public FileSystemTreeOptionPanel(RText rtext, Plugin plugin) {
+	FileSystemTreeOptionPanel(RText rtext, Plugin plugin) {
 
 		super(plugin);
 		ResourceBundle gpb = ResourceBundle.getBundle(

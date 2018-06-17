@@ -3,9 +3,9 @@ plugins {
   id "edu.sc.seis.macAppBundle" version "2.1.1"
 }
 */
-["java", "distribution", "maven", "eclipse" ].each { apply plugin: it }
+['java', 'distribution', /*'checkstyle', */'maven', 'eclipse' ].each { apply plugin: it }
 
-group = "com.fifesoft"
+group = 'com.fifesoft'
 sourceCompatibility = '1.6'
 
 assert JavaVersion.current().isJava6Compatible()
@@ -39,6 +39,11 @@ repositories {
 wrapper {
 	gradleVersion '4.8'
 }
+
+//checkstyle {
+//	toolVersion = '8.10'
+//	configFile = 'config/checkstyle/checkstyle.xml' as File
+//}
 
 static isSubstanceJar(jarName) {
 	return jarName.startsWith("substance-") || jarName.startsWith("trident-") ||

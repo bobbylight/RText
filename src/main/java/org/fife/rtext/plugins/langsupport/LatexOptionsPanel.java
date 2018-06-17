@@ -24,7 +24,7 @@ class LatexOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public LatexOptionsPanel() {
+	LatexOptionsPanel() {
 		super("Options.Latex.Name", "page_white_latex.png",
 				SyntaxConstants.SYNTAX_STYLE_LATEX);
 	}

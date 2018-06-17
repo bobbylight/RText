@@ -29,7 +29,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-public class FileTypeIconManager {
+public final class FileTypeIconManager {
 
 	/**
 	 * The map of file extensions to icon names.

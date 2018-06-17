@@ -117,7 +117,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			ComponentOrientation o = ComponentOrientation.
 					getOrientation(Locale.getDefault());
 			popup.applyComponentOrientation(o);
-			
+
 		}
 
 	}
@@ -312,8 +312,8 @@ public class WorkspaceTree extends JTree implements FileSelector {
 				AbstractMainView mainView = plugin.getRText().getMainView();
 				mainView.openFile(file.getAbsolutePath(), null, true);
 			}
-			else if (getLastSelectedPathComponent()
-					instanceof FileProjectEntryTreeNode) {
+			else if (getLastSelectedPathComponent() instanceof
+					FileProjectEntryTreeNode) {
 				FileProjectEntryTreeNode node = (FileProjectEntryTreeNode)
 						getLastSelectedPathComponent();
 				promptForRemoval(node);

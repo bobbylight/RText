@@ -307,7 +307,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	}
 
 
-	private static final boolean isFileSeparatorChar(char ch) {
+	private static boolean isFileSeparatorChar(char ch) {
 		return ch=='\\' || ch=='/';
 	}
 
@@ -341,7 +341,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 			//width = column.getWidth();
 			Component c = getTableHeader().getDefaultRenderer().
 						getTableCellRendererComponent(this,
-							column.getHeaderValue(), false, false, 0, 0); 
+							column.getHeaderValue(), false, false, 0, 0);
 			width = c.getPreferredSize().width;
 
 			// Loop through all cells in the column to find the longest.

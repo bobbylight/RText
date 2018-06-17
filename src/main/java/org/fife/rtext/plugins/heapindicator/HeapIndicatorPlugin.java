@@ -195,7 +195,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 * @param denom The second long.
 	 * @return The two longs in an <code>Object</code> array.
 	 */
-	private static final Object[] getParams(long num, long denom) {
+	private static Object[] getParams(long num, long denom) {
 		if (objArray==null)
 			objArray = new Object[2];
 		objArray[0] = new Long(num);
@@ -245,7 +245,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 *
 	 * @return The file.
 	 */
-	private static final File getPrefsFile() {
+	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"heapIndicator.properties");
 	}

@@ -33,7 +33,7 @@ class DOMModelCreator implements WorkspaceVisitor {
 	private Stack<Element> projEntryParentStack;
 
 
-	public DOMModelCreator() throws IOException {
+	DOMModelCreator() throws IOException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = null;
 		try {

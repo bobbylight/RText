@@ -116,7 +116,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	/**
 	 * Constructor.
 	 */
-	public ConsoleTextArea(Plugin plugin) {
+	ConsoleTextArea(Plugin plugin) {
 		this.plugin = plugin;
 		installDefaultStyles(false);
 		fixKeyboardShortcuts();
@@ -247,7 +247,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		am.put("backspace", new BackspaceAction(delegate));
 
 		// Just remove "delete previous word" for now, since DefaultEditorKit
-		// doesn't expose the delegate for us to call into. 
+		// doesn't expose the delegate for us to call into.
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, ctrl),
 				"deletePreviousWord");
 		am.put("deletePreviousWord", new DeletePreviousWordAction());
@@ -258,7 +258,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		am.put("delete", new DeleteAction(delegate));
 
 		// Just remove "delete next word" for now, since DefaultEditorKit
-		// doesn't expose the delegate for us to call into. 
+		// doesn't expose the delegate for us to call into.
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, ctrl), "invalid");
 
 		// up - previous command in history
@@ -347,7 +347,7 @@ abstract class ConsoleTextArea extends JTextPane {
 
 	/**
 	 * Installs the styles used by this text component.
-	 * 
+	 *
 	 * @param checkForSubstance Whether to work around a Substance oddity
 	 *        (Insubstantial 7.2.1).
 	 */
@@ -590,7 +590,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	private class ClearAllAction extends AbstractAction {
 
-		public ClearAllAction() {
+		ClearAllAction() {
 			putValue(NAME, plugin.getString("Action.ClearAll"));
 		}
 
@@ -606,7 +606,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	private class ConfigureAction extends AbstractAction {
 
-		public ConfigureAction() {
+		ConfigureAction() {
 			putValue(NAME, plugin.getString("Action.Configure"));
 		}
 
@@ -625,7 +625,7 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		private int amt;
 
-		public CommandHistoryAction(int amt) {
+		CommandHistoryAction(int amt) {
 			this.amt = amt;
 		}
 
@@ -650,7 +650,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	private class CopyAllAction extends AbstractAction {
 
-		public CopyAllAction() {
+		CopyAllAction() {
 			putValue(NAME, plugin.getString("Action.CopyAll"));
 		}
 
@@ -677,7 +677,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		 */
 		private Action delegate;
 
-		public BackspaceAction(Action delegate) {
+		BackspaceAction(Action delegate) {
 			super("backspace");
 			this.delegate = delegate;
 		}
@@ -715,7 +715,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		 */
 		private Action delegate;
 
-		public DeleteAction(Action delegate) {
+		DeleteAction(Action delegate) {
 			super("delete");
 			this.delegate = delegate;
 		}
@@ -740,7 +740,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	private class DeletePreviousWordAction extends TextAction {
 
-		public DeletePreviousWordAction() {
+		DeletePreviousWordAction() {
 			super("deletePreviousWord");
 		}
 
@@ -780,7 +780,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		private Action delegate;
 		private boolean select;
 
-		public HomeAction(Action delegate, boolean select) {
+		HomeAction(Action delegate, boolean select) {
 			this.delegate = delegate;
 			this.select = select;
 		}
@@ -865,11 +865,11 @@ abstract class ConsoleTextArea extends JTextPane {
 	private class SelectAllAction extends TextAction {
 
 		/**
-		 * DefaultEditorKit's SelectAllAction;
+		 * DefaultEditorKit's SelectAllAction.
 		 */
 		private Action delegate;
 
-		public SelectAllAction(Action delegate) {
+		SelectAllAction(Action delegate) {
 			super("SelectAll");
 			this.delegate = delegate;
 		}

@@ -31,8 +31,6 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.optionsdialog.ThemeOptionPanel;
 import org.fife.ui.*;
-import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
-import org.fife.ui.rsyntaxtextarea.Style;
 import org.fife.ui.rtextarea.RTextArea;
 
 
@@ -395,7 +393,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 *
 	 * @return The text area.
 	 */
-	private static final RSyntaxTextArea createSampleTextArea() {
+	private static RSyntaxTextArea createSampleTextArea() {
 		RSyntaxTextArea textArea = new RSyntaxTextArea(9, 40);
 		textArea.setHighlightCurrentLine(false);
 		textArea.setAntiAliasingEnabled(true);
@@ -533,7 +531,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 * @param index An index into the <code>JList</code>.
 	 * @return The corresponding index into a <code>SyntaxScheme</code>.
 	 */
-	private static final int indexToStyle(int index) {
+	private static int indexToStyle(int index) {
 		return index + 1;
 	}
 
@@ -635,7 +633,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			firePropertyChange(UNKNOWN_PROPERTY,
 							e.getOldValue(), e.getNewValue());
 		}
-		
+
 	}
 
 
@@ -830,7 +828,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		boolean notNull = style.foreground!=null;
 		fgCheckBox.setSelected(notNull);
 		foregroundButton.setEnabled(notNull);
-		foregroundButton.setColor(notNull ? style.foreground : 
+		foregroundButton.setColor(notNull ? style.foreground :
 									getTextAreaForeground());
 		notNull = style.background!=null;
 		bgCheckBox.setSelected(notNull);

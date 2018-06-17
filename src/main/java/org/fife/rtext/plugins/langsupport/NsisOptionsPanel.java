@@ -24,7 +24,7 @@ class NsisOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public NsisOptionsPanel() {
+	NsisOptionsPanel() {
 		super("Options.Nsis.Name", "nsis.png",
 				SyntaxConstants.SYNTAX_STYLE_NSIS);
 	}

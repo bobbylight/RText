@@ -30,7 +30,7 @@ class TypeScriptParserNotice extends DefaultParserNotice {
 	 * @param msg The text of the message.
 	 * @param line The line number for the message.
 	 */
-	public TypeScriptParserNotice(Parser parser, String msg, int line) {
+	TypeScriptParserNotice(Parser parser, String msg, int line) {
 		super(parser, msg, line);
 	}
 

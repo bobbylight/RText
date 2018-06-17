@@ -24,7 +24,7 @@ class DartOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public DartOptionsPanel() {
+	DartOptionsPanel() {
 		super("Options.Dart.Name",
 				"/org/fife/rtext/graphics/file_icons/dart.png",
 				SyntaxConstants.SYNTAX_STYLE_DART);

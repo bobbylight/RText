@@ -35,7 +35,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 	 * @param dialog The "find in files" dialog.
 	 * @param directory The directory in which to search.
 	 */
-	public ReplaceInFilesThread(FindInFilesDialog dialog, File directory) {
+	ReplaceInFilesThread(FindInFilesDialog dialog, File directory) {
 		super(dialog, directory);
 	}
 
@@ -251,7 +251,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 	 *
 	 * @return The number of replacements.
 	 */
-	private static final int doSearchNoRegex(CharSequence sb,
+	private static int doSearchNoRegex(CharSequence sb,
 			String searchString, String replaceString, boolean matchCase,
 			boolean wholeWord, String fileFullPath, StringBuilder replaceSB) {
 
@@ -312,7 +312,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 	 *
 	 * @return The number of replacements.
 	 */
-	private static final int doSearchRegex(StringBuilder sb, String searchString,
+	private static int doSearchRegex(StringBuilder sb, String searchString,
 					String replaceString, boolean matchCase,
 					boolean wholeWord, String fileFullPath,
 					StringBuilder replaceSB) {

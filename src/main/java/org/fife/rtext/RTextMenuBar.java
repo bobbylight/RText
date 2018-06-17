@@ -153,7 +153,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 * Note that this is only  GUIDELINE, and some filenames
 	 * can (and will) exceed this limit.
 	 */
-	private final int MAX_FILE_PATH_LENGTH = 250;
+	private static final int MAX_FILE_PATH_LENGTH = 250;
 
 
 	/**
@@ -592,8 +592,8 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		// Also, due to the Preferences API needing a non-null key for all
 		// values, a "-" filename means no files were found for the file
 		// history.  So, we won't add this file in either.
-		if (fileFullPath.endsWith(File.separatorChar + rtext.getNewFileName())
-				|| fileFullPath.equals("-")) {
+		if (fileFullPath.endsWith(File.separatorChar + rtext.getNewFileName()) ||
+				fileFullPath.equals("-")) {
 			return;
 		}
 		recentFilesMenu.addFileToFileHistory(fileFullPath);

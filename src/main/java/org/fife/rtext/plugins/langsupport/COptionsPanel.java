@@ -51,7 +51,7 @@ class COptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Constructor.
 	 */
-	public COptionsPanel() {
+	COptionsPanel() {
 
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.C.Name"));

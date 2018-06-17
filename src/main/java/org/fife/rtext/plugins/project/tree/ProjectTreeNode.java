@@ -38,7 +38,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	private static Icon icon;
 
 
-	public ProjectTreeNode(ProjectPlugin plugin, Project project) {
+	ProjectTreeNode(ProjectPlugin plugin, Project project) {
 		super(plugin);
 		this.project = project;
 	}
@@ -168,7 +168,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 		private Workspace workspace;
 
-		public ProjectNameChecker(Workspace workspace) {
+		ProjectNameChecker(Workspace workspace) {
 			this.workspace = workspace;
 		}
 

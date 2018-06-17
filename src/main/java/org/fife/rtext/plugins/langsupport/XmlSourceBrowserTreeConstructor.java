@@ -23,7 +23,7 @@ import org.fife.rtext.RTextEditorPane;
  * tree view, along with their "primary" attribute (an "id" attribute is
  * preferred; if one isn't defined, "name" is preferred.  If neither attribute
  * is defined, the first attribute on the element is used).
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */

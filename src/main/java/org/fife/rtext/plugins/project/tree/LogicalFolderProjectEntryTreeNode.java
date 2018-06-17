@@ -49,7 +49,7 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 	public String getDisplayName() {
 		return ((LogicalFolderProjectEntry)entry).getName();
 	}
-	
+
 
 	@Override
 	public Icon getIcon() {

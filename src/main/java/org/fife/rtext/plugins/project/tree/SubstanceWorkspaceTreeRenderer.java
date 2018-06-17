@@ -30,7 +30,7 @@ class SubstanceWorkspaceTreeRenderer extends SubstanceDefaultTreeCellRenderer {
 			boolean sel, boolean expanded, boolean leaf, int row,
 			boolean focused) {
 
-		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, 
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
 				row, focused);
 		// Not true the first time through!
 		if (value instanceof AbstractWorkspaceTreeNode) {

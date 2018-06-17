@@ -55,7 +55,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 * @param properties A properties object used to initialize some fields on
 	 *        this view.
 	 */
-	public RTextMDIView(RText owner, String[] filesToOpen,
+	RTextMDIView(RText owner, String[] filesToOpen,
 									RTextPrefs properties) {
 
 		frames = new ArrayList<InternalFrame>(5);
@@ -118,7 +118,9 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 							newTitle = newTitle + "*";
 						try {
 							setDocumentDisplayNameAt(j, newTitle);
-						} catch (Exception e) { System.err.println("Exception: " + e); }
+						} catch (Exception e) {
+							System.err.println("Exception: " + e);
+						}
 					}
 				}
 				break;
@@ -133,10 +135,10 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 			owner.setMessages(fileFullPath + "*", "Opened document '" + fileFullPath + "'");
 		else
 			owner.setMessages(fileFullPath, "Opened document '" + fileFullPath + "'");
-		
+
 		// RText's listeners will be updated by stateChanged() for all
 		// addTextAreaImpl() calls.
-		
+
 	}
 
 
@@ -638,10 +640,10 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 */
 	class InternalFrame extends JInternalFrame {
 
-		private static final int xOffset = 30;
-		private static final int yOffset = 30;
+		private static final int X_OFFSET = 30;
+		private static final int Y_OFFSET = 30;
 
-		public InternalFrame(String title, Component component) {
+		InternalFrame(String title, Component component) {
 			super(title, true, true, true, true);
 			RTextScrollPane sp = (RTextScrollPane)((JPanel)component).
 													getComponent(0);
@@ -654,7 +656,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 				openFrameCount = 0;
 			setDefaultCloseOperation(JInternalFrame.DO_NOTHING_ON_CLOSE);
 			pack();
-			setLocation(xOffset*openFrameCount, yOffset*openFrameCount);
+			setLocation(X_OFFSET * openFrameCount, Y_OFFSET * openFrameCount);
 		}
 
 	}

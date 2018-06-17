@@ -33,7 +33,7 @@ class OpenFileFromHistoryAction extends AppAction<RText> {
 	 * @param owner the main window of this rtext instance.
 	 * @see #setFileFullPath(String)
 	 */
-	 public OpenFileFromHistoryAction(RText owner) {
+	OpenFileFromHistoryAction(RText owner) {
 		super(owner);
 	}
 

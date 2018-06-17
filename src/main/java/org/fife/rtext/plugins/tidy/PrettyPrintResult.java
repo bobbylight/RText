@@ -23,7 +23,7 @@ class PrettyPrintResult {
 	private String summary;
 
 
-	public PrettyPrintResult(int result, String text, String summary) {
+	PrettyPrintResult(int result, String text, String summary) {
 		this.result = result;
 		this.text = text;
 		this.summary = summary;

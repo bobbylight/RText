@@ -30,7 +30,7 @@ import org.fife.ui.rtextarea.IconGroup;
  * @author Robert Futrell
  * @version 0.7
  */
-class IconGroupLoader extends DefaultHandler {
+final class IconGroupLoader extends DefaultHandler {
 
 	/**
 	 * The name of the default icon group.  This icon group MUST be defined

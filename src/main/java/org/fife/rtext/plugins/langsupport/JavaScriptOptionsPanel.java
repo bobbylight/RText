@@ -83,7 +83,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Constructor.
 	 */
-	public JavaScriptOptionsPanel() {
+	JavaScriptOptionsPanel() {
 
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.JavaScript.Name"));

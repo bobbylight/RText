@@ -93,7 +93,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Constructor.
 	 */
-	public JavaOptionsPanel() {
+	JavaOptionsPanel() {
 
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString("Options.Java.Name"));

@@ -38,7 +38,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 	 *
 	 * @param rtext The owner of this dialog.
 	 */
-	public AboutDialog(final RText rtext) {
+	AboutDialog(final RText rtext) {
 
 		// Let it be known who the owner of this dialog is.
 		super(rtext, rtext.getResourceBundle().getString("AboutDialogTitle"));
@@ -63,7 +63,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 			@Override
 			public Dimension getPreferredScrollableViewportSize() {
 				return new Dimension(50, 50); //Will be bigger.
-			};
+			}
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
@@ -109,7 +109,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 	}
 
 
-	private static final void appendLibrary(StringBuilder sb, String name,
+	private static void appendLibrary(StringBuilder sb, String name,
 			String url, String desc) {
 		sb.append("<tr><td><b>").append(name).append("</b></td>");
 		sb.append("<td><a href=\"").append(url).append("\">");
@@ -127,7 +127,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 	 * @param msg The resource bundle.
 	 * @return The panel.
 	 */
-	private static final JPanel createLibrariesPanel(ResourceBundle msg) {
+	private static JPanel createLibrariesPanel(ResourceBundle msg) {
 
 		JPanel panel = UIUtil.newTabbedPanePanel(new BorderLayout());
 		panel.setBorder(UIUtil.getEmpty5Border());
@@ -174,7 +174,7 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 	 * @param app The GUI Application containing plugins.
 	 * @return The contents for the "Plugins" About tab.
 	 */
-	private static final String[][] createTableData(
+	private static String[][] createTableData(
 			AbstractPluggableGUIApplication<?> app) {
 
 		Plugin[] plugins = app.getPlugins(); // Guaranteed non-null.
@@ -199,18 +199,21 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 	}
 
 
-	private static class InfoPane extends SelectableLabel
+	/**
+	 * An informational pane in the about dialog.
+	 */
+	private static final class InfoPane extends SelectableLabel
 									implements HyperlinkListener {
 
 		private RText rtext;
 
-		public InfoPane(RText rtext) {
+		InfoPane(RText rtext) {
 			this.rtext = rtext;
 			setText(getContentText());
 			addHyperlinkListener(this);
 		}
 
-		public String getContentText() {
+		String getContentText() {
 			String version = rtext==null ? "firstTime" :
 											rtext.getVersionString();
 			String text = "<html><body><center>" +

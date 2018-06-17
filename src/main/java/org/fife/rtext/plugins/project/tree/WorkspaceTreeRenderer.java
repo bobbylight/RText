@@ -30,7 +30,7 @@ class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
 	 * Returns a tree cell renderer for workspace trees.  This may not be
 	 * an instance of this class (or a subclass).  Some Look and Feels
 	 * unfortunately require inheritance to work properly...
-	 * 
+	 *
 	 * @return The renderer.
 	 */
 	public static TreeCellRenderer create() {
@@ -46,7 +46,7 @@ class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
 			boolean sel, boolean expanded, boolean leaf, int row,
 			boolean focused) {
 
-		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, 
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
 				row, focused);
 		// Not true the first time through!
 		if (value instanceof AbstractWorkspaceTreeNode) {

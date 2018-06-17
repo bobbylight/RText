@@ -24,7 +24,7 @@ class ClojureOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public ClojureOptionsPanel() {
+	ClojureOptionsPanel() {
 		super("Options.Clojure.Name", "clojure.png",
 				SyntaxConstants.SYNTAX_STYLE_CLOJURE);
 	}

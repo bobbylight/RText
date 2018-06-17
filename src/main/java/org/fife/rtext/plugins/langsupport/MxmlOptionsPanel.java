@@ -24,7 +24,7 @@ class MxmlOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public MxmlOptionsPanel() {
+	MxmlOptionsPanel() {
 		super("Options.Mxml.Name", "mxml.png",
 				SyntaxConstants.SYNTAX_STYLE_MXML);
 	}

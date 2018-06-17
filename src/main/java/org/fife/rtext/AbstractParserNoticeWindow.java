@@ -81,7 +81,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 		FileExplorerTableModel model2 = new FileExplorerTableModel(model,
 				table.getTableHeader());
 
-		model2.setColumnComparator(Integer.class, new Comparator<Integer>() {	
+		model2.setColumnComparator(Integer.class, new Comparator<Integer>() {
 			@Override
 			public int compare(Integer int1, Integer int2) {
 				return int1.compareTo(int2);
@@ -262,7 +262,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 	 */
 	private static class IconTableCellRenderer extends DefaultTableCellRenderer{
 
-		static final Border b = BorderFactory.createEmptyBorder(0, 5, 0, 5);
+		static final Border B = BorderFactory.createEmptyBorder(0, 5, 0, 5);
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table,
@@ -271,7 +271,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 					row, col);
 			setText(null);
 			setIcon((Icon)value);
-			setBorder(b);
+			setBorder(B);
 			return this;
 		}
 
@@ -283,17 +283,17 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 	 * we don't have to create two separate custom renderers, one for Substance
 	 * and another for all other LookAndFeels.  Substance sucks.
 	 */
-	private static class TextAreaWrapper implements Comparable<TextAreaWrapper>{
+	private static class TextAreaWrapper implements Comparable<TextAreaWrapper> {
 
 		// textArea and fileFullPath are mutually exclusive.
 		private RTextEditorPane textArea;
 		private String fileFullPath;
 
-		public TextAreaWrapper(RTextEditorPane textArea) {
+		TextAreaWrapper(RTextEditorPane textArea) {
 			this.textArea = textArea;
 		}
 
-		public TextAreaWrapper(String fileFullPath) {
+		TextAreaWrapper(String fileFullPath) {
 			this.fileFullPath = fileFullPath;
 		}
 
@@ -310,6 +310,9 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 	}
 
 
+	/**
+	 * Listens for mouse events in the parser notice table.
+	 */
 	private class TableMouseListener extends MouseAdapter {
 
 		private void focusLine(RTextEditorPane textArea, int line) {

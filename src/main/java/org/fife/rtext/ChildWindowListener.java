@@ -69,7 +69,7 @@ class ChildWindowListener extends ComponentAdapter
 	 *
 	 * @param app The parent application.
 	 */
-	public ChildWindowListener(RText app) {
+	ChildWindowListener(RText app) {
 		this.app = app;
 	}
 

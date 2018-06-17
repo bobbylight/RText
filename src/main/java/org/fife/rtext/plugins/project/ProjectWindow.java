@@ -56,7 +56,7 @@ class ProjectWindow extends DockableWindow {
 	private JToolBar toolbar;
 
 
-	public ProjectWindow(RText app, ProjectPlugin plugin, ProjectPluginPrefs prefs) {
+	ProjectWindow(RText app, ProjectPlugin plugin, ProjectPluginPrefs prefs) {
 
 		this.plugin = plugin;
 		setDockableWindowName(Messages.getString("Project.DockableWindow.Title"));
@@ -207,7 +207,7 @@ class ProjectWindow extends DockableWindow {
 	 */
 	private class PluginHelpAction extends AbstractWorkspaceAction {
 
-		public PluginHelpAction() {
+		PluginHelpAction() {
 			super("Action.Help");
 		}
 
@@ -227,7 +227,7 @@ class ProjectWindow extends DockableWindow {
 	 */
 	private class NewWorkspaceAction extends AbstractWorkspaceAction {
 
-		public NewWorkspaceAction() {
+		NewWorkspaceAction() {
 			super("Action.NewWorkspace");
 		}
 
@@ -280,7 +280,7 @@ class ProjectWindow extends DockableWindow {
 
 		private RTextFileChooser chooser;
 
-		public OpenWorkspaceAction() {
+		OpenWorkspaceAction() {
 			super("Action.OpenWorkspace");
 		}
 
@@ -342,7 +342,7 @@ class ProjectWindow extends DockableWindow {
 	 */
 	private class ShowWorkspaceTreeNodeAction extends AbstractWorkspaceAction {
 
-		public ShowWorkspaceTreeNodeAction(boolean selected) {
+		ShowWorkspaceTreeNodeAction(boolean selected) {
 			super("Action.ShowWorkspaceTreeRootNode");
 			setSelected(selected);
 		}

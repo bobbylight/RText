@@ -24,7 +24,7 @@ class CSharpOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public CSharpOptionsPanel() {
+	CSharpOptionsPanel() {
 		super("Options.CSharp.Name", "page_white_csharp.png",
 				SyntaxConstants.SYNTAX_STYLE_CSHARP);
 	}

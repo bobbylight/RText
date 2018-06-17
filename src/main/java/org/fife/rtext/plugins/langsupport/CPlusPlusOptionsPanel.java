@@ -24,7 +24,7 @@ class CPlusPlusOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	public CPlusPlusOptionsPanel() {
+	CPlusPlusOptionsPanel() {
 		super("Options.CPlusPlus.Name", "page_white_cplusplus.png",
 				SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
 	}
