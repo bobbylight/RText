@@ -17,6 +17,8 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.swing.*;
@@ -881,6 +883,24 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	/**
+	 * Initializes the "recent files" manager.
+	 *
+	 * @param prefs The preferences for the application.
+	 */
+	private void initRecentFileManager(RTextPrefs prefs) {
+
+		String fileHistoryStr = prefs.fileHistoryString;
+		java.util.List<String> recentFiles = new ArrayList<String>();
+		if (fileHistoryStr != null && fileHistoryStr.length() > 0) {
+			String[] initialContents = fileHistoryStr.split("<");
+			recentFiles.addAll(Arrays.asList(initialContents));
+		}
+
+		recentFileManager = new RecentFileManager(this, recentFiles);
+	}
+
+
+	/**
 	 * Returns whether or not the QuickSearch toolbar is visible.  This
 	 * method should be used over <code>getSearchToolBar().isVisible()</code>
 	 * because the latter will allocate the toolbar if it isn't already
@@ -995,8 +1015,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		setSearchWindowOpacity(prefs.searchWindowOpacity);
 		setSearchWindowOpacityRule(prefs.searchWindowOpacityRule);
 
-		recentFileManager = new RecentFileManager(this);
-
 		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
 			System.err.println("preDisplayInit: " + (System.currentTimeMillis()-start));
 		}
@@ -1013,6 +1031,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	protected void preMenuBarInit(RTextPrefs prefs, SplashScreen splashScreen) {
 
 		long start = System.currentTimeMillis();
+
+		initRecentFileManager(prefs);
 
 		// Make the split pane positions same as last time.
 		setSplitPaneDividerLocation(TOP, prefs.dividerLocations[TOP]);

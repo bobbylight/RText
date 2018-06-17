@@ -17,6 +17,8 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -36,6 +38,7 @@ import org.fife.ui.OS;
 import org.fife.ui.RecentFilesMenu;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.MenuBar;
+import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextAreaEditorKit;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
@@ -86,12 +89,6 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 * A key to get the Help menu via {@link #getMenuByName(String)}.
 	 */
 	public static final String MENU_HELP		= "Help";
-
-	/**
-	 * This is cached only until {@code #addNotify()} is called, to work around
-	 * an issue in Darcula.
-	 */
-	private String initialFileHistoryString;
 
 	// These items correspond to actions belonging to RTextEditorPanes, and are
 	// changed in disableEditorActions() below, so we need to remember them.
@@ -235,7 +232,6 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		fileMenu.addSeparator();
 
-		this.initialFileHistoryString = properties.fileHistoryString;
 		recentFilesMenu = new RecentFilesMenu(menuMsg.getString("RecentFiles")) {
 			@Override
 			protected Action createOpenAction(String fileFullPath) {
@@ -610,12 +606,11 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		super.addNotify();
 
 		// Populate file history here to avoid issue with Darcula
-		if (initialFileHistoryString!=null && initialFileHistoryString.length()>0) {
-			String[] initialContents = initialFileHistoryString.split("<");
-			for (String fileFullPath : initialContents) {
-				recentFilesMenu.addFileToFileHistory(fileFullPath);
-			}
-			initialFileHistoryString = null;
+		List<FileLocation> recentFiles = rtext.getRecentFiles();
+		List<FileLocation> recentFilesCopy = new ArrayList<FileLocation>(recentFiles);
+		Collections.reverse(recentFilesCopy);
+		for (FileLocation file : recentFilesCopy) {
+			recentFilesMenu.addFileToFileHistory(file.getFileFullPath());
 		}
 	}
 
@@ -633,7 +628,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		FontMetrics fontMetrics = getFontMetrics(getFont());
 		int textWidth = getTextWidth(longPath, fontMetrics);
 
-		// If the text width is already short enough to fit, don't do anything to it.		
+		// If the text width is already short enough to fit, don't do anything to it.
 		if (textWidth <= MAX_FILE_PATH_LENGTH) {
 			return longPath;
 		}

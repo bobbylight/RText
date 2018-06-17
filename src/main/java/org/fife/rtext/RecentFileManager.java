@@ -40,8 +40,9 @@ public class RecentFileManager implements PropertyChangeListener {
 	 * Constructor.
 	 *
 	 * @param rtext The parent application.
+	 * @param recentFiles The initial set of recent files.
 	 */
-	public RecentFileManager(RText rtext) {
+	public RecentFileManager(RText rtext, List<String> recentFiles) {
 
 		this.rtext = rtext;
 		files = new ArrayList<FileLocation>();
@@ -49,10 +50,10 @@ public class RecentFileManager implements PropertyChangeListener {
 		rtext.getMainView().addPropertyChangeListener(
 				AbstractMainView.TEXT_AREA_ADDED_PROPERTY, this);
 
-		List<String> history = ((RTextMenuBar)rtext.getJMenuBar()).
-				getFileHistory();
-		for (int i=history.size() - 1; i>=0; i--) {
-			addFile(history.get(i));
+		if (recentFiles != null) {
+			for (String recentFile : recentFiles) {
+				addFile(recentFile);
+			}
 		}
 
 	}
@@ -109,8 +110,7 @@ public class RecentFileManager implements PropertyChangeListener {
 		}
 
 		// Add our new file to the "top" of remembered files.
-		// TODO: Simplify when RSyntaxTextArea bug #94 is fixed
-		FileLocation loc = null;
+		FileLocation loc;
 		try {
 			loc = FileLocation.create(file);
 		} catch (IllegalArgumentException iae) {
