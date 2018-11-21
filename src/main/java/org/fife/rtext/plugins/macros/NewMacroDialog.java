@@ -61,7 +61,7 @@ public class NewMacroDialog extends EscapableDialog {
 	private JTextField nameField;
 	private JTextField descField;
 	private KeyStrokeField shortcutField;
-	private JComboBox typeCombo;
+	private JComboBox<String> typeCombo;
 	private JButton okButton;
 	private JButton editButton;
 	private JButton cancelButton;
@@ -123,7 +123,7 @@ public class NewMacroDialog extends EscapableDialog {
 		JPanel shortcutPanel = RTextUtilities.createAssistancePanel(shortcutField, null);
 		JLabel typeLabel = UIUtil.newLabel(msg, "Label.Type");
 		String[] items = { "Rhino (JavaScript)", "Groovy" };
-		typeCombo = new JComboBox(items);
+		typeCombo = new JComboBox<>(items);
 		typeCombo.addActionListener(l);
 		typeCombo.setEditable(false);
 		typeLabel.setLabelFor(typeCombo);

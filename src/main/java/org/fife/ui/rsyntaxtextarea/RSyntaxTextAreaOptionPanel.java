@@ -68,15 +68,15 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 	private JPanel syntaxPanel;
 
-	private JList syntaxList;
-	private DefaultListModel syntaxListModel;
+	private JList<String> syntaxList;
+	private DefaultListModel<String> syntaxListModel;
 	private FontSelector fontSelector;
 	private RColorSwatchesButton foregroundButton;
 	private JCheckBox fgCheckBox;
 	private JCheckBox bgCheckBox;
 	private RColorSwatchesButton backgroundButton;
 
-	private JComboBox sampleCombo;
+	private JComboBox<String> sampleCombo;
 	private RSyntaxTextArea sampleArea;
 	private SyntaxScheme colorScheme;
 
@@ -168,8 +168,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 								msg.getString("FontsAndColors")));
 
 		// Add the token style selection panel to the right.
-		syntaxListModel = new DefaultListModel();
-		syntaxList = new JList(syntaxListModel);
+		syntaxListModel = new DefaultListModel<>();
+		syntaxList = new JList<>(syntaxListModel);
 		syntaxList.setSelectionModel(new RListSelectionModel());
 		syntaxList.addListSelectionListener(this);
 		syntaxList.setVisibleRowCount(8);
@@ -271,7 +271,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		horizBox.add(new JLabel(msg.getString("SampleTextLabel")));
 		horizBox.add(Box.createHorizontalStrut(5));
 		final String[] samples = { "Java", "Perl", "XML", };
-		sampleCombo = new JComboBox(samples);
+		sampleCombo = new JComboBox<>(samples);
 		sampleCombo.setEditable(false);
 		sampleCombo.addActionListener(this);
 		horizBox.add(sampleCombo);

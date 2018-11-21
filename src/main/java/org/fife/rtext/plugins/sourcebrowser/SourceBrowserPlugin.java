@@ -232,10 +232,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 					public void run() {
 						try {
 							Class<?> clazz = Class.forName(customHandlerName);
-							Object handler = clazz.newInstance();
+							Object handler = clazz.getDeclaredConstructor().newInstance();
 							java.lang.reflect.Method m = clazz.getMethod(
-									"constructSourceBrowserTree",
-									new Class[] { RText.class });
+									"constructSourceBrowserTree", RText.class);
 							sourceTree = (JTree)m.invoke(handler,
 									new Object[] { owner });
 							checkTreeCellRenderer(sourceTree);

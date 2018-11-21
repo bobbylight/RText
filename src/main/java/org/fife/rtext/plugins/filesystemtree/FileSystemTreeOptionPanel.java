@@ -45,7 +45,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 
 	private JCheckBox visibleCB;
 	private JLabel locationLabel;
-	private JComboBox locationCombo;
+	private JComboBox<String> locationCombo;
 
 	private static final String PROPERTY = "Property";
 
@@ -86,7 +86,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 
 		// A combo in which to select the dockable window's placement.
 		Box locationPanel = createHorizontalBox();
-		locationCombo = new JComboBox();
+		locationCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(locationCombo);
 		locationCombo.addItem(gpb.getString("Location.top"));
 		locationCombo.addItem(gpb.getString("Location.left"));

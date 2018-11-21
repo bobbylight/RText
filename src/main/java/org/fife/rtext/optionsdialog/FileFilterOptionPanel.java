@@ -231,8 +231,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 		hasUnsavedChanges = true;
-		firePropertyChange("fileFilterChanged", null,
-						new Integer(e.getRow()));
+		firePropertyChange("fileFilterChanged", null, e.getRow());
 	}
 
 

@@ -484,12 +484,12 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 	private JComboBox createModKeyCombo() {
 		Integer[] items = new Integer[] {
-			new Integer(InputEvent.CTRL_DOWN_MASK),
-			new Integer(InputEvent.META_DOWN_MASK),
-			new Integer(InputEvent.SHIFT_DOWN_MASK),
-			new Integer(InputEvent.ALT_DOWN_MASK),
+			InputEvent.CTRL_DOWN_MASK,
+			InputEvent.META_DOWN_MASK,
+			InputEvent.SHIFT_DOWN_MASK,
+			InputEvent.ALT_DOWN_MASK,
 		};
-		JComboBox combo = new JComboBox(items) {
+		JComboBox<Integer> combo = new JComboBox<>(items) {
 			// Force preferred size to prevent vertical stretching!
 			@Override
 			public Dimension getMaximumSize() {

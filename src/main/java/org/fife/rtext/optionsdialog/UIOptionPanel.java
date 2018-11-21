@@ -66,11 +66,11 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	private int statusBarStyle;
 
 	private JPanel springPanel, springPanel2;
-	private JComboBox viewCombo;
-	private JComboBox docSelCombo;
+	private JComboBox<String> viewCombo;
+	private JComboBox<String> docSelCombo;
 	private LabelValueComboBox<String, String> lnfCombo;
 	private LabelValueComboBox<String, String> imageLnFCombo;
-	private JComboBox statusBarCombo;
+	private JComboBox<String> statusBarCombo;
 
 	private JCheckBox highlightModifiedCheckBox;
 	private RColorSwatchesButton hmColorButton;
@@ -97,7 +97,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		// "North" so it doesn't stretch when the user resizes the dialog.
 		Box everything = Box.createVerticalBox();
 
-		viewCombo = new JComboBox();
+		viewCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(viewCombo);
 		viewCombo.setActionCommand("ViewComboBox");
 		viewCombo.addActionListener(this);
@@ -105,7 +105,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		viewCombo.addItem(msg.getString("OptUISPV"));
 		viewCombo.addItem(msg.getString("OptUIMDIV"));
 
-		docSelCombo = new JComboBox();
+		docSelCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(docSelCombo);
 		docSelCombo.setActionCommand("DocSelCombo");
 		docSelCombo.addActionListener(this);
@@ -150,7 +150,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 			imageLnFCombo.addLabelValuePair(group.getName(), group.getName());
 		}
 
-		statusBarCombo = new JComboBox();
+		statusBarCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(statusBarCombo);
 		statusBarCombo.setActionCommand("StatusBarComboBox");
 		statusBarCombo.addActionListener(this);

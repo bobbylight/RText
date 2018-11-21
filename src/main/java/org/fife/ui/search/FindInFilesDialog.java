@@ -44,9 +44,9 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 	// Text fields in which the user enters parameters that are not
 	// defined in AbstractSearchDialog.
-	protected JComboBox inFilesComboBox;
+	protected JComboBox<String> inFilesComboBox;
 	protected FSATextField inFolderTextField;
-	protected JComboBox skipFoldersComboBox;
+	protected JComboBox<String> skipFoldersComboBox;
 
 	protected JCheckBox subfoldersCheckBox;
 
@@ -112,7 +112,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		textField.getDocument().addDocumentListener(docListener);
 
 		// Make an "In files" combo box.
-		inFilesComboBox = new JComboBox(new RComboBoxModel());
+		inFilesComboBox = new JComboBox<>(new RComboBoxModel());
 		inFilesComboBox.setEditable(true);
 		textField = getTextComponent(inFilesComboBox);
 		textField.addFocusListener(focusAdapter);
@@ -127,7 +127,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		inFolderTextField.addFocusListener(focusAdapter);
 		inFolderTextField.getDocument().addDocumentListener(docListener);
 
-		skipFoldersComboBox = new JComboBox(new RComboBoxModel());
+		skipFoldersComboBox = new JComboBox<>(new RComboBoxModel());
 		textField = getTextComponent(skipFoldersComboBox);
 		textField.addFocusListener(focusAdapter);
 		textField.addKeyListener(keyListener);

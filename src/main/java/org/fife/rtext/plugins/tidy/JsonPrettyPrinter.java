@@ -178,7 +178,7 @@ class JsonPrettyPrinter implements PrettyPrinter {
 		// We use reflection since jsonbeans is built with Java 6.
 		Class<?> clazz = Class.forName(JSON_CLASS, true,
 				plugin.getClass().getClassLoader());
-		Object obj = clazz.newInstance();
+		Object obj = clazz.getDeclaredConstructor().newInstance();
 		Method sotm = clazz.getMethod("setOutputType", format.getClass());
 		Method ppm  = clazz.getMethod("prettyPrint", String.class);
 		try {

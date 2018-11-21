@@ -52,8 +52,8 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		implements ActionListener, ChangeListener, PropertyChangeListener {
 
-	private JComboBox insCaretCombo;
-	private JComboBox overCaretCombo;
+	private JComboBox<String> insCaretCombo;
+	private JComboBox<String> overCaretCombo;
 	private JSpinner blinkRateSpinner;
 	private RColorSwatchesButton caretColorButton;
 	private RColorSwatchesButton selColorButton;
@@ -175,7 +175,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 			Color defaultSelectedTextColor = Color.white;
 			CaretStyle defaultInsertCaret = CaretStyle.THICK_VERTICAL_LINE_STYLE;
 			CaretStyle defaultOverwriteCaret = CaretStyle.BLOCK_STYLE;
-			Integer defaultCaretBlinkRate = new Integer(500);
+			Integer defaultCaretBlinkRate = 500;
 			Color[] defaultSecLangColor = new Color[SEC_LANG_COUNT];
 			defaultSecLangColor[0] = new Color(0xfff0cc);
 			defaultSecLangColor[1] = new Color(0xdafeda);
@@ -283,8 +283,8 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param msg The resource bundle with localized caret string values.
 	 */
-	private static final JComboBox createCaretComboBox(ResourceBundle msg) {
-		JComboBox combo = new JComboBox();
+	private static final JComboBox<String> createCaretComboBox(ResourceBundle msg) {
+		JComboBox<String> combo = new JComboBox<>();
 		UIUtil.fixComboOrientation(combo);
 		combo.addItem(msg.getString("CaretVerticalLine"));
 		combo.addItem(msg.getString("CaretUnderline"));
@@ -613,7 +613,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 * @see #getBlinkRate()
 	 */
 	private void setBlinkRate(int blinkRate) {
-		blinkRateSpinner.setValue(new Integer(blinkRate));
+		blinkRateSpinner.setValue(blinkRate);
 	}
 
 

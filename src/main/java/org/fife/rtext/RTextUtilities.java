@@ -974,7 +974,7 @@ public class RTextUtilities {
 				// simply use its name for some reason (Exceptions are
 				// thrown).
 				Class<?> c = cl.loadClass(lnfClassName);
-				LookAndFeel lnf = (LookAndFeel)c.newInstance();
+				LookAndFeel lnf = (LookAndFeel)c.getDeclaredConstructor().newInstance();
 
 				// If we're changing to a LAF that supports window decorations
 				// and our current one doesn't, or vice versa, inform the

@@ -31,8 +31,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 import org.fife.rtext.RText;
-import org.fife.rtext.plugins.macros.NewMacroDialog;
-import org.fife.rtext.plugins.macros.Macro;
 import org.fife.ui.KeyStrokeCellRenderer;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
@@ -245,7 +243,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, null, new Integer(e.getRow()));
+		firePropertyChange(PROPERTY, null, e.getRow());
 	}
 
 

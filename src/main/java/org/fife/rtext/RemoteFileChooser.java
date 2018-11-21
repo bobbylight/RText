@@ -51,19 +51,19 @@ public class RemoteFileChooser extends EscapableDialog
 	private RText owner;
 	private JPanel formPanel;
 	private JLabel protoLabel;
-	private JComboBox protocolCombo;
+	private JComboBox<String> protocolCombo;
 	private JLabel hostLabel;
-	private JComboBox hostCombo;
+	private JComboBox<String> hostCombo;
 	private JLabel fileNameLabel;
-	private JComboBox fileCombo;
+	private JComboBox<String> fileCombo;
 	private JLabel userLabel;
-	private JComboBox userCombo;
+	private JComboBox<String> userCombo;
 	private JLabel passLabel;
 	private JPasswordField passField;
 	private JLabel encodingLabel;
-	private JComboBox encodingCombo;
+	private JComboBox<String> encodingCombo;
 	private JLabel portLabel;
-	private JComboBox portCombo;
+	private JComboBox<String> portCombo;
 	private JButton okButton;
 	private JToggleButton advancedButton;
 
@@ -102,7 +102,7 @@ public class RemoteFileChooser extends EscapableDialog
 
 		// A panel containing the file information.
 		formPanel = new JPanel(new SpringLayout());
-		protocolCombo = new JComboBox(new String[] { "FTP", "HTTP" });
+		protocolCombo = new JComboBox<>(new String[] { "FTP", "HTTP" });
 		UIUtil.fixComboOrientation(protocolCombo);
 		protocolCombo.addActionListener(this);
 		protoLabel = createLabel(protocolCombo, msg, "Protocol");
@@ -115,7 +115,7 @@ public class RemoteFileChooser extends EscapableDialog
 		passField = new JPasswordField(25);
 		passField.addFocusListener(this);
 		passLabel = createLabel(passField, msg, "Password");
-		encodingCombo = new JComboBox();
+		encodingCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(encodingCombo);
 		Map<String, Charset> availcs = Charset.availableCharsets();
 		for (String key : availcs.keySet()) {
@@ -237,7 +237,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 *
 	 * @return The combo box.
 	 */
-	private JComboBox createCombo() {
+	private JComboBox<String> createCombo() {
 		JComboBox combo = new JComboBox(new RComboBoxModel());
 		UIUtil.fixComboOrientation(combo);
 		combo.setEditable(true);

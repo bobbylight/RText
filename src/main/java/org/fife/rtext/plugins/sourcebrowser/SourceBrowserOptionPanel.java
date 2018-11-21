@@ -50,7 +50,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 								ItemListener, GUIApplicationConstants {
 
 	private JCheckBox visibleCB;
-	private JComboBox locationCombo;
+	private JComboBox<String> locationCombo;
 	private JLabel ctagsExecutableLocationLabel;
 	private JRadioButton exubCtagsRB;
 	private JRadioButton standardCtagsRB;
@@ -104,7 +104,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 
 		// A combo in which to select the file system tree placement.
 		temp = new JPanel(new SpringLayout());
-		locationCombo = new JComboBox();
+		locationCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(locationCombo);
 		locationCombo.addItem(gpb.getString("Location.top"));
 		locationCombo.addItem(gpb.getString("Location.left"));

@@ -36,7 +36,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	private boolean sortable;
 	private boolean sorted;
 	private String prefix;
-	private Vector<Object> visibleChildren;
+	private Vector<TreeNode> visibleChildren;
 	private int sortPriority;
 
 
@@ -47,7 +47,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 
 	public SourceTreeNode(Object userObject, boolean sorted) {
 		super(userObject);
-		visibleChildren = new Vector<Object>();
+		visibleChildren = new Vector<>();
 		setSortable(true);
 		setSorted(sorted);
 	}
@@ -69,7 +69,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 
 
 	@Override
-	public Enumeration<?> children() {
+	public Enumeration<TreeNode> children() {
 		return visibleChildren.elements();
 	}
 
@@ -141,7 +141,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 
 	@Override
 	public TreeNode getChildAt(int index) {
-		return (TreeNode)visibleChildren.get(index);
+		return visibleChildren.get(index);
 	}
 
 
@@ -170,7 +170,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 			throw new IllegalArgumentException("child cannot be null");
 		}
 		for (int i=0; i<visibleChildren.size(); i++) {
-			TreeNode node = (TreeNode)visibleChildren.get(i);
+			TreeNode node = visibleChildren.get(i);
 			if (node.equals(child)) {
 				return i;
 			}
@@ -235,9 +235,9 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 				Collections.sort(visibleChildren, createComparator());
 			}
 			if (prefix!=null) {
-				Iterator<Object> i = visibleChildren.iterator();
+				Iterator<TreeNode> i = visibleChildren.iterator();
 				while (i.hasNext()) {
-					TreeNode node = (TreeNode)i.next();
+					TreeNode node = i.next();
 					if (node.isLeaf()) {
 						String text = node.toString();
 						text = Util.stripHtml(text);

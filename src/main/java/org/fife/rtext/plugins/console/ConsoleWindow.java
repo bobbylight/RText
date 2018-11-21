@@ -48,7 +48,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	private JavaScriptShellTextArea jsTextArea;
 
 	private JToolBar toolbar;
-	private JComboBox shellCombo;
+	private JComboBox<String> shellCombo;
 	private StopAction stopAction;
 
 
@@ -88,7 +88,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 		Box temp = new Box(BoxLayout.LINE_AXIS);
 		temp.add(label);
 		temp.add(Box.createHorizontalStrut(5));
-		shellCombo = new JComboBox();
+		shellCombo = new JComboBox<>();
 		shellCombo.addItemListener(listener);
 		shellCombo.addItem(plugin.getString("System"));
 		shellCombo.addItem(plugin.getString("JavaScript"));

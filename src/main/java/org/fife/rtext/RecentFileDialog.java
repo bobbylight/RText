@@ -52,8 +52,8 @@ public class RecentFileDialog extends EscapableDialog {
 	private RText rtext;
 	private List<FileLocation> files;
 
-	private JList list;
-	private DefaultListModel model;
+	private JList<FileLocation> list;
+	private DefaultListModel<FileLocation> model;
 	private JTextField filterField;
 	private JButton okButton;
 	private Listener listener;
@@ -123,8 +123,8 @@ public class RecentFileDialog extends EscapableDialog {
 		Container buttons = UIUtil.createButtonFooter(okButton, cancelButton);
 		cp.add(buttons, BorderLayout.SOUTH);
 
-		model = new DefaultListModel();
-		list = new JList(model);
+		model = new DefaultListModel<>();
+		list = new JList<>(model);
 		setFilter(null); // Do initial population.
 		list.addMouseListener(listener);
 		list.setCellRenderer(createCellRenderer());

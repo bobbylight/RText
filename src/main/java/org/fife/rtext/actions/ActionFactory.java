@@ -99,14 +99,14 @@ public final class ActionFactory implements RTextActionInfo {
 		rtext.addAction(COPY_AS_RTF_ACTION, new RSyntaxTextAreaEditorKit.CopyAsRtfAction(temp,
 			null,
 			msg.getString("CopyAsRtfAction.ShortDesc"),
-			new Integer(msg.getString("CopyAsRtfAction.Mnemonic").charAt(0)),
+			(int)msg.getString("CopyAsRtfAction.Mnemonic").charAt(0),
 			null));
 
 		temp = msg.getString("TimeAction");
 		rtext.addAction(TIME_DATE_ACTION, new RTextAreaEditorKit.TimeDateAction(temp,
 			new ImageIcon(cl.getResource(commonIconPath+"timedate16.gif")),
 			msg.getString("TimeAction.ShortDesc"),
-			new Integer(msg.getString("TimeAction.Mnemonic").charAt(0)),
+			(int)msg.getString("TimeAction.Mnemonic").charAt(0),
 			null));
 
 		a = new RText.ToggleToolBarAction<RText>(rtext, msg, "ToolBarAction");

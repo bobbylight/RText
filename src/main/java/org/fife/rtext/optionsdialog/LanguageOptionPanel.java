@@ -56,8 +56,8 @@ import org.fife.ui.app.GUIApplication;
 class LanguageOptionPanel extends OptionsDialogPanel
 								implements ListSelectionListener {
 
-	private DefaultListModel listModel;
-	private JList languageList;	// Contains all available languages.
+	private DefaultListModel<IconTextInfo> listModel;
+	private JList<IconTextInfo> languageList;	// Contains all available languages.
 	private Map<String, String> languageMap;
 	private GUIApplication app;
 
@@ -102,10 +102,10 @@ class LanguageOptionPanel extends OptionsDialogPanel
 		temp.add(label, BorderLayout.LINE_START);
 		languagePanel.add(temp, BorderLayout.NORTH);
 
-		listModel = new DefaultListModel();
-		languageList = new JList(listModel);
+		listModel = new DefaultListModel<>();
+		languageList = new JList<>(listModel);
 		languageList.setCellRenderer(LanguageListCellRenderer.create());
-		languageMap = new HashMap<String, String>(1);
+		languageMap = new HashMap<>(1);
 		try {
 			File file = new File(app.getInstallLocation(), FILE_NAME);
 			getLocalizations(file);

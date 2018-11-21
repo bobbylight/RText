@@ -1744,7 +1744,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 						lafName = UIManager.getSystemLookAndFeelClassName();
 						clazz = cl.loadClass(lafName);
 					}
-					LookAndFeel laf = (LookAndFeel)clazz.newInstance();
+					LookAndFeel laf = (LookAndFeel)clazz.getDeclaredConstructor().newInstance();
 					UIManager.setLookAndFeel(laf);
 					UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
 					UIUtil.installOsSpecificLafTweaks();

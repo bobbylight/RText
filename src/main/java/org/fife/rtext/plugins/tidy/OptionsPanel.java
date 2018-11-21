@@ -146,15 +146,15 @@ class OptionsPanel extends PluginOptionsDialogPanel
 				addXmlPiCB.setSelected(false);
 				dropEmptyParasCB.setSelected(false);
 				hideEndTagsCB.setSelected(false);
-				htmlSpaceSpinner.setValue(new Integer(4));
+				htmlSpaceSpinner.setValue(4);
 				logicalEmpCB.setSelected(false);
 				makeCleanCB.setSelected(false);
 				upperCaseAttrNamesCB.setSelected(false);
 				upperCaseTagNamesCB.setSelected(false);
-				xmlSpaceSpinner.setValue(new Integer(4));
-				xmlWrapLenSpinner.setValue(new Integer(0));
+				xmlSpaceSpinner.setValue(4);
+				xmlWrapLenSpinner.setValue(0);
 				jsonIndentFirstLevelCB.setSelected(false);
-				jsonSpaceSpinner.setValue(new Integer(3));
+				jsonSpaceSpinner.setValue(3);
 				jsonStyleCombo.setSelectedValue(DEFAULT_JSON_STYLE);
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
@@ -245,7 +245,7 @@ class OptionsPanel extends PluginOptionsDialogPanel
 		temp.add(temp2);
 		temp.add(Box.createVerticalStrut(5));
 
-		jsonStyleCombo = new LabelValueComboBox<String, String>();
+		jsonStyleCombo = new LabelValueComboBox<>();
 		jsonStyleCombo.addLabelValuePair("JSON", "json");
 		jsonStyleCombo.addLabelValuePair("JavaScript", "javascript");
 		jsonStyleCombo.addLabelValuePair(
@@ -359,7 +359,7 @@ class OptionsPanel extends PluginOptionsDialogPanel
 	 * @return The value displayed by the spinner.
 	 */
 	private static final int getIntValue(JSpinner spinner) {
-		return ((Integer)spinner.getValue()).intValue();
+		return ((Integer)spinner.getValue());
 	}
 
 
@@ -394,22 +394,22 @@ class OptionsPanel extends PluginOptionsDialogPanel
 		Plugin plugin = (Plugin)getPlugin();
 
 		HtmlOptions opts = plugin.getHtmlOptions();
-		htmlSpaceSpinner.setValue(new Integer(opts.getSpaceCount()));
+		htmlSpaceSpinner.setValue(opts.getSpaceCount());
 		dropEmptyParasCB.setSelected(opts.getDropEmptyParas());
 		hideEndTagsCB.setSelected(opts.getHideOptionalEndTags());
 		logicalEmpCB.setSelected(opts.getLogicalEmphasis());
 		makeCleanCB.setSelected(opts.getMakeClean());
 		upperCaseTagNamesCB.setSelected(opts.getUpperCaseTagNames());
 		upperCaseAttrNamesCB.setSelected(opts.getUpperCaseAttrNames());
-		htmlWrapLenSpinner.setValue(new Integer(opts.getWrapLength()));
+		htmlWrapLenSpinner.setValue(opts.getWrapLength());
 
 		XmlOptions xmlOpts = plugin.getXmlOptions();
-		xmlSpaceSpinner.setValue(new Integer(xmlOpts.getSpaceCount()));
+		xmlSpaceSpinner.setValue(xmlOpts.getSpaceCount());
 		addXmlPiCB.setSelected(xmlOpts.getAddXmlDeclaration());
-		xmlWrapLenSpinner.setValue(new Integer(xmlOpts.getWrapLength()));
+		xmlWrapLenSpinner.setValue(xmlOpts.getWrapLength());
 
 		JsonOptions jsonOpts = plugin.getJsonOptions();
-		jsonSpaceSpinner.setValue(new Integer(jsonOpts.getSpaceCount()));
+		jsonSpaceSpinner.setValue(jsonOpts.getSpaceCount());
 		jsonStyleCombo.setSelectedValue(jsonOpts.getOutputStyle());
 		jsonIndentFirstLevelCB.setSelected(jsonOpts.getIndentFirstLevel());
 

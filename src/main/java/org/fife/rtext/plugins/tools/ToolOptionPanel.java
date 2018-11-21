@@ -54,7 +54,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 
 	private Listener listener;
 	private JCheckBox visibleCB;
-	private JComboBox locationCombo;
+	private JComboBox<String> locationCombo;
 	private DefaultTableModel model;
 	private ModifiableTable toolTable;
 
@@ -96,7 +96,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 
 		// A combo in which to select the dockable window's placement.
 		Box locationPanel = createHorizontalBox();
-		locationCombo = new JComboBox();
+		locationCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(locationCombo);
 		locationCombo.addItem(gpb.getString("Location.top"));
 		locationCombo.addItem(gpb.getString("Location.left"));

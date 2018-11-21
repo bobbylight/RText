@@ -47,7 +47,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	private JTextField dirField;
 	private JButton dirBrowseButton;
 	private LabelValueComboBox<String, String> terminatorCombo;
-	private JComboBox encCombo;
+	private JComboBox<String> encCombo;
 	private JCheckBox utf8BomCB;
 	private JCheckBox sizeCheckCB;
 	private JFormattedTextField sizeField;
@@ -130,7 +130,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 			newFilePanel.add(newlineLabel);
 		}
 		JLabel encLabel = new JLabel(msg.getString("OptNewFileEncoding"));
-		encCombo = new JComboBox();
+		encCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(encCombo);
 		// Populate the combo box with all available encodings.
 		Map<String, Charset> availcs = Charset.availableCharsets();
@@ -527,7 +527,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 * @see #setDoFileSizeCheck(boolean)
 	 */
 	private void setMaxFileSize(float size) {
-		sizeField.setValue(new Float(size));
+		sizeField.setValue(size);
 	}
 
 

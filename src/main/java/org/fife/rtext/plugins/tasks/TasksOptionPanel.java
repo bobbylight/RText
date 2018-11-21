@@ -59,7 +59,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 
 	private TasksPlugin plugin;
 	private JCheckBox visibleCB;
-	private JComboBox locationCombo;
+	private JComboBox<String> locationCombo;
 	private DefaultTableModel model;
 	private ModifiableTable table;
 
@@ -97,7 +97,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 
 		// A combo in which to select the dockable window's placement.
 		Box locationPanel = createHorizontalBox();
-		locationCombo = new JComboBox();
+		locationCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(locationCombo);
 		locationCombo.addItem(gpb.getString("Location.top"));
 		locationCombo.addItem(gpb.getString("Location.left"));

@@ -198,8 +198,8 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	private static Object[] getParams(long num, long denom) {
 		if (objArray==null)
 			objArray = new Object[2];
-		objArray[0] = new Long(num);
-		objArray[1] = new Long(denom);
+		objArray[0] = num;
+		objArray[1] = denom;
 		return objArray;
 	}
 
@@ -371,11 +371,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 					long difference = oldMem - newMem;
 					String text = msg.getString(
 									"Plugin.PopupDialog.GC.text");
-					text = MessageFormat.format(text,
-								new Object[] {
-									new Long(bytesToKb(difference))
-								}
-					);
+					text = MessageFormat.format(text, bytesToKb(difference));
 					JOptionPane.showMessageDialog(app, text,
 							msg.getString("Plugin.PopupDialog.GC.title"),
 							JOptionPane.INFORMATION_MESSAGE);

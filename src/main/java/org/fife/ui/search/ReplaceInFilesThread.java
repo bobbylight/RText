@@ -170,16 +170,14 @@ class ReplaceInFilesThread extends FindInFilesThread {
 							w.print(replaceSB.toString());
 							w.close();
 
-							String text = MessageFormat.format(occurrencesString,
-									new Object[] { new Integer(repCount) });
+							String text = MessageFormat.format(occurrencesString, repCount);
 							MatchData data = new MatchData(fileFullPath,
 											NO_LINE_NUMBER, text);
 							dialog.addMatchData(data);
 
 						}
 						else if (doVerboseOutput) { // repCount==0
-							String text = MessageFormat.format(occurrencesString,
-									new Object[] { new Integer(repCount) });
+							String text = MessageFormat.format(occurrencesString, repCount);
 							MatchData data = createVerboseMatchData(
 											fileFullPath, text);
 							dialog.addMatchData(data);

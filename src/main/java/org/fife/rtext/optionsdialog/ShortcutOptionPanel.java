@@ -185,7 +185,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 		hasUnsavedChanges = true;
-		firePropertyChange(SHORTCUT_PROPERTY, null, new Integer(e.getRow()));
+		firePropertyChange(SHORTCUT_PROPERTY, null, e.getRow());
 	}
 
 

@@ -57,8 +57,8 @@ public class HtmlOptions extends Prefs {
 
 
 	/**
-	 * Returns whether to replace <tt>&lt;i&gt;</tt> and <tt>&lt;b&gt;</tt>
-	 * with <tt>&lt;em&gt;</tt> and <tt>&lt;strong&gt;</tt>, respectively.
+	 * Returns whether to replace {@code &lt;i&gt;} and {@code &lt;b&gt;}
+	 * with {@code &lt;em&gt;} and {@code &lt;strong&gt;}, respectively.
 	 *
 	 * @return Whether to use logical emphasis tags.
 	 * @see #setLogicalEmphasis(boolean)
@@ -162,8 +162,8 @@ public class HtmlOptions extends Prefs {
 
 
 	/**
-	 * Sets whether to replace <tt>&lt;i&gt;</tt> and <tt>&lt;b&gt;</tt> with
-	 * <tt>&lt;em&gt;</tt> and <tt>&lt;strong&gt;</tt>, respectively.
+	 * Sets whether to replace {@code &lt;i&gt;} and {@code &lt;b&gt;} with
+	 * {@code &lt;em&gt;} and {@code &lt;strong&gt;}, respectively.
 	 *
 	 * @param emphasis Whether to use logical emphasis tags.
 	 * @see #getLogicalEmphasis()
@@ -189,7 +189,7 @@ public class HtmlOptions extends Prefs {
 	 * Sets the number of spaces to use for indentation when formatting HTML.
 	 *
 	 * @param count The number of spaces.  This should be greater than or
-	 *        equal to <tt>-1</tt> (which specifies to use tabs).
+	 *        equal to {@code -1} (which specifies to use tabs).
 	 * @see #getSpaceCount()
 	 */
 	public void setSpaceCount(int count) {

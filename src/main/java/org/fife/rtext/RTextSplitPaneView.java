@@ -58,9 +58,9 @@ class RTextSplitPaneView extends AbstractMainView
 									implements ListSelectionListener {
 
 	private DockableWindow listWindow;
-	private JList documentList;
+	private JList<DocumentInfo> documentList;
 	private RScrollPane documentListScrollPane;
-	private DefaultListModel listModel;
+	private DefaultListModel<DocumentInfo> listModel;
 	private CardLayout layout;
 
 	private List<Component> scrollPanes;	// The scroll panes passed in.
@@ -87,10 +87,10 @@ class RTextSplitPaneView extends AbstractMainView
 		setLayout(new GridLayout(1,1));	// So the split pane takes up the whole panel.
 
 		// Create the document list.
-		documentList = new JList();
+		documentList = new JList<>();
 		documentList.setBorder(UIUtil.getEmpty5Border());
 		documentList.setCellRenderer(new DocumentListCellRenderer());
-		listModel = new DefaultListModel();
+		listModel = new DefaultListModel<>();
 		documentList.setModel(listModel);
 		documentList.setSelectionModel(new RListSelectionModel());
 		documentList.addListSelectionListener(this);
@@ -144,7 +144,7 @@ class RTextSplitPaneView extends AbstractMainView
 		int numDocuments = getNumDocuments();
 		listModel.addElement(new DocumentInfo(
 						title, getIconFor((RTextScrollPane)component)));
-		add(temp, new Integer(numDocuments).toString());
+		add(temp, Integer.toString(numDocuments));
 		scrollPanes.add(component);
 		setSelectedIndex(numDocuments);		// Sets currentTextArea.
 		numDocuments++;					// We just added a document.
@@ -328,7 +328,7 @@ class RTextSplitPaneView extends AbstractMainView
 				for (int j=0; j<comps.length; j++) {
 					RTextScrollPane sp2 = (RTextScrollPane)((JPanel)comps[j]).getComponent(0);
 					if (sp==sp2) {
-						add(comps[j], new Integer(i).toString());
+						add(comps[j], Integer.toString(i));
 						reAdded = true;
 						break;
 					}
@@ -444,7 +444,7 @@ class RTextSplitPaneView extends AbstractMainView
 		selectedIndex = documentList.getSelectedIndex();
 		if (selectedIndex!=-1) {
 
-			String key = new Integer(selectedIndex).toString();
+			String key = Integer.toString(selectedIndex);
 			layout.show(this, key);
 			current = getRTextEditorPaneAt(selectedIndex);
 			setCurrentTextArea(current);
