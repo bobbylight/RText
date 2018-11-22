@@ -88,7 +88,7 @@ class OutputTextPane extends JTextPane {
 
 		// Just remove "delete previous word" for now, since DefaultEditorKit
 		// doesn't expose the delegate for us to call into.
-		int ctrl = InputEvent.CTRL_MASK;
+		int ctrl = InputEvent.CTRL_DOWN_MASK;
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, ctrl), "invalid");
 
 		// delete

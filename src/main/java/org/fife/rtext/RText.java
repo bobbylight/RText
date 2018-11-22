@@ -84,7 +84,7 @@ import org.fife.util.TranslucencyUtil;
  * status bar.
  *
  * @author Robert Futrell
- * @version 2.6.3
+ * @version 3.0.0
  */
 public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			implements ActionListener, CaretListener, PropertyChangeListener,
@@ -179,7 +179,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 */
 	private static final String PROPERTY_PRINT_START_TIMES = "printStartTimes";
 
-	public static final String VERSION_STRING		= "2.6.4.BETA-????????";
+	public static final String VERSION_STRING		= "3.0.0.BETA-????????";
 
 
 	/**

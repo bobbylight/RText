@@ -204,7 +204,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, null, new Integer(e.getRow()));
+		firePropertyChange(PROPERTY, null, e.getRow());
 	}
 
 

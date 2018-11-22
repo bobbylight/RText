@@ -50,8 +50,8 @@ public class GoToMemberAction extends AppAction<RText>
 
 		RText rtext = getApplication();
 		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
-		int c = textArea.getToolkit().getMenuShortcutKeyMask();
-		int shift = InputEvent.SHIFT_MASK;
+		int c = textArea.getToolkit().getMenuShortcutKeyMaskEx();
+		int shift = InputEvent.SHIFT_DOWN_MASK;
 		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_O, c|shift);
 		boolean success = false;
 
@@ -61,7 +61,7 @@ public class GoToMemberAction extends AppAction<RText>
 			ActionMap am = textArea.getActionMap();
 			Action a = am.get(key);
 			if (a instanceof org.fife.rsta.ac.GoToMemberAction) {
-				((org.fife.rsta.ac.GoToMemberAction)a).actionPerformed(e);
+				a.actionPerformed(e);
 				success = true;
 			}
 		}
@@ -99,7 +99,7 @@ public class GoToMemberAction extends AppAction<RText>
 	 * @param style The syntax style.
 	 * @return Whether the action is available.
 	 */
-	private static final boolean getStyleSupportsGoToMember(String style) {
+	private static boolean getStyleSupportsGoToMember(String style) {
 		return style.equals(SyntaxConstants.SYNTAX_STYLE_JAVA) ||
 				style.equals(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT) ||
 				style.equals(SyntaxConstants.SYNTAX_STYLE_XML);

@@ -342,8 +342,8 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			}
 		});
 
-		int mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |
-				InputEvent.SHIFT_MASK;
+		int mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() |
+				InputEvent.SHIFT_DOWN_MASK;
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, mods), "CopyPath");
 		am.put("CopyPath", new AbstractAction() {
 			@Override
@@ -363,8 +363,8 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			}
 		});
 
-		mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |
-				InputEvent.SHIFT_MASK;
+		mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() |
+				InputEvent.SHIFT_DOWN_MASK;
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_F, mods), "FindInFilesFH");
 		am.put("FindInFilesFH", new AbstractAction() {
 			@Override
@@ -398,7 +398,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			}
 		});
 
-		int alt = InputEvent.ALT_MASK;
+		int alt = InputEvent.ALT_DOWN_MASK;
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, alt), "Properties");
 		am.put("Properties", new AbstractAction() {
 			@Override

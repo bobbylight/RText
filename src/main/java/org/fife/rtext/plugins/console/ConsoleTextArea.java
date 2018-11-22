@@ -239,7 +239,7 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		InputMap im = getInputMap();
 		ActionMap am = getActionMap();
-		int ctrl = getToolkit().getMenuShortcutKeyMask();
+		int ctrl = getToolkit().getMenuShortcutKeyMaskEx();
 
 		// backspace
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "backspace");
@@ -275,7 +275,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		am.put("home", new HomeAction(delegate, false));
 
 		// Shift+Home - Select to start of input area (right after prompt)
-		int shift = InputEvent.SHIFT_MASK;
+		int shift = InputEvent.SHIFT_DOWN_MASK;
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, shift), "shiftHome");
 		delegate = am.get(DefaultEditorKit.selectionBeginLineAction);
 		am.put("shiftHome", new HomeAction(delegate, true));
@@ -286,7 +286,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		am.put("ctrlA", new SelectAllAction(delegate));
 
 		// Enter - submit command entered
-		int mod = 0;//InputEvent.CTRL_MASK;
+		int mod = 0;
 		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, mod);
 		im.put(ks, "Submit");
 		am.put("Submit", new SubmitAction());

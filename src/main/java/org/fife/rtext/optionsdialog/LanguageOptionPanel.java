@@ -79,6 +79,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	 * @param app The owner of the options dialog in which this panel appears.
 	 * @param msg The resource bundle to use.
 	 */
+	@SuppressWarnings("unchecked") // We must use DefaultListCellRenderer
 	public LanguageOptionPanel(GUIApplication app, ResourceBundle msg) {
 
 		super(msg.getString("OptLaName"));

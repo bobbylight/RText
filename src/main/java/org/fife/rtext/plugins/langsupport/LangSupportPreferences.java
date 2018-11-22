@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -240,8 +241,8 @@ public class LangSupportPreferences extends Prefs {
 		ts_folding_enabled = true;
 		ts_build_output_window_visible = false;
 		ts_build_output_window_position = DockableWindow.BOTTOM;
-		int ctrlShift = InputEvent.SHIFT_MASK;
-		ctrlShift |= OS.get() == OS.MAC_OS_X ? InputEvent.META_MASK : InputEvent.CTRL_MASK;
+		int ctrlShift = InputEvent.SHIFT_DOWN_MASK;
+		ctrlShift |= Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 		ts_build_accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_F6, ctrlShift);
 		ts_build_window_visible_accelerator = null;
 

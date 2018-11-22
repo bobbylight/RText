@@ -521,8 +521,8 @@ public class SearchToolBar extends JToolBar {
 		@Override
 		public void keyTyped(KeyEvent e) {
 			if (e.getKeyChar()=='\n') {
-				int mod = e.getModifiers();
-				if ((mod&InputEvent.CTRL_MASK)>0)
+				int mod = e.getModifiersEx();
+				if ((mod&InputEvent.CTRL_DOWN_MASK)>0)
 					findPrevButton.doClick(0);
 				else
 					findButton.doClick(0);

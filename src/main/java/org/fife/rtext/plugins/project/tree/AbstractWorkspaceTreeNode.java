@@ -181,7 +181,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		private ProjectEntryParent parent;
 		private MutableTreeNode node;
 
-		public AddFileAction(ProjectEntryParent parent, MutableTreeNode node) {
+		AddFileAction(ProjectEntryParent parent, MutableTreeNode node) {
 			super("Action.NewFiles", "page_white_add.png");
 			this.parent = parent;
 			this.node = node;
@@ -249,7 +249,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		private ProjectEntryParent parent;
 		private MutableTreeNode node;
 
-		public AddLogicalFolderAction(ProjectEntryParent parent,
+		AddLogicalFolderAction(ProjectEntryParent parent,
 				MutableTreeNode node) {
 
 			super("Action.NewLogicalFolder", "folder_add.png");
@@ -292,10 +292,10 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 */
 	protected class CopyFullPathAction extends BaseAction {
 
-		public CopyFullPathAction() {
+		CopyFullPathAction() {
 			super("Action.CopyFullPath");
-			int mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |
-					InputEvent.SHIFT_MASK;
+			int mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() |
+					InputEvent.SHIFT_DOWN_MASK;
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, mods));
 		}
 
@@ -312,11 +312,11 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 */
 	protected class DeleteAction extends BaseAction {
 
-		public DeleteAction() {
+		DeleteAction() {
 			this(true);
 		}
 
-		public DeleteAction(boolean enabled) {
+		DeleteAction(boolean enabled) {
 			super("Action.Delete");
 			setEnabled(enabled);
 		}
@@ -341,10 +341,10 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 */
 	protected class FindInFilesFromHereAction extends BaseAction {
 
-		public FindInFilesFromHereAction() {
+		FindInFilesFromHereAction() {
 			super("Action.FindInFilesFromHere");
-			int mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() |
-					InputEvent.SHIFT_MASK;
+			int mods = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() |
+					InputEvent.SHIFT_DOWN_MASK;
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, mods));
 		}
 
@@ -361,7 +361,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 */
 	protected class MoveDownAction extends BaseAction {
 
-		public MoveDownAction() {
+		MoveDownAction() {
 			super("Action.MoveDown");
 			int index = getParent().getIndex(AbstractWorkspaceTreeNode.this);
 			setEnabled(index<getParent().getChildCount()-1);
@@ -380,7 +380,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 */
 	protected class MoveToBottomAction extends BaseAction {
 
-		public MoveToBottomAction() {
+		MoveToBottomAction() {
 			super("Action.MoveToBottom");
 			setEnabled(getParent().getIndex(AbstractWorkspaceTreeNode.this) <
 					getParent().getChildCount() - 1);
@@ -399,7 +399,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 */
 	protected class MoveToTopAction extends BaseAction {
 
-		public MoveToTopAction() {
+		MoveToTopAction() {
 			super("Action.MoveToTop");
 			setEnabled(getParent().getIndex(AbstractWorkspaceTreeNode.this)>0);
 		}
@@ -417,7 +417,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 */
 	protected class MoveUpAction extends BaseAction {
 
-		public MoveUpAction() {
+		MoveUpAction() {
 			super("Action.MoveUp");
 			setEnabled(getParent().getIndex(AbstractWorkspaceTreeNode.this)>0);
 		}
@@ -468,13 +468,13 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 */
 	protected class PropertiesAction extends BaseAction {
 
-		public PropertiesAction(boolean enabled) {
+		PropertiesAction(boolean enabled) {
 			this(false, enabled);
 		}
 
-		public PropertiesAction(boolean root, boolean enabled) {
+		PropertiesAction(boolean root, boolean enabled) {
 			super(root ? "Action.Properties.Workspace" : "Action.Properties");
-			int alt = InputEvent.ALT_MASK;
+			int alt = InputEvent.ALT_DOWN_MASK;
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, alt));
 			setEnabled(enabled);
 		}
@@ -492,7 +492,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 */
 	protected class RefreshAction extends BaseAction {
 
-		public RefreshAction() {
+		RefreshAction() {
 			super("Action.Refresh");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 		}
@@ -517,11 +517,11 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 */
 	protected class RenameAction extends BaseAction {
 
-		public RenameAction() {
+		RenameAction() {
 			this(false);
 		}
 
-		public RenameAction(boolean root) {
+		RenameAction(boolean root) {
 			super(root ? "Action.Rename.Workspace" : "Action.Rename");
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 		}

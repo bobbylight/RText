@@ -20,6 +20,7 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -150,13 +151,15 @@ public class RTextUtilities {
 
 		Rectangle visible = textArea.getVisibleRect();
 
-		Rectangle r = null;
+		Rectangle2D r2d;
 		try {
-			r = textArea.modelToView(textArea.getCaretPosition());
+			r2d = textArea.modelToView2D(textArea.getCaretPosition());
 		} catch (BadLocationException ble) { // Never happens
 			ble.printStackTrace();
 			return;
 		}
+		Rectangle r = new Rectangle((int)r2d.getX(), (int)r2d.getY(), (int)r2d.getWidth(),
+			(int)r2d.getHeight());
 		visible.x = r.x - (visible.width - r.width) / 2;
 		visible.y = r.y - (visible.height - r.height) / 2;
 
@@ -853,12 +856,12 @@ public class RTextUtilities {
 	public static void removeTabbedPaneFocusTraversalKeyBindings(JComponent c) {
 
 		InputMap im = c.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, InputEvent.CTRL_MASK), "nothing");
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, InputEvent.CTRL_MASK), "nothing");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, InputEvent.CTRL_DOWN_MASK), "nothing");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, InputEvent.CTRL_DOWN_MASK), "nothing");
 
 		im = c.getInputMap();
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, InputEvent.CTRL_MASK), "nothing");
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, InputEvent.CTRL_MASK), "nothing");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, InputEvent.CTRL_DOWN_MASK), "nothing");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, InputEvent.CTRL_DOWN_MASK), "nothing");
 
 	}
 

@@ -72,13 +72,14 @@ class LanguageListCellRenderer extends DefaultListCellRenderer {
 
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Component getListCellRendererComponent(JList list,
 			Object value, int index, boolean selected, boolean focused) {
 
 		JLabel renderer;
-		if (possibleDelegate!=null) {
+		if (possibleDelegate instanceof ListCellRenderer) {
 			renderer = possibleDelegate;
-			((ListCellRenderer)possibleDelegate).getListCellRendererComponent(
+			((ListCellRenderer<Object>)possibleDelegate).getListCellRendererComponent(
 					list, value, index, selected, focused);
 		}
 		else {

@@ -26,20 +26,16 @@ import org.fife.ui.app.Prefs;
  */
 public class PluginPrefs extends Prefs {
 
-
 	/**
 	 * Accelerator key for the "pretty print source code" action.
 	 */
 	public KeyStroke tidyActionAccelerator;
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setDefaults() {
-		int defaultMod = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-		int defShift = defaultMod | InputEvent.SHIFT_MASK;
+		int defaultMod = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+		int defShift = defaultMod | InputEvent.SHIFT_DOWN_MASK;
 		tidyActionAccelerator = KeyStroke.getKeyStroke(KeyEvent.VK_P, defShift);
 	}
 

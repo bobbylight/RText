@@ -296,7 +296,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		// these actions are also owned by RSyntaxTextArea and thus we
 		// do not want to be able to change them.
 		JMenu textMenu = createMenu(menuMsg, "MenuText");
-		int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+		int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 		menuItem = createMenuItem(
 				new RSyntaxTextAreaEditorKit.ToggleCommentAction(),
 				menuMsg, "ToggleComment", "ToggleCommentMnemonic",
@@ -338,7 +338,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		// these actions are also owned by the RSyntaxTextArea and thus we do
 		// not want to be able to change them.
 		JMenu indentMenu = createMenu(menuMsg, "MenuIndent");
-		final int shift = InputEvent.SHIFT_MASK;
+		final int shift = InputEvent.SHIFT_DOWN_MASK;
 		menuItem = createMenuItem(
 						//new RSyntaxTextAreaEditorKit.IncreaseIndentAction(),
 						new RSyntaxTextAreaEditorKit.InsertTabAction(),

@@ -9,28 +9,30 @@ group = 'com.fifesoft'
 
 assert JavaVersion.current().isJava11Compatible()
 
+configurations.all { // Check for updates every build
+	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 dependencies {
-	compile(
+	compile('com.fifesoft.rtext:fife.common:3.0.0-SNAPSHOT') { changing = true }
 
-		[ "com.fifesoft.rtext:fife.common:2.6.3" ],
+	compile('com.fifesoft:rsyntaxtextarea:3.0.0-SNAPSHOT') {changing = true }
+	compile('com.fifesoft:autocomplete:3.0.0-SNAPSHOT') {changing = true }
+	compile('com.fifesoft:rstaui:3.0.0-SNAPSHOT') {changing = true }
+	compile('com.fifesoft:spellchecker:3.0.0-SNAPSHOT') {changing = true }
+	compile('com.fifesoft:languagesupport:3.0.0-SNAPSHOT') {changing = true }
 
-		[ "com.fifesoft:rsyntaxtextarea:2.6.1" ],
-		[ "com.fifesoft:autocomplete:2.6.1" ],
-		[ "com.fifesoft:rstaui:2.6.1" ],
-		[ "com.fifesoft:spellchecker:2.6.0" ],
-		[ "com.fifesoft:languagesupport:2.6.0" ],
+	compile 'net.sf.jtidy:jtidy:r938'
+	compile 'org.codehaus.groovy:groovy-all:2.5.+'
+	compile 'com.esotericsoftware:jsonbeans:0.7'
 
-		[ "net.sf.jtidy:jtidy:r938" ],
-		[ "org.codehaus.groovy:groovy-all:2.5.+" ],
-		[ 'com.esotericsoftware:jsonbeans:0.7' ]
-		)
-	testCompile( [ 'junit:junit:4.12' ] )
+	testCompile 'junit:junit:4.12'
 }
 repositories {
 	mavenCentral()
 	mavenLocal()
 	maven {
-		url "https://oss.sonatype.org/content/repositories/snapshots"
+		url 'https://oss.sonatype.org/content/repositories/snapshots'
 	}
 }
 
@@ -45,8 +47,8 @@ wrapper {
 //}
 
 static isSubstanceJar(jarName) {
-	return jarName.startsWith("substance-") || jarName.startsWith("trident-") ||
-		jarName.startsWith("laf-")
+	return jarName.startsWith('substance-') || jarName.startsWith('trident-') ||
+		jarName.startsWith('laf-')
 }
 static isPluginJar(jarName) {
 	return jarName.startsWith('plugin-') ||
@@ -231,7 +233,7 @@ artifacts {
 def getDistributionFiles(configurations) {
 
 	def distFiles = [
-			"build/libs", // The built jars
+			'build/libs', // The built jars
 			configurations.runtime // Gradle dependencies
 	]
 

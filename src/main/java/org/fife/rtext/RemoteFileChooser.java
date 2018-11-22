@@ -238,7 +238,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @return The combo box.
 	 */
 	private JComboBox<String> createCombo() {
-		JComboBox combo = new JComboBox(new RComboBoxModel());
+		JComboBox<String> combo = new JComboBox<>(new RComboBoxModel<>());
 		UIUtil.fixComboOrientation(combo);
 		combo.setEditable(true);
 		getDocument(combo).addDocumentListener(this);
@@ -256,7 +256,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 *        <code>msg</code>.
 	 * @return The label.
 	 */
-	private static final JLabel createLabel(JComponent labelFor,
+	private static JLabel createLabel(JComponent labelFor,
 			ResourceBundle msg, String keyRoot) {
 		JLabel label = new JLabel(msg.getString(keyRoot));
 		label.setDisplayedMnemonic(msg.getString(keyRoot + "Mnemonic").

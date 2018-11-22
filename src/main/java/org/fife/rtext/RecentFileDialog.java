@@ -86,10 +86,11 @@ public class RecentFileDialog extends EscapableDialog {
 
 	/**
 	 * Creates and returns the cell renderer to use for the file list.
+	 * The renderer cannot be parameterized because Substance uses DefaultListCellRenderer.
 	 *
 	 * @return The cell renderer.
 	 */
-	private static final ListCellRenderer createCellRenderer() {
+	private static ListCellRenderer createCellRenderer() {
 		if (SubstanceUtil.isSubstanceInstalled()) {
 			return new RecentFileListSubstanceCellRenderer();
 		}
@@ -100,6 +101,7 @@ public class RecentFileDialog extends EscapableDialog {
 	/**
 	 * Creates the content of this dialog.
 	 */
+	@SuppressWarnings("unchecked") // Must use DefaultListCellRenderer
 	private void createUI() {
 
 		listener = new Listener();
