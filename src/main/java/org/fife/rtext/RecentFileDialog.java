@@ -19,6 +19,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
@@ -172,10 +173,10 @@ public class RecentFileDialog extends EscapableDialog {
 	 * Opens the file selected in the file list.
 	 */
 	private void openSelectedFile() {
-		FileLocation loc = (FileLocation)list.getSelectedValue();
+		FileLocation loc = list.getSelectedValue();
 		if (loc != null) {
 			if (loc.isLocalAndExists()) {
-				rtext.openFile(loc.getFileFullPath());
+				rtext.openFile(new File(loc.getFileFullPath()));
 			}
 			else {
 				// TODO: Support opening remote FileLocations once

@@ -840,7 +840,7 @@ public class RTextUtilities {
 					openAllFilesIn(rtext, files[i]);
 				}
 				else {
-					rtext.openFile(files[i].getAbsolutePath());
+					rtext.openFile(files[i]);
 				}
 			}
 		}

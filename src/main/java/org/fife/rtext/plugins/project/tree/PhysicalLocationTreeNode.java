@@ -160,7 +160,7 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 				}
 				node.handleRefresh();
 				if (dialog.getOpenOnCreate()) {
-					rtext.openFile(createFileObject(newName).getAbsolutePath());
+					rtext.openFile(createFileObject(newName));
 				}
 			}
 

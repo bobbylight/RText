@@ -390,7 +390,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			public void actionPerformed(ActionEvent e) {
 				File file = getSelectedFile();
 				if (file != null && file.isFile()) {
-					plugin.getRText().openFile(file.getAbsolutePath());
+					plugin.getRText().openFile(file);
 				}
 				else {
 					UIManager.getLookAndFeel().provideErrorFeedback(null);

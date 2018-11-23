@@ -69,7 +69,7 @@ class NewMacroAction extends AppAction<RText> {
 				createInitialContentByExtension(file);
 			}
 
-			getApplication().openFile(file.getAbsolutePath());
+			getApplication().openFile(file);
 			MacroManager.get().addMacro(macro);
 
 		}

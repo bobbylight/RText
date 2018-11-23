@@ -12,7 +12,6 @@ package org.fife.rtext.plugins.console;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -112,7 +111,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	 * @return The file's root directory, or null if we're on Windows and
 	 *         this is an NFS path.
 	 */
-	private static final File getRootDir(File file) {
+	private static File getRootDir(File file) {
 
 		File root = null;
 
@@ -263,7 +262,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 		}
 
 		if (temp.isFile()) {
-			(plugin.getRText()).openFile(temp.getAbsolutePath());
+			(plugin.getRText()).openFile(temp);
 		}
 		else if (temp.exists()) {
 			append(plugin.getString("Error.NotAFile", cmd, dir), STYLE_STDERR);
@@ -369,15 +368,12 @@ class SystemShellTextArea extends ConsoleTextArea {
 			final String[] cmd = cmdList.toArray(new String[cmdList.size()]);
 
 			setEditable(false);
-			activeProcessThread = new Thread() {
-				@Override
-				public void run() {
-					ProcessRunner pr = new ProcessRunner(cmd);
-					pr.setDirectory(pwd);
-					pr.setOutputListener(new ProcessOutputListener());
-					pr.run();
-				}
-			};
+			activeProcessThread = new Thread(() -> {
+				ProcessRunner pr = new ProcessRunner(cmd);
+				pr.setDirectory(pwd);
+				pr.setOutputListener(new ProcessOutputListener());
+				pr.run();
+			});
 			firePropertyChange(PROPERTY_PROCESS_RUNNING, false, true);
 			activeProcessThread.start();
 
@@ -413,7 +409,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	 */
 	private class CompleteFileNameAction extends TextAction {
 
-		public CompleteFileNameAction() {
+		CompleteFileNameAction() {
 			super("completeFileName");
 		}
 
@@ -440,14 +436,11 @@ class SystemShellTextArea extends ConsoleTextArea {
 				}
 			}
 
-			File[] siblings = parent.listFiles(new FilenameFilter() {
-				@Override
-				public boolean accept(File dir, String name) {
-					if (!CASE_SENSITIVE) {
-						name = name.toLowerCase();
-					}
-					return name.startsWith(fileNamePart);
+			File[] siblings = parent.listFiles((dir, name) -> {
+				if (!CASE_SENSITIVE) {
+					name = name.toLowerCase();
 				}
+				return name.startsWith(fileNamePart);
 			});
 
 			if (siblings.length==0) {
@@ -483,7 +476,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 			Element root = doc.getDefaultRootElement();
 			Element elem = root.getElement(root.getElementIndex(dot));
 			int start = elem.getStartOffset();
-			String text = null;
+			String text;
 			try {
 				text = doc.getText(start, dot-start);
 			} catch (BadLocationException ble) { // Never happens
@@ -507,7 +500,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 
 		}
 
-		private final boolean isValidFilePathChar(char ch) {
+		private boolean isValidFilePathChar(char ch) {
 			return Character.isLetterOrDigit(ch) || ch=='-' || ch=='_' ||
 					ch=='/' || ch=='.' || (isWindows && (ch=='\\' || ch==':'));
 		}

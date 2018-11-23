@@ -457,7 +457,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 					return;
 				}
 			}
-			plugin.getRText().openFile(file.getAbsolutePath());
+			plugin.getRText().openFile(file);
 		}
 
 	}

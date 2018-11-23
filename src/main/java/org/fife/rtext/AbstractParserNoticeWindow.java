@@ -81,12 +81,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 		FileExplorerTableModel model2 = new FileExplorerTableModel(model,
 				table.getTableHeader());
 
-		model2.setColumnComparator(Integer.class, new Comparator<Integer>() {
-			@Override
-			public int compare(Integer int1, Integer int2) {
-				return int1.compareTo(int2);
-			}
-		});
+		model2.setColumnComparator(Integer.class, Comparator.naturalOrder());
 
 		IconTableCellRenderer itcr = new IconTableCellRenderer();
 		ComponentOrientation o = ComponentOrientation.getOrientation(getLocale());
@@ -189,7 +184,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 
 		@Override
 		public Class<?> getColumnClass(int col) {
-			Class<?> clazz = null;
+			Class<?> clazz;
 			switch (col) {
 				case 0:
 					clazz = Icon.class;
@@ -342,7 +337,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 						AbstractMainView mainView = rtext.getMainView();
 						if (mainView.setSelectedTextArea(textArea)) {
 							Integer i = (Integer)model.getValueAt(row, 2);
-							int line = i.intValue() - 1; // 0-based
+							int line = i - 1; // 0-based
 							focusLine(textArea, line);
 						}
 					}
@@ -351,16 +346,13 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 						String fileFullPath = wrapper.fileFullPath;
 						File file = new File(fileFullPath);
 						if (file.isAbsolute() && file.isFile()) {
-							rtext.openFile(file.getAbsolutePath());
-							SwingUtilities.invokeLater(new Runnable() {
-								@Override
-								public void run() {
-									RTextEditorPane textArea2 = rtext.
-											getMainView().getCurrentTextArea();
-									Integer i = (Integer)model.getValueAt(row, 2);
-									int line = i.intValue() - 1; // 0-based
-									focusLine(textArea2, line);
-								}
+							rtext.openFile(file);
+							SwingUtilities.invokeLater(() -> {
+								RTextEditorPane textArea2 = rtext.
+										getMainView().getCurrentTextArea();
+								Integer i = (Integer)model.getValueAt(row, 2);
+								int line = i - 1; // 0-based
+								focusLine(textArea2, line);
 							});
 						}
 						else {

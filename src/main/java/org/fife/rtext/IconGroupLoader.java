@@ -15,12 +15,13 @@ import java.util.Map;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 import org.fife.io.UnicodeReader;
 import org.fife.ui.OS;
 import org.fife.ui.rtextarea.IconGroup;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 
 /**
@@ -91,15 +92,12 @@ final class IconGroupLoader extends DefaultHandler {
 
 		//long start = System.currentTimeMillis();
 		try {
-			XMLReader xr = XMLReaderFactory.createXMLReader();
-			if (xr==null) {
-				return iconGroupMap; // Return the empty map
-			}
-			xr.setContentHandler(this);
+
+			SAXParser parser = SAXParserFactory.newDefaultInstance().newSAXParser();
 			InputSource is = new InputSource(new UnicodeReader(
 					new FileInputStream(iconGroupFile), "UTF-8"));
 			is.setEncoding("UTF-8");
-			xr.parse(is);
+			parser.parse(is, this);
 		} catch (Exception e) {
 			e.printStackTrace();
 			owner.displayException(e);

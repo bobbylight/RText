@@ -507,9 +507,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public OptionsDialog getOptionsDialog() {
 
@@ -659,9 +656,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected String getPreferencesClassName() {
 		return "org.fife.rtext.RTextPrefs";
@@ -965,14 +959,11 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	private void openFiles(String[] filesToOpen) {
 		int count = filesToOpen==null ? 0 : filesToOpen.length;
 		for (int i=0; i<count; i++) {
-			openFile(filesToOpen[i]);
+			openFile(new File(filesToOpen[i]));
 		}
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void preDisplayInit(RTextPrefs prefs, SplashScreen splashScreen) {
 
@@ -1024,9 +1015,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void preMenuBarInit(RTextPrefs prefs, SplashScreen splashScreen) {
 
@@ -1052,9 +1040,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void preStatusBarInit(RTextPrefs prefs,
 							SplashScreen splashScreen) {
@@ -1102,9 +1087,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void preToolBarInit(RTextPrefs prefs, SplashScreen splashScreen) {
 
@@ -1197,7 +1179,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	/**
-	 * Saves the uesr's preferences.
+	 * Saves the user's preferences.
 	 */
 	public void savePreferences() {
 
@@ -1605,9 +1587,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void updateLookAndFeel(LookAndFeel lnf) {
 
@@ -1651,27 +1630,18 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	}
 
 
-	/**
-	 * 1.5.2004/pwy: The following two functions are called from the
-	 * OSXAdapter and provide the hooks for the functions from the standard
-	 * Apple application menu.  The "about()" OSX hook is in
-	 * AbstractGUIApplication.
-	 */
 	@Override
 	public void preferences() {
 		getAction(OPTIONS_ACTION).actionPerformed(new ActionEvent(this,0,"unused"));
 	}
 
 	@Override
-	public void openFile(final String filename) {
+	public void openFile(File file) {
 		//gets called when we receive an open event from the finder on OS X
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				// null encoding means check for Unicode before using
-				// system default encoding.
-				mainView.openFile(filename, null, true);
-			}
+		SwingUtilities.invokeLater(() -> {
+			// null encoding means check for Unicode before using
+			// system default encoding.
+			mainView.openFile(file.getAbsolutePath(), null, true);
 		});
 	}
 

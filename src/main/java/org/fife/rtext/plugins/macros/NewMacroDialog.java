@@ -197,7 +197,7 @@ public class NewMacroDialog extends EscapableDialog {
 		File file = new File(macro.getFile());
 
 		if (file.isFile()) { // Should always be true
-			rtext.openFile(macro.getFile());
+			rtext.openFile(file);
 			text = msg.getString("Message.MacroOpened");
 			text = MessageFormat.format(text, macro.getName());
 		}
