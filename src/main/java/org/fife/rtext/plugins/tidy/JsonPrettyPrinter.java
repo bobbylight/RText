@@ -13,11 +13,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import javax.swing.JOptionPane;
 
+import com.esotericsoftware.jsonbeans.Json;
+import com.esotericsoftware.jsonbeans.OutputType;
 import org.fife.rtext.RText;
 
 
@@ -26,16 +26,11 @@ import org.fife.rtext.RText;
  * <a href="jsonbeans.googlecode.com">jsonbeans</a> library.
  *
  * @author Robert Futrell
- * @version 1.0
+ * @version 1.1
  */
 class JsonPrettyPrinter implements PrettyPrinter {
 
 	private Plugin plugin;
-
-	private static final String JSON_CLASS =
-			"com.esotericsoftware.jsonbeans.Json";
-	private static final String OUTPUT_TYPE_CLASS =
-			"com.esotericsoftware.jsonbeans.OutputType";
 
 
 	JsonPrettyPrinter(Plugin plugin) {
@@ -52,7 +47,7 @@ class JsonPrettyPrinter implements PrettyPrinter {
 	 *        leading tabs with.
 	 * @return The new string.
 	 */
-	private static final String convertLeadingTabs(String text,
+	private static String convertLeadingTabs(String text,
 			String tabReplacement) {
 
 		BufferedReader r = new BufferedReader(new StringReader(text));
@@ -85,7 +80,7 @@ class JsonPrettyPrinter implements PrettyPrinter {
 	 * @param spaceCount The number of spaces.
 	 * @return The string of space characters.
 	 */
-	private static final String createSpacer(int spaceCount) {
+	private static String createSpacer(int spaceCount) {
 		StringBuilder sb = new StringBuilder();
 		for (int i=0; i<spaceCount; i++) {
 			sb.append(' ');
@@ -101,7 +96,7 @@ class JsonPrettyPrinter implements PrettyPrinter {
 	 * @return The first non-whitespace character, or <code>'\0'</code> if none
 	 *         is found.
 	 */
-	private static final char getFirstNonWhitespaceChar(String text) {
+	private static char getFirstNonWhitespaceChar(String text) {
 		for (int i=0; i<text.length(); i++) {
 			char ch = text.charAt(i);
 			if (!Character.isWhitespace(ch)) {
@@ -117,11 +112,13 @@ class JsonPrettyPrinter implements PrettyPrinter {
 	 *
 	 * @return The output format.
 	 */
-	private Object getFormat(String format) throws Exception {
-		Class<?> clazz = Class.forName(OUTPUT_TYPE_CLASS, true,
-				plugin.getClass().getClassLoader());
-		Field field = clazz.getDeclaredField(format);
-		return field.get(null);
+	private OutputType getOutputType(String format) {
+
+		try {
+			return OutputType.valueOf(format.toLowerCase());
+		} catch (IllegalArgumentException e) {
+			return OutputType.json;
+		}
 	}
 
 
@@ -134,21 +131,21 @@ class JsonPrettyPrinter implements PrettyPrinter {
 	 * @param indenter The text to use as the indention (a tab or spaces).
 	 * @return The indented text.
 	 */
-	private static final String indentFirstLevel(String text, String indenter) {
+	private static String indentFirstLevel(String text, String indenter) {
 		String[] lines = text.split("\n");
 		for (int i=1; i<lines.length-1; i++) {
 			lines[i] = indenter + lines[i];
 		}
 		StringBuilder sb = new StringBuilder();
-		for (int i=0; i<lines.length; i++) {
-			sb.append(lines[i]).append('\n');
+		for (String line : lines) {
+			sb.append(line).append('\n');
 		}
 		return sb.toString();
 	}
 
 
 	@Override
-	public PrettyPrintResult prettyPrint(String json) throws Exception {
+	public PrettyPrintResult prettyPrint(String json) {
 
 		// First, do a sanity check to ensure everything is wrapped in curlys.
 		char ch = getFirstNonWhitespaceChar(json);
@@ -173,19 +170,14 @@ class JsonPrettyPrinter implements PrettyPrinter {
 		}
 
 		JsonOptions opts = plugin.getJsonOptions();
-		Object format = getFormat(opts.getOutputStyle());
 
 		// We use reflection since jsonbeans is built with Java 6.
-		Class<?> clazz = Class.forName(JSON_CLASS, true,
-				plugin.getClass().getClassLoader());
-		Object obj = clazz.getDeclaredConstructor().newInstance();
-		Method sotm = clazz.getMethod("setOutputType", format.getClass());
-		Method ppm  = clazz.getMethod("prettyPrint", String.class);
+		Json jsonFormatter = new Json();
+		jsonFormatter.setOutputType(getOutputType(opts.getOutputStyle()));
+
 		try {
 
-			sotm.invoke(obj, new Object[] { format });
-			String result = (String)ppm.invoke(obj,
-					new Object[] { json });
+			String result = jsonFormatter.prettyPrint(json);
 
 			int spaceCount = opts.getSpaceCount();
 			if (spaceCount>-1) {
