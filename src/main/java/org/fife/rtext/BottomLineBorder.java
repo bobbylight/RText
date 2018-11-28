@@ -9,9 +9,9 @@
  */
 package org.fife.rtext;
 
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Insets;
+import org.fife.ui.UIUtil;
+
+import java.awt.*;
 import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
 
@@ -47,7 +47,16 @@ public class BottomLineBorder extends AbstractBorder {
 	@Override
 	public void paintBorder(Component c, Graphics g, int x, int y,
 							int width, int height) {
-		g.setColor(UIManager.getColor("controlDkShadow"));
+
+		Color color;
+		if (UIUtil.isLightForeground(c.getForeground())) {
+			color = c.getBackground().brighter();
+		}
+		else {
+			color = UIManager.getColor("controlDkShadow");
+		}
+
+		g.setColor(color);
 		y = y + height - 1;
 		g.drawLine(x,y, x+width-1,y);
 	}
