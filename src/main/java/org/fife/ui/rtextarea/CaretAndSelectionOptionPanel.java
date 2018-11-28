@@ -283,7 +283,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param msg The resource bundle with localized caret string values.
 	 */
-	private static final JComboBox<String> createCaretComboBox(ResourceBundle msg) {
+	private static JComboBox<String> createCaretComboBox(ResourceBundle msg) {
 		JComboBox<String> combo = new JComboBox<>();
 		UIUtil.fixComboOrientation(combo);
 		combo.addItem(msg.getString("CaretVerticalLine"));
@@ -500,7 +500,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 * @return The blink rate.
 	 */
 	public int getBlinkRate() {
-		return ((Integer)blinkRateSpinner.getValue()).intValue();
+		return (Integer)blinkRateSpinner.getValue();
 	}
 
 

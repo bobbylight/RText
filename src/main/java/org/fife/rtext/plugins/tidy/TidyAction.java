@@ -79,7 +79,7 @@ class TidyAction extends AppAction<RText> {
 	/**
 	 * Makes summary messages more palatable to JOptionPanes.
 	 */
-	private static final String cleanupSummary(String summary) {
+	private static String cleanupSummary(String summary) {
 
 		// Single-line JSON streams shouldn't create super-long JOptionPanes.
 		final int MAX_SUMMARY_LENGTH = 200;

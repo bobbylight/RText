@@ -94,7 +94,7 @@ public class RTextUtilities {
 	/**
 	 * Adds a set of "default" code templates to the text areas.
 	 */
-	public static final void addDefaultCodeTemplates() {
+	public static void addDefaultCodeTemplates() {
 
 		CodeTemplateManager ctm = RSyntaxTextArea.getCodeTemplateManager();
 
@@ -126,8 +126,8 @@ public class RTextUtilities {
 	 * @param extensions Either a string representing a single extension or
 	 *        an array of strings containing multiple extensions.
 	 */
-	private static final void addFilter(RTextFileChooser chooser,
-					ResourceBundle msg, String key, Object extensions) {
+	private static void addFilter(RTextFileChooser chooser,
+								  ResourceBundle msg, String key, Object extensions) {
 		ExtensionFileFilter filter = null;
 		if (extensions instanceof String) {
 			filter = new ExtensionFileFilter(msg.getString(key),
@@ -196,7 +196,7 @@ public class RTextUtilities {
 	 *
 	 * @param fnfd The <code>FindInFilesDialog</code> to configure.
 	 */
-	public static final void configureFindInFilesDialog(FindInFilesDialog fnfd) {
+	public static void configureFindInFilesDialog(FindInFilesDialog fnfd) {
 		fnfd.addInFilesComboBoxFilter("*.asm");
 		fnfd.addInFilesComboBoxFilter("*.bat *.cmd");
 		fnfd.addInFilesComboBoxFilter("*.c *.cpp *.cxx *.h");
@@ -239,7 +239,7 @@ public class RTextUtilities {
 	 * @return A file chooser for RText to use.
 	 * @see #saveFileChooserFavorites(RText)
 	 */
-	public static final RTextFileChooser createFileChooser(RText rtext) {
+	public static RTextFileChooser createFileChooser(RText rtext) {
 
 		rtext.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		RTextFileChooser chooser = null;
@@ -457,8 +457,8 @@ public class RTextUtilities {
 	 *        If this is <code>null</code>, they are simply removed.
 	 * @return The escaped version of <code>s</code>.
 	 */
-	public static final String escapeForHTML(String s,
-									String newlineReplacement) {
+	public static String escapeForHTML(String s,
+									   String newlineReplacement) {
 		return escapeForHTML(s, newlineReplacement, false);
 	}
 
@@ -476,8 +476,8 @@ public class RTextUtilities {
 	 *        otherwise, they will be converted to "<code>&nbsp;</code>".
 	 * @return The escaped version of <code>s</code>.
 	 */
-	public static final String escapeForHTML(String s,
-						String newlineReplacement, boolean inPreBlock) {
+	public static String escapeForHTML(String s,
+									   String newlineReplacement, boolean inPreBlock) {
 
 		if (newlineReplacement==null) {
 			newlineReplacement = "";
@@ -590,7 +590,7 @@ public class RTextUtilities {
 	 * @return The macro directory, or <code>null</code> if it cannot be found
 	 *         or created.
 	 */
-	public static final File getMacroDirectory() {
+	public static File getMacroDirectory() {
 
 		File f = new File(getPreferencesDirectory(), "macros");
 		if (!f.isDirectory() && !f.mkdirs()) {
@@ -609,7 +609,7 @@ public class RTextUtilities {
 	 *        is returned.
 	 * @return The name of the macro.
 	 */
-	public static final String getMacroName(File macroFile) {
+	public static String getMacroName(File macroFile) {
 		String name = null;
 		if (macroFile!=null) {
 			name = macroFile.getName();
@@ -695,7 +695,7 @@ public class RTextUtilities {
 	 * FIXME:  Have me return the file list in alphabetical order (as this is
 	 *         not guaranteed by File.listFiles()).
 	 */
-	public static final File[] getSavedMacroFiles() {
+	public static File[] getSavedMacroFiles() {
 
 		File macroDir = getMacroDirectory();
 
@@ -779,7 +779,7 @@ public class RTextUtilities {
 	 * @return Whether the current Look and Feel is primarily dark.
 	 * @see #getLookAndFeelToSave()
 	 */
-	public static final boolean isDarkLookAndFeel() {
+	public static boolean isDarkLookAndFeel() {
 
 		String laf = getLookAndFeelToSave();
 
@@ -798,7 +798,7 @@ public class RTextUtilities {
 	 * @return The joined text.
 	 * @see #join(String[], String)
 	 */
-	public static final String join(String[] array) {
+	public static String join(String[] array) {
 		return join(array, ", ");
 	}
 
@@ -812,7 +812,7 @@ public class RTextUtilities {
 	 * @return The joined text.
 	 * @see #join(String[])
 	 */
-	public static final String join(String[] array, String connector) {
+	public static String join(String[] array, String connector) {
 		if (array==null || array.length==0) {
 			return null;
 		}
@@ -835,12 +835,12 @@ public class RTextUtilities {
 		if (directory!=null && directory.isDirectory()) {
 			File[] files = directory.listFiles();
 			int count = files.length;
-			for (int i=0; i<count; i++) {
-				if (files[i].isDirectory()) {
-					openAllFilesIn(rtext, files[i]);
+			for (File file : files) {
+				if (file.isDirectory()) {
+					openAllFilesIn(rtext, file);
 				}
 				else {
-					rtext.openFile(files[i]);
+					rtext.openFile(file);
 				}
 			}
 		}
@@ -1011,9 +1011,6 @@ public class RTextUtilities {
 				UIUtil.installOsSpecificLafTweaks();
 				StoreKeeper.updateLookAndFeels(lnf);
 
-			} catch (NoClassDefFoundError ncdfe) {
-				// They missed a required LaF jar on in LookAndFeels.xml
-				rtext.displayException(ncdfe);
 			} catch (Exception e) {
 				rtext.displayException(e);
 			}

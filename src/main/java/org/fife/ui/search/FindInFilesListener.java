@@ -27,7 +27,7 @@ public interface FindInFilesListener extends EventListener {
 	 *
 	 * @param e The event.
 	 */
-	public void findInFilesFileSelected(FindInFilesEvent e);
+	void findInFilesFileSelected(FindInFilesEvent e);
 
 
 }

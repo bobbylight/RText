@@ -155,7 +155,7 @@ public class Plugin extends GUIPlugin {
 	 *
 	 * @return The file.
 	 */
-	private static final File getPrefsFile() {
+	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"console.properties");
 	}

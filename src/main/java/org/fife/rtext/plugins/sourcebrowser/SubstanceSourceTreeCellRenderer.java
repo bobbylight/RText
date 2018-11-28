@@ -89,7 +89,7 @@ class SubstanceSourceTreeCellRenderer extends SubstanceDefaultTreeCellRenderer {
 		if (icon==null) { // Languages without custom icons.
 			if (leaf && value!=null) {
 				String strVal = value.toString();
-				if (strVal!=null && strVal.indexOf("(0)")==-1) {
+				if (strVal!=null && !strVal.contains("(0)")) {
 					setIcon(icon = greenBullet);
 				}
 			}

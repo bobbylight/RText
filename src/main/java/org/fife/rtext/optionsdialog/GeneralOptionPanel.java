@@ -108,7 +108,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 			newFilePanel.add(dirLabel);
 		}
 		JLabel newlineLabel = new JLabel(msg.getString("LineTerminator"));
-		terminatorCombo = new LabelValueComboBox<String, String>();
+		terminatorCombo = new LabelValueComboBox<>();
 		UIUtil.fixComboOrientation(terminatorCombo);
 		terminatorCombo.addLabelValuePair(msg.getString("SysDef"), TERM_SYSTEM);
 		terminatorCombo.addLabelValuePair(msg.getString("CR"),     TERM_CR);

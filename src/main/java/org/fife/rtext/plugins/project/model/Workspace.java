@@ -59,7 +59,7 @@ public class Workspace implements ModelEntity {
 		this.plugin = plugin;
 		this.file = file;
 		this.name = getNameFromFile(file);//setName(getNameFromFile(file));
-		projects = new ArrayList<Project>();
+		projects = new ArrayList<>();
 	}
 
 
@@ -324,7 +324,7 @@ public class Workspace implements ModelEntity {
 		Document doc = domCreator.getDocument();
 
 		Result result = new StreamResult(loc);
-		Transformer t = null;
+		Transformer t;
 		try {
 			t = TransformerFactory.newInstance().newTransformer();
 			t.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -332,8 +332,6 @@ public class Workspace implements ModelEntity {
 			t.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 			t.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "rtext-workspace.dtd");
 			t.transform(new DOMSource(doc), result);
-		} catch (TransformerConfigurationException tce) {
-			throw new IOException(tce.getMessage());
 		} catch (TransformerException te) {
 			throw new IOException(te.getMessage());
 		}
@@ -394,8 +392,7 @@ public class Workspace implements ModelEntity {
 		}
 
 		@Override
-		public InputSource resolveEntity(String publicID,  String systemID)
-				throws SAXException {
+		public InputSource resolveEntity(String publicID,  String systemID) {
 			return new InputSource(getClass().
 					getResourceAsStream("rtext-workspace-1.0.dtd"));
 		}

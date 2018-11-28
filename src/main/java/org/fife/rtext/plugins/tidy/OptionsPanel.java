@@ -358,7 +358,7 @@ class OptionsPanel extends PluginOptionsDialogPanel
 	 * @param spinner The spinner.
 	 * @return The value displayed by the spinner.
 	 */
-	private static final int getIntValue(JSpinner spinner) {
+	private static int getIntValue(JSpinner spinner) {
 		return ((Integer)spinner.getValue());
 	}
 

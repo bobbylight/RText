@@ -681,7 +681,7 @@ public abstract class AbstractMainView extends JPanel
 		int numDocuments = fromPanel.getNumDocuments();
 		int fromSelectedIndex = fromPanel.getSelectedIndex();
 		ArrayList<RTextScrollPane> scrollPanes =
-				new ArrayList<RTextScrollPane>(numDocuments);
+			new ArrayList<>(numDocuments);
 		for (int i=0; i<numDocuments; i++) {
 			scrollPanes.add(fromPanel.getRTextScrollPaneAt(0));
 			fromPanel.removeComponentAt(0);
@@ -2270,11 +2270,11 @@ public abstract class AbstractMainView extends JPanel
 		capsLockAction = new CapsLockAction(owner);
 
 		// Get folding states before creating initial editors.
-		codeFoldingEnabledStates = new HashMap<String, Boolean>();
+		codeFoldingEnabledStates = new HashMap<>();
 		if (prefs.codeFoldingEnabledFor!=null) {
 			String[] languages = prefs.codeFoldingEnabledFor.split(",");
-			for (int i=0; i<languages.length; i++) {
-				codeFoldingEnabledStates.put(languages[i], Boolean.TRUE);
+			for (String language : languages) {
+				codeFoldingEnabledStates.put(language, Boolean.TRUE);
 			}
 		}
 
@@ -2287,9 +2287,9 @@ public abstract class AbstractMainView extends JPanel
 			addNewEmptyUntitledFile();
 		}
 		else {
-			for (int i=0; i<filesToOpen.length; i++) {
+			for (String s : filesToOpen) {
 				// The "null" encoding means they'll be checked for Unicode.
-				openFile(filesToOpen[i], null);
+				openFile(s, null);
 			}
 		}
 		setSelectedIndex(0);
@@ -2601,7 +2601,7 @@ public abstract class AbstractMainView extends JPanel
 		else if (propertyName.equals(RTextEditorPane.DIRTY_PROPERTY)) {
 			int selectedIndex = getSelectedIndex();
 			String oldTitle = getDocumentDisplayNameAt(selectedIndex);
-			if (((Boolean)e.getNewValue()).booleanValue())
+			if ((Boolean)e.getNewValue())
 				setDocumentDisplayNameAt(selectedIndex, oldTitle+"*");
 			else {
 				setDocumentDisplayNameAt(selectedIndex,
@@ -3194,7 +3194,7 @@ public abstract class AbstractMainView extends JPanel
 	public void setCodeFoldingEnabledFor(String language, boolean enabled) {
 		boolean prev = isCodeFoldingEnabledFor(language);
 		if (enabled!=prev) {
-			codeFoldingEnabledStates.put(language, Boolean.valueOf(enabled));
+			codeFoldingEnabledStates.put(language, enabled);
 			for (int i=0; i<getNumDocuments(); i++) {
 				RTextEditorPane textArea = getRTextEditorPaneAt(i);
 				if (language.equals(textArea.getSyntaxEditingStyle())) {

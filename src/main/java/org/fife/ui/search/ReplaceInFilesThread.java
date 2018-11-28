@@ -57,7 +57,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 		// Then, do the search.
 		dialog.clearSearchResults();
 		File[] files = directory.listFiles();
-		List<File> fileList = new ArrayList<File>();
+		List<File> fileList = new ArrayList<>();
 		fileList.addAll(Arrays.asList(files));
 
 		boolean checkSubfolders = dialog.getCheckSubfolders();
@@ -117,15 +117,12 @@ class ReplaceInFilesThread extends FindInFilesThread {
 					// somehow.
 					UnicodeReader ur = new UnicodeReader(temp);
 					encoding = ur.getEncoding();
-					Reader r = new BufferedReader(ur);
-					try {
+					try (Reader r = new BufferedReader(ur)) {
 						int count = 0;
 						sb.setLength(0);
-						while ((count=r.read(buf))!=-1) {
-							sb.append(buf,0,count);
+						while ((count = r.read(buf)) != -1) {
+							sb.append(buf, 0, count);
 						}
-					} finally {
-						r.close();
 					}
 				} catch (IOException ioe) {
 					MatchData data = createErrorMatchData(fileFullPath,

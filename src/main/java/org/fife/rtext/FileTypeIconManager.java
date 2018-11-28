@@ -64,7 +64,7 @@ public final class FileTypeIconManager {
 		ClassLoader cl = this.getClass().getClassLoader();
 		defaultIcon = new ImageIcon(cl.getResource(DEFAULT_ICON_PATH));
 
-		type2IconNameMap = new HashMap<String, String>();
+		type2IconNameMap = new HashMap<>();
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_C,				PATH + "c.gif");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_CLOJURE,			PATH + "clojure.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS,		PATH + "cpp.gif");
@@ -84,7 +84,7 @@ public final class FileTypeIconManager {
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH,	PATH + "bat.gif");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_XML,				PATH + "xml.png");
 
-		iconName2IconMap = new HashMap<String, Icon>();
+		iconName2IconMap = new HashMap<>();
 
 	}
 
@@ -192,7 +192,7 @@ public final class FileTypeIconManager {
 		public void propertyChange(PropertyChangeEvent e) {
 			String propertyName = e.getPropertyName();
 			if (RTextEditorPane.DIRTY_PROPERTY.equals(propertyName)) {
-				paintModifiedMarker = ((Boolean)e.getNewValue()).booleanValue();
+				paintModifiedMarker = (Boolean)e.getNewValue();
 			}
 		}
 

@@ -163,7 +163,7 @@ public class ProjectPlugin extends GUIPlugin {
 	 *
 	 * @return The preferences file for this plugin.
 	 */
-	private static final File getPrefsFile() {
+	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 				"projects.properties");
 	}

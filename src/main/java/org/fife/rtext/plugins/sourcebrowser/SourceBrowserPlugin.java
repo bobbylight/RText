@@ -310,7 +310,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 			return;
 		}
 
-		Object[] args = { Boolean.valueOf(sortButton.isSelected()) };
+		Object[] args = {sortButton.isSelected()};
 		try {
 			sortMethod.invoke(sourceTree, args);
 		} catch (RuntimeException re) { // FindBugs

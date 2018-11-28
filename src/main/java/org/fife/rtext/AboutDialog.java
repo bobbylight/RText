@@ -151,13 +151,10 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 		sb.append("</table>");
 
 		final SelectableLabel label = new SelectableLabel(sb.toString());
-		label.addHyperlinkListener(new HyperlinkListener() {
-			@Override
-			public void hyperlinkUpdate(HyperlinkEvent e) {
-				if (HyperlinkEvent.EventType.ACTIVATED==e.getEventType()) {
-					if (!UIUtil.browse(e.getDescription())) {
-						UIManager.getLookAndFeel().provideErrorFeedback(label);
-					}
+		label.addHyperlinkListener(e -> {
+			if (HyperlinkEvent.EventType.ACTIVATED==e.getEventType()) {
+				if (!UIUtil.browse(e.getDescription())) {
+					UIManager.getLookAndFeel().provideErrorFeedback(label);
 				}
 			}
 		});

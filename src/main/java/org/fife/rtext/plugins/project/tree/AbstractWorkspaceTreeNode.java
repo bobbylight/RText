@@ -193,11 +193,11 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			int rc = chooser.showOpenDialog(plugin.getRText());
 			if (rc==RTextFileChooser.APPROVE_OPTION) {
 				File[] toAdd = chooser.getSelectedFiles();
-				for (int i=0; i<toAdd.length; i++) {
-					ProjectEntry entry = new FileProjectEntry(parent, toAdd[i]);
+				for (File file : toAdd) {
+					ProjectEntry entry = new FileProjectEntry(parent, file);
 					parent.addEntry(entry);
 					FileProjectEntryTreeNode childNode =
-							new FileProjectEntryTreeNode(plugin, entry);
+						new FileProjectEntryTreeNode(plugin, entry);
 					plugin.insertTreeNodeInto(childNode, node);
 				}
 			}
@@ -324,12 +324,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// Run later to allow popup to hide
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					handleDelete();
-				}
-			});
+			SwingUtilities.invokeLater(AbstractWorkspaceTreeNode.this::handleDelete);
 		}
 
 	}

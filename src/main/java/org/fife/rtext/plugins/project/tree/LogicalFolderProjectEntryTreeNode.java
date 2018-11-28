@@ -69,7 +69,7 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 	@Override
 	public List<PopupContent> getPopupActions() {
-		List<PopupContent> actions = new ArrayList<PopupContent>();
+		List<PopupContent> actions = new ArrayList<>();
 		LogicalFolderProjectEntry entry = (LogicalFolderProjectEntry)this.entry;
 		actions.add(new AddFileAction(entry, this));
 		actions.add(new AddFolderAction(entry, this));

@@ -160,7 +160,7 @@ public class RecentFileDialog extends EscapableDialog {
 	 * @param pattern The pattern for the file name.
 	 * @return Whether the file's name matched the pattern.
 	 */
-	private static final boolean matches(FileLocation loc, Pattern pattern) {
+	private static boolean matches(FileLocation loc, Pattern pattern) {
 		if (pattern == null) {
 			return true;
 		}

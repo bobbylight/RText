@@ -97,7 +97,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	 */
 	// We can't be more specific with our type as Swing's not genericized
 	public Comparator<Object> createComparator() {
-		return new Comparator<Object>() {
+		return new Comparator<>() {
 			@Override
 			public int compare(Object o1, Object o2) {
 				SourceTreeNode stn1 = (SourceTreeNode)o1;
@@ -232,7 +232,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 		if (children!=null) {
 			visibleChildren.addAll(children);
 			if (sortable && sorted) {
-				Collections.sort(visibleChildren, createComparator());
+				visibleChildren.sort(createComparator());
 			}
 			if (prefix!=null) {
 				Iterator<TreeNode> i = visibleChildren.iterator();

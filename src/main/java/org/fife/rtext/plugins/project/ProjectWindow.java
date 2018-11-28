@@ -353,7 +353,7 @@ class ProjectWindow extends DockableWindow {
 		}
 
 		private void setSelected(boolean selected) {
-			putValue(Action.SELECTED_KEY, Boolean.valueOf(selected));
+			putValue(Action.SELECTED_KEY, selected);
 		}
 
 	}

@@ -71,8 +71,8 @@ class OpenAction extends AppAction<RText> {
 
 				// Add each file, one at a time.
 				File [] selectedFiles = chooser.getSelectedFiles();
-				for (int i=0; i<selectedFiles.length; i++) {
-					String fileFullPath = selectedFiles[i].getAbsolutePath();
+				for (File selectedFile : selectedFiles) {
+					String fileFullPath = selectedFile.getAbsolutePath();
 					mainView.openFile(fileFullPath, encoding);
 				}
 

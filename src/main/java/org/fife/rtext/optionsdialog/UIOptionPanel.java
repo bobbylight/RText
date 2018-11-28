@@ -141,7 +141,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		lnfCombo.setActionCommand("LookAndFeelComboBox");
 		lnfCombo.addActionListener(this);
 
-		imageLnFCombo = new LabelValueComboBox<String, String>();
+		imageLnFCombo = new LabelValueComboBox<>();
 		UIUtil.fixComboOrientation(imageLnFCombo);
 		imageLnFCombo.setActionCommand("IconComboBox");
 		imageLnFCombo.addActionListener(this);
@@ -278,10 +278,10 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @param rtext The parent RText instance.
 	 * @return The combo box.
 	 */
-	private static final LabelValueComboBox<String, String> createLookAndFeelComboBox(
+	private static LabelValueComboBox<String, String> createLookAndFeelComboBox(
 			RText rtext) {
 
-		LabelValueComboBox<String, String> combo = new LabelValueComboBox<String, String>();
+		LabelValueComboBox<String, String> combo = new LabelValueComboBox<>();
 		UIUtil.fixComboOrientation(combo);
 		boolean osIsWindows = rtext.getOS()==OS.WINDOWS;
 
@@ -297,15 +297,15 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 			}
 		}
 
-		for (int i=0; i<infos.length; i++) {
+		for (LookAndFeelInfo info1 : infos) {
 			// NOTE: It would be nice if we could check the
 			// LookAndFeel.isSupportedLookAndFeel() method, but that would
 			// require loading each LnF class, which we're trying to avoid.
 			// We'll assume Windows supports all LnFs, and any other OS does
 			// NOT support a standard Look with "Windows" in the name.
-			String name = infos[i].getName();
+			String name = info1.getName();
 			if (osIsWindows || !(name.toLowerCase().contains("windows"))) {
-				combo.addLabelValuePair(name, infos[i].getClassName());
+				combo.addLabelValuePair(name, info1.getClassName());
 			}
 		}
 
@@ -322,8 +322,8 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		// Add any 3rd party Look and Feels in the lnfs subdirectory.
 		ExtendedLookAndFeelInfo[] info = rtext.get3rdPartyLookAndFeelInfo();
 		if (info!=null && info.length>0) {
-			for (int i=0; i<info.length; i++) {
-				combo.addLabelValuePair(info[i].getName(),info[i].getClassName());
+			for (ExtendedLookAndFeelInfo extendedLookAndFeelInfo : info) {
+				combo.addLabelValuePair(extendedLookAndFeelInfo.getName(), extendedLookAndFeelInfo.getClassName());
 			}
 		}
 

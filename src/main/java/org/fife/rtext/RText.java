@@ -884,7 +884,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	private void initRecentFileManager(RTextPrefs prefs) {
 
 		String fileHistoryStr = prefs.fileHistoryString;
-		java.util.List<String> recentFiles = new ArrayList<String>();
+		java.util.List<String> recentFiles = new ArrayList<>();
 		if (fileHistoryStr != null && fileHistoryStr.length() > 0) {
 			String[] initialContents = fileHistoryStr.split("<");
 			recentFiles.addAll(Arrays.asList(initialContents));
@@ -1190,8 +1190,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		// Save preferences for any plugins.
 		Plugin[] plugins = getPlugins();
 		int count = plugins.length;
-		for (int i=0; i<count; i++) {
-			plugins[i].savePreferences();
+		for (Plugin plugin : plugins) {
+			plugin.savePreferences();
 		}
 
 		// Save the file chooser's properties, if it has been instantiated.

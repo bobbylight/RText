@@ -33,7 +33,7 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 	public LogicalFolderProjectEntry(ProjectEntryParent parent, String name) {
 		super(parent);
 		this.name = name;
-		entries = new ArrayList<ProjectEntry>();
+		entries = new ArrayList<>();
 	}
 
 

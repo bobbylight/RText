@@ -23,10 +23,10 @@ import javax.swing.JMenu;
 public interface PopupContent {
 
 
-	public static interface PopupAction extends Action, PopupContent {}
+	interface PopupAction extends Action, PopupContent {}
 
 
-	public static class PopupSubMenu extends JMenu implements PopupContent {
+	class PopupSubMenu extends JMenu implements PopupContent {
 
 		public PopupSubMenu(String text) {
 			super(text);

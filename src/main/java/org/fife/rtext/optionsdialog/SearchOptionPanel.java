@@ -115,7 +115,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 		translucentSearchDialogsCB.addActionListener(this);
 		addLeftAligned(expPanel, translucentSearchDialogsCB);
 		ruleLabel = new JLabel(msg.getString("TranslucencyRule"));
-		ruleCombo = new LabelValueComboBox<String, String>();
+		ruleCombo = new LabelValueComboBox<>();
 		ruleCombo.addLabelValuePair(msg.getString("Translucency.Never"), "0");
 		ruleCombo.addLabelValuePair(msg.getString("Translucency.WhenNotFocused"), "1");
 		ruleCombo.addLabelValuePair(msg.getString("Translucency.WhenOverlappingApp"), "2");

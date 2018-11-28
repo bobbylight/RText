@@ -53,7 +53,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 
 	static {
 
-		tagTypesMap = new HashMap<String, String>();
+		tagTypesMap = new HashMap<>();
 		tagTypesMap.put(SYNTAX_STYLE_NONE,				"");
 		tagTypesMap.put(SYNTAX_STYLE_ACTIONSCRIPT,		"fcmpvx");
 		tagTypesMap.put(SYNTAX_STYLE_ASSEMBLER_X86,		"");
@@ -97,12 +97,12 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	public SourceBrowserThread(SourceBrowserPlugin plugin) {
 
 		this.plugin = plugin;
-		map = new HashMap<String, List<TagEntry>>();
+		map = new HashMap<>();
 
 		// Create a cache of array lists to use for performance.
-		arrayListBuffer = new ArrayList<List<TagEntry>>(MAX_NUM_HASH_MAPS);
+		arrayListBuffer = new ArrayList<>(MAX_NUM_HASH_MAPS);
 		for (int i=0; i<MAX_NUM_HASH_MAPS; i++) {
-			arrayListBuffer.add(new ArrayList<TagEntry>());
+			arrayListBuffer.add(new ArrayList<>());
 		}
 
 	}

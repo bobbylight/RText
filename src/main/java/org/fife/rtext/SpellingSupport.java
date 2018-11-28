@@ -50,7 +50,7 @@ public class SpellingSupport implements SpellingParserListener {
 	private String spellingDictionary;
 	private File userDictionary;
 	private int maxSpellingErrors;
-	private ViewSpellingErrorWindowAction vsewAction;
+	private ViewSpellingErrorWindowAction viewAction;
 
 	private static final String VIEW_SPELLING_ERROR_WINDOW
 									= "viewSpellingErrorWindowAction";
@@ -72,12 +72,12 @@ public class SpellingSupport implements SpellingParserListener {
 	 */
 	private void addViewErrorWindowMenuItem() {
 
-		vsewAction = new ViewSpellingErrorWindowAction(rtext);
+		viewAction = new ViewSpellingErrorWindowAction(rtext);
 
 		// Add a menu item to toggle the visibility of the dockable window
-		rtext.addAction(VIEW_SPELLING_ERROR_WINDOW, vsewAction);
+		rtext.addAction(VIEW_SPELLING_ERROR_WINDOW, viewAction);
 		RTextMenuBar mb = (RTextMenuBar)rtext.getJMenuBar();
-		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(vsewAction);
+		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(viewAction);
 		item.applyComponentOrientation(rtext.getComponentOrientation());
 		JMenu viewMenu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
 		viewMenu.add(item);
@@ -114,12 +114,7 @@ public class SpellingSupport implements SpellingParserListener {
 		setUserDictionary(prefs.userDictionary);
 
 		// Add menu item later since menu bar not yet created(!)
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				addViewErrorWindowMenuItem();
-			}
-		});
+		SwingUtilities.invokeLater(this::addViewErrorWindowMenuItem);
 
 	}
 
@@ -325,8 +320,8 @@ public class SpellingSupport implements SpellingParserListener {
 
 			// Set the dictionary file, ensuring it is valid.
 			boolean valid = false;
-			for (int i=0; i<DICTIONARIES.length; i++) {
-				if (DICTIONARIES[i].equals(dict)) {
+			for (String dictionary : DICTIONARIES) {
+				if (dictionary.equals(dict)) {
 					valid = true;
 					break;
 				}
@@ -467,20 +462,12 @@ public class SpellingSupport implements SpellingParserListener {
 		public void run() {
 			try {
 				createSpellingParser();
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						toggleSpellingParserInstalled();
-					}
-				});
+				SwingUtilities.invokeLater(SpellingSupport.this::toggleSpellingParserInstalled);
 			} catch (final IOException ioe) {
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						String desc= rtext.getString(
-							"Error.LoadingSpellingParser.txt");
-						rtext.displayException(ioe, desc);
-					}
+				SwingUtilities.invokeLater(() -> {
+					String desc= rtext.getString(
+						"Error.LoadingSpellingParser.txt");
+					rtext.displayException(ioe, desc);
 				});
 			}
 		}

@@ -449,8 +449,8 @@ ac.install(dirField);
 
 		argModel.setRowCount(0);
 		String[] args = tool.getArgs();
-		for (int i=0; i<args.length; i++) {
-			argModel.addRow(new String[] { args[i] });
+		for (String arg : args) {
+			argModel.addRow(new String[]{arg});
 		}
 
 		if (tool.getAppendEnvironmentVars()) {

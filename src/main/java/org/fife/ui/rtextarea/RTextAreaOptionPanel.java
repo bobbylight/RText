@@ -1062,7 +1062,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			Object value, int index, boolean selected, boolean hasFocus) {
 			super.getListCellRendererComponent(list, value, index,
 										selected, hasFocus);
-			int i = ((Integer)value).intValue();
+			int i = (Integer)value;
 			setText(InputEvent.getModifiersExText(i));
 			return this;
 		}

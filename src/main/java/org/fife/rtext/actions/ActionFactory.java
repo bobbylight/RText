@@ -92,7 +92,7 @@ public final class ActionFactory implements RTextActionInfo {
 		a = new SaveAllAction(rtext, msg, null);
 		rtext.addAction(SAVE_ALL_ACTION, a);
 
-		a = new RText.ExitAction<RText>(rtext, msg, "ExitAction");
+		a = new RText.ExitAction<>(rtext, msg, "ExitAction");
 		rtext.addAction(RText.EXIT_ACTION_KEY, a);
 
 		String temp = msg.getString("CopyAsRtfAction");
@@ -109,10 +109,10 @@ public final class ActionFactory implements RTextActionInfo {
 			(int)msg.getString("TimeAction.Mnemonic").charAt(0),
 			null));
 
-		a = new RText.ToggleToolBarAction<RText>(rtext, msg, "ToolBarAction");
+		a = new RText.ToggleToolBarAction<>(rtext, msg, "ToolBarAction");
 		rtext.addAction(TOOL_BAR_ACTION, a);
 
-		a = new RText.ToggleStatusBarAction<RText>(rtext, msg, "StatusBarAction");
+		a = new RText.ToggleStatusBarAction<>(rtext, msg, "StatusBarAction");
 		rtext.addAction(STATUS_BAR_ACTION, a);
 
 		a = new LineNumberAction(rtext, msg, null);
@@ -121,13 +121,13 @@ public final class ActionFactory implements RTextActionInfo {
 		a = new FilePropertiesAction(rtext, msg);
 		rtext.addAction(FILE_PROPERTIES_ACTION, a);
 
-		a = new HelpAction<RText>(rtext, msg, "HelpAction");
+		a = new HelpAction<>(rtext, msg, "HelpAction");
 		rtext.addAction(RText.HELP_ACTION_KEY, a);
 
-		a = new AboutAction<RText>(rtext, msg, "AboutAction");
+		a = new AboutAction<>(rtext, msg, "AboutAction");
 		rtext.addAction(RText.ABOUT_ACTION_KEY, a);
 
-		a = new AbstractGUIApplication.OptionsAction<RText>(rtext, msg, "OptionsAction");
+		a = new AbstractGUIApplication.OptionsAction<>(rtext, msg, "OptionsAction");
 		rtext.addAction(OPTIONS_ACTION, a);
 
 		a = new HomePageAction(rtext, msg, null);

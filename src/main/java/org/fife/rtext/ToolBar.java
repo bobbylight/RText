@@ -210,7 +210,7 @@ class ToolBar extends CustomizableToolBar {
 	 * @param button The button.
 	 * @param mouseListener A mouse listener to add.
 	 */
-	private final void configure(JButton button, StatusBar mouseListener) {
+	private void configure(JButton button, StatusBar mouseListener) {
 		// Bug in Windows 1.4 and some 1.5 JRE's - changing LAF to
 		// windows LAF causes margin to become much too wide.
 		if (owner.getOS()==OS.WINDOWS) {

@@ -48,7 +48,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		ResourceBundle msg = ResourceBundle.getBundle(
 								"org.fife.rtext.OptionsDialog");
 
-		List<OptionsDialogPanel> panels = new ArrayList<OptionsDialogPanel>();
+		List<OptionsDialogPanel> panels = new ArrayList<>();
 
 		OptionsDialogPanel panel = new GeneralOptionPanel(rtext, msg);
 		setIcon(panel, "general.png");
@@ -103,14 +103,13 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		panels.add(panel);
 
 		Plugin[] plugins = rtext.getPlugins();
-		for (int i=0; i<plugins.length; i++) {
-			Plugin plugin = plugins[i];
+		for (Plugin plugin : plugins) {
 			panel = plugin.getOptionsDialogPanel();
-			if (panel!=null) {
+			if (panel != null) {
 				String parentID = plugin.getOptionsDialogPanelParentPanelID();
-				if (parentID!=null) {
+				if (parentID != null) {
 					OptionsDialogPanel parent = getPanelById(panels, parentID);
-					if (parent!=null) {
+					if (parent != null) {
 						parent.addChildPanel(panel);
 					}
 					else { // Unknown parent specified...

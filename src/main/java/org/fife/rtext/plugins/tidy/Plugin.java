@@ -101,7 +101,7 @@ public class Plugin extends AbstractPlugin
 	 * Attempts to delete older versions' preferences (&lt;= RText 2.06),
 	 * since this plugin has consolidated all preferences into a single file.
 	 */
-	private static final void deleteOldVersionTidyPreferenceFiles() {
+	private static void deleteOldVersionTidyPreferenceFiles() {
 
 		File oldPrefsDir = new File(RTextUtilities.getPreferencesDirectory(),
 				"tidy");
@@ -109,8 +109,8 @@ public class Plugin extends AbstractPlugin
 
 			boolean success = true;
 			File[] propFiles = oldPrefsDir.listFiles();
-			for (int i=0; i<propFiles.length; i++) {
-				success &= propFiles[i].delete();
+			for (File propFile : propFiles) {
+				success &= propFile.delete();
 			}
 
 			if (success) {
@@ -213,7 +213,7 @@ public class Plugin extends AbstractPlugin
 	 *
 	 * @return The file.
 	 */
-	private static final File getPrefsFile() {
+	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"tidy.properties");
 	}
@@ -281,7 +281,7 @@ public class Plugin extends AbstractPlugin
 	 * @param style The language.
 	 * @return Whether the language can be pretty printed.
 	 */
-	private static final boolean isSupportedLanguage(String style) {
+	private static boolean isSupportedLanguage(String style) {
 		return SyntaxConstants.SYNTAX_STYLE_HTML.equals(style) ||
 				SyntaxConstants.SYNTAX_STYLE_XML.equals(style) ||
 				SyntaxConstants.SYNTAX_STYLE_JSON.equals(style);
@@ -304,12 +304,9 @@ public class Plugin extends AbstractPlugin
 			try {
 
 				Properties props = new Properties();
-				BufferedInputStream bin = new BufferedInputStream(
-						new FileInputStream(prefsFile));
-				try {
+				try (BufferedInputStream bin = new BufferedInputStream(
+					new FileInputStream(prefsFile))) {
 					props.load(bin);
-				} finally {
-					bin.close();
 				}
 
 				htmlOptions.load(props);
@@ -352,13 +349,10 @@ public class Plugin extends AbstractPlugin
 			prefs.tidyActionAccelerator = action.getAccelerator();
 			prefs.save(props);
 
-			BufferedOutputStream out = new BufferedOutputStream(
-					new FileOutputStream(prefsFile));
-			try {
+			try (BufferedOutputStream out = new BufferedOutputStream(
+				new FileOutputStream(prefsFile))) {
 				props.store(out,
-						"Preferences for the tidy/pretty-print plugin");
-			} finally {
-				out.close();
+					"Preferences for the tidy/pretty-print plugin");
 			}
 
 		} catch (IOException ioe) {

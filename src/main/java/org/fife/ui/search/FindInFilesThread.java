@@ -78,7 +78,7 @@ class FindInFilesThread extends GUIWorkerThread {
 		this.dialog = dialog;
 		this.directory = directory;
 
-		folderNamesToSkip = new HashSet<String>();
+		folderNamesToSkip = new HashSet<>();
 		String[] tempFoldersToSkip = dialog.getSkipFolders();
 		if (tempFoldersToSkip != null) {
 			for (String folderName : tempFoldersToSkip) {
@@ -134,7 +134,7 @@ class FindInFilesThread extends GUIWorkerThread {
 		// Then, do the search.
 		dialog.clearSearchResults();
 		File[] files = directory.listFiles();
-		List<File> fileList = new ArrayList<File>();
+		List<File> fileList = new ArrayList<>();
 		fileList.addAll(Arrays.asList(files));
 
 		boolean checkSubfolders = dialog.getCheckSubfolders();
@@ -453,12 +453,12 @@ class FindInFilesThread extends GUIWorkerThread {
 	 * @param dir The directory.
 	 * @return The files in the directory, as a list.
 	 */
-	protected static final List<File> getFilesFromDirectory(File dir) {
+	protected static List<File> getFilesFromDirectory(File dir) {
 		// Get the list of files in this directory.
 		File[] moreFiles = dir.listFiles();
 		if (moreFiles==null) {
 			// Should never happen (as dirs return empty arrays).
-			return new ArrayList<File>(0);
+			return new ArrayList<>(0);
 		}
 		return Arrays.asList(moreFiles);
 	}
@@ -501,7 +501,7 @@ class FindInFilesThread extends GUIWorkerThread {
 	 * @param textArea The text area to get the highlighting information from.
 	 * @return The HTML.
 	 */
-	private static final String getHtml(Token t, RSyntaxTextArea textArea) {
+	private static String getHtml(Token t, RSyntaxTextArea textArea) {
 
 		// HTML rendering in Swing is very slow, and we've also seen OOME's
 		// from trying render lines that were too long in the Find in Files
@@ -545,7 +545,7 @@ class FindInFilesThread extends GUIWorkerThread {
 	 *         expression for the string passed in.  If an error occurs,
 	 *         <code>null</code> is returned.
 	 */
-	protected static final String getRegexForFileFilter(String filter) {
+	protected static String getRegexForFileFilter(String filter) {
 		filter = filter.replaceAll("\\.", "\\\\.");		// '.' => '\.'
 		filter = filter.replaceAll("\\*", ".*");		// '*' => '.*'
 		filter = filter.replaceAll("\\?", ".");			// '?' => '.'
@@ -562,10 +562,10 @@ class FindInFilesThread extends GUIWorkerThread {
 	 * @param filters The filters for files to search.
 	 * @return Whether the file is filtered out.
 	 */
-	protected static final boolean isFilteredOut(String file,
-										Pattern[] filters) {
-		for (int j=0; j<filters.length; j++) {
-			if (filters[j].matcher(file).matches()) {
+	protected static boolean isFilteredOut(String file,
+										   Pattern[] filters) {
+		for (Pattern filter : filters) {
+			if (filter.matcher(file).matches()) {
 				return false;
 			}
 		}

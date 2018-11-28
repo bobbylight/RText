@@ -89,7 +89,7 @@ class DOMModelCreator implements WorkspaceVisitor {
 		doc.appendChild(root);
 		projectsElem = doc.createElement("projects");
 		root.appendChild(projectsElem);
-		projEntryParentStack = new Stack<Element>();
+		projEntryParentStack = new Stack<>();
 	}
 
 

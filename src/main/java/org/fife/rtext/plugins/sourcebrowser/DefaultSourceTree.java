@@ -163,7 +163,7 @@ class DefaultSourceTree extends JTree {
 				String tagText = node.toString();
 				if (treeModel.isLeaf(node) &&
 						tagText!=null &&
-						tagText.indexOf("(0)")==-1 &&
+					!tagText.contains("(0)") &&
 						!tagText.startsWith("<")) {
 
 					ignoreTreeSelections = true;

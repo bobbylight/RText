@@ -21,17 +21,17 @@ interface PrettyPrinter {
 	/**
 	 * Specifies that there were no issues formatting the source.
 	 */
-	public static final int RESULT_OK				= 0;
+	int RESULT_OK				= 0;
 
 	/**
 	 * Specifies that there were warnings formatting the source.
 	 */
-	public static final int RESULT_WARNINGS			= 1;
+	int RESULT_WARNINGS			= 1;
 
 	/**
 	 * Specifies that there were errors formatting the source.
 	 */
-	public static final int RESULT_ERRORS			= 2;
+	int RESULT_ERRORS			= 2;
 
 
 	/**

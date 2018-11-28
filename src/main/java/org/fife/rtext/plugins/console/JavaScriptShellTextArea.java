@@ -10,7 +10,6 @@
  */
 package org.fife.rtext.plugins.console;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -161,7 +160,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	 * @param e The exception to massage.
 	 * @return The error message to display for the exception in the console.
 	 */
-	private static final String massageScriptException(ScriptException e) {
+	private static String massageScriptException(ScriptException e) {
 
 		String text = e.getMessage();
 
@@ -169,9 +168,9 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 			"sun.org.mozilla.javascript.internal.EcmaError: ",
 			"sun.org.mozilla.javascript.internal.EvaluatorException: ",
 		};
-		for (int i=0; i<rhinoStarts.length; i++) {
-			if (text.startsWith(rhinoStarts[i])) {
-				text = text.substring(rhinoStarts[i].length());
+		for (String rhinoStart : rhinoStarts) {
+			if (text.startsWith(rhinoStart)) {
+				text = text.substring(rhinoStart.length());
 				break;
 			}
 		}
@@ -231,12 +230,12 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 		}
 
 		@Override
-		public void close() throws IOException {
+		public void close() {
 			// Do nothing
 		}
 
 		@Override
-		public void flush() throws IOException {
+		public void flush() {
 			// Do nothing
 		}
 

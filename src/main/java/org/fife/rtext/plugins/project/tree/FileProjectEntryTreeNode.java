@@ -79,7 +79,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 	@Override
 	public List<PopupContent> getPopupActions() {
-		List<PopupContent> actions = new ArrayList<PopupContent>();
+		List<PopupContent> actions = new ArrayList<>();
 		boolean dir = getFile().isDirectory();
 		if (!dir) {
 			actions.add(new OpenAction());

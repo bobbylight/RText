@@ -61,7 +61,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 	@Override
 	public List<PopupContent> getPopupActions() {
-		List<PopupContent> actions = new ArrayList<PopupContent>();
+		List<PopupContent> actions = new ArrayList<>();
 		actions.add(new AddFileAction(project, this));
 		actions.add(new AddFolderAction(project, this));
 		actions.add(new AddLogicalFolderAction(project, this));

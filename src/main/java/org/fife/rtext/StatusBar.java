@@ -261,8 +261,8 @@ public class StatusBar extends org.fife.ui.StatusBar
 
 		// If a file was just saved...
 		if (property.equals(RTextEditorPane.DIRTY_PROPERTY)) {
-			boolean wasDirty = ((Boolean)e.getOldValue()).booleanValue();
-			boolean isDirty = ((Boolean)e.getNewValue()).booleanValue();
+			boolean wasDirty = (Boolean)e.getOldValue();
+			boolean isDirty = (Boolean)e.getNewValue();
 			if (wasDirty && !isDirty)
 				setStatusMessage(fileSaveSuccessfulText);
 		}
@@ -279,7 +279,7 @@ public class StatusBar extends org.fife.ui.StatusBar
 		// NOTE:  We don't have the "else" below because we'll get both this
 		// property change notification and a DIRTY_PROPERTY one.
 		if (property.equals(RTextEditorPane.READ_ONLY_PROPERTY)) {
-			boolean enabled = ((Boolean)e.getNewValue()).booleanValue();
+			boolean enabled = (Boolean)e.getNewValue();
 			setReadOnlyIndicatorEnabled(enabled);
 		}
 

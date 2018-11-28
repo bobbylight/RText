@@ -89,8 +89,8 @@ public class AWTExceptionHandler {
 		if (logger!=null) {
 			// Manually close FileHandlers to remove .lck files.
 			Handler[] handlers = logger.getHandlers();
-			for (int i=0; i<handlers.length; i++) {
-				handlers[i].close();
+			for (Handler handler : handlers) {
+				handler.close();
 			}
 			logger = null;
 		}

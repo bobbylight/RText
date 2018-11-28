@@ -102,7 +102,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	}
 
 
-	protected static final long bytesToKb(long bytes) {
+	protected static long bytesToKb(long bytes) {
 		return bytes / 1024L;
 	}
 

@@ -63,7 +63,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 
 	@Override
 	public List<PopupContent> getPopupActions() {
-		List<PopupContent> actions = new ArrayList<PopupContent>();
+		List<PopupContent> actions = new ArrayList<>();
 		actions.add(new NewProjectAction());
 		actions.add(null);
 		actions.add(new RenameAction(true));
@@ -84,7 +84,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	 *
 	 * @return The shared icon instance.
 	 */
-	public static final Icon getWorkspaceIcon() {
+	public static Icon getWorkspaceIcon() {
 		return icon;
 	}
 

@@ -273,8 +273,8 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		Font font = null;
 		if (!fontName.equals("null")) {
 			int fontSize = Integer.parseInt(t2.nextToken());
-			boolean isBold = Boolean.valueOf(t2.nextToken()).booleanValue();
-			boolean isItalic = Boolean.valueOf(t2.nextToken()).booleanValue();
+			boolean isBold = Boolean.valueOf(t2.nextToken());
+			boolean isItalic = Boolean.valueOf(t2.nextToken());
 			int fontStyle = Font.PLAIN;
 			if (isBold) {
 				if (isItalic)

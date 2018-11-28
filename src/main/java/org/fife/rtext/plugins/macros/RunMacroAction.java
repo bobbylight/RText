@@ -108,7 +108,7 @@ public class RunMacroAction extends AppAction<RText> {
 	 *
 	 * @return The plugin jar directory.
 	 */
-	private final File getPluginDir() {
+	private File getPluginDir() {
 		return new File(getApplication().getInstallLocation(), "plugins");
 	}
 
@@ -131,11 +131,8 @@ public class RunMacroAction extends AppAction<RText> {
 		}
 
 		try {
-			BufferedReader r = new BufferedReader(new FileReader(file));
-			try {
+			try (BufferedReader r = new BufferedReader(new FileReader(file))) {
 				handleSubmit(file.getName(), r);
-			} finally {
-				r.close();
 			}
 		} catch (Throwable t/*IOException ioe*/) {
 			getApplication().displayException(t/*ioe*/);

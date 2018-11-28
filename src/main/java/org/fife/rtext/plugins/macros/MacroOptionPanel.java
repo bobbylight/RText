@@ -82,7 +82,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 				plugin.getString("Options.TableHeader.Shortcut"),
 				plugin.getString("Options.TableHeader.Description") }, 0);
 
-		List<Action> customButtons = new ArrayList<Action>();
+		List<Action> customButtons = new ArrayList<>();
 		customButtons.add(new AddExampleMacrosAction(plugin));
 
 		macroTable = new ModifiableTable(model, ModifiableTable.BOTTOM,
@@ -120,7 +120,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	 * @param toFile The new file.
 	 * @return Whether the operation was successful.
 	 */
-	private static final boolean copyFile(File fromFile, File toFile) {
+	private static boolean copyFile(File fromFile, File toFile) {
 		boolean success = false;
 		try {
 			Utilities.copyFile(fromFile, toFile);

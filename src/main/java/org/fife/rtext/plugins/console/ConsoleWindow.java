@@ -158,7 +158,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 		String prop = e.getPropertyName();
 
 		if (ConsoleTextArea.PROPERTY_PROCESS_RUNNING.equals(prop)) {
-			boolean running = ((Boolean)e.getNewValue()).booleanValue();
+			boolean running = (Boolean)e.getNewValue();
 			stopAction.setEnabled(running);
 		}
 
@@ -196,8 +196,8 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	 * @param fg
 	 * @param textArea
 	 */
-	private static final void setForegroundImpl(String style, Color fg,
-									ConsoleTextArea textArea) {
+	private static void setForegroundImpl(String style, Color fg,
+										  ConsoleTextArea textArea) {
 		Style s = textArea.getStyle(style);
 		if (s!=null) {
 			if (fg!=null) {

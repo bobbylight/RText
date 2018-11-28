@@ -69,19 +69,19 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	private void addChildrenFilteredAndSorted(File[] files) {
 
 		int num = files.length;
-		ArrayList<File> dirList = new ArrayList<File>();
-		ArrayList<File> fileList = new ArrayList<File>();
+		ArrayList<File> dirList = new ArrayList<>();
+		ArrayList<File> fileList = new ArrayList<>();
 
 		// First, separate the directories from regular files so we can
 		// sort them individually.  This part could be made more compact,
 		// but it isn't just for a tad more speed.
-		for (int i=0; i<num; i++) {
-			boolean isDir = files[i].isDirectory();
-			if (filterInfo!=null && filterInfo.isAllowed(files[i], isDir)) {
+		for (File file1 : files) {
+			boolean isDir = file1.isDirectory();
+			if (filterInfo != null && filterInfo.isAllowed(file1, isDir)) {
 				if (isDir)
-					dirList.add(files[i]);
+					dirList.add(file1);
 				else
-					fileList.add(files[i]);
+					fileList.add(file1);
 			}
 		}
 
@@ -124,7 +124,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	 * @param filters The array of filters, may be <code>null</code>.
 	 * @return A string representation of the filters.
 	 */
-	public static final String getFilterString(String[] filters) {
+	public static String getFilterString(String[] filters) {
 		return getFilterString(filters, "");
 	}
 
@@ -136,7 +136,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	 * @param def The value to display if the filter array is <code>null</code>.
 	 * @return A string representation of the filters.
 	 */
-	public static final String getFilterString(String[] filters, String def) {
+	public static String getFilterString(String[] filters, String def) {
 		return filters==null ? def : RTextUtilities.join(filters);
 	}
 
@@ -144,7 +144,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	@Override
 	public List<PopupContent> getPopupActions() {
 
-		List<PopupContent> actions = new ArrayList<PopupContent>();
+		List<PopupContent> actions = new ArrayList<>();
 		boolean isDir = getFile().isDirectory();
 
 		if (isDir) {
@@ -242,8 +242,8 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
-	public static final boolean handleDeleteNative(File[] files,
-										ProjectPlugin plugin) {
+	public static boolean handleDeleteNative(File[] files,
+											 ProjectPlugin plugin) {
 		FileIOExtras extras = FileIOExtras.getInstance();
 		RText rtext = plugin.getRText();
 		if (!extras.moveToRecycleBin(rtext, files, true, true)) {

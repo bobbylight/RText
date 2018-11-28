@@ -353,7 +353,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 				return;
 			}
 
-			List<String> cmdList = new ArrayList<String>();
+			List<String> cmdList = new ArrayList<>();
 			if (File.separatorChar=='/') {
 				cmdList.add("/bin/sh");
 				cmdList.add("-c");

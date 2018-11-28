@@ -37,7 +37,7 @@ public class ReplaceInFilesTable extends FindInFilesTable {
 	@Override
 	protected Vector<String> createMatchDataVector(String fileName,
 			MatchData data) {
-		Vector<String> v = new Vector<String>(2);
+		Vector<String> v = new Vector<>(2);
 		v.add(fileName);
 		v.add(data.getLineText());
 		return v;

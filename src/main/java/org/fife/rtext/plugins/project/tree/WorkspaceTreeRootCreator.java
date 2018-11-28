@@ -35,7 +35,7 @@ class WorkspaceTreeRootCreator implements WorkspaceVisitor {
 
 	public WorkspaceTreeRootCreator(ProjectPlugin plugin) {
 		this.plugin = plugin;
-		entryParentNodeStack = new Stack<AbstractWorkspaceTreeNode>();
+		entryParentNodeStack = new Stack<>();
 	}
 
 

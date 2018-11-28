@@ -95,7 +95,7 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 
 	public void parseErrors(File rootDir, String stdout) {
 
-		List<ParserNotice> errors = new ArrayList<ParserNotice>();
+		List<ParserNotice> errors = new ArrayList<>();
 
 		Pattern ERROR = Pattern.compile("([^\\(]+)\\((\\d+),(\\d+)\\): (.+)");
 
@@ -181,7 +181,7 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 				TypeScriptParserNotice tsNotice =
 						(TypeScriptParserNotice)notice;
 				Object[] data = {	getIcon(), tsNotice.getFileFullPath(),
-						Integer.valueOf(notice.getLine()),
+					notice.getLine(),
 						notice.getMessage() };
 				addRow(data);
 			}

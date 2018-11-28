@@ -380,8 +380,8 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 
 		if (contents!=null) {
 			String[] items = contents.split(";");
-			for (int i=0; i<items.length; i++) {
-				model.addRow(new Object[] { items[i] });
+			for (String item : items) {
+				model.addRow(new Object[]{item});
 			}
 		}
 

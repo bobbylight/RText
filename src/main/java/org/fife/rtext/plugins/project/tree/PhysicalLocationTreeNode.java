@@ -122,12 +122,12 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 	 * Creates a new child file or folder whose parent is this node's file
 	 * (which must be a directory).
 	 */
-	static class NewFileOrFolderAction extends BaseAction {
+	class NewFileOrFolderAction extends BaseAction {
 
 		private PhysicalLocationTreeNode node;
 		private boolean isFile;
 
-		public NewFileOrFolderAction(PhysicalLocationTreeNode node,
+		NewFileOrFolderAction(PhysicalLocationTreeNode node,
 				boolean isFile) {
 			super(isFile ? "Action.NewFile": "Action.NewFolder",
 				isFile ? "page_white_add.png" : "folder_add.png");

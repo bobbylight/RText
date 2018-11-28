@@ -113,7 +113,7 @@ class RTextSplitPaneView extends AbstractMainView
 
 		// These are initialized when documents are added.
 		selectedIndex = -1;
-		scrollPanes = new ArrayList<Component>();
+		scrollPanes = new ArrayList<>();
 
 		// Add transfer handler to listen for files being drag-and-dropped
 		// into this main view.
@@ -325,10 +325,10 @@ class RTextSplitPaneView extends AbstractMainView
 			for (int i=0; i<numDocuments; i++) {
 				RTextScrollPane sp = (RTextScrollPane)scrollPanes.get(i);
 				boolean reAdded = false;
-				for (int j=0; j<comps.length; j++) {
-					RTextScrollPane sp2 = (RTextScrollPane)((JPanel)comps[j]).getComponent(0);
-					if (sp==sp2) {
-						add(comps[j], Integer.toString(i));
+				for (Component comp : comps) {
+					RTextScrollPane sp2 = (RTextScrollPane)((JPanel)comp).getComponent(0);
+					if (sp == sp2) {
+						add(comp, Integer.toString(i));
 						reAdded = true;
 						break;
 					}

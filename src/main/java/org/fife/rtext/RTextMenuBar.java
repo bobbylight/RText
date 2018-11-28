@@ -607,7 +607,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		// Populate file history here to avoid issue with Darcula
 		List<FileLocation> recentFiles = rtext.getRecentFiles();
-		List<FileLocation> recentFilesCopy = new ArrayList<FileLocation>(recentFiles);
+		List<FileLocation> recentFilesCopy = new ArrayList<>(recentFiles);
 		Collections.reverse(recentFilesCopy);
 		for (FileLocation file : recentFilesCopy) {
 			recentFilesMenu.addFileToFileHistory(file.getFileFullPath());
@@ -734,17 +734,17 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 * @param metrics the font metrics to use for the calculation
 	 * @return  the width of the text
 	 */
-	private static final int getTextWidth(String s, FontMetrics metrics) {
+	private static int getTextWidth(String s, FontMetrics metrics) {
 
 		int textWidth = 0;
 
 		char[] txt = s.toCharArray();
 		int n = txt.length;
-		for (int i=0; i<n; i++) {
+		for (char c : txt) {
 			// Ignore newlines, they take up space and we shouldn't be
 			// counting them.
-			if(txt[i] != '\n')
-				textWidth += metrics.charWidth(txt[i]);
+			if (c != '\n')
+				textWidth += metrics.charWidth(c);
 		}
 		return textWidth;
 	}
@@ -902,14 +902,14 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 			// Add all saved macros to the popup menu.
 			int count = files.length;
-			for (int i=0; i<count; i++) {
-				String name = RTextUtilities.getMacroName(files[i]);
-				final File f = files[i];
+			for (File file : files) {
+				String name = RTextUtilities.getMacroName(file);
+				final File f = file;
 				AbstractAction a = new AbstractAction(name) {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							rtext.getMainView().loadMacro(f);
-						}
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						rtext.getMainView().loadMacro(f);
+					}
 				};
 				savedMacroMenu.add(new JMenuItem(a));
 			}

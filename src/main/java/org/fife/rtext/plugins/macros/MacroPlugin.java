@@ -92,7 +92,7 @@ public class MacroPlugin extends AbstractPlugin
 	 * @param a The action.
 	 * @return The menu item.
 	 */
-	private static final JMenuItem createMenuItem(Action a) {
+	private static JMenuItem createMenuItem(Action a) {
 		JMenuItem item = new JMenuItem(a);
 		item.setToolTipText(null);
 		return item;
@@ -159,7 +159,7 @@ public class MacroPlugin extends AbstractPlugin
 	 *
 	 * @return The file.
 	 */
-	private static final File getPrefsFile() {
+	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"macros.properties");
 	}

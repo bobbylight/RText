@@ -59,7 +59,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	public SyntaxFilters(String filterStr) {
 
 		// One filter set for every file type except plain text.
-		filters = new HashMap<String, List<String>>();
+		filters = new HashMap<>();
 		restoreDefaultFileFilters();
 
 		if (filterStr!=null) {
@@ -128,8 +128,8 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * @param values An array of values to go into the value.
 	 * @return The value.
 	 */
-	private static final List<String> createValue(String... values) {
-		List<String> list = new ArrayList<String>();
+	private static List<String> createValue(String... values) {
+		List<String> list = new ArrayList<>();
 		for (String value : values) {
 			list.add(value);
 		}
@@ -150,13 +150,13 @@ public class SyntaxFilters implements SyntaxConstants {
 			// Allow plugins to add filters for new languages not built into
 			// RSyntaxTextArea.
 			if (addedFilters==null) {
-				addedFilters = new HashMap<String, List<String>>();
+				addedFilters = new HashMap<>();
 			}
 			else {
 				l = addedFilters.get(style);
 			}
 			if (l==null) {
-				l = new ArrayList<String>();
+				l = new ArrayList<>();
 				addedFilters.put(style, l);
 			}
 		}
@@ -237,8 +237,8 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * @return The syntax style for the file, or <code>null</code> if not found
 	 *         in that map.
 	 */
-	private static final String getSyntaxStyleForFileImpl(String fileName,
-			Map<String, List<String>> filters) {
+	private static String getSyntaxStyleForFileImpl(String fileName,
+													Map<String, List<String>> filters) {
 
 		String syntaxStyle = null;
 
@@ -388,7 +388,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * @param filters The new values for filters.
 	 */
 	public void setPreservingPluginAdded(SyntaxFilters filters) {
-		this.filters = new HashMap<String, List<String>>(filters.filters);
+		this.filters = new HashMap<>(filters.filters);
 	}
 
 

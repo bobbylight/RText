@@ -107,9 +107,9 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		temp.add(Box.createVerticalStrut(5));
 
 		dictLabel = new JLabel(msg.getString("Dictionary"));
-		dictCombo = new LabelValueComboBox<String, String>();
-		for (int i=0; i<DICTIONARIES.length; i++) {
-			dictCombo.addLabelValuePair(DICTIONARIES[i][0], DICTIONARIES[i][1]);
+		dictCombo = new LabelValueComboBox<>();
+		for (String[] dictionary : DICTIONARIES) {
+			dictCombo.addLabelValuePair(dictionary[0], dictionary[1]);
 		}
 		dictCombo.setEditable(false);
 		dictCombo.setActionCommand("Dictionary");

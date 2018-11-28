@@ -203,7 +203,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	protected void doApplyImpl(Frame owner) {
 		HeapIndicatorPlugin p = (HeapIndicatorPlugin)getPlugin();
 		p.setVisible(visibilityCheckBox.isSelected());
-		int refresh = ((Integer)refreshRateSpinner.getValue()).intValue();
+		int refresh = (Integer)refreshRateSpinner.getValue();
 		p.setRefreshInterval(refresh*1000);
 		p.setUseSystemColors(systemColorsCheckBox.isSelected());
 		p.setIconBorderColor(borderButton.getColor());

@@ -45,7 +45,7 @@ public class RecentFileManager implements PropertyChangeListener {
 	public RecentFileManager(RText rtext, List<String> recentFiles) {
 
 		this.rtext = rtext;
-		files = new ArrayList<FileLocation>();
+		files = new ArrayList<>();
 
 		rtext.getMainView().addPropertyChangeListener(
 				AbstractMainView.TEXT_AREA_ADDED_PROPERTY, this);

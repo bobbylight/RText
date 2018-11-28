@@ -57,7 +57,7 @@ final class IconGroupLoader extends DefaultHandler {
 	 */
 	private IconGroupLoader(RText owner) {
 		this.owner = owner;
-		iconGroupMap = new HashMap<String, IconGroup>(3);
+		iconGroupMap = new HashMap<>(3);
 	}
 
 

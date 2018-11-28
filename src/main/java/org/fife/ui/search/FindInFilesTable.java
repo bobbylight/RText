@@ -78,7 +78,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 
 		initColumnWidths();
 
-		matchDatas = new ArrayList<MatchData>();
+		matchDatas = new ArrayList<>();
 		defaultRenderer = new StandardCellRenderer();
 
 		// By default, tables are registered to give tool tips.  This causes
@@ -202,7 +202,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	 */
 	protected Vector<String> createMatchDataVector(String fileName,
 			MatchData data) {
-		Vector<String> v = new Vector<String>(3);
+		Vector<String> v = new Vector<>(3);
 		v.add(fileName);
 		v.add(data.getLineNumber());
 		v.add(data.getLineText());

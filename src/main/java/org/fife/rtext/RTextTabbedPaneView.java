@@ -513,12 +513,7 @@ inCloseCurrentDocument = false;
 			// a Runnable as during this stateChanged() call, the text area's
 			// panel hasn't actually been made visible yet, and that must
 			// have happened for requestFocusInWindow to work.
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					currentTextArea.requestFocusInWindow();
-				}
-			});
+			SwingUtilities.invokeLater(currentTextArea::requestFocusInWindow);
 
 			// Update RText actions associated with the current currentTextArea.
 			currentTextArea.addCaretListener(owner);

@@ -253,8 +253,8 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 		model.setRowCount(0);
 		if (identifiers!=null && identifiers.length()>0) {
 			String[] ids = identifiers.split("\\|");
-			for (int i=0; i<ids.length; i++) {
-				model.addRow(new String[] { ids[i] });
+			for (String id : ids) {
+				model.addRow(new String[]{id});
 			}
 		}
 	}

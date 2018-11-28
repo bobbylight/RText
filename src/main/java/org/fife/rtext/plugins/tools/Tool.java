@@ -205,7 +205,7 @@ public class Tool implements Comparable<Tool> {
 
 		// Replace any ${file_XXX} "variables" in the environment.
 		final Map<String, String> env2 = env==null ? null :
-			new HashMap<String, String>(env);
+			new HashMap<>(env);
 		if (env2!=null) {
 			for (String key : env2.keySet()) {
 				env2.put(key, varSubstitute(env2.get(key)));
@@ -214,19 +214,16 @@ public class Tool implements Comparable<Tool> {
 
 		// Run this tool in a separate thread.
 		synchronized (RUN_THREAD_LOCK) {
-			runThread = new Thread() {
-				@Override
-				public void run() {
-					ProcessRunner pr = new ProcessRunner(cmd);
-					pr.setDirectory(new File(dir));
-					pr.setEnvironmentVars(env2, appendEnv);
-					pr.setOutputListener(l);
-					pr.run();
-					synchronized (RUN_THREAD_LOCK) {
-						runThread = null;
-					}
+			runThread = new Thread(() -> {
+				ProcessRunner pr = new ProcessRunner(cmd);
+				pr.setDirectory(new File(dir));
+				pr.setEnvironmentVars(env2, appendEnv);
+				pr.setOutputListener(l);
+				pr.run();
+				synchronized (RUN_THREAD_LOCK) {
+					runThread = null;
 				}
-			};
+			});
 			runThread.start();
 		}
 
@@ -290,7 +287,7 @@ public class Tool implements Comparable<Tool> {
 	 * @see #setEnvVars(Map)
 	 */
 	public Map<String, String> getEnvVars() {
-		return new HashMap<String, String>(env);
+		return new HashMap<>(env);
 	}
 
 
@@ -342,8 +339,8 @@ public class Tool implements Comparable<Tool> {
 	 * Initializes this tool.
 	 */
 	private void init() {
-		args = new ArrayList<String>(3);
-		env = new HashMap<String, String>();
+		args = new ArrayList<>(3);
+		env = new HashMap<>();
 	}
 
 
@@ -424,8 +421,8 @@ public class Tool implements Comparable<Tool> {
 	public void setArgs(String[] args) {
 		clearArgs();
 		if (args!=null) {
-			for (int i=0; i<args.length; i++) {
-				addArg(args[i]);
+			for (String arg : args) {
+				addArg(arg);
 			}
 		}
 	}
@@ -515,7 +512,7 @@ public class Tool implements Comparable<Tool> {
 	private String varSubstitute(String str) {
 
 		// Bail early if on (likely) variables
-		if (str.indexOf("${file_")==-1) {
+		if (!str.contains("${file_")) {
 			return str;
 		}
 

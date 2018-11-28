@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.JFileChooser;
@@ -129,7 +130,7 @@ class SaveAsWebPageAction extends AppAction<RText> {
 		StringBuilder sb = new StringBuilder();
 
 		PrintWriter out = new PrintWriter(new BufferedWriter(
-			new OutputStreamWriter(new FileOutputStream(path), "UTF-8")));
+			new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8)));
 		out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
 		out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
 		out.println("<head>");
@@ -168,9 +169,9 @@ class SaveAsWebPageAction extends AppAction<RText> {
 
 		// Print CSS styles
 		out.println("<style type=\"text/css\">");
-		for (int i=0; i<styles.length; i++) {
-			if (styles[i]!=null) {
-				out.println(styles[i]);
+		for (String style : styles) {
+			if (style != null) {
+				out.println(style);
 			}
 		}
 		out.println("</style>");

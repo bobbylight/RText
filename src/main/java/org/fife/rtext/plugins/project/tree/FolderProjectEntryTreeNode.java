@@ -53,20 +53,20 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	private void addChildrenFilteredAndSorted(File[] files) {
 
 		int num = files.length;
-		ArrayList<File> dirList = new ArrayList<File>();
-		ArrayList<File> fileList = new ArrayList<File>();
+		ArrayList<File> dirList = new ArrayList<>();
+		ArrayList<File> fileList = new ArrayList<>();
 		FolderFilterInfo filterInfo = getFilterInfo();
 
 		// First, separate the directories from regular files so we can
 		// sort them individually.  This part could be made more compact,
 		// but it isn't just for a tad more speed.
-		for (int i=0; i<num; i++) {
-			boolean isDir = files[i].isDirectory();
-			if (filterInfo!=null && filterInfo.isAllowed(files[i], isDir)) {
+		for (File file1 : files) {
+			boolean isDir = file1.isDirectory();
+			if (filterInfo != null && filterInfo.isAllowed(file1, isDir)) {
 				if (isDir)
-					dirList.add(files[i]);
+					dirList.add(file1);
 				else
-					fileList.add(files[i]);
+					fileList.add(file1);
 			}
 		}
 

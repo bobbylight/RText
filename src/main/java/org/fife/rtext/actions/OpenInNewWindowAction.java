@@ -115,8 +115,8 @@ class OpenInNewWindowAction extends AppAction<RText> {
 
 				// Add each file, one at a time, to our tabbed pane.
 				File [] selectedFiles = chooser.getSelectedFiles();
-				for (int i=0; i<selectedFiles.length; i++) {
-					String file = selectedFiles[i].getAbsolutePath();
+				for (File selectedFile : selectedFiles) {
+					String file = selectedFile.getAbsolutePath();
 					newMainView.openFile(file, encoding);
 				}
 

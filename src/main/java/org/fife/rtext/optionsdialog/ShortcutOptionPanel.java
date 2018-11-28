@@ -22,7 +22,6 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import org.fife.ui.GetKeyStrokeDialog;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextActionInfo;
 import org.fife.ui.*;
@@ -124,17 +123,17 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 		Action[] realActions = ((AbstractGUIApplication<?>)owner).getActions();
 		int j;
 
-		for (int k=0; k<realActions.length; k++) {
-			String name = (String)realActions[k].getValue(Action.NAME);
-			for (j=0; j<actionsLength; j++) {
+		for (Action realAction : realActions) {
+			String name = (String)realAction.getValue(Action.NAME);
+			for (j = 0; j < actionsLength; j++) {
 				String name2 = (String)actions[j].getValue(Action.NAME);
 				if (name.equals(name2)) {
-					realActions[k].putValue(Action.ACCELERATOR_KEY,
-									actions[j].getValue(Action.ACCELERATOR_KEY));
+					realAction.putValue(Action.ACCELERATOR_KEY,
+						actions[j].getValue(Action.ACCELERATOR_KEY));
 					break;
 				}
 			}
-			if (j==actionsLength)
+			if (j == actionsLength)
 				System.err.println("err0r!!!!");
 		}
 
@@ -198,17 +197,17 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 
 		masterActionList = app.getActions();
 
-		Arrays.sort(masterActionList, new Comparator<Action>() {
+		Arrays.sort(masterActionList, new Comparator<>() {
 			@Override
 			public int compare(Action a1, Action a2) {
 				String name1 = (String)a1.getValue(Action.NAME);
 				String name2 = (String)a2.getValue(Action.NAME);
-				if (name1==null) {
-					if (name2==null)
+				if (name1 == null) {
+					if (name2 == null)
 						return 0;
 					return -1;
 				}
-				if (name2==null) // name1!=null && name2==null.
+				if (name2 == null) // name1!=null && name2==null.
 					return 1;
 				return name1.compareTo(name2);
 			}

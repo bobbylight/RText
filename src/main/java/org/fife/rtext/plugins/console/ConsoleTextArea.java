@@ -124,7 +124,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		addMouseListener(listener);
 		getDocument().addDocumentListener(listener);
 		init();
-		cmdHistory = new LinkedList<String>();
+		cmdHistory = new LinkedList<>();
 	}
 
 
@@ -816,12 +816,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		private void handleDocumentEvent(DocumentEvent e) {
 			if (plugin.getSyntaxHighlightInput()) {
 				// Can't update Document in DocumentListener directly
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						syntaxHighlightInput();
-					}
-				});
+				SwingUtilities.invokeLater(ConsoleTextArea.this::syntaxHighlightInput);
 			}
 		}
 

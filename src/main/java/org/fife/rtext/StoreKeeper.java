@@ -36,7 +36,7 @@ public class StoreKeeper {
 	 */
 	public static void addRTextInstance(RText rtext) {
 		if (rtextInstances==null)
-			rtextInstances = new ArrayList<RText>(1);
+			rtextInstances = new ArrayList<>(1);
 		rtextInstances.add(rtext);
 	}
 

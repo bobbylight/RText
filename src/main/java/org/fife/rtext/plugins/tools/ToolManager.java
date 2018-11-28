@@ -56,7 +56,7 @@ public final class ToolManager {
 	 * Private constructor to prevent instantiation.
 	 */
 	private ToolManager() {
-		tools = new TreeSet<Tool>();
+		tools = new TreeSet<>();
 		support = new PropertyChangeSupport(this);
 	}
 
@@ -160,13 +160,10 @@ public final class ToolManager {
 		Thread.currentThread().setContextClassLoader(Tool.class.getClassLoader());
 
 		File[] files = dir.listFiles(new ToolFilenameFilter());
-		for (int i=0; i<files.length; i++) {
-			XMLDecoder d = new XMLDecoder(new BufferedInputStream(
-					new FileInputStream(files[i])));
-			try {
+		for (File file : files) {
+			try (XMLDecoder d = new XMLDecoder(new BufferedInputStream(
+				new FileInputStream(file)))) {
 				addTool((Tool)d.readObject());
-			} finally {
-				d.close();
 			}
 		}
 
@@ -217,8 +214,8 @@ public final class ToolManager {
 		// First, clear out old tools
 		if (dir.isDirectory()) { // Should always already exist.
 			File[] oldFiles = dir.listFiles(new ToolFilenameFilter());
-			for (int i=0; i<oldFiles.length; i++) {
-				oldFiles[i].delete();
+			for (File oldFile : oldFiles) {
+				oldFile.delete();
 			}
 		}
 		else {
@@ -235,12 +232,9 @@ public final class ToolManager {
 		// Now save the new ones.
 		for (Tool tool : tools) {
 			File file = new File(dir, tool.getName() + TOOL_FILE_EXTENSION);
-			XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
-										new FileOutputStream(file)));
-			try {
+			try (XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
+				new FileOutputStream(file)))) {
 				e.writeObject(tool);
-			} finally {
-				e.close();
 			}
 		}
 

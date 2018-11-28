@@ -633,7 +633,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 * @param combo The combo box.
 	 * @return The text component.
 	 */
-	protected static final JTextComponent getTextComponent(JComboBox combo) {
+	protected static JTextComponent getTextComponent(JComboBox combo) {
 		return org.fife.rsta.ui.UIUtil.getTextComponent(combo);
 	}
 
@@ -657,7 +657,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 *
 	 * @return The list of folders to skip.
 	 */
-	private static final String getDefaultFoldersToSkip() {
+	private static String getDefaultFoldersToSkip() {
 		return ".git, CVS, .svn, bower_components, node_modules";
 	}
 
@@ -688,7 +688,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 * @param c The text component.
 	 * @return The number of characters in that text component.
 	 */
-	protected static final int getLength(JTextComponent c) {
+	protected static int getLength(JTextComponent c) {
 		return c.getDocument().getLength();
 	}
 

@@ -116,7 +116,7 @@ public class JsonOptions extends Prefs {
 	 * @param outputStyle The output style string to validate.
 	 * @return The output style string to use.
 	 */
-	private static final String validateOutputStyle(String outputStyle) {
+	private static String validateOutputStyle(String outputStyle) {
 		if (!"json".equals(outputStyle) && !"javascript".equals(outputStyle) &&
 				!"minimal".equals(outputStyle)) {
 			outputStyle = DEFAULT_OUTPUT_STYLE;

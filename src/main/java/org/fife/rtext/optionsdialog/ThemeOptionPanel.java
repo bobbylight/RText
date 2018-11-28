@@ -79,7 +79,7 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 		Box temp = Box.createVerticalBox();
 		temp.setBorder(new OptionPanelBorder(msg.getString("OptThemeLabel")));
 
-		themeCombo = new LabelValueComboBox<String, String>();
+		themeCombo = new LabelValueComboBox<>();
 		themeCombo.addLabelValuePair("Default", "default");
 		themeCombo.addLabelValuePair("Eclipse", "eclipse");
 		themeCombo.addLabelValuePair("Dark", "dark");

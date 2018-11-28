@@ -58,7 +58,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	RTextMDIView(RText owner, String[] filesToOpen,
 									RTextPrefs properties) {
 
-		frames = new ArrayList<InternalFrame>(5);
+		frames = new ArrayList<>(5);
 
 		setLayout(new GridLayout(1,1));
 		desktopPane = new JDesktopPane();
@@ -313,8 +313,8 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	public Dimension getPreferredSize() {
 		Dimension preferredSize = new Dimension(300,300); // Default value.
 		int numDocuments = frames.size();
-		for (int i=0; i<numDocuments; i++) {
-			Dimension framePreferredSize = ((JInternalFrame)frames.get(i)).getPreferredSize();
+		for (InternalFrame frame : frames) {
+			Dimension framePreferredSize = ((JInternalFrame)frame).getPreferredSize();
 			preferredSize.width = Math.max(framePreferredSize.width, preferredSize.width);
 			preferredSize.height = Math.max(framePreferredSize.height, preferredSize.height);
 		}
@@ -525,9 +525,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		int numFrames = frames.size();
 		int numToResize = 0;
 
-		for (int i=0; i<numFrames; i++) {
-
-			JInternalFrame frame = frames.get(i);
+		for (JInternalFrame frame : frames) {
 
 			if (frame.isVisible() && !frame.isIcon()) {
 
@@ -536,7 +534,8 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 				if (!frame.isResizable()) {
 					try {
 						frame.setMaximum(false);
-					} catch (PropertyVetoException e) { }
+					} catch (PropertyVetoException e) {
+					}
 				}
 
 				else
@@ -554,9 +553,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 			int fHeight = desktopHeight / numToResize;
 			int yPos = 0;
 
-			for (int i=0; i<numFrames; i++) {
-
-				JInternalFrame frame = frames.get(i);
+			for (JInternalFrame frame : frames) {
 
 				if (frame.isVisible() && frame.isResizable() && !frame.isIcon()) {
 					frame.setSize(desktopWidth, fHeight);
@@ -579,9 +576,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		int numFrames = frames.size();
 		int numToResize = 0;
 
-		for (int i=0; i<numFrames; i++) {
-
-			JInternalFrame frame = frames.get(i);
+		for (JInternalFrame frame : frames) {
 
 			if (frame.isVisible() && !frame.isIcon()) {
 
@@ -590,7 +585,8 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 				if (!frame.isResizable()) {
 					try {
 						frame.setMaximum(false);
-					} catch (PropertyVetoException e) { }
+					} catch (PropertyVetoException e) {
+					}
 				}
 
 				else
@@ -608,12 +604,10 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 			int fWidth = desktopWidth / numToResize;
 			int xPos = 0;
 
-			for (int i=0; i<numFrames; i++) {
-
-				JInternalFrame frame = frames.get(i);
+			for (JInternalFrame frame : frames) {
 
 				if (frame.isVisible() && frame.isResizable() && !frame.isIcon()) {
-					frame.setBounds(xPos,0, fWidth,desktopHeight);
+					frame.setBounds(xPos, 0, fWidth, desktopHeight);
 					xPos += fWidth;
 				}
 

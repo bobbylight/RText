@@ -23,9 +23,6 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import org.fife.ui.FontSelector;
-import org.fife.ui.RListSelectionModel;
-import org.fife.ui.SelectableLabel;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;

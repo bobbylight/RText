@@ -147,11 +147,11 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 		if (manager!=null) {
 			CodeTemplate[] templates = manager.getTemplates();
 			int count = templates.length;
-			for (int i=0; i<count; i++) {
-				tableModel.addRow(new Object[] {
-					new String(templates[i].getID()),
+			for (CodeTemplate template : templates) {
+				tableModel.addRow(new Object[]{
+					new String(template.getID()),
 					// Deep copy.
-					new TemplateWrapper((CodeTemplate)templates[i].clone()),
+					new TemplateWrapper((CodeTemplate)template.clone()),
 				});
 			}
 		}

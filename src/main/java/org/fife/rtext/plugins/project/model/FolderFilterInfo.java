@@ -139,8 +139,8 @@ public class FolderFilterInfo {
 	 */
 	private static boolean matches(String fileName,
 			NameMatcher[] matchers) {
-		for (int i=0; i<matchers.length; i++) {
-			if (matchers[i].matches(fileName)) {
+		for (NameMatcher matcher : matchers) {
+			if (matcher.matches(fileName)) {
 				return true;
 			}
 		}

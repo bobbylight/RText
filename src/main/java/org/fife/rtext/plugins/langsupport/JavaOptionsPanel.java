@@ -480,7 +480,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 		}
 
-		private static final String getString(String keySuffix) {
+		private static String getString(String keySuffix) {
 			String key = "Options.Java.BuildPathDialog." + keySuffix;
 			return Plugin.msg.getString(key);
 		}

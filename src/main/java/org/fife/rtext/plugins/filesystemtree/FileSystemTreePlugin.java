@@ -84,7 +84,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		DockableWindow wind = createDockableWindow(prefs);
 		putDockableWindow(name, wind);
 
-		rootHistory = new ArrayList<File>();
+		rootHistory = new ArrayList<>();
 		rootHistory.add(null);
 		rootHistoryOffs = 0;
 
@@ -213,7 +213,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 *
 	 * @return The file.
 	 */
-	private static final File getPrefsFile() {
+	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"fileSystemTree.properties");
 	}

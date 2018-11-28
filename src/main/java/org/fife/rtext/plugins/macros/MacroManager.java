@@ -63,7 +63,7 @@ public class MacroManager {
 	 * Private constructor to prevent instantiation.
 	 */
 	private MacroManager() {
-		macros = new TreeSet<Macro>();
+		macros = new TreeSet<>();
 		support = new PropertyChangeSupport(this);
 	}
 
@@ -107,7 +107,7 @@ public class MacroManager {
 	 *         empty, but will never be <code>null</code>.
 	 */
 	public SortedSet<Macro> clearMacros() {
-		TreeSet<Macro> copy = new TreeSet<Macro>(macros);
+		TreeSet<Macro> copy = new TreeSet<>(macros);
 		macros.clear();
 		support.firePropertyChange(PROPERTY_MACROS, null, null);
 		return copy;
@@ -236,8 +236,8 @@ public class MacroManager {
 		// First, clear out old macros
 		if (dir.isDirectory()) { // Should always already exist.
 			File[] oldFiles = dir.listFiles(new OldMacroFilenameFilter());
-			for (int i=0; i<oldFiles.length; i++) {
-				oldFiles[i].delete();
+			for (File oldFile : oldFiles) {
+				oldFile.delete();
 			}
 		}
 		else {
@@ -253,16 +253,13 @@ public class MacroManager {
 		try {
 
 			// Put our macros into a list.
-			List<Macro> macroList = new ArrayList<Macro>(macros);
+			List<Macro> macroList = new ArrayList<>(macros);
 
 			// Save our list of macros as XML.
 			File file = new File(dir, MACRO_DEFINITION_FILE_NAME);
-			XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
-										new FileOutputStream(file)));
-			try {
+			try (XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
+				new FileOutputStream(file)))) {
 				e.writeObject(macroList);
-			} finally {
-				e.close();
 			}
 
 		} finally {

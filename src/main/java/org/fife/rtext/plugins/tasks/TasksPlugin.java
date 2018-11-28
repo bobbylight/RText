@@ -158,7 +158,7 @@ public class TasksPlugin extends GUIPlugin {
 	 *
 	 * @return The file.
 	 */
-	private static final File getPrefsFile() {
+	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"tasks.properties");
 	}

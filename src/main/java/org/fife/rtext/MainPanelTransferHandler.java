@@ -92,8 +92,8 @@ class MainPanelTransferHandler extends TransferHandler {
 	 * @return Whether <code>flavors</code> contains the file flavor.
 	 */
 	public static boolean hasFileFlavor(DataFlavor[] flavors) {
-		for (int i=0; i<flavors.length; i++) {
-			if (FILE_FLAVOR.equals(flavors[i]))
+		for (DataFlavor flavor : flavors) {
+			if (FILE_FLAVOR.equals(flavor))
 				return true;
 		}
 		return false;

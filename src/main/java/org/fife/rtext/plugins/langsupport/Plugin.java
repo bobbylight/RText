@@ -246,7 +246,7 @@ public class Plugin extends GUIPlugin {
 	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
-		icons = new HashMap<ParserNotice.Level, Icon>();
+		icons = new HashMap<>();
 		icons.put(ParserNotice.Level.ERROR, createIcon("error_obj.gif"));
 		icons.put(ParserNotice.Level.WARNING, createIcon("warning_obj.gif"));
 		// Informational icons are annoying - spelling errors, etc.

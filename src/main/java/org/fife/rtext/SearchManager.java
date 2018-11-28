@@ -442,9 +442,9 @@ public class SearchManager {
 	/**
 	 * Specifies what searching UI the user wants to use.
 	 */
-	public static enum SearchingMode {
+	public enum SearchingMode {
 		DIALOGS,
-		TOOLBARS;
+		TOOLBARS
 	}
 
 

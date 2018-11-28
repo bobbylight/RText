@@ -274,8 +274,8 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @return The URL
 	 * @throws MalformedURLException If something goes horribly wrong.
 	 */
-	private static final URL createURL(String protocol, String user,
-			char[] pass, String host, String port, String file)
+	private static URL createURL(String protocol, String user,
+								 char[] pass, String host, String port, String file)
 					throws MalformedURLException {
 		String urlStr = protocol + "://";
 		if ("ftp".equalsIgnoreCase(protocol)) {
@@ -337,7 +337,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @return The <code>Document</code>.
 	 * @see #getTextComponent(JComboBox)
 	 */
-	private static final Document getDocument(JComboBox combo) {
+	private static Document getDocument(JComboBox combo) {
 		return getTextComponent(combo).getDocument();
 	}
 
@@ -367,7 +367,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @return The text component.
 	 * @see #getDocument(JComboBox)
 	 */
-	private static final JTextComponent getTextComponent(JComboBox combo) {
+	private static JTextComponent getTextComponent(JComboBox combo) {
 		return (JTextComponent)combo.getEditor().getEditorComponent();
 	}
 
@@ -388,7 +388,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @param field The text field.
 	 * @return Whether there is text in the text field.
 	 */
-	private static final boolean hasContent(JTextComponent field) {
+	private static boolean hasContent(JTextComponent field) {
 		return field.getDocument().getLength()>0;
 	}
 

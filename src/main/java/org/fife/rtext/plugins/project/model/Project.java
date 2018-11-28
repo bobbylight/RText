@@ -33,7 +33,7 @@ public class Project implements Comparable<Project>, ProjectEntryParent {
 	public Project(Workspace workspace, String name) {
 		this.workspace = workspace;
 		setName(name);
-		entries = new ArrayList<ProjectEntry>();
+		entries = new ArrayList<>();
 	}
 
 
