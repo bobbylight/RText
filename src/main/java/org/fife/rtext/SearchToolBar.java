@@ -153,7 +153,7 @@ public class SearchToolBar extends JToolBar {
 				return max;
 			}
 		};
-		// OS X-specific property (requires Java 5+).  Causes the text field
+		// OS X-specific property.  Causes the text field
 		// to be painted in OS X's "Search field" style.
 		findField.putClientProperty("JTextField.variant", "search");
 		findField.getAccessibleContext().setAccessibleDescription(

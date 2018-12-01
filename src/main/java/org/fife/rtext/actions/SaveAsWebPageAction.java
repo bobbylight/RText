@@ -42,10 +42,6 @@ import org.fife.ui.rsyntaxtextarea.Token;
  * @author Robert Futrell
  * @version 1.0
  */
-/*
- * TODO: Use CSS; have one CSS class per token type and just do
- *    <div class=\"" + token.type + "\"> + text + "</div>"
- */
 class SaveAsWebPageAction extends AppAction<RText> {
 
 

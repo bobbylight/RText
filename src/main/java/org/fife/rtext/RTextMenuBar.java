@@ -17,6 +17,8 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +41,7 @@ import org.fife.ui.RecentFilesMenu;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
+import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextAreaEditorKit;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
@@ -111,7 +114,9 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	private JMenuItem redoItem;
 	private JMenuItem cutItem;
 	private JMenuItem copyItem;
-	private JMenuItem copyAsRtfItem;
+	private JMenuItem copyAsStyledTextItem;
+	private JMenuItem copyAsStyledTextMonokaiItem;
+	private JMenuItem copyAsStyledTextEclipseItem;
 	private JMenuItem pasteItem;
 	private JMenuItem deleteItem;
 	private JMenuItem findItem;
@@ -161,13 +166,10 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 *
 	 * @param rtext The instance of the <code>RText</code> editor that this
 	 *        menu bar belongs to.
-	 * @param lnfName The name for a look and feel; should be obtained from
-	 *        <code>UIManager.getLookAndFeel().getName()</code>.
 	 * @param properties The properties we'll be using to initialize the menu
 	 *        bar.
 	 */
-	public RTextMenuBar(final RText rtext, String lnfName,
-							RTextPrefs properties) {
+	public RTextMenuBar(final RText rtext, RTextPrefs properties) {
 
 		// Initialize some private variables.
 		this.rtext = rtext;
@@ -273,8 +275,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		copyItem = createMenuItem(RTextArea.getAction(RTextArea.COPY_ACTION));
 		menu.add(copyItem);
 
-		copyAsRtfItem = createMenuItem(rtext.getAction(RText.COPY_AS_RTF_ACTION));
-		menu.add(copyAsRtfItem);
+		addCopyAsSubMenu(menu);
 
 		pasteItem = createMenuItem(RTextArea.getAction(RTextArea.PASTE_ACTION));
 		menu.add(pasteItem);
@@ -580,6 +581,44 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	}
 
 
+	private void addCopyAsSubMenu(JMenu menu) {
+
+		ResourceBundle msg = ResourceBundle.getBundle("org.fife.rtext.actions.Actions");
+
+		JMenu subMenu = new JMenu(msg.getString("CopyAs"));
+
+		copyAsStyledTextItem = createMenuItem(rtext.getAction(RText.COPY_AS_STYLED_TEXT_ACTION));
+		subMenu.add(copyAsStyledTextItem);
+
+		String[] themes = { "dark", "default", "eclipse", "idea", "monokai" };
+		try {
+
+			for (String theme : themes) {
+
+				String themeTitleCase = Character.toUpperCase(theme.charAt(0)) +
+					theme.substring(1);
+				String title = MessageFormat.format(msg.getString(
+					"CopyAsStyledTextAction.Themed"), themeTitleCase);
+
+				subMenu.add(createCopyAsStyledTextMenuItem(title, theme));
+			}
+		} catch (IOException ioe) {
+			rtext.displayException(ioe);
+		}
+
+		menu.add(subMenu);
+	}
+
+	private JMenuItem createCopyAsStyledTextMenuItem(String title, String themeName)
+		throws IOException {
+		Theme theme = Theme.load(getClass().getResourceAsStream(
+			"/org/fife/ui/rsyntaxtextarea/themes/" + themeName + ".xml"));
+		RSyntaxTextAreaEditorKit.CopyAsStyledTextAction action =
+			new RSyntaxTextAreaEditorKit.CopyAsStyledTextAction(themeName, theme);
+		action.setName(title);
+		return createMenuItem(action);
+	}
+
 	/**
 	 * Adds the file specified to the file history.
 	 *
@@ -782,7 +821,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		updateAction(findInFilesItem, RText.FIND_IN_FILES_ACTION);
 		updateAction(replaceInFilesItem, RText.REPLACE_IN_FILES_ACTION);
 		updateAction(goToItem, RText.GOTO_ACTION);
-		updateAction(copyAsRtfItem, RText.COPY_AS_RTF_ACTION);
+		updateAction(copyAsStyledTextItem, RText.COPY_AS_STYLED_TEXT_ACTION);
 		updateAction(timeDateItem, RText.TIME_DATE_ACTION);
 		if (rtext.getOS()!=OS.MAC_OS_X) {
 			updateAction(optionsItem, RText.OPTIONS_ACTION);

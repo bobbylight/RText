@@ -328,8 +328,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		//splashScreen.updateStatus(msg.getString("CreatingMenuBar"), 75);
 
 		// Create the menu bar.
-		menuBar = new RTextMenuBar(this, UIManager.getLookAndFeel().getName(),
-				prefs);
+		menuBar = new RTextMenuBar(this, prefs);
 		mainView.addPropertyChangeListener(menuBar);
 
 		menuBar.setWindowMenuVisible(prefs.mainView==MDI_VIEW);

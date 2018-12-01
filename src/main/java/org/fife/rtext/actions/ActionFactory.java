@@ -95,11 +95,11 @@ public final class ActionFactory implements RTextActionInfo {
 		a = new RText.ExitAction<>(rtext, msg, "ExitAction");
 		rtext.addAction(RText.EXIT_ACTION_KEY, a);
 
-		String temp = msg.getString("CopyAsRtfAction");
-		rtext.addAction(COPY_AS_RTF_ACTION, new RSyntaxTextAreaEditorKit.CopyAsRtfAction(temp,
+		String temp = msg.getString("CopyAsStyledTextAction");
+		rtext.addAction(COPY_AS_STYLED_TEXT_ACTION, new RSyntaxTextAreaEditorKit.CopyAsStyledTextAction(temp,
 			null,
-			msg.getString("CopyAsRtfAction.ShortDesc"),
-			(int)msg.getString("CopyAsRtfAction.Mnemonic").charAt(0),
+			msg.getString("CopyAsStyledTextAction.ShortDesc"),
+			(int)msg.getString("CopyAsStyledTextAction.Mnemonic").charAt(0),
 			null));
 
 		temp = msg.getString("TimeAction");

@@ -38,7 +38,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.fife.ui.RListSelectionModel;
-import org.fife.ui.RScrollPane;
 import org.fife.ui.UIUtil;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
@@ -59,7 +58,6 @@ class RTextSplitPaneView extends AbstractMainView
 
 	private DockableWindow listWindow;
 	private JList<DocumentInfo> documentList;
-	private RScrollPane documentListScrollPane;
 	private DefaultListModel<DocumentInfo> listModel;
 	private CardLayout layout;
 
@@ -81,8 +79,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 * @param prefs A properties object used to initialize some fields on
 	 *        this view.
 	 */
-	public RTextSplitPaneView(RText owner, String[] filesToOpen,
-										RTextPrefs prefs) {
+	RTextSplitPaneView(RText owner, String[] filesToOpen, RTextPrefs prefs) {
 
 		setLayout(new GridLayout(1,1));	// So the split pane takes up the whole panel.
 
@@ -95,7 +92,8 @@ class RTextSplitPaneView extends AbstractMainView
 		documentList.setSelectionModel(new RListSelectionModel());
 		documentList.addListSelectionListener(this);
 		documentList.addMouseListener(new ListListener());
-		documentListScrollPane = new DockableWindowScrollPane(documentList);
+		DockableWindowScrollPane documentListScrollPane =
+			new DockableWindowScrollPane(documentList);
 
 		String name = "Files";
 		listWindow = new DockableWindow(name, new BorderLayout());
@@ -234,7 +232,7 @@ class RTextSplitPaneView extends AbstractMainView
 	@Override
 	public String getDocumentDisplayNameAt(int index) {
 		if (index>=0 && index<getNumDocuments()) {
-			return ((DocumentInfo)listModel.get(index)).text;
+			return listModel.get(index).text;
 		}
 		return null;
 	}
@@ -358,7 +356,7 @@ class RTextSplitPaneView extends AbstractMainView
 	@Override
 	public void setDocumentDisplayNameAt(int index, String displayName) {
 		if (index>=0 && index<getNumDocuments()) {
-			DocumentInfo info = (DocumentInfo)listModel.get(index);
+			DocumentInfo info = listModel.get(index);
 			info.text = displayName;
 			// May need to reset icon if extension has changed.
 			info.icon = getIconFor(getRTextScrollPaneAt(index));
@@ -484,7 +482,7 @@ class RTextSplitPaneView extends AbstractMainView
 		public String text;
 		public Icon icon;
 
-		public DocumentInfo(String text, Icon icon) {
+		DocumentInfo(String text, Icon icon) {
 			this.text = text;
 			this.icon = icon;
 		}
@@ -515,7 +513,7 @@ class RTextSplitPaneView extends AbstractMainView
 				RTextEditorPane textArea = getRTextEditorPaneAt(index);
 				if (textArea==null) // Happens in JRE 1.5.0, not in 1.4.x...
 					setForeground(list.getForeground());
-				else if (textArea.isDirty()==true && highlightModifiedDocumentDisplayNames())
+				else if (textArea.isDirty() && highlightModifiedDocumentDisplayNames())
 					setForeground(getModifiedDocumentDisplayNamesColor());
 				else
 					setForeground(list.getForeground());

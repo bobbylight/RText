@@ -27,29 +27,29 @@ package org.fife.rtext;
 public interface RTextActionInfo {
 
 	// Constants specifying the available actions (for getAction).
-	String NEW_ACTION				= "newAction";
-	String OPEN_ACTION				= "openAction";
-	String OPEN_NEWWIN_ACTION		= "openNewWinAction";
-	String OPEN_RECENT_ACTION		= "openRecentAction";
-	String OPEN_REMOTE_ACTION		= "openRemoteAction";
-	String SAVE_ACTION				= "saveAction";
-	String SAVE_AS_ACTION			= "saveAsAction";
-	String SAVE_AS_REMOTE_ACTION	= "saveAsRemoteAction";
-	String SAVE_WEBPAGE_ACTION		= "saveWebPageAction";
-	String SAVE_ALL_ACTION			= "saveAllAction";
-	String COPY_AS_RTF_ACTION		= "copyAsRtf";
-	String TIME_DATE_ACTION			= "timeDateAction";
-	String TOOL_BAR_ACTION			= "toolBarAction";
-	String STATUS_BAR_ACTION		= "statusBarAction";
-	String LINE_NUMBER_ACTION		= "lineNumberAction";
-	String NEXT_DOCUMENT_ACTION		= "nextDocumentAction";
-	String PREVIOUS_DOCUMENT_ACTION = "prevDocumentAction";
-	String FILE_PROPERTIES_ACTION	= "filePropertiesAction";
-	String OPTIONS_ACTION			= "optionsAction";
-	String HOME_PAGE_ACTION			= "homePageAction";
-	String UPDATES_ACTION			= "checkForUpdatesAction";
-	String INC_FONT_SIZES_ACTION	= "incFontSizesAction";
-	String DEC_FONT_SIZES_ACTION	= "decFontSizesAction";
+	String NEW_ACTION				  = "newAction";
+	String OPEN_ACTION				  = "openAction";
+	String OPEN_NEWWIN_ACTION		  = "openNewWinAction";
+	String OPEN_RECENT_ACTION		  = "openRecentAction";
+	String OPEN_REMOTE_ACTION		  = "openRemoteAction";
+	String SAVE_ACTION				  = "saveAction";
+	String SAVE_AS_ACTION			  = "saveAsAction";
+	String SAVE_AS_REMOTE_ACTION	  = "saveAsRemoteAction";
+	String SAVE_WEBPAGE_ACTION		  = "saveWebPageAction";
+	String SAVE_ALL_ACTION			  = "saveAllAction";
+	String COPY_AS_STYLED_TEXT_ACTION = "copyAsStyledText";
+	String TIME_DATE_ACTION			  = "timeDateAction";
+	String TOOL_BAR_ACTION			  = "toolBarAction";
+	String STATUS_BAR_ACTION		  = "statusBarAction";
+	String LINE_NUMBER_ACTION		  = "lineNumberAction";
+	String NEXT_DOCUMENT_ACTION		  = "nextDocumentAction";
+	String PREVIOUS_DOCUMENT_ACTION   = "prevDocumentAction";
+	String FILE_PROPERTIES_ACTION	  = "filePropertiesAction";
+	String OPTIONS_ACTION			  = "optionsAction";
+	String HOME_PAGE_ACTION			  = "homePageAction";
+	String UPDATES_ACTION			  = "checkForUpdatesAction";
+	String INC_FONT_SIZES_ACTION	  = "incFontSizesAction";
+	String DEC_FONT_SIZES_ACTION	  = "decFontSizesAction";
 
 	String FIND_ACTION				= "findAction";
 	String FIND_NEXT_ACTION			= "findNextAction";
@@ -85,7 +85,7 @@ public interface RTextActionInfo {
 		SAVE_WEBPAGE_ACTION,
 		SAVE_ALL_ACTION,
 		RText.EXIT_ACTION_KEY,
-		COPY_AS_RTF_ACTION,
+		COPY_AS_STYLED_TEXT_ACTION,
 		TIME_DATE_ACTION,
 		TOOL_BAR_ACTION,
 		STATUS_BAR_ACTION,
