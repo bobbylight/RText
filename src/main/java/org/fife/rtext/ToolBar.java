@@ -35,18 +35,13 @@ class ToolBar extends CustomizableToolBar {
 	private JButton newButton;
 	private JButton openButton;
 	private JButton saveButton;
-	private JButton saveAllButton;
-	private JButton closeButton;
 	private JButton printButton;
-	private JButton printPreviewButton;
 	private JButton cutButton;
 	private JButton copyButton;
 	private JButton pasteButton;
 	private JButton deleteButton;
 	private JButton findButton;
-	private JButton findNextButton;
 	private JButton replaceButton;
-	private JButton replaceNextButton;
 	private JButton undoButton;
 	private JButton redoButton;
 
@@ -85,23 +80,11 @@ class ToolBar extends CustomizableToolBar {
 		configure(saveButton, mouseListener);
 		add(saveButton);
 
-		saveAllButton = createButton(rtext.getAction(RText.SAVE_ALL_ACTION));
-		configure(saveAllButton, mouseListener);
-		add(saveAllButton);
-
-		closeButton = createButton(rtext.getAction(RText.CLOSE_ACTION));
-		configure(closeButton, mouseListener);
-		add(closeButton);
-
 		addSeparator();
 
 		printButton = createButton(rtext.getAction(RText.PRINT_ACTION));
 		configure(printButton, mouseListener);
 		add(printButton);
-
-		printPreviewButton = createButton(rtext.getAction(RText.PRINT_PREVIEW_ACTION));
-		configure(printPreviewButton, mouseListener);
-		add(printPreviewButton);
 
 		addSeparator();
 
@@ -127,17 +110,9 @@ class ToolBar extends CustomizableToolBar {
 		configure(findButton, mouseListener);
 		add(findButton);
 
-		findNextButton = createButton(rtext.getAction(RText.FIND_NEXT_ACTION));
-		configure(findNextButton, mouseListener);
-		add(findNextButton);
-
 		replaceButton = createButton(rtext.getAction(RText.REPLACE_ACTION));
 		configure(replaceButton, mouseListener);
 		add(replaceButton);
-
-		replaceNextButton = createButton(rtext.getAction(RText.REPLACE_NEXT_ACTION));
-		configure(replaceNextButton, mouseListener);
-		add(replaceNextButton);
 
 		addSeparator();
 
@@ -172,14 +147,8 @@ class ToolBar extends CustomizableToolBar {
 			openButton.setIcon(icon);
 			icon = group.getLargeIcon("save");
 			saveButton.setIcon(icon);
-			icon = group.getLargeIcon("saveall");
-			saveAllButton.setIcon(icon);
-			icon = group.getLargeIcon("close");
-			closeButton.setIcon(icon);
 			icon = group.getLargeIcon("print");
 			printButton.setIcon(icon);
-			icon = group.getLargeIcon("printpreview");
-			printPreviewButton.setIcon(icon);
 			icon = group.getLargeIcon("cut");
 			cutButton.setIcon(icon);
 			icon = group.getLargeIcon("copy");
@@ -190,12 +159,8 @@ class ToolBar extends CustomizableToolBar {
 			deleteButton.setIcon(icon);
 			icon = group.getLargeIcon("find");
 			findButton.setIcon(icon);
-			icon = group.getLargeIcon("findnext");
-			findNextButton.setIcon(icon);
 			icon = group.getLargeIcon("replace");
 			replaceButton.setIcon(icon);
-			icon = group.getLargeIcon("replacenext");
-			replaceNextButton.setIcon(icon);
 			icon = group.getLargeIcon("undo");
 			undoButton.setIcon(icon);
 			icon = group.getLargeIcon("redo");

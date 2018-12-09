@@ -81,7 +81,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	/**
 	 * Constructor.
 	 */
-	public UIOptionPanel(RText rtext, ResourceBundle msg) {
+	UIOptionPanel(RText rtext, ResourceBundle msg) {
 
 		super(msg.getString("OptUIName"));
 		setId(OPTION_PANEL_ID);
@@ -220,52 +220,51 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		String actionCommand = e.getActionCommand();
 
-		if (actionCommand.equals("ViewComboBox")) {
-			hasUnsavedChanges = true;
-			int old = mainViewStyle;
-			mainViewStyle = viewCombo.getSelectedIndex();
-			firePropertyChange("UIOptionPanel.mainViewStyle", old, mainViewStyle);
-		}
-
-		else if (actionCommand.equals("DocSelCombo")) {
-			hasUnsavedChanges = true;
-			int old = documentSelectionPlacement;
-			documentSelectionPlacement = docSelCombo.getSelectedIndex() +
-										JTabbedPane.TOP;
-			firePropertyChange("UIOptionPanel.documentSelectionPlacement",
-								old, documentSelectionPlacement);
-		}
-
-		else if (actionCommand.equals("LookAndFeelComboBox")) {
-			hasUnsavedChanges = true;
-			String newLnF = lnfCombo.getSelectedValue();
-			firePropertyChange("UIOptionPanel.lookAndFeel", null, newLnF);
-		}
-
-		else if (actionCommand.equals("IconComboBox")) {
-			hasUnsavedChanges = true;
-			String name = imageLnFCombo.getSelectedValue();
-			firePropertyChange("UIOptionPanel.iconStyle", null, name);
-		}
-
-		else if (actionCommand.equals("StatusBarComboBox")) {
-			hasUnsavedChanges = true;
-			int old = statusBarStyle;
-			statusBarStyle = statusBarCombo.getSelectedIndex();
-			firePropertyChange("UIOptionPanel.statusBarStyle", old, statusBarStyle);
-		}
-
-		else if (actionCommand.equals("HighlightModifiedCheckBox")) {
-			boolean highlight = highlightModifiedDocumentDisplayNames();
-			hmColorButton.setEnabled(highlight);
-			hasUnsavedChanges = true;
-			firePropertyChange("UIOptionPanel.highlightModified", !highlight, highlight);
-		}
-
-		else if (actionCommand.equals("ShowHostNameCB")) {
-			boolean show = getShowHostName();
-			hasUnsavedChanges = true;
-			firePropertyChange("UIOptionPanel.showHostName", !show, show);
+		switch (actionCommand) {
+			case "ViewComboBox": {
+				hasUnsavedChanges = true;
+				int old = mainViewStyle;
+				mainViewStyle = viewCombo.getSelectedIndex();
+				firePropertyChange("UIOptionPanel.mainViewStyle", old, mainViewStyle);
+				break;
+			}
+			case "DocSelCombo": {
+				hasUnsavedChanges = true;
+				int old = documentSelectionPlacement;
+				documentSelectionPlacement = docSelCombo.getSelectedIndex() +
+					JTabbedPane.TOP;
+				firePropertyChange("UIOptionPanel.documentSelectionPlacement",
+					old, documentSelectionPlacement);
+				break;
+			}
+			case "LookAndFeelComboBox":
+				hasUnsavedChanges = true;
+				String newLnF = lnfCombo.getSelectedValue();
+				firePropertyChange("UIOptionPanel.lookAndFeel", null, newLnF);
+				break;
+			case "IconComboBox":
+				hasUnsavedChanges = true;
+				String name = imageLnFCombo.getSelectedValue();
+				firePropertyChange("UIOptionPanel.iconStyle", null, name);
+				break;
+			case "StatusBarComboBox": {
+				hasUnsavedChanges = true;
+				int old = statusBarStyle;
+				statusBarStyle = statusBarCombo.getSelectedIndex();
+				firePropertyChange("UIOptionPanel.statusBarStyle", old, statusBarStyle);
+				break;
+			}
+			case "HighlightModifiedCheckBox":
+				boolean highlight = highlightModifiedDocumentDisplayNames();
+				hmColorButton.setEnabled(highlight);
+				hasUnsavedChanges = true;
+				firePropertyChange("UIOptionPanel.highlightModified", !highlight, highlight);
+				break;
+			case "ShowHostNameCB":
+				boolean show = getShowHostName();
+				hasUnsavedChanges = true;
+				firePropertyChange("UIOptionPanel.showHostName", !show, show);
+				break;
 		}
 
 	}
@@ -353,9 +352,6 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		// They can't input invalid stuff on this options panel.
@@ -369,7 +365,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @return The document selection placement.
 	 * @see #setDocumentSelectionPlacement
 	 */
-	public int getDocumentSelectionPlacement() {
+	private int getDocumentSelectionPlacement() {
 		return documentSelectionPlacement;
 	}
 
@@ -380,7 +376,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @return The icon style.
 	 * @see #setIconGroupByName
 	 */
-	public String getIconGroupName() {
+	private String getIconGroupName() {
 		return imageLnFCombo.getSelectedValue();
 	}
 
@@ -391,7 +387,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @return The look and feel.
 	 * @see #setLookAndFeelByClassName
 	 */
-	public String getLookAndFeelClassName() {
+	private String getLookAndFeelClassName() {
 		return lnfCombo.getSelectedValue();
 	}
 
@@ -403,7 +399,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 *         <code>RText.SPLIT_PANE_VIEW</code>.
 	 * @see #setMainViewStyle
 	 */
-	public int getMainViewStyle() {
+	private int getMainViewStyle() {
 		return mainViewStyle;
 	}
 
@@ -417,7 +413,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @see #highlightModifiedDocumentDisplayNames
 	 * @see #setHighlightModifiedDocumentDisplayNames
 	 */
-	public Color getModifiedDocumentDisplayNamesColor() {
+	private Color getModifiedDocumentDisplayNamesColor() {
 		return hmColorButton.getColor();
 	}
 
@@ -427,9 +423,9 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * bar.
 	 *
 	 * @return Whether to show the host name.
-	 * @see #setShowHostName(String)
+	 * @see #setShowHostName(boolean)
 	 */
-	public boolean getShowHostName() {
+	private boolean getShowHostName() {
 		return showHostNameCheckBox.isSelected();
 	}
 
@@ -440,7 +436,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @return The status bar style selected.
 	 * @see #setStatusBarStyle
 	 */
-	public int getStatusBarStyle() {
+	private int getStatusBarStyle() {
 		return statusBarStyle;
 	}
 
@@ -469,7 +465,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @see #getModifiedDocumentDisplayNamesColor
 	 * @see #setModifiedDocumentDisplayNamesColor
 	 */
-	public boolean highlightModifiedDocumentDisplayNames() {
+	private boolean highlightModifiedDocumentDisplayNames() {
 		return highlightModifiedCheckBox.isSelected();
 	}
 
@@ -499,7 +495,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 *        <code>RIGHT</code>, or <code>BOTTOM</code>.
 	 * @see #getDocumentSelectionPlacement
 	 */
-	public void setDocumentSelectionPlacement(int documentSelectionPlacement) {
+	private void setDocumentSelectionPlacement(int documentSelectionPlacement) {
 
 		if (documentSelectionPlacement!=JTabbedPane.LEFT &&
 				documentSelectionPlacement!=JTabbedPane.RIGHT &&
@@ -526,7 +522,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @see #getModifiedDocumentDisplayNamesColor
 	 * @see #setModifiedDocumentDisplayNamesColor
 	 */
-	public void setHighlightModifiedDocumentDisplayNames(boolean highlight) {
+	private void setHighlightModifiedDocumentDisplayNames(boolean highlight) {
 		highlightModifiedCheckBox.setSelected(highlight);
 		hmColorButton.setEnabled(highlight);
 	}
@@ -538,7 +534,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @param name The name of the icon group.
 	 * @see #getIconGroupName
 	 */
-	public void setIconGroupByName(String name) {
+	private void setIconGroupByName(String name) {
 		int count = imageLnFCombo.getItemCount();
 		for (int i=0; i<count; i++) {
 			String specialValue = imageLnFCombo.getValueAt(i);
@@ -557,7 +553,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @param name The class name for the Look.
 	 * @see #getLookAndFeelClassName
 	 */
-	public void setLookAndFeelByClassName(String name) {
+	private void setLookAndFeelByClassName(String name) {
 		int count = lnfCombo.getItemCount();
 		for (int i=0; i<count; i++) {
 			String specialValue = lnfCombo.getValueAt(i);
@@ -578,7 +574,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 *        <code>RText.SPLIT_PANE_VIEW</code>.
 	 * @see #getMainViewStyle
 	 */
-	public void setMainViewStyle(final int viewStyle) {
+	private void setMainViewStyle(final int viewStyle) {
 		if (viewStyle==RText.TABBED_VIEW || viewStyle==RText.SPLIT_PANE_VIEW ||
 			viewStyle==RText.MDI_VIEW)
 			mainViewStyle = viewStyle;
@@ -598,7 +594,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @see #highlightModifiedDocumentDisplayNames
 	 * @see #setHighlightModifiedDocumentDisplayNames
 	 */
-	public void setModifiedDocumentDisplayNamesColor(Color color) {
+	private void setModifiedDocumentDisplayNamesColor(Color color) {
 		if (color==null)
 			throw new NullPointerException();
 		hmColorButton.setColor(color);
@@ -611,7 +607,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @param show Whether the checkbox should be enabled.
 	 * @see #getShowHostName()
 	 */
-	public void setShowHostName(boolean show) {
+	private void setShowHostName(boolean show) {
 		showHostNameCheckBox.setSelected(show);
 	}
 
@@ -622,7 +618,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @param style The status bar style.
 	 * @see #getStatusBarStyle
 	 */
-	public void setStatusBarStyle(int style) {
+	private void setStatusBarStyle(int style) {
 		if (style!=StatusBar.WINDOWS_98_STYLE &&
 				style!=StatusBar.WINDOWS_XP_STYLE)
 			style = StatusBar.WINDOWS_XP_STYLE;

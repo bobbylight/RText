@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextActionInfo;
@@ -33,6 +33,7 @@ import org.fife.ui.rtextarea.RTextAreaEditorKit;
  */
 public final class ActionFactory implements RTextActionInfo {
 
+	private static final String COMMON_ICON_PATH = "/org/fife/rtext/graphics/common_icons/";
 
 	/**
 	 * Private constructor to prevent instantiation.
@@ -53,7 +54,6 @@ public final class ActionFactory implements RTextActionInfo {
 									"org.fife.rtext.actions.Actions");
 
 		ClassLoader cl = ActionFactory.class.getClassLoader();
-		String commonIconPath = "org/fife/rtext/graphics/common_icons/";
 
 		try {
 			rtext.setIconImage(ImageIO.read(cl.getResource(
@@ -104,7 +104,7 @@ public final class ActionFactory implements RTextActionInfo {
 
 		temp = msg.getString("TimeAction");
 		rtext.addAction(TIME_DATE_ACTION, new RTextAreaEditorKit.TimeDateAction(temp,
-			new ImageIcon(cl.getResource(commonIconPath+"timedate16.gif")),
+			null,
 			msg.getString("TimeAction.ShortDesc"),
 			(int)msg.getString("TimeAction.Mnemonic").charAt(0),
 			null));
@@ -169,7 +169,7 @@ public final class ActionFactory implements RTextActionInfo {
 		a = new PrintPreviewAction(rtext, msg, null);
 		rtext.addAction(PRINT_PREVIEW_ACTION, a);
 
-		a = new GoToAction(rtext, msg, new ImageIcon(cl.getResource(commonIconPath+"goto16.gif")));
+		a = new GoToAction(rtext, msg, getDefaultGoToActionIcon());
 		rtext.addAction(GOTO_ACTION, a);
 
 		a = new TextAreaOrientationAction(rtext, msg, "LeftToRightAction", null,
@@ -218,5 +218,12 @@ public final class ActionFactory implements RTextActionInfo {
 
 	}
 
+	private static Icon getDefaultCommonIcon(String name) {
+		return new ImageIcon(ActionFactory.class.getResource(
+			COMMON_ICON_PATH + name));
+	}
 
+	public static Icon getDefaultGoToActionIcon() {
+		return getDefaultCommonIcon("goto16.gif");
+	}
 }

@@ -46,14 +46,11 @@ class NewMacroAction extends AppAction<RText> {
 	 */
 	public NewMacroAction(MacroPlugin plugin, RText owner, ResourceBundle msg) {
 		super(owner, msg, "NewMacroAction");
-		setIcon("cog_add.png");
+		restoreDefaultIcon();
 		this.plugin = plugin;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -106,4 +103,7 @@ class NewMacroAction extends AppAction<RText> {
 	}
 
 
+	void restoreDefaultIcon() {
+		setIcon("cog_add.png");
+	}
 }

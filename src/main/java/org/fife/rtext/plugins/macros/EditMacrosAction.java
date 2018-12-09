@@ -35,13 +35,9 @@ class EditMacrosAction extends AppAction<RText> {
 	 */
 	EditMacrosAction(RText owner, ResourceBundle msg) {
 		super(owner, msg, "EditMacrosAction");
-		setIcon("cog_edit.png");
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		RText owner = getApplication();

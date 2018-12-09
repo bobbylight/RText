@@ -96,7 +96,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	public static final int MDI_VIEW					= 2;
 
 	// Properties fired.
-	private static final String ICON_STYLE_PROPERTY		= "RText.iconStyle";
+	public static final String ICON_STYLE_PROPERTY		= "RText.iconStyle";
 	private static final String MAIN_VIEW_STYLE_PROPERTY	= "RText.mainViewStyle";
 
 	private Map<String, IconGroup> iconGroupMap;
@@ -570,7 +570,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * Returns the Help dialog for RText.
 	 *
 	 * @return The Help dialog.
-	 * @see org.fife.ui.app.GUIApplication#getHelpDialog
 	 */
 	@Override
 	public HelpDialog getHelpDialog() {
@@ -1258,6 +1257,12 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		getAction(PRINT_PREVIEW_ACTION).putValue(Action.SMALL_ICON, icon);
 		icon = iconGroup.getIcon("closeall");
 		getAction(CLOSE_ALL_ACTION).putValue(Action.SMALL_ICON, icon);
+
+		Icon gotoIcon = iconGroup.getIcon("goto");
+		if (gotoIcon == null) {
+			gotoIcon = ActionFactory.getDefaultGoToActionIcon();
+		}
+		getAction(GOTO_ACTION).putValue(Action.SMALL_ICON, gotoIcon);
 
 		// Change all RTextAreas' open documents' icon sets.
 		RTextEditorPane.setIconGroup(iconGroup);

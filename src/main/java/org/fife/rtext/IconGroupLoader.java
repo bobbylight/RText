@@ -9,10 +9,15 @@
  */
 package org.fife.rtext;
 
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.fife.ui.ImageTranscodingUtil;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
@@ -20,6 +25,7 @@ import org.fife.io.UnicodeReader;
 import org.fife.ui.OS;
 import org.fife.ui.rtextarea.IconGroup;
 
+import javax.swing.*;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -111,6 +117,10 @@ final class IconGroupLoader extends DefaultHandler {
 			addOfficeLnFsIconGroups();
 		}
 
+		IconGroup flatIconGroup = new SvgIconGroup("IntelliJ Icons (Dark)",
+			"icongroups/intellij-icons.jar");
+		iconGroupMap.put(flatIconGroup.getName(), flatIconGroup);
+
 		return iconGroupMap;
 
 	}
@@ -120,7 +130,7 @@ final class IconGroupLoader extends DefaultHandler {
 	 * Reads all icon groups from the specified XML file and returns a map
 	 * of them.
 	 *
-	 * @param RText The RText instance.
+	 * @param rtext The RText instance.
 	 * @param iconGroupFile The file from which to read.
 	 * @return A map of icon groups.  The key to each icon group is that
 	 *         icon group's name.
@@ -158,4 +168,27 @@ final class IconGroupLoader extends DefaultHandler {
 	}
 
 
+	private class SvgIconGroup extends IconGroup {
+
+		private String jarFile;
+
+		SvgIconGroup(String name, String jarFile) {
+			super(name, "", null, "svg", jarFile);
+			this.jarFile = owner.getInstallLocation() + '/' + jarFile;
+		}
+
+		@Override
+		protected Icon getIconImpl(String iconFullPath) {
+			try (InputStream svg = new URL("jar:file:///" +
+					jarFile + "!/" + iconFullPath).openStream()) {
+				//System.err.println("***** " + url.toString());
+				BufferedImage image = ImageTranscodingUtil.rasterize(
+					iconFullPath, svg, 16, 16);
+				return new ImageIcon(image);
+			} catch (IOException ioe) {
+				// If any one icon's not there, we just don't display it in the UI
+				return null;
+			}
+		}
+	}
 }

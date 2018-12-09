@@ -32,6 +32,7 @@ import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaOptionPanel;
 import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rtextarea.IconGroup;
 import org.fife.ui.rtextarea.RTextAreaOptionPanel;
 
 
@@ -51,7 +52,8 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 
 	private LabelValueComboBox<String, String> themeCombo;
 	private JButton applyButton;
-
+	private IconGroup eclipseIconGroup;
+	private IconGroup flatIconGroup;
 
 	/**
 	 * Constructor.
@@ -100,6 +102,8 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 		ComponentOrientation o = ComponentOrientation.getOrientation(getLocale());
 		applyComponentOrientation(o);
 
+		eclipseIconGroup = rtext.getIconGroupMap().get("Eclipse Icons");
+		flatIconGroup = rtext.getIconGroupMap().get("IntelliJ Icons (Dark)");
 	}
 
 
@@ -108,6 +112,7 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 		String theme = themeCombo.getSelectedValue();
 		String laf = null;
 		String editorTheme = null;
+		IconGroup iconGroup = eclipseIconGroup;
 
 		if ("default".equals(theme)) {
 			laf = UIManager.getSystemLookAndFeelClassName();
@@ -122,20 +127,23 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 		else if ("dark".equals(theme)) {
 			laf = "com.bulenkov.darcula.DarculaLaf";
 			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/dark.xml";
+			iconGroup = flatIconGroup;
 		}
 
 		else if ("monokai".equals(theme)) {
 			laf = "com.bulenkov.darcula.DarculaLaf";
 			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/monokai.xml";
+			iconGroup = flatIconGroup;
 		}
 
 		RText rtext = (RText)getOptionsDialog().getOwner();
 		if (laf != null) {
 			RTextUtilities.setLookAndFeel(rtext, laf); // Doesn't update if...
 		}
+		rtext.setIconGroupByName(iconGroup.getName());
 
 		if (editorTheme != null) {
-			Theme themeObj = null;
+			Theme themeObj;
 			try {
 				themeObj = Theme.load(getClass().getResourceAsStream(editorTheme));
 				installRstaTheme(rtext, themeObj);
@@ -156,6 +164,7 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 		dialog.getPanelById(UIOptionPanel.OPTION_PANEL_ID).setValues(rtext);
 		dialog.getPanelById(RTextAreaOptionPanel.OPTION_PANEL_ID).setValues(rtext);
 		dialog.getPanelById(RSyntaxTextAreaOptionPanel.OPTION_PANEL_ID).setValues(rtext);
+		dialog.getPanelById(ThemeOptionPanel.OPTION_PANEL_ID).setValues(rtext);
 		// Options panels installed by plugins weren't loaded by the same
 		// ClassLoader, so we can't reference them directly, but we can
 		// broadcast events to them.
@@ -299,11 +308,11 @@ public class ThemeOptionPanel extends OptionsDialogPanel {
 
 		private Color modifiedDocumentNameColor;
 
-		public Color getModifiedDocumentNameColor() {
+		Color getModifiedDocumentNameColor() {
 			return modifiedDocumentNameColor;
 		}
 
-		public void setModifiedDocumentNameColor(Color color) {
+		void setModifiedDocumentNameColor(Color color) {
 			modifiedDocumentNameColor = color;
 		}
 

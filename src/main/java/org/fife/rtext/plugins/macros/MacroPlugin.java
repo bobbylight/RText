@@ -31,6 +31,7 @@ import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.AppAction;
+import org.fife.ui.rtextarea.IconGroup;
 
 
 /**
@@ -47,6 +48,8 @@ public class MacroPlugin extends AbstractPlugin
 	private RText app;
 	private Icon icon;
 	private JMenu macrosMenu;
+	private NewMacroAction newMacroAction;
+	private EditMacrosAction editMacrosAction;
 
 	private static final String MSG = "org.fife.rtext.plugins.macros.MacrosPlugin";
 	protected static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
@@ -75,14 +78,16 @@ public class MacroPlugin extends AbstractPlugin
 
 		RText rtext = (RText)app;
 		this.app = rtext;
-		AppAction<RText> a = new NewMacroAction(this, rtext, msg);
-		a.setAccelerator(prefs.newMacroAccelerator);
-		rtext.addAction(NEW_MACRO_ACTION, a);
+		newMacroAction = new NewMacroAction(this, rtext, msg);
+		newMacroAction.setAccelerator(prefs.newMacroAccelerator);
+		rtext.addAction(NEW_MACRO_ACTION, newMacroAction);
 
-		a = new EditMacrosAction(rtext, msg);
-		a.setAccelerator(prefs.editMacrosAccelerator);
-		rtext.addAction(EDIT_MACROS_ACTION, a);
+		editMacrosAction = new EditMacrosAction(rtext, msg);
+		editMacrosAction.setAccelerator(prefs.editMacrosAccelerator);
+		rtext.addAction(EDIT_MACROS_ACTION, editMacrosAction);
 
+		updateActionIcons(rtext.getIconGroup());
+		rtext.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, this);
 	}
 
 
@@ -104,50 +109,35 @@ public class MacroPlugin extends AbstractPlugin
 	 *
 	 * @return The directory.
 	 */
-	public File getMacroDir() {
+	File getMacroDir() {
 		return new File(RTextUtilities.getPreferencesDirectory(), "macros");
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new MacroOptionPanel(this);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Icon getPluginIcon() {
 		return icon;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginName() {
 		return getString("Plugin.Name");
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginVersion() {
 		return VERSION;
@@ -195,9 +185,6 @@ public class MacroPlugin extends AbstractPlugin
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
@@ -270,9 +257,6 @@ public class MacroPlugin extends AbstractPlugin
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
@@ -282,6 +266,9 @@ public class MacroPlugin extends AbstractPlugin
 			refreshMacrosMenu();
 		}
 
+		else if (RText.ICON_STYLE_PROPERTY.equals(prop)) {
+			updateActionIcons((IconGroup)e.getNewValue());
+		}
 	}
 
 
@@ -355,13 +342,28 @@ public class MacroPlugin extends AbstractPlugin
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean uninstall() {
 		return true;
 	}
 
 
+	private void updateActionIcons(IconGroup iconGroup) {
+
+		Icon icon = iconGroup.getIcon("newmacro");
+		if (icon != null) {
+			newMacroAction.setIcon(icon);
+		}
+		else {
+			newMacroAction.restoreDefaultIcon();
+		}
+
+		icon = iconGroup.getIcon("editmacros");
+		if (icon != null) {
+			editMacrosAction.setIcon(icon);
+		}
+		else {
+			editMacrosAction.setIcon((Icon)null);
+		}
+	}
 }

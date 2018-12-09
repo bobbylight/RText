@@ -12,6 +12,8 @@ package org.fife.rtext.plugins.sourcebrowser;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -48,7 +50,7 @@ import org.fife.ui.rsyntaxtextarea.Token;
  * @version 1.2
  */
 public class SourceBrowserPlugin extends GUIPlugin
-				implements CurrentTextAreaListener {
+				implements CurrentTextAreaListener, PropertyChangeListener {
 
 	public static final String CTAGS_TYPE_EXUBERANT	= "Exuberant";
 	public static final String CTAGS_TYPE_STANDARD	= "Standard";
@@ -96,6 +98,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	public SourceBrowserPlugin(AbstractPluggableGUIApplication<?> app) {
 
 		this.owner = (RText)app;
+		this.owner.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, this);
 
 		URL url = getClass().getResource("source_browser.png");
 		pluginIcon = new ImageIcon(url);
@@ -227,28 +230,25 @@ public class SourceBrowserPlugin extends GUIPlugin
 			final String customHandlerName = System.getProperty(
 									CUSTOM_HANDLER_PREFIX + style);
 			if (customHandlerName!=null) {
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							Class<?> clazz = Class.forName(customHandlerName);
-							Object handler = clazz.getDeclaredConstructor().newInstance();
-							java.lang.reflect.Method m = clazz.getMethod(
-									"constructSourceBrowserTree", RText.class);
-							sourceTree = (JTree)m.invoke(handler,
-									new Object[] { owner });
-							checkTreeCellRenderer(sourceTree);
-							wind.setPrimaryComponent(sourceTree);
-							RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
-							ensureSourceTreeSortedProperly();
-							scrollPane.setViewportView(sourceTree);
-						} catch (RuntimeException re) { // FindBugs
-							throw re;
-						} catch (Exception ex) {
-							owner.displayException(ex);
-						}
-					}}
-				);
+				SwingUtilities.invokeLater(() -> {
+					try {
+						Class<?> clazz = Class.forName(customHandlerName);
+						Object handler = clazz.getDeclaredConstructor().newInstance();
+						Method m = clazz.getMethod(
+								"constructSourceBrowserTree", RText.class);
+						sourceTree = (JTree)m.invoke(handler,
+								new Object[] { owner });
+						checkTreeCellRenderer(sourceTree);
+						wind.setPrimaryComponent(sourceTree);
+						RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
+						ensureSourceTreeSortedProperly();
+						scrollPane.setViewportView(sourceTree);
+					} catch (RuntimeException re) { // FindBugs
+						throw re;
+					} catch (Exception ex) {
+						owner.displayException(ex);
+					}
+				});
 				return;
 			}
 
@@ -399,71 +399,74 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 	private static String getLanguageForStyle(String style) {
 		String language = null;
-		if (style.equals(SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT)) {
-			language = "Flex"; // Same as MXML to Exuberant Ctags
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_C)) {
-			language = "C";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS)) {
-			language = "C++";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_CSHARP)) {
-			language = "C#";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_DELPHI)) {
-			language = "Pascal";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_FORTRAN)) {
-			language = "Fortran";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_GROOVY)) {
-			language = "Groovy";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_HTML)) {
-			language = "HTML";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_JAVA)) {
-			language = "Java";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT)) {
-			language = "JavaScript";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_LISP)) {
-			language = "Lisp";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_LUA)) {
-			language = "Lua";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_MAKEFILE)) {
-			language = "Make";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_MXML)) {
-			language = "Flex"; // Same as ActionScript to Exuberant Ctags
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_PERL)) {
-			language = "Perl";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_PHP)) {
-			language = "PHP";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_PYTHON)) {
-			language = "Python";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_RUBY)) {
-			language = "Ruby";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_SQL)) {
-			language = "SQL";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_TCL)) {
-			language = "Tcl";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL)) {
-			language = "Sh";
-		}
-		else if (style.equals(SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH)) {
-			language = "DosBatch";
+		switch (style) {
+			case SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT:
+				language = "Flex"; // Same as MXML to Exuberant Ctags
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_C:
+				language = "C";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS:
+				language = "C++";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_CSHARP:
+				language = "C#";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_DELPHI:
+				language = "Pascal";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_FORTRAN:
+				language = "Fortran";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_GROOVY:
+				language = "Groovy";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_HTML:
+				language = "HTML";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_JAVA:
+				language = "Java";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT:
+				language = "JavaScript";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_LISP:
+				language = "Lisp";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_LUA:
+				language = "Lua";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_MAKEFILE:
+				language = "Make";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_MXML:
+				language = "Flex"; // Same as ActionScript to Exuberant Ctags
+
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_PERL:
+				language = "Perl";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_PHP:
+				language = "PHP";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_PYTHON:
+				language = "Python";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_RUBY:
+				language = "Ruby";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_SQL:
+				language = "SQL";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_TCL:
+				language = "Tcl";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL:
+				language = "Sh";
+				break;
+			case SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH:
+				language = "DosBatch";
+				break;
 		}
 		return language;
 	}
@@ -609,6 +612,16 @@ public class SourceBrowserPlugin extends GUIPlugin
 		return prefs;
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent e) {
+
+		String propertyName = e.getPropertyName();
+
+		if (RText.ICON_STYLE_PROPERTY.equals(propertyName)) {
+			sortAction.refreshIcon();
+		}
+	}
+
 
 	/**
 	 * Refreshes the tag list for the current document.
@@ -623,9 +636,6 @@ public class SourceBrowserPlugin extends GUIPlugin
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void savePreferences() {
 		SourceBrowserPrefs prefs = new SourceBrowserPrefs();
@@ -755,7 +765,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		SortAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Sort");
-			setIcon("alphab_sort_co.gif");
+			refreshIcon();
 			setName(null); // No text on button
 		}
 
@@ -764,6 +774,17 @@ public class SourceBrowserPlugin extends GUIPlugin
 			ensureSourceTreeSortedProperly();
 		}
 
+		void refreshIcon() {
+
+			// Allow themes, such as the dark theme, to provide an icon
+			Icon icon = getApplication().getIconGroup().getIcon("sorted");
+			if (icon != null) {
+				setIcon(icon);
+			}
+			else {
+				setIcon("alphab_sort_co.gif");
+			}
+		}
 	}
 
 
