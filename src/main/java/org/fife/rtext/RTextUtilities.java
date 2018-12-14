@@ -74,7 +74,7 @@ public class RTextUtilities {
 	/**
 	 * The extension at the end of all macro files.
 	 */
-	public static final String MACRO_EXTENSION		  = ".macro";
+	private static final String MACRO_EXTENSION		  = ".macro";
 
 	private static final String FILE_FILTERS_FILE	  = "ExtraFileChooserFilters.xml";
 
@@ -128,7 +128,7 @@ public class RTextUtilities {
 	 */
 	private static void addFilter(RTextFileChooser chooser,
 								  ResourceBundle msg, String key, Object extensions) {
-		ExtensionFileFilter filter = null;
+		ExtensionFileFilter filter;
 		if (extensions instanceof String) {
 			filter = new ExtensionFileFilter(msg.getString(key),
 										(String)extensions);
@@ -239,10 +239,10 @@ public class RTextUtilities {
 	 * @return A file chooser for RText to use.
 	 * @see #saveFileChooserFavorites(RText)
 	 */
-	public static RTextFileChooser createFileChooser(RText rtext) {
+	static RTextFileChooser createFileChooser(RText rtext) {
 
 		rtext.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		RTextFileChooser chooser = null;
+		RTextFileChooser chooser;
 
 		try {
 
@@ -877,7 +877,7 @@ public class RTextUtilities {
 	 * @param rtext The parent RText instance.
 	 * @see #createFileChooser(RText)
 	 */
-	public static void saveFileChooserFavorites(RText rtext) {
+	static void saveFileChooserFavorites(RText rtext) {
 		RTextFileChooser chooser = rtext.getFileChooser();
 		try {
 			chooser.saveFavorites(getFileChooserFavoritesFile());

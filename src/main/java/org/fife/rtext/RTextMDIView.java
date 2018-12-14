@@ -453,6 +453,14 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	}
 
 
+	@Override
+	public void refreshTabIcons() {
+		for (InternalFrame frame : frames) {
+			frame.refreshIcon();
+		}
+	}
+
+
 	/**
 	 * Removes a component from this container.  Note that this method does not
 	 * update currentTextArea, you must do that yourself.
@@ -460,7 +468,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	@Override
 	protected void removeComponentAt(int index) {
 		if (index>=0 && index<getNumDocuments()) {
-			((JInternalFrame)frames.get(index)).dispose();
+			frames.get(index).dispose();
 			frames.remove(index);
 			//tabbedPane.removeTabAt(index);
 		}
@@ -478,7 +486,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	@Override
 	public void setDocumentDisplayNameAt(int index, String displayName) {
 		if (index>=0 && index<getNumDocuments()) {
-			((JInternalFrame)frames.get(index)).setTitle(displayName);
+			frames.get(index).setTitle(displayName);
 		}
 	}
 
@@ -637,11 +645,12 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		private static final int X_OFFSET = 30;
 		private static final int Y_OFFSET = 30;
 
+		private RTextScrollPane scrollPane;
+
 		InternalFrame(String title, Component component) {
 			super(title, true, true, true, true);
-			RTextScrollPane sp = (RTextScrollPane)((JPanel)component).
-													getComponent(0);
-			this.setFrameIcon(getIconFor(sp));
+			scrollPane = (RTextScrollPane)((JPanel)component).getComponent(0);
+			this.setFrameIcon(getIconFor(scrollPane));
 			Container contentPane = getContentPane();
 			contentPane.setLayout(new GridLayout(1,1));
 			contentPane.add(component);
@@ -653,6 +662,9 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 			setLocation(X_OFFSET * openFrameCount, Y_OFFSET * openFrameCount);
 		}
 
+		void refreshIcon() {
+			setFrameIcon(getIconFor(scrollPane));
+		}
 	}
 
 

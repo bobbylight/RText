@@ -305,6 +305,15 @@ class RTextSplitPaneView extends AbstractMainView
 	}
 
 
+	@Override
+	public void refreshTabIcons() {
+		for (int i = 0; i < getNumDocuments(); i++) {
+			DocumentInfo info = listModel.getElementAt(i);
+			info.icon = getIconFor(getRTextScrollPaneAt(i));
+		}
+		documentList.repaint();
+	}
+
 	/**
 	 * Removes a component from this container.
 	 * NOTE:  This is HORRIBLY inefficient, as we remove all components from the

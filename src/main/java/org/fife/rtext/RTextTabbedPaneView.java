@@ -378,6 +378,13 @@ inCloseCurrentDocument = false;
 	}
 
 
+	@Override
+	public void refreshTabIcons() {
+		for (int i = 0; i < getNumDocuments(); i++) {
+			tabbedPane.setIconAt(i, getIconFor(getRTextScrollPaneAt(i)));
+		}
+	}
+
 	/**
 	 * Removes a change listener from this tabbed pane.
 	 *

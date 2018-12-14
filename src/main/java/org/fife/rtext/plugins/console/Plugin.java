@@ -105,45 +105,30 @@ public class Plugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new ConsoleOptionPanel(this);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Icon getPluginIcon() {
 		return icon;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginName() {
 		return msg.getString("Plugin.Name");
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginVersion() {
 		return VERSION;
@@ -190,7 +175,7 @@ public class Plugin extends GUIPlugin {
 	 * @return Whether user input is syntax highlighted.
 	 * @see #setSyntaxHighlightInput(boolean)
 	 */
-	public boolean getSyntaxHighlightInput() {
+	boolean getSyntaxHighlightInput() {
 		return highlightInput;
 	}
 
@@ -265,14 +250,11 @@ public class Plugin extends GUIPlugin {
 	 * Changes all consoles to use the default colors for the current
 	 * application theme.
 	 */
-	public void restoreDefaultColors() {
+	void restoreDefaultColors() {
 		window.restoreDefaultColors();
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void savePreferences() {
 
@@ -321,7 +303,7 @@ public class Plugin extends GUIPlugin {
 	 * @param highlightInput Whether to syntax highlight user input.
 	 * @see #getSyntaxHighlightInput()
 	 */
-	public void setSyntaxHighlightInput(boolean highlightInput) {
+	void setSyntaxHighlightInput(boolean highlightInput) {
 		if (highlightInput!=this.highlightInput) {
 			this.highlightInput = highlightInput;
 			if (window!=null) {
@@ -334,14 +316,11 @@ public class Plugin extends GUIPlugin {
 	/**
 	 * Stops the currently running process, if any.
 	 */
-	public void stopCurrentProcess() {
+	void stopCurrentProcess() {
 		window.stopCurrentProcess();
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean uninstall() {
 		return true;

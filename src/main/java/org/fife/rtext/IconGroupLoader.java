@@ -125,7 +125,6 @@ final class IconGroupLoader extends DefaultHandler {
 
 	}
 
-
 	/**
 	 * Reads all icon groups from the specified XML file and returns a map
 	 * of them.
@@ -187,7 +186,9 @@ final class IconGroupLoader extends DefaultHandler {
 				return new ImageIcon(image);
 			} catch (IOException ioe) {
 				// If any one icon's not there, we just don't display it in the UI
-				return null;
+				int lastDot = iconFullPath.lastIndexOf('.');
+				String pngIconName = iconFullPath.substring(0, lastDot) + ".png";
+				return super.getIconImpl(pngIconName);
 			}
 		}
 	}

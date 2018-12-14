@@ -1056,6 +1056,14 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		splashScreen.updateStatus(getString("CreatingView"), 20);
 
+		loadPossibleIconGroups();
+		try {
+			setIconGroupByName(prefs.iconGroupName);
+		} catch (InternalError ie) {
+			displayException(ie);
+			System.exit(0);
+		}
+
 		// Initialize our view object.
 		switch (prefs.mainView) {
 			case TABBED_VIEW:
@@ -1071,6 +1079,10 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 				mainView = new RTextMDIView(RText.this, filesToOpen, prefs);
 				break;
 		}
+
+		// Change all RTextAreas' open documents' icon sets.  This must be done
+		// after the main view is instantiated.
+		RTextEditorPane.setIconGroup(iconGroup);
 
 		csp = new CollapsibleSectionPanel(false);
 		csp.add(mainView);
@@ -1092,14 +1104,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		StatusBar statusBar = (StatusBar)getStatusBar();
 		mainView.addPropertyChangeListener(statusBar);
-
-		loadPossibleIconGroups();
-		try {
-			setIconGroupByName(prefs.iconGroupName);
-		} catch (InternalError ie) {
-			displayException(ie);
-			System.exit(0);
-		}
 
 		splashScreen.updateStatus(getString("CreatingToolBar"), 60);
 		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
@@ -1187,7 +1191,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		// Save preferences for any plugins.
 		Plugin[] plugins = getPlugins();
-		int count = plugins.length;
 		for (Plugin plugin : plugins) {
 			plugin.savePreferences();
 		}
@@ -1263,10 +1266,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			gotoIcon = ActionFactory.getDefaultGoToActionIcon();
 		}
 		getAction(GOTO_ACTION).putValue(Action.SMALL_ICON, gotoIcon);
-
-		// Change all RTextAreas' open documents' icon sets.
-		RTextEditorPane.setIconGroup(iconGroup);
-
 
 		// The toolbar uses the large versions of the icons, if available.
 		// FIXME:  Make this toggle-able.
@@ -1677,88 +1676,85 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		//System.setProperty("com.apple.mrj.application.apple.menu.about.name", "RText");
 
 		// Swing stuff should always be done on the EDT...
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
+		SwingUtilities.invokeLater(() -> {
 
-				String lafName = RTextPrefs.getLookAndFeelToLoad();
+			String lafName = RTextPrefs.getLookAndFeelToLoad();
 
-				// Allow Substance to paint window titles, etc.  We don't allow
-				// Metal (for example) to do this, because setting these
-				// properties to "true", then toggling to a LAF that doesn't
-				// support this property, such as Windows, causes the
-				// OS-supplied frame to not appear (as of 6u20).
-				if (SubstanceUtil.isASubstanceLookAndFeel(lafName)) {
-					JFrame.setDefaultLookAndFeelDecorated(true);
-					JDialog.setDefaultLookAndFeelDecorated(true);
+			// Allow Substance to paint window titles, etc.  We don't allow
+			// Metal (for example) to do this, because setting these
+			// properties to "true", then toggling to a LAF that doesn't
+			// support this property, such as Windows, causes the
+			// OS-supplied frame to not appear (as of 6u20).
+			if (SubstanceUtil.isASubstanceLookAndFeel(lafName)) {
+				JFrame.setDefaultLookAndFeelDecorated(true);
+				JDialog.setDefaultLookAndFeelDecorated(true);
+			}
+
+			String rootDir = AbstractGUIApplication.getLocationOfJar();
+			ThirdPartyLookAndFeelManager lafManager =
+				new ThirdPartyLookAndFeelManager(rootDir);
+
+			try {
+				ClassLoader cl = lafManager.getLAFClassLoader();
+				// Set these properties before instantiating WebLookAndFeel
+				if (WebLookAndFeelUtils.isWebLookAndFeel(lafName)) {
+					WebLookAndFeelUtils.installWebLookAndFeelProperties(cl);
 				}
-
-				String rootDir = AbstractGUIApplication.getLocationOfJar();
-				ThirdPartyLookAndFeelManager lafManager =
-					new ThirdPartyLookAndFeelManager(rootDir);
-
+				else {
+					ShadowPopupFactory.install();
+				}
+				// Must set UIManager's ClassLoader before instantiating
+				// the LAF.  Substance is so high-maintenance!
+				UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
+				Class<?> clazz;
 				try {
-					ClassLoader cl = lafManager.getLAFClassLoader();
-					// Set these properties before instantiating WebLookAndFeel
-					if (WebLookAndFeelUtils.isWebLookAndFeel(lafName)) {
-						WebLookAndFeelUtils.installWebLookAndFeelProperties(cl);
-					}
-					else {
-						ShadowPopupFactory.install();
-					}
-					// Must set UIManager's ClassLoader before instantiating
-					// the LAF.  Substance is so high-maintenance!
-					UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
-					Class<?> clazz;
-					try {
-						clazz = cl.loadClass(lafName);
-					} catch (UnsupportedClassVersionError ucve) {
-						// A LookAndFeel requiring Java X or later, but we're
-						// now restarting with a Java version earlier than X
-						lafName = UIManager.getSystemLookAndFeelClassName();
-						clazz = cl.loadClass(lafName);
-					}
-					LookAndFeel laf = (LookAndFeel)clazz.getDeclaredConstructor().newInstance();
-					UIManager.setLookAndFeel(laf);
-					UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
-					UIUtil.installOsSpecificLafTweaks();
-				} catch (RuntimeException re) { // FindBugs
-					throw re;
+					clazz = cl.loadClass(lafName);
+				} catch (UnsupportedClassVersionError ucve) {
+					// A LookAndFeel requiring Java X or later, but we're
+					// now restarting with a Java version earlier than X
+					lafName = UIManager.getSystemLookAndFeelClassName();
+					clazz = cl.loadClass(lafName);
+				}
+				LookAndFeel laf = (LookAndFeel)clazz.getDeclaredConstructor().newInstance();
+				UIManager.setLookAndFeel(laf);
+				UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
+				UIUtil.installOsSpecificLafTweaks();
+			} catch (RuntimeException re) { // FindBugs
+				throw re;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			// The default speed of Substance animations is too slow
+			// (200ms), looks bad moving through JMenuItems quickly.
+			if (SubstanceUtil.isSubstanceInstalled()) {
+				try {
+					SubstanceUtil.setAnimationSpeed(100);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
-				// The default speed of Substance animations is too slow
-				// (200ms), looks bad moving through JMenuItems quickly.
-				if (SubstanceUtil.isSubstanceInstalled()) {
-					try {
-						SubstanceUtil.setAnimationSpeed(100);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-
-				if (lafName.contains(".Darcula")) {
-					UIManager.getLookAndFeelDefaults().put("Tree.rendererFillBackground", Boolean.FALSE);
-				}
-				else {
-					UIManager.getLookAndFeelDefaults().put("Tree.rendererFillBackground", null);
-				}
-
-				RText rtext = new RText(args);
-				rtext.setLookAndFeelManager(lafManager);
-
-				// For some reason, when using MDI_VIEW, the first window
-				// isn't selected (although it is activated)...
-				// INVESTIGATE ME!!
-				if (rtext.getMainViewStyle()==MDI_VIEW) {
-					rtext.getMainView().setSelectedIndex(0);
-				}
-
-				// We currently have one RText instance running.
-				StoreKeeper.addRTextInstance(rtext);
-
 			}
+
+			if (lafName.contains(".Darcula")) {
+				UIManager.getLookAndFeelDefaults().put("Tree.rendererFillBackground", Boolean.FALSE);
+			}
+			else {
+				UIManager.getLookAndFeelDefaults().put("Tree.rendererFillBackground", null);
+			}
+
+			RText rtext = new RText(args);
+			rtext.setLookAndFeelManager(lafManager);
+
+			// For some reason, when using MDI_VIEW, the first window
+			// isn't selected (although it is activated)...
+			// INVESTIGATE ME!!
+			if (rtext.getMainViewStyle()==MDI_VIEW) {
+				rtext.getMainView().setSelectedIndex(0);
+			}
+
+			// We currently have one RText instance running.
+			StoreKeeper.addRTextInstance(rtext);
+
 		});
 
 	}

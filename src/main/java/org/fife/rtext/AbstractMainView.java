@@ -325,7 +325,7 @@ public abstract class AbstractMainView extends JPanel
 
 	/**
 	 * Adds a text area to this view.  This method fires a property change
-	 * event of type {@link #OLD_FILE_ADDED_PROPERTY}.
+	 * event of type {@link #TEXT_AREA_ADDED_PROPERTY}.
 	 *
 	 * @param textArea The text area to add.
 	 * @see #addTextAreaImpl(String, Component, String)
@@ -1341,7 +1341,14 @@ public abstract class AbstractMainView extends JPanel
 	protected Icon getIconFor(RTextScrollPane scrollPane) {
 		RTextEditorPane textArea = (RTextEditorPane)scrollPane.
 								getTextArea();
-		return FileTypeIconManager.get().getIconFor(textArea);
+
+		// Fetch an icon from the theme first, then from the general icon manager if
+		// the theme doesn't supply its own icons for file types.
+		Icon icon = owner.getIconGroup().getFileTypeIcon(textArea.getSyntaxEditingStyle());
+		if (icon == null || icon.getIconWidth() == -1) { // Allow for bogus URLs returning no-data images
+			icon = FileTypeIconManager.get().getIconFor(textArea);
+		}
+		return icon;
 	}
 
 
@@ -2174,6 +2181,7 @@ public abstract class AbstractMainView extends JPanel
 
 		// Remember the owner of this tabbed pane.
 		this.owner = owner;
+		owner.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, this);
 		searchManager = new SearchManager(owner);
 
 		// Initialize some stuff from prefs.
@@ -2589,34 +2597,41 @@ public abstract class AbstractMainView extends JPanel
 
 		String propertyName = e.getPropertyName();
 
-		// If the file's path is changing (must be caused by the file being
-		// saved(?))...
-		if (propertyName.equals(RTextEditorPane.FULL_PATH_PROPERTY)) {
-			setDocumentDisplayNameAt(getSelectedIndex(), currentTextArea.getFileName());
-			fireCurrentTextAreaEvent(CurrentTextAreaEvent.FILE_NAME_CHANGED,
-								e.getOldValue(), e.getNewValue());
-		}
+		switch (propertyName) {
 
-		// If the file's modification status is changing...
-		else if (propertyName.equals(RTextEditorPane.DIRTY_PROPERTY)) {
-			int selectedIndex = getSelectedIndex();
-			String oldTitle = getDocumentDisplayNameAt(selectedIndex);
-			if ((Boolean)e.getNewValue())
-				setDocumentDisplayNameAt(selectedIndex, oldTitle+"*");
-			else {
-				setDocumentDisplayNameAt(selectedIndex,
-						oldTitle.substring(0,oldTitle.length()-1));	// Get rid of the "*".
-			}
-			fireCurrentTextAreaEvent(
-							CurrentTextAreaEvent.IS_MODIFIED_CHANGED,
-							e.getOldValue(), e.getNewValue());
-		}
+			// If the file's path is changing (must be caused by the file being
+			// saved(?))...
+			case RTextEditorPane.FULL_PATH_PROPERTY:
+				setDocumentDisplayNameAt(getSelectedIndex(), currentTextArea.getFileName());
+				fireCurrentTextAreaEvent(CurrentTextAreaEvent.FILE_NAME_CHANGED,
+					e.getOldValue(), e.getNewValue());
+				break;
 
-		// If the highlighting style of the current file changed...
-		else if (propertyName.equals(RTextEditorPane.SYNTAX_STYLE_PROPERTY)) {
-			fireCurrentTextAreaEvent(
-						CurrentTextAreaEvent.SYNTAX_STYLE_CNANGED,
-						e.getOldValue(), e.getNewValue());
+			// If the file's modification status is changing...
+			case RTextEditorPane.DIRTY_PROPERTY:
+				int selectedIndex = getSelectedIndex();
+				String oldTitle = getDocumentDisplayNameAt(selectedIndex);
+				if ((Boolean)e.getNewValue())
+					setDocumentDisplayNameAt(selectedIndex, oldTitle + "*");
+				else {
+					setDocumentDisplayNameAt(selectedIndex,
+						oldTitle.substring(0, oldTitle.length() - 1));    // Get rid of the "*".
+				}
+				fireCurrentTextAreaEvent(
+					CurrentTextAreaEvent.IS_MODIFIED_CHANGED,
+					e.getOldValue(), e.getNewValue());
+				break;
+
+			// If the highlighting style of the current file changed...
+			case RTextEditorPane.SYNTAX_STYLE_PROPERTY:
+				fireCurrentTextAreaEvent(
+					CurrentTextAreaEvent.SYNTAX_STYLE_CNANGED,
+					e.getOldValue(), e.getNewValue());
+				break;
+
+			case RText.ICON_STYLE_PROPERTY:
+				refreshTabIcons();
+				break;
 		}
 
 	}
@@ -2641,6 +2656,12 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public abstract void refreshDisplayNames();
 
+
+	/**
+	 * Updates the icons in file tabs/list view/etc.  This called in response to
+	 * the user picking a new icon group.
+	 */
+	public abstract void refreshTabIcons();
 
 	/**
 	 * Looks for duplicate open documents (documents opened more than once)
@@ -3812,23 +3833,6 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public void setPrintFont(Font newPrintFont) {
 		printFont = newPrintFont;
-	}
-
-
-	/**
-	 * This method is called by {@link BeginRecordingMacroAction} and
-	 * {@link EndRecordingMacroAction} so we can change the cursor used by all
-	 * open text areas when a macro is being recorded.
-	 *
-	 * @param recording Whether a macro is being recorded.
-	 */
-	void setRecordingMacro(boolean recording) {
-		Cursor cursor = (recording ? getMacroCursor() :
-					Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-		for (int i=0; i<getNumDocuments(); i++) {
-			RTextEditorPane textArea = getRTextEditorPaneAt(i);
-			textArea.setCursor(cursor);
-		}
 	}
 
 

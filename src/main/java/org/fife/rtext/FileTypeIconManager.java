@@ -9,16 +9,17 @@
  */
 package org.fife.rtext;
 
-import java.awt.Component;
-import java.awt.Graphics;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -52,7 +53,7 @@ public final class FileTypeIconManager {
 	private static final FileTypeIconManager INSTANCE =
 									new FileTypeIconManager();
 
-	private static final String PATH = "org/fife/rtext/graphics/file_icons/";
+	private static final String PATH = "/org/fife/rtext/graphics/file_icons/";
 	private static final String DEFAULT_ICON_PATH	= PATH + "txt.gif";
 
 
@@ -61,8 +62,7 @@ public final class FileTypeIconManager {
 	 */
 	private FileTypeIconManager() {
 
-		ClassLoader cl = this.getClass().getClassLoader();
-		defaultIcon = new ImageIcon(cl.getResource(DEFAULT_ICON_PATH));
+		defaultIcon = getIconImpl(DEFAULT_ICON_PATH);
 
 		type2IconNameMap = new HashMap<>();
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_C,				PATH + "c.gif");
@@ -97,7 +97,7 @@ public final class FileTypeIconManager {
 	 */
 	public Icon getIconFor(RTextEditorPane textArea) {
 
-		Icon icon = null;
+		Icon icon;
 
 		// If this file has no extension, use the default icon.
 		String style = textArea.getSyntaxEditingStyle();
@@ -113,8 +113,7 @@ public final class FileTypeIconManager {
 				icon = iconName2IconMap.get(iconName);
 				// Load and cache the icon if it's not yet loaded.
 				if (icon==null) {
-					ClassLoader cl = this.getClass().getClassLoader();
-					icon = new ImageIcon(cl.getResource(iconName));
+					icon = getIconImpl(iconName);
 					iconName2IconMap.put(iconName, icon);
 				}
 			}
@@ -130,6 +129,20 @@ public final class FileTypeIconManager {
 
 	}
 
+
+	private Icon getIconImpl(String resource) {
+
+		if (resource.endsWith(".svg")) {
+			try {
+				return new ImageIcon(ImageTranscodingUtil.rasterize(resource,
+					getClass().getResourceAsStream(resource), 16, 16));
+			} catch (IOException ioe) { // Never happens
+				return null;
+			}
+		}
+
+		return new ImageIcon(getClass().getResource(resource));
+	}
 
 	/**
 	 * Returns the singleton instance of this class.
