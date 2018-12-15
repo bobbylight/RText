@@ -174,45 +174,30 @@ public class Plugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new OptionsPanel(this);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public Icon getPluginIcon() {
+	public Icon getPluginIcon(boolean darkLookAndFeel) {
 		return null;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginName() {
 		return msg.getString("Name");
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginVersion() {
 		return PLUGIN_VERSION;

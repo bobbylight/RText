@@ -940,7 +940,6 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 			File[] files = RTextUtilities.getSavedMacroFiles();
 
 			// Add all saved macros to the popup menu.
-			int count = files.length;
 			for (File file : files) {
 				String name = RTextUtilities.getMacroName(file);
 				final File f = file;

@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.*;
@@ -28,6 +27,7 @@ import javax.swing.tree.TreeCellRenderer;
 import org.fife.ctags.TagEntry;
 import org.fife.rtext.*;
 import org.fife.rtext.optionsdialog.OptionsDialog;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.RScrollPane;
 import org.fife.util.SubstanceUtil;
 import org.fife.ui.WebLookAndFeelUtils;
@@ -63,7 +63,8 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private JTree sourceTree;
 	private RScrollPane scrollPane;
 	private ResourceBundle msg;
-	private Icon pluginIcon;
+	private Icon darkThemeIcon;
+	private Icon lightThemeIcon;
 	private boolean useHTMLToolTips;
 	private SourceBrowserThread sourceBrowserThread;
 	private SourceTreeNode workingRoot;
@@ -100,8 +101,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 		this.owner = (RText)app;
 		this.owner.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, this);
 
-		URL url = getClass().getResource("source_browser.png");
-		pluginIcon = new ImageIcon(url);
+		loadIcons();
 
 		msg = ResourceBundle.getBundle(BUNDLE_NAME);
 		this.name = msg.getString("Name");
@@ -135,8 +135,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 			TreeCellRenderer renderer = tree.getCellRenderer();
 			try {
 				Class<?> clazz = Class.forName(RENDERER_WRAPPER_CLASS_NAME);
-				Constructor<?> cons = clazz.getConstructor(
-						new Class[] { TreeCellRenderer.class });
+				Constructor<?> cons = clazz.getConstructor(TreeCellRenderer.class);
 				renderer = (TreeCellRenderer)cons.newInstance(
 						new Object[] { renderer });
 				tree.setCellRenderer(renderer);
@@ -269,8 +268,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 			// (via the text editor's syntax highlighting style).  We do
 			// it this way because the user may have some odd extension
 			// (like .abc) mapped to say C source files.
-			Icon fileIcon = FileTypeIconManager.get().
-										getIconFor(textArea);
+			Icon fileIcon = owner.getMainView().getIconFor(textArea);
 			((DefaultSourceTree)sourceTree).setRootIcon(fileIcon);
 			String language = getLanguageForStyle(style);
 			if (language==null) {
@@ -301,10 +299,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 	protected void ensureSourceTreeSortedProperly() {
 
 		Class<?> clazz = sourceTree.getClass();
-		Method sortMethod = null;
+		Method sortMethod;
 		try {
-			sortMethod = clazz.getMethod("setSorted",
-										new Class[] { boolean.class });
+			sortMethod = clazz.getMethod("setSorted", boolean.class);
 		} catch (NoSuchMethodException nsme) {
 			nsme.printStackTrace();
 			return;
@@ -497,14 +494,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 	}
 
 
-	/**
-	 * Returns the icon for this plugin.
-	 *
-	 * @return The icon for this plugin.
-	 */
 	@Override
-	public Icon getPluginIcon() {
-		return pluginIcon;
+	public Icon getPluginIcon(boolean darkLookAndFeel) {
+		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
 	}
 
 
@@ -589,6 +581,23 @@ public class SourceBrowserPlugin extends GUIPlugin
 			}
 		});
 
+	}
+
+
+	private void loadIcons() {
+
+		try {
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("source browser light",
+				getClass().getResourceAsStream("toolWindowTodo.svg"), 16, 16);
+			lightThemeIcon = new ImageIcon(lightThemeImage);
+
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("source browser dark",
+				getClass().getResourceAsStream("toolWindowTodo_dark.svg"), 16, 16);
+			darkThemeIcon = new ImageIcon(darkThemeImage);
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 

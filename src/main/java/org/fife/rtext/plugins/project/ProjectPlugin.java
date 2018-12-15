@@ -9,10 +9,9 @@
  */
 package org.fife.rtext.plugins.project;
 
-import java.awt.ComponentOrientation;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Locale;
 
 import javax.swing.Action;
@@ -36,6 +35,7 @@ import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.model.Workspace;
 import org.fife.rtext.plugins.project.tree.AbstractWorkspaceTreeNode;
 import org.fife.rtext.plugins.project.tree.WorkspaceTree;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
@@ -58,7 +58,8 @@ public class ProjectPlugin extends GUIPlugin {
 	public static final String PROPERTY_INITIAL_WORKSPACE = "workspace.override";
 
 	private RText rtext;
-	private Icon icon;
+	private Icon darkThemeIcon;
+	private Icon lightThemeIcon;
 	private Workspace workspace;
 	private ProjectPluginOptionPanel optionPanel;
 
@@ -71,8 +72,7 @@ public class ProjectPlugin extends GUIPlugin {
 
 		rtext = (RText)app; // Needed now in case of XML errors below.
 
-		URL res = getClass().getResource("application_side_list.png");
-		icon = new ImageIcon(res);
+		loadIcons();
 		ProjectPluginPrefs prefs = loadPrefs();
 
 		AppAction<RText> a = new ViewProjectsAction((RText)app, this);
@@ -110,9 +110,6 @@ public class ProjectPlugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		if (optionPanel==null) {
@@ -122,36 +119,24 @@ public class ProjectPlugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public Icon getPluginIcon() {
-		return icon;
+	public Icon getPluginIcon(boolean darkLookAndFeel) {
+		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginName() {
 		return Messages.getString("ProjectPlugin.Name");
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginVersion() {
 		return VERSION_STRING;
@@ -237,12 +222,7 @@ public class ProjectPlugin extends GUIPlugin {
 		final TreePath path = new TreePath(model.getPathToRoot(parent));
 		getTree().expandPath(path);
 
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				getTree().setSelectionPath(new TreePath(model.getPathToRoot(child)));
-			}
-		});
+		SwingUtilities.invokeLater(() -> getTree().setSelectionPath(new TreePath(model.getPathToRoot(child))));
 	}
 
 
@@ -292,6 +272,22 @@ public class ProjectPlugin extends GUIPlugin {
 		return getDockableWindow().isActive();
 	}
 
+
+	private void loadIcons() {
+
+		try {
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("projectStructure light",
+				getClass().getResourceAsStream("projectStructure.svg"), 16, 16);
+			lightThemeIcon = new ImageIcon(lightThemeImage);
+
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("projectStructure dark",
+				getClass().getResourceAsStream("projectStructure_dark.svg"), 16, 16);
+			darkThemeIcon = new ImageIcon(darkThemeImage);
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
 
 	/**
 	 * Loads the initial workspace as previously saved in the preferences.

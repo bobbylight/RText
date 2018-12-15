@@ -9,12 +9,11 @@
  */
 package org.fife.rtext.plugins.console;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
-import javax.imageio.ImageIO;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -27,6 +26,7 @@ import javax.swing.event.PopupMenuListener;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
@@ -47,7 +47,8 @@ public class Plugin extends GUIPlugin {
 	private RText app;
 	private boolean highlightInput;
 	private ConsoleWindow window;
-	private Icon icon;
+	private Icon darkThemeIcon;
+	private Icon lightThemeIcon;
 
 	private static final String MSG = "org.fife.rtext.plugins.console.Plugin";
 	protected static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
@@ -64,15 +65,7 @@ public class Plugin extends GUIPlugin {
 
 		this.app = (RText)app;
 
-		// Load the plugin icon.
-		URL url = getClass().getResource("monitor.png");
-		if (url!=null) { // Should always be true
-			try {
-				icon = new ImageIcon(ImageIO.read(url));
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-			}
-		}
+		loadIcons();
 
 		ConsolePrefs prefs = loadPrefs();
 		setSyntaxHighlightInput(prefs.syntaxHighlightInput);
@@ -118,8 +111,8 @@ public class Plugin extends GUIPlugin {
 
 
 	@Override
-	public Icon getPluginIcon() {
-		return icon;
+	public Icon getPluginIcon(boolean darkLookAndFeel) {
+		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
 	}
 
 
@@ -222,6 +215,23 @@ public class Plugin extends GUIPlugin {
 	 */
 	boolean isConsoleWindowVisible() {
 		return window!=null && window.isActive();
+	}
+
+
+	private void loadIcons() {
+
+		try {
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("console light",
+				getClass().getResourceAsStream("console.svg"), 16, 16);
+			lightThemeIcon = new ImageIcon(lightThemeImage);
+
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("console dark",
+				getClass().getResourceAsStream("console_dark.svg"), 16, 16);
+			darkThemeIcon = new ImageIcon(darkThemeImage);
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 

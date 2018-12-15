@@ -10,7 +10,8 @@ package org.fife.rtext.plugins.langsupport.typescript;
 
 import java.awt.BorderLayout;
 import java.io.File;
-import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.langsupport.Plugin;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
@@ -66,8 +68,13 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 		setDockableWindowName(msg.getString("TypeScript"));
 		setDockableWindowTitle(msg.getString("TypeScript.BuildOutput"));
 
-		URL url = getClass().getResource("/org/fife/rtext/plugins/langsupport/ts.png");
-		setIcon(new ImageIcon(url));
+		try {
+			InputStream in = getClass().getResourceAsStream(
+				"/org/fife/rtext/plugins/langsupport/typescript.svg");
+			setIcon(new ImageIcon(ImageTranscodingUtil.rasterize("ts", in, 16, 16)));
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 
 		applyComponentOrientation(rtext.getComponentOrientation());
 

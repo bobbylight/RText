@@ -9,11 +9,11 @@
  */
 package org.fife.rtext.plugins.tools;
 
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.ResourceBundle;
@@ -30,6 +30,7 @@ import javax.swing.event.PopupMenuListener;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.MenuBar;
@@ -48,7 +49,8 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	private static final String VERSION				= "3.0.0";
 
 	private RText app;
-	private Icon icon;
+	private Icon darkThemeIcon;
+	private Icon lightThemeIcon;
 	private JMenu toolsMenu;
 
 	private static final String MSG = "org.fife.rtext.plugins.tools.ToolPlugin";
@@ -66,16 +68,13 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	 */
 	public ToolPlugin(AbstractPluggableGUIApplication<?> app) {
 
-		URL url = getClass().getResource("tools.png");
-		if (url!=null) { // Should always be true
-			icon = new ImageIcon(url);
-		}
-
+		loadIcons();
 		ToolsPrefs prefs = loadPrefs();
 
 		RText rtext = (RText)app;
 		this.app = rtext;
 		AppAction<RText> a = new NewToolAction(rtext, msg, null);
+		a.setIcon(getPluginIcon());
 		a.setAccelerator(prefs.newToolAccelerator);
 		rtext.addAction(NEW_TOOL_ACTION, a);
 
@@ -132,44 +131,29 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new ToolOptionPanel(this);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public Icon getPluginIcon() {
-		return icon;
+	public Icon getPluginIcon(boolean darkLookAndFeel) {
+		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginName() {
 		return msg.getString("Plugin.Name");
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginVersion() {
 		return VERSION;
@@ -218,9 +202,6 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
@@ -276,6 +257,23 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	boolean isToolOutputWindowVisible() {
 		ToolDockableWindow window = getDockableWindow();
 		return window!=null && window.isActive();
+	}
+
+
+	private void loadIcons() {
+
+		try {
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("tools light",
+				getClass().getResourceAsStream("toolWindowBuild.svg"), 16, 16);
+			lightThemeIcon = new ImageIcon(lightThemeImage);
+
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("tools dark",
+				getClass().getResourceAsStream("toolWindowBuild_dark.svg"), 16, 16);
+			darkThemeIcon = new ImageIcon(darkThemeImage);
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 

@@ -9,9 +9,9 @@
  */
 package org.fife.rtext.plugins.tasks;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -26,6 +26,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.MenuBar;
@@ -52,10 +53,8 @@ public class TasksPlugin extends GUIPlugin {
 	 */
 	private TaskWindow window;
 
-	/**
-	 * The plugin's icon.
-	 */
-	private Icon icon;
+	private Icon darkThemeIcon;
+	private Icon lightThemeIcon;
 
 	/**
 	 * The location of the task window.
@@ -92,10 +91,7 @@ public class TasksPlugin extends GUIPlugin {
 		taskIdentifiers = prefs.taskIdentifiers;
 		windowPosition = prefs.windowPosition;
 
-		URL url = getClass().getResource("page_white_edit.png");
-		if (url!=null) { // Should always be true
-			icon = new ImageIcon(url);
-		}
+		loadIcons();
 
 		ViewTasksAction a = new ViewTasksAction(rtext, msg, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
@@ -108,45 +104,30 @@ public class TasksPlugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new TasksOptionPanel(app, this);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public Icon getPluginIcon() {
-		return icon;
+	public Icon getPluginIcon(boolean darkLookAndFeel) {
+		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginName() {
 		return msg.getString("PluginName");
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginVersion() {
 		return VERSION;
@@ -244,6 +225,23 @@ public class TasksPlugin extends GUIPlugin {
 	}
 
 
+	private void loadIcons() {
+
+		try {
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("tasks light",
+				getClass().getResourceAsStream("todoQuestion.svg"), 16, 16);
+			lightThemeIcon = new ImageIcon(lightThemeImage);
+
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("showAsTree dark",
+				getClass().getResourceAsStream("todoQuestion_dark.svg"), 16, 16);
+			darkThemeIcon = new ImageIcon(darkThemeImage);
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
+
+
 	/**
 	 * Loads saved preferences into the <code>prefs</code> member.  If this
 	 * is the first time through, default values will be returned.
@@ -284,9 +282,6 @@ public class TasksPlugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void savePreferences() {
 		TasksPrefs prefs = new TasksPrefs();
@@ -362,7 +357,7 @@ public class TasksPlugin extends GUIPlugin {
 	 */
 	void toggleTaskWindowVisible() {
 		if (window==null) { // First time through
-			window = new TaskWindow(app, taskIdentifiers);
+			window = new TaskWindow(this, app, taskIdentifiers);
 			window.setPosition(windowPosition);
 			window.setActive(true);
 			app.addDockableWindow(window);

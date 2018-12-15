@@ -1337,10 +1337,23 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @param scrollPane The scroll pane.
 	 * @return The icon.
+	 * @see #getIconFor(RTextEditorPane)
 	 */
-	protected Icon getIconFor(RTextScrollPane scrollPane) {
-		RTextEditorPane textArea = (RTextEditorPane)scrollPane.
-								getTextArea();
+	public Icon getIconFor(RTextScrollPane scrollPane) {
+		return getIconFor((RTextEditorPane)scrollPane.getTextArea());
+	}
+
+
+	/**
+	 * Returns the system icon associated with the file being edited in the
+	 * given text area.  This method is called by subclasses that want to
+	 * display a system icon for open files.
+	 *
+	 * @param textArea The text area.
+	 * @return The icon.
+	 * @see #getIconFor(RTextScrollPane)
+	 */
+	public Icon getIconFor(RTextEditorPane textArea) {
 
 		// Fetch an icon from the theme first, then from the general icon manager if
 		// the theme doesn't supply its own icons for file types.

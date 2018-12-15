@@ -24,7 +24,7 @@ class TypeScriptOptionsPanel extends FoldingOnlyOptionsPanel {
 	 * Constructor.
 	 */
 	TypeScriptOptionsPanel() {
-		super("Options.TypeScript.Name", "ts.png",
+		super("Options.TypeScript.Name", "typescript.svg",
 				SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT);
 	}
 

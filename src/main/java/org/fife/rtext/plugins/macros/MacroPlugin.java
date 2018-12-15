@@ -46,7 +46,6 @@ public class MacroPlugin extends AbstractPlugin
 	private static final String VERSION				= "3.0.0";
 
 	private RText app;
-	private Icon icon;
 	private JMenu macrosMenu;
 	private NewMacroAction newMacroAction;
 	private EditMacrosAction editMacrosAction;
@@ -64,15 +63,6 @@ public class MacroPlugin extends AbstractPlugin
 	 * @param app The parent RText application.
 	 */
 	public MacroPlugin(AbstractPluggableGUIApplication<?> app) {
-
-		URL url = getClass().getResource("cog.png");
-		if (url!=null) { // Should always be true
-			try {
-				icon = new ImageIcon(ImageIO.read(url));
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-			}
-		}
 
 		MacroPrefs prefs = loadPrefs();
 
@@ -127,8 +117,9 @@ public class MacroPlugin extends AbstractPlugin
 
 
 	@Override
-	public Icon getPluginIcon() {
-		return icon;
+	public Icon getPluginIcon(boolean darkLookAndFeel) {
+		// This allows us to get a theme-specific icon if there is one
+		return app.getIconGroup().getIcon("newmacro");
 	}
 
 

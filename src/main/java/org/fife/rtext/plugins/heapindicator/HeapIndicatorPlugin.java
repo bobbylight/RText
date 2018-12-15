@@ -204,36 +204,24 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public Icon getPluginIcon() {
+	public Icon getPluginIcon(boolean darkLookAndFeel) {
 		return pluginIcon;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginName() {
 		return msg.getString("Plugin.Name");
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginVersion() {
 		return VERSION;

@@ -13,9 +13,7 @@ package org.fife.rtext.plugins.tasks;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.net.URL;
 import java.util.List;
-import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
 import org.fife.rtext.AbstractMainView;
@@ -45,15 +43,17 @@ import org.fife.ui.rsyntaxtextarea.parser.TaskTagParser;
 class TaskWindow extends AbstractParserNoticeWindow
 				implements PropertyChangeListener {
 
+	private TasksPlugin plugin;
 	private JTable table;
 	private TaskNoticeTableModel model;
 	private TaskTagParser taskParser;
 	private boolean installed;
 
 
-	public TaskWindow(RText rtext, String taskIdentifiers) {
+	public TaskWindow(TasksPlugin plugin, RText rtext, String taskIdentifiers) {
 
 		super(rtext);
+		this.plugin = plugin;
 		installed = false;
 
 		model = new TaskNoticeTableModel(rtext.getString("TaskList.Task"));
@@ -68,8 +68,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 		// active and position are set by caller, from TasksPrefs
 		setDockableWindowName(rtext.getString("TaskList.Tasks"));
 
-		URL url = getClass().getResource("page_white_edit.png");
-		setIcon(new ImageIcon(url));
+		setIcon(plugin.getPluginIcon());
 
 		taskParser = new TaskTagParser();
 		setTaskIdentifiers(taskIdentifiers);
@@ -101,7 +100,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 	 *         string is returned.
 	 * @see #setTaskIdentifiers(String)
 	 */
-	public String getTaskIdentifiers() {
+	String getTaskIdentifiers() {
 		String pattern = taskParser.getTaskPattern();
 		if (pattern!=null) {
 			pattern = pattern.replaceAll("\\\\\\?", "?");
@@ -137,7 +136,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 	 * @param parser The parser to check.
 	 * @return Whether the parser is the task parser.
 	 */
-	public boolean isTaskParser(Parser parser) {
+	boolean isTaskParser(Parser parser) {
 		return parser==taskParser;
 	}
 
@@ -218,7 +217,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 	 *         the current value.
 	 * @see #getTaskIdentifiers()
 	 */
-	public boolean setTaskIdentifiers(String identifiers) {
+	boolean setTaskIdentifiers(String identifiers) {
 		if (!identifiers.equals(getTaskIdentifiers())) {
 			identifiers = identifiers.replaceAll("\\?", "\\\\\\?");
 			taskParser.setTaskPattern(identifiers);
@@ -249,7 +248,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 
 	private class TaskNoticeTableModel extends ParserNoticeTableModel {
 
-		public TaskNoticeTableModel(String lastColHeader) {
+		TaskNoticeTableModel(String lastColHeader) {
 			super(lastColHeader);
 		}
 

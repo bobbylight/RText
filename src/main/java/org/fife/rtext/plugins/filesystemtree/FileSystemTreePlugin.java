@@ -14,7 +14,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -24,6 +23,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import org.fife.rtext.*;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.*;
@@ -44,7 +44,8 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	private String name;
 	private Tree tree;
 	private FileSystemTreeOptionPanel optionPanel;
-	private Icon pluginIcon;
+	private Icon lightThemeIcon;
+	private Icon darkThemeIcon;
 	private ViewAction viewAction;
 	private JToolBar dockableWindowTB;
 
@@ -69,10 +70,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	public FileSystemTreePlugin(AbstractPluggableGUIApplication<?> app) {
 
 		this.owner = (RText)app;
-
-		URL url = this.getClass().getResource("filesystemtree.gif");
-		if (url!=null)
-			pluginIcon = new ImageIcon(url);
+		loadIcons();
 
 		ResourceBundle msg = ResourceBundle.getBundle(BUNDLE_NAME);
 		this.name = msg.getString("Name");
@@ -141,7 +139,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 		wind.setActive(prefs.active);
 		wind.setPosition(prefs.position);
-		wind.setIcon(getPluginIcon());
+		wind.setIcon(getPluginIcon(isDarkLookAndFeel()));
 
 		ComponentOrientation o = ComponentOrientation.
 									getOrientation(Locale.getDefault());
@@ -177,14 +175,9 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * Returns the icon for this plugin.
-	 *
-	 * @return The icon for this plugin.
-	 */
 	@Override
-	public Icon getPluginIcon() {
-		return pluginIcon;
+	public Icon getPluginIcon(boolean darkLookAndFeel) {
+		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
 	}
 
 
@@ -264,9 +257,6 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
@@ -294,6 +284,23 @@ public class FileSystemTreePlugin extends GUIPlugin {
 			}
 		});
 
+	}
+
+
+	private void loadIcons() {
+
+		try {
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("showAsTree light",
+				getClass().getResourceAsStream("showAsTree.svg"), 16, 16);
+			lightThemeIcon = new ImageIcon(lightThemeImage);
+
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("showAsTree dark",
+				getClass().getResourceAsStream("showAsTree_dark.svg"), 16, 16);
+			darkThemeIcon = new ImageIcon(darkThemeImage);
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 

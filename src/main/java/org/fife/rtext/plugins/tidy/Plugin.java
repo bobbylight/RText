@@ -162,20 +162,14 @@ public class Plugin extends AbstractPlugin
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public Icon getPluginIcon() {
+	public Icon getPluginIcon(boolean darkLookAndFeel) {
 		if (icon==null) {
 			URL url = getClass().getResource("lightning.png");
 			if (url!=null) { // Should always be true
@@ -190,9 +184,6 @@ public class Plugin extends AbstractPlugin
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginName() {
 		return msg.getString("Name");

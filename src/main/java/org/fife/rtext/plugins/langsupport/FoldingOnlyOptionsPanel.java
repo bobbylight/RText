@@ -9,21 +9,18 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
-import java.awt.BorderLayout;
-import java.awt.ComponentOrientation;
-import java.awt.Frame;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ResourceBundle;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.UIUtil;
 
@@ -63,7 +60,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 		ResourceBundle msg = Plugin.msg;
 		setName(msg.getString(nameKey));
 		if (icon!=null) {
-			setIcon(new ImageIcon(getClass().getResource(icon)));
+			setIcon(loadIcon(icon));
 		}
 		listener = new Listener();
 
@@ -142,6 +139,22 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 		return enabledCB;
 	}
 
+
+	private Icon loadIcon(String icon) {
+
+		if (icon.endsWith(".svg")) {
+			InputStream in = getClass().getResourceAsStream(icon);
+			try {
+				Image image = ImageTranscodingUtil.rasterize(icon, in, 16, 16);
+				return new ImageIcon(image);
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+				return null;
+			}
+		}
+
+		return new ImageIcon(getClass().getResource(icon));
+	}
 
 	protected void setCodeFoldingValueImpl(RText rtext) {
 		AbstractMainView view = rtext.getMainView();
