@@ -35,6 +35,7 @@ import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
 import org.fife.ui.StandardAction;
+import org.fife.ui.rtextarea.RTextArea;
 import org.fife.util.SubstanceUtil;
 import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
@@ -1226,6 +1227,16 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		IconGroup old = iconGroup;
 		iconGroup = newGroup;
 
+		// Text area icons
+		updateTextAreaIcon(RTextArea.CUT_ACTION, "cut");
+		updateTextAreaIcon(RTextArea.COPY_ACTION, "copy");
+		updateTextAreaIcon(RTextArea.PASTE_ACTION, "paste");
+		updateTextAreaIcon(RTextArea.DELETE_ACTION, "delete");
+		updateTextAreaIcon(RTextArea.UNDO_ACTION, "undo");
+		updateTextAreaIcon(RTextArea.REDO_ACTION, "redo");
+		updateTextAreaIcon(RTextArea.SELECT_ALL_ACTION, "selectall");
+
+		// All other icons
 		Icon icon = iconGroup.getIcon("new");
 		getAction(NEW_ACTION).putValue(Action.SMALL_ICON, icon);
 		icon = iconGroup.getIcon("open");
@@ -1648,6 +1659,15 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		});
 	}
 
+	private void updateTextAreaIcon(int actionName, String iconName) {
+
+		Icon icon = iconGroup.getIcon(iconName);
+
+		Action action = RTextArea.getAction(actionName);
+		if (action != null) { // Can be null when the app is first starting up
+			action.putValue(Action.SMALL_ICON, icon);
+		}
+	}
 
 	/**
 	 * Program entry point.

@@ -229,9 +229,7 @@ public class TasksPlugin extends GUIPlugin {
 
 		try {
 
-			Image lightThemeImage = ImageTranscodingUtil.rasterize("tasks light",
-				getClass().getResourceAsStream("todoQuestion.svg"), 16, 16);
-			lightThemeIcon = new ImageIcon(lightThemeImage);
+			lightThemeIcon = new ImageIcon(getClass().getResource("page_white_edit.png"));
 
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("showAsTree dark",
 				getClass().getResourceAsStream("todoQuestion_dark.svg"), 16, 16);

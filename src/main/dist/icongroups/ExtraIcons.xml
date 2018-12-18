@@ -46,9 +46,7 @@
 -->
 
 <IconGroups>
-   <group name="BlueSphere Icons" extension="png" jar="icongroups/BlueSphereIcons.jar"/>
    <group name="Eclipse Icons" jar="icongroups/EclipseIcons.jar"/>
    <group name="IntelliJ Icons (Dark)" jar="icongroups/intellij-icons.jar"/>
-   <group name="Java Icons" largeIconSubDir="large" jar="icongroups/JavaIcons.jar"/>
    <group name="Windows XP Icons" largeIconSubDir="large" jar="icongroups/XPIcons.jar"/>
 </IconGroups>

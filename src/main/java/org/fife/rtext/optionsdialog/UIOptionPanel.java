@@ -10,11 +10,7 @@
  */
 package org.fife.rtext.optionsdialog;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.ComponentOrientation;
-import java.awt.Container;
-import java.awt.Frame;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -22,28 +18,18 @@ import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
-import javax.swing.Box;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.SpringLayout;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
-import org.fife.ui.OS;
-import org.fife.ui.OptionsDialogPanel;
-import org.fife.ui.RColorSwatchesButton;
-import org.fife.ui.LabelValueComboBox;
-import org.fife.ui.StatusBar;
-import org.fife.ui.UIUtil;
+import org.fife.ui.*;
 import org.fife.ui.app.ExtendedLookAndFeelInfo;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaOptionPanel;
+import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.IconGroup;
+import org.fife.ui.rtextarea.RTextAreaOptionPanel;
 
 
 /**
@@ -53,13 +39,18 @@ import org.fife.ui.rtextarea.IconGroup;
  * @author Robert Futrell
  * @version 1.0
  */
-class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
+public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 										PropertyChangeListener {
 
 	/**
 	 * ID used to identify this option panel, so others can attach to it.
 	 */
 	public static final String OPTION_PANEL_ID = "UIOptionPanel";
+
+	private LabelValueComboBox<String, String> themeCombo;
+	private JButton applyButton;
+	private IconGroup eclipseIconGroup;
+	private IconGroup flatIconGroup;
 
 	private int mainViewStyle;
 	private int documentSelectionPlacement;
@@ -85,6 +76,7 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		super(msg.getString("OptUIName"));
 		setId(OPTION_PANEL_ID);
+		Listener listener = new Listener();
 
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
@@ -93,122 +85,21 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
 
-		// Create a panel to put everything in.  We'll add this panel to our
-		// "North" so it doesn't stretch when the user resizes the dialog.
-		Box everything = Box.createVerticalBox();
+		Box cp = Box.createVerticalBox();
 
-		viewCombo = new JComboBox<>();
-		UIUtil.fixComboOrientation(viewCombo);
-		viewCombo.setActionCommand("ViewComboBox");
-		viewCombo.addActionListener(this);
-		viewCombo.addItem(msg.getString("OptUITV"));
-		viewCombo.addItem(msg.getString("OptUISPV"));
-		viewCombo.addItem(msg.getString("OptUIMDIV"));
-
-		docSelCombo = new JComboBox<>();
-		UIUtil.fixComboOrientation(docSelCombo);
-		docSelCombo.setActionCommand("DocSelCombo");
-		docSelCombo.addActionListener(this);
-		docSelCombo.addItem(msg.getString("OptUITop"));
-		docSelCombo.addItem(msg.getString("OptUILeft"));
-		docSelCombo.addItem(msg.getString("OptUIBottom"));
-		docSelCombo.addItem(msg.getString("OptUIRight"));
-
-		// Add a panel for the "Layout" stuff.
-		springPanel = new JPanel(new SpringLayout());
-		JPanel temp = new JPanel(new BorderLayout());
-		temp.setBorder(new OptionPanelBorder(msg.getString("OptUILT")));
-		if (orientation.isLeftToRight()) {
-			springPanel.add(new JLabel(msg.getString("OptUIViewT")));
-			springPanel.add(viewCombo);
-			springPanel.add(new JLabel(msg.getString("OptUIDSPT")));
-			springPanel.add(docSelCombo);
-		}
-		else {
-			springPanel.add(viewCombo);
-			springPanel.add(new JLabel(msg.getString("OptUIViewT")));
-			springPanel.add(docSelCombo);
-			springPanel.add(new JLabel(msg.getString("OptUIDSPT")));
-		}
-		temp.add(springPanel, BorderLayout.LINE_START);
-		UIUtil.makeSpringCompactGrid(springPanel,
-									2,2,		// rows,cols,
-									0,0,		// initial-x, initial-y,
-									5,5);	// x-spacing, y-spacing.
-		everything.add(temp);
-
-		lnfCombo = createLookAndFeelComboBox(rtext);
-		lnfCombo.setActionCommand("LookAndFeelComboBox");
-		lnfCombo.addActionListener(this);
-
-		imageLnFCombo = new LabelValueComboBox<>();
-		UIUtil.fixComboOrientation(imageLnFCombo);
-		imageLnFCombo.setActionCommand("IconComboBox");
-		imageLnFCombo.addActionListener(this);
-		Collection<IconGroup> iconGroups = rtext.getIconGroupMap().values();
-		for (IconGroup group : iconGroups) {
-			imageLnFCombo.addLabelValuePair(group.getName(), group.getName());
-		}
-
-		statusBarCombo = new JComboBox<>();
-		UIUtil.fixComboOrientation(statusBarCombo);
-		statusBarCombo.setActionCommand("StatusBarComboBox");
-		statusBarCombo.addActionListener(this);
-		statusBarCombo.addItem(msg.getString("OptUIW95A"));
-		statusBarCombo.addItem(msg.getString("OptUIWXPA"));
-
-		// Add a panel for the "Appearance" stuff.
-		springPanel2 = new JPanel(new SpringLayout());
-		temp = new JPanel(new BorderLayout());
-		temp.setBorder(new OptionPanelBorder(msg.getString("OptUIAT")));
-		if (orientation.isLeftToRight()) {
-			springPanel2.add(new JLabel(msg.getString("OptUILnFT")));
-			springPanel2.add(lnfCombo);
-			springPanel2.add(new JLabel(msg.getString("OptUIIAT")));
-			springPanel2.add(imageLnFCombo);
-			springPanel2.add(new JLabel(msg.getString("OptUISBT")));
-			springPanel2.add(statusBarCombo);
-		}
-		else {
-			springPanel2.add(lnfCombo);
-			springPanel2.add(new JLabel(msg.getString("OptUILnFT")));
-			springPanel2.add(imageLnFCombo);
-			springPanel2.add(new JLabel(msg.getString("OptUIIAT")));
-			springPanel2.add(statusBarCombo);
-			springPanel2.add(new JLabel(msg.getString("OptUISBT")));
-		}
-		temp.add(springPanel2, BorderLayout.LINE_START);
-		UIUtil.makeSpringCompactGrid(springPanel2,
-									3,2,		// rows,cols,
-									0,0,		// initial-x, initial-y,
-									5,5);	// x-spacing, y-spacing.
-		everything.add(temp);
-
-		// Add a panel for the "modified filenames" color button.
-		Container miscPanel = createHorizontalBox();
-		highlightModifiedCheckBox = new JCheckBox(msg.getString("OptUIHMDN"));
-		highlightModifiedCheckBox.setActionCommand("HighlightModifiedCheckBox");
-		highlightModifiedCheckBox.addActionListener(this);
-		hmColorButton = new RColorSwatchesButton(Color.RED);
-		hmColorButton.addPropertyChangeListener(this);
-		miscPanel.add(highlightModifiedCheckBox);
-		miscPanel.add(hmColorButton);
-		miscPanel.add(Box.createHorizontalGlue());
-		everything.add(miscPanel);
-
-		// A panel for the "Show hostname" check box.
-		miscPanel = new JPanel(new BorderLayout());
-		showHostNameCheckBox = new JCheckBox(msg.getString("OptUIShowHostName"));
-		showHostNameCheckBox.setActionCommand("ShowHostNameCB");
-		showHostNameCheckBox.addActionListener(this);
-		miscPanel.add(showHostNameCheckBox, BorderLayout.LINE_START);
-		everything.add(miscPanel);
+		cp.add(createThemePanel(msg, listener));
+		cp.add(Box.createVerticalStrut(10));
+		cp.add(createAppearancePanel(msg, rtext));
+		cp.add(createLayoutPanel(msg));
+		cp.add(createOtherPanel(msg));
 
 		// Add everything "to the north" so the spacing between stuff doesn't
 		// change then the user stretches the dialog.
-		add(everything, BorderLayout.NORTH);
+		add(cp, BorderLayout.NORTH);
 		applyComponentOrientation(orientation);
 
+		eclipseIconGroup = rtext.getIconGroupMap().get("Eclipse Icons");
+		flatIconGroup = rtext.getIconGroupMap().get("IntelliJ Icons (Dark)");
 	}
 
 
@@ -270,6 +161,182 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	}
 
 
+	private void applySelectedTheme() {
+
+		String theme = themeCombo.getSelectedValue();
+		String laf = null;
+		String editorTheme = null;
+		IconGroup iconGroup = eclipseIconGroup;
+
+		if ("default".equals(theme)) {
+			laf = UIManager.getSystemLookAndFeelClassName();
+			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/default-alt.xml";
+		}
+
+		else if ("eclipse".equals(theme)) {
+			laf = UIManager.getSystemLookAndFeelClassName();
+			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/eclipse.xml";
+		}
+
+		else if ("dark".equals(theme)) {
+			laf = "com.bulenkov.darcula.DarculaLaf";
+			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/dark.xml";
+			iconGroup = flatIconGroup;
+		}
+
+		else if ("monokai".equals(theme)) {
+			laf = "com.bulenkov.darcula.DarculaLaf";
+			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/monokai.xml";
+			iconGroup = flatIconGroup;
+		}
+
+		RText rtext = (RText)getOptionsDialog().getOwner();
+		if (laf != null) {
+			RTextUtilities.setLookAndFeel(rtext, laf); // Doesn't update if...
+		}
+		rtext.setIconGroupByName(iconGroup.getName());
+
+		if (editorTheme != null) {
+			Theme themeObj;
+			try {
+				themeObj = Theme.load(getClass().getResourceAsStream(editorTheme));
+				installRstaTheme(rtext, themeObj);
+			} catch (Exception ioe) {
+				rtext.displayException(ioe);
+				return;
+			}
+		}
+
+		// Any colors not specific to the LAF or the RSTA theme.
+		OtherColors otherColors = getOtherColorsForTheme(theme);
+		AbstractMainView mainView = rtext.getMainView();
+		mainView.setModifiedDocumentDisplayNamesColor(
+			otherColors.getModifiedDocumentNameColor());
+
+		// Refresh other option panels whose properties were affected
+		org.fife.ui.OptionsDialog dialog = getOptionsDialog();
+		setValues(rtext);
+		dialog.getPanelById(UIOptionPanel.OPTION_PANEL_ID).setValues(rtext);
+		dialog.getPanelById(RTextAreaOptionPanel.OPTION_PANEL_ID).setValues(rtext);
+		dialog.getPanelById(RSyntaxTextAreaOptionPanel.OPTION_PANEL_ID).setValues(rtext);
+		// Options panels installed by plugins weren't loaded by the same
+		// ClassLoader, so we can't reference them directly, but we can
+		// broadcast events to them.
+		getOptionsDialog().broadcast("appTheme:" + theme);
+	}
+
+
+	private JPanel createAppearancePanel(ResourceBundle msg, RText rtext) {
+
+		ComponentOrientation orientation = ComponentOrientation.
+			getOrientation(getLocale());
+
+		JPanel temp = new JPanel(new BorderLayout());
+
+		SelectableLabel label = new SelectableLabel();
+		label.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+		label.setText(msg.getString("OptAppearanceDesc"));
+		temp.add(label, BorderLayout.NORTH);
+
+		lnfCombo = createLookAndFeelComboBox(rtext);
+		lnfCombo.setActionCommand("LookAndFeelComboBox");
+		lnfCombo.addActionListener(this);
+
+		imageLnFCombo = new LabelValueComboBox<>();
+		UIUtil.fixComboOrientation(imageLnFCombo);
+		imageLnFCombo.setActionCommand("IconComboBox");
+		imageLnFCombo.addActionListener(this);
+		Collection<IconGroup> iconGroups = rtext.getIconGroupMap().values();
+		for (IconGroup group : iconGroups) {
+			imageLnFCombo.addLabelValuePair(group.getName(), group.getName());
+		}
+
+		statusBarCombo = new JComboBox<>();
+		UIUtil.fixComboOrientation(statusBarCombo);
+		statusBarCombo.setActionCommand("StatusBarComboBox");
+		statusBarCombo.addActionListener(this);
+		statusBarCombo.addItem(msg.getString("OptUIW95A"));
+		statusBarCombo.addItem(msg.getString("OptUIWXPA"));
+
+		// Add a panel for the "Appearance" stuff.
+		springPanel2 = new JPanel(new SpringLayout());
+		JPanel temp2 = new JPanel(new BorderLayout());
+		temp.setBorder(new OptionPanelBorder(msg.getString("OptUIAT")));
+		if (orientation.isLeftToRight()) {
+			springPanel2.add(new JLabel(msg.getString("OptUILnFT")));
+			springPanel2.add(lnfCombo);
+			springPanel2.add(new JLabel(msg.getString("OptUIIAT")));
+			springPanel2.add(imageLnFCombo);
+			springPanel2.add(new JLabel(msg.getString("OptUISBT")));
+			springPanel2.add(statusBarCombo);
+		}
+		else {
+			springPanel2.add(lnfCombo);
+			springPanel2.add(new JLabel(msg.getString("OptUILnFT")));
+			springPanel2.add(imageLnFCombo);
+			springPanel2.add(new JLabel(msg.getString("OptUIIAT")));
+			springPanel2.add(statusBarCombo);
+			springPanel2.add(new JLabel(msg.getString("OptUISBT")));
+		}
+		temp2.add(springPanel2, BorderLayout.LINE_START);
+		UIUtil.makeSpringCompactGrid(springPanel2,
+			3,2,		// rows,cols,
+			0,0,		// initial-x, initial-y,
+			5,5);	// x-spacing, y-spacing.
+
+		temp.add(temp2);
+
+		return temp;
+	}
+
+
+	private JPanel createLayoutPanel(ResourceBundle msg) {
+
+		ComponentOrientation orientation = ComponentOrientation.
+			getOrientation(getLocale());
+
+		viewCombo = new JComboBox<>();
+		UIUtil.fixComboOrientation(viewCombo);
+		viewCombo.setActionCommand("ViewComboBox");
+		viewCombo.addActionListener(this);
+		viewCombo.addItem(msg.getString("OptUITV"));
+		viewCombo.addItem(msg.getString("OptUISPV"));
+		viewCombo.addItem(msg.getString("OptUIMDIV"));
+
+		docSelCombo = new JComboBox<>();
+		UIUtil.fixComboOrientation(docSelCombo);
+		docSelCombo.setActionCommand("DocSelCombo");
+		docSelCombo.addActionListener(this);
+		docSelCombo.addItem(msg.getString("OptUITop"));
+		docSelCombo.addItem(msg.getString("OptUILeft"));
+		docSelCombo.addItem(msg.getString("OptUIBottom"));
+		docSelCombo.addItem(msg.getString("OptUIRight"));
+
+		// Add a panel for the "Layout" stuff.
+		springPanel = new JPanel(new SpringLayout());
+		JPanel temp = new JPanel(new BorderLayout());
+		temp.setBorder(new OptionPanelBorder(msg.getString("OptUILT")));
+		if (orientation.isLeftToRight()) {
+			springPanel.add(new JLabel(msg.getString("OptUIViewT")));
+			springPanel.add(viewCombo);
+			springPanel.add(new JLabel(msg.getString("OptUIDSPT")));
+			springPanel.add(docSelCombo);
+		}
+		else {
+			springPanel.add(viewCombo);
+			springPanel.add(new JLabel(msg.getString("OptUIViewT")));
+			springPanel.add(docSelCombo);
+			springPanel.add(new JLabel(msg.getString("OptUIDSPT")));
+		}
+		temp.add(springPanel, BorderLayout.LINE_START);
+		UIUtil.makeSpringCompactGrid(springPanel,
+			2,2,		// rows,cols,
+			0,0,		// initial-x, initial-y,
+			5,5);	// x-spacing, y-spacing.
+
+		return temp;
+	}
+
 	/**
 	 * Creates and returns a special value combo box containing all available
 	 * Look and Feels.
@@ -282,40 +349,20 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		LabelValueComboBox<String, String> combo = new LabelValueComboBox<>();
 		UIUtil.fixComboOrientation(combo);
-		boolean osIsWindows = rtext.getOS()==OS.WINDOWS;
+		boolean osIsWindows = rtext.getOS() == OS.WINDOWS;
 
-		// Get all Look and Feels, with the system default listed first.
-		LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
-		for (int i=1; i<infos.length; i++) {
-			String clazzName = infos[i].getClassName();
+		// Get the system look and feel.
+		LookAndFeelInfo systemInfo = null;
+		for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+			String clazzName = info.getClassName();
 			if (clazzName.equals(UIManager.getSystemLookAndFeelClassName())) {
-				LookAndFeelInfo temp = infos[0];
-				infos[0] = infos[i];
-				infos[i] = temp;
+				systemInfo = info;
 				break;
 			}
 		}
 
-		for (LookAndFeelInfo info1 : infos) {
-			// NOTE: It would be nice if we could check the
-			// LookAndFeel.isSupportedLookAndFeel() method, but that would
-			// require loading each LnF class, which we're trying to avoid.
-			// We'll assume Windows supports all LnFs, and any other OS does
-			// NOT support a standard Look with "Windows" in the name.
-			String name = info1.getName();
-			if (osIsWindows || !(name.toLowerCase().contains("windows"))) {
-				combo.addLabelValuePair(name, info1.getClassName());
-			}
-		}
-
-		// Add the Office Looks if we're on Windows.
-		if (osIsWindows) {
-			combo.addLabelValuePair("MS Office XP",
-				"org.fife.plaf.OfficeXP.OfficeXPLookAndFeel");
-			combo.addLabelValuePair("MS Office 2003",
-				"org.fife.plaf.Office2003.Office2003LookAndFeel");
-			combo.addLabelValuePair("Visual Studio 2005",
-				"org.fife.plaf.VisualStudio2005.VisualStudio2005LookAndFeel");
+		if (systemInfo != null) {
+			combo.addLabelValuePair(systemInfo.getName(), systemInfo.getClassName());
 		}
 
 		// Add any 3rd party Look and Feels in the lnfs subdirectory.
@@ -330,6 +377,61 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 	}
 
+
+	private Container createOtherPanel(ResourceBundle msg) {
+
+		Box temp = Box.createVerticalBox();
+		temp.setBorder(new OptionPanelBorder(msg.getString("OptOtherTitle")));
+
+		Container modifiedDocsPanel = createHorizontalBox();
+		highlightModifiedCheckBox = new JCheckBox(msg.getString("OptUIHMDN"));
+		highlightModifiedCheckBox.setActionCommand("HighlightModifiedCheckBox");
+		highlightModifiedCheckBox.addActionListener(this);
+		hmColorButton = new RColorSwatchesButton(Color.RED);
+		hmColorButton.addPropertyChangeListener(this);
+		modifiedDocsPanel.add(highlightModifiedCheckBox);
+		modifiedDocsPanel.add(hmColorButton);
+		modifiedDocsPanel.add(Box.createHorizontalGlue());
+		temp.add(modifiedDocsPanel);
+
+		JPanel showHostNamePanel = new JPanel(new BorderLayout());
+		showHostNameCheckBox = new JCheckBox(msg.getString("OptUIShowHostName"));
+		showHostNameCheckBox.setActionCommand("ShowHostNameCB");
+		showHostNameCheckBox.addActionListener(this);
+		showHostNamePanel.add(showHostNameCheckBox, BorderLayout.LINE_START);
+		temp.add(showHostNamePanel);
+
+		temp.add(Box.createVerticalGlue());
+		return temp;
+	}
+
+
+	private Container createThemePanel(ResourceBundle msg, Listener listener) {
+
+		Box temp = Box.createVerticalBox();
+		temp.setBorder(new OptionPanelBorder(msg.getString("OptThemeLabel")));
+
+		SelectableLabel label = new SelectableLabel();
+		label.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+		label.setText(msg.getString("OptThemeDesc"));
+		temp.add(label, BorderLayout.NORTH);
+
+		themeCombo = new LabelValueComboBox<>();
+		themeCombo.addLabelValuePair("Default", "default");
+		themeCombo.addLabelValuePair("Eclipse", "eclipse");
+		themeCombo.addLabelValuePair("Dark", "dark");
+		themeCombo.addLabelValuePair("Monokai", "monokai");
+		UIUtil.fixComboOrientation(themeCombo);
+		Box temp2 = createHorizontalBox();
+		temp2.add(themeCombo);
+		temp2.add(Box.createHorizontalStrut(5));
+		applyButton = UIUtil.newButton(msg, "OptThemeApply", listener);
+		temp2.add(applyButton);
+		temp2.add(Box.createHorizontalGlue());
+		temp.add(temp2);
+
+		return temp;
+	}
 
 	/**
 	 * Applies the settings entered into this dialog on the specified
@@ -419,6 +521,40 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 
 	/**
+	 * Returns other colors to install that aren't tied to the LAF or the
+	 * RSTA theme.
+	 *
+	 * @param theme The selected theme.
+	 * @return The other colors.
+	 */
+	private static OtherColors getOtherColorsForTheme(String theme) {
+
+		OtherColors colors = new OtherColors();
+
+		Color darkModifiedDocumentNameColor = new Color(255, 128, 128);
+
+		if ("eclipse".equals(theme)) {
+			colors.setModifiedDocumentNameColor(Color.RED);
+		}
+
+		else if ("dark".equals(theme)) {
+			colors.setModifiedDocumentNameColor(darkModifiedDocumentNameColor);
+		}
+
+		else if ("monokai".equals(theme)) {
+			colors.setModifiedDocumentNameColor(darkModifiedDocumentNameColor);
+		}
+
+		else {//if ("default".equals(theme)) {
+			colors.setModifiedDocumentNameColor(Color.RED);
+		}
+
+		return colors;
+
+	}
+
+
+	/**
 	 * Returns whether the user wants the host name displayed in the title
 	 * bar.
 	 *
@@ -441,16 +577,9 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	}
 
 
-	/**
-	 * Returns the <code>JComponent</code> at the "top" of this Options
-	 * panel.  This is the component that will receive focus if the user
-	 * switches to this Options panel in the Options dialog.  As an added
-	 * bonus, if this component is a <code>JTextComponent</code>, its
-	 * text is selected for easy changing.
-	 */
 	@Override
 	public JComponent getTopJComponent() {
-		return viewCombo;
+		return themeCombo;
 	}
 
 
@@ -467,6 +596,59 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 */
 	private boolean highlightModifiedDocumentDisplayNames() {
 		return highlightModifiedCheckBox.isSelected();
+	}
+
+
+	/**
+	 * Installs all properties in an RSTA <code>Theme</code> instance properly
+	 * into RText.
+	 *
+	 * @param rtext The application.
+	 * @param theme The theme instance.
+	 */
+	private static void installRstaTheme(RText rtext, Theme theme) {
+
+		rtext.setSyntaxScheme(theme.scheme);
+		AbstractMainView mainView = rtext.getMainView();
+
+		//themeObj.activeLineRangeColor;
+		mainView.setBackgroundObject(theme.bgColor);
+		mainView.setCaretColor(theme.caretColor);
+		mainView.setCurrentLineHighlightColor(theme.currentLineHighlight);
+		//themeObj.fadeCurrentLineHighlight
+		//themeObj.foldBG
+		mainView.setGutterBorderColor(theme.gutterBorderColor);
+		mainView.setHyperlinkColor(theme.hyperlinkFG);
+		//themeObj.iconRowHeaderInheritsGutterBG
+		mainView.setLineNumberColor(theme.lineNumberColor);
+		if (theme.lineNumberFont != null) {
+			int fontSize = theme.lineNumberFontSize > 0 ? theme.lineNumberFontSize : 11;
+			mainView.setLineNumberFont(new Font(theme.lineNumberFont, Font.PLAIN, fontSize));
+		}
+		mainView.setMarginLineColor(theme.marginLineColor);
+		mainView.setMarkAllHighlightColor(theme.markAllHighlightColor);
+		//themeObj.markOccurrencesBorder;
+		mainView.setMarkOccurrencesColor(theme.markOccurrencesColor);
+		//themeObj.matchedBracketAnimate;
+		if (theme.matchedBracketBG != null) {
+			mainView.setMatchedBracketBorderColor(theme.matchedBracketFG);
+		}
+		mainView.setMatchedBracketBGColor(theme.matchedBracketBG);
+		if (theme.secondaryLanguages != null) {
+			for (int i = 0; i < theme.secondaryLanguages.length; i++) {
+				mainView.setSecondaryLanguageColor(i, theme.secondaryLanguages[i]);
+			}
+		}
+		mainView.setSelectionColor(theme.selectionBG);
+		if (theme.selectionFG != null) {
+			mainView.setSelectedTextColor(theme.selectionFG);
+		}
+		mainView.setUseSelectedTextColor(theme.useSelctionFG);
+		mainView.setRoundedSelectionEdges(theme.selectionRoundedEdges);
+
+		mainView.setFoldBackground(theme.foldBG);
+		mainView.setArmedFoldBackground(theme.armedFoldBG);
+
 	}
 
 
@@ -666,4 +848,40 @@ class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		}
 	}
 
+
+
+	/**
+	 * Listens for events in this panel.
+	 */
+	private class Listener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			Object source = e.getSource();
+
+			if (applyButton == source) {
+				applySelectedTheme();
+			}
+		}
+
+	}
+
+
+	/**
+	 * Miscellaneous extra colors set as part of an RText theme.
+	 */
+	private static class OtherColors {
+
+		private Color modifiedDocumentNameColor;
+
+		Color getModifiedDocumentNameColor() {
+			return modifiedDocumentNameColor;
+		}
+
+		void setModifiedDocumentNameColor(Color color) {
+			modifiedDocumentNameColor = color;
+		}
+
+	}
 }

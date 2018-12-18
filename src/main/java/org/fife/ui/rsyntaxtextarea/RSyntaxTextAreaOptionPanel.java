@@ -26,7 +26,7 @@ import javax.swing.event.*;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
-import org.fife.rtext.optionsdialog.ThemeOptionPanel;
+import org.fife.rtext.optionsdialog.UIOptionPanel;
 import org.fife.ui.*;
 import org.fife.ui.rtextarea.RTextArea;
 
@@ -115,13 +115,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		SelectableLabel label = new SelectableLabel();
 		label.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
 		label.setText(msg.getString("Note.UseThemesInstead"));
-		label.addHyperlinkListener(new HyperlinkListener() {
-			@Override
-			public void hyperlinkUpdate(HyperlinkEvent e) {
-				if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-					getOptionsDialog().setSelectedOptionsPanel(
-							ThemeOptionPanel.OPTION_PANEL_ID);
-				}
+		label.addHyperlinkListener(e -> {
+			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+				getOptionsDialog().setSelectedOptionsPanel(
+						UIOptionPanel.OPTION_PANEL_ID);
 			}
 		});
 		cp.add(label);
@@ -364,7 +361,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			SyntaxScheme defaultScheme = new SyntaxScheme(true);
 
 			if (!getTextAreaFont().equals(defaultFont) ||
-				getUnderline()==true ||
+				getUnderline() ||
 				!getTextAreaForeground().equals(defaultForeground) ||
 				!Color.WHITE.equals(background) ||
 				!currentScheme.equals(defaultScheme))
@@ -806,8 +803,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		index = indexToStyle(index); // To get index into schemes.
 		isSettingStyle = true;
 
-		Font font = null;
-		boolean underline = false;
+		Font font;
+		boolean underline;
 		Style style = colorScheme.getStyle(index);
 		if (style.font!=null) {
 			font = style.font;

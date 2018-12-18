@@ -61,80 +61,15 @@
 -->
 
 <ThirdPartyLookAndFeels>
-<!--
-<LookAndFeel name="WebLaF"
-   class="com.alee.laf.WebLookAndFeel"
-   jars="lnfs/weblaf-1.27.jar"
-   minJavaVersion="1.6"/>
--->
-<LookAndFeel name="Darcula"
-   class="com.bulenkov.darcula.DarculaLaf"
-   jars="lnfs/darcula.jar"
-   minJavaVersion="1.6"/>
-   
-<LookAndFeel name="Substance Business"
-   class="org.pushingpixels.substance.api.skin.SubstanceBusinessLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
-
-<LookAndFeel name="Substance Business Black Steel"
-   class="org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
-
-<LookAndFeel name="Substance Business Blue Steel"
-   class="org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
-
-<LookAndFeel name="Substance Cerulean"
-   class="org.pushingpixels.substance.api.skin.SubstanceCeruleanLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
-
-<LookAndFeel name="Substance Creme Coffee"
-   class="org.pushingpixels.substance.api.skin.SubstanceCremeCoffeeLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
-
-<LookAndFeel name="Substance Creme"
-   class="org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
-
-<LookAndFeel name="Substance Dust Coffee"
-   class="org.pushingpixels.substance.api.skin.SubstanceDustCoffeeLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
-
-<LookAndFeel name="Substance Dust"
-   class="org.pushingpixels.substance.api.skin.SubstanceDustLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
-
-<LookAndFeel name="Substance Graphite Aqua"
-   class="org.pushingpixels.substance.api.skin.SubstanceGraphiteAquaLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
-
-<LookAndFeel name="Substance Graphite Glass"
-   class="org.pushingpixels.substance.api.skin.SubstanceGraphiteGlassLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
-
-<LookAndFeel name="Substance Moderate"
-   class="org.pushingpixels.substance.api.skin.SubstanceModerateLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
-
-<LookAndFeel name="Substance Mist Aqua"
-   class="org.pushingpixels.substance.api.skin.SubstanceMistAquaLookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
-
-<LookAndFeel name="Substance Office Black 2007"
-   class="org.pushingpixels.substance.api.skin.SubstanceOfficeBlack2007LookAndFeel"
-   dir="lnfs/substance/"
-   minJavaVersion="1.6"/>
+    <!--
+    <LookAndFeel name="WebLaF"
+       class="com.alee.laf.WebLookAndFeel"
+       jars="lnfs/weblaf-1.27.jar"
+       minJavaVersion="1.6"/>
+    -->
+    <LookAndFeel name="Darcula"
+       class="com.bulenkov.darcula.DarculaLaf"
+       jars="lnfs/darcula.jar"
+       minJavaVersion="1.6"/>
 
 </ThirdPartyLookAndFeels>

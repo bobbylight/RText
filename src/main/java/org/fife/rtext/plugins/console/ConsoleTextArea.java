@@ -77,6 +77,7 @@ abstract class ConsoleTextArea extends JTextPane {
 
 	public static final Color DEFAULT_DARK_STDERR_FG	= new Color(0xff, 0x80, 0x80);
 
+	public static final Color DEFAULT_DARK_EXCEPTION_FG = new Color(0xa0649a);
 
 	/**
 	 * Property change event fired whenever a process is launched or
@@ -519,7 +520,8 @@ abstract class ConsoleTextArea extends JTextPane {
 		StyleConstants.setForeground(stderr, stderrColor);
 
 		Style exception = addStyle(STYLE_EXCEPTION, defaultStyle);
-		StyleConstants.setForeground(exception, DEFAULT_EXCEPTION_FG);
+		Color exceptionColor = isDark ? DEFAULT_DARK_EXCEPTION_FG : DEFAULT_EXCEPTION_FG;
+		StyleConstants.setForeground(exception, exceptionColor);
 
 	}
 

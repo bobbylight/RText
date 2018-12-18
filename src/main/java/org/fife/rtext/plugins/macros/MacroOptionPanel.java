@@ -132,9 +132,6 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
@@ -189,9 +186,6 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
@@ -228,18 +222,12 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public JComponent getTopJComponent() {
 		return macroTable;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 		hasUnsavedChanges = true;
@@ -247,9 +235,6 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {
 		MacroManager tm = MacroManager.get();

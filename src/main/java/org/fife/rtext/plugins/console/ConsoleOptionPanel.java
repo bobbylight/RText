@@ -335,9 +335,6 @@ public class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public JComponent getTopJComponent() {
 		return visibleCB;
@@ -370,21 +367,22 @@ public class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	private boolean notDefaults() {
 
 		boolean isDark = RTextUtilities.isDarkLookAndFeel();
-		Color defaultPrompt = isDark ? ConsoleTextArea.DEFAULT_DARK_PROMPT_FG :
-			ConsoleTextArea.DEFAULT_PROMPT_FG;
 		Color defaultStdout = isDark ? ConsoleTextArea.DEFAULT_DARK_STDOUT_FG :
 			ConsoleTextArea.DEFAULT_STDOUT_FG;
 		Color defaultStderr = isDark ? ConsoleTextArea.DEFAULT_DARK_STDERR_FG :
 			ConsoleTextArea.DEFAULT_STDERR_FG;
+		Color defaultPrompt = isDark ? ConsoleTextArea.DEFAULT_DARK_PROMPT_FG :
+			ConsoleTextArea.DEFAULT_PROMPT_FG;
+		Color defaultException = isDark ? ConsoleTextArea.DEFAULT_DARK_EXCEPTION_FG :
+			ConsoleTextArea.DEFAULT_EXCEPTION_FG;
 
 		return !visibleCB.isSelected() ||
 			locationCombo.getSelectedIndex()!=2 ||
 			!highlightInputCB.isSelected() ||
-			!defaultPrompt.equals(promptButton.getColor()) ||
 			!defaultStdout.equals(stdoutButton.getColor()) ||
 			!defaultStderr.equals(stderrButton.getColor()) ||
-			!ConsoleTextArea.DEFAULT_PROMPT_FG.equals(promptButton.getColor()) ||
-			!ConsoleTextArea.DEFAULT_EXCEPTION_FG.equals(exceptionsButton.getColor());
+			!defaultPrompt.equals(promptButton.getColor()) ||
+			!defaultException.equals(exceptionsButton.getColor());
 	}
 
 
@@ -444,7 +442,7 @@ public class ConsoleOptionPanel extends PluginOptionsDialogPanel
 			stdoutButton.setColor(ConsoleTextArea.DEFAULT_DARK_STDOUT_FG);
 			stderrButton.setColor(ConsoleTextArea.DEFAULT_DARK_STDERR_FG);
 			promptButton.setColor(ConsoleTextArea.DEFAULT_DARK_PROMPT_FG);
-			exceptionsButton.setColor(ConsoleTextArea.DEFAULT_EXCEPTION_FG);
+			exceptionsButton.setColor(ConsoleTextArea.DEFAULT_DARK_EXCEPTION_FG);
 		}
 		else {
 			stdoutButton.setColor(ConsoleTextArea.DEFAULT_STDOUT_FG);

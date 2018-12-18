@@ -277,9 +277,7 @@ public class ProjectPlugin extends GUIPlugin {
 
 		try {
 
-			Image lightThemeImage = ImageTranscodingUtil.rasterize("projectStructure light",
-				getClass().getResourceAsStream("projectStructure.svg"), 16, 16);
-			lightThemeIcon = new ImageIcon(lightThemeImage);
+			lightThemeIcon = new ImageIcon(getClass().getResource("application_side_list.png"));
 
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("projectStructure dark",
 				getClass().getResourceAsStream("projectStructure_dark.svg"), 16, 16);

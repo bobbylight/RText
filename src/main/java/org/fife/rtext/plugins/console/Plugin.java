@@ -222,9 +222,7 @@ public class Plugin extends GUIPlugin {
 
 		try {
 
-			Image lightThemeImage = ImageTranscodingUtil.rasterize("console light",
-				getClass().getResourceAsStream("console.svg"), 16, 16);
-			lightThemeIcon = new ImageIcon(lightThemeImage);
+			lightThemeIcon = new ImageIcon(getClass().getResource("monitor.png"));
 
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("console dark",
 				getClass().getResourceAsStream("console_dark.svg"), 16, 16);

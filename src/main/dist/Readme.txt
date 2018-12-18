@@ -44,11 +44,6 @@ a plugin API is being developed to add new functionality to RText with ease.
 
 2. Requirements
 ---------------
-RText requires only a 1.5 Java Runtime Environment (JRE) or higher; however,
-using the most recent JRE available always gives the best performance and most
-features.  You can get the latest JRE for Microsoft Windows and other platforms
-here:  http://www.java.com
-
 Using the Source Browser plugin (which comes standard with RText) requires
 either Exuberant Ctags, or the classic "ctags" UNIX command.  If you do not
 have either installed, RText will still work normally, but the Source Browser

@@ -264,9 +264,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 		try {
 
-			Image lightThemeImage = ImageTranscodingUtil.rasterize("tools light",
-				getClass().getResourceAsStream("toolWindowBuild.svg"), 16, 16);
-			lightThemeIcon = new ImageIcon(lightThemeImage);
+			lightThemeIcon = new ImageIcon(getClass().getResource("tools.png"));
 
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("tools dark",
 				getClass().getResourceAsStream("toolWindowBuild_dark.svg"), 16, 16);

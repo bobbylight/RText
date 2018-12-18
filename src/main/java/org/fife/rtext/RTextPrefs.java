@@ -47,6 +47,11 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		implements RTextActionInfo {
 
 	/**
+	 * The default Look and Feel.
+	 */
+	public static final String DEFAULT_LAF = UIManager.getSystemLookAndFeelClassName();
+
+	/**
 	 * The default maximum number of spelling errors to display for a single
 	 * file.
 	 */
@@ -302,14 +307,10 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	public static String getLookAndFeelToLoad() {
 		Preferences prefs = Preferences.userNodeForPackage(RText.class);
 		String defaultLAF = UIManager.getSystemLookAndFeelClassName();
-		String laf = prefs.get("lookAndFeel", defaultLAF);
-		return laf;
+		return prefs.get("lookAndFeel", defaultLAF);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public RTextPrefs load() {
 
@@ -650,11 +651,11 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	protected void setDefaults() {
 		location = new Point(0,0);
 		size = new Dimension(650,500);
-		lookAndFeel = UIManager.getSystemLookAndFeelClassName(); //1.5.2004/pwy: use the system default
+		lookAndFeel = DEFAULT_LAF;
 		iconGroupName = IconGroupLoader.DEFAULT_ICON_GROUP_NAME;
 		toolbarVisible = true;
 		statusBarVisible = true;
-		lineNumbersVisible = false;
+		lineNumbersVisible = true;
 		tabSize = 5;
 		emulateTabsWithSpaces = false;
 		textMode = RTextArea.INSERT_MODE;
@@ -700,8 +701,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		tabLinesColor = Color.gray;
 		rememberWhitespaceLines = true;
 		autoInsertClosingCurlys = false;
-		aaEnabled = File.separatorChar=='\\' ||
-				System.getProperty("os.name").contains("mac os x");
+		aaEnabled = File.separatorChar=='\\' || OS.get() == OS.MAC_OS_X;
 		fractionalMetricsEnabled = false;
 		markAllHighlightColor = RTextArea.getDefaultMarkAllHighlightColor();
 		markOccurrences = true;

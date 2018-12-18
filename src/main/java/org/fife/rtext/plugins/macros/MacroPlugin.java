@@ -119,7 +119,7 @@ public class MacroPlugin extends AbstractPlugin
 	@Override
 	public Icon getPluginIcon(boolean darkLookAndFeel) {
 		// This allows us to get a theme-specific icon if there is one
-		return app.getIconGroup().getIcon("newmacro");
+		return newMacroAction != null ? newMacroAction.getIcon() : null;
 	}
 
 

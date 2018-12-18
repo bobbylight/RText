@@ -94,7 +94,7 @@ public class RTextUtilities {
 	/**
 	 * Adds a set of "default" code templates to the text areas.
 	 */
-	public static void addDefaultCodeTemplates() {
+	static void addDefaultCodeTemplates() {
 
 		CodeTemplateManager ctm = RSyntaxTextArea.getCodeTemplateManager();
 
@@ -752,7 +752,7 @@ public class RTextUtilities {
 		alpha = Math.min(alpha, 1);
 
 		// Create fast image
-		BufferedImage bi = null;
+		BufferedImage bi;
 		int w = image.getWidth(null);
 		int h = image.getHeight(null);
 		bi = rtext.getGraphicsConfiguration().createCompatibleImage(w, h);

@@ -588,9 +588,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		try {
 
-			Image lightThemeImage = ImageTranscodingUtil.rasterize("source browser light",
-				getClass().getResourceAsStream("toolWindowTodo.svg"), 16, 16);
-			lightThemeIcon = new ImageIcon(lightThemeImage);
+			lightThemeIcon = new ImageIcon(getClass().getResource("source_browser.png"));
 
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("source browser dark",
 				getClass().getResourceAsStream("toolWindowTodo_dark.svg"), 16, 16);

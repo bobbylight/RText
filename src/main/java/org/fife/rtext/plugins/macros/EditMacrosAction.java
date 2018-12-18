@@ -49,4 +49,9 @@ class EditMacrosAction extends AppAction<RText> {
 	}
 
 
+	void restoreDefaultIcon() {
+		setIcon("cog.png");
+	}
+
+
 }

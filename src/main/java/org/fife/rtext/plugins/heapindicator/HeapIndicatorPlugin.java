@@ -102,7 +102,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	}
 
 
-	protected static long bytesToKb(long bytes) {
+	private static long bytesToKb(long bytes) {
 		return bytes / 1024L;
 	}
 
@@ -120,13 +120,13 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	/**
 	 * Updates heap memory information.
 	 */
-	protected void getData() {
+	private void getData() {
 		totalMem = Runtime.getRuntime().totalMemory();
 		usedMem =  totalMem - Runtime.getRuntime().freeMemory();
 	}
 
 
-	public Color getIconBorderColor() {
+	Color getIconBorderColor() {
 
 		Color c = iconBorderColor;
 
@@ -136,12 +136,12 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 					c = SubstanceUtil.getSubstanceColor(
 										SubstanceUtil.ULTRA_DARK_COLOR);
 				} catch (Exception e) {
-					c = UIManager.getColor("Label.foreground");
+					c = UIManager.getColor("textInactiveText");
 					e.printStackTrace();
 				}
 			}
 			else {
-				c = UIManager.getColor("Label.foreground");
+				c = UIManager.getColor("textInactiveText");
 			}
 		}
 
@@ -150,7 +150,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	}
 
 
-	public Color getIconForeground() {
+	Color getIconForeground() {
 
 		Color c = iconForeground;
 
@@ -245,7 +245,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 * @return The refresh interval, in milliseconds.
 	 * @see #setRefreshInterval
 	 */
-	public int getRefreshInterval() {
+	int getRefreshInterval() {
 		return timer==null ? -1 : timer.getDelay();
 	}
 
@@ -271,7 +271,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 * @return The total memory available to the JVM, in bytes.
 	 * @see #getUsedMemory
 	 */
-	public long getTotalMemory() {
+	long getTotalMemory() {
 		return totalMem;
 	}
 
@@ -282,7 +282,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 * @return The memory being used by the JVM, in bytes.
 	 * @see #getTotalMemory
 	 */
-	public long getUsedMemory() {
+	long getUsedMemory() {
 		return usedMem;
 	}
 
@@ -294,7 +294,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 * @return Whether or not to use system colors.
 	 * @see #setUseSystemColors
 	 */
-	public boolean getUseSystemColors() {
+	boolean getUseSystemColors() {
 		return useSystemColors;
 	}
 
@@ -313,7 +313,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	}
 
 
-	protected void installTimer(int interval) {
+	private void installTimer(int interval) {
 		if (timer==null) {
 			timerEvent = new TimerEvent();
 			timer = new Timer(interval, timerEvent);
@@ -371,9 +371,6 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void savePreferences() {
 		HeapIndicatorPrefs prefs = new HeapIndicatorPrefs();
@@ -391,13 +388,13 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	}
 
 
-	public void setIconBorderColor(Color iconBorderColor) {
+	void setIconBorderColor(Color iconBorderColor) {
 		this.iconBorderColor = iconBorderColor;
 		repaint();
 	}
 
 
-	public void setIconForeground(Color iconForeground) {
+	void setIconForeground(Color iconForeground) {
 		this.iconForeground = iconForeground;
 		repaint();
 	}
@@ -409,7 +406,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 * @param interval The new refresh interval, in milliseconds.
 	 * @see #getRefreshInterval
 	 */
-	public void setRefreshInterval(int interval) {
+	void setRefreshInterval(int interval) {
 		if (interval<=0 || interval==getRefreshInterval())
 			return;
 		installTimer(interval);
@@ -423,7 +420,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 * @param useSystemColors Whether or not to use system colors.
 	 * @see #getUseSystemColors
 	 */
-	public void setUseSystemColors(boolean useSystemColors) {
+	void setUseSystemColors(boolean useSystemColors) {
 		if (useSystemColors!=getUseSystemColors()) {
 			this.useSystemColors = useSystemColors;
 			repaint();
@@ -457,7 +454,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	}
 
 
-	protected void uninstallTimer() {
+	private void uninstallTimer() {
 		if (timer!=null) {
 			timer.stop();
 			timer.removeActionListener(timerEvent);

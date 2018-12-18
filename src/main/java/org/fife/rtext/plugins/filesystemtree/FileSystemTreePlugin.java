@@ -291,9 +291,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 		try {
 
-			Image lightThemeImage = ImageTranscodingUtil.rasterize("showAsTree light",
-				getClass().getResourceAsStream("showAsTree.svg"), 16, 16);
-			lightThemeIcon = new ImageIcon(lightThemeImage);
+			lightThemeIcon = new ImageIcon(getClass().getResource("filesystemtree.gif"));
 
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("showAsTree dark",
 				getClass().getResourceAsStream("showAsTree_dark.svg"), 16, 16);

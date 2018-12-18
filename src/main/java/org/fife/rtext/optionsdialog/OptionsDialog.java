@@ -62,10 +62,6 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		setIcon(panel2, "language.png");
 		panel.addChildPanel(panel2);
 
-		panel = new ThemeOptionPanel(rtext, msg);
-		setIcon(panel, "theme.png");
-		panels.add(panel);
-
 		panel = new RTextAreaOptionPanel();
 		setIcon(panel, "textarea.png");
 		panels.add(panel);
@@ -87,12 +83,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		panel.addChildPanel(new FileChooserFavoritesOptionPanel());
 
 		panel = new PrintingOptionPanel(rtext, msg);
-		setIcon(panel, "printing.png");
 		panels.add(panel);
-
-		//panel = new LanguageOptionPanel(rtext, msg);
-		//setIcon(panel, "language.png");
-		//optionsPanels.add(panel);
 
 		panel = new FileFilterOptionPanel(rtext, msg);
 		setIcon(panel, "file_filters.png");
@@ -106,6 +97,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		for (Plugin plugin : plugins) {
 			panel = plugin.getOptionsDialogPanel();
 			if (panel != null) {
+				panel.setIcon(plugin.getPluginIcon());
 				String parentID = plugin.getOptionsDialogPanelParentPanelID();
 				if (parentID != null) {
 					OptionsDialogPanel parent = getPanelById(panels, parentID);
