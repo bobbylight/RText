@@ -17,7 +17,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import org.pushingpixels.substance.api.renderers.SubstanceDefaultTreeCellRenderer;
+import org.pushingpixels.substance.api.renderer.SubstanceDefaultTreeCellRenderer;
 
 
 /**

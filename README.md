@@ -21,33 +21,34 @@ you would expect:
 # Building
 
 RText uses [Gradle](http://gradle.org/) to build.  To compile, run
-all unit tests, and create the jar, run:
+all unit tests, and create the jar, and run:
 
-    ./gradlew build
+    ./gradlew build installDist
+    java -jar build/install/rtext/RText.jar
 
-Note that RText only requires Java 6.  To that end, the boot classpath will be set to accommodate
-this if a variable `java6CompileBootClasspath` is set to the location of `rt.jar` in a Java 6 JDK.
-This can be added to `<maven-home>/gradle.properties` if desired, to avoid diffs in the project's
-`gradle.properties`.  For example:
+Note that RText requires Java 11 or later to build.
 
-    On Windows:
-      java6CompileBootClasspath=C:/java/jdk1.8.0_102/jre/lib/rt.jar
-    On OS X:
-      java6CompileBootClasspath=/Library/Java/JavaVirtualMachines/jdk1.8.0_102.jdk/Contents/Home/jre/lib/rt.jar
+## Building the Windows application and installer
 
-To build and run an installable image:
+To create the Windows version of the application, run the `generateWindowsStarterExe`
+task in addition to `installDist`.  This ensures a trimmed-down JRE is generated,
+and a starter `RText.exe` file is added into `build/install/rtext`:
 
-    ./gradlew clean build
-    ./gradlew installDist
-    java -jar ./build/install/rtext/RText.jar
+    ./gradlew build installDist generateWindowsStarterExe
+
+The `generateWindowsStarterExe` task uses a JDK 11 install and `launch4j` as defined in
+`gradle.properties`.
 
 After building the installable image, you can create the win32 installer by
 running the `MakeRTextInstaller.nsi` [NSIS](http://nsis.sourceforge.net/Main_Page)
 script at the root of the project.
 
+## Building the OS X application
+
 Building the OS X package is a little wonky at the moment.  I am working
-on finding the best way to build an App bundle via Gradle.  For now, the
-easiest way to do so is:
+on finding the best way to build an App bundle via Gradle.  It doesn't seem
+like there is a good way to do it as of Java 11+.  Previously, the easiest
+way to do so was:
 
     ./gradlew clean build installDist
     vi build.gradle
@@ -56,5 +57,5 @@ easiest way to do so is:
     cp -R ./build/install/rtext ./build/macApp/RText.app/Contents/
     mv ./build/macApp/RText.app/Contents/rtext ./build/macApp/RText.app/Contents/Java
 
-This should create a functional `RText.app`, but note the application icon
+This used to create a functional `RText.app`, but note the application icon
 is not correct yet.

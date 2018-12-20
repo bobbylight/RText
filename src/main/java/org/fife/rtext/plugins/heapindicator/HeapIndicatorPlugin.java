@@ -133,8 +133,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 		if (getUseSystemColors()) {
 			if (SubstanceUtil.isSubstanceInstalled()) {
 				try {
-					c = SubstanceUtil.getSubstanceColor(
-										SubstanceUtil.ULTRA_DARK_COLOR);
+					c = SubstanceUtil.getUltraDarkColor();
 				} catch (Exception e) {
 					c = UIManager.getColor("textInactiveText");
 					e.printStackTrace();
@@ -157,8 +156,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 		if (getUseSystemColors()) {
 			if (SubstanceUtil.isSubstanceInstalled()) {
 				try {
-					c = SubstanceUtil.getSubstanceColor(
-										SubstanceUtil.MID_COLOR);
+					c = SubstanceUtil.getMidColor();
 				} catch (Exception e) {
 					c = UIManager.getColor("ProgressBar.foreground");
 					e.printStackTrace();

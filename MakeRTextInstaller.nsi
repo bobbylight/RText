@@ -46,14 +46,11 @@ ShowUnInstDetails show
 
 Section "MainSection" SEC01
   WriteRegStr HKLM "Software\RText" "Location" "$INSTDIR"
-  SetOutPath "$INSTDIR"
-  SetOverwrite on
-  File "RText.exe"
   CreateDirectory "$SMPROGRAMS\RText"
   CreateShortCut "$SMPROGRAMS\RText\RText.lnk" "$INSTDIR\RText.exe"
   CreateShortCut "$DESKTOP\RText.lnk" "$INSTDIR\RText.exe"
-  SetOverwrite on
   SetOutPath "$INSTDIR"
+  SetOverwrite on
   File /r "build\install\rtext\*"
 SectionEnd
 
@@ -86,85 +83,27 @@ FunctionEnd
 
 Section Uninstall
   ; Don't just Delete /r $INSTDIR, preserve files they added themselves
+  ; Also guards against someone accidentally installing directly into
+  ; C:\Program Files, we don't want to wipe that entire folder...
   SetOutPath "$INSTDIR"
-  Delete "$INSTDIR\RText.exe"
-  Delete "$INSTDIR\RText.url"
-  Delete "$INSTDIR\uninst.exe"
-  Delete /REBOOTOK "$INSTDIR\autocomplete*"
-  Delete /REBOOTOK "$INSTDIR\AutoComplete.License.txt"
+
+  ; That said, we are going to be unforgiving and use wildcards
+  ; to remove jar files, and blindly remove our subdirectories.
+  RMDir /r "$INSTDIR\doc"
+  RMDir /r "$INSTDIR\exampleMacros"
+  RMDir /r "$INSTDIR\icongroups"
+  RMDir /r "$INSTDIR\jre-11.0.1"
+  RMDir /r "$INSTDIR\lnfs"
+  RMDir /r "$INSTDIR\plugins"
+  Delete /REBOOTOK "$INSTDIR\RText.*"
+  Delete /REBOOTOK "$INSTDIR\*FileIOExtras.dll"
   Delete /REBOOTOK "$INSTDIR\english_dic.zip"
-  Delete /REBOOTOK "$INSTDIR\ExtraFileChooserFilters.xml"
-  Delete /REBOOTOK "$INSTDIR\fife.common*"
-  Delete /REBOOTOK "$INSTDIR\Jazzy.LICENSE.txt"
-  Delete /REBOOTOK "$INSTDIR\js-14*.jar" ; Shouldn't be there, but was put by older releases
+  Delete /REBOOTOK "$INSTDIR\*.jar"
   Delete /REBOOTOK "$INSTDIR\License.txt"
-  Delete /REBOOTOK "$INSTDIR\localizations.xml"
-  Delete /REBOOTOK "$INSTDIR\README.jazzy.txt"
-  Delete /REBOOTOK "$INSTDIR\README.spellchecker.txt"
   Delete /REBOOTOK "$INSTDIR\Readme.txt"
   Delete /REBOOTOK "$INSTDIR\readme.unix"
-  Delete /REBOOTOK "$INSTDIR\Rhino.build-date" ; Shouldn't be there, but was put by older releases
-  Delete /REBOOTOK "$INSTDIR\Rhino.LICENSE.txt" ; Shouldn't be there, but was put by older releases
-  Delete /REBOOTOK "$INSTDIR\RSTALanguageSupport.License.txt" ; Shouldn't be there, but was put by older releases
-  Delete /REBOOTOK "$INSTDIR\RSTAUI.*.txt" ; License and readme
-  Delete /REBOOTOK "$INSTDIR\rstaui*"
-  Delete /REBOOTOK "$INSTDIR\rsta_spellchecker.jar"
-  Delete /REBOOTOK "$INSTDIR\spellchecker*"
-  Delete /REBOOTOK "$INSTDIR\rsyntaxtextarea*"
-  Delete /REBOOTOK "$INSTDIR\RSyntaxTextArea.License.txt"
-  Delete /REBOOTOK "$INSTDIR\RText.jar"
-  Delete /REBOOTOK "$INSTDIR\SpellChecker.License.txt"
-  Delete /REBOOTOK "$INSTDIR\Win32FileIOExtras.dll"
-  Delete /REBOOTOK "$INSTDIR\x64FileIOExtras.dll"
-  Delete /REBOOTOK "$INSTDIR\doc\HelpDialogContents.xml"
-  Delete /REBOOTOK "$INSTDIR\doc\en\*"
-  Delete /REBOOTOK "$INSTDIR\exampleMacros\*"
-  Delete /REBOOTOK "$INSTDIR\icongroups\BlueSphereIcons.jar"
-  Delete /REBOOTOK "$INSTDIR\icongroups\EclipseIcons.jar"
-  Delete /REBOOTOK "$INSTDIR\icongroups\ExtraIcons.xml"
-  Delete /REBOOTOK "$INSTDIR\icongroups\JavaIcons.jar"
-  Delete /REBOOTOK "$INSTDIR\icongroups\XPIcons.jar"
-  Delete /REBOOTOK "$INSTDIR\lnfs\lookandfeels.xml"
-  Delete /REBOOTOK "$INSTDIR\lnfs\OfficeLnFs.jar"
-  Delete /REBOOTOK "$INSTDIR\lnfs\OfficeLnFs.License.txt"
-  Delete /REBOOTOK "$INSTDIR\lnfs\substance\*jar"
-  Delete /REBOOTOK "$INSTDIR\lnfs\substance.jar" ; Possibly there from old releases
-  Delete /REBOOTOK "$INSTDIR\lnfs\trident.jar" ; Possibly there from old releases
-  Delete /REBOOTOK "$INSTDIR\plugins\groovy-all-*.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\groovy.LICENSE.txt"
-  Delete /REBOOTOK "$INSTDIR\plugins\js-14*.jar" ; Old and new versions
-  Delete /REBOOTOK "$INSTDIR\plugins\jsonbeans-*.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\jsonbeans.LICENSE.txt"
-  Delete /REBOOTOK "$INSTDIR\plugins\jtidy-r938.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\jtidy-r938.LICENSE.txt"
-  Delete /REBOOTOK "$INSTDIR\plugins\languagesupport-*.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\plugin-console.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\plugin-fileSystemTree.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\plugin-heapIndicator.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\plugin-languageSupport.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\plugin-macros.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\plugin-sourceBrowser.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\plugin-tasks.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\plugin-projects.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\plugin-tools.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\plugin-tidy.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\rhino-*.jar"
-  Delete /REBOOTOK "$INSTDIR\plugins\Rhino.build-date"
-  Delete /REBOOTOK "$INSTDIR\plugins\Rhino.LICENSE.txt"
-
-  Delete /REBOOTOK "$INSTDIR\plugins\Console.jar" ; Older name
-  Delete /REBOOTOK "$INSTDIR\plugins\FileSystemTree.jar" ; Older name
-  Delete /REBOOTOK "$INSTDIR\plugins\HeapIndicator.jar" ; Older name
-  Delete /REBOOTOK "$INSTDIR\plugins\language_support.jar" ; Older name
-  Delete /REBOOTOK "$INSTDIR\plugins\MacroSupport.jar" ; Older name
-  Delete /REBOOTOK "$INSTDIR\plugins\ProjectSupport.jar" ; Older name
-  Delete /REBOOTOK "$INSTDIR\plugins\RSTALanguageSupport.License.txt" ; Older name
-  Delete /REBOOTOK "$INSTDIR\plugins\RTextLanguageSupport.jar" ; Older name
-  Delete /REBOOTOK "$INSTDIR\plugins\SourceBrowser.jar" ; Older name
-  Delete /REBOOTOK "$INSTDIR\plugins\TaskList.jar" ; Older name
-  Delete /REBOOTOK "$INSTDIR\plugins\tidy.jar" ; Older name
-  Delete /REBOOTOK "$INSTDIR\plugins\ToolSupport.jar" ; Older name
-  Delete /REBOOTOK "$INSTDIR\plugins\language_support.jar" ; Older name
+  Delete /REBOOTOK "$INSTDIR\ExtraFileChooserFilters.xml"
+  Delete /REBOOTOK "$INSTDIR\localizations.xml"
 
   Delete "$SMPROGRAMS\RText\Uninstall.lnk"
   Delete "$SMPROGRAMS\RText\Website.lnk"
@@ -173,13 +112,6 @@ Section Uninstall
 
   ; Folders will be removed if they are completely empty (user didn't add anything)
   RMDir "$SMPROGRAMS\RText"
-  RMDir "$INSTDIR\doc\en"
-  RMDir "$INSTDIR\doc"
-  RMDir "$INSTDIR\exampleMacros"
-  RMDir "$INSTDIR\icongroups"
-  RMDir "$INSTDIR\lnfs\substance"
-  RMDir "$INSTDIR\lnfs"
-  RMDir "$INSTDIR\plugins"
   SetOutPath "$TEMP" ; So we can remove the root dir if it's empty
   RMDir "$INSTDIR"
 

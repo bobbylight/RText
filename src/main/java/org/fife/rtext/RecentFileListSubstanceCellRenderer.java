@@ -14,7 +14,7 @@ import javax.swing.JList;
 import javax.swing.filechooser.FileSystemView;
 
 import org.fife.ui.rsyntaxtextarea.FileLocation;
-import org.pushingpixels.substance.api.renderers.SubstanceDefaultListCellRenderer;
+import org.pushingpixels.substance.api.renderer.SubstanceDefaultListCellRenderer;
 
 
 /**

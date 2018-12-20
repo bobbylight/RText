@@ -66,7 +66,6 @@ class BackgroundDialog extends JDialog implements ActionListener {
 	private JButton colorBrowseButton;
 	private JButton imageBrowseButton;
 	private JButton okButton;
-	private JButton cancelButton;
 	private ColorOrImageIcon colorOrImageIcon;
 
 	private Color currentColor;
@@ -181,7 +180,7 @@ class BackgroundDialog extends JDialog implements ActionListener {
 		okButton = UIUtil.newButton(msg, "OK", "OKMnemonic");
 		okButton.setActionCommand("OK");
 		okButton.addActionListener(this);
-		cancelButton = UIUtil.newButton(msg, "Cancel", "CancelMnemonic");
+		JButton cancelButton = UIUtil.newButton(msg, "Cancel", "CancelMnemonic");
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(this);
 		Container buttons = UIUtil.createButtonFooter(okButton, cancelButton);
@@ -213,85 +212,88 @@ class BackgroundDialog extends JDialog implements ActionListener {
 
 		String command = e.getActionCommand();
 
-		if (command.equals("ColorRadioButton")) {
-			colorBrowseButton.setEnabled(true);
-			imageBrowseButton.setEnabled(false);
-			viewingColors = true;
-			colorOrImageIcon.setColor(currentColor);
-			okButton.setEnabled(true);
-			String colorString = currentColor.toString();
-			imageFileNameField.setText(colorString.substring(colorString.indexOf('[')));
-			this.repaint();
-		}
+		switch (command) {
 
-		else if (command.equals("ImageRadioButton")) {
-			colorBrowseButton.setEnabled(false);
-			imageBrowseButton.setEnabled(true);
-			viewingColors = false;
-			colorOrImageIcon.setColor(null);
-			if (currentImageFileName!=null) {
-				imageFileNameField.setText(currentImageFileName);
-				okButton.setEnabled(true);
-			}
-			else {
-				imageFileNameField.setText(msg.getString("NoImageLabel"));
-				okButton.setEnabled(false);
-			}
-			this.repaint();
-		}
-
-		else if (command.equals("BrowseColors")) {
-			Color tempColor = JColorChooser.showDialog(this,
-							msg.getString("BGColorChooserTitle"),
-							currentColor);
-			if (tempColor != null) {
-				currentColor = tempColor;
+			case "ColorRadioButton":
+				colorBrowseButton.setEnabled(true);
+				imageBrowseButton.setEnabled(false);
+				viewingColors = true;
 				colorOrImageIcon.setColor(currentColor);
+				okButton.setEnabled(true);
 				String colorString = currentColor.toString();
 				imageFileNameField.setText(colorString.substring(colorString.indexOf('[')));
 				this.repaint();
-				//currentImageFileName = null;
-			}
-		}
+				break;
 
-		else if (command.equals("BrowseImages")) {
-
-			int returnVal = imageChooser.showOpenDialog(this);
-
-			// If they selected a file and clicked "OK", open the flie!
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				currentImageFileName = imageChooser.getSelectedFile().getAbsolutePath();
-				Image previewImage = getPreviewImage(currentImageFileName);
-				if (previewImage==null) {
-					JOptionPane.showMessageDialog(this,
-							msg.getString("ImageFileError") + "\n'" +
-										currentImageFileName + "'",
-							msg.getString("ErrorDialogTitle"),
-							JOptionPane.ERROR_MESSAGE);
-					currentImageFileName = null;
-					okButton.setEnabled(false);
-					imageFileNameField.setText(msg.getString("NoImageLabel"));
-					colorOrImageIcon.setImage(null);
-					repaint();
-				}
-				else {
-					colorOrImageIcon.setImage(previewImage);
+			case "ImageRadioButton":
+				colorBrowseButton.setEnabled(false);
+				imageBrowseButton.setEnabled(true);
+				viewingColors = false;
+				colorOrImageIcon.setColor(null);
+				if (currentImageFileName != null) {
 					imageFileNameField.setText(currentImageFileName);
 					okButton.setEnabled(true);
-					this.repaint();
 				}
-			}
+				else {
+					imageFileNameField.setText(msg.getString("NoImageLabel"));
+					okButton.setEnabled(false);
+				}
+				this.repaint();
+				break;
 
-		}
+			case "BrowseColors":
+				Color tempColor = JColorChooser.showDialog(this,
+					msg.getString("BGColorChooserTitle"),
+					currentColor);
+				if (tempColor != null) {
+					currentColor = tempColor;
+					colorOrImageIcon.setColor(currentColor);
+					colorString = currentColor.toString();
+					imageFileNameField.setText(colorString.substring(colorString.indexOf('[')));
+					this.repaint();
+					//currentImageFileName = null;
+				}
+				break;
 
-		else if (command.equals("OK")) {
-			this.setVisible(false);
-		}
+			case "BrowseImages":
 
-		else if (command.equals("Cancel")) {
-			currentColor = null;
-			currentImageFileName = null;
-			this.setVisible(false);
+				int returnVal = imageChooser.showOpenDialog(this);
+
+				// If they selected a file and clicked "OK", open the flie!
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					currentImageFileName = imageChooser.getSelectedFile().getAbsolutePath();
+					Image previewImage = getPreviewImage(currentImageFileName);
+					if (previewImage == null) {
+						JOptionPane.showMessageDialog(this,
+							msg.getString("ImageFileError") + "\n'" +
+								currentImageFileName + "'",
+							msg.getString("ErrorDialogTitle"),
+							JOptionPane.ERROR_MESSAGE);
+						currentImageFileName = null;
+						okButton.setEnabled(false);
+						imageFileNameField.setText(msg.getString("NoImageLabel"));
+						colorOrImageIcon.setImage(null);
+						repaint();
+					}
+					else {
+						colorOrImageIcon.setImage(previewImage);
+						imageFileNameField.setText(currentImageFileName);
+						okButton.setEnabled(true);
+						this.repaint();
+					}
+				}
+
+				break;
+
+			case "OK":
+				this.setVisible(false);
+				break;
+
+			case "Cancel":
+				currentColor = null;
+				currentImageFileName = null;
+				this.setVisible(false);
+				break;
 		}
 
 	}
@@ -512,15 +514,8 @@ class BackgroundDialog extends JDialog implements ActionListener {
 				g.fillRect(x,y, getIconWidth(), getIconHeight());
 				g.setColor(old);
 			}
-			else {
-				// In 1.4.2, calling super.paintIcon() with a null image
-				// threw an NPE.  In 1.5+, Javadoc for this method
-				// explicitly states that null images cause nothing to be
-				// drawn.  But since we support 1.4.x, we check for null
-				// images here.
-				if (getImage()!=null) {
-					super.paintIcon(c, g, x,y);
-				}
+			else if (getImage()!=null) {
+				super.paintIcon(c, g, x,y);
 			}
 		}
 

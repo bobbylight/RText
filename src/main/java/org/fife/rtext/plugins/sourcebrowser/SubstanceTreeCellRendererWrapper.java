@@ -18,7 +18,7 @@ import javax.swing.JTree;
 import javax.swing.tree.TreeCellRenderer;
 
 import org.fife.ui.autocomplete.Util;
-import org.pushingpixels.substance.api.renderers.SubstanceDefaultTreeCellRenderer;
+import org.pushingpixels.substance.api.renderer.SubstanceDefaultTreeCellRenderer;
 
 
 /**
@@ -33,7 +33,7 @@ import org.pushingpixels.substance.api.renderers.SubstanceDefaultTreeCellRendere
  * @author Robert Futrell
  * @version 1.0
  */
-class SubstanceTreeCellRendererWrapper extends SubstanceDefaultTreeCellRenderer{
+class SubstanceTreeCellRendererWrapper extends SubstanceDefaultTreeCellRenderer {
 
 	private TreeCellRenderer delegate;
 
@@ -73,11 +73,11 @@ class SubstanceTreeCellRendererWrapper extends SubstanceDefaultTreeCellRenderer{
 			JLabel label = (JLabel)c;
 			setFont(label.getFont());
 			String text = label.getText();
-			// NOTE: As of 7.2.1, Insubstantial's SubstanceDefaultTreeCellRenderers
-			// do not play nicely with tree nodes displaying HTML.  On rollover,
-			// colors get wonky and inconsistent.  So for now, we have to simply
-			// strip all HTML when using Substance.  
-			// Our renderers already strip HTML when they are selected.
+			// NOTE: SubstanceDefaultTreeCellRenderers do not play nicely with
+			// tree nodes displaying HTML.  On rollover, colors get wonky and
+			// inconsistent.  So for now, we have to simply strip all HTML when
+			// using Substance. Our renderers already strip HTML when they are
+			// selected.
 //			if (substanceAndRollover(tree, row)) {
 				text = Util.stripHtml(text);
 //			}

@@ -349,8 +349,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	/**
 	 * Installs the styles used by this text component.
 	 *
-	 * @param checkForSubstance Whether to work around a Substance oddity
-	 *        (Insubstantial 7.2.1).
+	 * @param checkForSubstance Whether to work around a Substance oddity.
 	 */
 	private void installDefaultStyles(boolean checkForSubstance) {
 
@@ -496,7 +495,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 * Changes all consoles to use the default colors for the current
 	 * application theme.
 	 */
-	public void restoreDefaultColors() {
+	void restoreDefaultColors() {
 
 		Font font = RTextArea.getDefaultFont();
 		boolean isDark = RTextUtilities.isDarkLookAndFeel();
@@ -815,7 +814,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		public void changedUpdate(DocumentEvent e) {
 		}
 
-		private void handleDocumentEvent(DocumentEvent e) {
+		private void handleDocumentEvent() {
 			if (plugin.getSyntaxHighlightInput()) {
 				// Can't update Document in DocumentListener directly
 				SwingUtilities.invokeLater(ConsoleTextArea.this::syntaxHighlightInput);
@@ -830,7 +829,7 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 		@Override
@@ -850,7 +849,7 @@ abstract class ConsoleTextArea extends JTextPane {
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 	}
@@ -913,7 +912,7 @@ abstract class ConsoleTextArea extends JTextPane {
 				appendPrompt();
 				return;
 			}
-			String text = null;
+			String text;
 			try {
 				text = getText(startOffs, len).trim();
 			} catch (BadLocationException ble) { // Never happens

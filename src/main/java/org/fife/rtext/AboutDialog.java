@@ -142,8 +142,8 @@ class AboutDialog extends org.fife.ui.AboutDialog {
 				msg.getString("Desc.Jazzy"));
 		appendLibrary(sb, "JGoodies:", "http://jgoodies.com",
 				msg.getString("Desc.JGoodies"));
-		appendLibrary(sb, "Insubstantial:",
-				"https://github.com/Insubstantial/insubstantial",
+		appendLibrary(sb, "Substance:",
+				"https://github.com/kirill-grouchnikov/radiance/",
 				msg.getString("Desc.Substance"));
 		appendLibrary(sb, "Groovy:",
 				"http://groovy.codehaus.org/",

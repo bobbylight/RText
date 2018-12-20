@@ -13,7 +13,7 @@ package org.fife.rtext.plugins.project.tree;
 import java.awt.Component;
 import javax.swing.JTree;
 
-import org.pushingpixels.substance.api.renderers.SubstanceDefaultTreeCellRenderer;
+import org.pushingpixels.substance.api.renderer.SubstanceDefaultTreeCellRenderer;
 
 
 /**

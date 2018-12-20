@@ -1,3 +1,5 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 /*
 plugins {
   id "edu.sc.seis.macAppBundle" version "2.1.1"
@@ -36,6 +38,8 @@ repositories {
 	}
 }
 
+import org.apache.tools.ant.taskdefs.condition.Os
+
 // Regenerate local gradlew
 wrapper {
 	gradleVersion '5.0'
@@ -47,8 +51,7 @@ wrapper {
 //}
 
 static isSubstanceJar(jarName) {
-	return jarName.startsWith('substance-') || jarName.startsWith('trident-') ||
-		jarName.startsWith('laf-')
+	return jarName.startsWith('radiance-')
 }
 static isPluginJar(jarName) {
 	return jarName.startsWith('plugin-') ||
@@ -298,6 +301,52 @@ srcDistZip {
 	include 'src/**'
 	include 'TO-DO'
 }
+
+def getJreDependencyList = { installDistDir ->
+
+	// Store the output instead of printing to the console
+	def stdout = new ByteArrayOutputStream()
+
+	exec {
+		workingDir installDistDir
+		commandLine "${jdkRoot}/bin/jdeps", '--list-deps', 'RText.jar', 'plugins/plugin*.jar'
+		standardOutput = stdout
+	}
+
+	def retVal =  String.join(',', stdout.toString().split('[ \t\r\n]+'))
+	if (retVal[0] == ',') {
+		retVal = retVal.substring(1)
+	}
+	return retVal
+}
+
+task generateJre {
+	doLast {
+
+		def installDistDir = 'build/install/rtext'
+
+		def moduleList = getJreDependencyList(installDistDir)
+		println "Generating JRE with modules: ${moduleList}"
+
+		exec {
+			workingDir installDistDir
+			commandLine "${jdkRoot}/bin/jlink", '--module-path', "\"${jdkRoot}/jmods\"", '--add-modules',
+					moduleList, '--output', embeddedJreFolderName, '--strip-debug', '--compress', '2',
+					'--no-header-files', '--no-man-pages'
+		}
+	}
+}
+generateJre.dependsOn('installDist')
+
+task generateWindowsStarterExe {
+	doLast {
+		exec {
+			commandLine launch4jExe, 'launch4j.xml'
+		}
+	}
+}
+generateWindowsStarterExe.dependsOn('generateJre')
+
 /* Mac .app plugin config.  Uncomment this and run './gradlew createApp'
  * after './gradlew clean build installDist'.
 copyToResourcesJava {

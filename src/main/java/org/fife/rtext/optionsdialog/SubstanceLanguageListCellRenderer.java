@@ -14,7 +14,7 @@ import java.awt.Component;
 import javax.swing.JList;
 
 import org.fife.rtext.optionsdialog.LanguageOptionPanel.IconTextInfo;
-import org.pushingpixels.substance.api.renderers.SubstanceDefaultListCellRenderer;
+import org.pushingpixels.substance.api.renderer.SubstanceDefaultListCellRenderer;
 
 
 /**
