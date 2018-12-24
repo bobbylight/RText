@@ -27,6 +27,7 @@ import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.FolderFilterInfo;
+import org.fife.ui.UIUtil;
 import org.fife.ui.rtextfilechooser.FileDisplayNames;
 import org.fife.ui.rtextfilechooser.Utilities;
 import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
@@ -208,18 +209,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	@Override
 	protected void handleDelete() {
 
-		final boolean hard = false;
 		File file = getFile();
-		File[] files = new File[1];
-		files[0] = file;
-
-		FileIOExtras extras = FileIOExtras.getInstance();
-		if (!hard && extras!=null) {
-			if (handleDeleteNative(files, plugin)) {
-				plugin.refreshTree(getParent());
-			}
-			return;
-		}
 
 		String text = Messages.getString("Action.DeleteFile.Confirm",
 				file.getName());
@@ -229,7 +219,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		int rc = JOptionPane.showConfirmDialog(rtext, text, title,
 				JOptionPane.YES_NO_OPTION);
 		if (rc==JOptionPane.YES_OPTION) {
-			if (!file.delete()) {
+			if (!UIUtil.deleteFile(file)) {
 				text = Messages.getString("ProjectPlugin.Error.DeletingFile",
 						file.getName());
 				title = rtext.getString("ErrorDialogTitle");
@@ -239,18 +229,6 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 			plugin.refreshTree(getParent());
 		}
 
-	}
-
-
-	public static boolean handleDeleteNative(File[] files,
-											 ProjectPlugin plugin) {
-		FileIOExtras extras = FileIOExtras.getInstance();
-		RText rtext = plugin.getRText();
-		if (!extras.moveToRecycleBin(rtext, files, true, true)) {
-			UIManager.getLookAndFeel().provideErrorFeedback(rtext);
-			return false;
-		}
-		return true;
 	}
 
 

@@ -105,7 +105,7 @@ an "MIT-like license."  See http://jtidy.sourceforge.net/ for more information.
 
 5. Getting Support
 ------------------
-Try the project's home page:  http://sourceforge.net/projects/rtext
+Try the project's home page:  https://github.com/bobbylight/RText
 There you will find forums where you can post questions, file bug
 reports, submit feature requests, etc.
 

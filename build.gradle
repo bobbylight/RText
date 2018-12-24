@@ -1,4 +1,4 @@
-import org.apache.tools.ant.taskdefs.condition.Os
+import java.time.Instant
 
 /*
 plugins {
@@ -18,11 +18,11 @@ configurations.all { // Check for updates every build
 dependencies {
 	compile('com.fifesoft.rtext:fife.common:3.0.0-SNAPSHOT') { changing = true }
 
-	compile('com.fifesoft:rsyntaxtextarea:3.0.0-SNAPSHOT') {changing = true }
-	compile('com.fifesoft:autocomplete:3.0.0-SNAPSHOT') {changing = true }
-	compile('com.fifesoft:rstaui:3.0.0-SNAPSHOT') {changing = true }
-	compile('com.fifesoft:spellchecker:3.0.0-SNAPSHOT') {changing = true }
-	compile('com.fifesoft:languagesupport:3.0.0-SNAPSHOT') {changing = true }
+	compile('com.fifesoft:rsyntaxtextarea:3.0.0')
+	compile('com.fifesoft:autocomplete:3.0.0')
+	compile('com.fifesoft:rstaui:3.0.0')
+	compile('com.fifesoft:spellchecker:3.0.0')
+	compile('com.fifesoft:languagesupport:3.0.0')
 
 	compile 'net.sf.jtidy:jtidy:r938'
 	compile 'org.codehaus.groovy:groovy-all:2.5.+'
@@ -37,8 +37,6 @@ repositories {
 		url 'https://oss.sonatype.org/content/repositories/snapshots'
 	}
 }
-
-import org.apache.tools.ant.taskdefs.condition.Os
 
 // Regenerate local gradlew
 wrapper {
@@ -74,6 +72,7 @@ ext.sharedManifest = manifest {
 		'Specification-Version': version,
 		'Implementation-Title': 'org.fife.rtext',
 		'Implementation-Version': version,
+		'Build-Date': Instant.now().toString(),
 		'Main-Class': 'org/fife/rtext/RText',
 		// OfficeLnFs are only available on Windows but still need to be on the classpath
 		'Class-Path': configurations.runtime.findAll { !isPluginJar(it.name) }.collect {

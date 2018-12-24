@@ -25,9 +25,9 @@ import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.RenameDialog;
 import org.fife.rtext.plugins.project.model.FolderProjectEntry;
 import org.fife.rtext.plugins.project.model.ProjectEntry;
+import org.fife.ui.UIUtil;
 import org.fife.ui.rtextfilechooser.FileDisplayNames;
 import org.fife.ui.rtextfilechooser.Utilities;
-import org.fife.ui.rtextfilechooser.extras.FileIOExtras;
 
 
 /**
@@ -116,20 +116,6 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 	@Override
 	protected void handleDelete() {
 
-		final boolean hard = false;
-		File[] files = new File[1];
-		files[0] = entry.getFile();
-
-		FileIOExtras extras = FileIOExtras.getInstance();
-		if (!hard && extras!=null) {
-			if (FileTreeNode.handleDeleteNative(files, plugin)) {
-				entry.removeFromParent();
-				removeFromParent();
-				plugin.refreshTree(getParent());
-			}
-			return;
-		}
-
 		String text = Messages.getString("Action.DeleteFile.Confirm",
 				getFile().getName());
 		RText rtext = plugin.getRText();
@@ -138,7 +124,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 		int rc = JOptionPane.showConfirmDialog(rtext, text, title,
 				JOptionPane.YES_NO_OPTION);
 		if (rc==JOptionPane.YES_OPTION) {
-			if (!entry.getFile().delete()) {
+			if (!UIUtil.deleteFile(entry.getFile())) {
 				text = Messages.getString("ProjectPlugin.Error.DeletingFile",
 						getFile().getName());
 				title = rtext.getString("ErrorDialogTitle");

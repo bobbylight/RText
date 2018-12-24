@@ -1,240 +1,357 @@
-/*
- * 11/14/2003
- *
- * AboutDialog.java - Dialog that displays the program information for RText.
- * Copyright (C) 2003 Robert Futrell
- * http://fifesoft.com/rtext
- * Licensed under a modified BSD license.
- * See the included license file for details.
- */
 package org.fife.rtext;
 
 import java.awt.*;
+import java.io.*;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.MessageFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
-import javax.swing.*;
-import javax.swing.event.*;
 
-import org.fife.ui.RScrollPane;
-import org.fife.ui.SelectableLabel;
-import org.fife.ui.UIUtil;
-import org.fife.ui.app.AbstractPluggableGUIApplication;
-import org.fife.ui.app.Plugin;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.SpringLayout;
+import javax.swing.UIManager;
+import javax.swing.border.AbstractBorder;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.plaf.FontUIResource;
 
+import org.fife.ui.*;
+import org.fife.ui.rtextarea.RTextArea;
+import org.fife.ui.rtextfilechooser.Utilities;
 
-/**
- * The dialog that displays the program information about <code>RText</code>.
- *
- * @author Robert Futrell
- * @version 1.0
- */
-class AboutDialog extends org.fife.ui.AboutDialog {
+class AboutDialog extends EscapableDialog {
+
+	private static final long serialVersionUID = 1L;
+
+	private RText parent;
+	private Listener listener;
+	private SelectableLabel memoryField;
 
 	private static final String MSG = "org.fife.rtext.AboutDialog";
 
 
-	/**
-	 * Creates a new <code>AboutDialog</code>.
-	 *
-	 * @param rtext The owner of this dialog.
-	 */
-	AboutDialog(final RText rtext) {
+	AboutDialog(RText parent) {
 
-		// Let it be known who the owner of this dialog is.
-		super(rtext, rtext.getResourceBundle().getString("AboutDialogTitle"));
+		super(parent);
+		this.parent = parent;
+		listener = new Listener();
+		//ResourceBundle msg = parent.getResourceBundle();
+		ComponentOrientation o = parent.getComponentOrientation();
 
 		ResourceBundle msg = ResourceBundle.getBundle(MSG);
-		ComponentOrientation orientation = ComponentOrientation.
-									getOrientation(getLocale());
 
+		JPanel cp = new ResizableFrameContentPane(new BorderLayout());
 
-		// Add a panel containing information about installed plugins.
-		JPanel temp = UIUtil.newTabbedPanePanel(new BorderLayout());
-		temp.setBorder(UIUtil.getEmpty5Border());
-		JPanel panel = UIUtil.newTabbedPanePanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
-		panel.add(new JLabel(msg.getString("Static.TableDescription")));
-		panel.add(Box.createHorizontalGlue());
-		temp.add(panel, BorderLayout.NORTH);
-		JTable pluginTable = new JTable(createTableData(rtext),
-					new String[] { msg.getString("Column.Plugin"),
-								msg.getString("Column.Version"),
-								msg.getString("Column.Author") }) {
-			@Override
-			public Dimension getPreferredScrollableViewportSize() {
-				return new Dimension(50, 50); //Will be bigger.
-			}
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		};
-		UIUtil.fixJTableRendererOrientations(pluginTable);
-		temp.add(new RScrollPane(pluginTable));
-		temp.applyComponentOrientation(orientation);
-		addPanel(msg.getString("Tab.Plugins"), temp);
+		Box box = Box.createVerticalBox();
 
-		// Add a panel for libraries used by RText.
-		addPanel(msg.getString("Tab.Libraries"), createLibrariesPanel(msg));
+		JPanel top = new JPanel(new BorderLayout(15, 0));
+		top.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+		Color topBG = UIManager.getColor("TextField.background");
+		top.setOpaque(true);
+		top.setBackground(topBG);
+		top.setBorder(new TopBorder());
 
+		try (InputStream in = getClass().getResourceAsStream("/org/fife/rtext/graphics/about-image.svg")) {
+			Image image = ImageTranscodingUtil.rasterize("about-image.svg", in, 64, 64);
+			JLabel linkLabel = new JLabel(new ImageIcon(image));
+			top.add(linkLabel, BorderLayout.LINE_START);
+		} catch (IOException ioe) {
+			parent.displayException(ioe);
+		}
+
+		JPanel topText = new JPanel(new BorderLayout());
+		topText.setOpaque(false);
+		top.add(topText);
+
+		// Don't use a Box, as some JVM's won't have the resulting component
+		// honor its opaque property.
+		JPanel box2 = new JPanel();
+		box2.setOpaque(false);
+		box2.setLayout(new BoxLayout(box2, BoxLayout.Y_AXIS));
+		topText.add(box2, BorderLayout.NORTH);
+
+		JLabel label = new JLabel(msg.getString("About.Header"));
+		label.setOpaque(true);
+		label.setBackground(topBG);
+		Font labelFont = label.getFont();
+		label.setFont(labelFont.deriveFont(Font.BOLD, 20));
+		addLeftAligned(label, box2);
+		box2.add(Box.createVerticalStrut(5));
+
+		Date buildDate = parent.getBuildDate();
+		String dateStr = buildDate == null ? "unknown" :
+			DateFormat.getDateTimeInstance().format(buildDate);
+		String desc = getString(msg, "About.MainDesc", parent.getVersionString(), dateStr);
+		SelectableLabel textArea = new SelectableLabel(desc);
+		textArea.addHyperlinkListener(listener);
+		box2.add(textArea);
+		box2.add(Box.createVerticalGlue());
+
+		box.add(top);
+		box.add(Box.createVerticalStrut(5));
+
+		JPanel temp = new JPanel(new SpringLayout());
+		SelectableLabel javaField = new SelectableLabel(System.getProperty("java.home"));
+		memoryField = new SelectableLabel();
+		JLabel javaLabel = UIUtil.newLabel(msg, "About.JavaHome", javaField);
+		JLabel memoryLabel = UIUtil.newLabel(msg, "About.Memory", memoryField);
+
+		if (o.isLeftToRight()) {
+			temp.add(javaLabel);        temp.add(javaField);
+			temp.add(memoryLabel);      temp.add(memoryField);
+		}
+		else {
+			temp.add(javaField);        temp.add(javaLabel);
+			temp.add(memoryField);      temp.add(memoryLabel);
+		}
+		UIUtil.makeSpringCompactGrid(temp, 2, 2, 5,5, 15,5);
+		box.add(temp);
+
+		box.add(Box.createVerticalGlue());
+
+		cp.add(box, BorderLayout.NORTH);
+
+		JButton okButton = UIUtil.newButton(msg, "Button.OK");
+		okButton.addActionListener(e -> setVisible(false));
+		JPanel buttons = (JPanel)UIUtil.createButtonFooter(okButton);
+		buttons.setBorder(BorderFactory.createCompoundBorder(
+			BorderFactory.createEmptyBorder(5, 8, 5, 8),
+			buttons.getBorder()));
+		cp.add(buttons, BorderLayout.SOUTH);
+
+		getRootPane().setDefaultButton(okButton);
+		setTitle(parent.getString("AboutDialogTitle"));
+		setContentPane(cp);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setModal(true);
 		pack();
 
 	}
 
 
-	@Override
-	protected JPanel createAboutApplicationPanel() {
-
-		// Create the picture.
-		JPanel temp = UIUtil.newTabbedPanePanel(new BorderLayout());
-		temp.setBorder(UIUtil.getEmpty5Border());
-		ClassLoader cl = this.getClass().getClassLoader();
-		ResourceBundle msg = ResourceBundle.getBundle(MSG);
-		URL imageURL = cl.getResource("org/fife/rtext/graphics/" +
-									msg.getString("Splash.Image"));
-		ImageIcon icon = new ImageIcon(imageURL);
-		JLabel label = new JLabel(icon);
-		label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		temp.add(label, BorderLayout.CENTER);
-
-		// Add a panel containing the rest of the stuff.
-		JPanel panel = UIUtil.newTabbedPanePanel();
-		RText rtext = (RText)getOwner();
-		InfoPane editor = new InfoPane(rtext);
-		panel.add(editor);
-
-		temp.add(panel, BorderLayout.SOUTH);
+	private JPanel addLeftAligned(Component toAdd, Container addTo) {
+		JPanel temp = new JPanel(new BorderLayout());
+		temp.setOpaque(false); // For ones on white background.
+		temp.add(toAdd, BorderLayout.LINE_START);
+		addTo.add(temp);
 		return temp;
-
 	}
 
 
-	private static void appendLibrary(StringBuilder sb, String name,
-			String url, String desc) {
-		sb.append("<tr><td><b>").append(name).append("</b></td>");
-		sb.append("<td><a href=\"").append(url).append("\">");
-		sb.append(url).append("</a></td></tr>");
-		sb.append("<tr><td colspan=\"2\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\u2022 ");
-		sb.append(desc).append("</td></tr>");
-		// Add an empty row, just for spacing.
-		sb.append("<tr><td>&nbsp;</td><td>&nbsp;</td></tr>");
+	private String getMemoryInfo() {
+		long curMemory = Runtime.getRuntime().totalMemory() -
+			Runtime.getRuntime().freeMemory();
+		return Utilities.getFileSizeStringFor(curMemory, false);
+	}
+
+
+	public Dimension getPreferredSize() {
+		Dimension d = super.getPreferredSize();
+		d.width = Math.max(d.width, 600); // Looks better with a little width.
+		return d;
+	}
+
+
+	private static String getString(ResourceBundle msg, String key, Object... params) {
+		String value = msg.getString(key);
+		return params.length > 0 ? MessageFormat.format(value, params) : value;
+	}
+
+	public void setVisible(boolean visible) {
+		if (visible) {
+			memoryField.setText(getMemoryInfo());
+		}
+		super.setVisible(visible);
 	}
 
 
 	/**
-	 * Creates a panel describing the libraries this application uses.
-	 *
-	 * @param msg The resource bundle.
-	 * @return The panel.
+	 * Dialog showing used libraries and credits.
 	 */
-	private static JPanel createLibrariesPanel(ResourceBundle msg) {
+	private class CreditsDialog extends EscapableDialog {
 
-		JPanel panel = UIUtil.newTabbedPanePanel(new BorderLayout());
-		panel.setBorder(UIUtil.getEmpty5Border());
+		private static final long serialVersionUID = 1L;
 
-		StringBuilder sb = new StringBuilder("<html><table>");
-		appendLibrary(sb, "RSyntaxTextArea:",
+		CreditsDialog() {
+
+			super(AboutDialog.this);
+			JPanel cp = new ResizableFrameContentPane(new BorderLayout());
+			cp.setBorder(UIUtil.getEmpty5Border());
+			ResourceBundle msg = ResourceBundle.getBundle(MSG);
+
+			StringBuilder sb = new StringBuilder("<html><table>");
+			appendLibrary(sb, "RSyntaxTextArea:",
 				"http://fifesoft.com/rsyntaxtextarea",
 				msg.getString("Desc.RSyntaxTextArea"));
-		appendLibrary(sb, "JTidy:", "http://jtidy.sourceforge.net/",
+			appendLibrary(sb, "JTidy:", "http://jtidy.sourceforge.net/",
 				msg.getString("Desc.JTidy"));
-		appendLibrary(sb, "Jazzy:", "http://jazzy.sourceforge.net/",
+			appendLibrary(sb, "Jazzy:", "http://jazzy.sourceforge.net/",
 				msg.getString("Desc.Jazzy"));
-		appendLibrary(sb, "JGoodies:", "http://jgoodies.com",
+			appendLibrary(sb, "JGoodies:", "http://jgoodies.com",
 				msg.getString("Desc.JGoodies"));
-		appendLibrary(sb, "Substance:",
+			appendLibrary(sb, "Substance:",
 				"https://github.com/kirill-grouchnikov/radiance/",
 				msg.getString("Desc.Substance"));
-		appendLibrary(sb, "Groovy:",
+			appendLibrary(sb, "Groovy:",
 				"http://groovy.codehaus.org/",
 				msg.getString("Desc.Groovy"));
-		sb.append("</table>");
+			sb.append("</table>");
 
-		final SelectableLabel label = new SelectableLabel(sb.toString());
-		label.addHyperlinkListener(e -> {
-			if (HyperlinkEvent.EventType.ACTIVATED==e.getEventType()) {
-				if (!UIUtil.browse(e.getDescription())) {
-					UIManager.getLookAndFeel().provideErrorFeedback(label);
-				}
+			SelectableLabel label = new SelectableLabel(sb.toString());
+			label.addHyperlinkListener(listener);
+			cp.add(label);
+
+			JButton okButton = UIUtil.newButton(msg, "Button.OK");
+			okButton.addActionListener(e -> setVisible(false));
+			Container buttons = UIUtil.createButtonFooter(okButton);
+			cp.add(buttons, BorderLayout.SOUTH);
+
+			setContentPane(cp);
+			setTitle(msg.getString("Dialog.Credits.Title"));
+			setModal(true);
+			pack();
+			setLocationRelativeTo(AboutDialog.this);
+
+		}
+
+		private void appendLibrary(StringBuilder sb, String name,
+										  String url, String desc) {
+			sb.append("<tr><td><b>").append(name).append("</b></td>");
+			sb.append("<td><a href=\"").append(url).append("\">");
+			sb.append(url).append("</a></td></tr>");
+			sb.append("<tr><td colspan=\"2\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\u2022 ");
+			sb.append(desc).append("</td></tr>");
+			// Add an empty row, just for spacing.
+			sb.append("<tr><td>&nbsp;</td><td>&nbsp;</td></tr>");
+		}
+	}
+
+
+	/**
+	 * Dialog showing the license for this application.
+	 */
+	private class LicenseDialog extends EscapableDialog {
+
+		private static final long serialVersionUID = 1L;
+
+		public LicenseDialog() {
+
+			super(AboutDialog.this);
+			JPanel cp = new ResizableFrameContentPane(new BorderLayout());
+			cp.setBorder(UIUtil.getEmpty5Border());
+			ResourceBundle msg = ResourceBundle.getBundle(MSG);
+
+			JTextArea textArea = new JTextArea(25, 80);
+            Font font = RTextArea.getDefaultFont();
+            if (font instanceof FontUIResource) { // Substance!  argh!!!
+                font = new Font(font.getFamily(), font.getStyle(), font.getSize());
+            }
+            textArea.setFont(font);
+			loadLicense(textArea);
+			textArea.setEditable(false);
+			RScrollPane sp = new RScrollPane(textArea);
+			cp.add(sp);
+
+			JButton okButton = UIUtil.newButton(msg, "Button.OK");
+			okButton.addActionListener(e -> setVisible(false));
+			Container buttons = UIUtil.createButtonFooter(okButton);
+			cp.add(buttons, BorderLayout.SOUTH);
+
+			setContentPane(cp);
+			setTitle(msg.getString("Dialog.License.Title"));
+			setModal(true);
+			pack();
+			setLocationRelativeTo(AboutDialog.this);
+
+		}
+
+		private void loadLicense(JTextArea textArea) {
+			File file = new File(parent.getInstallLocation(), "License.txt");
+			try {
+				BufferedReader r = new BufferedReader(new FileReader(file));
+				textArea.read(r, null);
+				r.close();
+			} catch (IOException ioe) {
+				textArea.setText(ioe.getMessage());
 			}
-		});
-		panel.add(label);
-
-		return panel;
+		}
 
 	}
 
 
 	/**
-	 * Returns the array of strings for the "Plugins" tab on the About dialog.
-	 *
-	 * @param app The GUI Application containing plugins.
-	 * @return The contents for the "Plugins" About tab.
+	 * Listens for events in this dialog.
 	 */
-	private static String[][] createTableData(
-			AbstractPluggableGUIApplication<?> app) {
+	private class Listener implements HyperlinkListener {
 
-		Plugin[] plugins = app.getPlugins(); // Guaranteed non-null.
-		int count = plugins.length;
+		private void handleLocalLink(URL url) {
 
-		if (count>0) {
-			String[][] strings = new String[count][3];
-			for (int i=0; i<count; i++) {
-				strings[i][0] = plugins[i].getPluginName();
-				strings[i][1] = plugins[i].getPluginVersion();
-				strings[i][2] = plugins[i].getPluginAuthor();
+			String str = url.toString();
+			String command = str.substring(str.lastIndexOf('/')+1);
+
+			if ("libraries".equals(command)) {
+				new CreditsDialog().setVisible(true);
 			}
-			return strings;
+			else if ("license".equals(command)) {
+				new LicenseDialog().setVisible(true);
+			}
+
 		}
 
-		// Shouldn't happen unless they remove standard plugin jars.
-		ResourceBundle msg = ResourceBundle.getBundle(MSG);
-		String text = msg.getString("Message.NoPluginsInstalled");
-		String[][] strings = { { text, "", "" } };
-		return strings;
-
-	}
-
-
-	/**
-	 * An informational pane in the about dialog.
-	 */
-	private static final class InfoPane extends SelectableLabel
-									implements HyperlinkListener {
-
-		private RText rtext;
-
-		InfoPane(RText rtext) {
-			this.rtext = rtext;
-			setText(getContentText());
-			addHyperlinkListener(this);
-		}
-
-		String getContentText() {
-			String version = rtext==null ? "firstTime" :
-											rtext.getVersionString();
-			String text = "<html><body><center>" +
-				"Version " + version + "<br>" +
-				"<a href=\"http://bobbylight.github.io/RText/\">http://bobbylight.github.io/RText/</a>" +
-				"</font></center></body></html>";
-			return text;
-		}
 
 		@Override
 		public void hyperlinkUpdate(HyperlinkEvent e) {
 			if (e.getEventType()==HyperlinkEvent.EventType.ACTIVATED) {
-				UIUtil.browse(e.getURL().toString());
+				URL url = e.getURL();
+				if ("file".equals(url.getProtocol())) {
+					handleLocalLink(url);
+					return;
+				}
+				if (!UIUtil.browse(url.toString())) {
+					UIManager.getLookAndFeel().provideErrorFeedback(AboutDialog.this);
+				}
 			}
-		}
-
-		@Override
-		public void updateUI() {
-			super.updateUI();
-			// Label font has been updated so we must update our HTML.
-			setText(getContentText());
 		}
 
 	}
 
+
+	/**
+	 * The border of the "top section" of the About dialog.
+	 */
+	private static class TopBorder extends AbstractBorder {
+
+		private static final long serialVersionUID = 1L;
+
+		public Insets getBorderInsets(Component c) {
+			return getBorderInsets(c, new Insets(0, 0, 0, 0));
+		}
+
+		public Insets getBorderInsets(Component c, Insets insets) {
+			insets.top = insets.left = insets.right = 5;
+			insets.bottom = 6;
+			return insets;
+		}
+
+		public void paintBorder(Component c, Graphics g, int x, int y,
+								int width, int height) {
+			Color color = UIManager.getColor("controlShadow");
+			if (color==null) {
+				color = SystemColor.controlShadow;
+			}
+			g.setColor(color);
+			g.drawLine(x,y+height-1, x+width,y+height-1);
+		}
+
+	}
 
 }

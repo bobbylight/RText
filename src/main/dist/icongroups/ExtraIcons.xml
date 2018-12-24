@@ -4,7 +4,7 @@
      This file defines all icon groups available to RText.
 
      Additional icon groups can be downloaded from
-     http://sourceforge.net/projects/rtext.  These icon groups will be in
+     https://github.com/bobbylight/RText.  These icon groups will be in
      Jar files that should be placed in the directory
      <RText-root>/icongroups, where <RText-root> is the directory in which
      you installed RText.  The new icon group(s) will then be available via

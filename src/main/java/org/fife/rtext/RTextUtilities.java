@@ -674,7 +674,7 @@ public class RTextUtilities {
 					text + "\nPlease use only valid filename characters " +
 					"or wildcards (* or ?).\n" +
 					"If you have, please report this error at: " +
-					"http://sourceforge.net/projects/rtext",
+					"https://github.com/bobbylight/RText",
 					"Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}

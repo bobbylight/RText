@@ -2,9 +2,17 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
-3.0.0
+3.0.0 (12/24/2018)
 ------------------
-   -
+   - "Recent Files" dialog remembers files between sessions.
+   - "Copy as RTF" changed to "Copy as Styled Text".  Now more compatible
+     with MS Word and other rich text applications.  Can copy in different
+     themes as well (current, light, dark, etc.).
+   - Much improved dark theme, based off of Darcula, and better theming
+     and Look and Feel changing overall.
+   - RText now runs in a Java 11 JRE, which ships with the editor.  This
+     allows for much better control over our runtime environment, as well
+     as improved performance.
 
 
 2.6.3 (04/30/2017)
