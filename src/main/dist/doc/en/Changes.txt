@@ -2,7 +2,7 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
-3.0.0 (12/24/2018)
+3.0.0 (01/13/2019)
 ------------------
    - "Recent Files" dialog remembers files between sessions.
    - "Copy as RTF" changed to "Copy as Styled Text".  Now more compatible
