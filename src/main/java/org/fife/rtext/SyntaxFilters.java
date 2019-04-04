@@ -11,10 +11,7 @@
 package org.fife.rtext;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -130,9 +127,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	 */
 	private static List<String> createValue(String... values) {
 		List<String> list = new ArrayList<>();
-		for (String value : values) {
-			list.add(value);
-		}
+		list.addAll(Arrays.asList(values));
 		return list;
 	}
 
@@ -310,6 +305,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_CPLUSPLUS,		createValue("*.cpp", "*.cxx", "*.h"));
 		filters.put(SYNTAX_STYLE_CSHARP,			createValue("*.cs"));
 		filters.put(SYNTAX_STYLE_CSS,				createValue("*.css"));
+		filters.put(SYNTAX_STYLE_CSV,				createValue("*.csv"));
 		filters.put(SYNTAX_STYLE_D,					createValue("*.d"));
 		filters.put(SYNTAX_STYLE_DART,				createValue("*.dart"));
 		filters.put(SYNTAX_STYLE_DELPHI,				createValue("*.pas"));

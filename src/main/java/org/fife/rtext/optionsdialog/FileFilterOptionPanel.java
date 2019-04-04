@@ -62,7 +62,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	 * @param rtext The RText instance.
 	 * @param msg The resource bundle to use.
 	 */
-	public FileFilterOptionPanel(RText rtext, ResourceBundle msg) {
+	FileFilterOptionPanel(RText rtext, ResourceBundle msg) {
 
 		super(msg.getString("OptFFName"));
 		this.rtext = rtext;
@@ -183,7 +183,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 		int rowCount = model.getRowCount();
 		for (int i=0; i<rowCount; i++) {
 			String filters = (String)model.getValueAt(i, 1);
-			if (SyntaxFilters.isValidFileFilterString(filters)==false) {
+			if (!SyntaxFilters.isValidFileFilterString(filters)) {
 				String temp = rtext.getString("InvalidFFString", filters);
 				return new OptionsPanelCheckResult(this, filterTable, temp);
 			}
@@ -200,7 +200,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	 *
 	 * @return The syntax file filters.
 	 */
-	public SyntaxFilters getSyntaxFilters() {
+	private SyntaxFilters getSyntaxFilters() {
 		SyntaxFilters filters = new SyntaxFilters();
 		for (int i=0; i<model.styles.length; i++) {
 			filters.setFiltersForSyntaxStyle(model.styles[i],
@@ -242,7 +242,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	 * @return Whether any of the values actually changed.
 	 * @see SyntaxFilters
 	 */
-	public boolean setSyntaxFilters(SyntaxFilters syntaxFilters) {
+	private boolean setSyntaxFilters(SyntaxFilters syntaxFilters) {
 
 		String filterString;
 		boolean changed = false;
@@ -285,12 +285,11 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	static class FilterTableModel extends DefaultTableModel
 							implements SyntaxConstants {
 
-		public String[] columnNames;
 		public String[] styles;
 
-		public FilterTableModel(String fileTypeHeader, String filterHeader) {
+		FilterTableModel(String fileTypeHeader, String filterHeader) {
 			super(new Object[] { fileTypeHeader, filterHeader }, 0);
-			styles = new String[44];
+			styles = new String[45];
 			addRow(new Object[] { "ActionScript",		null }); styles[0]  = SYNTAX_STYLE_ACTIONSCRIPT;
 			addRow(new Object[] { "Assembler (x86)",	null }); styles[1]  = SYNTAX_STYLE_ASSEMBLER_X86;
 			addRow(new Object[] { "BBCode",				null }); styles[2]  = SYNTAX_STYLE_BBCODE;
@@ -299,42 +298,43 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 			addRow(new Object[] { "C#",					null }); styles[5]  = SYNTAX_STYLE_CSHARP;
 			addRow(new Object[] { "Clojure",			null }); styles[6]  = SYNTAX_STYLE_CLOJURE;
 			addRow(new Object[] { "CSS",				null }); styles[7]  = SYNTAX_STYLE_CSS;
-			addRow(new Object[] { "D",					null }); styles[8]  = SYNTAX_STYLE_D;
-			addRow(new Object[] { "Delphi",				null }); styles[9]  = SYNTAX_STYLE_DELPHI;
-			addRow(new Object[] { "DTD",				null }); styles[10] = SYNTAX_STYLE_DTD;
-			addRow(new Object[] { "Flex",				null }); styles[11] = SYNTAX_STYLE_MXML;
-			addRow(new Object[] { "Fortran",			null }); styles[12] = SYNTAX_STYLE_FORTRAN;
-			addRow(new Object[] { "Groovy",				null }); styles[13] = SYNTAX_STYLE_GROOVY;
-			addRow(new Object[] { "Hosts",				null }); styles[14] = SYNTAX_STYLE_HOSTS;
-			addRow(new Object[] { "htaccess",			null }); styles[15] = SYNTAX_STYLE_HTACCESS;
-			addRow(new Object[] { "HTML",				null }); styles[16] = SYNTAX_STYLE_HTML;
-			addRow(new Object[] { "INI",				null }); styles[17] = SYNTAX_STYLE_INI;
-			addRow(new Object[] { "Java",				null }); styles[18] = SYNTAX_STYLE_JAVA;
-			addRow(new Object[] { "JavaScript",			null }); styles[19] = SYNTAX_STYLE_JAVASCRIPT;
-			addRow(new Object[] { "JSP",				null }); styles[20] = SYNTAX_STYLE_JSP;
-			addRow(new Object[] { "JSON",				null }); styles[21] = SYNTAX_STYLE_JSON;
-			addRow(new Object[] { "JSON with comments",	null }); styles[22] = SYNTAX_STYLE_JSON_WITH_COMMENTS;
-			addRow(new Object[] { "LaTeX",				null }); styles[23] = SYNTAX_STYLE_LATEX;
-			addRow(new Object[] { "Less",				null }); styles[24] = SYNTAX_STYLE_LESS;
-			addRow(new Object[] { "Lisp",				null }); styles[25] = SYNTAX_STYLE_LISP;
-			addRow(new Object[] { "Lua",				null }); styles[26] = SYNTAX_STYLE_LUA;
-			addRow(new Object[] { "Make",				null }); styles[27] = SYNTAX_STYLE_MAKEFILE;
-			addRow(new Object[] { "NSIS",				null }); styles[28] = SYNTAX_STYLE_NSIS;
-			addRow(new Object[] { "Perl",				null }); styles[29] = SYNTAX_STYLE_PERL;
-			addRow(new Object[] { "PHP",				null }); styles[30] = SYNTAX_STYLE_PHP;
-			addRow(new Object[] { "Properties files",	null }); styles[31] = SYNTAX_STYLE_PROPERTIES_FILE;
-			addRow(new Object[] { "Python",				null }); styles[32] = SYNTAX_STYLE_PYTHON;
-			addRow(new Object[] { "Ruby",				null }); styles[33] = SYNTAX_STYLE_RUBY;
-			addRow(new Object[] { "SAS",				null }); styles[34] = SYNTAX_STYLE_SAS;
-			addRow(new Object[] { "Scala",				null }); styles[35] = SYNTAX_STYLE_SCALA;
-			addRow(new Object[] { "SQL",				null }); styles[36] = SYNTAX_STYLE_SQL;
-			addRow(new Object[] { "Tcl",				null }); styles[37] = SYNTAX_STYLE_TCL;
-			addRow(new Object[] { "TypeScript",			null }); styles[38] = SYNTAX_STYLE_TYPESCRIPT;
-			addRow(new Object[] { "UNIX shell scripts",	null }); styles[39] = SYNTAX_STYLE_UNIX_SHELL;
-			addRow(new Object[] { "Visual Basic",       null }); styles[40] = SYNTAX_STYLE_VISUAL_BASIC;
-			addRow(new Object[] { "Windows Batch",		null }); styles[41] = SYNTAX_STYLE_WINDOWS_BATCH;
-			addRow(new Object[] { "XML",				null }); styles[42] = SYNTAX_STYLE_XML;
-			addRow(new Object[] { "YAML",				null }); styles[43] = SYNTAX_STYLE_YAML;
+			addRow(new Object[] { "CSV",				null }); styles[8]  = SYNTAX_STYLE_CSV;
+			addRow(new Object[] { "D",					null }); styles[9]  = SYNTAX_STYLE_D;
+			addRow(new Object[] { "Delphi",				null }); styles[10] = SYNTAX_STYLE_DELPHI;
+			addRow(new Object[] { "DTD",				null }); styles[11] = SYNTAX_STYLE_DTD;
+			addRow(new Object[] { "Flex",				null }); styles[12] = SYNTAX_STYLE_MXML;
+			addRow(new Object[] { "Fortran",			null }); styles[13] = SYNTAX_STYLE_FORTRAN;
+			addRow(new Object[] { "Groovy",				null }); styles[14] = SYNTAX_STYLE_GROOVY;
+			addRow(new Object[] { "Hosts",				null }); styles[15] = SYNTAX_STYLE_HOSTS;
+			addRow(new Object[] { "htaccess",			null }); styles[16] = SYNTAX_STYLE_HTACCESS;
+			addRow(new Object[] { "HTML",				null }); styles[17] = SYNTAX_STYLE_HTML;
+			addRow(new Object[] { "INI",				null }); styles[18] = SYNTAX_STYLE_INI;
+			addRow(new Object[] { "Java",				null }); styles[19] = SYNTAX_STYLE_JAVA;
+			addRow(new Object[] { "JavaScript",			null }); styles[20] = SYNTAX_STYLE_JAVASCRIPT;
+			addRow(new Object[] { "JSP",				null }); styles[21] = SYNTAX_STYLE_JSP;
+			addRow(new Object[] { "JSON",				null }); styles[22] = SYNTAX_STYLE_JSON;
+			addRow(new Object[] { "JSON with comments",	null }); styles[23] = SYNTAX_STYLE_JSON_WITH_COMMENTS;
+			addRow(new Object[] { "LaTeX",				null }); styles[24] = SYNTAX_STYLE_LATEX;
+			addRow(new Object[] { "Less",				null }); styles[25] = SYNTAX_STYLE_LESS;
+			addRow(new Object[] { "Lisp",				null }); styles[26] = SYNTAX_STYLE_LISP;
+			addRow(new Object[] { "Lua",				null }); styles[27] = SYNTAX_STYLE_LUA;
+			addRow(new Object[] { "Make",				null }); styles[28] = SYNTAX_STYLE_MAKEFILE;
+			addRow(new Object[] { "NSIS",				null }); styles[29] = SYNTAX_STYLE_NSIS;
+			addRow(new Object[] { "Perl",				null }); styles[30] = SYNTAX_STYLE_PERL;
+			addRow(new Object[] { "PHP",				null }); styles[31] = SYNTAX_STYLE_PHP;
+			addRow(new Object[] { "Properties files",	null }); styles[32] = SYNTAX_STYLE_PROPERTIES_FILE;
+			addRow(new Object[] { "Python",				null }); styles[33] = SYNTAX_STYLE_PYTHON;
+			addRow(new Object[] { "Ruby",				null }); styles[34] = SYNTAX_STYLE_RUBY;
+			addRow(new Object[] { "SAS",				null }); styles[35] = SYNTAX_STYLE_SAS;
+			addRow(new Object[] { "Scala",				null }); styles[36] = SYNTAX_STYLE_SCALA;
+			addRow(new Object[] { "SQL",				null }); styles[37] = SYNTAX_STYLE_SQL;
+			addRow(new Object[] { "Tcl",				null }); styles[38] = SYNTAX_STYLE_TCL;
+			addRow(new Object[] { "TypeScript",			null }); styles[39] = SYNTAX_STYLE_TYPESCRIPT;
+			addRow(new Object[] { "UNIX shell scripts",	null }); styles[40] = SYNTAX_STYLE_UNIX_SHELL;
+			addRow(new Object[] { "Visual Basic",       null }); styles[41] = SYNTAX_STYLE_VISUAL_BASIC;
+			addRow(new Object[] { "Windows Batch",		null }); styles[42] = SYNTAX_STYLE_WINDOWS_BATCH;
+			addRow(new Object[] { "XML",				null }); styles[43] = SYNTAX_STYLE_XML;
+			addRow(new Object[] { "YAML",				null }); styles[44] = SYNTAX_STYLE_YAML;
 		
 		}
 
