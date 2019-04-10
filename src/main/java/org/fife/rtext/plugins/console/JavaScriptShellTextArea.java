@@ -20,7 +20,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -54,7 +53,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	 *
 	 * @param plugin The console plugin.
 	 */
-	public JavaScriptShellTextArea(Plugin plugin) {
+	JavaScriptShellTextArea(Plugin plugin) {
 		super(plugin);
 	}
 
@@ -98,11 +97,11 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	/**
 	 * Submits the entered JavaScript code.
 	 * 
-	 * @param text The text to submit.
+	 * @param code The text to submit.
 	 * @param appendPrompt Whether another prompt should be added to the text
 	 *        area after the command completes.
 	 */
-	private void handleSubmitImpl(String text, boolean appendPrompt) {
+	private void handleSubmitImpl(String code, boolean appendPrompt) {
 
 		possiblyInitialize();
 
@@ -114,8 +113,6 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 			}
 			return;
 		}
-
-		String code = text;
 
 		try {
 
@@ -204,17 +201,13 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 		// Import commonly-used packages.  Do this before stdout and
 		// stderr redirecting so the user won't see it in their console.
-		StringBuilder imports = new StringBuilder();
-		if (!UIUtil.isPreJava8()) {
-			// Nashorn requires this for Rhino compatibility functions
-			// such as importPackage
-			imports.append("load('nashorn:mozilla_compat.js');");
-		}
-		imports.append("importPackage(java.lang, java.io, " +
-				"java.util, java.awt, javax.swing, org.fife.rtext, " +
-				"org.fife.ui.rtextarea, org.fife.ui.rsyntaxtextarea)");
-		handleSubmitImpl(imports.toString(), false);
-
+		// Also, Nashorn requires the load() below for Rhino compatibility
+		// functions such as importPackage.
+		String imports = "load('nashorn:mozilla_compat.js');" +
+			"importPackage(java.lang, java.io, " +
+			"java.util, java.awt, javax.swing, org.fife.rtext, " +
+			"org.fife.ui.rtextarea, org.fife.ui.rsyntaxtextarea)";
+		handleSubmitImpl(imports, false);
 	}
 
 
@@ -225,7 +218,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 		private String style;
 
-		public OutputWriter(String style) {
+		OutputWriter(String style) {
 			this.style = style;
 		}
 

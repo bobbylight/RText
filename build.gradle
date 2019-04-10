@@ -16,7 +16,7 @@ configurations.all { // Check for updates every build
 }
 
 dependencies {
-	compile('com.fifesoft.rtext:fife.common:3.0.0') { changing = true }
+	compile('com.fifesoft.rtext:fife.common:3.0.1-SNAPSHOT') { changing = true }
 
 	compile('com.fifesoft:rsyntaxtextarea:3.0.3')
 	compile('com.fifesoft:autocomplete:3.0.0')
@@ -316,6 +316,7 @@ def getJreDependencyList = { installDistDir ->
 	if (retVal[0] == ',') {
 		retVal = retVal.substring(1)
 	}
+	retVal += ',jdk.scripting.nashorn' // Have to manually add this since it's not a hard dependency
 	return retVal
 }
 
