@@ -36,6 +36,7 @@ import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
 import org.fife.ui.StandardAction;
 import org.fife.ui.rtextarea.RTextArea;
+import org.fife.util.DarculaUtil;
 import org.fife.util.SubstanceUtil;
 import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
@@ -85,7 +86,7 @@ import org.fife.util.TranslucencyUtil;
  * status bar.
  *
  * @author Robert Futrell
- * @version 3.0.0
+ * @version 3.0.1
  */
 public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			implements ActionListener, CaretListener, PropertyChangeListener,
@@ -180,7 +181,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 */
 	private static final String PROPERTY_PRINT_START_TIMES = "printStartTimes";
 
-	public static final String VERSION_STRING		= "3.0.0";
+	public static final String VERSION_STRING		= "3.0.1";
 
 
 	/**
@@ -1705,7 +1706,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			// properties to "true", then toggling to a LAF that doesn't
 			// support this property, such as Windows, causes the
 			// OS-supplied frame to not appear (as of 6u20).
-			if (SubstanceUtil.isASubstanceLookAndFeel(lafName)) {
+			if (SubstanceUtil.isASubstanceLookAndFeel(lafName) ||
+				DarculaUtil.isDarculaLookAndFeel(lafName)) {
 				JFrame.setDefaultLookAndFeelDecorated(true);
 				JDialog.setDefaultLookAndFeelDecorated(true);
 			}
