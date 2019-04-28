@@ -39,11 +39,13 @@ import org.fife.ui.StatusBarPanel;
 public class StatusBar extends org.fife.ui.StatusBar
 					implements PropertyChangeListener {
 
+	private JLabel selectionLengthIndicator;
 	private JLabel rowAndColumnIndicator;
 	private JLabel overwriteModeIndicator;
 	private JLabel capsLockIndicator;
 	private JLabel readOnlyIndicator;
 
+	private RText rtext;
 	private int row, column;
 
 	private boolean rowColumnIndicatorVisible;
@@ -51,9 +53,11 @@ public class StatusBar extends org.fife.ui.StatusBar
 	private StatusBarPanel overwritePanel;
 	private StatusBarPanel capsLockPanel;
 	private StatusBarPanel readOnlyPanel;
+	private StatusBarPanel selectionLengthPanel;
 
 	private String fileSaveSuccessfulText;
 	private String openedFileText;
+	private String selectionLengthText;
 
 	// Hack: Sine row/column can change so frequently, we break apart
 	// the row/column text in the status bar for speedy updating.
@@ -82,12 +86,14 @@ public class StatusBar extends org.fife.ui.StatusBar
 				int newRow, int newColumn, boolean overwriteModeEnabled) {
 
 		super(defaultMessage);
+		this.rtext = rtext;
 
 		ResourceBundle msg= ResourceBundle.getBundle(StatusBar.class.getName());
 
 		// Initialize private variables.
 		fileSaveSuccessfulText = msg.getString("FileSaveSuccessful");
 		openedFileText = msg.getString("OpenedFile");
+		selectionLengthText = msg.getString("SelectionLength");
 		initRowColumnTextStuff(msg);
 		row = newRow;
 		column = newColumn; // DON'T call setRowAndColumn() yet!
@@ -98,10 +104,17 @@ public class StatusBar extends org.fife.ui.StatusBar
 		capsLockIndicator = createLabel(msg, "CapsLockIndicator");
 		overwriteModeIndicator = createLabel(msg, "OverwriteModeIndicator");
 		overwriteModeIndicator = createLabel(msg, "OverwriteModeIndicator");
+		selectionLengthIndicator = new JLabel();
 
 		// Make the layout such that different items can be different sizes.
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
+
+		// Create a label showing the selection length
+		c.weightx = 0;
+		selectionLengthPanel = new StatusBarPanel(new BorderLayout(),
+			selectionLengthIndicator);
+		addStatusBarComponent(selectionLengthPanel, c);
 
 		// Create a Read Only indicator.
 		c.weightx = 0.0;
@@ -148,6 +161,17 @@ public class StatusBar extends org.fife.ui.StatusBar
 		temp1.add(rowAndColumnIndicator);
 		addStatusBarComponent(temp1, c);
 
+	}
+
+
+	/**
+	 * Overridden to ensure the "selection length" panel is to the left of
+	 * plugins.
+	 */
+	@Override
+	public void addStatusBarComponent(StatusBarPanel panel,
+						  int index, GridBagConstraints constraints) {
+		super.addStatusBarComponent(panel, index + 1, constraints);
 	}
 
 
@@ -271,7 +295,7 @@ public class StatusBar extends org.fife.ui.StatusBar
 		else if (property.equals(AbstractMainView.TEXT_AREA_ADDED_PROPERTY)) {
 			RTextEditorPane textArea = (RTextEditorPane)e.getNewValue();
 			setStatusMessage(MessageFormat.format(openedFileText,
-									new Object[] { textArea.getFileName() }));
+				textArea.getFileName()));
 		}
 
 		// If they saved a read-only file with a different filename (hence it
@@ -351,6 +375,7 @@ public class StatusBar extends org.fife.ui.StatusBar
 		row = newRow;
 		column = newColumn;
 		updateRowColumnDisplay();
+		updateSelectionLengthDisplay();
 	}
 
 
@@ -382,6 +407,30 @@ public class StatusBar extends org.fife.ui.StatusBar
 			rcBuf.append(rowColumnText1).append(row).append(rowColumnText2);
 			rcBuf.append(column).append(rowColumnText3);
 			rowAndColumnIndicator.setText(rcBuf.toString());
+		}
+	}
+
+
+	/**
+	 * Updates the selection indicator to reflect the current selection,
+	 * if it is enabled.
+	 */
+	private void updateSelectionLengthDisplay() {
+
+		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
+		int selectionLength = textArea.getSelectionEnd() -
+			textArea.getSelectionStart();
+
+		if (selectionLength == 0) {
+			selectionLengthPanel.setVisible(false);
+		}
+		else {
+			String newValue = MessageFormat.format(selectionLengthText,
+				selectionLength);
+			selectionLengthIndicator.setText(newValue);
+			if (!selectionLengthPanel.isVisible()) {
+				selectionLengthPanel.setVisible(true);
+			}
 		}
 	}
 
