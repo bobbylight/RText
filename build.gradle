@@ -1,10 +1,6 @@
 import java.time.Instant
+import org.apache.tools.ant.taskdefs.condition.Os
 
-/*
-plugins {
-  id "edu.sc.seis.macAppBundle" version "2.1.1"
-}
-*/
 ['java', 'distribution', /*'checkstyle', */'maven', 'eclipse' ].each { apply plugin: it }
 
 group = 'com.fifesoft'
@@ -308,7 +304,12 @@ def getJreDependencyList = { installDistDir ->
 
 	exec {
 		workingDir installDistDir
-		commandLine "${jdkRoot}/bin/jdeps", '--list-deps', 'RText.jar', 'plugins/plugin*.jar'
+		if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+			commandLine 'cmd.exe', '/c', "${jdkRoot}/bin/jdeps --list-deps RText.jar plugins/plugin*.jar"
+		}
+		else {
+			commandLine '/bin/bash', '-c', "${jdkRoot}/bin/jdeps --list-deps RText.jar plugins/plugin*.jar"
+		}
 		standardOutput = stdout
 	}
 
@@ -336,7 +337,7 @@ task generateJre {
 		}
 	}
 }
-generateJre.dependsOn('installDist')
+generateJre.dependsOn('build', 'installDist')
 
 task generateWindowsStarterExe {
 	doLast {
@@ -347,17 +348,11 @@ task generateWindowsStarterExe {
 }
 generateWindowsStarterExe.dependsOn('generateJre')
 
-/* Mac .app plugin config.  Uncomment this and run './gradlew createApp'
- * after './gradlew clean build installDist'.
-copyToResourcesJava {
-	include 'src/main/dist/**'
+task generateMacApp {
+	doLast {
+		exec {
+			commandLine '/bin/bash', '-c', './mac/build-mac-app.sh'
+		}
+	}
 }
-
-macAppBundle {
-    mainClassName = "org.fife.rtext.RText"
-    icon = "RText.icns"
-    bundleJRE = true
-    javaProperties.put("apple.laf.useScreenMenuBar", "true")
-//    backgroundImage = "doc/macbackground.png"
-}
-*/
+generateMacApp.dependsOn('generateJre')

@@ -45,17 +45,16 @@ script at the root of the project.
 
 ## Building the OS X application
 
-Building the OS X package is a little wonky at the moment.  I am working
-on finding the best way to build an App bundle via Gradle.  It doesn't seem
-like there is a good way to do it as of Java 11+.  Previously, the easiest
-way to do so was:
+Building the OS X package has just been revamped.  Everything seems to be
+working, except for the fact that the app icon in the doc doesn't take
+(the default Java icon is used).  The .app bundle uses the proper icon
+however.
 
-    ./gradlew clean build installDist
-    vi build.gradle
-    <un-comment the macAppBundle plugin at the top and config at the bottom>
-    ./gradlew createApp
-    cp -R ./build/install/rtext ./build/macApp/RText.app/Contents/
-    mv ./build/macApp/RText.app/Contents/rtext ./build/macApp/RText.app/Contents/Java
+Here's how to build the .app bundle into `build/install/RText.app`:
 
-This used to create a functional `RText.app`, but note the application icon
-is not correct yet.
+    ./gradlew clean build generateMacApp
+
+Then, open `build/install` in Finder.  Right-click `RText.app` ->
+`Get Info`.  Drag-and-drop `./mac/RText.icns` on top of the icon in the
+top-left of this dialog to update the app bundle's icon.  Now you can
+double-click RText.app to run it.

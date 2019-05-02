@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# RText launcher for OS X.  This script must have the same
+# name as the app folder (RText.app)
+#
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd ${DIR}
+${DIR}/app/jre-11.0.1/bin/java -jar app/RText.jar
