@@ -2,6 +2,16 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
+3.0.1 (05/05/2019)
+------------------
+   - Added CSV syntax highlighting
+   - Improved appearance when using Darcula Look and Feel
+   - Status bar now shows selected character count
+   - Bug fix:  JS Console works again (broken last release with the
+     upgrade to Java 11)
+   - Get OS X .app bundles building again
+
+
 3.0.0 (01/13/2019)
 ------------------
    - "Recent Files" dialog remembers files between sessions.
