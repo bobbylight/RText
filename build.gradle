@@ -305,7 +305,7 @@ def getJreDependencyList = { installDistDir ->
 	exec {
 		workingDir installDistDir
 		if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-			commandLine 'cmd.exe', '/c', "${jdkRoot}/bin/jdeps --list-deps RText.jar plugins/plugin*.jar"
+			commandLine "${jdkRoot}/bin/jdeps", '--list-deps', 'RText.jar', 'plugins/plugin*.jar'
 		}
 		else {
 			commandLine '/bin/bash', '-c', "${jdkRoot}/bin/jdeps --list-deps RText.jar plugins/plugin*.jar"

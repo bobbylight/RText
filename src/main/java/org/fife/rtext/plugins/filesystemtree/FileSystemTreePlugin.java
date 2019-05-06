@@ -57,7 +57,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 	static final String BUNDLE_NAME			=
 					"org/fife/rtext/plugins/filesystemtree/FileSystemTree";
-	private static final String VERSION_STRING	= "3.0.0";
+	private static final String VERSION_STRING	= "3.0.2";
 
 	private static final String VIEW_FST_ACTION	= "ViewFileSystemTreeAction";
 
