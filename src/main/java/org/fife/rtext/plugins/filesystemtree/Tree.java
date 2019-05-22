@@ -59,9 +59,6 @@ class Tree extends FileSystemTree {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void configurePopupMenuActions() {
 

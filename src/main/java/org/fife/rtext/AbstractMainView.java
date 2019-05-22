@@ -826,7 +826,6 @@ public abstract class AbstractMainView extends JPanel
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_CAPS_LOCK, 0), "OnCapsLock");
 		am.put("OnCapsLock", capsLockAction);
 
-		// Return him.
 		return pane;
 
 	}

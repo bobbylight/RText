@@ -15,9 +15,10 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.print.PageFormat;
 import java.io.IOException;
-import javax.swing.JComponent;
+import javax.swing.*;
 
 import org.fife.print.RPrintUtilities;
+import org.fife.rtext.plugins.filesystemtree.FileSystemTreePlugin;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 import org.fife.ui.rtextarea.RTATextTransferHandler;
@@ -55,6 +56,19 @@ public class RTextEditorPane extends TextEditorPane {
 		// Change the transfer handler to one that recognizes drag-and-dropped
 		// files as needing to be opened in the parent main view.
 		setTransferHandler(new RTextEditorPaneTransferHandler());
+	}
+
+
+	@Override
+	protected JPopupMenu createPopupMenu() {
+
+		JPopupMenu popup = super.createPopupMenu();
+
+		popup.addSeparator();
+		popup.add(rtext.getAction(FileSystemTreePlugin.
+			SELECT_CURRENT_FILE_ACTION_NAME));
+
+		return popup;
 	}
 
 

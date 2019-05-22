@@ -59,6 +59,9 @@ public class FileSystemTreePlugin extends GUIPlugin {
 					"org/fife/rtext/plugins/filesystemtree/FileSystemTree";
 	private static final String VERSION_STRING	= "3.0.2";
 
+	public static final String SELECT_CURRENT_FILE_ACTION_NAME =
+		"FileSystemTree.SelectCurrentFileAction";
+
 	private static final String VIEW_FST_ACTION	= "ViewFileSystemTreeAction";
 
 
@@ -260,6 +263,13 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
+		RText rtext = (RText)app;
+
+		// Register an action to show the current file in this plugin
+		ShowCurrentFileInFileSystemTreeAction a = new ShowCurrentFileInFileSystemTreeAction(
+			rtext,this, ResourceBundle.getBundle(BUNDLE_NAME));
+		rtext.addAction(SELECT_CURRENT_FILE_ACTION_NAME, a);
+
 		// Add a menu item to toggle the visibility of the dockable window
 		owner.addAction(VIEW_FST_ACTION, viewAction);
 		RTextMenuBar mb = (RTextMenuBar)owner.getJMenuBar();
@@ -323,9 +333,6 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void savePreferences() {
 		FileSystemTreePrefs prefs = new FileSystemTreePrefs();
@@ -338,6 +345,35 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		} catch (IOException ioe) {
 			getRText().displayException(ioe);
 		}
+	}
+
+
+	void selectInFileChooser(File file) {
+		DockableWindow window = getDockableWindow(getPluginName());
+		window.setActive(true);
+		window.focusInDockableWindowGroup();
+		tree.setSelectedFile(file);
+	}
+
+
+	/**
+	 * Sets the root of the file system tree to some folder.
+	 *
+	 * @param dir Either the folder to set the root to, or {@code null}
+	 *        to render all file system roots.
+	 */
+	private void setRootImpl(File dir) {
+		if (dir != null) {
+			if (!dir.isDirectory()) {
+				UIManager.getLookAndFeel().provideErrorFeedback(null);
+				rootHistory.clear();
+				rootHistory.add(null);
+				rootHistoryOffs = 0;
+				dir = null; // Default to showing the file system roots
+			}
+		}
+		tree.setRoot(dir);
+		dirLabel.setText(dir != null ? dir.getName() : null);
 	}
 
 
@@ -358,7 +394,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 */
 	private class BackAction extends AppAction<RText> {
 
-		public BackAction(RText app, ResourceBundle msg) {
+		BackAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Back");
 			setName(null); // We're only a toolbar icon
 			setIcon("arrow_left.png");
@@ -368,20 +404,8 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (rootHistoryOffs>0) {
-				Object obj = rootHistory.get(--rootHistoryOffs);
-				if (obj instanceof File) {
-					File dir = (File)obj;
-					if (!dir.isDirectory()) {
-						UIManager.getLookAndFeel().provideErrorFeedback(null);
-						rootHistory.clear();
-						rootHistory.add(null);
-						rootHistoryOffs = 0;
-						obj = null; // Default to showing the file system roots
-					}
-				}
-				tree.setRoot((File)obj);
-				dirLabel.setText(obj instanceof File ?
-									((File)obj).getName() : null);
+				File dir = rootHistory.get(--rootHistoryOffs);
+				setRootImpl(dir);
 				setEnabled(rootHistoryOffs>0);
 				forwardAction.setEnabled(rootHistoryOffs<rootHistory.size()-1);
 			}
@@ -396,7 +420,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 */
 	private class ForwardAction extends AppAction<RText> {
 
-		public ForwardAction(RText app, ResourceBundle msg) {
+		ForwardAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Forward");
 			setName(null); // We're only a toolbar icon
 			setIcon("arrow_right.png");
@@ -406,20 +430,8 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (rootHistoryOffs<rootHistory.size()-1) {
-				Object obj = rootHistory.get(++rootHistoryOffs);
-				if (obj instanceof File) {
-					File dir = (File)obj;
-					if (!dir.isDirectory()) {
-						UIManager.getLookAndFeel().provideErrorFeedback(null);
-						rootHistory.clear();
-						rootHistory.add(null);
-						rootHistoryOffs = 0;
-						obj = null; // Default to showing the file system roots
-					}
-				}
-				tree.setRoot((File)obj);
-				dirLabel.setText(obj instanceof File ?
-						((File)obj).getName() : null);
+				File dir = rootHistory.get(++rootHistoryOffs);
+				setRootImpl(dir);
 				backAction.setEnabled(rootHistoryOffs>0);
 				setEnabled(rootHistoryOffs<rootHistory.size()-1);
 			}
@@ -433,7 +445,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 */
 	private class ViewAction extends AppAction<RText> {
 
-		public ViewAction(RText app, ResourceBundle msg) {
+		ViewAction(RText app, ResourceBundle msg) {
 			super(app, msg, "MenuItem.View");
 		}
 
