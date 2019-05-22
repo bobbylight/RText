@@ -43,21 +43,11 @@ class BuildThread extends GUIWorkerThread {
 		try {
 			tsConfig = getTsConfig();
 		} catch (final IllegalArgumentException iae) {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					plugin.getRText().displayException(iae);
-				}
-			});
+			SwingUtilities.invokeLater(() -> plugin.getRText().displayException(iae));
 			return null;
 		}
 
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				window.setTitleWhileBuilding(tsConfig);
-			}
-		});
+		SwingUtilities.invokeLater(() -> window.setTitleWhileBuilding(tsConfig));
 
 		String[] cmd;
 		if (File.separatorChar=='/') {

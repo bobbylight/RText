@@ -85,17 +85,14 @@ class TabbedPaneViewTransferHandler extends TabbedPaneTransferHandler {
 	 */
 	@Override
 	protected void selectTab(final JTabbedPane tabbedPane, final int index) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				Container parent = tabbedPane.getParent();
-				if (parent instanceof AbstractMainView) {
-					((AbstractMainView)parent).setSelectedIndex(index);
-				}
-				else {
-					// Should never happen.
-					tabbedPane.setSelectedIndex(index);
-				}
+		SwingUtilities.invokeLater(() -> {
+			Container parent = tabbedPane.getParent();
+			if (parent instanceof AbstractMainView) {
+				((AbstractMainView)parent).setSelectedIndex(index);
+			}
+			else {
+				// Should never happen.
+				tabbedPane.setSelectedIndex(index);
 			}
 		});
 	}

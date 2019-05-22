@@ -45,7 +45,6 @@ import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 
 	private Plugin plugin;
-	private JTable table;
 	private TypeScriptNoticeTableModel model;
 
 
@@ -56,7 +55,7 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 		ResourceBundle msg = plugin.getBundle();
 
 		model = new TypeScriptNoticeTableModel(msg.getString("TypeScript.Message"));
-		table = createTable(model);
+		JTable table = createTable(model);
 		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(table);
 		RScrollPane sp = new DockableWindowScrollPane(table);
 		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
@@ -131,7 +130,6 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 	 * Sets the title for this window while a build is running.
 	 *
 	 * @param tsConfig The tsconfig file we're building from.
-	 * @return The title.
 	 */
 	void setTitleWhileBuilding(File tsConfig) {
 		String msg = plugin.getBundle().getString("TypeScript.Building");

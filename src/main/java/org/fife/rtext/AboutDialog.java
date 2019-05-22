@@ -243,7 +243,7 @@ class AboutDialog extends EscapableDialog {
 
 		private static final long serialVersionUID = 1L;
 
-		public LicenseDialog() {
+		LicenseDialog() {
 
 			super(AboutDialog.this);
 			JPanel cp = new ResizableFrameContentPane(new BorderLayout());

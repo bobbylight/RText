@@ -208,7 +208,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	 *         <code>es</code>.
 	 */
 	public final String getSelectedLanguage() {
-		IconTextInfo iti = (IconTextInfo)languageList.getSelectedValue();
+		IconTextInfo iti = languageList.getSelectedValue();
 		String language = iti.getText();
 		String code = languageMap.get(language);
 		if (code==null) {

@@ -708,12 +708,9 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 
 		public int showDialog() {
 			rc = CANCEL; // Set here in case they "X" the dialog out.
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					field.requestFocusInWindow();
-					field.selectAll();
-				}
+			SwingUtilities.invokeLater(() -> {
+				field.requestFocusInWindow();
+				field.selectAll();
 			});
 			setLocationRelativeTo(getOwner());
 			okButton.setEnabled(false);

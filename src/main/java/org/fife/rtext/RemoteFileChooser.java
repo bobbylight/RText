@@ -541,12 +541,7 @@ public class RemoteFileChooser extends EscapableDialog
 		if (visible) {
 			userCombo.setSelectedItem(null);
 			passField.setText(null);
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					hostCombo.requestFocusInWindow();
-				}
-			});
+			SwingUtilities.invokeLater(() -> hostCombo.requestFocusInWindow());
 		}
 		super.setVisible(visible);
 	}

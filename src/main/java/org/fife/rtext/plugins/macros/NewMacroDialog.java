@@ -415,13 +415,10 @@ public class NewMacroDialog extends EscapableDialog {
 	@Override
 	public void setVisible(boolean visible) {
 		if (visible) {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					JTextField field = isNew ? nameField : descField;
-					field.requestFocusInWindow();
-					field.selectAll();
-				}
+			SwingUtilities.invokeLater(() -> {
+				JTextField field = isNew ? nameField : descField;
+				field.requestFocusInWindow();
+				field.selectAll();
 			});
 		}
 		super.setVisible(visible);

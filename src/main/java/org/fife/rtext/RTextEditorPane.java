@@ -65,8 +65,8 @@ public class RTextEditorPane extends TextEditorPane {
 		JPopupMenu popup = super.createPopupMenu();
 
 		popup.addSeparator();
-		popup.add(rtext.getAction(FileSystemTreePlugin.
-			SELECT_CURRENT_FILE_ACTION_NAME));
+		popup.add(createPopupMenuItem(rtext.getAction(FileSystemTreePlugin.
+			SELECT_CURRENT_FILE_ACTION_NAME)));
 
 		return popup;
 	}

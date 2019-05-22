@@ -126,9 +126,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * @return The value.
 	 */
 	private static List<String> createValue(String... values) {
-		List<String> list = new ArrayList<>();
-		list.addAll(Arrays.asList(values));
-		return list;
+		return new ArrayList<>(Arrays.asList(values)); // Mutable
 	}
 
 

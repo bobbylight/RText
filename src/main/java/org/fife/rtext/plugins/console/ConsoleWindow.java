@@ -192,9 +192,10 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	/**
 	 * Sets a color for a given type of a text in a single console.
 	 *
-	 * @param style
-	 * @param fg
-	 * @param textArea
+	 * @param style The token style to manipulate.
+	 * @param fg The foreground to use, or {@code null} to remove special
+	 *        foreground coloring for this token type.
+	 * @param textArea The text area whose style to modify.
 	 */
 	private static void setForegroundImpl(String style, Color fg,
 										  ConsoleTextArea textArea) {

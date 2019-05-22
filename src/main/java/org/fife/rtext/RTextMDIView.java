@@ -274,7 +274,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	@Override
 	public String getDocumentDisplayNameAt(int index) {
 		if (index>=0 && index<getNumDocuments()) {
-			return ((JInternalFrame)frames.get(index)).getTitle();
+			return (frames.get(index)).getTitle();
 		}
 		return null;
 	}
@@ -312,9 +312,8 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	@Override
 	public Dimension getPreferredSize() {
 		Dimension preferredSize = new Dimension(300,300); // Default value.
-		int numDocuments = frames.size();
 		for (InternalFrame frame : frames) {
-			Dimension framePreferredSize = ((JInternalFrame)frame).getPreferredSize();
+			Dimension framePreferredSize = frame.getPreferredSize();
 			preferredSize.width = Math.max(framePreferredSize.width, preferredSize.width);
 			preferredSize.height = Math.max(framePreferredSize.height, preferredSize.height);
 		}
@@ -330,7 +329,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		if (index<0 || index>=getNumDocuments())
 			//throw new IndexOutOfBoundsException();
 			return null;
-		JPanel temp = (JPanel)((JInternalFrame)frames.get(index)).
+		JPanel temp = (JPanel)(frames.get(index)).
 											getContentPane().getComponent(0);
 		return (RTextScrollPane)temp.getComponent(0);
 	}

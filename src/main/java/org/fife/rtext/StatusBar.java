@@ -183,38 +183,6 @@ public class StatusBar extends org.fife.ui.StatusBar
 
 
 	/**
-	 * Decrements the value of column in row/column indicator.
-	 */
-	public void decColumn() {
-		setRowAndColumn(row, Math.max(column-1, 0));
-	}
-
-
-	/**
-	 * Decrements the value of row in row/column indicator.
-	 */
-	public void decRow() {
-		setRowAndColumn(Math.max(row-1, 0), column);
-	}
-
-
-	/**
-	 * Increments the value of column in row/column indicator.
-	 */
-	public void incColumn() {
-		setRowAndColumn(row, column+1);
-	}
-
-
-	/**
-	 * Increments the value of row in row/column indicator.
-	 */
-	public void incRow() {
-		setRowAndColumn(row+1, column);
-	}
-
-
-	/**
 	 * Dirty hack to avoid having to use MessageFormat.format() every
 	 * time the caret's position changes.
 	 *

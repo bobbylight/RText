@@ -288,7 +288,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 			if (source!=null && source.length()>0) {
 				File loc = new File(source);
 				SourceLocation sourceLoc = loc.isFile() ?
-						(SourceLocation)new ZipSourceLocation(loc) :
+						new ZipSourceLocation(loc) :
 							new DirSourceLocation(loc);
 				info.setSourceLocation(sourceLoc);
 			}
@@ -547,7 +547,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 				int rowCount = model.getRowCount();
 				boolean jreFieldModified = rowCount!=1 ||
-					!((File)model.getValueAt(0, 0)).equals(
+					!(model.getValueAt(0, 0)).equals(
 												jreInfo.getJarFile());
 
 				if (enabledCB.isSelected() ||

@@ -118,13 +118,10 @@ public class SearchToolBar extends JToolBar {
 		} catch (Exception e) {
 			e.printStackTrace(); // Never happens
 		}
-		hideButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-				((RTextMenuBar)rtext.getJMenuBar()).
-					setSearchToolbarMenuItemSelected(false);
-			}
+		hideButton.addActionListener(e -> {
+			setVisible(false);
+			((RTextMenuBar)rtext.getJMenuBar()).
+				setSearchToolbarMenuItemSelected(false);
 		});
 		add(hideButton);
 

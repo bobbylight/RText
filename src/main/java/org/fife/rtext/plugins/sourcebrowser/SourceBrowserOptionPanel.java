@@ -402,7 +402,6 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 * Sets the path to the ctags executable displayed by this options panel.
 	 *
 	 * @param path The path to display.
-	 * @see #getCTagsExecutableLocation
 	 */
 	private void setCTagsExecutableLocation(String path) {
 		ctagsExecutableTextField.setFileSystemAware(false);
@@ -417,7 +416,6 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 * @param placement The tab placement displayed; one of
 	 *        <code>GUIApplication.LEFT</code>, <code>TOP</code>,
 	 *        <code>RIGHT</code>, <code>BOTTOM</code> or <code>FLOATING</code>.
-	 * @see #getSourceBrowserPlacement
 	 */
 	private void setSourceBrowserPlacement(int placement) {
 		if (!DockableWindow.isValidPosition(placement))
@@ -427,11 +425,11 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 
 
 	/**
-	 * Sets thetype of Ctags specified by the user.
+	 * Sets the type of Ctags specified by the user.
 	 *
-	 * @return The type of Ctags specified.  If this is <code>null</code> or
-	 *         invalid, {@link SourceBrowserPlugin#CTAGS_TYPE_EXUBERANT} is
-	 *         used.
+	 * @param type The type of Ctags specified.  If this is <code>null</code>
+	 *        or invalid, {@link SourceBrowserPlugin#CTAGS_TYPE_EXUBERANT} is
+	 *        used.
 	 * @see #getCTagsType()
 	 * @see SourceBrowserPlugin#CTAGS_TYPE_EXUBERANT
 	 * @see SourceBrowserPlugin#CTAGS_TYPE_STANDARD

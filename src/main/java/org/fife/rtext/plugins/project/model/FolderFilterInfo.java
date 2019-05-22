@@ -47,19 +47,19 @@ public class FolderFilterInfo {
 
 	public String[] getAllowedFileFilters() {
 		return allowedFileFilters==null ? null :
-			(String[])allowedFileFilters.clone();
+			allowedFileFilters.clone();
 	}
 
 
 	public String[] getHiddenFolderFilters() {
 		return disallowedDirectories==null ? null :
-			(String[])disallowedDirectories.clone();
+			disallowedDirectories.clone();
 	}
 
 
 	public String[] getHiddenFileFilters() {
 		return disallowedFileFilters==null ? null :
-			(String[])disallowedFileFilters.clone();
+			disallowedFileFilters.clone();
 	}
 
 

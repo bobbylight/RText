@@ -41,7 +41,7 @@ interface PrettyPrinter {
 	 * @return The result of pretty printing the text.
 	 * @throws Exception If something goes wrong.
 	 */
-	PrettyPrintResult prettyPrint(String text) throws Exception;
+	PrettyPrintResult prettyPrint(String text);
 
 
 }

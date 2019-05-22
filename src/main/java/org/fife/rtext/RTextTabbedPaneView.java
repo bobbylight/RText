@@ -228,23 +228,20 @@ inCloseCurrentDocument = true;
 		// MUST be done by SwingUtilities.invokeLater(), I think because
 		// currentTextArea is not yet visible on this line of code, so
 		// calling requestFocusInWindow() now would do nothing.
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				// NOTE: This null check here is silly, but we have to do
-				// it because: Before this runnable runs, we are sure that
-				// at least 1 document is open in RText.  However, when this
-				// Runnable runs, there is a case where there are no
-				// documents open: If one empty untitled document is open,
-				// and the user tries to open a file from the file history
-				// that no longer exists.  In that case the current document
-				// will have been closed to be replaced with the new one,
-				// but the "does not exist, create it?" dialog pops up
-				// while no documents are in the tabbed pane, which causes
-				// currentTextArea to be null here.
-				if (currentTextArea!=null) {
-					currentTextArea.requestFocusInWindow();
-				}
+		SwingUtilities.invokeLater(() -> {
+			// NOTE: This null check here is silly, but we have to do
+			// it because: Before this runnable runs, we are sure that
+			// at least 1 document is open in RText.  However, when this
+			// Runnable runs, there is a case where there are no
+			// documents open: If one empty untitled document is open,
+			// and the user tries to open a file from the file history
+			// that no longer exists.  In that case the current document
+			// will have been closed to be replaced with the new one,
+			// but the "does not exist, create it?" dialog pops up
+			// while no documents are in the tabbed pane, which causes
+			// currentTextArea to be null here.
+			if (currentTextArea!=null) {
+				currentTextArea.requestFocusInWindow();
 			}
 		});
 

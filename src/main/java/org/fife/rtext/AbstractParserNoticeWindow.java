@@ -53,7 +53,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 	private JTable table;
 
 
-	public AbstractParserNoticeWindow(RText rtext) {
+	protected AbstractParserNoticeWindow(RText rtext) {
 		this.rtext = rtext;
 	}
 

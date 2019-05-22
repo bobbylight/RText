@@ -69,7 +69,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 * @param rtext The owning RText instance.
 	 * @param msg The resource bundle to use.
 	 */
-	public GeneralOptionPanel(RText rtext, ResourceBundle msg) {
+	GeneralOptionPanel(RText rtext, ResourceBundle msg) {
 
 		super(msg.getString("OptGenName"));
 		fileSizeError = msg.getString("OptGenFileSizeError");
@@ -472,7 +472,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 
 		int count = encCombo.getItemCount();
 		for (int i=0; i<count; i++) {
-			String item = (String)encCombo.getItemAt(i);
+			String item = encCombo.getItemAt(i);
 			Charset cs2 = Charset.forName(item);
 			if (cs1.equals(cs2)) {
 				encCombo.setSelectedIndex(i);
@@ -483,7 +483,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		// Encoding not found: select default.
 		cs1 = Charset.forName(RTextFileChooser.getDefaultEncoding());
 		for (int i=0; i<count; i++) {
-			String item = (String)encCombo.getItemAt(i);
+			String item = encCombo.getItemAt(i);
 			Charset cs2 = Charset.forName(item);
 			if (cs1.equals(cs2)) {
 				encCombo.setSelectedIndex(i);

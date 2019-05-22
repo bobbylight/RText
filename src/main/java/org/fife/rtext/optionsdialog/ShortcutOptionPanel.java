@@ -197,20 +197,17 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 
 		masterActionList = app.getActions();
 
-		Arrays.sort(masterActionList, new Comparator<>() {
-			@Override
-			public int compare(Action a1, Action a2) {
-				String name1 = (String)a1.getValue(Action.NAME);
-				String name2 = (String)a2.getValue(Action.NAME);
-				if (name1 == null) {
-					if (name2 == null)
-						return 0;
-					return -1;
-				}
-				if (name2 == null) // name1!=null && name2==null.
-					return 1;
-				return name1.compareTo(name2);
+		Arrays.sort(masterActionList, (a1, a2) -> {
+			String name1 = (String)a1.getValue(Action.NAME);
+			String name2 = (String)a2.getValue(Action.NAME);
+			if (name1 == null) {
+				if (name2 == null)
+					return 0;
+				return -1;
 			}
+			if (name2 == null) // name1!=null && name2==null.
+				return 1;
+			return name1.compareTo(name2);
 		});
 
 		// Action count may change from initial value as plugins might

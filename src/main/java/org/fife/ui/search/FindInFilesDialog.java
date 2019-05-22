@@ -331,12 +331,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 */
 	void addMatchData(final MatchData matchData) {
 		final String dirName = inFolderTextField.getText();
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				getResultsComponent().addMatchData(matchData, dirName);
-			}
-		});
+		SwingUtilities.invokeLater(() -> getResultsComponent().addMatchData(matchData, dirName));
 	}
 
 
@@ -370,10 +365,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 			getResultsComponent().clear();
 		}
 		else {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() { getResultsComponent().clear(); }
-			});
+			SwingUtilities.invokeLater(() -> getResultsComponent().clear());
 		}
 	}
 
@@ -872,8 +864,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 */
 	void searchCompleted(final long time) {
 
-		SwingUtilities.invokeLater(new Runnable() { @Override
-		public void run() {
+		SwingUtilities.invokeLater(() -> {
 
 			setWorkerThread(null);
 
@@ -907,7 +898,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 			getResultsComponent().prettyUp();
 
-		}});
+		});
 
 	}
 
@@ -960,12 +951,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 				statusBar.setStatusMessage(text);
 			}
 			else {
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						statusBar.setStatusMessage(text);
-					}
-				});
+				SwingUtilities.invokeLater(() -> statusBar.setStatusMessage(text));
 			}
 		}
 	}
@@ -986,7 +972,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		// If they're making the dialog visible, make sure the status text
 		// is "Ready" and not something left over from the last time the
 		// dialog was visible.
-		if (visible==true) {
+		if (visible) {
 			setStatusText(defaultStatusText);
 		}
 
@@ -998,14 +984,11 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 			editor.selectAll();
 		}
 		else {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					handleToggleButtons();
-					findTextCombo.requestFocusInWindow();
-					JTextComponent editor = getTextComponent(findTextCombo);
-					editor.selectAll();
-				}
+			SwingUtilities.invokeLater(() -> {
+				handleToggleButtons();
+				findTextCombo.requestFocusInWindow();
+				JTextComponent editor = getTextComponent(findTextCombo);
+				editor.selectAll();
 			});
 		}
 

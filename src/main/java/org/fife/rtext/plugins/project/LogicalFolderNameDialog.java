@@ -84,12 +84,9 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 		packSpecial();
 		setLocationRelativeTo(parent);
 
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				nameField.requestFocusInWindow();
-				nameField.selectAll();
-			}
+		SwingUtilities.invokeLater(() -> {
+			nameField.requestFocusInWindow();
+			nameField.selectAll();
 		});
 
 	}

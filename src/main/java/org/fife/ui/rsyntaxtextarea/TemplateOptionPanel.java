@@ -89,12 +89,9 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 
 		// Must create and set row handler later, after this option panel has
 		// been added to the parent Options dialog.
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				RowHandler rowHandler = new TemplateDialog();
-				templateTable.setRowHandler(rowHandler);
-			}
+		SwingUtilities.invokeLater(() -> {
+			RowHandler rowHandler = new TemplateDialog();
+			templateTable.setRowHandler(rowHandler);
 		});
 
 	}

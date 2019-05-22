@@ -201,12 +201,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		}
 
 		else {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					appendImpl(text, style, treatAsUserInput);
-				}
-			});
+			SwingUtilities.invokeLater(() -> appendImpl(text, style, treatAsUserInput));
 		}
 
 	}

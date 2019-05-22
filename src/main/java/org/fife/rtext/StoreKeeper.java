@@ -74,13 +74,10 @@ public class StoreKeeper {
 	 * @param lnf The Look and Feel to change to.
 	 */
 	public static void updateLookAndFeels(final LookAndFeel lnf) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				int count = getInstanceCount();
-				for (int i=0; i<count; i++) {
-					rtextInstances.get(i).updateLookAndFeel(lnf);
-				}
+		SwingUtilities.invokeLater(() -> {
+			int count = getInstanceCount();
+			for (int i=0; i<count; i++) {
+				rtextInstances.get(i).updateLookAndFeel(lnf);
 			}
 		});
 	}

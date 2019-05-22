@@ -834,13 +834,14 @@ public class RTextUtilities {
 	public static void openAllFilesIn(RText rtext, File directory) {
 		if (directory!=null && directory.isDirectory()) {
 			File[] files = directory.listFiles();
-			int count = files.length;
-			for (File file : files) {
-				if (file.isDirectory()) {
-					openAllFilesIn(rtext, file);
-				}
-				else {
-					rtext.openFile(file);
+			if (files != null) {
+				for (File file : files) {
+					if (file.isDirectory()) {
+						openAllFilesIn(rtext, file);
+					}
+					else {
+						rtext.openFile(file);
+					}
 				}
 			}
 		}

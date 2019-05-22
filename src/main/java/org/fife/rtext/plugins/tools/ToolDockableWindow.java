@@ -129,12 +129,7 @@ public class ToolDockableWindow extends DockableWindow
 			ble.printStackTrace();
 		}
 
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				textArea.setCaretPosition(doc.getLength());
-			}
-		});
+		SwingUtilities.invokeLater(() -> textArea.setCaretPosition(doc.getLength()));
 
 	}
 
@@ -186,39 +181,36 @@ public class ToolDockableWindow extends DockableWindow
 								final Throwable e) {
 
 		// Note that this isn't called on the EDT
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
+		SwingUtilities.invokeLater(() -> {
 
-				if (e==null) {
-					float time = (System.currentTimeMillis()-startTime)/1000f;
-					String title = msg.getString("Window.Title.CompletedTool");
-					title = MessageFormat.format(title,
-						new Object[] { tool.getName(),
-							Integer.toString(rc), Float.toString(time) });
-					setDockableWindowTitle(title);
-				}
-				else if (e instanceof InterruptedException) { // User killed
-					String title = msg.getString("Window.Title.ProcessTerminated");
-					title = MessageFormat.format(title,
-							new Object[] { tool.getName() });
-					setDockableWindowTitle(title);
-					String text = msg.getString("Window.ProcessTerminated");
-					appendWithStyle(text,
-							textArea.getStyle(OutputTextPane.STYLE_EXCEPTION));
-				}
-				else {
-					String title = msg.getString("Window.Title.ToolError");
-					title = MessageFormat.format(title,
-						new Object[] { tool.getName() });
-					setDockableWindowTitle(title);
-					outputStackTrace(e);
-				}
-
-				stopAction.setEnabled(false);
-				tool = null;
-
+			if (e==null) {
+				float time = (System.currentTimeMillis()-startTime)/1000f;
+				String title = msg.getString("Window.Title.CompletedTool");
+				title = MessageFormat.format(title,
+					new Object[] { tool.getName(),
+						Integer.toString(rc), Float.toString(time) });
+				setDockableWindowTitle(title);
 			}
+			else if (e instanceof InterruptedException) { // User killed
+				String title = msg.getString("Window.Title.ProcessTerminated");
+				title = MessageFormat.format(title,
+						new Object[] { tool.getName() });
+				setDockableWindowTitle(title);
+				String text = msg.getString("Window.ProcessTerminated");
+				appendWithStyle(text,
+						textArea.getStyle(OutputTextPane.STYLE_EXCEPTION));
+			}
+			else {
+				String title = msg.getString("Window.Title.ToolError");
+				title = MessageFormat.format(title,
+					new Object[] { tool.getName() });
+				setDockableWindowTitle(title);
+				outputStackTrace(e);
+			}
+
+			stopAction.setEnabled(false);
+			tool = null;
+
 		});
 
 	}

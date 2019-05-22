@@ -217,16 +217,16 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		String command = e.getActionCommand();
 
-		if (command.equals("TileVertically")) {
-			((RTextMDIView)mainView).tileWindowsVertically();
-		}
-
-		else if (command.equals("TileHorizontally")) {
-			((RTextMDIView)mainView).tileWindowsHorizontally();
-		}
-
-		else if (command.equals("Cascade")) {
-			((RTextMDIView)mainView).cascadeWindows();
+		switch (command) {
+			case "TileVertically":
+				((RTextMDIView)mainView).tileWindowsVertically();
+				break;
+			case "TileHorizontally":
+				((RTextMDIView)mainView).tileWindowsHorizontally();
+				break;
+			case "Cascade":
+				((RTextMDIView)mainView).cascadeWindows();
+				break;
 		}
 
 	}

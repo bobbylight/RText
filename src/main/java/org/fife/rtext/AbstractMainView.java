@@ -617,9 +617,8 @@ public abstract class AbstractMainView extends JPanel
 		marginLinePosition = fromPanel.marginLinePosition;
 		marginLineColor = fromPanel.marginLineColor;
 		highlightSecondaryLanguages = fromPanel.highlightSecondaryLanguages;
-		for (int i=0; i<secondaryLanguageColors.length; i++) {
-			secondaryLanguageColors[i] = fromPanel.secondaryLanguageColors[i];
-		}
+		System.arraycopy(fromPanel.secondaryLanguageColors, 0, secondaryLanguageColors, 0,
+			secondaryLanguageColors.length);
 
 		hyperlinksEnabled = fromPanel.hyperlinksEnabled;
 		hyperlinkColor = fromPanel.hyperlinkColor;

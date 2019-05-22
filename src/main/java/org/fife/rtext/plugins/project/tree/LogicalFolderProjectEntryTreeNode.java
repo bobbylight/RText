@@ -126,7 +126,7 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
-	/**
+	/*
 	 * Get a slightly modified version of the standard "folder" icon for this
 	 * OS.
 	 */

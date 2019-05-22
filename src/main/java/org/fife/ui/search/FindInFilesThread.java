@@ -134,8 +134,7 @@ class FindInFilesThread extends GUIWorkerThread {
 		// Then, do the search.
 		dialog.clearSearchResults();
 		File[] files = directory.listFiles();
-		List<File> fileList = new ArrayList<>();
-		fileList.addAll(Arrays.asList(files));
+		List<File> fileList = new ArrayList<>(Arrays.asList(files));
 
 		boolean checkSubfolders = dialog.getCheckSubfolders();
 		boolean matchingLines = dialog.getShowMatchingLines();

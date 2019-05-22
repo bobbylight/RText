@@ -341,12 +341,9 @@ public class NewExistingFolderDialog extends EscapableDialog {
 		directoryTree.setEnabled(false);
 		setChosenDirectory(entry.getFile());
 		moveForwardOneStep();
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				inFilterField.selectAll();
-				inFilterField.requestFocusInWindow();
-			}
+		SwingUtilities.invokeLater(() -> {
+			inFilterField.selectAll();
+			inFilterField.requestFocusInWindow();
 		});
 
 		pack();

@@ -536,27 +536,24 @@ class SystemShellTextArea extends ConsoleTextArea {
 		@Override
 		public void processCompleted(Process p, int rc, final Throwable e) {
 			// Required because of other Swing calls we make inside
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					if (e!=null) {
-						String text = null;
-						if (e instanceof InterruptedException) {
-							text = plugin.getString("ProcessForciblyTerminated");
-						}
-						else {
-							StringWriter sw = new StringWriter();
-							e.printStackTrace(new PrintWriter(sw));
-							text = sw.toString();
-						}
-						append(text, STYLE_EXCEPTION);
+			SwingUtilities.invokeLater(() -> {
+				if (e!=null) {
+					String text = null;
+					if (e instanceof InterruptedException) {
+						text = plugin.getString("ProcessForciblyTerminated");
 					}
-					// Not really necessary, should allow GC of Process resources
-					activeProcessThread = null;
-					appendPrompt();
-					setEditable(true);
-					firePropertyChange(PROPERTY_PROCESS_RUNNING, true, false);
+					else {
+						StringWriter sw = new StringWriter();
+						e.printStackTrace(new PrintWriter(sw));
+						text = sw.toString();
+					}
+					append(text, STYLE_EXCEPTION);
 				}
+				// Not really necessary, should allow GC of Process resources
+				activeProcessThread = null;
+				appendPrompt();
+				setEditable(true);
+				firePropertyChange(PROPERTY_PROCESS_RUNNING, true, false);
 			});
 		}
 

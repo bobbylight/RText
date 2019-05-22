@@ -193,9 +193,9 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 				selectedTextColorCB.isSelected() ||
 				!selectedTextColorButton.getColor().equals(defaultSelectedTextColor) ||
 				secLangCB.isSelected() ||
-				!defaultSecLangColor[0].equals(secLangButtons[0]) ||
-				!defaultSecLangColor[1].equals(secLangButtons[1]) ||
-				!defaultSecLangColor[2].equals(secLangButtons[2])) {
+				!defaultSecLangColor[0].equals(secLangButtons[0].getColor()) ||
+				!defaultSecLangColor[1].equals(secLangButtons[1].getColor()) ||
+				!defaultSecLangColor[2].equals(secLangButtons[2].getColor())) {
 
 				setCaretColor(defaultCaretColor);
 				setSelectionColor(defaultSelectionColor);
