@@ -90,9 +90,7 @@ public class Plugin extends AbstractPlugin
 	public void currentTextAreaPropertyChanged(CurrentTextAreaEvent e) {
 		if (e.getType()==CurrentTextAreaEvent.TEXT_AREA_CHANGED ||
 				e.getType()==CurrentTextAreaEvent.SYNTAX_STYLE_CNANGED) {
-			RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
-			String style = textArea.getSyntaxEditingStyle();
-			action.setEnabled(isSupportedLanguage(style));
+			possiblyEnableAction();
 		}
 	}
 
@@ -142,9 +140,6 @@ public class Plugin extends AbstractPlugin
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public PluginOptionsDialogPanel getOptionsDialogPanel() {
 		return new OptionsPanel(this);
@@ -190,9 +185,6 @@ public class Plugin extends AbstractPlugin
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getPluginVersion() {
 		return PLUGIN_VERSION;
@@ -230,9 +222,6 @@ public class Plugin extends AbstractPlugin
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
@@ -244,7 +233,8 @@ public class Plugin extends AbstractPlugin
 		action = new TidyAction((RText)app, this);
 		action.setAccelerator(prefs.tidyActionAccelerator);
 		rtext.addAction(TIDY_ACTION, action);
-		action.setEnabled(false); // Gets enabled for appropriate files.
+		action.setEnabled(false); // Gets enabled for appropriate files below
+		possiblyEnableAction();
 		JMenuItem item = new JMenuItem(action);
 		item.setToolTipText(null);
 
@@ -316,9 +306,15 @@ public class Plugin extends AbstractPlugin
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
+	private void possiblyEnableAction() {
+		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
+		if (textArea != null) { // Possibly null on startup
+			String style = textArea.getSyntaxEditingStyle();
+			action.setEnabled(isSupportedLanguage(style));
+		}
+	}
+
+
 	@Override
 	public void savePreferences() {
 
@@ -353,9 +349,6 @@ public class Plugin extends AbstractPlugin
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean uninstall() {
 		return true;
