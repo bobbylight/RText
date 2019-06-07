@@ -60,8 +60,11 @@ class AboutDialog extends EscapableDialog {
 		top.setBackground(topBG);
 		top.setBorder(new TopBorder());
 
-		try (InputStream in = getClass().getResourceAsStream("/org/fife/rtext/graphics/about-image.svg")) {
-			Image image = ImageTranscodingUtil.rasterize("about-image.svg", in, 64, 64);
+		String imageName = "/org/fife/rtext/graphics/app_icons/seagull-" +
+			(UIUtil.isLightForeground(new JLabel().getForeground()) ? "dark.svg" : "light.svg");
+
+		try (InputStream in = getClass().getResourceAsStream(imageName)) {
+			Image image = ImageTranscodingUtil.rasterize(imageName, in, 64, 64);
 			JLabel linkLabel = new JLabel(new ImageIcon(image));
 			top.add(linkLabel, BorderLayout.LINE_START);
 		} catch (IOException ioe) {

@@ -9,14 +9,15 @@ package org.fife.rtext.actions;
 
 import java.awt.ComponentOrientation;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextActionInfo;
 import org.fife.rtext.RTextPrefs;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.app.AppAction;
 import org.fife.ui.app.GUIApplication.AboutAction;
@@ -55,9 +56,20 @@ public final class ActionFactory implements RTextActionInfo {
 
 		ClassLoader cl = ActionFactory.class.getClassLoader();
 
+		String lightResource = "org/fife/rtext/graphics/app_icons/seagull-light.svg";
+		String darkResource = "org/fife/rtext/graphics/app_icons/seagull-dark.svg";
+
 		try {
-			rtext.setIconImage(ImageIO.read(cl.getResource(
-						"org/fife/rtext/graphics/rtexticon.gif")));
+			rtext.setIconImages(Arrays.asList(
+				ImageTranscodingUtil.rasterize("appIcon16",
+					cl.getResourceAsStream(darkResource), 16, 16),
+				ImageTranscodingUtil.rasterize("appIcon32",
+					cl.getResourceAsStream(lightResource), 32, 32),
+				ImageTranscodingUtil.rasterize("appIcon48",
+					cl.getResourceAsStream(lightResource), 48, 48),
+				ImageTranscodingUtil.rasterize("appIcon64",
+					cl.getResourceAsStream(lightResource), 64, 64)
+			));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}

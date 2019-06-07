@@ -12,7 +12,7 @@ configurations.all { // Check for updates every build
 }
 
 dependencies {
-	compile('com.fifesoft.rtext:fife.common:3.0.1') { changing = true }
+	compile('com.fifesoft.rtext:fife.common:3.0.2-SNAPSHOT') { changing = true }
 
 	compile('com.fifesoft:rsyntaxtextarea:3.0.3')
 	compile('com.fifesoft:autocomplete:3.0.0')
