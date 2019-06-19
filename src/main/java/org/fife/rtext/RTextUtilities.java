@@ -123,20 +123,11 @@ public class RTextUtilities {
 	 * @param msg The resource bundle.
 	 * @param key The key to use in <code>msg</code> for the file filter's
 	 *        description.
-	 * @param extensions Either a string representing a single extension or
-	 *        an array of strings containing multiple extensions.
+	 * @param extensions The extensions for this filter.
 	 */
-	private static void addFilter(RTextFileChooser chooser,
-								  ResourceBundle msg, String key, Object extensions) {
-		ExtensionFileFilter filter;
-		if (extensions instanceof String) {
-			filter = new ExtensionFileFilter(msg.getString(key),
-										(String)extensions);
-		}
-		else {
-			filter = new ExtensionFileFilter(msg.getString(key),
-										(String[])extensions);
-		}
+	private static void addFilter(RTextFileChooser chooser, ResourceBundle msg,
+								  String key, String... extensions) {
+		ExtensionFileFilter filter = new ExtensionFileFilter(msg.getString(key), extensions);
 		chooser.addChoosableFileFilter(filter);
 	}
 
@@ -252,11 +243,11 @@ public class RTextUtilities {
 									"org.fife.rtext.FileFilters");
 
 			// Add (localized) file filters.
-			addFilter(chooser, msg, "ActionScript", new String[] { "as", "asc" });
+			addFilter(chooser, msg, "ActionScript", "as", "asc");
 			addFilter(chooser, msg, "AssemblerX86", "asm");
 			addFilter(chooser, msg, "BBCode", "bbc");
 			addFilter(chooser, msg, "CPlusPlus",
-					new String[] { "c", "cpp", "cxx", "h" });
+				"c", "cpp", "cxx", "h");
 			addFilter(chooser, msg, "Clojure", "clj");
 			addFilter(chooser, msg, "CSharp",	"cs");
 			addFilter(chooser, msg, "CSS", "css");
@@ -266,28 +257,28 @@ public class RTextUtilities {
 			addFilter(chooser, msg, "DTD", "dtd");
 			addFilter(chooser, msg, "Flex", "mxml");
 			addFilter(chooser, msg, "Fortran",
-					new String[] { "f", "for", "fort", "f77", "f90" });
+				"f", "for", "fort", "f77", "f90");
 			addFilter(chooser, msg, "Groovy",
-					new String[] { "groovy", "grv" });
+				"groovy", "grv");
 			addFilter(chooser, msg, "HTML",
-					new String[] { "htm", "html" });
+				"htm", "html");
 			addFilter(chooser, msg, "INI",
-					new String[] { "ini" });
+				"ini");
 			addFilter(chooser, msg, "Java", "java");
 			addFilter(chooser, msg, "JavaScript", "js");
 			addFilter(chooser, msg, "JSON", "json");
 			addFilter(chooser, msg, "JSP", "jsp");
-			addFilter(chooser, msg, "LaTeX", new String[] { "tex", "ltx", "latex" });
+			addFilter(chooser, msg, "LaTeX", "tex", "ltx", "latex");
 			addFilter(chooser, msg, "Lisp",
-					new String[] { "cl", "clisp", "el", "l", "lisp", "lsp", "ml" });
+				"cl", "clisp", "el", "l", "lisp", "lsp", "ml");
 			addFilter(chooser, msg, "Lua", "lua");
-			addFilter(chooser, msg, "Makefile", 
-					new String[] { "Makefile", "makefile" });
+			addFilter(chooser, msg, "Makefile",
+				"Makefile", "makefile");
 			addFilter(chooser, msg, "Nsis", "nsi");
 			addFilter(chooser, msg, "Perl",
-					new String[] { "pl", "perl", "pm" });
+				"pl", "perl", "pm");
 			addFilter(chooser, msg, "PHP",
-					new String[] { "php" });
+				"php");
 			addFilter(chooser, msg, "PropertiesFiles", "properties");
 			addFilter(chooser, msg, "Python", "py");
 			addFilter(chooser, msg, "Ruby", "rb");
@@ -298,14 +289,14 @@ public class RTextUtilities {
 			addFilter(chooser, msg, "Tcl", "tcl");
 			addFilter(chooser, msg, "TypeScript", "ts");
 			addFilter(chooser, msg, "UnixShell",
-					new String[] { "sh", "bsh", "csh", "ksh" });
+				"sh", "bsh", "csh", "ksh");
 			addFilter(chooser, msg, "VisualBasic", "vb");
 			addFilter(chooser, msg, "WindowsBatch",
-					new String[] { "bat", "cmd" });
+				"bat", "cmd");
 			addFilter(chooser, msg, "XML",
-					new String[] { "xml", "xsl", "xsd", "wsdl", "jnlp", "macro", "manifest" });
+				"xml", "xsl", "xsd", "xslt", "wsdl", "jnlp", "macro", "manifest");
 			addFilter(chooser, msg, "Yaml",
-					new String[] { "yml", "yaml" });
+				"yml", "yaml");
 
 			// Add any user-defined file filters.
 			File file = new File(rtext.getInstallLocation(), FILE_FILTERS_FILE);
@@ -320,7 +311,6 @@ public class RTextUtilities {
 					msg.getString("AllSupported"),
 					ExtensionFileFilter.CaseCheck.SYSTEM_CASE_CHECK,
 					false,
-					new String[] {
 						"as", "asc",
 						"asm",
 						"bbc",
@@ -360,9 +350,8 @@ public class RTextUtilities {
 						"sh", "bsh", "csh", "ksh",
 						"vb",
 						"bat", "cmd",
-						"xml", "xsl", "xsd", "wsdl", "jnlp", "macro", "manifest",
-						"yml", "yaml",
-					}
+						"xml", "xsl", "xsd", "xslt", "wsdl", "jnlp", "macro", "manifest",
+						"yml", "yaml"
 			));
 			chooser.setFileFilter(null);
 
@@ -430,7 +419,7 @@ public class RTextUtilities {
 	 * @return <code>true</code> if everything went okay; <code>false</code>
 	 *         if the method failed.
 	 */
-	public static boolean enableTemplates(RText rtext, boolean enabled) {
+	static boolean enableTemplates(RText rtext, boolean enabled) {
 		boolean old = RSyntaxTextArea.getTemplatesEnabled();
 		if (old!=enabled) {
 			RSyntaxTextArea.setTemplatesEnabled(enabled);
@@ -575,7 +564,7 @@ public class RTextUtilities {
 	 *
 	 * @return The name of the LookAndFeel to save in the RText preferences.
 	 */
-	public static String getLookAndFeelToSave() {
+	static String getLookAndFeelToSave() {
 		String laf = currentLaF;
 		if (laf==null) {
 			laf = UIManager.getLookAndFeel().getClass().getName();
@@ -590,7 +579,7 @@ public class RTextUtilities {
 	 * @return The macro directory, or <code>null</code> if it cannot be found
 	 *         or created.
 	 */
-	public static File getMacroDirectory() {
+	private static File getMacroDirectory() {
 
 		File f = new File(getPreferencesDirectory(), "macros");
 		if (!f.isDirectory() && !f.mkdirs()) {
@@ -609,7 +598,7 @@ public class RTextUtilities {
 	 *        is returned.
 	 * @return The name of the macro.
 	 */
-	public static String getMacroName(File macroFile) {
+	static String getMacroName(File macroFile) {
 		String name = null;
 		if (macroFile!=null) {
 			name = macroFile.getName();
@@ -695,7 +684,7 @@ public class RTextUtilities {
 	 * FIXME:  Have me return the file list in alphabetical order (as this is
 	 *         not guaranteed by File.listFiles()).
 	 */
-	public static File[] getSavedMacroFiles() {
+	static File[] getSavedMacroFiles() {
 
 		File macroDir = getMacroDirectory();
 
@@ -1028,7 +1017,7 @@ public class RTextUtilities {
 	 * @param fileName The file name.
 	 * @return The same file name, with any of the above extensions removed.
 	 */
-	public static String stripBackupExtensions(String fileName) {
+	static String stripBackupExtensions(String fileName) {
 		if (fileName!=null) {
 			if (fileName.endsWith(".bak") ||
 					fileName.endsWith(".old")) {
