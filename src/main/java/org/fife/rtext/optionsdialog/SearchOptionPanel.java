@@ -223,9 +223,6 @@ class SearchOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
@@ -246,9 +243,6 @@ class SearchOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		// They can't input invalid stuff on this options panel.
@@ -256,9 +250,6 @@ class SearchOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public JComponent getTopJComponent() {
 		return dialogRB;
@@ -304,9 +295,6 @@ class SearchOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {
 

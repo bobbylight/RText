@@ -125,9 +125,6 @@ class PrintingOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		// They can't input invalid stuff on this options panel.

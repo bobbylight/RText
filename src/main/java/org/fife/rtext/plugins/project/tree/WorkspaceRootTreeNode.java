@@ -52,9 +52,6 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Icon getIcon() {
 		return getWorkspaceIcon();

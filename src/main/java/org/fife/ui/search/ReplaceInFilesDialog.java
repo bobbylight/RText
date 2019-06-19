@@ -46,9 +46,6 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected Box createDetailsPanel() {
 
@@ -68,18 +65,12 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected Box createExtraOptionsPanel() {
 		return null;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected JPanel createInputPanel() {
 
@@ -116,9 +107,6 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected ResultsComponent createResultsComponent() {
 		ReplaceInFilesTable table = new ReplaceInFilesTable();
@@ -127,9 +115,6 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected FindInFilesThread createWorkerThread(File directory) {
 		return new ReplaceInFilesThread(this, directory);
@@ -187,9 +172,6 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void setSearching(boolean searching) {
 		super.setSearching(searching);
@@ -198,9 +180,6 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setVisible(boolean visible) {
 

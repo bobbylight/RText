@@ -145,9 +145,6 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;

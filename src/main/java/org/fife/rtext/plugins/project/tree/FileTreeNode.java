@@ -69,7 +69,6 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	 */
 	private void addChildrenFilteredAndSorted(File[] files) {
 
-		int num = files.length;
 		ArrayList<File> dirList = new ArrayList<>();
 		ArrayList<File> fileList = new ArrayList<>();
 

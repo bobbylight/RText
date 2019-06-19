@@ -46,7 +46,7 @@ import org.fife.ui.rtextarea.RTextAreaOptionPanel;
  * @author Robert Futrell
  * @version 1.0
  */
-class Plugin extends AbstractPlugin
+public class Plugin extends AbstractPlugin
 		implements CurrentTextAreaListener {
 
 	private final RText rtext;

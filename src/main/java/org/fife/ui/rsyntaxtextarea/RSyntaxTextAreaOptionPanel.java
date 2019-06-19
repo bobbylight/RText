@@ -496,9 +496,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public JComponent getTopJComponent() {
 		return mainFontSelector;

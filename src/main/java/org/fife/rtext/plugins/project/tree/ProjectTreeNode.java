@@ -50,9 +50,6 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Icon getIcon() {
 		return getProjectIcon();

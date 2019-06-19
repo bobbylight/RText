@@ -45,9 +45,6 @@ public class ToggleTextModeAction extends RecordableTextAction {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void actionPerformedImpl(ActionEvent e, RTextArea textArea) {
 		StatusBar statusBar = (StatusBar)rtext.getStatusBar();
@@ -59,9 +56,6 @@ public class ToggleTextModeAction extends RecordableTextAction {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getMacroID() {
 		return getName();

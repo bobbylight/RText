@@ -38,9 +38,6 @@ class RTextWindowListener extends WindowAdapter {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 		// Make sure the selection is always visible.

@@ -171,9 +171,6 @@ class RTextSplitPaneView extends AbstractMainView
 	}
 
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected synchronized boolean closeCurrentDocumentImpl() {
 
@@ -260,9 +257,6 @@ class RTextSplitPaneView extends AbstractMainView
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public RTextScrollPane getRTextScrollPaneAt(int index) {
 		if (index<0 || index>=getNumDocuments())

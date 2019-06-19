@@ -65,9 +65,6 @@ public class JsonOptions extends Prefs {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setDefaults() {
 		jsonOutputStyle = DEFAULT_OUTPUT_STYLE;

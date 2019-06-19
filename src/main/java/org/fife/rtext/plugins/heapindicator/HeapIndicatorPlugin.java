@@ -42,7 +42,7 @@ import org.fife.ui.app.StatusBarPlugin;
  * @author Robert Futrell
  * @version 1.0
  */
-class HeapIndicatorPlugin extends StatusBarPlugin {
+public class HeapIndicatorPlugin extends StatusBarPlugin {
 
 	private final AbstractPluggableGUIApplication<?> app;
 	private Timer timer;
@@ -72,10 +72,10 @@ class HeapIndicatorPlugin extends StatusBarPlugin {
 	public HeapIndicatorPlugin(AbstractPluggableGUIApplication<?> app) {
 
 		msg = ResourceBundle.getBundle(BUNDLE_NAME);
+		this.app = app;
 
 		HeapIndicatorPrefs prefs = loadPrefs();
 
-		this.app = app;
 		HeapIcon heapIcon = new HeapIcon(this);
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(2,2,4,2));

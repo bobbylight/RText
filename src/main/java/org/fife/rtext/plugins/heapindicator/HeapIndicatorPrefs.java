@@ -19,7 +19,7 @@ import org.fife.ui.app.Prefs;
  * @author Robert Futrell
  * @version 0.8
  */
-class HeapIndicatorPrefs extends Prefs {
+public class HeapIndicatorPrefs extends Prefs {
 
 	public boolean visible;
 	public int     refreshInterval;
@@ -33,9 +33,6 @@ class HeapIndicatorPrefs extends Prefs {
 	private static final Color	DEFAULT_ICON_FOREGROUND		= Color.BLUE;
 	private static final Color	DEFAULT_ICON_BORDER_COLOR	= Color.BLACK;
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setDefaults() {
 		visible         = DEFAULT_VISIBLE;

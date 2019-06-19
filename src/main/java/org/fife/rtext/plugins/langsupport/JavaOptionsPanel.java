@@ -239,9 +239,6 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
@@ -296,18 +293,12 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public JComponent getTopJComponent() {
 		return enabledCB;
@@ -354,9 +345,6 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {
 

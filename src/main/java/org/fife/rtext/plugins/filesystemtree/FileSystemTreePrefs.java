@@ -21,7 +21,7 @@ import org.fife.ui.app.Prefs;
  * @author Robert Futrell
  * @version 0.8
  */
-class FileSystemTreePrefs extends Prefs {
+public class FileSystemTreePrefs extends Prefs {
 
 
 	/**
@@ -40,9 +40,6 @@ class FileSystemTreePrefs extends Prefs {
 	public KeyStroke windowVisibilityAccelerator;
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setDefaults() {
 		active = true;

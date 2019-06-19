@@ -183,9 +183,6 @@ class RTextTabbedPaneView extends AbstractMainView implements ChangeListener {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected synchronized boolean closeCurrentDocumentImpl() {
 
@@ -312,9 +309,6 @@ inCloseCurrentDocument = false;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public RTextScrollPane getRTextScrollPaneAt(int index) {
 		if (index<0 || index>=getNumDocuments())

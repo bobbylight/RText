@@ -211,9 +211,6 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		OptionsPanelCheckResult res = null;

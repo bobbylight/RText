@@ -225,9 +225,6 @@ public class Plugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
@@ -661,9 +658,6 @@ public class Plugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean uninstall() {
 		AbstractMainView view = rtext.getMainView();

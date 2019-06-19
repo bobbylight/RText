@@ -126,9 +126,6 @@ class COptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
@@ -143,18 +140,12 @@ class COptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public JComponent getTopJComponent() {
 		return enabledCB;
@@ -168,9 +159,6 @@ class COptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {
 

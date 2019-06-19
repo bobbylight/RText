@@ -147,9 +147,6 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
@@ -168,9 +165,6 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
@@ -188,18 +182,12 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public JComponent getTopJComponent() {
 		return toolTable;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 		hasUnsavedChanges = true;
@@ -222,9 +210,6 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {
 

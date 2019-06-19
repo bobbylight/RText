@@ -41,9 +41,6 @@ class EditToolsAction extends AppAction<RText> {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		RText owner = getApplication();

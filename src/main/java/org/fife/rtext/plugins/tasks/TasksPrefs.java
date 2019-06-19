@@ -24,7 +24,7 @@ import org.fife.ui.dockablewindows.DockableWindow;
  * @author Robert Futrell
  * @version 0.8
  */
-class TasksPrefs extends Prefs {
+public class TasksPrefs extends Prefs {
 
 	/**
 	 * Whether the GUI plugin window is active (visible).
@@ -74,9 +74,6 @@ class TasksPrefs extends Prefs {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setDefaults() {
 		windowVisible = true;

@@ -37,7 +37,7 @@ import org.fife.ui.rtextarea.IconGroup;
  * @author Robert Futrell
  * @version 1.0
  */
-class MacroPlugin extends AbstractPlugin
+public class MacroPlugin extends AbstractPlugin
 		implements PropertyChangeListener {
 
 	private static final String VERSION				= "3.0.2";

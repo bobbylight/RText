@@ -38,9 +38,6 @@ public class CapsLockAction extends AppAction<RText> {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		RText rtext = getApplication();

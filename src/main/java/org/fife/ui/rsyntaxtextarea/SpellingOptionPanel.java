@@ -186,9 +186,6 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
 		RText rtext = (RText)owner;
@@ -202,9 +199,6 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 
@@ -258,9 +252,6 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public JComponent getTopJComponent() {
 		return enabledCB;
@@ -298,9 +289,6 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;

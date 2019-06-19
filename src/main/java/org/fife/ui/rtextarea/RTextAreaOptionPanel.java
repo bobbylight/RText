@@ -569,9 +569,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 

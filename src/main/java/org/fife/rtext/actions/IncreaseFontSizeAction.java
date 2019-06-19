@@ -29,9 +29,6 @@ class IncreaseFontSizeAction extends AbstractFontSizeAction {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected Font updateFontSize(Font font) {
 		float size = font.getSize2D();

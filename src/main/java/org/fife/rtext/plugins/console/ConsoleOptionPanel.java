@@ -298,9 +298,6 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
@@ -454,9 +451,6 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {
 

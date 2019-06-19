@@ -73,9 +73,6 @@ public class XmlOptions extends Prefs {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setDefaults() {
 		addXmlDeclaration = true;

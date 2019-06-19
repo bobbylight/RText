@@ -21,7 +21,7 @@ import org.fife.ui.app.Prefs;
  * @author Robert Futrell
  * @version 0.8
  */
-class SourceBrowserPrefs extends Prefs {
+public class SourceBrowserPrefs extends Prefs {
 
 	/**
 	 * Whether the GUI plugin window is active (visible).
@@ -54,9 +54,6 @@ class SourceBrowserPrefs extends Prefs {
 	public boolean useHTMLToolTips;
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setDefaults() {
 		active = true;

@@ -44,7 +44,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
+public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 	private static final String VERSION				= "3.0.2";
 
@@ -68,11 +68,11 @@ class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	 */
 	public ToolPlugin(AbstractPluggableGUIApplication<?> app) {
 
+		RText rtext = (RText)app;
+		this.app = rtext;
 		loadIcons();
 		ToolsPrefs prefs = loadPrefs();
 
-		RText rtext = (RText)app;
-		this.app = rtext;
 		AppAction<RText> a = new NewToolAction(rtext, msg, null);
 		a.setIcon(getPluginIcon());
 		a.setAccelerator(prefs.newToolAccelerator);
@@ -323,9 +323,6 @@ class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 

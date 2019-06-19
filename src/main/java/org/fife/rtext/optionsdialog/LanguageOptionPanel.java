@@ -125,9 +125,6 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
 		RText rtext = (RText)owner;
@@ -135,9 +132,6 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		// They can't input invalid stuff on this options panel.
@@ -221,9 +215,6 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	}
 
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public JComponent getTopJComponent() {
 		return languageList;
@@ -361,9 +352,6 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {
 		setSelectedLanguage(((RText)owner).getLanguage());

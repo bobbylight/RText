@@ -93,9 +93,6 @@ class SystemShellTextArea extends ConsoleTextArea {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected String getSyntaxStyle() {
 		return plugin.getRText().getOS()==OS.WINDOWS ?
@@ -131,9 +128,6 @@ class SystemShellTextArea extends ConsoleTextArea {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected String getUsageNote() {
 		return plugin.getString("Usage.Note.SystemShell");
@@ -382,9 +376,6 @@ class SystemShellTextArea extends ConsoleTextArea {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void init() {
 		pwd = new File(System.getProperty("user.home"));

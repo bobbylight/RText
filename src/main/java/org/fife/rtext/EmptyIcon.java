@@ -38,18 +38,12 @@ public class EmptyIcon implements Icon {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int getIconHeight() {
 		return height;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int getIconWidth() {
 		return width;

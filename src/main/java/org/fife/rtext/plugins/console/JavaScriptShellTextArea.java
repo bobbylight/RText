@@ -58,27 +58,18 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void appendPrompt() {
 		appendImpl("JS> ", STYLE_PROMPT);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected String getSyntaxStyle() {
 		return SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected String getUsageNote() {
 		return plugin.getString("Usage.Note.JsShell");

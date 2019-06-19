@@ -109,9 +109,6 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -127,9 +124,6 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
 		FileSystemTreePlugin p = (FileSystemTreePlugin)getPlugin();
@@ -139,9 +133,6 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		// They can't input invalid stuff on this options panel.

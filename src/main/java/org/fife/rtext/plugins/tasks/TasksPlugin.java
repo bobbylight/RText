@@ -41,7 +41,7 @@ import org.fife.ui.rsyntaxtextarea.parser.Parser;
  * @author Robert Futrell
  * @version 1.0
  */
-class TasksPlugin extends GUIPlugin {
+public class TasksPlugin extends GUIPlugin {
 
 	/**
 	 * The parent application.
@@ -179,9 +179,6 @@ class TasksPlugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
@@ -367,9 +364,6 @@ class TasksPlugin extends GUIPlugin {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean uninstall() {
 		return true;

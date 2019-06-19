@@ -131,9 +131,6 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public JComponent getTopJComponent() {
 		return enabledCB;

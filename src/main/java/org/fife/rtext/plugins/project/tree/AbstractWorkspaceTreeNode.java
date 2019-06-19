@@ -115,7 +115,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	public abstract Icon getIcon();
 
 
-	private ProjectPlugin getPlugin() {
+	public ProjectPlugin getPlugin() {
 		return plugin;
 	}
 

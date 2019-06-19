@@ -177,9 +177,6 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected synchronized boolean closeCurrentDocumentImpl() {
 
@@ -321,9 +318,6 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public RTextScrollPane getRTextScrollPaneAt(int index) {
 		if (index<0 || index>=getNumDocuments())

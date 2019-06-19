@@ -155,9 +155,6 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public RTextPrefs populate(RText rtext) {
 
@@ -519,9 +516,6 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void save() {
 

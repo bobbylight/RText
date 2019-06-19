@@ -162,9 +162,6 @@ public class ToolDockableWindow extends DockableWindow
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void outputWritten(Process p, String output, boolean stdout) {
 		Style style = textArea.getStyle(stdout ?
@@ -173,9 +170,6 @@ public class ToolDockableWindow extends DockableWindow
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void processCompleted(final Process p, final int rc,
 								final Throwable e) {

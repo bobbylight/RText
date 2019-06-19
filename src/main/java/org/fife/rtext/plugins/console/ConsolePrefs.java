@@ -26,7 +26,7 @@ import org.fife.ui.dockablewindows.DockableWindow;
  * @author Robert Futrell
  * @version 1.0
  */
-class ConsolePrefs extends Prefs {
+public class ConsolePrefs extends Prefs {
 
 	/**
 	 * Whether the GUI plugin window is active (visible).
@@ -82,9 +82,6 @@ class ConsolePrefs extends Prefs {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setDefaults() {
 

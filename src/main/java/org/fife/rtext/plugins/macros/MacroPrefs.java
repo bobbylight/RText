@@ -20,7 +20,7 @@ import org.fife.ui.app.Prefs;
  * @author Robert Futrell
  * @version 0.8
  */
-class MacroPrefs extends Prefs {
+public class MacroPrefs extends Prefs {
 
 	/**
 	 * Accelerator for the "New Macro..." action.
@@ -33,9 +33,6 @@ class MacroPrefs extends Prefs {
 	public KeyStroke editMacrosAccelerator;
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setDefaults() {
 		newMacroAccelerator = null;

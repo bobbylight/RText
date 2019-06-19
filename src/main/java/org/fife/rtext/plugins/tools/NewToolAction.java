@@ -39,9 +39,6 @@ class NewToolAction extends AppAction<RText> {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 

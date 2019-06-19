@@ -248,9 +248,6 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
@@ -314,9 +311,6 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 
@@ -336,9 +330,6 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public JComponent getTopJComponent() {
 		return foldingEnabledCB;
@@ -388,9 +379,6 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {
 

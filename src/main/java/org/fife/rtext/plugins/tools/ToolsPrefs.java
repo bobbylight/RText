@@ -23,7 +23,7 @@ import org.fife.ui.dockablewindows.DockableWindow;
  * @author Robert Futrell
  * @version 0.8
  */
-class ToolsPrefs extends Prefs {
+public class ToolsPrefs extends Prefs {
 
 	/**
 	 * Whether the GUI plugin window is active (visible).
@@ -64,9 +64,6 @@ class ToolsPrefs extends Prefs {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setDefaults() {
 		windowVisible = false;
