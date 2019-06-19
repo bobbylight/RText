@@ -52,11 +52,10 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 
 	static final String MSG = "org.fife.rtext.plugins.tools.OptionPanel";
 
-	private Listener listener;
-	private JCheckBox visibleCB;
-	private JComboBox<String> locationCombo;
-	private DefaultTableModel model;
-	private ModifiableTable toolTable;
+	private final JCheckBox visibleCB;
+	private final JComboBox<String> locationCombo;
+	private final DefaultTableModel model;
+	private final ModifiableTable toolTable;
 
 	private static final String PROPERTY		= "property";
 	static final String TITLE_KEY				= "Title";
@@ -70,7 +69,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	ToolOptionPanel(ToolPlugin plugin) {
 
 		super(plugin);
-		listener = new Listener();
+		Listener listener = new Listener();
 
 		ResourceBundle msg = ResourceBundle.getBundle(MSG);
 		setName(msg.getString(TITLE_KEY));
@@ -184,7 +183,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	 * @return The selected placement.
 	 * @see #setToolOutputPanelPlacement(int)
 	 */
-	public int getToolOutputPanelPlacement() {
+	private int getToolOutputPanelPlacement() {
 		return locationCombo.getSelectedIndex();
 	}
 
@@ -282,7 +281,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 	 */
 	private static class ToolWrapper {
 
-		private Tool tool;
+		private final Tool tool;
 
 		ToolWrapper(Tool tool) {
 			this.tool = tool;
@@ -304,7 +303,7 @@ class ToolOptionPanel extends PluginOptionsDialogPanel
 		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {
 			NewToolDialog toolDialog = new NewToolDialog(getOptionsDialog());
-			Tool old = null;
+			Tool old;
 			if (oldData!=null) {
 				old = ((ToolWrapper)oldData[0]).tool;
 				toolDialog.setTool(old);

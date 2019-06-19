@@ -39,7 +39,6 @@ interface PrettyPrinter {
 	 *
 	 * @param text The text to pretty print.
 	 * @return The result of pretty printing the text.
-	 * @throws Exception If something goes wrong.
 	 */
 	PrettyPrintResult prettyPrint(String text);
 

@@ -70,7 +70,7 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  * @author Robert Futrell
  * @version 1.0
  */
-public class NewToolDialog extends EscapableDialog implements ActionListener {
+class NewToolDialog extends EscapableDialog implements ActionListener {
 
 	private JTabbedPane tabPane;
 	private RTextFileChooser chooser;
@@ -513,8 +513,8 @@ ac.install(dirField);
 	private class ArgDialog extends EscapableDialog implements ActionListener,
 									DocumentListener {
 
-		private JTextField argField;
-		private JButton okButton;
+		private final JTextField argField;
+		private final JButton okButton;
 		private String arg;
 
 		ArgDialog(JDialog parent) {
@@ -609,7 +609,7 @@ ac.install(dirField);
 			okButton.setEnabled(e.getDocument().getLength()>0);
 		}
 
-		public void setArg(String arg) {
+		void setArg(String arg) {
 			argField.setText(arg);
 			argField.selectAll();
 			okButton.setEnabled(arg!=null && arg.length()>0);
@@ -643,9 +643,9 @@ ac.install(dirField);
 	private class EnvVarDialog extends EscapableDialog
 								implements DocumentListener, ActionListener {
 
-		private JTextField nameField;
-		private JTextField valueField;
-		private JButton okButton;
+		private final JTextField nameField;
+		private final JTextField valueField;
+		private final JButton okButton;
 		private boolean escaped;
 
 		EnvVarDialog(JDialog parent) {
@@ -741,7 +741,7 @@ ac.install(dirField);
 		public void changedUpdate(DocumentEvent e) {
 		}
 
-		public String[] getReturnValue() {
+		String[] getReturnValue() {
 			return escaped ? null :
 				new String[] { nameField.getText(), valueField.getText() };
 		}
@@ -756,7 +756,7 @@ ac.install(dirField);
 			okButton.setEnabled(e.getDocument().getLength()>0);
 		}
 
-		public void setData(String name, String value) {
+		void setData(String name, String value) {
 			nameField.setText(name);
 			valueField.setText(value);
 			okButton.setEnabled(name!=null && name.length()>0);
@@ -789,8 +789,8 @@ ac.install(dirField);
 	 */
 	private static class VariableAction extends AbstractAction {
 
-		private JTextField field;
-		private String replacement;
+		private final JTextField field;
+		private final String replacement;
 
 		VariableAction(String nameKey, String replacement,
 								JTextField field) {
@@ -824,7 +824,7 @@ ac.install(dirField);
 			addMenuItem(new VariableAction("Variable.FileFullPath", "${file_full_path}", field));
 		}
 
-		public void addMenuItem(VariableAction a) {
+		void addMenuItem(VariableAction a) {
 			addMenuItem(new JMenuItem(a));
 		}
 

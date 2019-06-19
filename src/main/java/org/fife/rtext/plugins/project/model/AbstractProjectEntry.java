@@ -18,10 +18,10 @@ package org.fife.rtext.plugins.project.model;
  */
 abstract class AbstractProjectEntry implements ProjectEntry {
 
-	private ProjectEntryParent parent;
+	private final ProjectEntryParent parent;
 
 
-	protected AbstractProjectEntry(ProjectEntryParent parent) {
+	AbstractProjectEntry(ProjectEntryParent parent) {
 		this.parent = parent;
 	}
 

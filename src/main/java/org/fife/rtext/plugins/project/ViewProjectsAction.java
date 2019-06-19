@@ -26,7 +26,7 @@ class ViewProjectsAction extends AppAction<RText> {
 	/**
 	 * The parent plugin.
 	 */
-	private ProjectPlugin plugin;
+	private final ProjectPlugin plugin;
 
 
 	/**

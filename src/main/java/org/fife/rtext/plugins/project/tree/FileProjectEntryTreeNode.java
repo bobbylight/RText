@@ -38,7 +38,7 @@ import org.fife.ui.rtextfilechooser.Utilities;
  */
 public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 
-	private Icon icon;
+	private final Icon icon;
 
 
 	public FileProjectEntryTreeNode(ProjectPlugin plugin, ProjectEntry entry) {
@@ -47,7 +47,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
-	protected NameChecker createNameChecker() {
+	NameChecker createNameChecker() {
 		File file = getFile();
 		return new FileTreeNode.FileNameChecker(file.getParentFile(),
 				file.isDirectory());
@@ -170,7 +170,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 	}
 
 
-	protected void handleRenameImpl(String newName) {
+	void handleRenameImpl(String newName) {
 		File old = entry.getFile();
 		File newFile = new File(old.getParentFile(), newName);
 		boolean success = old.renameTo(newFile);

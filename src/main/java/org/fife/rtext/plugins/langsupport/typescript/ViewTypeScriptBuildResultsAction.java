@@ -22,12 +22,12 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ViewTypeScriptBuildResultsAction extends AppAction<RText> {
+class ViewTypeScriptBuildResultsAction extends AppAction<RText> {
 
 	/**
 	 * The language support plugin.
 	 */
-	private Plugin plugin;
+	private final Plugin plugin;
 
 
 	/**

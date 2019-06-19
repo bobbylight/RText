@@ -21,7 +21,7 @@ import java.io.File;
  */
 public class FileProjectEntry extends AbstractProjectEntry {
 
-	private File file;
+	private final File file;
 
 
 	public FileProjectEntry(ProjectEntryParent parent, String file) {

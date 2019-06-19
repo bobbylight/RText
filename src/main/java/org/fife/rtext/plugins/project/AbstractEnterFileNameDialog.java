@@ -36,11 +36,10 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 	private JPanel topPanel;
 	private JLabel nameLabel;
 	private JButton okButton;
-	private JButton cancelButton;
 	private JTextField nameField;
 	private DecorativeIconPanel renameDIP;
-	private NameChecker nameChecker;
-	protected boolean isForFile;
+	private final NameChecker nameChecker;
+	final boolean isForFile;
 
 	private static Icon ERROR_ICON;
 
@@ -53,8 +52,8 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 	 *        a regular file.
 	 * @param checker The validator for the entered file name.
 	 */
-	protected AbstractEnterFileNameDialog(RText owner,
-			boolean directory, NameChecker checker) {
+	AbstractEnterFileNameDialog(RText owner,
+								boolean directory, NameChecker checker) {
 		super(owner);
 		this.nameChecker = checker;
 		this.isForFile = !directory;
@@ -103,7 +102,7 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 		okButton = UIUtil.newButton(bundle, "OKButtonLabel", "OKButtonMnemonic");
 		okButton.setActionCommand("OK");
 		okButton.addActionListener(listener);
-		cancelButton = UIUtil.newButton(bundle, "Cancel", "CancelMnemonic");
+		JButton cancelButton = UIUtil.newButton(bundle, "Cancel", "CancelMnemonic");
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(listener);
 
@@ -136,7 +135,7 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 	 *
 	 * @return The extra content.
 	 */
-	protected Container createExtraContent() {
+	Container createExtraContent() {
 		return null;
 	}
 
@@ -171,7 +170,7 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 	 * @param key The (part of the) key to display.
 	 * @return The localized error message.
 	 */
-	public static String getLocalizedReason(String key) {
+	private static String getLocalizedReason(String key) {
 		return Messages.getString("FileName.InvalidName." + key);
 	}
 

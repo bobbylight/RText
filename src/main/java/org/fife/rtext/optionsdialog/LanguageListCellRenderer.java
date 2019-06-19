@@ -35,7 +35,7 @@ class LanguageListCellRenderer extends DefaultListCellRenderer {
 	/**
 	 * For certain LAFs, we delegate to their custom renderer for simplicity.
 	 */
-	private JLabel possibleDelegate;
+	private final JLabel possibleDelegate;
 
 
 	/**

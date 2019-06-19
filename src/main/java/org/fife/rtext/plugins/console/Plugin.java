@@ -44,14 +44,14 @@ public class Plugin extends GUIPlugin {
 	private static final String VERSION					= "3.0.2";
 	private static final String DOCKABLE_WINDOW_CONSOLE	= "consoleDockableWindow";
 
-	private RText app;
+	private final RText app;
 	private boolean highlightInput;
 	private ConsoleWindow window;
 	private Icon darkThemeIcon;
 	private Icon lightThemeIcon;
 
 	private static final String MSG = "org.fife.rtext.plugins.console.Plugin";
-	protected static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
 	private static final String VIEW_CONSOLE_ACTION	= "viewConsoleAction";
 

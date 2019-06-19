@@ -365,7 +365,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 			text = "cd " + pwd.getAbsolutePath() + " && " + text;
 
 			cmdList.add(text);
-			final String[] cmd = cmdList.toArray(new String[cmdList.size()]);
+			final String[] cmd = cmdList.toArray(new String[0]);
 
 			setEditable(false);
 			activeProcessThread = new Thread(() -> {
@@ -424,7 +424,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 				file = new File(pwd, possibleFileName);
 			}
 
-			File parent = null;
+			File parent;
 			// If they've just typed a file or folder name
 			if (fileNamePart.length()==0) {
 				parent = file;
@@ -538,7 +538,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 			// Required because of other Swing calls we make inside
 			SwingUtilities.invokeLater(() -> {
 				if (e!=null) {
-					String text = null;
+					String text;
 					if (e instanceof InterruptedException) {
 						text = plugin.getString("ProcessForciblyTerminated");
 					}

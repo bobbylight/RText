@@ -216,7 +216,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	 */
 	private class OutputWriter extends Writer {
 
-		private String style;
+		private final String style;
 
 		OutputWriter(String style) {
 			this.style = style;

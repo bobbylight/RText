@@ -48,7 +48,7 @@ class MoveFocusUpAction extends AppAction<RText> {
 
 		RText rtext = getApplication();
 		int focusedGroup = rtext.getFocusedDockableWindowGroup();
-		int toFocus = -1;
+		int toFocus;
 
 		switch (focusedGroup) {
 			case DockableWindowConstants.LEFT:

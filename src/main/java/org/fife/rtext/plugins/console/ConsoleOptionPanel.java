@@ -43,13 +43,13 @@ import org.fife.ui.app.PluginOptionsDialogPanel;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ConsoleOptionPanel extends PluginOptionsDialogPanel
+class ConsoleOptionPanel extends PluginOptionsDialogPanel
 			implements ActionListener, ItemListener, PropertyChangeListener {
 
 	/**
 	 * ID used to identify this option panel.
 	 */
-	public static final String OPTION_PANEL_ID = "ConsoleOptionPanel";
+	private static final String OPTION_PANEL_ID = "ConsoleOptionPanel";
 
 	private JCheckBox visibleCB;
 	private JLabel locationLabel;
@@ -63,7 +63,7 @@ public class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	private RColorSwatchesButton stderrButton;
 	private RColorSwatchesButton promptButton;
 	private RColorSwatchesButton exceptionsButton;
-	private JButton defaultsButton;
+	private final JButton defaultsButton;
 
 	private static final String PROPERTY = "Property";
 
@@ -390,7 +390,7 @@ public class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	 * Overridden to set all colors to values appropriate for the current Look
 	 * and Feel.
 	 *
-	 * @param event the broadcasted event.
+	 * @param event The broadcasted event.
 	 */
 	@Override
 	public void optionsEvent(String event) {

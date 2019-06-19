@@ -42,14 +42,14 @@ import org.fife.ui.dockablewindows.DockableWindow;
 class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 
 //	private Plugin plugin;
-	private CardLayout cards;
-	private JPanel mainPanel;
-	private SystemShellTextArea shellTextArea;
-	private JavaScriptShellTextArea jsTextArea;
+	private final CardLayout cards;
+	private final JPanel mainPanel;
+	private final SystemShellTextArea shellTextArea;
+	private final JavaScriptShellTextArea jsTextArea;
 
-	private JToolBar toolbar;
-	private JComboBox<String> shellCombo;
-	private StopAction stopAction;
+	private final JToolBar toolbar;
+	private final JComboBox<String> shellCombo;
+	private final StopAction stopAction;
 
 
 	public ConsoleWindow(RText app, Plugin plugin) {

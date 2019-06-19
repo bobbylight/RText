@@ -60,14 +60,14 @@ public class ToolDockableWindow extends DockableWindow
 	/**
 	 * Where the output of the tool goes.
 	 */
-	private OutputTextPane textArea;
+	private final OutputTextPane textArea;
 
-	private JToolBar toolbar;
+	private final JToolBar toolbar;
 
 	/**
 	 * Used by toolbar button to stop the currently running tool.
 	 */
-	private StopAction stopAction;
+	private final StopAction stopAction;
 
 
 	/**

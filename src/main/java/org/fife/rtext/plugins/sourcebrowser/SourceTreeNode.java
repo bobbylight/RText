@@ -30,12 +30,12 @@ import org.fife.ui.autocomplete.Util;
  * @author Robert Futrell
  * @version 1.0
  */
-public class SourceTreeNode extends DefaultMutableTreeNode {
+class SourceTreeNode extends DefaultMutableTreeNode {
 
 	private boolean sortable;
 	private boolean sorted;
 	private String prefix;
-	private Vector<TreeNode> visibleChildren;
+	private final Vector<TreeNode> visibleChildren;
 	private int sortPriority;
 
 
@@ -73,7 +73,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
-	public int compareTo(Object obj) {
+	private int compareTo(Object obj) {
 		int res = -1;
 		if (obj instanceof SourceTreeNode) {
 			SourceTreeNode stn2 = (SourceTreeNode)obj;
@@ -95,7 +95,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	 * @return A comparator.
 	 */
 	// We can't be more specific with our type as Swing's not genericized
-	public Comparator<Object> createComparator() {
+	private Comparator<Object> createComparator() {
 		return (o1, o2) -> {
 			SourceTreeNode stn1 = (SourceTreeNode)o1;
 			SourceTreeNode stn2 = (SourceTreeNode)o2;
@@ -110,7 +110,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	 * @param prefix The prefix.  If this is <code>null</code>, all possible
 	 *        children are shown.  This should be all lower case.
 	 */
-	protected void filter(String prefix) {
+	private void filter(String prefix) {
 		this.prefix = prefix;
 		refreshVisibleChildren();
 		for (int i=0; i<super.getChildCount(); i++) {
@@ -182,7 +182,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	 * @return The relative priority.
 	 * @see #setSortPriority(int)
 	 */
-	public int getSortPriority() {
+	private int getSortPriority() {
 		return sortPriority;
 	}
 
@@ -203,12 +203,12 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @return Whether this node is sorted.
 	 */
-	public boolean isSorted() {
+	private boolean isSorted() {
 		return sorted;
 	}
 
 
-	protected void refresh() {
+	void refresh() {
 		refreshVisibleChildren();
 		for (int i=0; i<getChildCount(); i++) {
 			TreeNode child = getChildAt(i);

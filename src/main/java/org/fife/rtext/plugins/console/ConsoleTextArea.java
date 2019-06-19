@@ -86,16 +86,15 @@ abstract class ConsoleTextArea extends JTextPane {
 	public static final String PROPERTY_PROCESS_RUNNING	= "ProcessRunning";
 
 	public static final String STYLE_PROMPT			= "prompt";
-	public static final String STYLE_STDIN			= "stdin";
+	static final String STYLE_STDIN			= "stdin";
 	public static final String STYLE_STDOUT			= "stdout";
 	public static final String STYLE_STDERR			= "stderr";
 	public static final String STYLE_EXCEPTION		= "exception";
 
-	protected Plugin plugin;
+	final Plugin plugin;
 	private JPopupMenu popup;
-	private Listener listener;
 	private int inputMinOffs;
-	private LinkedList<String> cmdHistory;
+	private final LinkedList<String> cmdHistory;
 	private int cmdHistoryIndex;
 
 	/**
@@ -121,7 +120,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		this.plugin = plugin;
 		installDefaultStyles(false);
 		fixKeyboardShortcuts();
-		listener = new Listener();
+		Listener listener = new Listener();
 		addMouseListener(listener);
 		getDocument().addDocumentListener(listener);
 		init();
@@ -135,7 +134,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 * @param text The text to append.
 	 * @param style The style to use.
 	 */
-	public void append(String text, String style) {
+	void append(String text, String style) {
 		if (text==null) {
 			return;
 		}
@@ -152,7 +151,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 * @param text The text to append.
 	 * @param style The style to apply to the appended text.
 	 */
-	protected void appendImpl(final String text, final String style) {
+	void appendImpl(final String text, final String style) {
 		appendImpl(text, style, false);
 	}
 
@@ -166,8 +165,8 @@ abstract class ConsoleTextArea extends JTextPane {
 	 *        determine whether the user can use backspace to remove this text
 	 *        or not.
 	 */
-	protected void appendImpl(final String text, final String style,
-			final boolean treatAsUserInput) {
+	void appendImpl(final String text, final String style,
+					final boolean treatAsUserInput) {
 
 		// Ensure the meat of this method is done on the EDT, to prevent
 		// concurrency errors.
@@ -211,7 +210,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 * Appends the prompt to the console, and resets the starting location
 	 * at which the user can input text.  This method is thread-safe.
 	 */
-	public abstract void appendPrompt();
+	protected abstract void appendPrompt();
 
 
 	/**
@@ -231,7 +230,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 * Fixes the keyboard shortcuts for this text component so the user cannot
 	 * accidentally delete any stdout or stderr, only stdin.
 	 */
-	protected void fixKeyboardShortcuts() {
+	void fixKeyboardShortcuts() {
 
 		InputMap im = getInputMap();
 		ActionMap am = getActionMap();
@@ -295,7 +294,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 *
 	 * @return The currently entered text.
 	 */
-	protected String getCurrentInput() {
+	String getCurrentInput() {
 		int startOffs = inputMinOffs;
 		Document doc = getDocument();
 		int len = doc.getLength() - startOffs;
@@ -337,7 +336,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 * Allows constructors to do stuff before the initial {@link #clear()}
 	 * call is made.  The default implementation does nothing.
 	 */
-	protected void init() {
+	void init() {
 	}
 
 
@@ -619,7 +618,7 @@ abstract class ConsoleTextArea extends JTextPane {
 
 	private class CommandHistoryAction extends AbstractAction {
 
-		private int amt;
+		private final int amt;
 
 		CommandHistoryAction(int amt) {
 			this.amt = amt;
@@ -671,7 +670,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		/**
 		 * DefaultEditorKit's DeletePrevCharAction.
 		 */
-		private Action delegate;
+		private final Action delegate;
 
 		BackspaceAction(Action delegate) {
 			super("backspace");
@@ -709,7 +708,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		/**
 		 * DefaultEditorKit's DeleteNextCharAction.
 		 */
-		private Action delegate;
+		private final Action delegate;
 
 		DeleteAction(Action delegate) {
 			super("delete");
@@ -773,8 +772,8 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	private class HomeAction extends AbstractAction {
 
-		private Action delegate;
-		private boolean select;
+		private final Action delegate;
+		private final boolean select;
 
 		HomeAction(Action delegate, boolean select) {
 			this.delegate = delegate;
@@ -858,7 +857,7 @@ abstract class ConsoleTextArea extends JTextPane {
 		/**
 		 * DefaultEditorKit's SelectAllAction.
 		 */
-		private Action delegate;
+		private final Action delegate;
 
 		SelectAllAction(Action delegate) {
 			super("SelectAll");

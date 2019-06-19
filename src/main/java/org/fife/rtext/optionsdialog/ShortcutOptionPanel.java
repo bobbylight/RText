@@ -17,7 +17,6 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.table.*;
@@ -38,9 +37,9 @@ import org.fife.ui.modifiabletable.*;
 class ShortcutOptionPanel extends OptionsDialogPanel
 					implements ActionListener, ModifiableTableListener {
 
-	private ModifiableTable shortcutTable;
-	private DefaultTableModel model;
-	private RText rtext;
+	private final ModifiableTable shortcutTable;
+	private final DefaultTableModel model;
+	private final RText rtext;
 	private Action[] masterActionList;
 
 	private static final String SHORTCUT_PROPERTY	= "SOP.shortcut";
@@ -160,7 +159,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	 *
 	 * @return The actions and their shortcuts.
 	 */
-	public Action[] getActions() {
+	private Action[] getActions() {
 		updateMasterActionList();
 		return masterActionList;
 	}
@@ -191,7 +190,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	/**
 	 * Sets the actions to display as configurable.
 	 *
-	 * @param actions The actions of the application.
+	 * @param app The application whose actions should be displayed.
 	 */
 	private void setActions(AbstractGUIApplication<?> app) {
 

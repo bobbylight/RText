@@ -136,7 +136,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	 */
 	private class NewProjectAction extends BaseAction {
 
-		public NewProjectAction() {
+		NewProjectAction() {
 			super("Action.NewProject");
 		}
 

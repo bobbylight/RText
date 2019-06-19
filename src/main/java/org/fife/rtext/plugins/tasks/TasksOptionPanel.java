@@ -57,11 +57,11 @@ import org.fife.ui.modifiabletable.ModifiableTableListener;
 class TasksOptionPanel extends PluginOptionsDialogPanel
 		implements ActionListener, ItemListener, ModifiableTableListener {
 
-	private TasksPlugin plugin;
-	private JCheckBox visibleCB;
-	private JComboBox<String> locationCombo;
-	private DefaultTableModel model;
-	private ModifiableTable table;
+	private final TasksPlugin plugin;
+	private final JCheckBox visibleCB;
+	private final JComboBox<String> locationCombo;
+	private final DefaultTableModel model;
+	private final ModifiableTable table;
 
 	private static final String PROPERTY			= "Property";
 
@@ -246,8 +246,8 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * Sets the displayed task identifiers.
 	 *
-	 * @param ids The new task identifiers, separated by the '|' character.
-	 *        This cannot be <code>null</code>.
+	 * @param identifiers The new task identifiers, separated by the '|'
+     *        character.  This cannot be <code>null</code>.
 	 */
 	private void setDisplayedTaskIds(String identifiers) {
 		model.setRowCount(0);
@@ -299,11 +299,11 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 	private class IdentifierDialog extends EscapableDialog
 						implements ActionListener, DocumentListener {
 
-		private JTextField idField;
-		private JButton okButton;
+		private final JTextField idField;
+		private final JButton okButton;
 		private boolean accepted;
 
-		public IdentifierDialog(JDialog parent) {
+		IdentifierDialog(JDialog parent) {
 
 			super(parent);
 			ComponentOrientation o = parent.getComponentOrientation();
@@ -374,7 +374,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 		public void changedUpdate(DocumentEvent e) {
 		}
 
-		public String getIdentifier() {
+		String getIdentifier() {
 			return accepted ? idField.getText() : null;
 		}
 
@@ -393,7 +393,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 			handleDocumentEvent(e);
 		}
 
-		public void setIdentifier(String identifier) {
+		void setIdentifier(String identifier) {
 			idField.setText(identifier);
 			idField.selectAll();
 			handleDocumentEvent(null); // Force proper OK button state

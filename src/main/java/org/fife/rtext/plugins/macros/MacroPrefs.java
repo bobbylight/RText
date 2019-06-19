@@ -20,7 +20,7 @@ import org.fife.ui.app.Prefs;
  * @author Robert Futrell
  * @version 0.8
  */
-public class MacroPrefs extends Prefs {
+class MacroPrefs extends Prefs {
 
 	/**
 	 * Accelerator for the "New Macro..." action.

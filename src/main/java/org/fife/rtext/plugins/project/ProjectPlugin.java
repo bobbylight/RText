@@ -55,9 +55,9 @@ public class ProjectPlugin extends GUIPlugin {
 	 * opened by this property.  Should be the full path to the workspace XML
 	 * file.
 	 */
-	public static final String PROPERTY_INITIAL_WORKSPACE = "workspace.override";
+	private static final String PROPERTY_INITIAL_WORKSPACE = "workspace.override";
 
-	private RText rtext;
+	private final RText rtext;
 	private Icon darkThemeIcon;
 	private Icon lightThemeIcon;
 	private Workspace workspace;
@@ -215,8 +215,8 @@ public class ProjectPlugin extends GUIPlugin {
 	 * @param index The index at which to insert the child node.
 	 * @see #insertTreeNodeInto(MutableTreeNode, MutableTreeNode)
 	 */
-	public void insertTreeNodeInto(final MutableTreeNode child,
-			MutableTreeNode parent, int index) {
+	private void insertTreeNodeInto(final MutableTreeNode child,
+									MutableTreeNode parent, int index) {
 		final DefaultTreeModel model = (DefaultTreeModel)getTree().getModel();
 		model.insertNodeInto(child, parent, index);
 		final TreePath path = new TreePath(model.getPathToRoot(parent));

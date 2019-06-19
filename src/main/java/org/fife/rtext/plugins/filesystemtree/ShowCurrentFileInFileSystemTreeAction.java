@@ -17,9 +17,9 @@ import java.util.ResourceBundle;
 /**
  * Selects the current file in the file system tree.
  */
-public class ShowCurrentFileInFileSystemTreeAction extends AppAction<RText> {
+class ShowCurrentFileInFileSystemTreeAction extends AppAction<RText> {
 
-	private FileSystemTreePlugin plugin;
+	private final FileSystemTreePlugin plugin;
 
 	public ShowCurrentFileInFileSystemTreeAction(RText app,
 				 	FileSystemTreePlugin plugin, ResourceBundle msg) {

@@ -58,16 +58,16 @@ public class SourceBrowserPlugin extends GUIPlugin
 	public static final String CUSTOM_HANDLER_PREFIX = "sbp.customHandler.";
 
 
-	private RText owner;
-	private String name;
+	private final RText owner;
+	private final String name;
 	private JTree sourceTree;
 	private RScrollPane scrollPane;
-	private ResourceBundle msg;
+	private final ResourceBundle msg;
 	private Icon darkThemeIcon;
 	private Icon lightThemeIcon;
 	private boolean useHTMLToolTips;
-	private SourceBrowserThread sourceBrowserThread;
-	private SourceTreeNode workingRoot;
+	private final SourceBrowserThread sourceBrowserThread;
+	private final SourceTreeNode workingRoot;
 	private JToolBar dockableWindowTB;
 
 	private String ctagsExecutableLocation;
@@ -77,7 +77,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private SortAction sortAction;
 	private JToggleButton sortButton;
 
-	private ViewAction viewAction;
+	private final ViewAction viewAction;
 	private SourceBrowserOptionPanel optionPanel;
 
 	static final String BUNDLE_NAME		=
@@ -296,7 +296,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * Ensures that a source tree is sorted or not sorted, to match the
 	 * sorting button's current state.
 	 */
-	protected void ensureSourceTreeSortedProperly() {
+	void ensureSourceTreeSortedProperly() {
 
 		Class<?> clazz = sourceTree.getClass();
 		Method sortMethod;
@@ -381,7 +381,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * @param line The line.
 	 * @return An HTML representation of the line.
 	 */
-	protected String getHTMLForLine(int line) {
+	String getHTMLForLine(int line) {
 		RSyntaxTextArea textArea = owner.getMainView().getCurrentTextArea();
 		Token t = textArea.getTokenListForLine(line);
 		StringBuilder text = new StringBuilder("<html>");
@@ -633,7 +633,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	/**
 	 * Refreshes the tag list for the current document.
 	 */
-	public void refresh() {
+	private void refresh() {
 		// Tricks this browser into refreshing its tree using the new
 		// ctags location.
 		currentTextAreaPropertyChanged(new CurrentTextAreaEvent(

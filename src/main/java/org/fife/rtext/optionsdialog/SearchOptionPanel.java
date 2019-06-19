@@ -52,16 +52,16 @@ import org.fife.util.TranslucencyUtil;
 class SearchOptionPanel extends OptionsDialogPanel
 		implements ActionListener, ChangeListener {
 
-	private JRadioButton dialogRB;
-	private JRadioButton toolbarRB;
-	private JCheckBox translucentSearchDialogsCB;
-	private JLabel ruleLabel;
-	private LabelValueComboBox<String, String> ruleCombo;
-	private JLabel opacityLabel;
-	private JSlider slider;
-	private JLabel opacityDisplay;
+	private final JRadioButton dialogRB;
+	private final JRadioButton toolbarRB;
+	private final JCheckBox translucentSearchDialogsCB;
+	private final JLabel ruleLabel;
+	private final LabelValueComboBox<String, String> ruleCombo;
+	private final JLabel opacityLabel;
+	private final JSlider slider;
+	private final JLabel opacityDisplay;
 
-	private DecimalFormat format;
+	private final DecimalFormat format;
 
 	private static final String PROPERTY	= "property";
 
@@ -72,7 +72,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 	 * @param app The owner of the options dialog in which this panel appears.
 	 * @param msg The resource bundle to use.
 	 */
-	public SearchOptionPanel(GUIApplication app, ResourceBundle msg) {
+	SearchOptionPanel(GUIApplication app, ResourceBundle msg) {
 
 		super(msg.getString("OptSearchOptionsName"));
 		format = new DecimalFormat("0%");

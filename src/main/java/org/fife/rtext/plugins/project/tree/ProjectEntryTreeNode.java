@@ -32,10 +32,10 @@ import org.fife.rtext.plugins.project.model.ProjectEntryParent;
  */
 abstract class ProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 
-	protected ProjectEntry entry;
+	final ProjectEntry entry;
 
 
-	protected ProjectEntryTreeNode(ProjectPlugin plugin, ProjectEntry entry) {
+	ProjectEntryTreeNode(ProjectPlugin plugin, ProjectEntry entry) {
 		super(plugin);
 		this.entry = entry;
 	}
@@ -82,9 +82,9 @@ abstract class ProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 	/**
 	 * Removes this entry from its parent.
 	 */
-	protected class RemoveAction extends BaseAction {
+	class RemoveAction extends BaseAction {
 
-		public RemoveAction() {
+		RemoveAction() {
 			super("Action.RemoveProjectEntry");
 			KeyStroke delete = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
 			putValue(ACCELERATOR_KEY, delete);

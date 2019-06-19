@@ -29,7 +29,7 @@ import org.fife.ui.app.AppAction;
  */
 class TextAreaOrientationAction extends AppAction<RText> {
 
-	private ComponentOrientation orientation;
+	private final ComponentOrientation orientation;
 
 
 	/**

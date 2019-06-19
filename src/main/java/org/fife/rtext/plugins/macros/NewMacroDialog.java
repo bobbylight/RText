@@ -52,7 +52,7 @@ import org.fife.ui.UIUtil;
  * @author Robert Futrell
  * @version 1.0
  */
-public class NewMacroDialog extends EscapableDialog {
+class NewMacroDialog extends EscapableDialog {
 
 	private RText rtext;
 	private MacroPlugin plugin;
@@ -88,7 +88,7 @@ public class NewMacroDialog extends EscapableDialog {
 	}
 
 
-	public void createGUI(MacroPlugin plugin) {
+	private void createGUI(MacroPlugin plugin) {
 
 		this.plugin = plugin;
 		rtext = plugin.getRText();
@@ -459,7 +459,7 @@ public class NewMacroDialog extends EscapableDialog {
 			handleDocumentEvent(e);
 		}
 
-		public void handleDocumentEvent(DocumentEvent e) {
+		void handleDocumentEvent(DocumentEvent e) {
 
 			if (nameField.getDocument().getLength()==0) {
 				setBadMacroName("empty");

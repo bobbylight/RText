@@ -43,9 +43,9 @@ import org.fife.ui.dockablewindows.DockableWindowConstants;
 class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 			implements ActionListener, ItemListener, DockableWindowConstants {
 
-	private JCheckBox visibleCB;
-	private JLabel locationLabel;
-	private JComboBox<String> locationCombo;
+	private final JCheckBox visibleCB;
+	private final JLabel locationLabel;
+	private final JComboBox<String> locationCombo;
 
 	private static final String PROPERTY = "Property";
 
@@ -153,9 +153,9 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	 * Returns the selected placement for the file system tree.
 	 *
 	 * @return The selected placement.
-	 * @see #setFileSystemPlacement
+	 * @see #setFileSystemTreePlacement(int)
 	 */
-	public int getFileSystemTreePlacement() {
+	private int getFileSystemTreePlacement() {
 		return locationCombo.getSelectedIndex();
 	}
 

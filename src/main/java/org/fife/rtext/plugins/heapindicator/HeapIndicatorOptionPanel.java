@@ -49,13 +49,13 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 					implements ActionListener, PropertyChangeListener,
 							ChangeListener {
 
-	private JCheckBox visibilityCheckBox;
-	private JSpinner refreshRateSpinner;
-	private JCheckBox systemColorsCheckBox;
-	private JLabel foregroundLabel;
-	private RColorSwatchesButton foregroundButton;
-	private JLabel borderLabel;
-	private RColorSwatchesButton borderButton;
+	private final JCheckBox visibilityCheckBox;
+	private final JSpinner refreshRateSpinner;
+	private final JCheckBox systemColorsCheckBox;
+	private final JLabel foregroundLabel;
+	private final RColorSwatchesButton foregroundButton;
+	private final JLabel borderLabel;
+	private final RColorSwatchesButton borderButton;
 
 	private static final String COLOR_PROPERTY		= "ColorProperty";
 	private static final String REFRESH_RATE_PROPERTY	= "RefreshRateProperty";
@@ -284,7 +284,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	 *
 	 * @param enabled Whether or not the widgets should be enabled.
 	 */
-	protected void setColorOptionsEnabled(boolean enabled) {
+	private void setColorOptionsEnabled(boolean enabled) {
 		if (borderLabel!=null) {
 			borderLabel.setEnabled(enabled);
 			borderButton.setEnabled(enabled);

@@ -80,7 +80,7 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 	 */
 	class NotYetPopulatedChild extends AbstractWorkspaceTreeNode {
 
-		public NotYetPopulatedChild(ProjectPlugin plugin) {
+		NotYetPopulatedChild(ProjectPlugin plugin) {
 			super(plugin);
 		}
 
@@ -124,8 +124,8 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 	 */
 	class NewFileOrFolderAction extends BaseAction {
 
-		private PhysicalLocationTreeNode node;
-		private boolean isFile;
+		private final PhysicalLocationTreeNode node;
+		private final boolean isFile;
 
 		NewFileOrFolderAction(PhysicalLocationTreeNode node,
 				boolean isFile) {

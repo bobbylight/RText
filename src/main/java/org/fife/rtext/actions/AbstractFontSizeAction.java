@@ -33,7 +33,7 @@ abstract class AbstractFontSizeAction extends AppAction<RText> {
 	/**
 	 * The RSTA version of this action.
 	 */
-	private RecordableTextAction delegate;
+	private final RecordableTextAction delegate;
 
 
 	/**

@@ -321,8 +321,8 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	 */
 	public static class FileNameChecker implements NameChecker {
 
-		private File parentDir;
-		private boolean folder;
+		private final File parentDir;
+		private final boolean folder;
 
 		public FileNameChecker(File parentDir, boolean folder) {
 			this.parentDir = parentDir;

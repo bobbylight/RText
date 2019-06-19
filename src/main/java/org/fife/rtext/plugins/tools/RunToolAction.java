@@ -29,8 +29,8 @@ import org.fife.ui.app.AppAction;
  */
 class RunToolAction extends AppAction<RText> {
 
-	private Tool tool;
-	private ToolDockableWindow window;
+	private final Tool tool;
+	private final ToolDockableWindow window;
 
 
 	/**

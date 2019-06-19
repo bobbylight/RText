@@ -28,9 +28,9 @@ import org.fife.rtext.plugins.project.model.WorkspaceVisitor;
  */
 class WorkspaceTreeRootCreator implements WorkspaceVisitor {
 
-	private ProjectPlugin plugin;
+	private final ProjectPlugin plugin;
 	private WorkspaceRootTreeNode root;
-	private Stack<AbstractWorkspaceTreeNode> entryParentNodeStack;
+	private final Stack<AbstractWorkspaceTreeNode> entryParentNodeStack;
 
 
 	public WorkspaceTreeRootCreator(ProjectPlugin plugin) {

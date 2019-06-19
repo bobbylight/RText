@@ -48,10 +48,10 @@ import org.fife.rtext.plugins.project.ProjectPlugin;
  */
 public class Workspace implements ModelEntity {
 
-	private ProjectPlugin plugin;
+	private final ProjectPlugin plugin;
 	private File file;
 	private String name;
-	private List<Project> projects;
+	private final List<Project> projects;
 
 
 	public Workspace(ProjectPlugin plugin, File file) {
@@ -188,8 +188,8 @@ public class Workspace implements ModelEntity {
 			throws IOException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setValidating(true);
-		DocumentBuilder db = null;
-		Document doc = null;
+		DocumentBuilder db;
+		Document doc;
 		Handler handler = new Handler();
 		try {
 			db = dbf.newDocumentBuilder();

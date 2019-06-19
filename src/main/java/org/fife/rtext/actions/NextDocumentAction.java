@@ -25,7 +25,7 @@ import org.fife.ui.app.AppAction;
  */
 public class NextDocumentAction extends AppAction<RText> {
 
-	private boolean forward;
+	private final boolean forward;
 
 
 	/**

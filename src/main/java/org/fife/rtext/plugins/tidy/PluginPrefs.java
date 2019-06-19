@@ -24,7 +24,7 @@ import org.fife.ui.app.Prefs;
  * @author Robert Futrell
  * @version 1.0
  */
-public class PluginPrefs extends Prefs {
+class PluginPrefs extends Prefs {
 
 	/**
 	 * Accelerator key for the "pretty print source code" action.

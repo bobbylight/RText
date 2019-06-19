@@ -40,11 +40,11 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  */
 class JspOptionsPanel extends OptionsDialogPanel {
 
-	private Listener listener;
-	private JCheckBox enabledCB;
-	private JCheckBox autoAddClosingTagsCB;
-	private JCheckBox foldingEnabledCB;
-	private JButton rdButton;
+	private final Listener listener;
+	private final JCheckBox enabledCB;
+	private final JCheckBox autoAddClosingTagsCB;
+	private final JCheckBox foldingEnabledCB;
+	private final JButton rdButton;
 
 	private static final String PROPERTY		= "Property";
 

@@ -23,7 +23,7 @@ import org.fife.ui.rtextfilechooser.FileDisplayNames;
  */
 public class FolderProjectEntry extends AbstractProjectEntry {
 
-	private File dir;
+	private final File dir;
 	private String displayName;
 	private FolderFilterInfo filterInfo;
 

@@ -30,7 +30,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class CheckForUpdatesAction extends AppAction<RText> {
+class CheckForUpdatesAction extends AppAction<RText> {
 
 	/**
 	 * The URL to contact to see if there is a newer RText release.

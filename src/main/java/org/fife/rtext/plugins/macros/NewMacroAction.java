@@ -34,7 +34,7 @@ class NewMacroAction extends AppAction<RText> {
 	/**
 	 * The parent plugin.
 	 */
-	private MacroPlugin plugin;
+	private final MacroPlugin plugin;
 
 
 	/**

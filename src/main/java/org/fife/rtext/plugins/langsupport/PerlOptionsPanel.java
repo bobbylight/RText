@@ -61,21 +61,21 @@ import org.fife.ui.rtextfilechooser.RDirectoryChooser;
  */
 class PerlOptionsPanel extends OptionsDialogPanel {
 
-	private Listener listener;
-	private JCheckBox enabledCB;
-	private JCheckBox paramAssistanceCB;
-	private JCheckBox showDescWindowCB;
-	private JCheckBox useParensCB;
-	private JCheckBox compileCB;
-	private JCheckBox foldingEnabledCB;
-	private JLabel installLocLabel;
-	private FSATextField installLocField;
-	private JButton installBrowseButton;
-	private JCheckBox warningsCB;
-	private JCheckBox taintModeCB;
-	private JCheckBox overridePerl5LibCB;
-	private ModifiableTable perl5Table;
-	private JButton rdButton;
+	private final Listener listener;
+	private final JCheckBox enabledCB;
+	private final JCheckBox paramAssistanceCB;
+	private final JCheckBox showDescWindowCB;
+	private final JCheckBox useParensCB;
+	private final JCheckBox compileCB;
+	private final JCheckBox foldingEnabledCB;
+	private final JLabel installLocLabel;
+	private final FSATextField installLocField;
+	private final JButton installBrowseButton;
+	private final JCheckBox warningsCB;
+	private final JCheckBox taintModeCB;
+	private final JCheckBox overridePerl5LibCB;
+	private final ModifiableTable perl5Table;
+	private final JButton rdButton;
 
 	private static final String PERL5LIB		= "PERL5LIB";
 	private static final String PROPERTY		= "Property";
@@ -591,12 +591,12 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		static final int OK		= 0;
 		static final int CANCEL	= 1;
 
-		private JTextField field;
-		private JButton okButton;
-		private JButton cancelButton;
+		private final JTextField field;
+		private final JButton okButton;
+		private final JButton cancelButton;
 		private int rc;
 
-		public Perl5ItemDialog(JDialog owner) {
+		Perl5ItemDialog(JDialog owner) {
 
 			super(owner);
 			ComponentOrientation orientation = ComponentOrientation.
@@ -688,7 +688,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		public void changedUpdate(DocumentEvent e) {
 		}
 
-		public String getPath() {
+		String getPath() {
 			return field.getText();
 		}
 
@@ -702,11 +702,11 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			okButton.setEnabled(field.getDocument().getLength()>0);
 		}
 
-		public void setPath(String path) {
+		void setPath(String path) {
 			field.setText(path);
 		}
 
-		public int showDialog() {
+		int showDialog() {
 			rc = CANCEL; // Set here in case they "X" the dialog out.
 			SwingUtilities.invokeLater(() -> {
 				field.requestFocusInWindow();

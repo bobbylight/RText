@@ -48,8 +48,7 @@ class FindAction extends AppAction<RText> {
 	 * @param icon The icon associated with the action.
 	 * @param nameKey The key for localizing the name of this action.
 	 */
-	protected FindAction(RText owner, ResourceBundle msg, Icon icon,
-							String nameKey) {
+	FindAction(RText owner, ResourceBundle msg, Icon icon, String nameKey) {
 		super(owner, msg, nameKey);
 		setIcon(icon);
 	}

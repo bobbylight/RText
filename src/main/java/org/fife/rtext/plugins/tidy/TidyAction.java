@@ -30,7 +30,7 @@ class TidyAction extends AppAction<RText> {
 	/**
 	 * The tidying plugin.
 	 */
-	private Plugin plugin;
+	private final Plugin plugin;
 
 
 	/**

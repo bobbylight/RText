@@ -47,11 +47,11 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 class FileFilterOptionPanel extends OptionsDialogPanel
 					implements ActionListener, ModifiableTableListener {
 
-	private ModifiableTable filterTable;
-	private FilterTableModel model;
-	private JCheckBox guessTypeCB;
-	private JCheckBox ignoreExtsCB;
-	private RText rtext;
+	private final ModifiableTable filterTable;
+	private final FilterTableModel model;
+	private final JCheckBox guessTypeCB;
+	private final JCheckBox ignoreExtsCB;
+	private final RText rtext;
 
 	private static final String DEFAULTS_RESTORED	= "defaultsRestored";
 
@@ -285,7 +285,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	static class FilterTableModel extends DefaultTableModel
 							implements SyntaxConstants {
 
-		public String[] styles;
+		String[] styles;
 
 		FilterTableModel(String fileTypeHeader, String filterHeader) {
 			super(new Object[] { fileTypeHeader, filterHeader }, 0);

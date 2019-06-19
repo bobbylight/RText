@@ -125,7 +125,7 @@ public class TypeScriptSupport {
 	 * @return Whether the dockable window is visible.
 	 * @see #toggleBuildResultsWindowVisible()
 	 */
-	public boolean isBuildResultsWindowVisible() {
+	private boolean isBuildResultsWindowVisible() {
 		return tsWindow!=null && tsWindow.isActive();
 	}
 
@@ -165,7 +165,7 @@ public class TypeScriptSupport {
 	 */
 	private static class BuildAction extends StandardAction {
 
-		private Plugin plugin;
+		private final Plugin plugin;
 
 		private BuildAction(Plugin plugin, KeyStroke accelerator) {
 			setName(plugin.getBundle().getString("TypeScript.Build"));

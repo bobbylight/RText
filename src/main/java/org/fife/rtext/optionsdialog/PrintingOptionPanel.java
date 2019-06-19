@@ -35,10 +35,8 @@ import org.fife.ui.UIUtil;
 class PrintingOptionPanel extends OptionsDialogPanel
 							implements PropertyChangeListener {
 
-	private FontSelector fontSelector;
+	private final FontSelector fontSelector;
 
-	private JCheckBox headerCheckBox;	// If checked, the user wants a header on printed documents.
-	private JCheckBox footerCheckBox;	// If checked, the user wants a footer on printed documents.
 	//private boolean useHeader;		// Internal variable used to remember what the user clicked.
 	//private boolean useFooter;		// Internal variable used to remember what the user clicked.
 
@@ -51,7 +49,7 @@ class PrintingOptionPanel extends OptionsDialogPanel
 	 * @param rtext The parent RText instance.
 	 * @param msg The resource bundle to use.
 	 */
-	public PrintingOptionPanel(final RText rtext, final ResourceBundle msg) {
+	PrintingOptionPanel(final RText rtext, final ResourceBundle msg) {
 
 		super(msg.getString("OptPrName"));
 
@@ -71,8 +69,8 @@ class PrintingOptionPanel extends OptionsDialogPanel
 		printFontPanel.add(Box.createHorizontalGlue());
 
 		Box temp = Box.createVerticalBox();
-		headerCheckBox = new JCheckBox(msg.getString("OptPrPH"));
-		footerCheckBox = new JCheckBox(msg.getString("OptPrPF"));
+		JCheckBox headerCheckBox = new JCheckBox(msg.getString("OptPrPH"));
+		JCheckBox footerCheckBox = new JCheckBox(msg.getString("OptPrPF"));
 		headerCheckBox.setEnabled(false);
 		footerCheckBox.setEnabled(false);
 		temp.add(headerCheckBox);
@@ -143,7 +141,7 @@ class PrintingOptionPanel extends OptionsDialogPanel
 	 * @return A font to use for printing.
 	 * @see #setPrintFont
 	 */
-	public Font getPrintFont() {
+	private Font getPrintFont() {
 		return fontSelector.getDisplayedFont();
 	}
 

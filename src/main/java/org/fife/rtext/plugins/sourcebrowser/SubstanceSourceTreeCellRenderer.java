@@ -29,9 +29,9 @@ import org.pushingpixels.substance.api.renderer.SubstanceDefaultTreeCellRenderer
  */
 class SubstanceSourceTreeCellRenderer extends SubstanceDefaultTreeCellRenderer {
 
-	private DefaultSourceTree tree;
-	private Icon blueBullet;
-	private Icon greenBullet;
+	private final DefaultSourceTree tree;
+	private final Icon blueBullet;
+	private final Icon greenBullet;
 
 	private static final String BLUE_BULLET	= "bullet_blue.gif";
 	private static final String GREEN_BULLET	= "bullet_green.gif";

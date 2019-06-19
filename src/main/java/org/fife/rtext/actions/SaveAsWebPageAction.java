@@ -98,7 +98,7 @@ class SaveAsWebPageAction extends AppAction<RText> {
 			}
 
 			// Ensure that it has an HTML extension.
-			if (!chosenFilePath.matches("[^\\.]*\\.htm[l]?"))
+			if (!chosenFilePath.matches("[^.]*\\.htm[l]?"))
 				chosenFilePath = chosenFilePath + ".html";
 
 			// Try and write output to the current filename.
@@ -155,7 +155,7 @@ class SaveAsWebPageAction extends AppAction<RText> {
 					temp.append("}");
 					styles[token.getType()] = temp.toString();
 				}
-				sb.append("<span class=\"s" + token.getType() + "\">");
+				sb.append("<span class=\"s").append(token.getType()).append("\">");
 				sb.append(RTextUtilities.escapeForHTML(token.getLexeme(), "\n", true));
 				sb.append("</span>");
 				token = token.getNextToken();

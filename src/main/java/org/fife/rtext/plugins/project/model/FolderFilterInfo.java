@@ -217,7 +217,7 @@ public class FolderFilterInfo {
 	 */
 	private static class RegexNameMatcher implements NameMatcher {
 
-		private Pattern pattern;
+		private final Pattern pattern;
 
 		RegexNameMatcher(Pattern pattern) {
 			this.pattern = pattern;
@@ -236,7 +236,7 @@ public class FolderFilterInfo {
 	 */
 	private static class StringLiteralNameMatcher implements NameMatcher {
 
-		private String literal;
+		private final String literal;
 
 		StringLiteralNameMatcher(String literal) {
 			this.literal = literal;

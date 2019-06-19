@@ -36,7 +36,7 @@ import org.fife.rtext.plugins.project.model.LogicalFolderProjectEntry;
  */
 public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 
-	private static DecoratableIcon icon;
+	private static final DecoratableIcon icon;
 
 
 	public LogicalFolderProjectEntryTreeNode(ProjectPlugin plugin,

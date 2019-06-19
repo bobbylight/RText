@@ -19,7 +19,7 @@ import org.fife.ui.app.Prefs;
  * @author Robert Futrell
  * @version 0.8
  */
-public class HeapIndicatorPrefs extends Prefs {
+class HeapIndicatorPrefs extends Prefs {
 
 	public boolean visible;
 	public int     refreshInterval;

@@ -30,7 +30,7 @@ import org.fife.ui.rtextfilechooser.FileSystemTree;
  */
 class Tree extends FileSystemTree {
 
-	private FileSystemTreePlugin plugin;
+	private final FileSystemTreePlugin plugin;
 	private OpenAction openAction;
 	private OpenAction openInNewWindowAction;
 	private GoIntoAction goIntoAction;
@@ -206,7 +206,7 @@ class Tree extends FileSystemTree {
 	 */
 	private class OpenAction extends AbstractAction {
 
-		private boolean newWindow;
+		private final boolean newWindow;
 
 		OpenAction(String name, boolean newWindow) {
 			putValue(NAME, name);
@@ -246,8 +246,8 @@ class Tree extends FileSystemTree {
 	 */
 	private class OpenInNewWindowRunnable implements Runnable {
 
-		private RText rtext;
-		private String file;
+		private final RText rtext;
+		private final String file;
 
 		OpenInNewWindowRunnable(RText rtext, String file) {
 			this.rtext = rtext;

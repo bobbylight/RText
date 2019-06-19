@@ -35,7 +35,7 @@ class DOMModelCreator implements WorkspaceVisitor {
 
 	DOMModelCreator() throws IOException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db = null;
+		DocumentBuilder db;
 		try {
 			db = dbf.newDocumentBuilder();
 		} catch (ParserConfigurationException pce) {

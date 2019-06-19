@@ -46,10 +46,10 @@ import org.fife.ui.UIUtil;
  */
 public class LogicalFolderNameDialog extends EscapableDialog {
 
-	private Listener l;
+	private final Listener l;
 	private JTextField nameField;
 	private DecorativeIconPanel nameDIP;
-	private NameChecker nameChecker;
+	private final NameChecker nameChecker;
 	private String logicalFolderName;
 	private JButton okButton;
 	private JButton cancelButton;
@@ -162,7 +162,7 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 	 * @param key The (part of the) key to display.
 	 * @return The localized error message.
 	 */
-	public static String getLocalizedReason(String key) {
+	private static String getLocalizedReason(String key) {
 		return Messages.getString("LogicalFolderNameDialog.InvalidName." + key);
 	}
 

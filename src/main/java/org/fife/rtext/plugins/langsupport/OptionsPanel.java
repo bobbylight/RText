@@ -42,16 +42,16 @@ import org.fife.ui.autocomplete.CompletionCellRenderer;
  * @author Robert Futrell
  * @version 1.0
  */
-public class OptionsPanel extends PluginOptionsDialogPanel {
+class OptionsPanel extends PluginOptionsDialogPanel {
 
 	/**
 	 * ID used to identify this option panel, so others can attach to it.
 	 */
-	public static final String OPTION_PANEL_ID = "LanguageSupportOptionPanel";
+	private static final String OPTION_PANEL_ID = "LanguageSupportOptionPanel";
 
-	private JCheckBox altColorCB;
-	private RColorSwatchesButton altColorButton;
-	private JButton rdButton;
+	private final JCheckBox altColorCB;
+	private final RColorSwatchesButton altColorButton;
+	private final JButton rdButton;
 
 	private static final Color DEFAULT_ALT_ROW_COLOR	= new Color(0xf4f4f4);
 	private static final String PROPERTY				= "Property";

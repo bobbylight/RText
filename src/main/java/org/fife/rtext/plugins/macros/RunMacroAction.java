@@ -34,22 +34,17 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class RunMacroAction extends AppAction<RText> {
+class RunMacroAction extends AppAction<RText> {
 
 	/**
 	 * The macro plugin.
 	 */
-	private MacroPlugin plugin;
+	private final MacroPlugin plugin;
 
 	/**
 	 * The macro to run.
 	 */
-	private Macro macro;
-
-	/**
-	 * The cached bindings instance.
-	 */
-	private Bindings bindings;
+	private final Macro macro;
 
 	/**
 	 * The script engine for JavaScript, shared across all instances of this
@@ -155,7 +150,7 @@ public class RunMacroAction extends AppAction<RText> {
 		jsEngine.eval("println(data.str); alert(data.str); data.i = 999");
 		 */
 
-		ScriptEngine engine = null;
+		ScriptEngine engine;
 		if (sourceName.endsWith(".js")) {
 			engine = initJavaScriptEngine();
 			if (engine==null) { // An error message was already displayed
@@ -174,7 +169,10 @@ public class RunMacroAction extends AppAction<RText> {
 		}
 
 		// Create our bindings and cache them for later.
-		bindings = engine.createBindings();
+		/**
+		 * The cached bindings instance.
+		 */
+		Bindings bindings = engine.createBindings();
 		engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
 
 		// We always reset the value of "rtext" and "textArea", but

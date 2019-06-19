@@ -24,7 +24,7 @@ import org.fife.ui.dockablewindows.DockableWindow;
  * @author Robert Futrell
  * @version 0.8
  */
-public class TasksPrefs extends Prefs {
+class TasksPrefs extends Prefs {
 
 	/**
 	 * Whether the GUI plugin window is active (visible).

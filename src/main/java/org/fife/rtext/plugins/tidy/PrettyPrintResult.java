@@ -18,9 +18,9 @@ package org.fife.rtext.plugins.tidy;
  */
 class PrettyPrintResult {
 
-	private int result;
-	private String text;
-	private String summary;
+	private final int result;
+	private final String text;
+	private final String summary;
 
 
 	PrettyPrintResult(int result, String text, String summary) {

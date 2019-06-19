@@ -41,11 +41,11 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  */
 class ShellOptionsPanel extends OptionsDialogPanel {
 
-	private Listener listener;
-	private JCheckBox enabledCB;
-	private JCheckBox showDescWindowCB;
-	private JCheckBox useSystemManCB;
-	private JButton rdButton;
+	private final Listener listener;
+	private final JCheckBox enabledCB;
+	private final JCheckBox showDescWindowCB;
+	private final JCheckBox useSystemManCB;
+	private final JButton rdButton;
 
 	private static final String PROPERTY		= "Property";
 

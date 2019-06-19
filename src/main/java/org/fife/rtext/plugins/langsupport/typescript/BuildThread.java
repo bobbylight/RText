@@ -26,8 +26,8 @@ import org.fife.ui.GUIWorkerThread;
  */
 class BuildThread extends GUIWorkerThread {
 
-	private volatile Plugin plugin;
-	private volatile TypeScriptNoticeWindow window;
+	private final Plugin plugin;
+	private final TypeScriptNoticeWindow window;
 
 
 	BuildThread(Plugin plugin, TypeScriptNoticeWindow window) {
@@ -116,8 +116,8 @@ class BuildThread extends GUIWorkerThread {
 	 */
 	private static class Result {
 
-		private File tsConfig;
-		private ProcessRunner pr;
+		private final File tsConfig;
+		private final ProcessRunner pr;
 
 		private Result(File tsConfig, ProcessRunner pr) {
 			this.tsConfig = tsConfig;

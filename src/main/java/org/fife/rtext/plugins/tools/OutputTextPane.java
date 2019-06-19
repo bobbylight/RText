@@ -49,14 +49,13 @@ import org.fife.ui.rtextarea.RTextArea;
  */
 class OutputTextPane extends JTextPane {
 
-	static final String STYLE_STDIN				= "stdin";
+	private static final String STYLE_STDIN				= "stdin";
 	static final String STYLE_STDOUT			= "stdout";
 	static final String STYLE_STDERR			= "stderr";
 	static final String STYLE_EXCEPTION			= "exception";
 
-	private ToolPlugin plugin;
+	private final ToolPlugin plugin;
 	private JPopupMenu popup;
-	private Listener listener;
 
 
 	/**
@@ -67,7 +66,7 @@ class OutputTextPane extends JTextPane {
 		installStyles();
 		setTabSize(4); // Do after installStyles()
 		fixKeyboardShortcuts();
-		listener = new Listener();
+		Listener listener = new Listener();
 		addMouseListener(listener);
 	}
 
@@ -192,7 +191,7 @@ class OutputTextPane extends JTextPane {
 	 *
 	 * @param tabSize The new tab size, in characters.
 	 */
-	public void setTabSize(int tabSize) {
+	private void setTabSize(int tabSize) {
 
 		FontMetrics fm = getFontMetrics(getFont());
 		int charWidth = fm.charWidth('m');
@@ -292,7 +291,7 @@ class OutputTextPane extends JTextPane {
 		/**
 		 * DefaultEditorKit's DeletePrevCharAction.
 		 */
-		private Action delegate;
+		private final Action delegate;
 
 		BackspaceAction(Action delegate) {
 			super("backspace");
@@ -325,7 +324,7 @@ class OutputTextPane extends JTextPane {
 		/**
 		 * DefaultEditorKit's DeleteNextCharAction.
 		 */
-		private Action delegate;
+		private final Action delegate;
 
 		DeleteAction(Action delegate) {
 			super("delete");

@@ -22,12 +22,12 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ViewTasksAction extends AppAction<RText> {
+class ViewTasksAction extends AppAction<RText> {
 
 	/**
 	 * The tasks plugin.
 	 */
-	private TasksPlugin plugin;
+	private final TasksPlugin plugin;
 
 
 	/**

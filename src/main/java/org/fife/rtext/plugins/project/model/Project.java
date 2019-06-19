@@ -25,9 +25,9 @@ import java.util.List;
  */
 public class Project implements Comparable<Project>, ProjectEntryParent {
 
-	private Workspace workspace;
+	private final Workspace workspace;
 	private String name;
-	private List<ProjectEntry> entries;
+	private final List<ProjectEntry> entries;
 
 
 	public Project(Workspace workspace, String name) {

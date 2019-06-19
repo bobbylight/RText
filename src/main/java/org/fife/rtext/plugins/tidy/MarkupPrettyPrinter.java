@@ -32,8 +32,8 @@ import org.w3c.tidy.TidyMessageListener;
  */
 class MarkupPrettyPrinter implements PrettyPrinter, TidyMessageListener {
 
-	private RText rtext;
-	private Plugin plugin;
+	private final RText rtext;
+	private final Plugin plugin;
 	private int result;
 	private StringBuilder output;
 
@@ -144,7 +144,7 @@ class MarkupPrettyPrinter implements PrettyPrinter, TidyMessageListener {
 		StringBuilder sb = new StringBuilder();
 
 		BufferedReader r = new BufferedReader(new StringReader(text));
-		String line = null;
+		String line;
 
 		try {
 			while ((line=r.readLine())!=null) {

@@ -43,10 +43,10 @@ import org.fife.ui.rsyntaxtextarea.modes.XMLTokenMaker;
  */
 class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 
-	private JCheckBox codeCompletionEnabledCB;
-	private JCheckBox autoCompleteClosingTagsCB;
-	private JCheckBox foldingEnabledCB;
-	private JButton rdButton;
+	private final JCheckBox codeCompletionEnabledCB;
+	private final JCheckBox autoCompleteClosingTagsCB;
+	private final JCheckBox foldingEnabledCB;
+	private final JButton rdButton;
 
 	private static final String PROPERTY		= "property";
 

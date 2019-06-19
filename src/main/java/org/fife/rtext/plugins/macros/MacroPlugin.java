@@ -37,18 +37,18 @@ import org.fife.ui.rtextarea.IconGroup;
  * @author Robert Futrell
  * @version 1.0
  */
-public class MacroPlugin extends AbstractPlugin
+class MacroPlugin extends AbstractPlugin
 		implements PropertyChangeListener {
 
 	private static final String VERSION				= "3.0.2";
 
-	private RText app;
+	private final RText app;
 	private JMenu macrosMenu;
-	private NewMacroAction newMacroAction;
-	private EditMacrosAction editMacrosAction;
+	private final NewMacroAction newMacroAction;
+	private final EditMacrosAction editMacrosAction;
 
 	private static final String MSG = "org.fife.rtext.plugins.macros.MacrosPlugin";
-	protected static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
 	private static final String EDIT_MACROS_ACTION		= "editMacrosAction";
 	private static final String NEW_MACRO_ACTION		= "newMacroAction";

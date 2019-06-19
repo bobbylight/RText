@@ -40,19 +40,19 @@ import org.fife.ui.dockablewindows.DockableWindowScrollPane;
  */
 public class FileSystemTreePlugin extends GUIPlugin {
 
-	private RText owner;
-	private String name;
+	private final RText owner;
+	private final String name;
 	private Tree tree;
 	private FileSystemTreeOptionPanel optionPanel;
 	private Icon lightThemeIcon;
 	private Icon darkThemeIcon;
-	private ViewAction viewAction;
+	private final ViewAction viewAction;
 	private JToolBar dockableWindowTB;
 
 	private JLabel dirLabel;
 	private BackAction backAction;
 	private ForwardAction forwardAction;
-	private List<File> rootHistory;
+	private final List<File> rootHistory;
 	private int rootHistoryOffs;
 
 	static final String BUNDLE_NAME			=

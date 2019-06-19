@@ -27,7 +27,7 @@ class ViewConsoleAction extends AppAction<RText> {
 	/**
 	 * The parent plugin.
 	 */
-	private Plugin plugin;
+	private final Plugin plugin;
 
 
 	/**

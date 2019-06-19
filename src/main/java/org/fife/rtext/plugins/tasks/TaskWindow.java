@@ -43,21 +43,18 @@ import org.fife.ui.rsyntaxtextarea.parser.TaskTagParser;
 class TaskWindow extends AbstractParserNoticeWindow
 				implements PropertyChangeListener {
 
-	private TasksPlugin plugin;
-	private JTable table;
-	private TaskNoticeTableModel model;
-	private TaskTagParser taskParser;
+	private final TaskNoticeTableModel model;
+	private final TaskTagParser taskParser;
 	private boolean installed;
 
 
 	public TaskWindow(TasksPlugin plugin, RText rtext, String taskIdentifiers) {
 
 		super(rtext);
-		this.plugin = plugin;
 		installed = false;
 
 		model = new TaskNoticeTableModel(rtext.getString("TaskList.Task"));
-		table = createTable(model);
+		JTable table = createTable(model);
 		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(table);
 		RScrollPane sp = new DockableWindowScrollPane(table);
 		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);

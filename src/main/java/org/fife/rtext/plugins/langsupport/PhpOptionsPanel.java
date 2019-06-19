@@ -49,17 +49,15 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  */
 class PhpOptionsPanel extends OptionsDialogPanel {
 
-	private Listener listener;
-	private JCheckBox enabledCB;
-	private JCheckBox showDescWindowCB;
-	private JCheckBox autoAddClosingTagsCB;
-	private JCheckBox autoActivateCB;
-	private JLabel aaDelayLabel;
-	private JTextField aaDelayField;
-	private JLabel aaHtmlKeysLabel;
-	private JTextField aaHtmlKeysField;
-	private JCheckBox foldingEnabledCB;
-	private JButton rdButton;
+	private final Listener listener;
+	private final JCheckBox enabledCB;
+	private final JCheckBox showDescWindowCB;
+	private final JCheckBox autoAddClosingTagsCB;
+	private final JCheckBox autoActivateCB;
+	private final JLabel aaDelayLabel;
+	private final JTextField aaDelayField;
+	private final JCheckBox foldingEnabledCB;
+	private final JButton rdButton;
 
 	private static final String PROPERTY		= "Property";
 
@@ -135,9 +133,9 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 		AbstractDocument doc = (AbstractDocument)aaDelayField.getDocument();
 		doc.setDocumentFilter(new NumberDocumentFilter());
 		doc.addDocumentListener(listener);
-		aaHtmlKeysLabel = new JLabel(msg.getString("Options.Php.AutoActivationHtmlKeys"));
+		JLabel aaHtmlKeysLabel = new JLabel(msg.getString("Options.Php.AutoActivationHtmlKeys"));
 		aaHtmlKeysLabel.setEnabled(false);
-		aaHtmlKeysField = new JTextField("<", 10);
+		JTextField aaHtmlKeysField = new JTextField("<", 10);
 		aaHtmlKeysField.setEnabled(false);
 		if (o.isLeftToRight()) {
 			temp.add(aaDelayLabel);		temp.add(aaDelayField);

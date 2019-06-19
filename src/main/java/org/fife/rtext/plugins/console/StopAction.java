@@ -22,12 +22,12 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class StopAction extends AppAction<RText> {
+class StopAction extends AppAction<RText> {
 
 	/**
 	 * The parent plugin.
 	 */
-	private Plugin plugin;
+	private final Plugin plugin;
 
 
 	/**

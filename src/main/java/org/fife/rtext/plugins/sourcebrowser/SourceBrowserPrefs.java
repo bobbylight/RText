@@ -21,7 +21,7 @@ import org.fife.ui.app.Prefs;
  * @author Robert Futrell
  * @version 0.8
  */
-public class SourceBrowserPrefs extends Prefs {
+class SourceBrowserPrefs extends Prefs {
 
 	/**
 	 * Whether the GUI plugin window is active (visible).

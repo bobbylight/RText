@@ -34,10 +34,10 @@ import org.fife.ui.UIUtil;
  */
 class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 
-	private String language;
-	private JCheckBox enabledCB;
-	private JButton rdButton;
-	private Listener listener;
+	private final String language;
+	private final JCheckBox enabledCB;
+	private final JButton rdButton;
+	private final Listener listener;
 
 	private static final String PROPERTY		= "Property";
 
@@ -96,14 +96,14 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	protected JCheckBox createCB(String key) {
+	private JCheckBox createCB(String key) {
 		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
 		cb.addActionListener(listener);
 		return cb;
 	}
 
 
-	protected void doApplyCodeFoldingPreference(RText rtext) {
+	private void doApplyCodeFoldingPreference(RText rtext) {
 		AbstractMainView view = rtext.getMainView();
 		view.setCodeFoldingEnabledFor(language, enabledCB.isSelected());
 	}
@@ -156,7 +156,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 		return new ImageIcon(getClass().getResource(icon));
 	}
 
-	protected void setCodeFoldingValueImpl(RText rtext) {
+	private void setCodeFoldingValueImpl(RText rtext) {
 		AbstractMainView view = rtext.getMainView();
 		enabledCB.setSelected(view.isCodeFoldingEnabledFor(language));
 	}

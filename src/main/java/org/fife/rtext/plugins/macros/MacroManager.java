@@ -40,8 +40,8 @@ public class MacroManager {
 	 */
 	public static final String PROPERTY_MACROS			= "macros";
 
-	private SortedSet<Macro> macros;
-	private PropertyChangeSupport support;
+	private final SortedSet<Macro> macros;
+	private final PropertyChangeSupport support;
 
 	/**
 	 * The extension all macro files in older versions of RText ended with.

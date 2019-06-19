@@ -357,7 +357,6 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 			// This happens when the t.join(maxTime) above does not complete
 			// before maxTime is up.
 			t.interrupt();
-			t = null;
 			String s = plugin.getBundle().getString("Error.RunawayProcess");
 			return new SourceTreeNode(s);
 		}
@@ -367,10 +366,9 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 			String s = plugin.getBundle().getString("Error.RunningProcess");
 			return new SourceTreeNode(s);
 		}
-		t = null;
 
 		// Add stuff from the process's stdout to our maps.
-		BufferedReader r = null;
+		BufferedReader r;
 		if (exuberant) {
 			String stdout = runner.getStdout();
 			r = new BufferedReader(new StringReader(stdout));
@@ -392,7 +390,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 				return new SourceTreeNode(s);
 			}
 		}
-		String line = null;
+		String line;
 		try {
 			while ((line=r.readLine()) != null) {
 				TagEntry entry = new SourceBrowserPlugin.ExtendedTagEntry(line);
@@ -426,7 +424,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	private String[] createCommandLine(boolean exuberant) {
 
 		String sourceFile = textArea.getFileFullPath();
-		String[] commandLine = null;
+		String[] commandLine;
 
 		if (exuberant) {
 			commandLine = new String[6];

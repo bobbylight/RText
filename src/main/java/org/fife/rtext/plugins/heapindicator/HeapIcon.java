@@ -25,7 +25,7 @@ import javax.swing.Icon;
  */
 class HeapIcon implements Icon {
 
-	private HeapIndicatorPlugin plugin;
+	private final HeapIndicatorPlugin plugin;
 
 
 	HeapIcon(HeapIndicatorPlugin plugin) {

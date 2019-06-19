@@ -57,7 +57,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  */
 class JavaScriptOptionsPanel extends OptionsDialogPanel {
 
-	private Listener listener;
+	private final Listener listener;
 	private JCheckBox enabledCB;
 	private JCheckBox paramAssistanceCB;
 	private JCheckBox showDescWindowCB;
@@ -71,11 +71,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 	private FSATextField jshintrcField;
 	private JLabel aaDelayLabel;
 	private JTextField aaDelayField;
-	private JLabel aaJavaKeysLabel;
-	private JTextField aaJavaKeysField;
-	private JLabel aaDocKeysLabel;
-	private JTextField aaDocKeysField;
-	private JButton rdButton;
+	private final JButton rdButton;
 
 	private static final String PROPERTY		= "Property";
 
@@ -148,13 +144,13 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		AbstractDocument doc = (AbstractDocument)aaDelayField.getDocument();
 		doc.setDocumentFilter(new NumberDocumentFilter());
 		doc.addDocumentListener(listener);
-		aaJavaKeysLabel = new JLabel(msg.getString("Options.JavaScript.AutoActivationJSKeys"));
+		JLabel aaJavaKeysLabel = new JLabel(msg.getString("Options.JavaScript.AutoActivationJSKeys"));
 		aaJavaKeysLabel.setEnabled(false);
-		aaJavaKeysField = new JTextField(".", 10);
+		JTextField aaJavaKeysField = new JTextField(".", 10);
 		aaJavaKeysField.setEnabled(false);
-		aaDocKeysLabel = new JLabel(msg.getString("Options.JavaScript.AutoActionDocCommentKeys"));
+		JLabel aaDocKeysLabel = new JLabel(msg.getString("Options.JavaScript.AutoActionDocCommentKeys"));
 		aaDocKeysLabel.setEnabled(false);
-		aaDocKeysField = new JTextField("@{", 10);
+		JTextField aaDocKeysField = new JTextField("@{", 10);
 		aaDocKeysField.setEnabled(false);
 		Dimension d = new Dimension(5, 5);
 		Dimension spacer = new Dimension(30, 5);

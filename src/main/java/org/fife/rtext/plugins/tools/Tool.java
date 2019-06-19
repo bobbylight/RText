@@ -50,7 +50,7 @@ public class Tool implements Comparable<Tool> {
 	/**
 	 * Synchronizes access to {@link #runThread}.
 	 */
-	private static Object RUN_THREAD_LOCK = new Object();
+	private static final Object RUN_THREAD_LOCK = new Object();
 
 	private static final Pattern VAR_PATTERN =
 			Pattern.compile("\\$\\{file_(?:name|name_no_ext|dir|full_path)\\}");
@@ -136,7 +136,7 @@ public class Tool implements Comparable<Tool> {
 	 *
 	 * @see #addArg(String)
 	 */
-	public void clearArgs() {
+	private void clearArgs() {
 		args.clear();
 	}
 
@@ -434,7 +434,7 @@ public class Tool implements Comparable<Tool> {
 	 * @param desc A description of this tool.  This may be <code>null</code>.
 	 * @see #getDescription()
 	 */
-	public void setDescription(String desc) {
+	private void setDescription(String desc) {
 		this.desc = desc;
 	}
 
@@ -471,7 +471,7 @@ public class Tool implements Comparable<Tool> {
 	 * @param name The name of this tool.
 	 * @see #getName()
 	 */
-	public void setName(String name) {
+	private void setName(String name) {
 		this.name = name;
 	}
 

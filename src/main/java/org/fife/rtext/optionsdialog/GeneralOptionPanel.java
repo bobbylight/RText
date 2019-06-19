@@ -44,21 +44,21 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
 class GeneralOptionPanel extends OptionsDialogPanel
 				implements ActionListener, DocumentListener {
 
-	private JTextField dirField;
-	private JButton dirBrowseButton;
-	private LabelValueComboBox<String, String> terminatorCombo;
-	private JComboBox<String> encCombo;
-	private JCheckBox utf8BomCB;
-	private JCheckBox sizeCheckCB;
-	private JFormattedTextField sizeField;
-	private JCheckBox dropShadowsInEditorCB;
+	private final JTextField dirField;
+	private final JButton dirBrowseButton;
+	private final LabelValueComboBox<String, String> terminatorCombo;
+	private final JComboBox<String> encCombo;
+	private final JCheckBox utf8BomCB;
+	private final JCheckBox sizeCheckCB;
+	private final JFormattedTextField sizeField;
+	private final JCheckBox dropShadowsInEditorCB;
 
 	private String fileSizeError;
 
-	public static final String TERM_CR		= "\r";
-	public static final String TERM_LF		= "\n";
-	public static final String TERM_CRLF	= "\r\n";
-	public static final String TERM_SYSTEM	= System.getProperty("line.separator");
+	private static final String TERM_CR		= "\r";
+	private static final String TERM_LF		= "\n";
+	private static final String TERM_CRLF	= "\r\n";
+	private static final String TERM_SYSTEM	= System.getProperty("line.separator");
 
 	private static final String PROPERTY	= "property";
 

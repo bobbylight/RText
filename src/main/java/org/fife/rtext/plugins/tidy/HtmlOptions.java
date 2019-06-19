@@ -23,14 +23,14 @@ import org.fife.ui.app.Prefs;
  */
 public class HtmlOptions extends Prefs {
 
-	public int htmlSpaceCount;
-	public boolean htmlClean;
-	public boolean htmlDropEmptyParas;
-	public boolean htmlLogicalEmphasis;
-	public boolean hideOptionalEndTags;
-	public boolean htmlUpperCaseTagNames;
-	public boolean htmlUpperCaseAttrNames;
-	public int htmlWrapLength;
+	private int htmlSpaceCount;
+	private boolean htmlClean;
+	private boolean htmlDropEmptyParas;
+	private boolean htmlLogicalEmphasis;
+	private boolean hideOptionalEndTags;
+	private boolean htmlUpperCaseTagNames;
+	private boolean htmlUpperCaseAttrNames;
+	private int htmlWrapLength;
 
 
 	/**

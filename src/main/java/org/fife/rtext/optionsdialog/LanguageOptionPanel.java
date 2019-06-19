@@ -56,10 +56,10 @@ import org.fife.ui.app.GUIApplication;
 class LanguageOptionPanel extends OptionsDialogPanel
 								implements ListSelectionListener {
 
-	private DefaultListModel<IconTextInfo> listModel;
-	private JList<IconTextInfo> languageList;	// Contains all available languages.
-	private Map<String, String> languageMap;
-	private GUIApplication app;
+	private final DefaultListModel<IconTextInfo> listModel;
+	private final JList<IconTextInfo> languageList;	// Contains all available languages.
+	private final Map<String, String> languageMap;
+	private final GUIApplication app;
 
 	private static final String LANGUAGE_PROPERTY	= "language";
 
@@ -153,7 +153,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	 * @return The icon.
 	 */
 	private Icon getIconFor(String id) {
-		Icon icon = null;
+		Icon icon;
 		URL url = getClass().getClassLoader().getResource(
 						"org/fife/rtext/graphics/flags/" + id + ".png");
 		if (url!=null) {
@@ -180,8 +180,8 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	private void getLocalizations(File xmlFile) throws IOException {
 
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db = null;
-		Document doc = null;
+		DocumentBuilder db;
+		Document doc;
 		try {
 			db = dbf.newDocumentBuilder();
 			//InputSource is = new InputSource(new FileReader(file));
@@ -207,7 +207,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	 * @return The selected language; i.e., <code>en</code> or
 	 *         <code>es</code>.
 	 */
-	public final String getSelectedLanguage() {
+	private String getSelectedLanguage() {
 		IconTextInfo iti = languageList.getSelectedValue();
 		String language = iti.getText();
 		String code = languageMap.get(language);
@@ -337,8 +337,8 @@ class LanguageOptionPanel extends OptionsDialogPanel
 
 		int count = listModel.size();
 		for (int i=0; i<count; i++) {
-			Object obj = listModel.get(i);
-			String langName = ((IconTextInfo)obj).getText();
+			IconTextInfo obj = listModel.get(i);
+			String langName = obj.getText();
 			String langValue = languageMap.get(langName);
 			if (language.startsWith(langValue)) {
 				languageList.setSelectedIndex(i);
@@ -349,8 +349,8 @@ class LanguageOptionPanel extends OptionsDialogPanel
 		// If the passed-in language wasn't "recognized," default to
 		// English.
 		for (int i=0; i<count; i++) {
-			Object obj = listModel.get(i);
-			String langName = ((IconTextInfo)obj).getText();
+			IconTextInfo obj = listModel.get(i);
+			String langName = obj.getText();
 			String langValue = languageMap.get(langName);
 			if (langValue.equals("en")) {
 				languageList.setSelectedIndex(i);
@@ -391,7 +391,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 		private Icon icon;
 		private String text;
 
-		public IconTextInfo(String text, Icon icon) {
+		IconTextInfo(String text, Icon icon) {
 			this.text = text;
 			this.icon = icon;
 		}

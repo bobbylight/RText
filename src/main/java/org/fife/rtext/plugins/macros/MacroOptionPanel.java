@@ -50,8 +50,8 @@ import org.fife.ui.rtextfilechooser.Utilities;
 class MacroOptionPanel extends PluginOptionsDialogPanel
 						implements ModifiableTableListener {
 
-	private DefaultTableModel model;
-	private ModifiableTable macroTable;
+	private final DefaultTableModel model;
+	private final ModifiableTable macroTable;
 
 	private static final String PROPERTY		= "property";
 	static final String TITLE_KEY				= "Plugin.Name";
@@ -251,7 +251,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	 */
 	private class AddExampleMacrosAction extends AbstractAction {
 
-		public AddExampleMacrosAction(MacroPlugin plugin) {
+		AddExampleMacrosAction(MacroPlugin plugin) {
 			putValue(NAME, plugin.getString("Options.Button.AddExampleMacros"));
 		}
 
@@ -314,7 +314,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 		public Object[] getNewRowInfo(Object[] oldData) {
 			NewMacroDialog macroDialog = new NewMacroDialog(
 					(MacroPlugin)getPlugin(), getOptionsDialog());
-			Macro old = null;
+			Macro old;
 			if (oldData!=null) {
 				old = (Macro)oldData[0];
 				macroDialog.setMacro(old);

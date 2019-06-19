@@ -44,8 +44,8 @@ import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
  */
 class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 
-	private Plugin plugin;
-	private TypeScriptNoticeTableModel model;
+	private final Plugin plugin;
+	private final TypeScriptNoticeTableModel model;
 
 
 	public TypeScriptNoticeWindow(RText rtext, Plugin plugin) {
@@ -175,7 +175,7 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 
 	private class TypeScriptNoticeTableModel extends ParserNoticeTableModel {
 
-		public TypeScriptNoticeTableModel(String lastColHeader) {
+		TypeScriptNoticeTableModel(String lastColHeader) {
 			super(lastColHeader);
 		}
 

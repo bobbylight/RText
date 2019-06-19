@@ -53,7 +53,7 @@ class GroupTreeNode extends SourceTreeNode {
 	 * @param icon The icon.
 	 * @see #getIcon()
 	 */
-	public void setIcon(Icon icon) {
+	private void setIcon(Icon icon) {
 		this.icon = icon;
 	}
 

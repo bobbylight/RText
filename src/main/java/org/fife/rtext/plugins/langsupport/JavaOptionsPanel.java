@@ -69,23 +69,17 @@ import org.fife.ui.rtextfilechooser.RDirectoryChooser;
  */
 class JavaOptionsPanel extends OptionsDialogPanel {
 
-	private Listener listener;
-	private JCheckBox enabledCB;
-	private JCheckBox paramAssistanceCB;
-	private JCheckBox showDescWindowCB;
-	private ModifiableTable bpt;
-	private DefaultTableModel model;
-	private JarRowHandler rowHandler;
-	private JButton addJREButton;
-	private JCheckBox buildPathModsCB;
-	private JCheckBox autoActivateCB;
-	private JLabel aaDelayLabel;
-	private JTextField aaDelayField;
-	private JLabel aaJavaKeysLabel;
-	private JTextField aaJavaKeysField;
-	private JLabel aaDocKeysLabel;
-	private JTextField aaDocKeysField;
-	private JButton rdButton;
+	private final Listener listener;
+	private final JCheckBox enabledCB;
+	private final JCheckBox paramAssistanceCB;
+	private final JCheckBox showDescWindowCB;
+	private final DefaultTableModel model;
+	private final JButton addJREButton;
+	private final JCheckBox buildPathModsCB;
+	private final JCheckBox autoActivateCB;
+	private final JLabel aaDelayLabel;
+	private final JTextField aaDelayField;
+	private final JButton rdButton;
 
 	private static final String PROPERTY		= "Property";
 
@@ -161,13 +155,13 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		AbstractDocument doc = (AbstractDocument)aaDelayField.getDocument();
 		doc.setDocumentFilter(new NumberDocumentFilter());
 		doc.addDocumentListener(listener);
-		aaJavaKeysLabel = new JLabel(msg.getString("Options.Java.AutoActivationJavaKeys"));
+		JLabel aaJavaKeysLabel = new JLabel(msg.getString("Options.Java.AutoActivationJavaKeys"));
 		aaJavaKeysLabel.setEnabled(false);
-		aaJavaKeysField = new JTextField(".", 10);
+		JTextField aaJavaKeysField = new JTextField(".", 10);
 		aaJavaKeysField.setEnabled(false);
-		aaDocKeysLabel = new JLabel(msg.getString("Options.Java.AutoActionDocCommentKeys"));
+		JLabel aaDocKeysLabel = new JLabel(msg.getString("Options.Java.AutoActionDocCommentKeys"));
 		aaDocKeysLabel.setEnabled(false);
-		aaDocKeysField = new JTextField("@{", 10);
+		JTextField aaDocKeysField = new JTextField("@{", 10);
 		aaDocKeysField.setEnabled(false);
 		Dimension d = new Dimension(5, 5);
 		Dimension spacer = new Dimension(30, 5);
@@ -202,12 +196,12 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		model = new DefaultTableModel(0, 2);
 		String[] colNames = { msg.getString("Options.Java.JarFile"),
 							msg.getString("Options.Java.SourceLocation") };
-		bpt = new ModifiableTable(model, colNames,
-					ModifiableTable.BOTTOM, ModifiableTable.ADD_REMOVE_MODIFY);
+		ModifiableTable bpt = new ModifiableTable(model, colNames,
+			ModifiableTable.BOTTOM, ModifiableTable.ADD_REMOVE_MODIFY);
 		bpt.addModifiableTableListener(listener);
 		bpt.getTable().setPreferredScrollableViewportSize(
 													new Dimension(50, 16*8));
-		rowHandler = new JarRowHandler();
+		JarRowHandler rowHandler = new JarRowHandler();
 		bpt.setRowHandler(rowHandler);
 		box.add(bpt);
 		box.add(Box.createVerticalStrut(5));
@@ -406,10 +400,10 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	private static class RowHandlerDialog extends EscapableDialog
 							implements ActionListener {
 
-		private FSATextField jarField;
-		private FSATextField sourceField;
-		private JButton okButton;
-		private JButton cancelButton;
+		private final FSATextField jarField;
+		private final FSATextField sourceField;
+		private final JButton okButton;
+		private final JButton cancelButton;
 		private Object[] newRowInfo;
 
 		private RowHandlerDialog(JDialog parent, Object[] old) {

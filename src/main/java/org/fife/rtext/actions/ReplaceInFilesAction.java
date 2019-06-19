@@ -1,7 +1,7 @@
 /*
  * 09/07/2006
  *
- * ReokaceInFilesAction.java - Action for replacing text in a group of files.
+ * ReplaceInFilesAction.java - Action for replacing text in a group of files.
  * Copyright (C) 2006 Robert Futrell
  * http://fifesoft.com/rtext
  * Licensed under a modified BSD license.

@@ -103,7 +103,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
-	public FolderFilterInfo getFilterInfo() {
+	private FolderFilterInfo getFilterInfo() {
 		return ((FolderProjectEntry)entry).getFilterInfo();
 	}
 
@@ -181,7 +181,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
-	public void setDisplayName(String displayName) {
+	private void setDisplayName(String displayName) {
 		((FolderProjectEntry)entry).setDisplayName(displayName);
 	}
 

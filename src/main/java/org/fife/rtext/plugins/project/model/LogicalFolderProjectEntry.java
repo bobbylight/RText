@@ -27,7 +27,7 @@ public class LogicalFolderProjectEntry extends AbstractProjectEntry
 		implements ProjectEntryParent {
 
 	private String name;
-	private List<ProjectEntry> entries;
+	private final List<ProjectEntry> entries;
 
 
 	public LogicalFolderProjectEntry(ProjectEntryParent parent, String name) {

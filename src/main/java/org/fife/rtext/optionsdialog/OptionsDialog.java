@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.optionsdialog;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -170,9 +171,14 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 	 * @param iconSuffix The suffix of the icon resource.
 	 */
 	private void setIcon(OptionsDialogPanel panel, String iconSuffix) {
+
 		ClassLoader cl = getClass().getClassLoader();
 		String prefix = "org/fife/rtext/graphics/options_";
-		panel.setIcon(new ImageIcon(cl.getResource(prefix + iconSuffix)));
+		URL resource = cl.getResource(prefix + iconSuffix);
+
+		if (resource != null) {
+			panel.setIcon(new ImageIcon(resource));
+		}
 	}
 
 

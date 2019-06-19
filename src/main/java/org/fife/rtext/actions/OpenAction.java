@@ -63,7 +63,7 @@ class OpenAction extends AppAction<RText> {
 
 			int returnVal = chooser.showOpenDialog(owner);
 
-			// If they selected a file and clicked "OK", open the flie!
+			// If they selected a file and clicked "OK", open the file!
 			if (returnVal == RTextFileChooser.APPROVE_OPTION) {
 
 				AbstractMainView mainView = owner.getMainView();

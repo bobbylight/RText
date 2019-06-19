@@ -16,7 +16,7 @@ package org.fife.rtext.plugins.project.model;
  * @author Robert Futrell
  * @version 1.0
  */
-public interface ModelEntity {
+interface ModelEntity {
 
 	/**
 	 * Called when a visitor visits this entity.

@@ -27,7 +27,7 @@ class ViewToolOutputAction extends AppAction<RText> {
 	/**
 	 * The tools plugin.
 	 */
-	private ToolPlugin plugin;
+	private final ToolPlugin plugin;
 
 
 	/**

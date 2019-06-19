@@ -30,7 +30,7 @@ import org.fife.rtext.RText;
  */
 class JsonPrettyPrinter implements PrettyPrinter {
 
-	private Plugin plugin;
+	private final Plugin plugin;
 
 
 	JsonPrettyPrinter(Plugin plugin) {

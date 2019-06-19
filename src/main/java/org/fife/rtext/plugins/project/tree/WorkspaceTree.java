@@ -60,8 +60,8 @@ import org.fife.ui.rtextfilechooser.FileSelector;
  */
 public class WorkspaceTree extends JTree implements FileSelector {
 
-	private ProjectPlugin plugin;
-	private DefaultTreeModel model;
+	private final ProjectPlugin plugin;
+	private final DefaultTreeModel model;
 	private JPopupMenu popup;
 
 
@@ -129,7 +129,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	 * @return Whether the selected tree node was a file.  If this is
 	 *         <code>null</code>, the clipboard was not updated.
 	 */
-	protected boolean copySelectedFilePathToClipboard() {
+	boolean copySelectedFilePathToClipboard() {
 		File file = getSelectedFile();
 		if (file != null && file.exists()) {
 			StringSelection sel = new StringSelection(
@@ -150,7 +150,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	 */
 	private void displayPopupMenu(Point p) {
 
-		Object selectedNode = null;
+		Object selectedNode;
 
 		// Select the tree node at the mouse position.
 		TreePath path = getPathForLocation(p.x, p.y);
@@ -186,7 +186,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	}
 
 
-	protected void findInFilesFromSelectedDir() {
+	void findInFilesFromSelectedDir() {
 
 		File dir = getSelectedFile();
 		Object sel = getLastSelectedPathComponent();

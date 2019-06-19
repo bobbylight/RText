@@ -23,9 +23,9 @@ import org.fife.ui.app.Prefs;
  */
 public class XmlOptions extends Prefs {
 
-	public boolean addXmlDeclaration;
-	public int xmlSpaceCount;
-	public int xmlWrapLength;
+	private boolean addXmlDeclaration;
+	private int xmlSpaceCount;
+	private int xmlWrapLength;
 
 
 	/**

@@ -76,7 +76,7 @@ public abstract class ContentAssistField extends JTextField
 	 *
 	 * @return The completion provider.
 	 */
-	protected synchronized CompletionProvider getCompletionProvider() {
+	private synchronized CompletionProvider getCompletionProvider() {
 		if (provider==null) {
 			provider = new DefaultCompletionProvider();
 			addCompletions(provider);

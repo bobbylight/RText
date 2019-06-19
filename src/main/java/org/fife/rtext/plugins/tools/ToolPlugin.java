@@ -44,17 +44,17 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
+class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 	private static final String VERSION				= "3.0.2";
 
-	private RText app;
+	private final RText app;
 	private Icon darkThemeIcon;
 	private Icon lightThemeIcon;
 	private JMenu toolsMenu;
 
 	private static final String MSG = "org.fife.rtext.plugins.tools.ToolPlugin";
-	protected static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
 	private static final String EDIT_TOOLS_ACTION		= "editToolsAction";
 	private static final String NEW_TOOL_ACTION			= "newToolAction";
@@ -197,7 +197,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	 *
 	 * @return The directory.
 	 */
-	public File getToolDir() {
+	private File getToolDir() {
 		return new File(RTextUtilities.getPreferencesDirectory(), "tools");
 	}
 

@@ -31,7 +31,7 @@ import org.fife.ui.rtextarea.RecordableTextAction;
  */
 public class ToggleTextModeAction extends RecordableTextAction {
 
-	private RText rtext;
+	private final RText rtext;
 
 
 	/**

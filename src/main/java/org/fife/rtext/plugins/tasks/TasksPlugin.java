@@ -41,12 +41,12 @@ import org.fife.ui.rsyntaxtextarea.parser.Parser;
  * @author Robert Futrell
  * @version 1.0
  */
-public class TasksPlugin extends GUIPlugin {
+class TasksPlugin extends GUIPlugin {
 
 	/**
 	 * The parent application.
 	 */
-	private RText app;
+	private final RText app;
 
 	/**
 	 * The tasks dockable window.

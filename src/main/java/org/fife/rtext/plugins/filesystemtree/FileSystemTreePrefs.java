@@ -21,7 +21,7 @@ import org.fife.ui.app.Prefs;
  * @author Robert Futrell
  * @version 0.8
  */
-public class FileSystemTreePrefs extends Prefs {
+class FileSystemTreePrefs extends Prefs {
 
 
 	/**

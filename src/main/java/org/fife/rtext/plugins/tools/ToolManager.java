@@ -38,8 +38,8 @@ public final class ToolManager {
 	 */
 	public static final String PROPERTY_TOOLS			= "tools";
 
-	private SortedSet<Tool> tools;
-	private PropertyChangeSupport support;
+	private final SortedSet<Tool> tools;
+	private final PropertyChangeSupport support;
 
 	/**
 	 * The extension all tool files end with.

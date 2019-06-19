@@ -35,7 +35,7 @@ import org.fife.rtext.plugins.project.model.Workspace;
 class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 	private Project project;
-	private static Icon icon;
+	private static final Icon icon;
 
 
 	ProjectTreeNode(ProjectPlugin plugin, Project project) {
@@ -85,7 +85,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	 *
 	 * @return The project represented.
 	 */
-	public Project getProject() {
+	private Project getProject() {
 		return project;
 	}
 
@@ -166,7 +166,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	 */
 	public static class ProjectNameChecker implements NameChecker {
 
-		private Workspace workspace;
+		private final Workspace workspace;
 
 		ProjectNameChecker(Workspace workspace) {
 			this.workspace = workspace;

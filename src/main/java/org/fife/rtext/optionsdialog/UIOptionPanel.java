@@ -50,8 +50,8 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 	private LabelValueComboBox<String, String> themeCombo;
 	private JButton applyButton;
-	private IconGroup eclipseIconGroup;
-	private IconGroup flatIconGroup;
+	private final IconGroup eclipseIconGroup;
+	private final IconGroup flatIconGroup;
 
 	private int mainViewStyle;
 	private int documentSelectionPlacement;

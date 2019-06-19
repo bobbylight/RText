@@ -52,19 +52,19 @@ import org.fife.ui.rtextarea.SearchEngine;
  */
 class DefaultSourceTree extends JTree {
 
-	private SourceBrowserPlugin plugin;
-	private RText owner;
-	private Listener listener;
+	private final SourceBrowserPlugin plugin;
+	private final RText owner;
+	private final Listener listener;
 	private TreeCellRenderer treeRenderer;
-	private DefaultTreeModel treeModel;
+	private final DefaultTreeModel treeModel;
 	private int mouseX;
 	private int mouseY;
 	private boolean ignoreTreeSelections;
 	private boolean sorted;
 
 	private Icon fileIcon;
-	private String lineFoundText;
-	private String cantFindLineText;
+	private final String lineFoundText;
+	private final String cantFindLineText;
 
 
 	public DefaultSourceTree(SourceBrowserPlugin plugin, RText owner) {
@@ -132,7 +132,7 @@ class DefaultSourceTree extends JTree {
 	 * @return Whether the contents of this tree are sorted.
 	 * @see #setSorted(boolean)
 	 */
-	public boolean isSorted() {
+	private boolean isSorted() {
 		return sorted;
 	}
 
@@ -211,7 +211,7 @@ class DefaultSourceTree extends JTree {
 	 * manually when updating a source tree with a new root, and is also called
 	 * internally on filtering and sorting.
 	 */
-	public void refresh() {
+	private void refresh() {
 		Object root = getModel().getRoot();
 		if (root instanceof SourceTreeNode) {
 			SourceTreeNode node = (SourceTreeNode)root;
@@ -279,7 +279,7 @@ class DefaultSourceTree extends JTree {
 	 */
 	private class ConfigureAction extends AppAction<RText> {
 
-		public ConfigureAction() {
+		ConfigureAction() {
 			super(owner, plugin.getBundle(), "MenuItem.Configure");
 		}
 
@@ -422,7 +422,7 @@ class DefaultSourceTree extends JTree {
 
 		private String mouseMovedTagEntry(ExtendedTagEntry entry) {
 
-			String text = null;
+			String text;
 
 			// If we've already generated the (probably HTML) tool tip text,
 			// use it.

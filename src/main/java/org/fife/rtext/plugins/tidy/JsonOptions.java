@@ -23,9 +23,9 @@ import org.fife.ui.app.Prefs;
  */
 public class JsonOptions extends Prefs {
 
-	public String jsonOutputStyle;
-	public int jsonSpaceCount;
-	public boolean jsonIndentFirstLevel;
+	private String jsonOutputStyle;
+	private int jsonSpaceCount;
+	private boolean jsonIndentFirstLevel;
 
 	private static final String DEFAULT_OUTPUT_STYLE = "json";
 

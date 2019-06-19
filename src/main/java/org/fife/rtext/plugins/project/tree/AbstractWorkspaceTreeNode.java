@@ -51,11 +51,11 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  */
 public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
-	protected ProjectPlugin plugin;
+	final ProjectPlugin plugin;
 	private static RTextFileChooser chooser;
 
 
-	public AbstractWorkspaceTreeNode(ProjectPlugin plugin) {
+	AbstractWorkspaceTreeNode(ProjectPlugin plugin) {
 		this.plugin = plugin;
 	}
 
@@ -66,7 +66,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @param actions The action list to add to.
 	 */
-	protected void addOpenInActions(List<PopupContent> actions) {
+	void addOpenInActions(List<PopupContent> actions) {
 		WorkspaceTree tree = plugin.getTree();
 		PopupContent.PopupSubMenu openInMenu = new PopupContent.PopupSubMenu(
 				Messages.getString("Action.OpenIn"));
@@ -79,7 +79,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
-	protected String escapeForHtml(String text) {
+	String escapeForHtml(String text) {
 		return RTextUtilities.escapeForHTML(text, null);
 	}
 
@@ -89,7 +89,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 *
 	 * @return The display name.
 	 */
-	public abstract String getDisplayName();
+	protected abstract String getDisplayName();
 
 
 	/**
@@ -115,7 +115,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	public abstract Icon getIcon();
 
 
-	public ProjectPlugin getPlugin() {
+	private ProjectPlugin getPlugin() {
 		return plugin;
 	}
 
@@ -176,10 +176,10 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Action for a menu item that adds a file to this project.
 	 */
-	protected class AddFileAction extends BaseAction {
+	class AddFileAction extends BaseAction {
 
-		private ProjectEntryParent parent;
-		private MutableTreeNode node;
+		private final ProjectEntryParent parent;
+		private final MutableTreeNode node;
 
 		AddFileAction(ProjectEntryParent parent, MutableTreeNode node) {
 			super("Action.NewFiles", "page_white_add.png");
@@ -209,12 +209,12 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Action for a menu item that adds a folder to this project.
 	 */
-	protected class AddFolderAction extends BaseAction {
+	class AddFolderAction extends BaseAction {
 
-		private ProjectEntryParent parent;
-		private MutableTreeNode node;
+		private final ProjectEntryParent parent;
+		private final MutableTreeNode node;
 
-		public AddFolderAction(ProjectEntryParent parent, MutableTreeNode node) {
+		AddFolderAction(ProjectEntryParent parent, MutableTreeNode node) {
 			super("Action.AddFolder", "folder_add.png");
 			this.parent = parent;
 			this.node = node;
@@ -244,10 +244,10 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Action for a menu item that adds a logical folder to this project.
 	 */
-	protected class AddLogicalFolderAction extends BaseAction {
+	class AddLogicalFolderAction extends BaseAction {
 
-		private ProjectEntryParent parent;
-		private MutableTreeNode node;
+		private final ProjectEntryParent parent;
+		private final MutableTreeNode node;
 
 		AddLogicalFolderAction(ProjectEntryParent parent,
 				MutableTreeNode node) {
@@ -290,7 +290,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 * Copies the full path of this file or folder to the clipboard.  If this
 	 * tree node does not represent a file or folder, an error beep is played.
 	 */
-	protected class CopyFullPathAction extends BaseAction {
+	class CopyFullPathAction extends BaseAction {
 
 		CopyFullPathAction() {
 			super("Action.CopyFullPath");
@@ -310,7 +310,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Action for deleting a tree node.
 	 */
-	protected class DeleteAction extends BaseAction {
+	class DeleteAction extends BaseAction {
 
 		DeleteAction() {
 			this(true);
@@ -334,7 +334,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	 * Opens the "Find in Files" dialog, starting in this folder.  If this
 	 * tree node does not represent a folder, an error beep is played.
 	 */
-	protected class FindInFilesFromHereAction extends BaseAction {
+	class FindInFilesFromHereAction extends BaseAction {
 
 		FindInFilesFromHereAction() {
 			super("Action.FindInFilesFromHere");
@@ -354,7 +354,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Moves this tree node "down" in the list of its parent's children.
 	 */
-	protected class MoveDownAction extends BaseAction {
+	class MoveDownAction extends BaseAction {
 
 		MoveDownAction() {
 			super("Action.MoveDown");
@@ -373,7 +373,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Moves this tree node to the "bottom" of the list of its parent's children.
 	 */
-	protected class MoveToBottomAction extends BaseAction {
+	class MoveToBottomAction extends BaseAction {
 
 		MoveToBottomAction() {
 			super("Action.MoveToBottom");
@@ -392,7 +392,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Moves this tree node to the "top" of the list of its parent's children.
 	 */
-	protected class MoveToTopAction extends BaseAction {
+	class MoveToTopAction extends BaseAction {
 
 		MoveToTopAction() {
 			super("Action.MoveToTop");
@@ -410,7 +410,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Moves this tree node "up" in the list of its parent's children.
 	 */
-	protected class MoveUpAction extends BaseAction {
+	class MoveUpAction extends BaseAction {
 
 		MoveUpAction() {
 			super("Action.MoveUp");
@@ -428,9 +428,9 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Opens the selected file in RText.
 	 */
-	protected class OpenAction extends BaseAction {
+	class OpenAction extends BaseAction {
 
-		public OpenAction() {
+		OpenAction() {
 			super("Action.Open");
 			int enter = KeyEvent.VK_ENTER;
 			setAccelerator(KeyStroke.getKeyStroke(enter, 0));
@@ -461,7 +461,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Action for getting the properties of a tree node.
 	 */
-	protected class PropertiesAction extends BaseAction {
+	class PropertiesAction extends BaseAction {
 
 		PropertiesAction(boolean enabled) {
 			this(false, enabled);
@@ -485,7 +485,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Refreshes the selected tree node.
 	 */
-	protected class RefreshAction extends BaseAction {
+	class RefreshAction extends BaseAction {
 
 		RefreshAction() {
 			super("Action.Refresh");
@@ -510,7 +510,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	/**
 	 * Action for renaming a tree node.
 	 */
-	protected class RenameAction extends BaseAction {
+	class RenameAction extends BaseAction {
 
 		RenameAction() {
 			this(false);

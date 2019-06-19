@@ -49,15 +49,13 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 						implements ActionListener, DocumentListener,
 								ItemListener, GUIApplicationConstants {
 
-	private JCheckBox visibleCB;
-	private JComboBox<String> locationCombo;
-	private JLabel ctagsExecutableLocationLabel;
-	private JRadioButton exubCtagsRB;
-	private JRadioButton standardCtagsRB;
+	private final JCheckBox visibleCB;
+	private final JComboBox<String> locationCombo;
+	private final JRadioButton exubCtagsRB;
+	private final JRadioButton standardCtagsRB;
 	private JRadioButton lastSelectedCtagsRB;
-	private FSATextField ctagsExecutableTextField;
-	private JButton exeBrowseButton;
-	private JCheckBox htmlToolTipCheckBox;
+	private final FSATextField ctagsExecutableTextField;
+	private final JCheckBox htmlToolTipCheckBox;
 
 	private RTextFileChooser exeFileChooser;
 
@@ -116,14 +114,14 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 		locLabel.setLabelFor(locationCombo);
 
 		// A field in which to enter the CTags executable location.
-		ctagsExecutableLocationLabel = new JLabel(
-					sbb.getString("OptionPanel.Label.ExecutablePath"));
+		JLabel ctagsExecutableLocationLabel = new JLabel(
+			sbb.getString("OptionPanel.Label.ExecutablePath"));
 		ctagsExecutableTextField = new FSATextField();
 		ctagsExecutableTextField.setColumns(30);
 		ctagsExecutableTextField.getDocument().addDocumentListener(this);
 		ctagsExecutableLocationLabel.setLabelFor(ctagsExecutableTextField);
-		exeBrowseButton = new JButton(sbb.getString(
-									"OptionPanel.Button.Browse"));
+		JButton exeBrowseButton = new JButton(sbb.getString(
+			"OptionPanel.Button.Browse"));
 		exeBrowseButton.setActionCommand("Browse");
 		exeBrowseButton.addActionListener(this);
 
@@ -333,7 +331,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 * @see SourceBrowserPlugin#CTAGS_TYPE_EXUBERANT
 	 * @see SourceBrowserPlugin#CTAGS_TYPE_STANDARD
 	 */
-	public String getCTagsType() {
+	private String getCTagsType() {
 		return exubCtagsRB.isSelected() ?
 			SourceBrowserPlugin.CTAGS_TYPE_EXUBERANT :
 			SourceBrowserPlugin.CTAGS_TYPE_STANDARD;
@@ -359,7 +357,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 * @return Whether HTML tooltips should be used.
 	 * @see #setUseHTMLToolTips
 	 */
-	public boolean getUseHTMLToolTips() {
+	private boolean getUseHTMLToolTips() {
 		return htmlToolTipCheckBox.isSelected();
 	}
 
@@ -434,7 +432,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 * @see SourceBrowserPlugin#CTAGS_TYPE_EXUBERANT
 	 * @see SourceBrowserPlugin#CTAGS_TYPE_STANDARD
 	 */
-	public void setCTagsType(String type) {
+	private void setCTagsType(String type) {
 		if (SourceBrowserPlugin.CTAGS_TYPE_EXUBERANT.equals(type)) {
 			exubCtagsRB.setSelected(true);
 			lastSelectedCtagsRB = exubCtagsRB;
@@ -456,7 +454,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 * @param use Whether or not the "HTML tooltips" checkbox is selected.
 	 * @see #getUseHTMLToolTips
 	 */
-	public void setUseHTMLToolTips(boolean use) {
+	private void setUseHTMLToolTips(boolean use) {
 		htmlToolTipCheckBox.setSelected(use);
 	}
 

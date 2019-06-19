@@ -50,10 +50,10 @@ import org.fife.ui.rtextfilechooser.filters.ExtensionFileFilter;
  */
 class ProjectWindow extends DockableWindow {
 
-	private ProjectPlugin plugin;
+	private final ProjectPlugin plugin;
 	private JLabel workspaceNameLabel;
-	private WorkspaceTree tree;
-	private JToolBar toolbar;
+	private final WorkspaceTree tree;
+	private final JToolBar toolbar;
 
 
 	ProjectWindow(RText app, ProjectPlugin plugin, ProjectPluginPrefs prefs) {
@@ -175,11 +175,11 @@ class ProjectWindow extends DockableWindow {
 	 */
 	private abstract class AbstractWorkspaceAction extends BaseAction {
 
-		protected AbstractWorkspaceAction(String key) {
+		AbstractWorkspaceAction(String key) {
 			super(key);
 		}
 
-		protected boolean saveWorkspace(Workspace workspace) {
+		boolean saveWorkspace(Workspace workspace) {
 
 			RText rtext = plugin.getRText();
 			boolean success = true;
@@ -302,7 +302,7 @@ class ProjectWindow extends DockableWindow {
 			}
 			File wsFile = chooser.getSelectedFile();
 
-			Workspace newWorkspace = null;
+			Workspace newWorkspace;
 			try {
 				newWorkspace = Workspace.load(plugin, wsFile);
 			} catch (IOException ioe) {

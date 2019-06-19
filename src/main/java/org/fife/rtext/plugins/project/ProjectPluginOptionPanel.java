@@ -41,9 +41,9 @@ import org.fife.ui.dockablewindows.DockableWindowConstants;
 class ProjectPluginOptionPanel extends PluginOptionsDialogPanel
 		implements ItemListener, ActionListener {
 
-	private JCheckBox visibleCB;
-	private JLabel locationLabel;
-	private JComboBox<String> locationCombo;
+	private final JCheckBox visibleCB;
+	private final JLabel locationLabel;
+	private final JComboBox<String> locationCombo;
 
 	private static final String PROPERTY = "Property";
 
@@ -154,7 +154,7 @@ class ProjectPluginOptionPanel extends PluginOptionsDialogPanel
 	 * @return The selected placement.
 	 * @see #setDockableWindowPlacement(int)
 	 */
-	public int getDockableWindowPlacement() {
+	private int getDockableWindowPlacement() {
 		return locationCombo.getSelectedIndex();
 	}
 
