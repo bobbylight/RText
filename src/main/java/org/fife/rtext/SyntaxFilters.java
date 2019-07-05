@@ -394,13 +394,16 @@ public class SyntaxFilters implements SyntaxConstants {
 	 */
 	@Override
 	public String toString() {
-		String retVal = "";
+
+		StringBuilder retVal = new StringBuilder();
+
 		for (String style : filters.keySet()) {
-			retVal += style + ":" + getFilterString(style) + ",";
+			retVal.append(style).append(":").append(getFilterString(style)).append(",");
 		}
+
 		// Get rid of the last comma.
-		retVal = retVal.substring(0,retVal.length()-1);
-		return retVal;
+		retVal = new StringBuilder(retVal.substring(0, retVal.length() - 1));
+		return retVal.toString();
 	}
 
 

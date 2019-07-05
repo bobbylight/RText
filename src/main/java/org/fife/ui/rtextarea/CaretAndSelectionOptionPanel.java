@@ -519,7 +519,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 * @see ConfigurableCaret
 	 */
 	public CaretStyle getCaretStyle(int mode) {
-		int ordinal = 0;
+		int ordinal;
 		if (mode==RTextArea.INSERT_MODE) {
 			ordinal = insCaretCombo.getSelectedIndex();
 		}

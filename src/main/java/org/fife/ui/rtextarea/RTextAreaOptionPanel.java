@@ -573,7 +573,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 
 		// Ensure the tab size specified is valid.
-		int temp = 0;
+		int temp;
 		try {
 			temp = Integer.parseInt(tabSizeField.getText());
 			if (temp<0) throw new NumberFormatException();
@@ -912,7 +912,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	/**
 	 * Sets the status of the "Enable hyperlinks" checkbox.
 	 *
-	 * @param clickable Whether the checkbox is selected.
+	 * @param enabled Whether hyperlinks arer enabled.
 	 */
 	private void setHyperlinksEnabled(boolean enabled) {
 		linkCB.setSelected(enabled);

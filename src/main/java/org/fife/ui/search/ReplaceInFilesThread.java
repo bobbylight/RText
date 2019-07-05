@@ -106,7 +106,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 				// Note that this method postpones the update to the EDT.
 				dialog.setStatusText(searchingFile + i + "/" + numFiles +
 								": " + fileFullPath);
-				String encoding = null;
+				String encoding;
 
 				try {
 					// Use a UnicodeReader to auto-detect whether this
@@ -117,7 +117,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 					UnicodeReader ur = new UnicodeReader(temp);
 					encoding = ur.getEncoding();
 					try (Reader r = new BufferedReader(ur)) {
-						int count = 0;
+						int count;
 						sb.setLength(0);
 						while ((count = r.read(buf)) != -1) {
 							sb.append(buf, 0, count);
@@ -143,7 +143,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 
 					try {
 
-						int repCount = 0;
+						int repCount;
 						replaceSB.setLength(0);
 
 						if (useRegex) {

@@ -34,7 +34,6 @@ import java.util.logging.Logger;
 public class AWTExceptionHandler {
 
 	private static Logger logger;
-	private FileHandler fileHandler;
 
 
 	public AWTExceptionHandler() {
@@ -44,7 +43,7 @@ public class AWTExceptionHandler {
 		if (logger!=null) {
 			logger = Logger.getLogger("org.fife.rtext");
 			try {
-				fileHandler = new FileHandler(
+				FileHandler fileHandler = new FileHandler(
 						"%h/uncaughtRTextAwtExceptions.log", true);
 				logger.addHandler(fileHandler);
 			} catch (IOException ioe) {

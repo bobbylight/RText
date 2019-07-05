@@ -741,14 +741,17 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 *         file history, then <code>null</code> is returned.
 	 */
 	public String getFileHistoryString() {
-		String retVal = "";
+
+		StringBuilder retVal = new StringBuilder();
+
 		int historyCount = recentFilesMenu.getItemCount();
 		for (int i=historyCount-1; i>=0; i--) {
-			retVal += recentFilesMenu.getFileFullPath(i) + "<";
+			retVal.append(recentFilesMenu.getFileFullPath(i)).append("<");
 		}
+
 		if (retVal.length()>0)
-			retVal = retVal.substring(0, retVal.length()-1); // Remove trailing '>'.
-		return retVal;
+			retVal = new StringBuilder(retVal.substring(0, retVal.length() - 1)); // Remove trailing '>'.
+		return retVal.toString();
 	}
 
 

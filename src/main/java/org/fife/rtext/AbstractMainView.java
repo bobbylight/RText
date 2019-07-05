@@ -488,8 +488,7 @@ public abstract class AbstractMainView extends JPanel
 				if (!closed) {
 					// If the newly-active file is read-only, say so in the status bar.
 					owner.setStatusBarReadOnlyIndicatorEnabled(
-						currentTextArea==null ? false
-										: currentTextArea.isReadOnly());
+						currentTextArea != null && currentTextArea.isReadOnly());
 					return false;
 				}
 
@@ -1091,7 +1090,7 @@ public abstract class AbstractMainView extends JPanel
 				codeFoldingEnabledStates.entrySet();
 		for (Map.Entry<String, Boolean> entry : entrySet) {
 			if (Boolean.TRUE.equals(entry.getValue())) {
-				sb.append(entry.getKey() + ",");
+				sb.append(entry.getKey()).append(',');
 			}
 		}
 		if (sb.length()>0) {
@@ -1452,7 +1451,7 @@ public abstract class AbstractMainView extends JPanel
 										BufferedImage.TYPE_INT_ARGB);
 
 				Graphics2D g2d = transparentImage.createGraphics();
-				BufferedImage image = null;
+				BufferedImage image;
 
 				ClassLoader cl = AbstractMainView.class.getClassLoader();
 				image = ImageIO.read(cl.getResource(
@@ -1939,7 +1938,7 @@ public abstract class AbstractMainView extends JPanel
 
 		String style = SyntaxConstants.SYNTAX_STYLE_NONE;
 
-		String firstLine = null;
+		String firstLine;
 		try {
 			int endOffs = pane.getLineEndOffset(0);
 			if (pane.getLineCount()>1) {
@@ -2012,7 +2011,7 @@ public abstract class AbstractMainView extends JPanel
 	private void handleAddTextFileIOException(FileLocation loc,
 								IOException ioe, boolean load) {
 
-		String desc = null;
+		String desc;
 		String title = owner.getString("ErrorDialogTitle");
 
 		if ("sun.net.ftp.FtpLoginException".equals(ioe.getClass().getName())){
@@ -2077,7 +2076,7 @@ public abstract class AbstractMainView extends JPanel
 			// Should be the number of the next modified document.
 			String token = tokenizer.nextToken();
 
-			int docNumber = 0;
+			int docNumber;
 			try {
 				docNumber = Integer.parseInt(token);
 			} catch (NumberFormatException nfe) { // Should never happen
@@ -2087,7 +2086,7 @@ public abstract class AbstractMainView extends JPanel
 
 			// We must get it as a regular expression because
 			// replaceFirst expects one.
-			int rc = JOptionPane.NO_OPTION;
+			int rc;
 			String temp = owner.getString("DocModifiedMessage",
 								currentTextArea.getFileName());
 			rc = JOptionPane.showConfirmDialog(owner, temp,

@@ -305,10 +305,10 @@ class FindInFilesThread extends GUIWorkerThread {
 
 		// Some stuff we'll use below.
 		int bufferLength = buffer.length();
-		String lineText = null;
+		String lineText;
 		RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
 		Element map = doc.getDefaultRootElement();
-		Element elem = null;
+		Element elem;
 		int lineCount = map.getElementCount();
 		int i = 0;
 		int len = searchString.length();
@@ -322,8 +322,8 @@ class FindInFilesThread extends GUIWorkerThread {
 
 				numMatches++;
 				if (matchingLines) {
-					int line = -1;
-					int lineEnd = bufferLength-1;
+					int line;
+					int lineEnd;
 					line = map.getElementIndex(i);
 					elem = map.getElement(line);
 					lineEnd = line==lineCount-1 ? elem.getEndOffset()-1 :
@@ -375,7 +375,7 @@ class FindInFilesThread extends GUIWorkerThread {
 
 		Document doc = textArea.getDocument();
 		Element map = doc.getDefaultRootElement();
-		Element elem = null;
+		Element elem;
 		int lineCount = map.getElementCount();
 		int numMatches = 0;
 		int lastStartLine = -1;

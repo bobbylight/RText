@@ -434,7 +434,7 @@ public class RemoteFileChooser extends EscapableDialog
 			portCombo.addItem(port); // Puts it at top of drop-down list.
 		}
 
-		URL url = null;
+		URL url;
 		try {
 			url = createURL(protocol, user, pass, host, port, file);
 		} catch (MalformedURLException mue) {

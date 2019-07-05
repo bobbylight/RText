@@ -576,7 +576,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		}
 
 		else if (source==foregroundButton && colorScheme!=null) {
-			Color fg = null;
+			Color fg;
 			if (foregroundButton.isEnabled()) {
 				fg = foregroundButton.getColor();
 			}
@@ -597,7 +597,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		}
 
 		else if (source==backgroundButton && colorScheme!=null) {
-			Color bg = null;
+			Color bg;
 			if (backgroundButton.isEnabled()) {
 				bg = backgroundButton.getColor();
 			}

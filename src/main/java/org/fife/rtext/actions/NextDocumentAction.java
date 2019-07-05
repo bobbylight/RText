@@ -47,7 +47,7 @@ public class NextDocumentAction extends AppAction<RText> {
 		AbstractMainView view = getApplication().getMainView();
 		int currentTab = view.getSelectedIndex();
 
-		int tab = 0;
+		int tab;
 		if (forward) {
 			tab = (currentTab+1) % view.getNumDocuments();
 		}

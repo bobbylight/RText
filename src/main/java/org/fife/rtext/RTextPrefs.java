@@ -633,7 +633,6 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		prefs.putInt("maxFileHistorySize",				maxFileHistorySize);
 
 		//prefs.flush();
-		prefs = null;
 
 	}
 

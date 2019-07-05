@@ -998,7 +998,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	/**
 	 * Synchronizes access to our "worker" thread.
 	 *
-	 * @param workerThread The new worker thread.
+	 * @param thread The new worker thread.
 	 * @see #getWorkerThread
 	 */
 	private synchronized void setWorkerThread(FindInFilesThread thread) {

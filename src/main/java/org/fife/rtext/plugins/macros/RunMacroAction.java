@@ -69,7 +69,7 @@ class RunMacroAction extends AppAction<RText> {
 	 * @param plugin The plugin.
 	 * @param macro The macro to run.
 	 */
-	public RunMacroAction(RText app, MacroPlugin plugin, Macro macro) {
+	RunMacroAction(RText app, MacroPlugin plugin, Macro macro) {
 		super(app);
 		setName(macro.getName());
 		this.plugin = plugin;
@@ -169,9 +169,6 @@ class RunMacroAction extends AppAction<RText> {
 		}
 
 		// Create our bindings and cache them for later.
-		/**
-		 * The cached bindings instance.
-		 */
 		Bindings bindings = engine.createBindings();
 		engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
 

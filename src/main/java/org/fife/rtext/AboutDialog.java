@@ -141,12 +141,11 @@ class AboutDialog extends EscapableDialog {
 	}
 
 
-	private JPanel addLeftAligned(Component toAdd, Container addTo) {
+	private void addLeftAligned(Component toAdd, Container addTo) {
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.setOpaque(false); // For ones on white background.
 		temp.add(toAdd, BorderLayout.LINE_START);
 		addTo.add(temp);
-		return temp;
 	}
 
 

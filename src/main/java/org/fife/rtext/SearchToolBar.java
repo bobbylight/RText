@@ -94,11 +94,11 @@ public class SearchToolBar extends JToolBar {
 		FindFieldListener findFieldListener = new FindFieldListener();
 
 		ClassLoader cl = this.getClass().getClassLoader();
-		Icon icon = null;
+		Icon icon;
 
 		add(Box.createHorizontalStrut(5));
 
-		FindButton hideButton = null;
+		FindButton hideButton;
 		try {
 			hideButton = new FindButton(new ImageIcon(
 				cl.getResource("org/fife/rtext/graphics/close.gif")));
