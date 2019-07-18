@@ -90,6 +90,7 @@ public abstract class AbstractMainView extends JPanel
 	public static final String MARK_OCCURRENCES_COLOR_PROPERTY	= "MainView.markOccurrencesColor";
 	public static final String MARK_OCCURRENCES_PROPERTY		= "MainView.markOccurrences";
 	public static final String MAX_FILE_SIZE_PROPERTY			= "MainView.maxFileSize";
+	public static final String MAX_FILE_SIZE_FOR_CODE_FOLDING_PROPERTY = "MainView.maxFileSizeForCodeFolding";
 	public static final String REMEMBER_WS_LINES_PROPERTY		= "MainView.rememberWhitespaceLines";
 	public static final String ROUNDED_SELECTION_PROPERTY		= "MainView.roundedSelection";
 	public static final String SMOOTH_TEXT_PROPERTY			= "MainView.smoothText";
@@ -175,6 +176,7 @@ public abstract class AbstractMainView extends JPanel
 
 	private boolean doFileSizeCheck;
 	private float maxFileSize;				// In MB.
+	private int maxFileSizeForCodeFolding;
 
 	private boolean ignoreBackupExtensions;
 
@@ -645,6 +647,7 @@ public abstract class AbstractMainView extends JPanel
 
 		doFileSizeCheck = fromPanel.doFileSizeCheck;
 		maxFileSize = fromPanel.maxFileSize;
+		maxFileSizeForCodeFolding = fromPanel.maxFileSizeForCodeFolding;
 
 		ignoreBackupExtensions = fromPanel.ignoreBackupExtensions;
 
@@ -799,11 +802,11 @@ public abstract class AbstractMainView extends JPanel
 		pane.setTabsEmulated(emulateTabsWithWhitespace);
 		pane.setAntiAliasingEnabled(aaEnabled);
 		pane.setFractionalFontMetricsEnabled(isFractionalFontMetricsEnabled());
-		// orientation is done later to override scrollpane's
+		// orientation is done later to override scroll pane's
 		// applyComponentOrientation(...).
 		//pane.applyComponentOrientation(getTextAreaOrientation());
 
-		pane.setCodeFoldingEnabled(isCodeFoldingEnabledFor(style));
+		setCodeFoldingEnabledForTextArea(pane, isCodeFoldingEnabledFor(style));
 
 		// Listeners.
 		pane.addPropertyChangeListener(owner);
@@ -1583,6 +1586,19 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns the maximum size a file can be before code folding
+	 * is never performed for it, even if code folding is enabled
+	 * for its file type.
+	 *
+	 * @return The maximum file size, in MB.
+	 * @see #setMaxFileSizeForCodeFolding(int)
+	 */
+	public int getMaxFileSizeForCodeFolding() {
+		return maxFileSizeForCodeFolding;
+	}
+
+
+	/**
 	 * Gets the color used to highlight modified documents' display names.
 	 *
 	 * @return color The color used.
@@ -2270,6 +2286,7 @@ public abstract class AbstractMainView extends JPanel
 		setGuessFileContentType(prefs.guessFileContentType);
 		setDoFileSizeCheck(prefs.doFileSizeCheck);
 		setMaxFileSize(prefs.maxFileSize);
+		setMaxFileSizeForCodeFolding(prefs.maxFileSizeForCodeFolding);
 		setIgnoreBackupExtensions(prefs.ignoreBackupExtensions);
 		setTextAreaFont(prefs.textAreaFont, prefs.textAreaUnderline);
 		setTextAreaForeground(prefs.textAreaForeground);
@@ -2946,8 +2963,8 @@ public abstract class AbstractMainView extends JPanel
 		// .c => .cpp, etc.).
 		String newStyle = getSyntaxStyleForFile(loc.getFileName());
 		setSyntaxStyle(currentTextArea, newStyle);
-		currentTextArea.setCodeFoldingEnabled(
-				isCodeFoldingEnabledFor(newStyle));
+		setCodeFoldingEnabledForTextArea(currentTextArea,
+			isCodeFoldingEnabledFor(newStyle));
 
 		// If they had the same file opened twice (i.e., the "foo (1)"
 		// and "foo (2)"), and did "Save As..." on one of them, the other
@@ -3223,17 +3240,37 @@ public abstract class AbstractMainView extends JPanel
 	 * @see #isCodeFoldingEnabledFor(String)
 	 */
 	public void setCodeFoldingEnabledFor(String language, boolean enabled) {
+
 		boolean prev = isCodeFoldingEnabledFor(language);
+
 		if (enabled!=prev) {
+
 			codeFoldingEnabledStates.put(language, enabled);
+
 			for (int i=0; i<getNumDocuments(); i++) {
 				RTextEditorPane textArea = getRTextEditorPaneAt(i);
 				if (language.equals(textArea.getSyntaxEditingStyle())) {
-					RTextScrollPane sp = getRTextScrollPaneAt(i);
-					sp.getGutter().setFoldIndicatorEnabled(enabled);
-					textArea.setCodeFoldingEnabled(enabled);
+					setCodeFoldingEnabledForTextArea(textArea, enabled);
 				}
 			}
+		}
+	}
+
+
+	/**
+	 * Sets whether code folding is enabled for a text area, but ensures its
+	 * file size is below our threshold first.
+	 *
+	 * @param textArea The text area to toggle.
+	 * @param enabled Whether code folding should be enabled.  Note this will
+	 *        be ignored if the file is too large for code folding.
+	 */
+	private void setCodeFoldingEnabledForTextArea(RTextEditorPane textArea, boolean enabled) {
+
+		int charCountThreshold = getMaxFileSizeForCodeFolding() * 1024 * 1024;
+
+		if (textArea.getDocument().getLength() <= charCountThreshold) {
+			textArea.setCodeFoldingEnabled(enabled);
 		}
 	}
 
@@ -3813,6 +3850,27 @@ public abstract class AbstractMainView extends JPanel
 			float old = maxFileSize;
 			maxFileSize = size;
 			firePropertyChange(MAX_FILE_SIZE_PROPERTY, old, maxFileSize);
+		}
+	}
+
+
+	/**
+	 * Sets the maximum size a file can be for code folding to be enabled.
+	 * If a file is larger than this size in MB, code folding will be
+	 * disabled for that file, regardless of the code folding state in
+	 * general.  This method fires a property change event of type
+	 * {@link #MAX_FILE_SIZE_FOR_CODE_FOLDING_PROPERTY}.
+	 *
+	 * @param size The new maximum size for a file before the user is
+	 *        prompted before opening it.
+	 * @see #getMaxFileSizeForCodeFolding()
+	 */
+	public void setMaxFileSizeForCodeFolding(int size) {
+		if (maxFileSizeForCodeFolding != size) {
+			int old = maxFileSizeForCodeFolding;
+			maxFileSizeForCodeFolding = size;
+			firePropertyChange(MAX_FILE_SIZE_FOR_CODE_FOLDING_PROPERTY, old,
+				maxFileSizeForCodeFolding);
 		}
 	}
 

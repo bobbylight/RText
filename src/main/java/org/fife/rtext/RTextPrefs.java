@@ -49,7 +49,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	/**
 	 * The default Look and Feel.
 	 */
-	public static final String DEFAULT_LAF = UIManager.getSystemLookAndFeelClassName();
+	private static final String DEFAULT_LAF = UIManager.getSystemLookAndFeelClassName();
 
 	/**
 	 * The default maximum number of spelling errors to display for a single
@@ -119,7 +119,8 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	public String defaultEncoding;				// Encoding of new text files.
 	public boolean guessFileContentType;
 	public boolean doFileSizeCheck;
-	public float maxFileSize;					// In MB.
+	public float maxFileSize;					// In MB
+	public int maxFileSizeForCodeFolding;		// In MB
 	public boolean ignoreBackupExtensions;
 	public Font textAreaFont;					// Default text area font.
 	public boolean textAreaUnderline;				// Is default font underlined?
@@ -231,6 +232,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		guessFileContentType		= mainView.getGuessFileContentType();
 		doFileSizeCheck			= mainView.getDoFileSizeCheck();
 		maxFileSize				= mainView.getMaxFileSize();
+		maxFileSizeForCodeFolding = mainView.getMaxFileSizeForCodeFolding();
 		ignoreBackupExtensions	= mainView.getIgnoreBackupExtensions();
 		textAreaFont				= mainView.getTextAreaFont();
 		textAreaUnderline			= mainView.getTextAreaUnderline();
@@ -427,6 +429,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 			guessFileContentType	= prefs.getBoolean("guessFileContentType", guessFileContentType);
 			doFileSizeCheck		= prefs.getBoolean("fileSizeCheck", doFileSizeCheck);
 			maxFileSize			= prefs.getFloat("maxFileSize", maxFileSize);
+			maxFileSizeForCodeFolding = prefs.getInt("maxFileSizeForCodeFolding", maxFileSizeForCodeFolding);
 			ignoreBackupExtensions= prefs.getBoolean("ignoreBackupExtensions", ignoreBackupExtensions);
 			temp						= prefs.get("textAreaFont", null);
 			if (temp!=null) {
@@ -605,6 +608,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		prefs.putBoolean("guessFileContentType",		guessFileContentType);
 		prefs.putBoolean("fileSizeCheck",				doFileSizeCheck);
 		prefs.putFloat("maxFileSize",					maxFileSize);
+		prefs.putInt("maxFileSizeForCodeFolding",		maxFileSizeForCodeFolding);
 		prefs.putBoolean("ignoreBackupExtensions",		ignoreBackupExtensions);
 		prefs.put("textAreaFont",					textAreaFont==null ? "null" : textAreaFont.getName() + ","
 													+ textAreaFont.getSize() + "," + textAreaFont.isBold() +
@@ -715,7 +719,8 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		defaultEncoding = null; // Use system default encoding.
 		guessFileContentType = true;
 		doFileSizeCheck	= true;
-		maxFileSize		= 10f;	// MB.
+		maxFileSize		= 10f;	// MB
+		maxFileSizeForCodeFolding = 2; // MB
 		ignoreBackupExtensions = true;
 		textAreaFont		= RTextArea.getDefaultFont();
 		textAreaUnderline	= false;

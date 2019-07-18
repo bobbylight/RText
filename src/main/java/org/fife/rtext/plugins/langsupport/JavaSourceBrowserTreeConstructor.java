@@ -36,7 +36,7 @@ import org.fife.rtext.RTextEditorPane;
  * @author Robert Futrell
  * @version 1.0
  */
-class JavaSourceBrowserTreeConstructor {
+public class JavaSourceBrowserTreeConstructor {
 
 
 	public JTree constructSourceBrowserTree(RText rtext) {

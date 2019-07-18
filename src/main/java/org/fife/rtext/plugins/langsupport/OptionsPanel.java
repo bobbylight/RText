@@ -16,19 +16,15 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.event.HyperlinkEvent.EventType;
 
 import org.fife.rsta.ac.java.JavaCellRenderer;
+import org.fife.rtext.RText;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
@@ -49,6 +45,7 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 	 */
 	private static final String OPTION_PANEL_ID = "LanguageSupportOptionPanel";
 
+	private final JComboBox<Integer> codeFoldingThresholdCB;
 	private final JCheckBox altColorCB;
 	private final RColorSwatchesButton altColorButton;
 	private final JButton rdButton;
@@ -86,11 +83,20 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 		Box temp = Box.createVerticalBox();
 		temp.setBorder(new OptionPanelBorder(msg.getString("Options.Main.Section")));
 
+		codeFoldingThresholdCB = new JComboBox<>(new Integer[] { 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+		codeFoldingThresholdCB.addActionListener(listener);
+		Box temp2 = createHorizontalBox();
+		temp2.add(UIUtil.newLabel(msg, "Options.Main.CodeFoldingThreshold", codeFoldingThresholdCB));
+		temp2.add(Box.createHorizontalStrut(5));
+		temp2.add(codeFoldingThresholdCB);
+		temp2.add(Box.createHorizontalGlue());
+		addLeftAligned(temp, temp2);
+
 		altColorCB = new JCheckBox(msg.getString("Options.Main.AlternateColor"));
 		altColorCB.addActionListener(listener);
 		altColorButton = new RColorSwatchesButton();
 		altColorButton.addActionListener(listener);
-		Box temp2 = createHorizontalBox();
+		temp2 = createHorizontalBox();
 		temp2.add(altColorCB);
 		temp2.add(Box.createHorizontalStrut(5));
 		temp2.add(altColorButton);
@@ -137,6 +143,11 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 
 	@Override
 	protected void doApplyImpl(Frame owner) {
+
+		RText rtext = (RText)owner;
+		rtext.getMainView().setMaxFileSizeForCodeFolding(
+			(Integer)codeFoldingThresholdCB.getSelectedItem());
+
 		Color c = altColorCB.isSelected() ? altColorButton.getColor() : null;
 		// All cell renderers except Java's are CompletionCellRenderers.
 		CompletionCellRenderer.setAlternateBackground(c);
@@ -158,6 +169,9 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 
 	@Override
 	protected void setValuesImpl(Frame owner) {
+
+		RText app = (RText)owner;
+		codeFoldingThresholdCB.setSelectedItem(app.getMainView().getMaxFileSizeForCodeFolding());
 
 		Color altColor = CompletionCellRenderer.getAlternateBackground();
 		if (altColor==null) {
@@ -181,9 +195,15 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
+			int defaultCodeFoldingThreshold = 2;
 			Object source = e.getSource();
 
-			if (altColorCB==source) {
+			if (codeFoldingThresholdCB == source) {
+				hasUnsavedChanges = true;
+				firePropertyChange(PROPERTY, null, null);
+			}
+
+			else if (altColorCB==source) {
 				altColorButton.setEnabled(altColorCB.isSelected());
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
@@ -196,8 +216,11 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 
 			else if (rdButton==source) {
 
-				if (altColorCB.isSelected() || !DEFAULT_ALT_ROW_COLOR.
-						equals(altColorButton.getColor())) {
+				if (!Objects.equals(defaultCodeFoldingThreshold,
+							codeFoldingThresholdCB.getSelectedItem()) ||
+						altColorCB.isSelected() ||
+						!DEFAULT_ALT_ROW_COLOR.equals(altColorButton.getColor())) {
+					codeFoldingThresholdCB.setSelectedItem(defaultCodeFoldingThreshold);
 					altColorCB.setSelected(false);
 					altColorButton.setEnabled(false);
 					altColorButton.setColor(DEFAULT_ALT_ROW_COLOR);
