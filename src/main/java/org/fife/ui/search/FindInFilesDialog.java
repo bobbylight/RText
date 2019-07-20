@@ -54,7 +54,6 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	private JButton browseButton;
 
 	private JRadioButton matchingLinesRadioButton;
-	private JRadioButton fileCountsOnlyRadioButton;
 
 	protected JCheckBox verboseCheckBox;
 
@@ -383,7 +382,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		matchingLinesRadioButton.setMnemonic((int)getString2("MatchingLinesMnemonic").charAt(0));
 		matchingLinesRadioButton.setSelected(true);
 		detailPanel.add(matchingLinesRadioButton);
-		fileCountsOnlyRadioButton = new JRadioButton(getString2("FileCounts"));
+		JRadioButton fileCountsOnlyRadioButton = new JRadioButton(getString2("FileCounts"));
 		fileCountsOnlyRadioButton.setMnemonic((int)getString2("FileCountsMnemonic").charAt(0));
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(matchingLinesRadioButton);
@@ -1097,34 +1096,43 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 			this.comp = comp;
 		}
 
+		private void handleOpenSearchResult() {
+
+			int row = comp.getSelectedRow();
+			if (row==-1)
+				return;
+
+			MatchData data = comp.getMatchDataForRow(row);
+			String fileName = data.getFileName();
+			// Might be a directory if Verbose is enabled.
+			if (!(new File(fileName).isFile())) {
+				UIManager.getLookAndFeel().provideErrorFeedback(null);
+				return;
+			}
+
+			String lineStr = data.getLineNumber();
+			int line = -1;
+
+			if (!FindInFilesThread.NO_LINE_NUMBER.equals(lineStr)) {
+				// Should be in format "3" or "5-7".
+				if (lineStr.contains("-")) {
+					lineStr = lineStr.substring(0, lineStr.indexOf('-'));
+				}
+				try {
+					line = Integer.parseInt(lineStr);
+				} catch (NumberFormatException nfe) {
+					nfe.printStackTrace();
+				}
+			}
+
+			fireFindInFilesEvent(new FindInFilesEvent(
+				FindInFilesDialog.this, fileName, line));
+		}
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (e.getButton()==MouseEvent.BUTTON1 && e.getClickCount()==2) {
-				int row = comp.getSelectedRow();
-				if (row==-1)
-					return;
-				MatchData data = comp.getMatchDataForRow(row);
-				String fileName = data.getFileName();
-				// Might be a directory if Verbose is enabled.
-				if (!(new File(fileName).isFile())) {
-					UIManager.getLookAndFeel().provideErrorFeedback(null);
-					return;
-				}
-				String lineStr = data.getLineNumber();
-				int line = -1;
-				if (!FindInFilesThread.NO_LINE_NUMBER.equals(lineStr)) {
-					// Should be in format "3" or "5-7".
-					if (lineStr.contains("-")) {
-						lineStr = lineStr.substring(0, lineStr.indexOf('-'));
-					}
-					try {
-						line = Integer.parseInt(lineStr);
-					} catch (NumberFormatException nfe) {
-						nfe.printStackTrace();
-					}
-				}
-				fireFindInFilesEvent(new FindInFilesEvent(
-							FindInFilesDialog.this, fileName, line));
+				handleOpenSearchResult();
 			}
 		}
 

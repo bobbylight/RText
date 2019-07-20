@@ -16,14 +16,13 @@ import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Vector;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JViewport;
-import javax.swing.ToolTipManager;
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -34,6 +33,9 @@ import org.fife.ui.FileExplorerTableModel;
 import org.fife.ui.RListSelectionModel;
 import org.fife.ui.FileExplorerTableModel.SortableHeaderRenderer;
 import org.fife.ui.autocomplete.Util;
+import org.fife.ui.rtextfilechooser.Actions;
+import org.fife.ui.rtextfilechooser.FileSelector;
+import org.fife.ui.rtextfilechooser.FileSystemTree;
 
 
 /**
@@ -43,11 +45,12 @@ import org.fife.ui.autocomplete.Util;
  * @author Robert Futrell
  * @version 1.0
  */
-public class FindInFilesTable extends JTable implements ResultsComponent {
+public class FindInFilesTable extends JTable implements ResultsComponent, FileSelector {
 
 	private FileExplorerTableModel sorter;
 	private DefaultTableModel tableModel;
 	private List<MatchData> matchDatas;
+	private JPopupMenu contextMenu;
 
 	private StandardCellRenderer defaultRenderer;
 	private VerboseCellRenderer verboseRenderer;
@@ -244,6 +247,27 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	}
 
 
+	@Override
+	public JPopupMenu getComponentPopupMenu() {
+
+		if (contextMenu == null) {
+
+			contextMenu = new JPopupMenu();
+			ResourceBundle bundle = ResourceBundle.getBundle(
+				FileSystemTree.class.getName());
+
+			JMenu openInMenu = new JMenu(bundle.getString("PopupMenu.OpenIn"));
+			openInMenu.add(new Actions.SystemOpenAction(this,
+				Actions.SystemOpenAction.OpenMethod.EDIT));
+			openInMenu.add(new Actions.SystemOpenAction(this,
+				Actions.SystemOpenAction.OpenMethod.OPEN));
+			contextMenu.add(openInMenu);
+		}
+
+		return getSelectedRow() > -1 ? contextMenu : null;
+	}
+
+
 	/**
 	 * Returns the match data displayed in the specified row.
 	 *
@@ -280,6 +304,36 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 			return parent.getSize().getWidth()>getPreferredSize().getWidth();
 		}
 		return super.getScrollableTracksViewportWidth();
+	}
+
+
+	@Override
+	public File getSelectedFile() {
+
+		int selectedRow = getSelectedRow();
+		if (selectedRow == -1) {
+			UIManager.getLookAndFeel().provideErrorFeedback(this);
+			return null;
+		}
+
+		MatchData matchData = getMatchDataForRow(selectedRow);
+		String fileName = matchData.getFileName();
+
+		// Might be a directory if Verbose is enabled.
+		File file = new File(fileName);
+		if (!file.isFile()) {
+			UIManager.getLookAndFeel().provideErrorFeedback(this);
+			return null;
+		}
+
+		return file;
+	}
+
+
+	@Override
+	public File[] getSelectedFiles() {
+		File file = getSelectedFile();
+		return file != null ? new File[] { file } : new File[0];
 	}
 
 
@@ -320,6 +374,24 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 	public void prettyUp() {
 		refreshColumnWidths();
 		revalidate();
+	}
+
+
+	@Override
+	protected void processMouseEvent(MouseEvent e) {
+
+		// Ensure right-clicking selects the current row too
+		if (SwingUtilities.isRightMouseButton(e)) {
+			int row = rowAtPoint(e.getPoint());
+			if (row > -1) {
+				setRowSelectionInterval(row, row);
+			}
+			else {
+				clearSelection();
+			}
+		}
+
+		super.processMouseEvent(e);
 	}
 
 
@@ -450,12 +522,10 @@ public class FindInFilesTable extends JTable implements ResultsComponent {
 
 			// If it's HTML and selected, don't colorize the HTML, let the
 			// text all be the table's "selected text" color.
-			if (value instanceof String) {
+			if (selected && value instanceof String) {
 				String str = (String)value;
 				if (str.startsWith("<html>")) {
-					if (selected) {
-						value = str.replaceAll("color=\"[^\"]+\"", "");
-					}
+					value = str.replaceAll("color=\"[^\"]+\"", "");
 				}
 			}
 
