@@ -47,6 +47,8 @@ public class LangSupportPreferences extends Prefs {
 
 	public boolean dart_folding_enabled;
 
+	public boolean go_folding_enabled;
+
 	public boolean groovy_folding_enabled;
 
 	public boolean html_enabled;
@@ -148,6 +150,8 @@ public class LangSupportPreferences extends Prefs {
 		d_folding_enabled = true;
 
 		dart_folding_enabled = true;
+
+		go_folding_enabled = true;
 
 		groovy_folding_enabled = true;
 

@@ -87,7 +87,7 @@ public class SyntaxFilters implements SyntaxConstants {
 				int colon = filterStr.indexOf(':', oldCommaPos);
 				if (colon>-1) {
 					String style = filterStr.substring(oldCommaPos, colon);
-					setFiltersForSyntaxStyle(style, filterStr.substring(colon+1)); 
+					setFiltersForSyntaxStyle(style, filterStr.substring(colon+1));
 				}
 				else {
 					System.err.println("Invalid saved filter string.  Using default syntax filters");
@@ -309,6 +309,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_DELPHI,				createValue("*.pas"));
 		filters.put(SYNTAX_STYLE_DTD,				createValue("*.dtd"));
 		filters.put(SYNTAX_STYLE_FORTRAN,			createValue("*.f", "*.for", "*.fort", "*.f77", "*.f90"));
+		filters.put(SYNTAX_STYLE_GO,				createValue("*.go"));
 		filters.put(SYNTAX_STYLE_GROOVY,			createValue("*.groovy", "*.gradle", "*.grv"));
 		filters.put(SYNTAX_STYLE_HOSTS,				createValue("hosts"));
 		filters.put(SYNTAX_STYLE_HTACCESS,			createValue(".htaccess"));
@@ -359,7 +360,7 @@ public class SyntaxFilters implements SyntaxConstants {
 
 		List<String> filters = getFiltersForStyle(style);
 		filters.clear();
-		
+
 		int oldSpacePos = 0;
 		int spacePos = filterString.indexOf(' ', 0);
 		while (spacePos!=-1) {
@@ -372,7 +373,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		if (oldSpacePos<filterString.length()-1) {
 			filters.add(filterString.substring(oldSpacePos));
 		}
-		
+
 	}
 
 

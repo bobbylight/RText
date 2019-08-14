@@ -307,6 +307,9 @@ public class Plugin extends GUIPlugin {
 		language = SyntaxConstants.SYNTAX_STYLE_DART;
 		view.setCodeFoldingEnabledFor(language, prefs.dart_folding_enabled);
 
+		language = SyntaxConstants.SYNTAX_STYLE_GO;
+		view.setCodeFoldingEnabledFor(language, prefs.go_folding_enabled);
+
 		language = SyntaxConstants.SYNTAX_STYLE_GROOVY;
 		view.setCodeFoldingEnabledFor(language, prefs.groovy_folding_enabled);
 
@@ -519,6 +522,9 @@ public class Plugin extends GUIPlugin {
 		language = SyntaxConstants.SYNTAX_STYLE_DART;
 		prefs.dart_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
+		language = SyntaxConstants.SYNTAX_STYLE_GO;
+		prefs.go_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
 		language = SyntaxConstants.SYNTAX_STYLE_GROOVY;
 		prefs.groovy_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
@@ -704,7 +710,7 @@ public class Plugin extends GUIPlugin {
 						}
 					}
 				}
-				
+
 			}
 
 			else if (AbstractMainView.TEXT_AREA_ADDED_PROPERTY.equals(name)) {
@@ -716,7 +722,7 @@ public class Plugin extends GUIPlugin {
 				RSyntaxTextArea old = (RSyntaxTextArea)e.getNewValue();
 				removeSupport(old);
 			}
-			
+
 		}
 
 	}

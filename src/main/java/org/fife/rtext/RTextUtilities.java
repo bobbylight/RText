@@ -258,6 +258,7 @@ public class RTextUtilities {
 			addFilter(chooser, msg, "Flex", "mxml");
 			addFilter(chooser, msg, "Fortran",
 				"f", "for", "fort", "f77", "f90");
+			addFilter(chooser, msg, "Go", "go");
 			addFilter(chooser, msg, "Groovy",
 				"groovy", "grv");
 			addFilter(chooser, msg, "HTML",
@@ -324,6 +325,7 @@ public class RTextUtilities {
 						"dtd",
 						"mxml",
 						"f", "for", "fort", "f77", "f90",
+						"go",
 						"groovy", "grv",
 						"hosts",
 						"htm", "html",
@@ -631,7 +633,7 @@ public class RTextUtilities {
 	 * <code>String regEx = RTextUtilities.getPatternForFileFilter("*.c", false);
 	 * </code><p>
 	 * the returned pattern will match <code>^.*\.c$</code>.<p>
-	 * 
+	 *
 	 * Case-sensitivity is taken into account appropriately.
 	 *
 	 * @param fileFilter The file filter for which to create equivalent regular
