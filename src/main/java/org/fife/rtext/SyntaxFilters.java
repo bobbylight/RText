@@ -322,7 +322,8 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_JSON,				createValue("*.json"));
 		filters.put(SYNTAX_STYLE_LATEX,				createValue("*.tex", "*.ltx", "*.latex"));
 		filters.put(SYNTAX_STYLE_LESS, 				createValue("*.less"));
-		filters.put(SYNTAX_STYLE_LISP, 				createValue("*.cl", "*.clisp", "*.el", "*.l", "*.lisp", "*.lsp", "*.ml"));
+		filters.put(SYNTAX_STYLE_LISP, 				createValue("*.cl", "*.clisp", "*.el", "*.l", "*.lisp",
+			"*.lsp", "*.ml"));
 		filters.put(SYNTAX_STYLE_LUA,				createValue("*.lua"));
 		filters.put(SYNTAX_STYLE_MAKEFILE,			createValue("Makefile", "makefile"));
 		filters.put(SYNTAX_STYLE_MXML,				createValue("*.mxml"));
@@ -340,7 +341,8 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_UNIX_SHELL,		createValue("*.sh", "*.?sh"));
 		filters.put(SYNTAX_STYLE_VISUAL_BASIC,		createValue("*.vb"));
 		filters.put(SYNTAX_STYLE_WINDOWS_BATCH,		createValue("*.bat", "*.cmd"));
-		filters.put(SYNTAX_STYLE_XML,				createValue("*.xml", "*.xsl", "*.xsd", "*.xslt", "*.wsdl", "*.pom", "*.manifest", "*.tmx", "*.tsx"));
+		filters.put(SYNTAX_STYLE_XML,				createValue("*.xml", "*.xsl", "*.xsd", "*.xslt", "*.wsdl",
+			"*.svg", "*.tmx", "*.tsx", "*.pom", "*.manifest"));
 		filters.put(SYNTAX_STYLE_YAML,				createValue("*.yml", "*.yaml"));
 
 		// Keep any filters added by the user
