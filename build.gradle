@@ -17,7 +17,7 @@ dependencies {
 	compile('com.fifesoft:rsyntaxtextarea:3.0.4-SNAPSHOT') { changing = true }
 	compile('com.fifesoft:autocomplete:3.0.1')
 	compile('com.fifesoft:rstaui:3.0.1')
-	compile('com.fifesoft:spellchecker:3.0.1')
+	compile('com.fifesoft:spellchecker:3.0.2')
 	compile('com.fifesoft:languagesupport:3.0.0')
 
 	compile 'net.sf.jtidy:jtidy:r938'
