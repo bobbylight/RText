@@ -458,6 +458,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		combo.addLabelValuePair("Graphite", root + "GraphiteLookAndFeel");
 		combo.addLabelValuePair("Graphite Aqua", root + "GraphiteAquaLookAndFeel");
 		combo.addLabelValuePair("Graphite Chalk", root + "GraphiteChalkLookAndFeel");
+		combo.addLabelValuePair("Graphite Electric", root + "GraphiteElectricLookAndFeel");
 		combo.addLabelValuePair("Graphite Glass", root + "GraphiteGlassLookAndFeel");
 		combo.addLabelValuePair("Mariner", root + "MarinerLookAndFeel");
 		combo.addLabelValuePair("Mist Aqua", root + "MistAquaLookAndFeel");
@@ -465,7 +466,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		combo.addLabelValuePair("Moderate", root + "ModerateLookAndFeel");
 		combo.addLabelValuePair("Nebula", root + "NebulaLookAndFeel");
 		combo.addLabelValuePair("Nebula Brick Wall", root + "NebulaBrickWallLookAndFeel");
-		combo.addLabelValuePair("Office Black 2007", root + "OfficeBlack2007LookAndFeel");
 		combo.addLabelValuePair("Sahara", root + "SaharaLookAndFeel");
 		combo.addLabelValuePair("Twilight", root + "TwilightLookAndFeel");
 
