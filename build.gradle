@@ -1,6 +1,10 @@
 import java.time.Instant
 import org.apache.tools.ant.taskdefs.condition.Os
 
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+
 ['java', 'distribution', /*'checkstyle', */'maven', 'eclipse' ].each { apply plugin: it }
 
 group = 'com.fifesoft'
@@ -81,8 +85,17 @@ ext.sharedManifest = manifest {
 						}.join(' ') + ' lnfs/OfficeLnFs.jar'
 	)
 }
+
+processResources {
+	doFirst {
+		new File(projectDir.absolutePath, 'build/resources/main/build-date.txt').text =
+			ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT)
+	}
+}
+
 jar {
 	manifest { from sharedManifest }
+	include 'build-date.txt'
 	include 'org/fife/**'
 	exclude 'org/fife/rtext/plugins/**'
 //	archiveName 'rtext.jar'
