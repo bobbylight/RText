@@ -244,7 +244,7 @@ class Tree extends FileSystemTree {
 	/**
 	 * Adds an old text file to an RText instance.
 	 */
-	private class OpenInNewWindowRunnable implements Runnable {
+	private static class OpenInNewWindowRunnable implements Runnable {
 
 		private final RText rtext;
 		private final String file;

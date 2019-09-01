@@ -10,10 +10,16 @@
 package org.fife.rtext.plugins.console;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ResourceBundle;
 
 import org.fife.rtext.RText;
+import org.fife.ui.ImageTranscodingUtil;
+import org.fife.ui.UIUtil;
 import org.fife.ui.app.AppAction;
+
+import javax.swing.*;
 
 
 /**
@@ -38,8 +44,20 @@ class StopAction extends AppAction<RText> {
 	 * @param plugin The parent plugin.
 	 */
 	StopAction(RText owner, ResourceBundle msg, Plugin plugin) {
+
 		super(owner, msg, "Action.StopProcess");
-		setIcon("stop.png");
+
+		if (UIUtil.isLightForeground(new JLabel().getForeground())) {
+			try {
+				InputStream in = getClass().getResourceAsStream("suspend.svg");
+				setIcon(new ImageIcon(ImageTranscodingUtil.rasterize("suspend.svg", in, 16, 16)));
+			} catch (IOException ioe) {
+				owner.displayException(ioe);
+			}
+		}
+		else {
+			setIcon("stop.png");
+		}
 		setEnabled(false);
 		this.plugin = plugin;
 	}

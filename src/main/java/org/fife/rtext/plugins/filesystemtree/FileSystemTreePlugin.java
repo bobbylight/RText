@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -132,7 +133,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		b = new JButton(forwardAction);
 		dockableWindowTB.add(b);
 		WebLookAndFeelUtils.fixToolbar(dockableWindowTB);
-		
+
 		tree = new Tree(this);
 		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(tree);
 		RScrollPane scrollPane = new DockableWindowScrollPane(tree);
@@ -397,7 +398,12 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		BackAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Back");
 			setName(null); // We're only a toolbar icon
-			setIcon("arrow_left.png");
+			try {
+				InputStream in = getClass().getResourceAsStream("arrow_left.svg");
+				setIcon(new ImageIcon(ImageTranscodingUtil.rasterize("arrow_left.svg", in, 16, 16)));
+			} catch (IOException ioe) {
+				app.displayException(ioe);
+			}
 			setEnabled(false);
 		}
 
@@ -423,7 +429,12 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		ForwardAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Forward");
 			setName(null); // We're only a toolbar icon
-			setIcon("arrow_right.png");
+			try {
+				InputStream in = getClass().getResourceAsStream("arrow_right.svg");
+				setIcon(new ImageIcon(ImageTranscodingUtil.rasterize("arrow_right.svg", in, 16, 16)));
+			} catch (IOException ioe) {
+				app.displayException(ioe);
+			}
 			setEnabled(false);
 		}
 

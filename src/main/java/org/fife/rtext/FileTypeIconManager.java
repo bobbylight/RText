@@ -16,10 +16,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
 import org.fife.ui.ImageTranscodingUtil;
+import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -54,7 +54,9 @@ public final class FileTypeIconManager {
 									new FileTypeIconManager();
 
 	private static final String PATH = "/org/fife/rtext/graphics/file_icons/";
-	private static final String DEFAULT_ICON_PATH	= PATH + "txt.gif";
+
+	private static final String DEFAULT_UNKNOWN_ICON_DARK_UI = "plain.svg";
+	private static final String DEFAULT_UNKNOWN_ICON_LIGHT_UI = "txt.gif";
 
 
 	/**
@@ -62,7 +64,12 @@ public final class FileTypeIconManager {
 	 */
 	private FileTypeIconManager() {
 
-		defaultIcon = getIconImpl(DEFAULT_ICON_PATH);
+		if (UIUtil.isLightForeground(new JLabel().getForeground())) {
+			defaultIcon = getIconImpl(PATH + DEFAULT_UNKNOWN_ICON_DARK_UI);
+		}
+		else {
+			defaultIcon = getIconImpl(PATH + DEFAULT_UNKNOWN_ICON_LIGHT_UI);
+		}
 
 		type2IconNameMap = new HashMap<>();
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_C,				PATH + "c.gif");
