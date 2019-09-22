@@ -1012,6 +1012,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		RTextUtilities.setDropShadowsEnabledInEditor(prefs.dropShadowsInEditor);
 
+		setWindowDraggableByMenuBarAndToolBar();
 	}
 
 
