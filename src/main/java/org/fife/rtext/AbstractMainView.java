@@ -3862,7 +3862,7 @@ public abstract class AbstractMainView extends JPanel
 	 * {@link #MAX_FILE_SIZE_FOR_CODE_FOLDING_PROPERTY}.
 	 *
 	 * @param size The new maximum size for a file before the user is
-	 *        prompted before opening it.
+	 *        prompted before opening it, in MB.
 	 * @see #getMaxFileSizeForCodeFolding()
 	 */
 	public void setMaxFileSizeForCodeFolding(int size) {

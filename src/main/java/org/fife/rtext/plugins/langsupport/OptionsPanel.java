@@ -83,7 +83,7 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 		Box temp = Box.createVerticalBox();
 		temp.setBorder(new OptionPanelBorder(msg.getString("Options.Main.Section")));
 
-		codeFoldingThresholdCB = new JComboBox<>(new Integer[] { 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+		codeFoldingThresholdCB = new JComboBox<>(new Integer[] { 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 });
 		codeFoldingThresholdCB.addActionListener(listener);
 		Box temp2 = createHorizontalBox();
 		temp2.add(UIUtil.newLabel(msg, "Options.Main.CodeFoldingThreshold", codeFoldingThresholdCB));
@@ -196,7 +196,7 @@ class OptionsPanel extends PluginOptionsDialogPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			int defaultCodeFoldingThreshold = 2;
+			int defaultCodeFoldingThreshold = 12;
 			Object source = e.getSource();
 
 			if (codeFoldingThresholdCB == source) {

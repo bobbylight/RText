@@ -43,7 +43,7 @@ class HomePageAction extends AppAction<RText> {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (!UIUtil.browse("http://fifesoft.com/rtext")) {
+		if (!UIUtil.browse("https://github.com/bobbylight/RText")) {
 			RText app = getApplication();
 			UIManager.getLookAndFeel().provideErrorFeedback(app);
 		}

@@ -150,8 +150,8 @@ public class SearchToolBar extends JToolBar {
 				return max;
 			}
 		};
-		// OS X-specific property.  Causes the text field
-		// to be painted in OS X's "Search field" style.
+		// OS X- and Darcula-specific property.  Causes the text field
+		// to be painted in a "Search field" style.
 		findField.putClientProperty("JTextField.variant", "search");
 		findField.getAccessibleContext().setAccessibleDescription(
 								msg.getString("FindFieldDesc"));
@@ -351,10 +351,10 @@ public class SearchToolBar extends JToolBar {
 
 			// layout the text and icon
 			String text = SwingUtilities.layoutCompoundLabel(
-				c, fm, b.getText(), b.getIcon(), 
+				c, fm, b.getText(), b.getIcon(),
 				b.getVerticalAlignment(), b.getHorizontalAlignment(),
 				b.getVerticalTextPosition(), b.getHorizontalTextPosition(),
-				viewRect, iconRect, textRect, 
+				viewRect, iconRect, textRect,
 				b.getText() == null ? 0 : b.getIconTextGap());
 
 			paintBackground(g, b);
@@ -409,7 +409,7 @@ public class SearchToolBar extends JToolBar {
 		protected void paintText(Graphics g, JComponent c, Rectangle textRect,
 								String text) {
 
-			AbstractButton b = (AbstractButton) c;                       
+			AbstractButton b = (AbstractButton) c;
 			ButtonModel model = b.getModel();
 			FontMetrics fm = g.getFontMetrics();
 			int mnemonicIndex = b.getDisplayedMnemonicIndex();

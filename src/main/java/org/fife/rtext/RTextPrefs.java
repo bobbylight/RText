@@ -495,7 +495,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	 * color.  If any matches are found, these tokens have their backgrounds
 	 * instead set to <code>null</code>, as their background painting wouldn't
 	 * be seen anyway, to improve performance.<p>
-	 * 
+	 *
 	 * Older RText releases might have had a problem where certain actions in
 	 * the Options dialog would erroneously cause tokens to have a Color.WHITE
 	 * background when in fact they should be <code>null</code>, so this
@@ -720,7 +720,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		guessFileContentType = true;
 		doFileSizeCheck	= true;
 		maxFileSize		= 10f;	// MB
-		maxFileSizeForCodeFolding = 2; // MB
+		maxFileSizeForCodeFolding = 10; // MB
 		ignoreBackupExtensions = true;
 		textAreaFont		= RTextArea.getDefaultFont();
 		textAreaUnderline	= false;

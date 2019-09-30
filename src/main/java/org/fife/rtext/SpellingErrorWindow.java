@@ -11,14 +11,18 @@
 package org.fife.rtext;
 
 import java.awt.BorderLayout;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
-import javax.swing.ImageIcon;
-import javax.swing.JTable;
+import javax.swing.*;
 
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.RScrollPane;
+import org.fife.ui.UIUtil;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
@@ -58,8 +62,22 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 		setActive(true);
 		setDockableWindowName(rtext.getString("SpellingErrorList.Spelling"));
 
-		URL url = getClass().getResource("graphics/spellcheck.png");
-		setIcon(new ImageIcon(url));
+		Icon icon = null;
+		if (UIUtil.isLightForeground(getForeground())) {
+			String svg = "graphics/dark/spellcheck.svg";
+			InputStream in = getClass().getResourceAsStream(svg);
+			try {
+				BufferedImage image = ImageTranscodingUtil.rasterize(svg, in, 16, 16);
+				icon = new ImageIcon(image);
+			} catch (IOException ioe) {
+				rtext.displayException(ioe);
+			}
+		}
+		else {
+			URL url = getClass().getResource("graphics/spellcheck.png");
+			icon = new ImageIcon(url);
+		}
+		setIcon(icon);
 
 		// Start listening to any already-opened files.
 		for (int i=0; i<mainView.getNumDocuments(); i++) {

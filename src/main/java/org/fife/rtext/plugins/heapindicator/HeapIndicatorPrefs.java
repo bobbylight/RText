@@ -28,8 +28,8 @@ public class HeapIndicatorPrefs extends Prefs {
 	public Color   iconBorderColor;
 
 	private static final boolean	DEFAULT_VISIBLE			= true;
-	private static final int		DEFAULT_REFRESH_INTERVAL		= 5000;
-	private static final boolean  DEFAULT_USE_SYSTEM_COLORS	= true;
+	private static final int		DEFAULT_REFRESH_INTERVAL	= 10000;
+	private static final boolean	DEFAULT_USE_SYSTEM_COLORS	= true;
 	private static final Color	DEFAULT_ICON_FOREGROUND		= Color.BLUE;
 	private static final Color	DEFAULT_ICON_BORDER_COLOR	= Color.BLACK;
 
