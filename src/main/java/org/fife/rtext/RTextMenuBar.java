@@ -441,12 +441,12 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		toolbarItem.setToolTipText(null);
 		toolbarItem.setSelected(properties.toolbarVisible);
 		toolbarsMenu.add(toolbarItem);
-		SearchToolBarAction stba = new SearchToolBarAction(rtext);
-		stba.setName(menuMsg.getString("QuickSearchBar"));
-		searchToolbarMenuItem = new JCheckBoxMenuItem(stba);
-		searchToolbarMenuItem.setSelected(properties.searchToolBarVisible);
-		UIUtil.setDescription(searchToolbarMenuItem, menuMsg,"DescQuickSearch");
-		toolbarsMenu.add(searchToolbarMenuItem);
+//		SearchToolBarAction stba = new SearchToolBarAction(rtext);
+//		stba.setName(menuMsg.getString("QuickSearchBar"));
+//		searchToolbarMenuItem = new JCheckBoxMenuItem(stba);
+//		searchToolbarMenuItem.setSelected(properties.searchToolBarVisible);
+//		UIUtil.setDescription(searchToolbarMenuItem, menuMsg,"DescQuickSearch");
+//		toolbarsMenu.add(searchToolbarMenuItem);
 		viewMenu.add(toolbarsMenu);
 
 		// Font sizes submenu.
