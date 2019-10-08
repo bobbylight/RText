@@ -913,7 +913,7 @@ abstract class ConsoleTextArea extends JTextPane {
 				ble.printStackTrace();
 				return;
 			}
-			if (text.length()==0) {
+			if (text.isEmpty()) {
 				appendPrompt();
 				return;
 			}

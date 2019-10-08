@@ -270,7 +270,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 			// If we found a match...
 			if (!wholeWord || FindDialog.isWholeWord(buffer, i, len)) {
 
-				replaceSB.append(origBuffer.substring(start,i));
+				replaceSB.append(origBuffer, start, i);
 				replaceSB.append(replaceString);
 
 				numMatches++;
@@ -293,7 +293,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 
 		// Any characters at the end.
 		if (start!=buffer.length()) {
-			replaceSB.append(origBuffer.substring(start,buffer.length()));
+			replaceSB.append(origBuffer, start, buffer.length());
 		}
 
 		return numMatches;

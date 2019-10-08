@@ -71,7 +71,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	@Override
 	public void appendPrompt() {
 		String prompt = pwd.getName();
-		if (prompt.length()==0) { // Root directory
+		if (prompt.isEmpty()) { // Root directory
 			prompt = pwd.getAbsolutePath();
 		}
 		prompt += File.separatorChar=='/' ? "$ " : "> ";
@@ -86,7 +86,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 		InputMap im = getInputMap();
 		ActionMap am = getActionMap();
 
-		// Tab should offer list of matching filenames, if any, like bash. 
+		// Tab should offer list of matching filenames, if any, like bash.
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0), "completeFileName");
 		am.put("completeFileName", new CompleteFileNameAction());
 
@@ -417,7 +417,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 
 			File parent;
 			// If they've just typed a file or folder name
-			if (fileNamePart.length()==0) {
+			if (fileNamePart.isEmpty()) {
 				parent = file;
 			}
 			else {

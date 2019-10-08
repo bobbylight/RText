@@ -19,7 +19,7 @@ textArea.beginAtomicEdit();
 try {
 
 	var fileName = textArea.selectedText;
-	if (fileName==null || fileName.length()==0) {
+	if (fileName==null || fileName.isEmpty()) {
 		javax.swing.JOptionPane.showMessageDialog(rtext,
 				"Couldn't open file:  No selection.\n" +
 				"A file name must be selected in the active editor to open a file.",
@@ -40,7 +40,7 @@ try {
 			java.awt.Desktop.getDesktop().browse(new java.net.URL(fileName).toURI());
 		}
 		else if (file.isFile()) {
-			rtext.openFile(file.absolutePath);
+			rtext.openFile(file);
 		}
 		else if (file.isDirectory()) {
 			var chooser = rtext.fileChooser;

@@ -427,7 +427,7 @@ public class Plugin extends GUIPlugin {
 		}
 		else {
 			String override = prefs.perl_overridden_perl5lib;
-			if (override!=null && override.length()==0) {
+			if (override!=null && override.isEmpty()) {
 				override = null;
 			}
 			pls.setPerl5LibOverride(override);

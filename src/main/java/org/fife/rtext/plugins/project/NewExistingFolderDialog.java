@@ -64,7 +64,7 @@ public class NewExistingFolderDialog extends EscapableDialog {
 	private JTextField inFilterField;
 	private JTextField outFilterField;
 	private JTextField outFolderField;
-	
+
 	private String chosenDirectory;
 
 	private static final String[] PANELS = { "SelectDir", "EnterFilters" };
@@ -132,7 +132,7 @@ public class NewExistingFolderDialog extends EscapableDialog {
 
 	private String[] getAllowedFileFilters() {
 		String text = inFilterField.getText().trim();
-		if (text.length()==0 || (text.length()==1 && text.charAt(0)=='*')) {
+		if (text.isEmpty() || (text.length()==1 && text.charAt(0)=='*')) {
 			return null;
 		}
 		return text.split("\\s*,\\s*");
@@ -141,7 +141,7 @@ public class NewExistingFolderDialog extends EscapableDialog {
 
 	private String[] getDisallowedDirectories() {
 		String text = outFolderField.getText().trim();
-		if (text.length()==0) {
+		if (text.isEmpty()) {
 			return null;
 		}
 		return text.split("\\s*,\\s*");
@@ -150,7 +150,7 @@ public class NewExistingFolderDialog extends EscapableDialog {
 
 	private String[] getDisallowedFileFilters() {
 		String text = outFilterField.getText().trim();
-		if (text.length()==0) {
+		if (text.isEmpty()) {
 			return null;
 		}
 		return text.split("\\s*,\\s*");

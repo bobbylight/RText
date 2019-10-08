@@ -10,7 +10,8 @@
 package org.fife.rtext.plugins.project.tree;
 
 import java.awt.Component;
-import javax.swing.JTree;
+import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
@@ -25,6 +26,8 @@ import org.fife.util.SubstanceUtil;
  */
 class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
 
+
+	private static final Border BORDER = BorderFactory.createEmptyBorder(1, 0, 1, 0);
 
 	/**
 	 * Returns a tree cell renderer for workspace trees.  This may not be
@@ -48,6 +51,8 @@ class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
 
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
 				row, focused);
+		setBorder(BORDER);
+
 		// Not true the first time through!
 		if (value instanceof AbstractWorkspaceTreeNode) {
 			AbstractWorkspaceTreeNode node = (AbstractWorkspaceTreeNode)value;

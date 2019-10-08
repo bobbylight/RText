@@ -146,7 +146,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			int count = templates.length;
 			for (CodeTemplate template : templates) {
 				tableModel.addRow(new Object[]{
-					new String(template.getID()),
+					template.getID(),
 					// Deep copy.
 					new TemplateWrapper((CodeTemplate)template.clone()),
 				});

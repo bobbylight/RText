@@ -277,8 +277,8 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		Font font = null;
 		if (!fontName.equals("null")) {
 			int fontSize = Integer.parseInt(t2.nextToken());
-			boolean isBold = Boolean.valueOf(t2.nextToken());
-			boolean isItalic = Boolean.valueOf(t2.nextToken());
+			boolean isBold = Boolean.parseBoolean(t2.nextToken());
+			boolean isItalic = Boolean.parseBoolean(t2.nextToken());
 			int fontStyle = Font.PLAIN;
 			if (isBold) {
 				if (isItalic)
@@ -452,7 +452,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 			spellingDictionary	= prefs.get("spellingDictionary", spellingDictionary);
 			String tempVal = prefs.get("userDictionary", null);
 			if (tempVal!=null) { // No previous value => use default already set
-				if (tempVal.length()==0) { // Empty string => no user dictionary
+				if (tempVal.isEmpty()) { // Empty string => no user dictionary
 					userDictionary = null;
 				}
 				else {

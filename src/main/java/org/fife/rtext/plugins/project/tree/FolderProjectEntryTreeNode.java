@@ -231,7 +231,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	/**
 	 * Checks the name of a folder project entry.
 	 */
-	private class FolderProjectEntryNameChecker implements NameChecker {
+	private static class FolderProjectEntryNameChecker implements NameChecker {
 
 		@Override
 		public String isValid(String text) {

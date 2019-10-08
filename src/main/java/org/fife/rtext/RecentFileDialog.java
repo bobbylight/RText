@@ -57,7 +57,6 @@ public class RecentFileDialog extends EscapableDialog {
 	private DefaultListModel<FileLocation> model;
 	private JTextField filterField;
 	private JButton okButton;
-	private Listener listener;
 
 	/**
 	 * The maximum width of this dialog.
@@ -105,7 +104,7 @@ public class RecentFileDialog extends EscapableDialog {
 	@SuppressWarnings("unchecked") // Must use DefaultListCellRenderer
 	private void createUI() {
 
-		listener = new Listener();
+		Listener listener = new Listener();
 
 		JPanel cp = new ResizableFrameContentPane(new BorderLayout());
 		cp.setBorder(UIUtil.getEmpty5Border());
@@ -235,7 +234,7 @@ public class RecentFileDialog extends EscapableDialog {
 
 		model.clear();
 
-		Pattern pattern = filter==null || filter.length()==0 ? null :
+		Pattern pattern = filter==null || filter.isEmpty() ? null :
 			RSyntaxUtilities.wildcardToPattern("^" + filter, false, false);
 
 		for (FileLocation loc : files) {

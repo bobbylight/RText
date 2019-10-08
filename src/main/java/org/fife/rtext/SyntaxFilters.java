@@ -61,7 +61,7 @@ public class SyntaxFilters implements SyntaxConstants {
 
 		if (filterStr!=null) {
 			int oldCommaPos = 0;
-			int commaPos = filterStr.indexOf(',', 0);
+			int commaPos = filterStr.indexOf(',');
 			try {
 				while (commaPos!=-1) {
 					String temp = filterStr.substring(oldCommaPos,commaPos);

@@ -282,8 +282,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(orientation);
 
-		msg = null;
-
 	}
 
 

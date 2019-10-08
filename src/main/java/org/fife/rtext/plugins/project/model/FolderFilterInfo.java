@@ -150,7 +150,7 @@ public class FolderFilterInfo {
 
 	public void setAllowedFileFilters(String[] filters) {
 		if (filters!=null && filters.length==1 &&
-				("*".equals(filters[0]) || filters[0].length()==0)) {
+				("*".equals(filters[0]) || filters[0].isEmpty())) {
 			filters = null;
 		}
 		this.allowedFileFilters = filters;
@@ -159,7 +159,7 @@ public class FolderFilterInfo {
 
 
 	public void setHiddenFolderFilters(String[] filters) {
-		if (filters!=null && filters.length==1 && filters[0].length()==0) {
+		if (filters!=null && filters.length==1 && filters[0].isEmpty()) {
 			filters = null;
 		}
 		this.disallowedDirectories = filters;
@@ -168,7 +168,7 @@ public class FolderFilterInfo {
 
 
 	public void setHiddenFileFilters(String[] filters) {
-		if (filters!=null && filters.length==1 && filters[0].length()==0) {
+		if (filters!=null && filters.length==1 && filters[0].isEmpty()) {
 			filters = null;
 		}
 		this.disallowedFileFilters = filters;

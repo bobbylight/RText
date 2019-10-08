@@ -688,7 +688,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		// Get the length of just the file name.
 		String justFileName = displayString.substring(
-						lastSeparatorPos+1, displayString.length());
+						lastSeparatorPos+1);
 		int justFileNameLength = getTextWidth(justFileName, fontMetrics);
 
 		// If even just the file name is too long, return it.
@@ -699,7 +699,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		// until the name gets too long.
 		String endPiece = "..." + separator + justFileName;
 		int endPieceLength = getTextWidth(endPiece, fontMetrics);
-		int separatorPos = displayString.indexOf(separator, 0);
+		int separatorPos = displayString.indexOf(separator);
 		String firstPart = displayString.substring(0, separatorPos+1);
 		int firstPartLength = getTextWidth(firstPart, fontMetrics);
 		String tempFirstPart = firstPart;
@@ -929,7 +929,6 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 				currentMenu.add(menuItem);
 				i++;
 			} // End of while (i<count).
-			currentMenu = null;
 
 		}
 

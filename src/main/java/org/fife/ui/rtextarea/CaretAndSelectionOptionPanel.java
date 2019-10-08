@@ -152,8 +152,6 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(o);
 
-		msg = null;
-
 	}
 
 
@@ -252,7 +250,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 			Color selectedTextColor = textArea.getSelectedTextColor();
 			if (!systemSelectionColor.equals(selColorButton.getColor()) ||
 					!selectedTextColorCB.isSelected() ||
-					!selectedTextColorButton.equals(selectedTextColor)) {
+					!selectedTextColorButton.getColor().equals(selectedTextColor)) {
 				selColorButton.setColor(systemSelectionColor);
 				setSelectedTextColorEnabled(true);
 				selectedTextColorButton.setColor(selectedTextColor);

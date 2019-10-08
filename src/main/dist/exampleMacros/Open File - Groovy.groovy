@@ -22,7 +22,7 @@ textArea.beginAtomicEdit()
 try {
 
 	def fileName = textArea.selectedText
-	if (fileName==null || fileName.length()==0) {
+	if (fileName==null || fileName.isEmpty()) {
 		JOptionPane.showMessageDialog(rtext,
 				"""Couldn't open file:  No selection.
 A file name must be selected in the active editor to open a file.""",
@@ -43,7 +43,7 @@ A file name must be selected in the active editor to open a file.""",
 			Desktop.desktop.browse(new URL(fileName).toURI())
 		}
 		else if (file.isFile()) {
-			rtext.openFile(file.absolutePath)
+			rtext.openFile(file)
 		}
 		else if (file.isDirectory()) {
 			def chooser = rtext.fileChooser

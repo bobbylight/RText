@@ -260,7 +260,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 
 	private File getUserDictionary() {
 		String temp = userDictField.getText();
-		if (temp.trim().length()==0) {
+		if (temp.trim().isEmpty()) {
 			return null;
 		}
 		return new File(temp).getAbsoluteFile();

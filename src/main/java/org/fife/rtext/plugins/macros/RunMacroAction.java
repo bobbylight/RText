@@ -58,8 +58,8 @@ class RunMacroAction extends AppAction<RText> {
 	 */
 	private static ScriptEngine groovyEngine;
 
-	private static final Pattern GROOVY_JAR_NAME_PATTERN = 
-			Pattern.compile("^groovy-all-[\\d\\.]+\\.jar$");
+	private static final Pattern GROOVY_JAR_NAME_PATTERN =
+			Pattern.compile("^groovy-[\\d.]+\\.jar$");
 
 
 	/**

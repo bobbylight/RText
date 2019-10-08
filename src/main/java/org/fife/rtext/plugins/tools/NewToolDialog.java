@@ -218,14 +218,14 @@ class NewToolDialog extends EscapableDialog implements ActionListener {
 
 		// The program to launch
 		String program = programField.getText().trim();
-		if (program.length()==0) {
+		if (program.isEmpty()) {
 			showError(programField, "Error.NoProgramSpecified", null);
 			return null;
 		}
 
 		// The directory to run in
 		String dir = dirField.getText().trim();
-		if (dir.length()==0) {
+		if (dir.isEmpty()) {
 			dir = System.getProperty("user.dir");
 		}
 
@@ -510,7 +510,7 @@ ac.install(dirField);
 	 * The dialog that allows the user to add or modify a command line
 	 * argument.
 	 */
-	private class ArgDialog extends EscapableDialog implements ActionListener,
+	private static class ArgDialog extends EscapableDialog implements ActionListener,
 									DocumentListener {
 
 		private final JTextField argField;
@@ -640,7 +640,7 @@ ac.install(dirField);
 	/**
 	 * The dialog that allows the user to add or modify an environment variable.
 	 */
-	private class EnvVarDialog extends EscapableDialog
+	private static class EnvVarDialog extends EscapableDialog
 								implements DocumentListener, ActionListener {
 
 		private final JTextField nameField;

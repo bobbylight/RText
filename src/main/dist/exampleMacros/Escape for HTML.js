@@ -30,7 +30,7 @@ textArea.beginAtomicEdit();
 try {
 
 	var text = textArea.selectedText;
-	if (text==null || text.length()==0) {
+	if (text==null || text.isEmpty()) {
 		javax.swing.JOptionPane.showMessageDialog(rtext,
 				"Error:  No selection.\n" +
 				"Text must be selected to HTML-ify.",

@@ -128,7 +128,7 @@ public class SearchManager {
 		// yet), bring up Find dialog.
 		SearchContext context = mainView.searchContext;
 		String searchString = mainView.searchContext.getSearchFor();
-		if (searchString==null || searchString.length()==0) {
+		if (searchString==null || searchString.isEmpty()) {
 			switch (searchingMode) {
 				case DIALOGS:
 					ensureSearchDialogsCreated();
@@ -247,7 +247,7 @@ public class SearchManager {
 		// Replace dialog.
 		SearchContext context = mainView.searchContext;
 		String searchString = context.getSearchFor();
-		if (searchString==null || searchString.length()==0) {
+		if (searchString==null || searchString.isEmpty()) {
 			switch (searchingMode) {
 				case DIALOGS:
 					ensureSearchDialogsCreated();

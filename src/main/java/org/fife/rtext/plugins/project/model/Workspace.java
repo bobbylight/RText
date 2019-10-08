@@ -238,7 +238,7 @@ public class Workspace implements ModelEntity {
 
 
 	private static String[] parseFilters(String str) {
-		if (str==null || str.trim().length()==0) {
+		if (str==null || str.trim().isEmpty()) {
 			return null;
 		}
 		return str.trim().split("\\s*,\\s*");

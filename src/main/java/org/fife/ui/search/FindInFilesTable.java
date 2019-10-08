@@ -513,7 +513,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent, FileSe
 	/**
 	 * The default renderer for the table.
 	 */
-	private class StandardCellRenderer extends DefaultTableCellRenderer {
+	private static class StandardCellRenderer extends DefaultTableCellRenderer {
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table,
