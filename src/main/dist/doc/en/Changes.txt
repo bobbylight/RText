@@ -2,8 +2,27 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
-3.0.2
+3.0.2 (10/19/2019)
 ------------------
+   - Fix #28: Add 'Show in File System Tree' action to editor's context menu
+   - Fix #32: Fix NPE when opening About dialog of RText 3.0.x
+   - Fix #34: Pretty printing action not enabled on first file if it is
+     opened via a command line parameter
+   - Fix #36: Turn off code folding if file size > some threshold. Configurable
+     in the Options dialog (defaults to 12 MB cutoff)
+   - Fix #37: UI improvements when in dark mode
+   - Fix #38: XSLT files should be rendered as XML
+   - Fix #40: Right-click menu in Find/Replace in Files
+   - Fix #42: Add code folding and syntax highlighting for Golang
+   - Fix #43: SVG files should be syntax highlighted as XML
+   - "Check for Updates" menu item is working again
+   - Groovy macros are working again
+   - Performance improvements with larger files when line wrap is enabled
+     (@mike-smith-portswigger)
+   - Fixed a bug with caret placement when clicking with the mouse at the
+     end of a physical line when line wrap is enabled (@mike-smith-portswigger)
+   - Fixed a bug where pasting as styled text into another plain text editor
+     removed newlines
 
 
 3.0.1 (05/05/2019)
