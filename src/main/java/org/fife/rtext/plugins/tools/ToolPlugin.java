@@ -46,7 +46,7 @@ import org.fife.ui.app.AppAction;
  */
 public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
-	private static final String VERSION				= "3.0.2";
+	private static final String VERSION				= "3.0.3";
 
 	private final RText app;
 	private Icon darkThemeIcon;

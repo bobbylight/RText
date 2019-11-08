@@ -61,7 +61,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 
 	private static final String BUNDLE_NAME		=
 					"org.fife.rtext.plugins.heapindicator.HeapIndicator";
-	private static final String VERSION		= "3.0.2";
+	private static final String VERSION		= "3.0.3";
 
 
 	/**

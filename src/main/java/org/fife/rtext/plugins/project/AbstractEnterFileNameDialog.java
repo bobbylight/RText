@@ -5,14 +5,12 @@ import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
 import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,6 +21,7 @@ import javax.swing.event.DocumentListener;
 
 import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.rsta.ui.EscapableDialog;
+import org.fife.rtext.AppIconLoader;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.tree.NameChecker;
@@ -157,8 +156,7 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 	 */
 	public static Icon getErrorIcon() {
 		if (ERROR_ICON==null) {
-			URL res = RenameDialog.class.getResource("error_co.gif");
-			ERROR_ICON = new ImageIcon(res);
+			ERROR_ICON = AppIconLoader.getIcon("toolbarError_dark.svg", "error_co.gif", 12, 12);
 		}
 		return ERROR_ICON;
 	}

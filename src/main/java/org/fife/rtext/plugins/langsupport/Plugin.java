@@ -19,9 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import javax.imageio.ImageIO;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
@@ -44,10 +42,7 @@ import org.fife.rsta.ac.perl.PerlLanguageSupport;
 import org.fife.rsta.ac.php.PhpLanguageSupport;
 import org.fife.rsta.ac.sh.ShellLanguageSupport;
 import org.fife.rsta.ac.xml.XmlLanguageSupport;
-import org.fife.rtext.AbstractMainView;
-import org.fife.rtext.RText;
-import org.fife.rtext.RTextMenuBar;
-import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.*;
 import org.fife.rtext.plugins.langsupport.typescript.TypeScriptSupport;
 import org.fife.rtext.plugins.sourcebrowser.SourceBrowserPlugin;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
@@ -78,7 +73,7 @@ public class Plugin extends GUIPlugin {
 	private Map<ParserNotice.Level, Icon> icons;
 	private TypeScriptSupport typeScriptSupport;
 
-	private static final String PLUGIN_VERSION			= "3.0.2";
+	private static final String PLUGIN_VERSION			= "3.0.3";
 	private static final String PREFS_FILE_NAME			= "langSupport.properties";
 
 	private static final String MSG = "org.fife.rtext.plugins.langsupport.Plugin";
@@ -130,23 +125,6 @@ public class Plugin extends GUIPlugin {
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
 		lsf.register(textArea);
 
-	}
-
-
-	/**
-	 * Creates an icon from an image resource in this package.
-	 *
-	 * @param res The resource.
-	 * @return The icon.
-	 */
-	private Icon createIcon(String res) {
-		Icon icon = null;
-		try {
-			icon = new ImageIcon(ImageIO.read(getClass().getResource(res)));
-		} catch (IOException ioe) { // Never happens
-			ioe.printStackTrace();
-		}
-		return icon;
 	}
 
 
@@ -229,8 +207,10 @@ public class Plugin extends GUIPlugin {
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		icons = new HashMap<>();
-		icons.put(ParserNotice.Level.ERROR, createIcon("error_obj.gif"));
-		icons.put(ParserNotice.Level.WARNING, createIcon("warning_obj.gif"));
+		icons.put(ParserNotice.Level.ERROR,
+			AppIconLoader.getIcon("toolbarError_dark.svg", "error_obj.gif", 14, 14));
+		icons.put(ParserNotice.Level.WARNING,
+			AppIconLoader.getIcon("warning_dark.svg", "warning_obj.gif", 14, 14));
 		// Informational icons are annoying - spelling errors, etc.
 		//icons.put(ParserNotice.Level.INFO, createIcon("info_obj.gif"));
 

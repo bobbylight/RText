@@ -16,12 +16,10 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -37,13 +35,10 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.fife.rsta.ui.DecorativeIconPanel;
+import org.fife.rtext.AppIconLoader;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
-import org.fife.ui.EscapableDialog;
-import org.fife.ui.KeyStrokeField;
-import org.fife.ui.ResizableFrameContentPane;
-import org.fife.ui.SelectableLabel;
-import org.fife.ui.UIUtil;
+import org.fife.ui.*;
 
 
 /**
@@ -69,6 +64,8 @@ class NewMacroDialog extends EscapableDialog {
 	private boolean isNew;
 	private static Icon ERROR_ICON;
 	private static Icon WARN_ICON;
+
+	private static final int DECORATIVE_ICON_WIDTH = 12;
 
 	private static final String[] EXTENSIONS = { ".js", ".groovy", };
 
@@ -111,23 +108,23 @@ class NewMacroDialog extends EscapableDialog {
 		nameField = new JTextField(40);
 		nameField.getDocument().addDocumentListener(l);
 		nameLabel.setLabelFor(nameField);
-		nameDIP = new DecorativeIconPanel();
+		nameDIP = new DecorativeIconPanel(DECORATIVE_ICON_WIDTH);
 		JPanel namePanel = RTextUtilities.createAssistancePanel(nameField, nameDIP);
 		JLabel descLabel = UIUtil.newLabel(msg, "Label.Desc");
 		descField = new JTextField(40);
 		descLabel.setLabelFor(descField);
-		JPanel descPanel = RTextUtilities.createAssistancePanel(descField, null);
+		JPanel descPanel = RTextUtilities.createAssistancePanel(descField, DECORATIVE_ICON_WIDTH);
 		JLabel shortcutLabel = UIUtil.newLabel(msg, "Label.Shortcut");
 		shortcutField = new KeyStrokeField();
 		shortcutLabel.setLabelFor(shortcutField);
-		JPanel shortcutPanel = RTextUtilities.createAssistancePanel(shortcutField, null);
+		JPanel shortcutPanel = RTextUtilities.createAssistancePanel(shortcutField, DECORATIVE_ICON_WIDTH);
 		JLabel typeLabel = UIUtil.newLabel(msg, "Label.Type");
 		String[] items = { "Rhino (JavaScript)", "Groovy" };
 		typeCombo = new JComboBox<>(items);
 		typeCombo.addActionListener(l);
 		typeCombo.setEditable(false);
 		typeLabel.setLabelFor(typeCombo);
-		JPanel typePanel = RTextUtilities.createAssistancePanel(typeCombo, null);
+		JPanel typePanel = RTextUtilities.createAssistancePanel(typeCombo, DECORATIVE_ICON_WIDTH);
 		if (rtext.getComponentOrientation().isLeftToRight()) {
 			formPanel.add(nameLabel);     formPanel.add(namePanel);
 			formPanel.add(typeLabel);     formPanel.add(typePanel);
@@ -156,7 +153,7 @@ class NewMacroDialog extends EscapableDialog {
 		cancelButton.addActionListener(l);
 		Container buttonPanel= UIUtil.createButtonFooter(okButton,cancelButton);
 		cp.add(buttonPanel, BorderLayout.SOUTH);
-		
+
 		setContentPane(cp);
 		setTitle(msg.getString("Title.New"));
 		getRootPane().setDefaultButton(okButton);
@@ -221,8 +218,7 @@ class NewMacroDialog extends EscapableDialog {
 	 */
 	private Icon getErrorIcon() {
 		if (ERROR_ICON==null) {
-			URL res = getClass().getResource("error_co.gif");
-			ERROR_ICON = new ImageIcon(res);
+			ERROR_ICON = AppIconLoader.getIcon("toolbarError_dark.svg", "error_co.gif", 12, 12);
 		}
 		return ERROR_ICON;
 	}
@@ -246,8 +242,7 @@ class NewMacroDialog extends EscapableDialog {
 	 */
 	private Icon getWarningIcon() {
 		if (WARN_ICON==null) {
-			URL res = getClass().getResource("warning_co.gif");
-			WARN_ICON = new ImageIcon(res);
+			WARN_ICON = AppIconLoader.getIcon("warning_dark.svg", "warning_co.gif", 12, 12);
 		}
 		return WARN_ICON;
 	}

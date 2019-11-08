@@ -210,12 +210,32 @@ public class RTextUtilities {
 	 * @param iconPanel The icon panel.  If this is <code>null</code>, then a
 	 *        spacer is used.
 	 * @return The panel.
+	 * @see #createAssistancePanel(JComponent, int)
 	 */
 	public static JPanel createAssistancePanel(JComponent comp,
 											DecorativeIconPanel iconPanel) {
 		if (iconPanel==null) {
 			iconPanel = new DecorativeIconPanel();
 		}
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(iconPanel, BorderLayout.LINE_START);
+		panel.add(comp);
+		return panel;
+	}
+
+
+	/**
+	 * Creates a panel containing the specified component and some leading
+	 * padding.  Used to make text fields <em>without</em> assistance
+	 * align properly with text fields in {@code DecorativeIconPanel}s.
+	 *
+	 * @param comp The component.
+	 * @param iconWidth A spacer for the decorative icon panel width.
+	 * @return The panel.
+	 * @see #createAssistancePanel(JComponent, DecorativeIconPanel)
+	 */
+	public static JPanel createAssistancePanel(JComponent comp, int iconWidth) {
+		DecorativeIconPanel iconPanel = new DecorativeIconPanel(iconWidth);
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(iconPanel, BorderLayout.LINE_START);
 		panel.add(comp);

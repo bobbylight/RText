@@ -25,6 +25,8 @@ import org.fife.rsta.ui.AssistanceIconPanel;
 import org.fife.rsta.ui.RComboBoxModel;
 import org.fife.rsta.ui.search.AbstractSearchDialog;
 import org.fife.rsta.ui.search.FindReplaceButtonsEnableResult;
+import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.SearchManager;
 import org.fife.ui.FSATextField;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.StatusBar;
@@ -76,6 +78,8 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	// Some strings cached from our resources for efficiency.
 	private String defaultStatusText;
 	private String searchingCompleteString;
+
+	static final int DECORATIVE_ICON_WIDTH = 12;
 
 	private static final String MSG = "org.fife.ui.search.Search";
 	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
@@ -136,6 +140,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 		// Make a panel containing the edit boxes and their associated labels.
 		JPanel inputPanel = createInputPanel();
+		updateIcons();
 
 		// Make a "Conditions" panel.
 		Box conditionsPanel = Box.createVerticalBox();
@@ -446,19 +451,19 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(findTextCombo);
-		AssistanceIconPanel aip = new AssistanceIconPanel(findTextCombo);
+		AssistanceIconPanel aip = new AssistanceIconPanel(findTextCombo, DECORATIVE_ICON_WIDTH);
 		temp.add(aip, BorderLayout.LINE_START);
 
 		JPanel temp2 = new JPanel(new BorderLayout());
-		temp2.add(inFilesComboBox);
+		temp2.add(RTextUtilities.createAssistancePanel(inFilesComboBox, DECORATIVE_ICON_WIDTH));
 		temp2.add(Box.createHorizontalStrut(AssistanceIconPanel.WIDTH), BorderLayout.LINE_START);
 
 		JPanel temp3 = new JPanel(new BorderLayout());
-		temp3.add(inFolderTextField);
+		temp3.add(RTextUtilities.createAssistancePanel(inFolderTextField, DECORATIVE_ICON_WIDTH));
 		temp3.add(Box.createHorizontalStrut(AssistanceIconPanel.WIDTH), BorderLayout.LINE_START);
 
 		JPanel temp4 = new JPanel(new BorderLayout());
-		temp4.add(skipFoldersComboBox);
+		temp4.add(RTextUtilities.createAssistancePanel(skipFoldersComboBox, DECORATIVE_ICON_WIDTH));
 		temp4.add(Box.createHorizontalStrut(AssistanceIconPanel.WIDTH), BorderLayout.LINE_START);
 
 		ComponentOrientation orientation = ComponentOrientation.
@@ -488,7 +493,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		UIUtil.makeSpringCompactGrid(inputPanel,
 									4,2,		// rows,cols,
 									0,0,		// initial-x, initial-y,
-									5,5);	// x-spacing, y-spacing.
+									0,5);	// x-spacing, y-spacing.
 
 		return inputPanel;
 
@@ -811,7 +816,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 * @return Whether everything is filled in.
 	 */
 	protected boolean isEverythingFilledIn() {
-		return getWorkerThread()==null && 
+		return getWorkerThread()==null &&
 				getLength(getTextComponent(findTextCombo))>0 &&
 				getLength(getTextComponent(inFilesComboBox))>0 &&
 				getLength(inFolderTextField)>0;
@@ -1002,6 +1007,14 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 */
 	private synchronized void setWorkerThread(FindInFilesThread thread) {
 		this.workerThread = thread;
+	}
+
+
+	private void updateIcons() {
+		if (UIUtil.isDarkLookAndFeel()) {
+			Image image = SearchManager.getDarkLookAndFeelContentAssistImage();
+			setContentAssistImage(image);
+		}
 	}
 
 

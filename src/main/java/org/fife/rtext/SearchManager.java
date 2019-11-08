@@ -9,6 +9,9 @@
  */
 package org.fife.rtext;
 
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -19,6 +22,8 @@ import org.fife.rsta.ui.search.FindDialog;
 import org.fife.rsta.ui.search.FindToolBar;
 import org.fife.rsta.ui.search.ReplaceDialog;
 import org.fife.rsta.ui.search.ReplaceToolBar;
+import org.fife.ui.ImageTranscodingUtil;
+import org.fife.ui.UIUtil;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.rtextarea.SearchResult;
@@ -78,6 +83,12 @@ public class SearchManager {
 	 * @param dialog Either the Find or Replace dialog.
 	 */
 	private void configureSearchDialog(AbstractFindReplaceDialog dialog) {
+
+		if (UIUtil.isDarkLookAndFeel()) {
+			Image image = getDarkLookAndFeelContentAssistImage();
+			dialog.setContentAssistImage(image);
+		}
+
 		AbstractMainView mainView = rtext.getMainView();
 		dialog.setSearchContext(mainView.searchContext);
 		rtext.registerChildWindowListeners(dialog);
@@ -103,6 +114,7 @@ public class SearchManager {
 	 */
 	private void ensureToolbarsCreated() {
 		if (findToolBar==null) {
+
 			AbstractMainView mainView = rtext.getMainView();
 			CollapsibleSectionPanel csp = rtext.getCollapsibleSectionPanel();
 			findToolBar = new FindToolBar(mainView);
@@ -111,6 +123,12 @@ public class SearchManager {
 			replaceToolBar = new ReplaceToolBar(mainView);
 			replaceToolBar.setSearchContext(mainView.searchContext);
 			csp.addBottomComponent(replaceToolBar);
+
+			if (UIUtil.isDarkLookAndFeel()) {
+				Image image = getDarkLookAndFeelContentAssistImage();
+				findToolBar.setContentAssistImage(image);
+				replaceToolBar.setContentAssistImage(image);
+			}
 		}
 	}
 
@@ -174,6 +192,21 @@ public class SearchManager {
 			"Error", JOptionPane.ERROR_MESSAGE);
 		}
 
+	}
+
+
+	public static Image getDarkLookAndFeelContentAssistImage() {
+
+		Image image = null;
+		InputStream in = SearchManager.class.getResourceAsStream("graphics/common_icons/intentionBulb_dark.svg");
+
+		try {
+			image = ImageTranscodingUtil.rasterize("bulb", in, 12, 12);
+		} catch (IOException ioe) { // Never happens
+			ioe.printStackTrace();
+		}
+
+		return image;
 	}
 
 

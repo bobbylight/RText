@@ -16,8 +16,6 @@ import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ui.AssistanceIconPanel;
-import org.fife.rsta.ui.MaxWidthComboBox;
-import org.fife.rsta.ui.search.RegexAwareComboBox;
 import org.fife.rsta.ui.search.SearchComboBox;
 import org.fife.ui.*;
 
@@ -30,7 +28,7 @@ import org.fife.ui.*;
  */
 public class ReplaceInFilesDialog extends FindInFilesDialog {
 
-	private MaxWidthComboBox replaceCombo;
+	private SearchComboBox replaceCombo;
 
 
 	/**
@@ -83,7 +81,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(replaceCombo);
-		AssistanceIconPanel aip = new AssistanceIconPanel(replaceCombo);
+		AssistanceIconPanel aip = new AssistanceIconPanel(replaceCombo, DECORATIVE_ICON_WIDTH);
 		temp.add(aip, BorderLayout.LINE_START);
 
 		ComponentOrientation orientation = ComponentOrientation.
@@ -100,7 +98,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 		UIUtil.makeSpringCompactGrid(inputPanel,
 									5,2,		// rows,cols,
 									0,0,		// initial-x, initial-y,
-									5,5);	// x-spacing, y-spacing.
+									0,5);	// x-spacing, y-spacing.
 
 		return inputPanel;
 
@@ -123,8 +121,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 
 	@Override
 	protected void escapePressed() {
-		if (replaceCombo instanceof RegexAwareComboBox) {
-			RegexAwareComboBox racb = (RegexAwareComboBox)replaceCombo;
+		if (replaceCombo != null) {
 			// Workaround for the strange behavior (Java bug?) that sometimes
 			// the Escape keypress "gets through" from the AutoComplete's
 			// registered key Actions, and gets to this EscapableDialog, which
@@ -135,7 +132,7 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 			// The entire dialog will hide, instead of the completion popup.
 			// Further, bringing the Find dialog back up, the completion popup
 			// will still be visible.
-			if (racb.hideAutoCompletePopups()) {
+			if (replaceCombo.hideAutoCompletePopups()) {
 				return;
 			}
 		}
@@ -164,11 +161,17 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 		// "Content assist" support
 		boolean b = regexCheckBox.isSelected();
 		// Always true except when debugging.  findTextCombo done in parent
-		if (replaceCombo instanceof RegexAwareComboBox) {
-			RegexAwareComboBox racb = (RegexAwareComboBox)replaceCombo;
-			racb.setAutoCompleteEnabled(b);
+		if (replaceCombo != null) {
+			replaceCombo.setAutoCompleteEnabled(b);
 		}
 
+	}
+
+
+	@Override
+	public void setContentAssistImage(Image image) {
+		super.setContentAssistImage(image);
+		replaceCombo.setContentAssistImage(image);
 	}
 
 
@@ -188,9 +191,8 @@ public class ReplaceInFilesDialog extends FindInFilesDialog {
 		if (visible) {
 			boolean regexEnabled = regexCheckBox.isSelected();
 			// Always true except when debugging.  findTextCombo done in parent
-			if (replaceCombo instanceof RegexAwareComboBox) {
-				RegexAwareComboBox racb = (RegexAwareComboBox)replaceCombo;
-				racb.setAutoCompleteEnabled(regexEnabled);
+			if (replaceCombo != null) {
+				replaceCombo.setAutoCompleteEnabled(regexEnabled);
 			}
 		}
 
