@@ -15,6 +15,7 @@ import javax.swing.Icon;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
+import org.fife.ui.rtextarea.SearchContext;
 
 
 /**
@@ -23,7 +24,7 @@ import org.fife.rtext.RText;
  * @author Robert Futrell
  * @version 1.0
  */
-class ReplaceNextAction extends ReplaceAction {
+class ReplaceNextAction extends ReplaceAction implements AbstractSearchAction {
 
 
 	/**
@@ -42,12 +43,19 @@ class ReplaceNextAction extends ReplaceAction {
 	 * Callback routine called when user uses this component.
 	 *
 	 * @param e The action event.
+	 * @see #actionPerformed(SearchContext)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		actionPerformed((SearchContext)null);
+	}
+
+
+	@Override
+	public void actionPerformed(SearchContext context) {
 		RText rtext = getApplication();
 		AbstractMainView mainView = rtext.getMainView();
-		mainView.getSearchManager().replaceNext();
+		mainView.getSearchManager().replaceNext(context);
 	}
 
 

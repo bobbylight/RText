@@ -136,15 +136,23 @@ public class SearchManager {
 	/**
 	 * Executes a "find" operation in the active editor.
 	 *
-	 * @see #replaceNext()
+	 * @param context The search context to use.  The context shared between
+	 *        all of the find/replace dialogs will be used if this is
+	 *        {@code null}.  This is here as a means for callers to override
+	 *        what search is performed to be different from what is in the
+	 *        current search dialog's UI (e.g. if the user uses a keyboard
+	 *        shortcut to search backwards).
+	 * @see #replaceNext(SearchContext) 
 	 */
-	public void findNext() {
+	public void findNext(SearchContext context) {
 
 		AbstractMainView mainView = rtext.getMainView();
+		if (context == null) {
+			context = mainView.searchContext;
+		}
 
 		// If the current text string is nothing (ie, they haven't searched
 		// yet), bring up Find dialog.
-		SearchContext context = mainView.searchContext;
 		String searchString = mainView.searchContext.getSearchFor();
 		if (searchString==null || searchString.isEmpty()) {
 			switch (searchingMode) {
@@ -270,15 +278,23 @@ public class SearchManager {
 	/**
 	 * Executes a "replace" operation in the active editor.
 	 *
-	 * @see #findNext()
+	 * @param context The search context to use.  The context shared between
+	 *        all of the find/replace dialogs will be used if this is
+	 *        {@code null}.  This is here as a means for callers to override
+	 *        what search is performed to be different from what is in the
+	 *        current search dialog's UI (e.g. if the user uses a keyboard
+	 *        shortcut to search backwards).
+	 * @see #findNext(SearchContext) 
 	 */
-	public void replaceNext() {
+	public void replaceNext(SearchContext context) {
 
 		AbstractMainView mainView = rtext.getMainView();
+		if (context == null) {
+			context = mainView.searchContext;
+		}
 
 		// If it's nothing (ie, they haven't searched yet), bring up the
 		// Replace dialog.
-		SearchContext context = mainView.searchContext;
 		String searchString = context.getSearchFor();
 		if (searchString==null || searchString.isEmpty()) {
 			switch (searchingMode) {

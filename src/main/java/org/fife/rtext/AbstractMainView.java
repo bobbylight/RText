@@ -35,6 +35,7 @@ import org.fife.io.UnicodeWriter;
 import org.fife.rsta.ui.GoToDialog;
 import org.fife.rsta.ui.search.*;
 import org.fife.rtext.SearchManager.SearchingMode;
+import org.fife.rtext.actions.AbstractSearchAction;
 import org.fife.rtext.actions.CapsLockAction;
 import org.fife.rtext.actions.ToggleTextModeAction;
 import org.fife.ui.UIUtil;
@@ -44,13 +45,7 @@ import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
-import org.fife.ui.rtextarea.CaretStyle;
-import org.fife.ui.rtextarea.Gutter;
-import org.fife.ui.rtextarea.Macro;
-import org.fife.ui.rtextarea.RTextArea;
-import org.fife.ui.rtextarea.RTextAreaEditorKit;
-import org.fife.ui.rtextarea.RTextScrollPane;
-import org.fife.ui.rtextarea.SearchEngine;
+import org.fife.ui.rtextarea.*;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.ui.search.*;
 
@@ -2984,19 +2979,25 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	@Override
 	public void searchEvent(SearchEvent e) {
+
+		SearchContext context = e.getSearchContext();
+
 		switch (e.getType()) {
 			case MARK_ALL:
 				RTextEditorPane textArea = getCurrentTextArea();
-				SearchEngine.markAll(textArea, searchContext);
+				SearchEngine.markAll(textArea, context);
 				break;
 			case FIND:
-				owner.getAction(RText.FIND_NEXT_ACTION).actionPerformed(null);
+				((AbstractSearchAction)owner.getAction(RText.FIND_NEXT_ACTION)).
+					actionPerformed(context);
 				break;
 			case REPLACE:
-				owner.getAction(RText.REPLACE_NEXT_ACTION).actionPerformed(null);
+				((AbstractSearchAction)owner.getAction(RText.REPLACE_NEXT_ACTION)).
+					actionPerformed(context);
 				break;
 			case REPLACE_ALL:
-				owner.getAction(RText.REPLACE_ALL_ACTION).actionPerformed(null);
+				((AbstractSearchAction)owner.getAction(RText.REPLACE_ALL_ACTION)).
+					actionPerformed(context);
 				break;
 		}
 	}

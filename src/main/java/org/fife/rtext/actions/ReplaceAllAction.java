@@ -33,7 +33,7 @@ import org.fife.ui.rtextarea.SearchResult;
  * @author Robert Futrell
  * @version 1.0
  */
-class ReplaceAllAction extends AppAction<RText> {
+class ReplaceAllAction extends AppAction<RText> implements AbstractSearchAction {
 
 
 	/**
@@ -56,13 +56,21 @@ class ReplaceAllAction extends AppAction<RText> {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		actionPerformed((SearchContext)null);
+	}
+
+
+	@Override
+	public void actionPerformed(SearchContext context) {
 
 		RText rtext = getApplication();
 		AbstractMainView mainView = rtext.getMainView();
 		RTextEditorPane textArea = mainView.getCurrentTextArea();
 
 		// Next, initialize some variables for this action.
-		SearchContext context = mainView.searchContext;
+		if (context == null) {
+			context = mainView.searchContext;
+		}
 		String searchString = context.getSearchFor();
 
 		// Do the replacement.
@@ -76,10 +84,10 @@ class ReplaceAllAction extends AppAction<RText> {
 			}
 			else if (count>0) {
 				String temp = rtext.getString("ReplacedNOccString",
-							Integer.toString(count), searchString);
+					Integer.toString(count), searchString);
 				JOptionPane.showMessageDialog(rtext, temp,
-								rtext.getString("InfoDialogHeader"),
-								JOptionPane.INFORMATION_MESSAGE);
+					rtext.getString("InfoDialogHeader"),
+					JOptionPane.INFORMATION_MESSAGE);
 			}
 			else { // count==0.
 				searchString = RTextUtilities.escapeForHTML(searchString, null);
@@ -87,24 +95,24 @@ class ReplaceAllAction extends AppAction<RText> {
 				// "null" parent returns focus to previously focused window,
 				// whether it be RText, the Find dialog or the Replace dialog.
 				JOptionPane.showMessageDialog(null, temp,
-								rtext.getString("InfoDialogHeader"),
-								JOptionPane.INFORMATION_MESSAGE);
+					rtext.getString("InfoDialogHeader"),
+					JOptionPane.INFORMATION_MESSAGE);
 			}
 
 		} catch (PatternSyntaxException pse) {
 			// There was a problem with the user's regex search string.
 			// Won't usually happen; should be caught earlier.
 			JOptionPane.showMessageDialog(rtext,
-			"Invalid regular expression:\n" + pse.toString() +
-			"\nPlease check your regular expression search string.",
-			"Error", JOptionPane.ERROR_MESSAGE);
+				"Invalid regular expression:\n" + pse.toString() +
+					"\nPlease check your regular expression search string.",
+				"Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IndexOutOfBoundsException ioobe) {
 			// The user's regex replacement string referenced an
 			// invalid group.
 			JOptionPane.showMessageDialog(rtext,
-			"Invalid group reference in replacement string:\n" +
-			ioobe.getMessage(),
-			"Error", JOptionPane.ERROR_MESSAGE);
+				"Invalid group reference in replacement string:\n" +
+					ioobe.getMessage(),
+				"Error", JOptionPane.ERROR_MESSAGE);
 		}
 
 	}

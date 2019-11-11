@@ -15,6 +15,7 @@ import javax.swing.Icon;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
+import org.fife.ui.rtextarea.SearchContext;
 
 
 /**
@@ -23,7 +24,7 @@ import org.fife.rtext.RText;
  * @author Robert Futrell
  * @version 1.0
  */
-class FindNextAction extends FindAction {
+class FindNextAction extends FindAction implements AbstractSearchAction {
 
 
 	/**
@@ -42,12 +43,19 @@ class FindNextAction extends FindAction {
 	 * Callback routine called when user uses this component.
 	 *
 	 * @param e The action event.
+	 * @see #actionPerformed(SearchContext)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		actionPerformed((SearchContext)null);
+	}
+
+
+	@Override
+	public void actionPerformed(SearchContext context) {
 		RText rtext = getApplication();
 		AbstractMainView mainView = rtext.getMainView();
-		mainView.getSearchManager().findNext();
+		mainView.getSearchManager().findNext(context);
 	}
 
 
