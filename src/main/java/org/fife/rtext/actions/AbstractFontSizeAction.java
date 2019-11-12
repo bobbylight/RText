@@ -16,37 +16,27 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.ui.app.AppAction;
-import org.fife.ui.rtextarea.RecordableTextAction;
 
 
 /**
  * A base class for actions that manipulate the current font size.
  *
  * @author Robert Futrell
- * @version 1.0
+ * @version 1.1
  */
 abstract class AbstractFontSizeAction extends AppAction<RText> {
 
 	protected static final float MINIMUM_SIZE = 2f;
 	protected static final float MAXIMUM_SIZE = 40f;
 
-	/**
-	 * The RSTA version of this action.
-	 */
-	private final RecordableTextAction delegate;
-
 
 	/**
 	 * Constructor.
 	 *
 	 * @param app The parent application.
-	 * @param delegate The RSTA version of this increase/decrease font size
-	 *        action.
 	 */
-	AbstractFontSizeAction(RText app, RecordableTextAction delegate,
-			ResourceBundle msg, String keyRoot) {
+	AbstractFontSizeAction(RText app, ResourceBundle msg, String keyRoot) {
 		super(app, msg, keyRoot);
-		this.delegate = delegate;
 	}
 
 
@@ -64,12 +54,9 @@ abstract class AbstractFontSizeAction extends AppAction<RText> {
 			return;
 		}
 
-		// First, update the "base font" of the text areas.
+		// This updates the "base font" and the (shared) syntax scheme for
+		// all text areas.
 		view.setTextAreaFont(font, view.getTextAreaUnderline());
-
-		// As the SyntaxScheme is shared, this will update it on all text areas
-		// and the AbstractMainView.
-		delegate.actionPerformedImpl(e, textArea);
 
 	}
 

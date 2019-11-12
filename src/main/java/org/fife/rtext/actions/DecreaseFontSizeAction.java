@@ -11,21 +11,19 @@ import java.awt.Font;
 import java.util.ResourceBundle;
 
 import org.fife.rtext.RText;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
 
 
 /**
  * Decreases the font sizes used in this RText instance.
  *
  * @author Robert Futrell
- * @version 1.0
+ * @version 1.1
  */
 class DecreaseFontSizeAction extends AbstractFontSizeAction {
 
 
 	DecreaseFontSizeAction(RText app, ResourceBundle msg) {
-		super(app, new RSyntaxTextAreaEditorKit.DecreaseFontSizeAction(),
-				msg, "DecreaseFontSizesAction");
+		super(app, msg, "DecreaseFontSizesAction");
 	}
 
 

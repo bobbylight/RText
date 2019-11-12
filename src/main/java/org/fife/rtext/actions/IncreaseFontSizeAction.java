@@ -11,21 +11,19 @@ import java.awt.Font;
 import java.util.ResourceBundle;
 
 import org.fife.rtext.RText;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
 
 
 /**
  * Increases the font sizes used in this RText instance.
  *
  * @author Robert Futrell
- * @version 1.0
+ * @version 1.1
  */
 class IncreaseFontSizeAction extends AbstractFontSizeAction {
 
 
 	IncreaseFontSizeAction(RText app, ResourceBundle msg) {
-		super(app, new RSyntaxTextAreaEditorKit.IncreaseFontSizeAction(),
-				msg, "IncreaseFontSizesAction");
+		super(app, msg, "IncreaseFontSizesAction");
 	}
 
 
