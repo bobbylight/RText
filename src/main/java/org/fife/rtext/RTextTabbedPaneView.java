@@ -26,6 +26,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import javax.swing.AbstractAction;
@@ -45,6 +46,8 @@ import javax.swing.plaf.TabbedPaneUI;
 
 import org.fife.ui.DrawDnDIndicatorTabbedPane;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import org.fife.ui.rtextfilechooser.Actions;
+import org.fife.ui.rtextfilechooser.FileSelector;
 
 
 /**
@@ -556,26 +559,45 @@ inCloseCurrentDocument = false;
 			repaint();
 		}
 
+		private JPopupMenu createPopupMenu() {
+
+			ResourceBundle msg = ResourceBundle.getBundle(POPUP_MSG);
+
+			JPopupMenu popup = new JPopupMenu();
+
+			String title = msg.getString("Close");
+			closeAction = new TabbedPaneCloseAction(title);
+			JMenuItem item = new JMenuItem(closeAction);
+			popup.add(item);
+
+			title = msg.getString("CloseOthers");
+			item = new JMenuItem(new TabbedPaneCloseOthersAction(title));
+			popup.add(item);
+
+			item = new JMenuItem(owner.getAction(RText.CLOSE_ALL_ACTION));
+			item.setToolTipText(null);
+			popup.add(item);
+
+			popup.addSeparator();
+
+			title = msg.getString("OpenParentFolder");
+			item = new JMenuItem(new TabbedPaneOpenParentFolderAction(title));
+			item.setToolTipText(null);
+			popup.add(item);
+
+			popup.addSeparator();
+
+			title = msg.getString("CopyPathToClipboard");
+			item = new JMenuItem(
+				new TabbedPaneCopyPathAction(title));
+			popup.add(item);
+
+			return popup;
+		}
+
 		protected JPopupMenu getTabPopupMenu() {
 			if (popup==null) {
-				ResourceBundle msg = ResourceBundle.getBundle(POPUP_MSG);
-				popup = new JPopupMenu();
-				String title = msg.getString("Close");
-				closeAction = new TabbedPaneCloseAction(title);
-				JMenuItem item = new JMenuItem(closeAction);
-				popup.add(item);
-				title = msg.getString("CloseOthers");
-				item = new JMenuItem(
-							new TabbedPaneCloseOthersAction(title));
-				popup.add(item);
-				item = new JMenuItem(owner.getAction(RText.CLOSE_ALL_ACTION));
-				item.setToolTipText(null);
-				popup.add(item);
-				popup.add(new JPopupMenu.Separator());
-				title = msg.getString("CopyPathToClipboard");
-				item = new JMenuItem(
-					new TabbedPaneCopyPathAction(title));
-				popup.add(item);
+				popup = createPopupMenu();
 			}
 			return popup;
 		}
@@ -737,6 +759,44 @@ inCloseCurrentDocument = false;
 			}
 		}
 
+	}
+
+
+	/**
+	 * Opens the parent directory of the currently selected file.
+	 */
+	private class TabbedPaneOpenParentFolderAction extends AbstractAction implements FileSelector {
+
+		private Actions.SystemOpenAction delegate;
+
+		TabbedPaneOpenParentFolderAction(String text) {
+			putValue(AbstractAction.NAME, text);
+			delegate = new Actions.SystemOpenAction(this, Actions.SystemOpenAction.OpenMethod.OPEN);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			delegate.actionPerformed(e);
+		}
+
+		@Override
+		public File getSelectedFile() {
+
+			if (rightClickIndex>-1) {
+				RTextEditorPane textArea = RTextTabbedPaneView.this.
+					getRTextEditorPaneAt(rightClickIndex);
+				String path = textArea.getFileFullPath();
+				return new File(path).getParentFile();
+			}
+
+			return null;
+		}
+
+		@Override
+		public File[] getSelectedFiles() {
+			File selectedFile = getSelectedFile();
+			return selectedFile != null ? new File[] { selectedFile } : new File[0];
+		}
 	}
 
 
