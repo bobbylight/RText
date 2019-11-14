@@ -460,12 +460,15 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		combo.addLabelValuePair("Graphite Chalk", root + "GraphiteChalkLookAndFeel");
 		combo.addLabelValuePair("Graphite Electric", root + "GraphiteElectricLookAndFeel");
 		combo.addLabelValuePair("Graphite Glass", root + "GraphiteGlassLookAndFeel");
+		combo.addLabelValuePair("Graphite Sunset", root + "GraphiteSunsetLookAndFeel");
 		combo.addLabelValuePair("Mariner", root + "MarinerLookAndFeel");
 		combo.addLabelValuePair("Mist Aqua", root + "MistAquaLookAndFeel");
 		combo.addLabelValuePair("Mist Silver", root + "MistSilverLookAndFeel");
 		combo.addLabelValuePair("Moderate", root + "ModerateLookAndFeel");
 		combo.addLabelValuePair("Nebula", root + "NebulaLookAndFeel");
+		combo.addLabelValuePair("Nebula Amethyst", root + "NebulaAmethystLookAndFeel");
 		combo.addLabelValuePair("Nebula Brick Wall", root + "NebulaBrickWallLookAndFeel");
+		combo.addLabelValuePair("Night Shade", root + "NightShadeLookAndFeel");
 		combo.addLabelValuePair("Sahara", root + "SaharaLookAndFeel");
 		combo.addLabelValuePair("Twilight", root + "TwilightLookAndFeel");
 
