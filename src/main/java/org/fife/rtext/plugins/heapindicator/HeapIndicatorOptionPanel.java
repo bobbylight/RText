@@ -36,7 +36,6 @@ import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.PluginOptionsDialogPanel;
-import org.fife.ui.app.Plugin;
 
 
 /**
@@ -45,7 +44,7 @@ import org.fife.ui.app.Plugin;
  * @author Robert Futrell
  * @version 1.0
  */
-class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
+class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlugin>
 					implements ActionListener, PropertyChangeListener,
 							ChangeListener {
 
@@ -67,10 +66,10 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	 * Constructor.
 	 */
 	HeapIndicatorOptionPanel(AbstractPluggableGUIApplication<?> app,
-								Plugin plugin) {
+							 HeapIndicatorPlugin plugin) {
 
 		super(plugin);
-		ResourceBundle msg = ((HeapIndicatorPlugin)plugin).getBundle();
+		ResourceBundle msg = plugin.getBundle();
 		setName(plugin.getPluginName());
 
 		ComponentOrientation orientation = ComponentOrientation.
@@ -201,7 +200,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
-		HeapIndicatorPlugin p = (HeapIndicatorPlugin)getPlugin();
+		HeapIndicatorPlugin p = getPlugin();
 		p.setVisible(visibilityCheckBox.isSelected());
 		int refresh = (Integer)refreshRateSpinner.getValue();
 		p.setRefreshInterval(refresh*1000);
@@ -217,8 +216,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 		// I don't think JSpinner allows invalid input, but just in case...
 		Number number = (Number)refreshRateSpinner.getValue();
 		if (!(number instanceof Integer)) {
-			ResourceBundle msg = ((HeapIndicatorPlugin)getPlugin())
-													.getBundle();
+			ResourceBundle msg = getPlugin().getBundle();
 			String error = msg.getString(
 							"Plugin.OptionPanel.Error.RefreshRate.text");
 			error = MessageFormat.format(error,
@@ -264,7 +262,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel
 	 */
 	@Override
 	protected void setValuesImpl(Frame frame) {
-		HeapIndicatorPlugin p = (HeapIndicatorPlugin)getPlugin();
+		HeapIndicatorPlugin p = getPlugin();
 		visibilityCheckBox.setSelected(p.isVisible());
 		refreshRateSpinner.setValue(p.getRefreshInterval() / 1000);
 		boolean useSystemColors = p.getUseSystemColors();

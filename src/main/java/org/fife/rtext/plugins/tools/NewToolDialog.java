@@ -494,7 +494,7 @@ ac.install(dirField);
 	private void showError(JComponent comp, String key, String param) {
 		String desc = msg.getString(key);
 		if (param!=null) {
-			desc = MessageFormat.format(desc, new Object[] { param });
+			desc = MessageFormat.format(desc, param);
 		}
 		String title = msg.getString("Error.Title");
 		JOptionPane.showMessageDialog(this, desc, title,

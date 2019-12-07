@@ -105,7 +105,7 @@ public class TasksPlugin extends GUIPlugin {
 
 
 	@Override
-	public PluginOptionsDialogPanel getOptionsDialogPanel() {
+	public PluginOptionsDialogPanel<TasksPlugin> getOptionsDialogPanel() {
 		return new TasksOptionPanel(app, this);
 	}
 

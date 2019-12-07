@@ -54,7 +54,7 @@ import org.fife.ui.modifiabletable.ModifiableTableListener;
  * @author Robert Futrell
  * @version 1.0
  */
-class TasksOptionPanel extends PluginOptionsDialogPanel
+class TasksOptionPanel extends PluginOptionsDialogPanel<TasksPlugin>
 		implements ActionListener, ItemListener, ModifiableTableListener {
 
 	private final TasksPlugin plugin;
@@ -171,7 +171,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
 			}
-			
+
 		}
 
 	}

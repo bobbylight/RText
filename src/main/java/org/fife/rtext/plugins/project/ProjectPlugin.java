@@ -111,7 +111,7 @@ public class ProjectPlugin extends GUIPlugin {
 
 
 	@Override
-	public PluginOptionsDialogPanel getOptionsDialogPanel() {
+	public PluginOptionsDialogPanel<ProjectPlugin> getOptionsDialogPanel() {
 		if (optionPanel==null) {
 			optionPanel = new ProjectPluginOptionPanel(this);
 		}

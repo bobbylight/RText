@@ -11,7 +11,6 @@ package org.fife.rtext.plugins.console;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -25,7 +24,6 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -35,23 +33,17 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
-import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
-import javax.swing.text.TabSet;
-import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
 import javax.swing.text.Utilities;
 
-import org.fife.rtext.RTextUtilities;
+import org.fife.rtext.AbstractConsoleTextArea;
 import org.fife.ui.OptionsDialog;
-import org.fife.util.SubstanceUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Token;
-import org.fife.ui.rtextarea.RTextArea;
 
 
 /**
@@ -61,23 +53,7 @@ import org.fife.ui.rtextarea.RTextArea;
  * @author Robert Futrell
  * @version 1.0
  */
-abstract class ConsoleTextArea extends JTextPane {
-
-	public static final Color DEFAULT_PROMPT_FG		= new Color(0,192,0);
-
-	public static final Color DEFAULT_STDOUT_FG		= Color.blue;
-
-	public static final Color DEFAULT_STDERR_FG		= Color.red;
-
-	public static final Color DEFAULT_EXCEPTION_FG	= new Color(111, 49, 152);
-
-	public static final Color DEFAULT_DARK_PROMPT_FG	= new Color(0x30, 0xff, 0x2f);
-
-	public static final Color DEFAULT_DARK_STDOUT_FG	= new Color(0, 255, 255);
-
-	public static final Color DEFAULT_DARK_STDERR_FG	= new Color(0xff, 0x80, 0x80);
-
-	public static final Color DEFAULT_DARK_EXCEPTION_FG = new Color(0xa0649a);
+abstract class ConsoleTextArea extends AbstractConsoleTextArea {
 
 	/**
 	 * Property change event fired whenever a process is launched or
@@ -85,14 +61,7 @@ abstract class ConsoleTextArea extends JTextPane {
 	 */
 	public static final String PROPERTY_PROCESS_RUNNING	= "ProcessRunning";
 
-	public static final String STYLE_PROMPT			= "prompt";
-	static final String STYLE_STDIN			= "stdin";
-	public static final String STYLE_STDOUT			= "stdout";
-	public static final String STYLE_STDERR			= "stderr";
-	public static final String STYLE_EXCEPTION		= "exception";
-
 	final Plugin plugin;
-	private JPopupMenu popup;
 	private int inputMinOffs;
 	private final LinkedList<String> cmdHistory;
 	private int cmdHistoryIndex;
@@ -226,6 +195,18 @@ abstract class ConsoleTextArea extends JTextPane {
 	}
 
 
+	@Override
+	protected JPopupMenu createPopupMenu() {
+		JPopupMenu popup = new JPopupMenu();
+		popup.add(new JMenuItem(new CopyAllAction()));
+		popup.addSeparator();
+		popup.add(new JMenuItem(new ClearAllAction()));
+		popup.addSeparator();
+		popup.add(new JMenuItem(new ConfigureAction()));
+		return popup;
+	}
+
+
 	/**
 	 * Fixes the keyboard shortcuts for this text component so the user cannot
 	 * accidentally delete any stdout or stderr, only stdin.
@@ -341,28 +322,6 @@ abstract class ConsoleTextArea extends JTextPane {
 
 
 	/**
-	 * Installs the styles used by this text component.
-	 *
-	 * @param checkForSubstance Whether to work around a Substance oddity.
-	 */
-	private void installDefaultStyles(boolean checkForSubstance) {
-
-		Font font = RTextArea.getDefaultFont();
-		if (!SubstanceUtil.isSubstanceInstalled()) {
-			// If we do this with a SubstanceLookAndFeel installed, we go into
-			// an infinite loop of updateUI()'s called (in calls to
-			// SwingUtilities.invokeLater()).  For some reason, Substance has
-			// to update JTextPaneUI's whenever the font changes.  Sigh...
-			setFont(font);
-		}
-
-		restoreDefaultColors();
-		setTabSize(4); // Do last
-
-	}
-
-
-	/**
 	 * Replaces the command entered thus far with another one.  This is used
 	 * when the user cycles through the command history.  This method should
 	 * only be called on the EDT.
@@ -408,55 +367,6 @@ abstract class ConsoleTextArea extends JTextPane {
 
 
 	/**
-	 * Sets the tab size in this text pane.
-	 *
-	 * @param tabSize The new tab size, in characters.
-	 */
-	private void setTabSize(int tabSize) {
-
-		FontMetrics fm = getFontMetrics(getFont());
-		int charWidth = fm.charWidth('m');
-		int tabWidth = charWidth * tabSize;
-
-		// NOTE: Array length is arbitrary, represents the maximum number of
-		// tabs handled on a single line.
-		TabStop[] tabs = new TabStop[50];
-		for (int j=0; j<tabs.length; j++) {
-			tabs[j] = new TabStop((j+1)*tabWidth);
-		}
-
-		TabSet tabSet = new TabSet(tabs);
-		SimpleAttributeSet attributes = new SimpleAttributeSet();
-		StyleConstants.setTabSet(attributes, tabSet);
-
-		int length = getDocument().getLength();
-		getStyledDocument().setParagraphAttributes(0, length, attributes, true);
-
-	}
-
-
-	/**
-	 * Displays this text area's popup menu.
-	 *
-	 * @param e The location at which to display the popup.
-	 */
-	private void showPopupMenu(MouseEvent e) {
-
-		if (popup==null) {
-			popup = new JPopupMenu();
-			popup.add(new JMenuItem(new CopyAllAction()));
-			popup.addSeparator();
-			popup.add(new JMenuItem(new ClearAllAction()));
-			popup.addSeparator();
-			popup.add(new JMenuItem(new ConfigureAction()));
-		}
-
-		popup.show(this, e.getX(), e.getY());
-
-	}
-
-
-	/**
 	 * Called when the user toggles whether or not to syntax highlight user
 	 * input in the options dialog.  This method changes the style of
 	 * <b>only</b> the current user input to match the new preference.  Any
@@ -481,40 +391,6 @@ abstract class ConsoleTextArea extends JTextPane {
 		// Otherwise, change all current input to default "input" color.
 		Style style = getStyle(STYLE_STDIN);
 		doc.setCharacterAttributes(start, end, style, true);
-
-	}
-
-
-	/**
-	 * Changes all consoles to use the default colors for the current
-	 * application theme.
-	 */
-	void restoreDefaultColors() {
-
-		Font font = RTextArea.getDefaultFont();
-		boolean isDark = RTextUtilities.isDarkLookAndFeel();
-
-		Style defaultStyle = getStyle(StyleContext.DEFAULT_STYLE);
-		StyleConstants.setFontFamily(defaultStyle, font.getFamily());
-		StyleConstants.setFontSize(defaultStyle, font.getSize());
-
-		Style prompt = addStyle(STYLE_PROMPT, defaultStyle);
-		Color promptColor = isDark ? DEFAULT_DARK_PROMPT_FG : DEFAULT_PROMPT_FG;
-		StyleConstants.setForeground(prompt, promptColor);
-
-		/*Style stdin = */addStyle(STYLE_STDIN, defaultStyle);
-
-		Style stdout = addStyle(STYLE_STDOUT, defaultStyle);
-		Color stdoutColor = isDark ? DEFAULT_DARK_STDOUT_FG : DEFAULT_STDOUT_FG;
-		StyleConstants.setForeground(stdout, stdoutColor);
-
-		Style stderr = addStyle(STYLE_STDERR, defaultStyle);
-		Color stderrColor = isDark ? DEFAULT_DARK_STDERR_FG : DEFAULT_STDERR_FG;
-		StyleConstants.setForeground(stderr, stderrColor);
-
-		Style exception = addStyle(STYLE_EXCEPTION, defaultStyle);
-		Color exceptionColor = isDark ? DEFAULT_DARK_EXCEPTION_FG : DEFAULT_EXCEPTION_FG;
-		StyleConstants.setForeground(exception, exceptionColor);
 
 	}
 
@@ -564,19 +440,6 @@ abstract class ConsoleTextArea extends JTextPane {
 			e.printStackTrace();
 		}
 
-	}
-
-
-	/**
-	 * Overridden to also update the UI of the popup menu.
-	 */
-	@Override
-	public void updateUI() {
-		super.updateUI();
-		installDefaultStyles(true);
-		if (popup!=null) {
-			SwingUtilities.updateComponentTreeUI(popup);
-		}
 	}
 
 

@@ -178,7 +178,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 * @return The options panel.
 	 */
 	@Override
-	public PluginOptionsDialogPanel getOptionsDialogPanel() {
+	public PluginOptionsDialogPanel<HeapIndicatorPlugin> getOptionsDialogPanel() {
 		if (optionPanel==null)
 			optionPanel = new HeapIndicatorOptionPanel(app, this);
 		return optionPanel;

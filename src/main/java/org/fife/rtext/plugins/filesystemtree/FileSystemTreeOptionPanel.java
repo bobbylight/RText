@@ -29,7 +29,6 @@ import javax.swing.border.Border;
 import org.fife.rtext.*;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
-import org.fife.ui.app.Plugin;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
 
@@ -40,7 +39,7 @@ import org.fife.ui.dockablewindows.DockableWindowConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
+class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel<FileSystemTreePlugin>
 			implements ActionListener, ItemListener, DockableWindowConstants {
 
 	private final JCheckBox visibleCB;
@@ -53,7 +52,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * Constructor.
 	 */
-	FileSystemTreeOptionPanel(RText rtext, Plugin plugin) {
+	FileSystemTreeOptionPanel(RText rtext, FileSystemTreePlugin plugin) {
 
 		super(plugin);
 		ResourceBundle gpb = ResourceBundle.getBundle(
@@ -126,7 +125,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 
 	@Override
 	protected void doApplyImpl(Frame owner) {
-		FileSystemTreePlugin p = (FileSystemTreePlugin)getPlugin();
+		FileSystemTreePlugin p = getPlugin();
 		DockableWindow wind = p.getDockableWindow(p.getPluginName());
 		wind.setActive(visibleCB.isSelected());
 		wind.setPosition(getFileSystemTreePlacement());
@@ -200,7 +199,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel
 	 */
 	@Override
 	protected void setValuesImpl(Frame frame) {
-		FileSystemTreePlugin p = (FileSystemTreePlugin)getPlugin();
+		FileSystemTreePlugin p = getPlugin();
 		DockableWindow wind = p.getDockableWindow(p.getPluginName());
 		setVisibleCBSelected(wind.isActive());
 		setFileSystemTreePlacement(wind.getPosition());

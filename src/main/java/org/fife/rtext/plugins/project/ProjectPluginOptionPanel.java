@@ -38,7 +38,7 @@ import org.fife.ui.dockablewindows.DockableWindowConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-class ProjectPluginOptionPanel extends PluginOptionsDialogPanel
+class ProjectPluginOptionPanel extends PluginOptionsDialogPanel<ProjectPlugin>
 		implements ItemListener, ActionListener {
 
 	private final JCheckBox visibleCB;
@@ -125,7 +125,7 @@ class ProjectPluginOptionPanel extends PluginOptionsDialogPanel
 
 	@Override
 	protected void doApplyImpl(Frame owner) {
-		ProjectPlugin pp = (ProjectPlugin)getPlugin();
+		ProjectPlugin pp = getPlugin();
 		DockableWindow wind = pp.getDockableWindow();
 		wind.setActive(visibleCB.isSelected());
 		wind.setPosition(getDockableWindowPlacement());
@@ -200,7 +200,7 @@ class ProjectPluginOptionPanel extends PluginOptionsDialogPanel
 	 */
 	@Override
 	protected void setValuesImpl(Frame frame) {
-		ProjectPlugin pp = (ProjectPlugin)getPlugin();
+		ProjectPlugin pp = getPlugin();
 		DockableWindow wind = pp.getDockableWindow();
 		setVisibleCBSelected(wind.isActive());
 		setDockableWindowPlacement(wind.getPosition());

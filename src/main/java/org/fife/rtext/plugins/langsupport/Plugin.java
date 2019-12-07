@@ -153,7 +153,7 @@ public class Plugin extends GUIPlugin {
 
 
 	@Override
-	public PluginOptionsDialogPanel getOptionsDialogPanel() {
+	public PluginOptionsDialogPanel<Plugin> getOptionsDialogPanel() {
 		return new OptionsPanel(this);
 	}
 

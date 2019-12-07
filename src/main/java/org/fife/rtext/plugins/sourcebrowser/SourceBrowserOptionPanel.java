@@ -27,7 +27,6 @@ import org.fife.ui.Hyperlink;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplicationConstants;
 import org.fife.ui.app.PluginOptionsDialogPanel;
-import org.fife.ui.app.Plugin;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
@@ -35,7 +34,7 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
 /**
  * Option panel for the Source Browser component.  This component requires
  * ctags to be installed on the system.<p>
- * 
+ *
  * The source browser will provide a list of all
  * functions/variables/classes/etc. declared in a source file, allowing the
  * programmer quick access to them.  See the documentation for
@@ -45,9 +44,10 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  * @author Robert Futrell
  * @version 1.2
  */
-class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
-						implements ActionListener, DocumentListener,
-								ItemListener, GUIApplicationConstants {
+class SourceBrowserOptionPanel
+		extends PluginOptionsDialogPanel<SourceBrowserPlugin>
+		implements ActionListener, DocumentListener, ItemListener,
+				GUIApplicationConstants {
 
 	private final JCheckBox visibleCB;
 	private final JComboBox<String> locationCombo;
@@ -71,7 +71,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	/**
 	 * Constructor.
 	 */
-	public SourceBrowserOptionPanel(RText rtext, Plugin plugin) {
+	public SourceBrowserOptionPanel(RText rtext, SourceBrowserPlugin plugin) {
 
 		super(plugin);
 		ResourceBundle gpb = ResourceBundle.getBundle(
@@ -140,7 +140,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 		typePanel.add(temp2, BorderLayout.SOUTH);
 		temp2 = new JPanel(new BorderLayout());
 		temp2.add(typePanel, BorderLayout.LINE_START);
-		
+
 		Dimension filler = new Dimension(1,1);
 		if (ltr) {
 			temp.add(locLabel);
@@ -284,7 +284,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 */
 	@Override
 	protected void doApplyImpl(Frame frame) {
-		SourceBrowserPlugin p = (SourceBrowserPlugin)getPlugin();
+		SourceBrowserPlugin p = getPlugin();
 		DockableWindow wind = p.getDockableWindow(p.getPluginName());
 		wind.setActive(visibleCB.isSelected());
 		wind.setPosition(locationCombo.getSelectedIndex());//getSourceBrowserPlacement());
@@ -308,7 +308,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 			firePropertyChange(CTAGS_LOCATION_PROPERTY, null,
 								ctagsExecutableTextField.getText());
 		}
-			
+
 	}
 
 
@@ -462,7 +462,7 @@ class SourceBrowserOptionPanel extends PluginOptionsDialogPanel
 	 */
 	@Override
 	protected void setValuesImpl(Frame frame) {
-		SourceBrowserPlugin p = (SourceBrowserPlugin)getPlugin();
+		SourceBrowserPlugin p = getPlugin();
 		DockableWindow wind = p.getDockableWindow(p.getPluginName());
 		visibleCB.setSelected(wind.isActive());
 		setSourceBrowserPlacement(wind.getPosition());

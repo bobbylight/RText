@@ -132,7 +132,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 
 	@Override
-	public PluginOptionsDialogPanel getOptionsDialogPanel() {
+	public PluginOptionsDialogPanel<ToolPlugin> getOptionsDialogPanel() {
 		return new ToolOptionPanel(this);
 	}
 
@@ -364,8 +364,14 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 
 	/**
-	 * {@inheritDoc}
+	 * Changes all consoles to use the default colors for the current
+	 * application theme.
 	 */
+	void restoreDefaultColors() {
+		getDockableWindow().restoreDefaultColors();
+	}
+
+
 	@Override
 	public void savePreferences() {
 

@@ -16,56 +16,29 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ResourceBundle;
 
 import javax.swing.Box;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SpringLayout;
 
-import org.fife.rtext.RTextUtilities;
-import org.fife.ui.RColorSwatchesButton;
+import org.fife.rtext.AbstractConsoleTextAreaOptionPanel;
 import org.fife.ui.UIUtil;
-import org.fife.ui.app.PluginOptionsDialogPanel;
 
 
 /**
  * Options panel for managing the Console plugin.
  *
  * @author Robert Futrell
- * @version 1.0
+ * @version 1.1
  */
-class ConsoleOptionPanel extends PluginOptionsDialogPanel
-			implements ActionListener, ItemListener, PropertyChangeListener {
+class ConsoleOptionPanel extends AbstractConsoleTextAreaOptionPanel<Plugin>
+			implements ActionListener {
 
 	/**
 	 * ID used to identify this option panel.
 	 */
 	private static final String OPTION_PANEL_ID = "ConsoleOptionPanel";
 
-	private JCheckBox visibleCB;
-	private JLabel locationLabel;
-	private JComboBox<String> locationCombo;
 	private JCheckBox highlightInputCB;
-	private JCheckBox stdoutCB;
-	private JCheckBox stderrCB;
-	private JCheckBox promptCB;
-	private JCheckBox exceptionsCB;
-	private RColorSwatchesButton stdoutButton;
-	private RColorSwatchesButton stderrButton;
-	private RColorSwatchesButton promptButton;
-	private RColorSwatchesButton exceptionsButton;
-	private final JButton defaultsButton;
-
-	private static final String PROPERTY = "Property";
 
 
 	/**
@@ -97,11 +70,7 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		topPanel.add(colorsPanel);
 		topPanel.add(Box.createVerticalStrut(5));
 
-		// Add a "Restore Defaults" button
-		defaultsButton = new JButton(plugin.getString("RestoreDefaults"));
-		defaultsButton.setActionCommand("RestoreDefaults");
-		defaultsButton.addActionListener(this);
-		addLeftAligned(topPanel, defaultsButton);
+		addRestoreDefaultsButton(topPanel);
 
 		// Put it all together!
 		topPanel.add(Box.createVerticalGlue());
@@ -119,189 +88,37 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+		// Parent class listens to color buttons and "Restore Defaults"
+		super.actionPerformed(e);
+
 		Object source = e.getSource();
 
-		if (visibleCB==source) {
-			setVisibleCBSelected(visibleCB.isSelected());
-			hasUnsavedChanges = true;
-			boolean visible = visibleCB.isSelected();
-			firePropertyChange(PROPERTY, !visible, visible);
-		}
-
-		else if (exceptionsCB==source) {
-			boolean selected = exceptionsCB.isSelected();
-			exceptionsButton.setEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
-		}
-
-		else if (promptCB==source) {
-			boolean selected = promptCB.isSelected();
-			promptButton.setEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
-		}
-
-		else if (stderrCB==source) {
-			boolean selected = stderrCB.isSelected();
-			stderrButton.setEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
-		}
-
-		else if (stdoutCB==source) {
-			boolean selected = stdoutCB.isSelected();
-			stdoutButton.setEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
-		}
-
-		else if (highlightInputCB==source) {
+		if (highlightInputCB==source) {
 			boolean selected = highlightInputCB.isSelected();
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, !selected, selected);
 		}
 
-		else if (defaultsButton==source) {
-			if (notDefaults()) {
-				restoreDefaults();
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, false, true);
-			}
-		}
-
 	}
 
 
 	/**
-	 * Creates the "Colors" section of options for this plugin.
+	 * Overridden to add our "syntax highlight user input" checkbox.
 	 *
-	 * @return A panel with the "color" options.
+	 * @param parent The container to add the content in.
 	 */
-	private Container createColorsPanel() {
-
-		Box temp = Box.createVerticalBox();
-
-		Plugin plugin = (Plugin)getPlugin();
-		temp.setBorder(new OptionPanelBorder(
-									plugin.getString("Options.Colors")));
-
+	@Override
+	protected void addExtraColorRelatedContent(Box parent) {
 		highlightInputCB = createColorActivateCB(
-				plugin.getString("Highlight.Input"));
-		addLeftAligned(temp, highlightInputCB);
-
-		stdoutCB = createColorActivateCB(plugin.getString("Color.Stdout"));
-		stdoutButton = createColorSwatchesButton();
-		stderrCB = createColorActivateCB(plugin.getString("Color.Stderr"));
-		stderrButton = createColorSwatchesButton();
-		promptCB = createColorActivateCB(plugin.getString("Color.Prompts"));
-		promptButton = createColorSwatchesButton();
-		exceptionsCB = createColorActivateCB(plugin.getString("Color.Exceptions"));
-		exceptionsButton = createColorSwatchesButton();
-
-		JPanel sp = new JPanel(new SpringLayout());
-		if (getComponentOrientation().isLeftToRight()) {
-			sp.add(stdoutCB);     sp.add(stdoutButton);
-			sp.add(stderrCB);     sp.add(stderrButton);
-			sp.add(promptCB);     sp.add(promptButton);
-			sp.add(exceptionsCB); sp.add(exceptionsButton);
-		}
-		else {
-			sp.add(stdoutButton);     sp.add(stdoutCB);
-			sp.add(stderrButton);     sp.add(stderrCB);
-			sp.add(promptButton);     sp.add(promptCB);
-			sp.add(exceptionsButton); sp.add(exceptionsCB);
-		}
-		UIUtil.makeSpringCompactGrid(sp, 4,2, 0,0, 5,5);
-
-		JPanel temp2 = new JPanel(new BorderLayout());
-		temp2.add(sp, BorderLayout.LINE_START);
-		temp.add(temp2);
-		temp.add(Box.createVerticalGlue());
-
-		return temp;
-
-	}
-
-
-	/**
-	 * Returns a check box used to toggle whether a color in a console uses
-	 * a special color.
-	 *
-	 * @param label The label for the check box.
-	 * @return The check box.
-	 */
-	private JCheckBox createColorActivateCB(String label) {
-		JCheckBox cb = new JCheckBox(label);
-		cb.addActionListener(this);
-		return cb;
-	}
-
-
-	/**
-	 * Creates a color picker button we're listening for changes on.
-	 *
-	 * @return The button.
-	 */
-	private RColorSwatchesButton createColorSwatchesButton() {
-		RColorSwatchesButton button = new RColorSwatchesButton();
-		button.addPropertyChangeListener(
-				RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		return button;
-	}
-
-
-	/**
-	 * Creates the "General" section of options for this plugin.
-	 *
-	 * @return A panel with the "general" options.
-	 */
-	private Container createGeneralPanel() {
-
-		Plugin plugin = (Plugin)getPlugin();
-		ResourceBundle gpb = ResourceBundle.getBundle(
-										"org.fife.ui.app.GUIPlugin");
-
-		Box temp = Box.createVerticalBox();
-		temp.setBorder(new OptionPanelBorder(
-									plugin.getString("Options.General")));
-
-		// A check box toggling the plugin's visibility.
-		visibleCB = new JCheckBox(gpb.getString("Visible"));
-		visibleCB.addActionListener(this);
-		JPanel temp2 = new JPanel(new BorderLayout());
-		temp2.add(visibleCB, BorderLayout.LINE_START);
-		temp.add(temp2);
-		temp.add(Box.createVerticalStrut(5));
-
-		// A combo in which to select the dockable window's placement.
-		Box locationPanel = createHorizontalBox();
-		locationCombo = new JComboBox<>();
-		UIUtil.fixComboOrientation(locationCombo);
-		locationCombo.addItem(gpb.getString("Location.top"));
-		locationCombo.addItem(gpb.getString("Location.left"));
-		locationCombo.addItem(gpb.getString("Location.bottom"));
-		locationCombo.addItem(gpb.getString("Location.right"));
-		locationCombo.addItem(gpb.getString("Location.floating"));
-		locationCombo.addItemListener(this);
-		locationLabel = new JLabel(gpb.getString("Location.title"));
-		locationLabel.setLabelFor(locationCombo);
-		locationPanel.add(locationLabel);
-		locationPanel.add(Box.createHorizontalStrut(5));
-		locationPanel.add(locationCombo);
-		locationPanel.add(Box.createHorizontalGlue());
-		temp.add(locationPanel);
-
-		temp.add(Box.createVerticalGlue());
-		return temp;
-
+			getPlugin().getString("Highlight.Input"));
+		addLeftAligned(parent, highlightInputCB);
 	}
 
 
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
-		Plugin plugin = (Plugin)getPlugin();
+		Plugin plugin = getPlugin();
 		ConsoleWindow window = plugin.getDockableWindow();
 		window.setActive(visibleCB.isSelected());
 		window.setPosition(locationCombo.getSelectedIndex());
@@ -333,53 +150,8 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 
 
 	@Override
-	public JComponent getTopJComponent() {
-		return visibleCB;
-	}
-
-
-	/**
-	 * Called when the user changes the desired location of the dockable
-	 * window.
-	 *
-	 * @param e The event.
-	 */
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		if (e.getSource()==locationCombo &&
-				e.getStateChange()==ItemEvent.SELECTED) {
-			hasUnsavedChanges = true;
-			int placement = locationCombo.getSelectedIndex();
-			firePropertyChange(PROPERTY, -1, placement);
-		}
-	}
-
-
-	/**
-	 * Returns whether something on this panel is NOT set to its default value.
-	 *
-	 * @return Whether some property in this panel is NOT set to its default
-	 * value.
-	 */
-	private boolean notDefaults() {
-
-		boolean isDark = RTextUtilities.isDarkLookAndFeel();
-		Color defaultStdout = isDark ? ConsoleTextArea.DEFAULT_DARK_STDOUT_FG :
-			ConsoleTextArea.DEFAULT_STDOUT_FG;
-		Color defaultStderr = isDark ? ConsoleTextArea.DEFAULT_DARK_STDERR_FG :
-			ConsoleTextArea.DEFAULT_STDERR_FG;
-		Color defaultPrompt = isDark ? ConsoleTextArea.DEFAULT_DARK_PROMPT_FG :
-			ConsoleTextArea.DEFAULT_PROMPT_FG;
-		Color defaultException = isDark ? ConsoleTextArea.DEFAULT_DARK_EXCEPTION_FG :
-			ConsoleTextArea.DEFAULT_EXCEPTION_FG;
-
-		return !visibleCB.isSelected() ||
-			locationCombo.getSelectedIndex()!=2 ||
-			!highlightInputCB.isSelected() ||
-			!defaultStdout.equals(stdoutButton.getColor()) ||
-			!defaultStderr.equals(stderrButton.getColor()) ||
-			!defaultPrompt.equals(promptButton.getColor()) ||
-			!defaultException.equals(exceptionsButton.getColor());
+	protected boolean notDefaults() {
+		return super.notDefaults() || !highlightInputCB.isSelected();
 	}
 
 
@@ -397,64 +169,27 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 
 
 	/**
-	 * Called when one of our color picker buttons is modified.
-	 *
-	 * @param e The event.
-	 */
-	@Override
-	public void propertyChange(PropertyChangeEvent e) {
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, false, true);
-	}
-
-
-	/**
 	 * Changes all consoles to use the default colors for the current
 	 * application theme.
 	 */
 	private void restoreDefaultColors() {
-		Plugin plugin = (Plugin)getPlugin();
+		Plugin plugin = getPlugin();
 		plugin.restoreDefaultColors();
-		setValues(((Plugin)getPlugin()).getRText());
+		setValues(plugin.getRText());
 	}
 
 
-	/**
-	 * Restores all properties on this panel to their default values.
-	 */
-	private void restoreDefaults() {
-
-		setVisibleCBSelected(true);
-		locationCombo.setSelectedIndex(2);
+	@Override
+	protected void restoreDefaults() {
+		super.restoreDefaults();
 		highlightInputCB.setSelected(true);
-
-		highlightInputCB.setSelected(true);
-		stdoutCB.setSelected(true);
-		stderrCB.setSelected(true);
-		promptCB.setSelected(true);
-		exceptionsCB.setSelected(true);
-
-		boolean isDark = RTextUtilities.isDarkLookAndFeel();
-		if (isDark) {
-			stdoutButton.setColor(ConsoleTextArea.DEFAULT_DARK_STDOUT_FG);
-			stderrButton.setColor(ConsoleTextArea.DEFAULT_DARK_STDERR_FG);
-			promptButton.setColor(ConsoleTextArea.DEFAULT_DARK_PROMPT_FG);
-			exceptionsButton.setColor(ConsoleTextArea.DEFAULT_DARK_EXCEPTION_FG);
-		}
-		else {
-			stdoutButton.setColor(ConsoleTextArea.DEFAULT_STDOUT_FG);
-			stderrButton.setColor(ConsoleTextArea.DEFAULT_STDERR_FG);
-			promptButton.setColor(ConsoleTextArea.DEFAULT_PROMPT_FG);
-			exceptionsButton.setColor(ConsoleTextArea.DEFAULT_EXCEPTION_FG);
-		}
-
 	}
 
 
 	@Override
 	protected void setValuesImpl(Frame owner) {
 
-		Plugin plugin = (Plugin)getPlugin();
+		Plugin plugin = getPlugin();
 		ConsoleWindow window = plugin.getDockableWindow();
 		visibleCB.setSelected(window.isActive());
 		locationCombo.setSelectedIndex(window.getPosition());
@@ -474,13 +209,6 @@ class ConsoleOptionPanel extends PluginOptionsDialogPanel
 		promptButton.setColor(window.getForeground(ConsoleTextArea.STYLE_PROMPT));
 		exceptionsButton.setColor(window.getForeground(ConsoleTextArea.STYLE_EXCEPTION));
 
-	}
-
-
-	private void setVisibleCBSelected(boolean selected) {
-		visibleCB.setSelected(selected);
-		locationLabel.setEnabled(selected);
-		locationCombo.setEnabled(selected);
 	}
 
 

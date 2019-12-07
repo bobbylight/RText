@@ -42,7 +42,7 @@ import org.fife.ui.app.PluginOptionsDialogPanel;
  * @author Robert Futrell
  * @version 1.0
  */
-class OptionsPanel extends PluginOptionsDialogPanel
+class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 		implements ActionListener, ChangeListener {
 
 	// HTML properties
@@ -315,7 +315,7 @@ class OptionsPanel extends PluginOptionsDialogPanel
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
-		Plugin plugin = (Plugin)getPlugin();
+		Plugin plugin = getPlugin();
 
 		HtmlOptions opts = plugin.getHtmlOptions();
 		opts.setSpaceCount(getIntValue(htmlSpaceSpinner));
@@ -379,7 +379,7 @@ class OptionsPanel extends PluginOptionsDialogPanel
 	@Override
 	protected void setValuesImpl(Frame owner) {
 
-		Plugin plugin = (Plugin)getPlugin();
+		Plugin plugin = getPlugin();
 
 		HtmlOptions opts = plugin.getHtmlOptions();
 		htmlSpaceSpinner.setValue(opts.getSpaceCount());

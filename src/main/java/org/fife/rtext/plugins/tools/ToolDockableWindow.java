@@ -10,8 +10,7 @@
  */
 package org.fife.rtext.plugins.tools;
 
-import java.awt.BorderLayout;
-import java.awt.ComponentOrientation;
+import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.MessageFormat;
@@ -25,9 +24,11 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import org.fife.io.ProcessRunnerOutputListener;
+import org.fife.rtext.AbstractConsoleTextArea;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.WebLookAndFeelUtils;
@@ -147,6 +148,36 @@ public class ToolDockableWindow extends DockableWindow
 
 
 	/**
+	 * Returns the color used for a given type of text in the consoles.
+	 *
+	 * @param style The style; e.g. {@link AbstractConsoleTextArea#STYLE_STDOUT}.
+	 * @return The color, or <code>null</code> if the system default color
+	 *         is being used.
+	 * @see #setForeground(String, Color)
+	 */
+	public Color getForeground(String style) {
+		Color c = null;
+		Style s = textArea.getStyle(style);
+		if (s!=null) {
+			c = StyleConstants.getForeground(s);
+		}
+		return c;
+	}
+
+
+	/**
+	 * Returns whether a special style is used for a given type of text in
+	 * the consoles.
+	 *
+	 * @param style The style of text.
+	 * @return Whether a special style is used.
+	 */
+	public boolean isStyleUsed(String style) {
+		return textArea.getStyle(style).isDefined(StyleConstants.Foreground);
+	}
+
+
+	/**
 	 * Prints an exception to the output text component.  This is called
 	 * when an error occurs trying to launch or run a process.
 	 *
@@ -181,14 +212,12 @@ public class ToolDockableWindow extends DockableWindow
 				float time = (System.currentTimeMillis()-startTime)/1000f;
 				String title = msg.getString("Window.Title.CompletedTool");
 				title = MessageFormat.format(title,
-					new Object[] { tool.getName(),
-						Integer.toString(rc), Float.toString(time) });
+					tool.getName(), Integer.toString(rc), Float.toString(time));
 				setDockableWindowTitle(title);
 			}
 			else if (e instanceof InterruptedException) { // User killed
 				String title = msg.getString("Window.Title.ProcessTerminated");
-				title = MessageFormat.format(title,
-						new Object[] { tool.getName() });
+				title = MessageFormat.format(title, tool.getName());
 				setDockableWindowTitle(title);
 				String text = msg.getString("Window.ProcessTerminated");
 				appendWithStyle(text,
@@ -196,8 +225,7 @@ public class ToolDockableWindow extends DockableWindow
 			}
 			else {
 				String title = msg.getString("Window.Title.ToolError");
-				title = MessageFormat.format(title,
-					new Object[] { tool.getName() });
+				title = MessageFormat.format(title, tool.getName());
 				setDockableWindowTitle(title);
 				outputStackTrace(e);
 			}
@@ -207,6 +235,36 @@ public class ToolDockableWindow extends DockableWindow
 
 		});
 
+	}
+
+
+	/**
+	 * Changes all consoles to use the default colors for the current
+	 * application theme.
+	 */
+	public void restoreDefaultColors() {
+		textArea.restoreDefaultColors();
+	}
+
+
+	/**
+	 * Sets the color used for a given type of text in the consoles.
+	 *
+	 * @param style The style; e.g. {@link AbstractConsoleTextArea#STYLE_STDOUT}.
+	 * @param fg The new foreground color to use, or <code>null</code> to
+	 *        use the system default foreground color.
+	 * @see #getForeground(String)
+	 */
+	public void setForeground(String style, Color fg) {
+		Style s = textArea.getStyle(style);
+		if (s!=null) {
+			if (fg!=null) {
+				StyleConstants.setForeground(s, fg);
+			}
+			else {
+				s.removeAttribute(StyleConstants.Foreground);
+			}
+		}
 	}
 
 
@@ -228,8 +286,8 @@ public class ToolDockableWindow extends DockableWindow
 		this.tool = tool;
 		startTime = System.currentTimeMillis();
 		String title = msg.getString("Window.Title.StartingTool");
-		title = MessageFormat.format(title, new Object[] { tool.getName(),
-								new SimpleDateFormat().format(new Date()) });
+		title = MessageFormat.format(title, tool.getName(),
+			new SimpleDateFormat().format(new Date()));
 		setDockableWindowTitle(title);
 		textArea.setText(null);
 		stopAction.setEnabled(true);

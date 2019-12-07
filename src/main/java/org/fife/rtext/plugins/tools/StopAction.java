@@ -43,20 +43,8 @@ class StopAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 */
 	StopAction(ToolPlugin plugin, ResourceBundle msg) {
-
 		super(plugin.getRText(), msg, "Action.StopTool");
-
-		if (UIUtil.isLightForeground(new JLabel().getForeground())) {
-			try {
-				InputStream in = getClass().getResourceAsStream("suspend.svg");
-				setIcon(new ImageIcon(ImageTranscodingUtil.rasterize("suspend.svg", in, 16, 16)));
-			} catch (IOException ioe) {
-				plugin.getRText().displayException(ioe);
-			}
-		}
-		else {
-			setIcon("stop.png");
-		}
+		initIcon();
 		setEnabled(false);
 		this.plugin = plugin;
 	}
@@ -76,4 +64,19 @@ class StopAction extends AppAction<RText> {
 	}
 
 
+	private void initIcon() {
+
+		if (UIUtil.isLightForeground(new JLabel().getForeground())) {
+			try {
+				InputStream in = getClass().getResourceAsStream("suspend.svg");
+				setIcon(new ImageIcon(ImageTranscodingUtil.rasterize("suspend.svg", in, 16, 16)));
+			} catch (IOException ioe) {
+				plugin.getRText().displayException(ioe);
+			}
+		}
+
+		else {
+			setIcon("stop.png");
+		}
+	}
 }

@@ -102,7 +102,7 @@ public class MacroPlugin extends AbstractPlugin
 
 
 	@Override
-	public PluginOptionsDialogPanel getOptionsDialogPanel() {
+	public PluginOptionsDialogPanel<MacroPlugin> getOptionsDialogPanel() {
 		return new MacroOptionPanel(this);
 	}
 

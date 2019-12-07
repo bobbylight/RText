@@ -160,7 +160,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 * @return The options panel.
 	 */
 	@Override
-	public synchronized PluginOptionsDialogPanel getOptionsDialogPanel() {
+	public synchronized PluginOptionsDialogPanel<FileSystemTreePlugin> getOptionsDialogPanel() {
 		if (optionPanel==null) {
 			optionPanel = new FileSystemTreeOptionPanel(owner, this);
 		}

@@ -47,7 +47,7 @@ import org.fife.ui.rtextfilechooser.Utilities;
  * @author Robert Futrell
  * @version 1.0
  */
-class MacroOptionPanel extends PluginOptionsDialogPanel
+class MacroOptionPanel extends PluginOptionsDialogPanel<MacroPlugin>
 						implements ModifiableTableListener {
 
 	private final DefaultTableModel model;
@@ -147,12 +147,12 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 
 			// If this is a macro template, create a copy of the file so the
 			// user can't edit the original.
-			MacroPlugin plugin = (MacroPlugin)getPlugin();
+			MacroPlugin plugin = getPlugin();
 			File examplesDir = getExampleMacrosDir();
 			File macroFile = new File(macro.getFile());
 			if (examplesDir.equals(macroFile.getParentFile())) {
 				// New macro name may have "_1", "_2", etc. on it, so be careful
-				String newMacroName = macro.getName() + "." + 
+				String newMacroName = macro.getName() + "." +
 						Utilities.getExtension(macroFile.getName());
 				File newMacroFile = new File(plugin.getMacroDir(),newMacroName);
 				if (copyFile(macroFile, newMacroFile)) {
@@ -198,7 +198,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 	 * @return The directory.
 	 */
 	private File getExampleMacrosDir() {
-		RText app = ((MacroPlugin)getPlugin()).getRText();
+		RText app = getPlugin().getRText();
 		String installDir = app.getInstallLocation();
 		return new File(installDir, "exampleMacros");
 	}
@@ -313,7 +313,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel
 		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {
 			NewMacroDialog macroDialog = new NewMacroDialog(
-					(MacroPlugin)getPlugin(), getOptionsDialog());
+					getPlugin(), getOptionsDialog());
 			Macro old;
 			if (oldData!=null) {
 				old = (Macro)oldData[0];

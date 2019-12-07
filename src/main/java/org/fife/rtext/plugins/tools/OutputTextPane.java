@@ -10,35 +10,21 @@
  */
 package org.fife.rtext.plugins.tools;
 
-import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JTextPane;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.TabSet;
-import javax.swing.text.TabStop;
 import javax.swing.text.TextAction;
 
+import org.fife.rtext.AbstractConsoleTextArea;
+import org.fife.ui.OptionsDialog;
 import org.fife.ui.StandardAction;
-import org.fife.ui.rtextarea.RTextArea;
 
 
 /**
@@ -47,15 +33,9 @@ import org.fife.ui.rtextarea.RTextArea;
  * @author Robert Futrell
  * @version 1.0
  */
-class OutputTextPane extends JTextPane {
-
-	private static final String STYLE_STDIN				= "stdin";
-	static final String STYLE_STDOUT			= "stdout";
-	static final String STYLE_STDERR			= "stderr";
-	static final String STYLE_EXCEPTION			= "exception";
+class OutputTextPane extends AbstractConsoleTextArea {
 
 	private final ToolPlugin plugin;
-	private JPopupMenu popup;
 
 
 	/**
@@ -63,11 +43,22 @@ class OutputTextPane extends JTextPane {
 	 */
 	OutputTextPane(ToolPlugin plugin) {
 		this.plugin = plugin;
-		installStyles();
-		setTabSize(4); // Do after installStyles()
+		installDefaultStyles(false);
 		fixKeyboardShortcuts();
 		Listener listener = new Listener();
 		addMouseListener(listener);
+	}
+
+
+	@Override
+	protected JPopupMenu createPopupMenu() {
+		JPopupMenu popup = new JPopupMenu();
+		popup.add(new JMenuItem(new CopyAllAction()));
+		popup.addSeparator();
+		popup.add(new JMenuItem(new ClearAllAction()));
+		popup.addSeparator();
+		popup.add(new JMenuItem(new ConfigureAction()));
+		return popup;
 	}
 
 
@@ -98,28 +89,6 @@ class OutputTextPane extends JTextPane {
 		// Just remove "delete next word" for now, since DefaultEditorKit
 		// doesn't expose the delegate for us to call into.
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, ctrl), "invalid");
-
-	}
-
-
-	/**
-	 * Installs the styles used by this text component.
-	 */
-	private void installStyles() {
-
-		setFont(RTextArea.getDefaultFont());
-
-		Style stdin = addStyle(STYLE_STDIN, null);
-		StyleConstants.setForeground(stdin, new Color(0,192,0));
-
-		Style stdout = addStyle(STYLE_STDOUT, null);
-		StyleConstants.setForeground(stdout, Color.blue);
-
-		Style stderr = addStyle(STYLE_STDERR, null);
-		StyleConstants.setForeground(stderr, Color.red);
-
-		Style exception = addStyle(STYLE_EXCEPTION, null);
-		StyleConstants.setForeground(exception, new Color(111, 49, 152));
 
 	}
 
@@ -187,65 +156,6 @@ class OutputTextPane extends JTextPane {
 
 
 	/**
-	 * Sets the tab size in this text pane.
-	 *
-	 * @param tabSize The new tab size, in characters.
-	 */
-	private void setTabSize(int tabSize) {
-
-		FontMetrics fm = getFontMetrics(getFont());
-		int charWidth = fm.charWidth('m');
-		int tabWidth = charWidth * tabSize;
-
-		// NOTE: Array length is arbitrary, represents the maximum number of
-		// tabs handled on a single line.
-		TabStop[] tabs = new TabStop[50];
-		for (int j=0; j<tabs.length; j++) {
-			tabs[j] = new TabStop((j+1)*tabWidth);
-		}
-
-		TabSet tabSet = new TabSet(tabs);
-		SimpleAttributeSet attributes = new SimpleAttributeSet();
-		StyleConstants.setTabSet(attributes, tabSet);
-
-		int length = getDocument().getLength();
-		getStyledDocument().setParagraphAttributes(0, length, attributes, true);
-
-	}
-
-
-	/**
-	 * Displays this text area's popup menu.
-	 *
-	 * @param e The location at which to display the popup.
-	 */
-	private void showPopupMenu(MouseEvent e) {
-
-		if (popup==null) {
-			popup = new JPopupMenu();
-			popup.add(new JMenuItem(new CopyAllAction()));
-			popup.addSeparator();
-			popup.add(new JMenuItem(new ClearAllAction()));
-		}
-
-		popup.show(this, e.getX(), e.getY());
-
-	}
-
-
-	/**
-	 * Overridden to also update the UI of the popup menu.
-	 */
-	@Override
-	public void updateUI() {
-		super.updateUI();
-		if (popup!=null) {
-			SwingUtilities.updateComponentTreeUI(popup);
-		}
-	}
-
-
-	/**
 	 * Clears all text from this text area.
 	 */
 	private class ClearAllAction extends StandardAction {
@@ -258,6 +168,26 @@ class OutputTextPane extends JTextPane {
 		public void actionPerformed(ActionEvent e) {
 			setText(null);
 		}
+	}
+
+
+	/**
+	 * Brings up the options dialog panel for this plugin.
+	 */
+	private class ConfigureAction extends AbstractAction {
+
+		ConfigureAction() {
+			putValue(NAME, plugin.getString("Action.Configure"));
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			OptionsDialog od = plugin.getRText().getOptionsDialog();
+			od.initialize();
+			od.setSelectedOptionsPanel(plugin.getString("Plugin.Name"));
+			od.setVisible(true);
+		}
+
 	}
 
 

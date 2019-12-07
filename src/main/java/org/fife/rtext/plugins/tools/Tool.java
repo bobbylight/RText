@@ -25,14 +25,12 @@ import org.fife.rtext.RTextEditorPane;
 
 
 /**
- * An "external tool."
+ * An "external tool;" that is, an external process that can be
+ * run from RText.  Tools are run in separate threads, and their
+ * output captured to be displayed in a docked window.
  *
  * @author Robert Futrell
  * @version 1.0
- */
-/*
- * NOTE: In 1.5, most of these fields could be replaced with a single
- * ProcessBuilder instance.
  */
 public class Tool implements Comparable<Tool> {
 
@@ -434,7 +432,8 @@ public class Tool implements Comparable<Tool> {
 	 * @param desc A description of this tool.  This may be <code>null</code>.
 	 * @see #getDescription()
 	 */
-	private void setDescription(String desc) {
+	// Must be public for XMLEncoder
+	public void setDescription(String desc) {
 		this.desc = desc;
 	}
 
@@ -471,7 +470,8 @@ public class Tool implements Comparable<Tool> {
 	 * @param name The name of this tool.
 	 * @see #getName()
 	 */
-	private void setName(String name) {
+	// Must be public for XMLEncoder
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -542,6 +542,13 @@ public class Tool implements Comparable<Tool> {
 			else if ("${file_full_path}".equals(var)) {
 				temp = textArea.getFileFullPath();
 			}
+
+			// Linters.  This can never happen, even textArea.getFileFullPath()
+			// should always be non-null for us
+			if (temp == null) {
+				temp = "null";
+			}
+
 			m.appendReplacement(sb, Matcher.quoteReplacement(temp));
 		}
 

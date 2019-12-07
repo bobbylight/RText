@@ -205,9 +205,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 			return;
 
 		int type = e.getType();
-		boolean doChange =
-				(type==CurrentTextAreaEvent.TEXT_AREA_CHANGED &&
-					(e.getNewValue()!=null)) ||
+		boolean switchedToAnotherTextArea = type==CurrentTextAreaEvent.TEXT_AREA_CHANGED &&
+			e.getNewValue() != null;
+		boolean doChange = switchedToAnotherTextArea ||
 				(type==CurrentTextAreaEvent.IS_MODIFIED_CHANGED &&
 					(Boolean.FALSE.equals(e.getNewValue()))) ||
 				(type==CurrentTextAreaEvent.SYNTAX_STYLE_CNANGED);
@@ -222,9 +222,19 @@ public class SourceBrowserPlugin extends GUIPlugin
 				sourceBrowserThread.interrupt();
 			}
 
+			RTextEditorPane textArea = owner.getMainView().getCurrentTextArea();
+
+			JTree prevSourceTree = (JTree)textArea.
+				getClientProperty("sourceBrowser.fileSystemTree");
+			if (switchedToAnotherTextArea && prevSourceTree != null) {
+				sourceTree = prevSourceTree;
+				scrollPane.setViewportView(sourceTree);
+				return;
+			}
+			textArea.putClientProperty("sourceBrowser.fileSystemTree", null);
+
 			// If the user has registered a special handler for this particular
 			// language, use it instead.
-			RTextEditorPane textArea = owner.getMainView().getCurrentTextArea();
 			String style = textArea.getSyntaxEditingStyle();
 			final String customHandlerName = System.getProperty(
 									CUSTOM_HANDLER_PREFIX + style);
@@ -242,6 +252,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 						RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
 						ensureSourceTreeSortedProperly();
 						scrollPane.setViewportView(sourceTree);
+						textArea.putClientProperty("sourceBrowser.fileSystemTree", sourceTree);
 					} catch (RuntimeException re) { // FindBugs
 						throw re;
 					} catch (Exception ex) {
@@ -256,6 +267,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 				wind.setPrimaryComponent(sourceTree);
 				RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
 				scrollPane.setViewportView(sourceTree);
+				textArea.putClientProperty("sourceBrowser.fileSystemTree", sourceTree);
 			}
 
 			// If we cannot find the ctags executable, quit now.
@@ -475,7 +487,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * @return The options panel.
 	 */
 	@Override
-	public synchronized PluginOptionsDialogPanel getOptionsDialogPanel() {
+	public synchronized PluginOptionsDialogPanel<SourceBrowserPlugin> getOptionsDialogPanel() {
 		if (optionPanel==null) {
 			optionPanel = new SourceBrowserOptionPanel(owner, this);
 		}

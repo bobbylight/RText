@@ -141,7 +141,7 @@ public class Plugin extends AbstractPlugin
 
 
 	@Override
-	public PluginOptionsDialogPanel getOptionsDialogPanel() {
+	public PluginOptionsDialogPanel<Plugin> getOptionsDialogPanel() {
 		return new OptionsPanel(this);
 	}
 

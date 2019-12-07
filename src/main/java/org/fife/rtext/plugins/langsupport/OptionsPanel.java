@@ -38,7 +38,7 @@ import org.fife.ui.autocomplete.CompletionCellRenderer;
  * @author Robert Futrell
  * @version 1.0
  */
-class OptionsPanel extends PluginOptionsDialogPanel {
+class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 
 	/**
 	 * ID used to identify this option panel, so others can attach to it.
