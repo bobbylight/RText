@@ -985,11 +985,15 @@ public class RTextUtilities {
 					ShadowPopupFactory.install();
 				}
 
-				// Load the Look and Feel class.  Note that we cannot
-				// simply use its name for some reason (Exceptions are
-				// thrown).
-				Class<?> c = cl.loadClass(lnfClassName);
-				LookAndFeel lnf = (LookAndFeel)c.getDeclaredConstructor().newInstance();
+				// Load the Look and Feel class via our special classloader.
+				// Java 11+ won't let us reflectively access system LookAndFeels,
+				// so in that case we keep lnf == null and have more complicated
+				// logic below.
+				LookAndFeel lnf = null;
+				if (!UIManager.getSystemLookAndFeelClassName().equals(lnfClassName)) {
+					Class<?> c = cl.loadClass(lnfClassName);
+					lnf = (LookAndFeel)c.getDeclaredConstructor().newInstance();
+				}
 
 				// If we're changing to a LAF that supports window decorations
 				// and our current one doesn't, or vice versa, inform the
@@ -1011,7 +1015,14 @@ public class RTextUtilities {
 					return;
 				}
 
-				UIManager.setLookAndFeel(lnf);
+				if (lnf != null) {
+					UIManager.setLookAndFeel(lnf);
+				}
+				else { // System LaF
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					lnf = UIManager.getLookAndFeel();
+				}
+
 				// Re-save the class loader BEFORE calling
 				// updateLookAndFeels(), as the UIManager.setLookAndFeel()
 				// call above resets this property to null, and we need

@@ -1671,6 +1671,48 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		}
 	}
 
+	private static void setLookAndFeel(ThirdPartyLookAndFeelManager lafManager,
+						   String lafName) throws ReflectiveOperationException,
+							UnsupportedLookAndFeelException {
+
+		ClassLoader cl = lafManager.getLAFClassLoader();
+
+		// Set these properties before instantiating WebLookAndFeel
+		if (WebLookAndFeelUtils.isWebLookAndFeel(lafName)) {
+			WebLookAndFeelUtils.installWebLookAndFeelProperties(cl);
+		}
+		else {
+			ShadowPopupFactory.install();
+		}
+
+		// Must set UIManager's ClassLoader before instantiating
+		// the LAF.  Substance is so high-maintenance!
+		UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
+
+		// Java 11+ won't let us reflectively access system LookAndFeel
+		// classes, so we need a little extra logic here
+		if (UIManager.getSystemLookAndFeelClassName().equals(lafName)) {
+			UIManager.setLookAndFeel(lafName);
+		}
+		else {
+			Class<?> clazz;
+			try {
+				clazz = cl.loadClass(lafName);
+			} catch (UnsupportedClassVersionError ucve) {
+				// A LookAndFeel requiring Java X or later, but we're
+				// now restarting with a Java version earlier than X
+				lafName = UIManager.getSystemLookAndFeelClassName();
+				clazz = cl.loadClass(lafName);
+			}
+			LookAndFeel laf = (LookAndFeel)clazz.getDeclaredConstructor().
+				newInstance();
+			UIManager.setLookAndFeel(laf);
+		}
+
+		UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
+		UIUtil.installOsSpecificLafTweaks();
+	}
+
 	/**
 	 * Program entry point.
 	 *
@@ -1718,30 +1760,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 				new ThirdPartyLookAndFeelManager(rootDir);
 
 			try {
-				ClassLoader cl = lafManager.getLAFClassLoader();
-				// Set these properties before instantiating WebLookAndFeel
-				if (WebLookAndFeelUtils.isWebLookAndFeel(lafName)) {
-					WebLookAndFeelUtils.installWebLookAndFeelProperties(cl);
-				}
-				else {
-					ShadowPopupFactory.install();
-				}
-				// Must set UIManager's ClassLoader before instantiating
-				// the LAF.  Substance is so high-maintenance!
-				UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
-				Class<?> clazz;
-				try {
-					clazz = cl.loadClass(lafName);
-				} catch (UnsupportedClassVersionError ucve) {
-					// A LookAndFeel requiring Java X or later, but we're
-					// now restarting with a Java version earlier than X
-					lafName = UIManager.getSystemLookAndFeelClassName();
-					clazz = cl.loadClass(lafName);
-				}
-				LookAndFeel laf = (LookAndFeel)clazz.getDeclaredConstructor().newInstance();
-				UIManager.setLookAndFeel(laf);
-				UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
-				UIUtil.installOsSpecificLafTweaks();
+				setLookAndFeel(lafManager, lafName);
 			} catch (RuntimeException re) { // FindBugs
 				throw re;
 			} catch (Exception e) {
