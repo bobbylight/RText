@@ -519,6 +519,25 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	}
 
 
+	/**
+	 * A null-safe means of storing the integer value of a color.  If the color
+	 * is {@code null}, any value for that key is removed from the preferences.
+	 *
+	 * @param prefs The preferences to check.
+	 * @param key The key for the preference.
+	 * @param color The color to store, which may be {@code null}.
+	 */
+	private void putOrRemoveInt(Preferences prefs, String key, Color color) {
+
+		if (color != null) {
+			prefs.putInt(key, color.getRGB());
+		}
+		else {
+			prefs.remove(key); // There may be a prior value
+		}
+	}
+
+
 	@Override
 	public void save() {
 
@@ -565,7 +584,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		prefs.putInt("hyperlinkModifierKey",			hyperlinkModifierKey);
 		prefs.putBoolean("marginLineEnabled",			marginLineEnabled);
 		prefs.putInt("marginLinePosition",				marginLinePosition);
-		prefs.putInt("matchedBracketBGColor",		matchedBracketBGColor.getRGB());
+		putOrRemoveInt(prefs, "matchedBracketBGColor", matchedBracketBGColor);
 		prefs.putInt("matchedBracketBorderColor",		matchedBracketBorderColor.getRGB());
 		prefs.putInt("modifiedDocumentNamesColor",	modifiedDocumentNamesColor.getRGB());
 		prefs.put("printFont",						printFont==null ? "null" : printFont.getName() + ","
