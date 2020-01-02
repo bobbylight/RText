@@ -997,7 +997,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			// If there are no templates, assume this is the user's first
 			// time in RText and add some "standard" templates.
 			CodeTemplateManager ctm = RTextEditorPane.getCodeTemplateManager();
-			if (ctm.getTemplateCount()==0) {
+			if (ctm.getTemplates().length==0) {
 				RTextUtilities.addDefaultCodeTemplates();
 			}
 		}

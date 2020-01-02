@@ -5,7 +5,7 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-['java', 'distribution', /*'checkstyle', */'maven', 'eclipse' ].each { apply plugin: it }
+['java', 'distribution', /*'checkstyle', */'maven-publish', 'eclipse' ].each { apply plugin: it }
 
 group = 'com.fifesoft'
 
@@ -16,19 +16,19 @@ configurations.all { // Check for updates every build
 }
 
 dependencies {
-	compile('com.fifesoft.rtext:fife.common:3.0.3-SNAPSHOT') { changing = true }
+	implementation('com.fifesoft.rtext:fife.common:3.0.3-SNAPSHOT') { changing = true }
 
-	compile('com.fifesoft:rsyntaxtextarea:3.0.5-SNAPSHOT') { changing = true }
-	compile('com.fifesoft:autocomplete:3.0.3-SNAPSHOT') { changing = true }
-	compile('com.fifesoft:rstaui:3.0.3-SNAPSHOT') { changing = true }
-	compile('com.fifesoft:spellchecker:3.0.3-SNAPSHOT') { changing = true }
-	compile('com.fifesoft:languagesupport:3.0.1')
+	implementation('com.fifesoft:rsyntaxtextarea:3.0.8') { changing = true }
+	implementation('com.fifesoft:autocomplete:3.0.4') { changing = true }
+	implementation('com.fifesoft:rstaui:3.0.3') { changing = true }
+	implementation('com.fifesoft:spellchecker:3.0.3') { changing = true }
+	implementation('com.fifesoft:languagesupport:3.0.1')
 
-	compile 'net.sf.jtidy:jtidy:r938'
-	compile 'org.codehaus.groovy:groovy-all:2.5.+'
-	compile 'com.esotericsoftware:jsonbeans:0.7'
+	implementation 'net.sf.jtidy:jtidy:r938'
+	implementation 'org.codehaus.groovy:groovy-all:2.5.+'
+	implementation 'com.esotericsoftware:jsonbeans:0.7'
 
-	testCompile 'junit:junit:4.12'
+	testImplementation 'junit:junit:4.12'
 }
 repositories {
 	mavenCentral()
@@ -40,7 +40,7 @@ repositories {
 
 // Regenerate local gradlew
 wrapper {
-	gradleVersion '5.5'
+	gradleVersion '6.0.1'
 }
 
 //checkstyle {
@@ -75,9 +75,8 @@ ext.sharedManifest = manifest {
 		'Build-Date': Instant.now().toString(),
 		'Main-Class': 'org/fife/rtext/RText',
 		// OfficeLnFs are only available on Windows but still need to be on the classpath
-		'Class-Path': configurations.runtime.findAll { !isPluginJar(it.name) }.collect {
+		'Class-Path': configurations.runtimeClasspath.findAll { !isPluginJar(it.name) }.collect {
 							def name = it.name
-							println name
 							if (isSubstanceJar(name)) {
 								name = 'lnfs/substance/' + name
 							}
@@ -107,7 +106,7 @@ jar {
 task consoleJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/console/**'
-		archiveName 'plugin-console.jar'
+		archiveFileName = provider { 'plugin-console.jar' }
 	}
 	manifest {
 		attributes(
@@ -119,7 +118,7 @@ task consoleJar(type: Jar) {
 task fileSystemTreeJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/filesystemtree/**'
-		archiveName 'plugin-fileSystemTree.jar'
+		archiveFileName = provider { 'plugin-fileSystemTree.jar' }
 	}
 	manifest {
 		attributes(
@@ -131,7 +130,7 @@ task fileSystemTreeJar(type: Jar) {
 task heapIndicatorJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/heapindicator/**'
-		archiveName 'plugin-heapIndicator.jar'
+		archiveFileName = provider { 'plugin-heapIndicator.jar' }
 	}
 	manifest {
 		attributes(
@@ -143,7 +142,7 @@ task heapIndicatorJar(type: Jar) {
 task macroSupportJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/macros/**'
-		archiveName 'plugin-macros.jar'
+		archiveFileName = provider { 'plugin-macros.jar' }
 	}
 	manifest {
 		attributes(
@@ -155,7 +154,7 @@ task macroSupportJar(type: Jar) {
 task projectSupportJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/project/**'
-		archiveName 'plugin-projects.jar'
+		archiveFileName = provider { 'plugin-projects.jar' }
 	}
 	manifest {
 		attributes(
@@ -167,7 +166,7 @@ task projectSupportJar(type: Jar) {
 task languageSupportJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/langsupport/**'
-		archiveName 'plugin-languageSupport.jar'
+		archiveFileName = provider { 'plugin-languageSupport.jar' }
 	}
 	manifest {
 		attributes(
@@ -179,7 +178,7 @@ task languageSupportJar(type: Jar) {
 task sourceBrowserJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/sourcebrowser/**'
-		archiveName 'plugin-sourceBrowser.jar'
+		archiveFileName = provider { 'plugin-sourceBrowser.jar' }
 	}
 	manifest {
 		attributes(
@@ -191,7 +190,7 @@ task sourceBrowserJar(type: Jar) {
 task taskListJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/tasks/**'
-		archiveName 'plugin-tasks.jar'
+		archiveFileName = provider { 'plugin-tasks.jar' }
 	}
 	manifest {
 		attributes(
@@ -203,7 +202,7 @@ task taskListJar(type: Jar) {
 task tidyJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/tidy/**'
-		archiveName 'plugin-tidy.jar'
+		archiveFileName = provider { 'plugin-tidy.jar' }
 	}
 	manifest {
 		attributes(
@@ -215,7 +214,7 @@ task tidyJar(type: Jar) {
 task toolsJar(type: Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/tools/**'
-		archiveName 'plugin-tools.jar'
+		archiveFileName = provider { 'plugin-tools.jar' }
 	}
 	manifest {
 		attributes(
@@ -245,7 +244,7 @@ def getDistributionFiles(configurations) {
 
 	def distFiles = [
 			'build/libs', // The built jars
-			configurations.runtime // Gradle dependencies
+			configurations.runtimeClasspath // Gradle dependencies
 	]
 
 	// Copy native libraries from FifeCommon, if it's checked out alongside this project
@@ -260,7 +259,7 @@ def getDistributionFiles(configurations) {
 distributions {
 	main {
 
-		baseName = 'rtext'
+		distributionBaseName = 'rtext'
 		contents {
 			exclude([ '**/*-sources.jar', '**/*-javadoc.jar' ])
 			from { getDistributionFiles(configurations) }
@@ -286,7 +285,7 @@ distributions {
 		}
 	}
 	src {
-		baseName = 'rtext'
+		distributionBaseName = 'rtext'
 	}
 }
 

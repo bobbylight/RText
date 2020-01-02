@@ -101,7 +101,6 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		// These listeners will be used by all text fields.
 		docListener = new FindInFilesDocumentListener();
 		FindInFilesFocusAdapter focusAdapter = new FindInFilesFocusAdapter();
-		FindInFilesKeyListener keyListener = new FindInFilesKeyListener();
 
 		// Set the main content pane for the "Find in Files" dialog.
 		JPanel contentPane = new JPanel();
@@ -111,7 +110,6 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		// Make a "Find what" combo box.
 		JTextComponent textField = getTextComponent(findTextCombo);
 		textField.addFocusListener(focusAdapter);
-		textField.addKeyListener(keyListener);
 		textField.getDocument().addDocumentListener(docListener);
 
 		// Make an "In files" combo box.
@@ -119,7 +117,6 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		inFilesComboBox.setEditable(true);
 		textField = getTextComponent(inFilesComboBox);
 		textField.addFocusListener(focusAdapter);
-		textField.addKeyListener(keyListener);
 		textField.getDocument().addDocumentListener(docListener);
 
 		// Make an "In folder" text field.
@@ -133,7 +130,6 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		skipFoldersComboBox = new JComboBox<>(new RComboBoxModel<>());
 		textField = getTextComponent(skipFoldersComboBox);
 		textField.addFocusListener(focusAdapter);
-		textField.addKeyListener(keyListener);
 		skipFoldersComboBox.addItem(getDefaultFoldersToSkip());
 		skipFoldersComboBox.setSelectedIndex(0);
 		skipFoldersComboBox.setEditable(true);
@@ -1027,18 +1023,15 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 		// Create listeners for the combo boxes.
 		FindInFilesFocusAdapter focusAdapter = new FindInFilesFocusAdapter();
-		FindInFilesKeyListener keyListener = new FindInFilesKeyListener();
 
 		// Fix the Find What combo box's listeners.
 		JTextComponent textField = getTextComponent(findTextCombo);
 		textField.addFocusListener(focusAdapter);
-		textField.addKeyListener(keyListener);
 		textField.getDocument().addDocumentListener(docListener);
 
 		// Fix the In Files combo box's listeners.
 		textField = getTextComponent(inFilesComboBox);
 		textField.addFocusListener(focusAdapter);
-		textField.addKeyListener(keyListener);
 		textField.getDocument().addDocumentListener(docListener);
 
 		// Fix the In Folders combo box's listeners.
@@ -1150,65 +1143,4 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		}
 
 	}
-
-
-	/**
-	 * Listens for key presses in the Find In Files dialog.
-	 */
-	private class FindInFilesKeyListener extends KeyAdapter {
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-
-			// This is an ugly hack to get around JComboBox's
-			// insistence on eating the first Enter keypress
-			// it receives when it has focus and its selected item
-			// has changed since the last time it lost focus.
-			if (e.getKeyCode()==KeyEvent.VK_ENTER && isPreJava6JRE()) {
-
-				Object source = e.getSource();
-
-				// If they pressed Enter in the 'Find What' combo box.
-				if (source==getTextComponent(findTextCombo)) {
-					String inFilesString = (String)inFilesComboBox.getSelectedItem();
-					lastInFilesString = inFilesString;	// Just in case it changed too.
-					String searchString = (String)findTextCombo.getSelectedItem();
-					if (!searchString.equals(lastSearchString)) {
-						findButton.doClick(0);
-						lastSearchString = searchString;
-						getTextComponent(findTextCombo).selectAll();
-					}
-				}
-
-				// If they pressed enter in the 'In Files' combo box.
-				else if (source==getTextComponent(inFilesComboBox)) {
-					String searchString = (String)findTextCombo.getSelectedItem();
-					lastSearchString = searchString;	// Just in case it changed too.
-					String inFilesString = (String)inFilesComboBox.getSelectedItem();
-					if (!inFilesString.equals(lastInFilesString)) {
-						findButton.doClick(0);
-						lastInFilesString = inFilesString;
-						getTextComponent(inFilesComboBox).selectAll();
-					}
-				}
-
-				// If they pressed enter in the 'Skip Folders' combo box.
-				else if (source==getTextComponent(skipFoldersComboBox)) {
-					String searchString = (String)findTextCombo.getSelectedItem();
-					lastSearchString = searchString;	// Just in case it changed too.
-					String skipFoldersString = (String)skipFoldersComboBox.getSelectedItem();
-					if (!skipFoldersString.equals(lastSkipFoldersString)) {
-						findButton.doClick(0);
-						lastSkipFoldersString = skipFoldersString;
-						getTextComponent(skipFoldersComboBox).selectAll();
-					}
-				}
-
-			}
-
-		}
-
-	}
-
-
 }
