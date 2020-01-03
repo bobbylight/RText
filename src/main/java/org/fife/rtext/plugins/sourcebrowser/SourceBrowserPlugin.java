@@ -25,6 +25,7 @@ import javax.swing.event.*;
 import javax.swing.tree.TreeCellRenderer;
 
 import org.fife.ctags.TagEntry;
+import org.fife.rsta.ac.AbstractSourceTree;
 import org.fife.rtext.*;
 import org.fife.rtext.optionsdialog.OptionsDialog;
 import org.fife.ui.ImageTranscodingUtil;
@@ -86,6 +87,8 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private static final String VERSION_STRING	= "3.0.3";
 
 	private static final String VIEW_SB_ACTION	= "ViewSourceBrowserAction";
+
+	private static final String CACHED_SOURCE_TREE = "sourceBrowser.fileSystemTree";
 
 	private static final String RENDERER_WRAPPER_CLASS_NAME =
 		"org.fife.rtext.plugins.sourcebrowser.SubstanceTreeCellRendererWrapper";
@@ -225,13 +228,13 @@ public class SourceBrowserPlugin extends GUIPlugin
 			RTextEditorPane textArea = owner.getMainView().getCurrentTextArea();
 
 			JTree prevSourceTree = (JTree)textArea.
-				getClientProperty("sourceBrowser.fileSystemTree");
+				getClientProperty(CACHED_SOURCE_TREE);
 			if (switchedToAnotherTextArea && prevSourceTree != null) {
 				sourceTree = prevSourceTree;
 				scrollPane.setViewportView(sourceTree);
 				return;
 			}
-			textArea.putClientProperty("sourceBrowser.fileSystemTree", null);
+			textArea.putClientProperty(CACHED_SOURCE_TREE, null);
 
 			// If the user has registered a special handler for this particular
 			// language, use it instead.
@@ -252,7 +255,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 						RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
 						ensureSourceTreeSortedProperly();
 						scrollPane.setViewportView(sourceTree);
-						textArea.putClientProperty("sourceBrowser.fileSystemTree", sourceTree);
+						textArea.putClientProperty(CACHED_SOURCE_TREE, sourceTree);
 					} catch (RuntimeException re) { // FindBugs
 						throw re;
 					} catch (Exception ex) {
@@ -267,7 +270,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 				wind.setPrimaryComponent(sourceTree);
 				RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
 				scrollPane.setViewportView(sourceTree);
-				textArea.putClientProperty("sourceBrowser.fileSystemTree", sourceTree);
+				textArea.putClientProperty(CACHED_SOURCE_TREE, sourceTree);
 			}
 
 			// If we cannot find the ctags executable, quit now.
@@ -568,6 +571,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	public void install(AbstractPluggableGUIApplication<?> app) {
 
 		owner.getMainView().addCurrentTextAreaListener(this);
+		owner.getMainView().addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
 
 		// Add a menu item to toggle the visibility of the dockable window
 		owner.addAction(VIEW_SB_ACTION, viewAction);
@@ -638,6 +642,12 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		if (RText.ICON_STYLE_PROPERTY.equals(propertyName)) {
 			sortAction.refreshIcon();
+		}
+
+		// Clean up cached source tree and listeners to aid GC
+		else if (AbstractMainView.TEXT_AREA_REMOVED_PROPERTY.equals(propertyName)) {
+			RTextEditorPane textArea = (RTextEditorPane)e.getNewValue();
+			uninstallSourceTree(textArea);
 		}
 	}
 
@@ -749,7 +759,23 @@ public class SourceBrowserPlugin extends GUIPlugin
 	@Override
 	public boolean uninstall() {
 		owner.getMainView().removeCurrentTextAreaListener(this);
+		owner.getMainView().removePropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
 		return true;
+	}
+
+
+	/**
+	 * Removes and uninstalls the cached source tree, if any.  This is called whenever
+	 * a text area is closed.
+	 *
+	 * @param textArea The text area that was closed.
+	 */
+	private void uninstallSourceTree(RSyntaxTextArea textArea) {
+		Object tree = textArea.getClientProperty(CACHED_SOURCE_TREE);
+		if (tree instanceof AbstractSourceTree) {
+			((AbstractSourceTree)tree).uninstall();
+		}
+		textArea.putClientProperty(CACHED_SOURCE_TREE, null);
 	}
 
 
