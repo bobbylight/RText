@@ -36,7 +36,7 @@ import org.fife.rtext.plugins.project.model.LogicalFolderProjectEntry;
  */
 public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 
-	private static final DecoratableIcon icon;
+	private static final DecoratableIcon ICON;
 
 
 	public LogicalFolderProjectEntryTreeNode(ProjectPlugin plugin,
@@ -63,7 +63,7 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 	 * @return The shared icon.
 	 */
 	public static Icon getLogicalFolderIcon() {
-		return icon;
+		return ICON;
 	}
 
 
@@ -133,11 +133,11 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 	static {
 		File testFile =  new File(System.getProperty("java.io.tmpdir"));
 		Icon temp = FileSystemView.getFileSystemView().getSystemIcon(testFile);
-		icon = new DecoratableIcon(16, temp);
+		ICON = new DecoratableIcon(16, temp);
 		URL decorationRes = RText.class.
 				getResource("/org/fife/rsta/ui/search/lightbulb.png");
 		Icon decoration = new ImageIcon(decorationRes);
-		icon.addDecorationIcon(decoration);
+		ICON.addDecorationIcon(decoration);
 	}
 
 

@@ -24,11 +24,11 @@ import org.fife.util.SubstanceUtil;
 
 /**
  * Cell renderer for <code>DefaultSourceTree</code>.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
-class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
+final class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
 
 	private final DefaultSourceTree tree;
 	private final Icon blueBullet;

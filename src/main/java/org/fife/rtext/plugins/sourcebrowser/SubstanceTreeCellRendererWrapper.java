@@ -25,15 +25,17 @@ import org.pushingpixels.substance.api.renderer.SubstanceDefaultTreeCellRenderer
  * A wrapper tree cell renderer to use for trees whose libraries create and use
  * custom renderers, but we want to look pretty in the Substance Look and Feel.
  * I love how Substance forces inheritance on renderers!<p>
- * 
+ *
  * Note that this class only works for renderers that return instances of
  * <code>JLabel</code>, but that's the case for
- * <code>DefaultTreeCellRenderer</code> and is the case for all trees we wrap.
- * 
+ * <code>DefaultTreeCellRenderer</code> and is the case for all trees we wrap.<p>
+ *
+ * This class is public since it is accessed via reflection.
+ *
  * @author Robert Futrell
  * @version 1.0
  */
-class SubstanceTreeCellRendererWrapper extends SubstanceDefaultTreeCellRenderer {
+public class SubstanceTreeCellRendererWrapper extends SubstanceDefaultTreeCellRenderer {
 
 	private TreeCellRenderer delegate;
 
@@ -82,7 +84,8 @@ class SubstanceTreeCellRendererWrapper extends SubstanceDefaultTreeCellRenderer 
 				text = Util.stripHtml(text);
 //			}
 //			else {//if (text.startsWith("<html>")) {
-////				System.out.println("--- " + UIManager.getColor("Tree.textForeground").toString().replace("javax.swing.plaf.ColorUIResource", "") + ": " + text);
+////				System.out.println("--- " + UIManager.getColor("Tree.textForeground").toString().
+//					replace("javax.swing.plaf.ColorUIResource", "") + ": " + text);
 //				// Convert ColorUIResource to Color
 //				Color c2 = ((DefaultTreeCellRenderer)delegate).getTextNonSelectionColor();
 //				c2 = new Color(c2.getRGB());

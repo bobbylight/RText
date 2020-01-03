@@ -87,7 +87,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 	/**
 	 * Submits the entered JavaScript code.
-	 * 
+	 *
 	 * @param code The text to submit.
 	 * @param appendPrompt Whether another prompt should be added to the text
 	 *        area after the command completes.
@@ -228,7 +228,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 			JavaScriptShellTextArea.this.
 							append(new String(buf, off, len), style);
 		}
-		
+
 	}
 
 

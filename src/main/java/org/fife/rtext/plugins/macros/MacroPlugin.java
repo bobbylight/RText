@@ -47,8 +47,8 @@ public class MacroPlugin extends AbstractPlugin
 	private final NewMacroAction newMacroAction;
 	private final EditMacrosAction editMacrosAction;
 
-	private static final String MSG = "org.fife.rtext.plugins.macros.MacrosPlugin";
-	static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.macros.MacrosPlugin";
+	static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
 
 	private static final String EDIT_MACROS_ACTION		= "editMacrosAction";
 	private static final String NEW_MACRO_ACTION		= "newMacroAction";
@@ -65,11 +65,11 @@ public class MacroPlugin extends AbstractPlugin
 
 		RText rtext = (RText)app;
 		this.app = rtext;
-		newMacroAction = new NewMacroAction(this, rtext, msg);
+		newMacroAction = new NewMacroAction(this, rtext, MSG);
 		newMacroAction.setAccelerator(prefs.newMacroAccelerator);
 		rtext.addAction(NEW_MACRO_ACTION, newMacroAction);
 
-		editMacrosAction = new EditMacrosAction(rtext, msg);
+		editMacrosAction = new EditMacrosAction(rtext, MSG);
 		editMacrosAction.setAccelerator(prefs.editMacrosAccelerator);
 		rtext.addAction(EDIT_MACROS_ACTION, editMacrosAction);
 
@@ -155,7 +155,7 @@ public class MacroPlugin extends AbstractPlugin
 	 * @return The localized text.
 	 */
 	String getString(String key) {
-		return msg.getString(key);
+		return MSG.getString(key);
 	}
 
 
@@ -167,7 +167,7 @@ public class MacroPlugin extends AbstractPlugin
 	 * @return The localized text.
 	 */
 	String getString(String key, String param) {
-		String text = msg.getString(key);
+		String text = MSG.getString(key);
 		text = MessageFormat.format(text, param);
 		return text;
 	}
@@ -279,7 +279,7 @@ public class MacroPlugin extends AbstractPlugin
 			}
 		}
 		else {
-			String text = MacroPlugin.msg.getString("NoMacrosDefined");
+			String text = MacroPlugin.MSG.getString("NoMacrosDefined");
 			JMenuItem item = new JMenuItem(text);
 			item.setEnabled(false);
 			macrosMenu.add(item);

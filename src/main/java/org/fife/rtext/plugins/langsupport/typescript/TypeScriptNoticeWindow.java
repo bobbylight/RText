@@ -48,7 +48,7 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 	private final TypeScriptNoticeTableModel model;
 
 
-	public TypeScriptNoticeWindow(RText rtext, Plugin plugin) {
+	TypeScriptNoticeWindow(RText rtext, Plugin plugin) {
 
 		super(rtext);
 		this.plugin = plugin;
@@ -103,11 +103,11 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 
 		List<ParserNotice> errors = new ArrayList<>();
 
-		Pattern ERROR = Pattern.compile("([^\\(]+)\\((\\d+),(\\d+)\\): (.+)");
+		Pattern error = Pattern.compile("([^\\(]+)\\((\\d+),(\\d+)\\): (.+)");
 
 		String[] lines = stdout.split("\n");
 		for (String line : lines) {
-			Matcher m = ERROR.matcher(line);
+			Matcher m = error.matcher(line);
 			if (m.matches()) {
 				String fileFullPath = new File(rootDir, m.group(1)).
 						getAbsolutePath();
@@ -191,7 +191,7 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 				addRow(data);
 			}
 		}
-		
+
 	}
 
 

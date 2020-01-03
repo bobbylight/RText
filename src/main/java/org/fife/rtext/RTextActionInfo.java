@@ -73,7 +73,7 @@ public interface RTextActionInfo {
 	String VIEW_SPLIT_NONE_ACTION	= "viewSplitNoneAction";
 	String VIEW_SPLIT_VERT_ACTION	= "viewSplitVerticallyAction";
 
-	String[] actionNames = {
+	String[] ACTION_NAMES = {
 		NEW_ACTION,
 		OPEN_ACTION,
 		OPEN_NEWWIN_ACTION,

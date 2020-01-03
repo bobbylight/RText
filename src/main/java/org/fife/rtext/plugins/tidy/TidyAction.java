@@ -39,8 +39,8 @@ class TidyAction extends AppAction<RText> {
 	 * @param app The parent application.
 	 * @param plugin The tidying plugin.
 	 */
-	public TidyAction(RText app, Plugin plugin) {
-		super(app, Plugin.msg, "Action.Tidy");
+	TidyAction(RText app, Plugin plugin) {
+		super(app, Plugin.MSG, "Action.Tidy");
 		this.plugin = plugin;
 	}
 
@@ -82,18 +82,18 @@ class TidyAction extends AppAction<RText> {
 	private static String cleanupSummary(String summary) {
 
 		// Single-line JSON streams shouldn't create super-long JOptionPanes.
-		final int MAX_SUMMARY_LENGTH = 200;
-		if (summary.length()>MAX_SUMMARY_LENGTH) {
-			summary = summary.substring(0, MAX_SUMMARY_LENGTH) + "...";
+		final int maxSummaryLength = 200;
+		if (summary.length()> maxSummaryLength) {
+			summary = summary.substring(0, maxSummaryLength) + "...";
 		}
 
 		// jsonbeans will print arbitrarily-long JSON blocks in its exception
 		// messages, so keep it <= 5 lines.
-		final int MAX_SUMMARY_LINE_COUNT = 10;
+		final int maxSummaryLineCount = 10;
 		int lineCount = 1;
 		int index = 0;
 		while ((index=summary.indexOf('\n', index))>-1) {
-			if (lineCount==MAX_SUMMARY_LINE_COUNT) {
+			if (lineCount== maxSummaryLineCount) {
 				summary = summary.substring(0, index) + "...";
 				break;
 			}
@@ -139,7 +139,7 @@ class TidyAction extends AppAction<RText> {
 		String summary = result.getSummary();
 		if (summary!=null) {
 			summary = cleanupSummary(summary);
-			String title = Plugin.msg.getString("Dialog.Result.Title");
+			String title = Plugin.MSG.getString("Dialog.Result.Title");
 			RText app = getApplication();
 			JOptionPane.showMessageDialog(app, summary, title, icon);
 		}

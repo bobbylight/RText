@@ -54,14 +54,14 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 	private static final String PROPERTY				= "Property";
 
 
-	public OptionsPanel(Plugin plugin) {
+	OptionsPanel(Plugin plugin) {
 
 		super(plugin);
 		setId(OPTION_PANEL_ID);
 		URL url = getClass().getResource("comment.png");
 		setIcon(new ImageIcon(url));
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Name"));
 		Listener listener = new Listener();
 

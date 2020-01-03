@@ -186,7 +186,7 @@ public final class FileTypeIconManager {
 		private Icon icon;
 		private boolean paintModifiedMarker;
 
-		public TextAreaAwareIcon(RTextEditorPane editorPane, Icon icon) {
+		TextAreaAwareIcon(RTextEditorPane editorPane, Icon icon) {
 			editorPane.addPropertyChangeListener(this);
 			this.icon = icon;
 		}

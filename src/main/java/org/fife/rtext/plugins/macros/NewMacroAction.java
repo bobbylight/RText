@@ -44,7 +44,7 @@ class NewMacroAction extends AppAction<RText> {
 	 * @param owner The parent RText instance.
 	 * @param msg The resource bundle to use for localization.
 	 */
-	public NewMacroAction(MacroPlugin plugin, RText owner, ResourceBundle msg) {
+	NewMacroAction(MacroPlugin plugin, RText owner, ResourceBundle msg) {
 		super(owner, msg, "NewMacroAction");
 		restoreDefaultIcon();
 		this.plugin = plugin;

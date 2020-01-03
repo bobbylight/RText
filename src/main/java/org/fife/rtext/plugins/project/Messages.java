@@ -19,10 +19,10 @@ import java.util.ResourceBundle;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Messages {
+public final class Messages {
 
-	private static final String MSG = "org.fife.rtext.plugins.project.ProjectPlugin";
-	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.project.ProjectPlugin";
+	private static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
 
 
 	/**
@@ -37,7 +37,7 @@ public class Messages {
 	 * @return The message bundle.
 	 */
 	static ResourceBundle getBundle() {
-		return msg;
+		return MSG;
 	}
 
 
@@ -48,7 +48,7 @@ public class Messages {
 	 * @return The localized mnemonic.
 	 */
 	public static int getMnemonic(String key) {
-		return msg.getString(key).charAt(0);
+		return MSG.getString(key).charAt(0);
 	}
 
 
@@ -60,7 +60,7 @@ public class Messages {
 	 * @return The localized message.
 	 */
 	public static String getString(String key, String... params) {
-		String temp = msg.getString(key);
+		String temp = MSG.getString(key);
 		return MessageFormat.format(temp, (Object[])params);
 	}
 

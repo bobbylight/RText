@@ -58,7 +58,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	private static final boolean CASE_SENSITIVE = OS.get().isCaseSensitive();
 
 
-	public SystemShellTextArea(Plugin plugin) {
+	SystemShellTextArea(Plugin plugin) {
 		super(plugin);
 		isWindows = plugin.getRText().getOS()==OS.WINDOWS;
 	}

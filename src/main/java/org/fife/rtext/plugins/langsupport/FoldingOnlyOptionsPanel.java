@@ -57,7 +57,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 			String language) {
 
 		this.language = language;
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString(nameKey));
 		if (icon!=null) {
 			setIcon(loadIcon(icon));
@@ -97,7 +97,7 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 
 
 	private JCheckBox createCB(String key) {
-		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
 	}

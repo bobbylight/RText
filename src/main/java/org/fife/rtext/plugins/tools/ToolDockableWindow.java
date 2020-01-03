@@ -44,8 +44,8 @@ import org.fife.ui.dockablewindows.DockableWindow;
 public class ToolDockableWindow extends DockableWindow
 								implements ProcessRunnerOutputListener {
 
-	private static final String MSG = "org.fife.rtext.plugins.tools.DockableWindow";
-	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.tools.DockableWindow";
+	private static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
 
 	/**
 	 * The tool currently running.  This should only be manipulated on the
@@ -80,7 +80,7 @@ public class ToolDockableWindow extends DockableWindow
 
 		super(new BorderLayout());
 		setIcon(plugin.getPluginIcon());
-		setDockableWindowName(msg.getString("Window.Name"));
+		setDockableWindowName(MSG.getString("Window.Name"));
 
 		// Set via preferences
 		//setActive(true);
@@ -97,7 +97,7 @@ public class ToolDockableWindow extends DockableWindow
 		toolbar.setFloatable(false);
 		toolbar.add(Box.createHorizontalGlue());
 
-		stopAction = new StopAction(plugin, ToolPlugin.msg);
+		stopAction = new StopAction(plugin, ToolPlugin.MSG);
 		JButton b = new JButton(stopAction);
 		b.setText(null);
 		toolbar.add(b);
@@ -210,21 +210,21 @@ public class ToolDockableWindow extends DockableWindow
 
 			if (e==null) {
 				float time = (System.currentTimeMillis()-startTime)/1000f;
-				String title = msg.getString("Window.Title.CompletedTool");
+				String title = MSG.getString("Window.Title.CompletedTool");
 				title = MessageFormat.format(title,
 					tool.getName(), Integer.toString(rc), Float.toString(time));
 				setDockableWindowTitle(title);
 			}
 			else if (e instanceof InterruptedException) { // User killed
-				String title = msg.getString("Window.Title.ProcessTerminated");
+				String title = MSG.getString("Window.Title.ProcessTerminated");
 				title = MessageFormat.format(title, tool.getName());
 				setDockableWindowTitle(title);
-				String text = msg.getString("Window.ProcessTerminated");
+				String text = MSG.getString("Window.ProcessTerminated");
 				appendWithStyle(text,
 						textArea.getStyle(OutputTextPane.STYLE_EXCEPTION));
 			}
 			else {
-				String title = msg.getString("Window.Title.ToolError");
+				String title = MSG.getString("Window.Title.ToolError");
 				title = MessageFormat.format(title, tool.getName());
 				setDockableWindowTitle(title);
 				outputStackTrace(e);
@@ -277,15 +277,15 @@ public class ToolDockableWindow extends DockableWindow
 	 */
 	public boolean startingTool(Tool tool) {
 		if (this.tool!=null) {
-			String title = msg.getString("ErrorDialog.Title");
-			String message = msg.getString("ErrorDialog.ToolAlreadyRunning");
+			String title = MSG.getString("ErrorDialog.Title");
+			String message = MSG.getString("ErrorDialog.ToolAlreadyRunning");
 			JOptionPane.showMessageDialog(this, message, title,
 											JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		this.tool = tool;
 		startTime = System.currentTimeMillis();
-		String title = msg.getString("Window.Title.StartingTool");
+		String title = MSG.getString("Window.Title.StartingTool");
 		title = MessageFormat.format(title, tool.getName(),
 			new SimpleDateFormat().format(new Date()));
 		setDockableWindowTitle(title);

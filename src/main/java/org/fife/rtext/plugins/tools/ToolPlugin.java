@@ -53,8 +53,8 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	private Icon lightThemeIcon;
 	private JMenu toolsMenu;
 
-	private static final String MSG = "org.fife.rtext.plugins.tools.ToolPlugin";
-	static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.tools.ToolPlugin";
+	static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
 
 	private static final String EDIT_TOOLS_ACTION		= "editToolsAction";
 	private static final String NEW_TOOL_ACTION			= "newToolAction";
@@ -73,16 +73,16 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 		loadIcons();
 		ToolsPrefs prefs = loadPrefs();
 
-		AppAction<RText> a = new NewToolAction(rtext, msg, null);
+		AppAction<RText> a = new NewToolAction(rtext, MSG, null);
 		a.setIcon(getPluginIcon());
 		a.setAccelerator(prefs.newToolAccelerator);
 		rtext.addAction(NEW_TOOL_ACTION, a);
 
-		a = new EditToolsAction(rtext, msg, null);
+		a = new EditToolsAction(rtext, MSG, null);
 		a.setAccelerator(prefs.editToolsAccelerator);
 		rtext.addAction(EDIT_TOOLS_ACTION, a);
 
-		a = new ViewToolOutputAction(rtext, msg, this);
+		a = new ViewToolOutputAction(rtext, MSG, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
 		rtext.addAction(VIEW_TOOL_OUTPUT_ACTION, a);
 
@@ -151,7 +151,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 	@Override
 	public String getPluginName() {
-		return msg.getString("Plugin.Name");
+		return MSG.getString("Plugin.Name");
 	}
 
 	@Override
@@ -188,7 +188,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	 * @return The localized text.
 	 */
 	String getString(String key) {
-		return msg.getString(key);
+		return MSG.getString(key);
 	}
 
 
@@ -211,7 +211,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 		// Add a new menu for selecting tools
 		RText rtext = (RText)app;
 		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
-		toolsMenu = new JMenu(msg.getString("Plugin.Name"));
+		toolsMenu = new JMenu(MSG.getString("Plugin.Name"));
 		Action a = rtext.getAction(ToolPlugin.NEW_TOOL_ACTION);
 		toolsMenu.add(createMenuItem(a));
 		a = rtext.getAction(ToolPlugin.EDIT_TOOLS_ACTION);
@@ -316,7 +316,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 			if (text==null) {
 				text = ioe.toString();
 			}
-			String desc = msg.getString("Error.LoadingTools");
+			String desc = MSG.getString("Error.LoadingTools");
 			desc = MessageFormat.format(desc, new Object[] { text });
 			app.displayException(ioe, desc);
 		}
@@ -354,7 +354,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 			}
 		}
 		else {
-			String text = ToolPlugin.msg.getString("NoToolsDefined");
+			String text = ToolPlugin.MSG.getString("NoToolsDefined");
 			JMenuItem item = new JMenuItem(text);
 			item.setEnabled(false);
 			toolsMenu.add(item);
@@ -412,7 +412,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 			if (text==null) {
 				text = ioe.toString();
 			}
-			String desc = msg.getString("Error.SavingTools");
+			String desc = MSG.getString("Error.SavingTools");
 			desc = MessageFormat.format(desc, new Object[] { text });
 			app.displayException(ioe, desc);
 		}

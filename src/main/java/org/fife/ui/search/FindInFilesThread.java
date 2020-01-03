@@ -61,7 +61,7 @@ class FindInFilesThread extends GUIWorkerThread {
 	protected String verboseNoFiltMatchString;
 	protected String dontSearchSubfoldersString;
 	protected String skipThisFolderString;
-	protected String newFilesToExamineString;	
+	protected String newFilesToExamineString;
 	protected String occurrencesString;
 
 //	private static final Pattern TAB_PATTERN	= Pattern.compile("\\t");
@@ -73,7 +73,7 @@ class FindInFilesThread extends GUIWorkerThread {
 	 * @param dialog The "find in files" dialog.
 	 * @param directory The directory in which to search.
 	 */
-	public FindInFilesThread(FindInFilesDialog dialog, File directory) {
+	FindInFilesThread(FindInFilesDialog dialog, File directory) {
 
 		this.dialog = dialog;
 		this.directory = directory;
@@ -429,7 +429,7 @@ class FindInFilesThread extends GUIWorkerThread {
 					dialog.addMatchData(data);
 
 				} // End of if (matchingLines)
-		
+
 			} // End of if (!wholeWord || FindDialog.isWholeWord(...))
 
 		} // End of while (m.find())

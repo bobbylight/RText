@@ -72,7 +72,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel<TasksPlugin>
 	 * @param rtext The parent application.
 	 * @param plugin The tasks plugin.
 	 */
-	public TasksOptionPanel(RText rtext, TasksPlugin plugin) {
+	TasksOptionPanel(RText rtext, TasksPlugin plugin) {
 
 		super(plugin.getPluginName(), plugin);
 

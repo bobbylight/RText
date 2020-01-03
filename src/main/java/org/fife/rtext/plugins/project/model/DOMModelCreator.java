@@ -62,7 +62,8 @@ class DOMModelCreator implements WorkspaceVisitor {
 
 
 	@Override
-	public void postVisit(Workspace workspace) {}
+	public void postVisit(Workspace workspace) {
+	}
 
 
 	@Override
@@ -72,10 +73,12 @@ class DOMModelCreator implements WorkspaceVisitor {
 
 
 	@Override
-	public void postVisit(FileProjectEntry entry) {}
+	public void postVisit(FileProjectEntry entry) {
+	}
 
 	@Override
-	public void postVisit(FolderProjectEntry entry) {}
+	public void postVisit(FolderProjectEntry entry) {
+	}
 
 	@Override
 	public void postVisit(LogicalFolderProjectEntry entry) {

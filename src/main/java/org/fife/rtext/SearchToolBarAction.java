@@ -30,7 +30,7 @@ class SearchToolBarAction extends AppAction<RText> {
 	 *
 	 * @param rtext The parent <code>RText</code> application.
 	 */
-	public SearchToolBarAction(RText rtext) {
+	SearchToolBarAction(RText rtext) {
 		super(rtext);
 	}
 

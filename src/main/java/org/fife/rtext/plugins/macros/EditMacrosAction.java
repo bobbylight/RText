@@ -42,7 +42,7 @@ class EditMacrosAction extends AppAction<RText> {
 	public void actionPerformed(ActionEvent e) {
 		RText owner = getApplication();
 		OptionsDialog od = owner.getOptionsDialog();
-		ResourceBundle msg = MacroPlugin.msg;
+		ResourceBundle msg = MacroPlugin.MSG;
 		od.setSelectedOptionsPanel(msg.getString(MacroOptionPanel.TITLE_KEY));
 		od.initialize();
 		od.setVisible(true);

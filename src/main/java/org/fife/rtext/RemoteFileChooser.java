@@ -414,7 +414,7 @@ public class RemoteFileChooser extends EscapableDialog
 	}
 
 
-	/** 
+	/**
 	 * Called when the OK button is pressed.
 	 *
 	 * @see #cancelPressed()

@@ -38,8 +38,8 @@ class GoToMemberAction extends AppAction<RText>
 			implements CurrentTextAreaListener {
 
 
-	public GoToMemberAction(RText app) {
-		super(app, Plugin.msg, "Action.GoToMember");
+	GoToMemberAction(RText app) {
+		super(app, Plugin.MSG, "Action.GoToMember");
 		app.getMainView().addCurrentTextAreaListener(this);
 		refreshEnabledState();
 	}

@@ -26,6 +26,7 @@ import java.util.ResourceBundle;
  * renders stdout, stderr, etc.  This base class provides the infrastructure
  * to allow the user to customize the styles used in the console.
  *
+ * @param <T> The type of plugin this option panel is for.
  * @author Robert Futrell
  * @version 1.0
  */

@@ -35,7 +35,7 @@ import org.fife.rtext.plugins.project.model.Workspace;
 class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 	private Project project;
-	private static final Icon icon;
+	private static final Icon ICON;
 
 
 	ProjectTreeNode(ProjectPlugin plugin, Project project) {
@@ -93,7 +93,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	 * @return The shared icon.
 	 */
 	public static Icon getProjectIcon() {
-		return icon;
+		return ICON;
 	}
 
 
@@ -185,7 +185,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 
 	static {
-		icon = new ImageIcon(ProjectTreeNode.class.
+		ICON = new ImageIcon(ProjectTreeNode.class.
 				getResource("application.png"));
 	}
 

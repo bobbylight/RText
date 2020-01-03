@@ -133,7 +133,7 @@ public class TypeScriptSupport {
 	/**
 	 * Stores TypeScript-specific parameters into a preferences structure.
 	 * This should be called when the application is shutting down.
-	 * 
+	 *
 	 * @param rtext The parent application.
 	 * @param prefs The preferences structure.
 	 * @see #install(RText, Plugin, LangSupportPreferences)
@@ -163,7 +163,7 @@ public class TypeScriptSupport {
 	/**
 	 * Runs the TypeScript compiler and collects any errors.
 	 */
-	private static class BuildAction extends StandardAction {
+	private static final class BuildAction extends StandardAction {
 
 		private final Plugin plugin;
 

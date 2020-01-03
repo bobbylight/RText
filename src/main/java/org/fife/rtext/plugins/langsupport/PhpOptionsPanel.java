@@ -67,7 +67,7 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 	 */
 	PhpOptionsPanel() {
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.Php.Name"));
 		listener = new Listener();
 		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/page_white_php.png")));
@@ -178,7 +178,7 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 		if (key.indexOf('.')==-1) {
 			key = "Options.Php." + key;
 		}
-		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
 	}

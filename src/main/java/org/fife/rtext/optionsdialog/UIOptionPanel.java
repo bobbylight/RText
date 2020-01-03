@@ -119,22 +119,20 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		String actionCommand = e.getActionCommand();
 
 		switch (actionCommand) {
-			case "ViewComboBox": {
+			case "ViewComboBox":
 				hasUnsavedChanges = true;
 				int old = mainViewStyle;
 				mainViewStyle = viewCombo.getSelectedIndex();
 				firePropertyChange("UIOptionPanel.mainViewStyle", old, mainViewStyle);
 				break;
-			}
-			case "DocSelCombo": {
+			case "DocSelCombo":
 				hasUnsavedChanges = true;
-				int old = documentSelectionPlacement;
+				old = documentSelectionPlacement;
 				documentSelectionPlacement = docSelCombo.getSelectedIndex() +
 					JTabbedPane.TOP;
 				firePropertyChange("UIOptionPanel.documentSelectionPlacement",
 					old, documentSelectionPlacement);
 				break;
-			}
 			case "LookAndFeelComboBox":
 				hasUnsavedChanges = true;
 				possiblyUpdateSubstanceThemeWidgets();
@@ -151,13 +149,12 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 				String name = imageLnFCombo.getSelectedValue();
 				firePropertyChange("UIOptionPanel.iconStyle", null, name);
 				break;
-			case "StatusBarComboBox": {
+			case "StatusBarComboBox":
 				hasUnsavedChanges = true;
-				int old = statusBarStyle;
+				old = statusBarStyle;
 				statusBarStyle = statusBarCombo.getSelectedIndex();
 				firePropertyChange("UIOptionPanel.statusBarStyle", old, statusBarStyle);
 				break;
-			}
 			case "HighlightModifiedCheckBox":
 				boolean highlight = highlightModifiedDocumentDisplayNames();
 				hmColorButton.setEnabled(highlight);

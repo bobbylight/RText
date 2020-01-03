@@ -114,7 +114,7 @@ class BuildThread extends GUIWorkerThread {
 	/**
 	 * The result of building via tsc.
 	 */
-	private static class Result {
+	private static final class Result {
 
 		private final File tsConfig;
 		private final ProcessRunner pr;

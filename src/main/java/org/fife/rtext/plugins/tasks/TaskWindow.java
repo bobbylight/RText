@@ -48,7 +48,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 	private boolean installed;
 
 
-	public TaskWindow(TasksPlugin plugin, RText rtext, String taskIdentifiers) {
+	TaskWindow(TasksPlugin plugin, RText rtext, String taskIdentifiers) {
 
 		super(rtext);
 		installed = false;
@@ -260,7 +260,7 @@ class TaskWindow extends AbstractParserNoticeWindow
 				}
 			}
 		}
-		
+
 	}
 
 

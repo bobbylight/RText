@@ -55,7 +55,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 	 */
 	ShellOptionsPanel() {
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.Sh.Name"));
 		listener = new Listener();
 		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/page_white_tux.png")));
@@ -113,7 +113,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 		if (key.indexOf('.')==-1) {
 			key = "Options.Sh." + key;
 		}
-		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
 	}

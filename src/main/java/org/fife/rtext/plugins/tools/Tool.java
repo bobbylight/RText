@@ -109,7 +109,7 @@ public class Tool implements Comparable<Tool> {
 		// Ensure the program to run exists.
 		File file = new File(varSubstitute(program));
 		if (!file.isFile()) {
-			error = ToolPlugin.msg.getString("Error.ProgramNotFound");
+			error = ToolPlugin.MSG.getString("Error.ProgramNotFound");
 			error = MessageFormat.format(error, file.getAbsolutePath());
 		}
 
@@ -118,7 +118,7 @@ public class Tool implements Comparable<Tool> {
 			// Ensure the directory to run in exists
 			File dir = new File(varSubstitute(getDirectory()));
 			if (!dir.isDirectory()) {
-				error = ToolPlugin.msg.getString("Error.NoSuchDirectory");
+				error = ToolPlugin.MSG.getString("Error.NoSuchDirectory");
 				error = MessageFormat.format(error, dir.getAbsolutePath());
 			}
 

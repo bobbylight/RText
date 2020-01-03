@@ -67,7 +67,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 	 */
 	HtmlOptionsPanel() {
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.Html.Name"));
 		listener = new Listener();
 		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/html.png")));
@@ -177,7 +177,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		if (key.indexOf('.')==-1) {
 			key = "Options.Html." + key;
 		}
-		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
 	}

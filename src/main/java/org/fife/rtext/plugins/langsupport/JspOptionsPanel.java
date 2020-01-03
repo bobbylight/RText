@@ -54,7 +54,7 @@ class JspOptionsPanel extends OptionsDialogPanel {
 	 */
 	JspOptionsPanel() {
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.Jsp.Name"));
 		listener = new Listener();
 		setIcon(new ImageIcon(getClass().getResource("page_white_code_red.png")));
@@ -103,7 +103,7 @@ class JspOptionsPanel extends OptionsDialogPanel {
 		if (key.indexOf('.')==-1) {
 			key = "Options.JSP." + key;
 		}
-		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
 	}

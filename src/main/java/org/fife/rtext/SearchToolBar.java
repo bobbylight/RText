@@ -236,15 +236,15 @@ public class SearchToolBar extends JToolBar {
 	 */
 	private static class FindButton extends JButton {
 
-		public FindButton(String text) {
+		FindButton(String text) {
 			super(text);
 		}
 
-		public FindButton(String text, Icon icon) {
+		FindButton(String text, Icon icon) {
 			super(text, icon);
 		}
 
-		public FindButton(Icon icon) {
+		FindButton(Icon icon) {
 			super(icon);
 		}
 

@@ -73,11 +73,11 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 	 *
 	 * @param plugin The plugin.
 	 */
-	public OptionsPanel(Plugin plugin) {
+	OptionsPanel(Plugin plugin) {
 
 		super(plugin);
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.Panel.Name"));
 
 		ComponentOrientation o = ComponentOrientation.
@@ -127,7 +127,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 		}
 
 		else if ("RestoreDefaults".equals(e.getActionCommand())) {
-			final String DEFAULT_JSON_STYLE = "json";
+			final String defaultJsonStyle = "json";
 			if (addXmlPiCB.isSelected() ||
 					dropEmptyParasCB.isSelected() ||
 					hideEndTagsCB.isSelected() ||
@@ -141,7 +141,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 					getIntValue(xmlWrapLenSpinner)!=0 ||
 					jsonIndentFirstLevelCB.isSelected() ||
 					getIntValue(jsonSpaceSpinner)!=3 ||
-					!DEFAULT_JSON_STYLE.equals(
+					!defaultJsonStyle.equals(
 							jsonStyleCombo.getSelectedValue())) {
 				addXmlPiCB.setSelected(false);
 				dropEmptyParasCB.setSelected(false);
@@ -155,7 +155,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 				xmlWrapLenSpinner.setValue(0);
 				jsonIndentFirstLevelCB.setSelected(false);
 				jsonSpaceSpinner.setValue(3);
-				jsonStyleCombo.setSelectedValue(DEFAULT_JSON_STYLE);
+				jsonStyleCombo.setSelectedValue(defaultJsonStyle);
 				hasUnsavedChanges = true;
 				firePropertyChange(PROPERTY, null, null);
 			}
@@ -172,7 +172,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 	 * @return The check box added.
 	 */
 	private JCheckBox addCheckBox(String key, Box addTo) {
-		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.add(cb, BorderLayout.LINE_START);
 		addTo.add(temp);
@@ -184,7 +184,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 
 	private Container createHtmlOptionsSection() {
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 
 		Box temp = Box.createVerticalBox();
 		temp.setBorder(BorderFactory.createCompoundBorder(
@@ -227,7 +227,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 
 	private Container createJsonOptionsSection() {
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 
 		Box temp = Box.createVerticalBox();
 		temp.setBorder(BorderFactory.createCompoundBorder(
@@ -274,7 +274,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 
 	private Container createXmlOptionsSection() {
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 
 		Box temp = Box.createVerticalBox();
 		temp.setBorder(BorderFactory.createCompoundBorder(

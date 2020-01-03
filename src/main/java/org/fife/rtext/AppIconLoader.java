@@ -18,7 +18,7 @@ import java.io.InputStream;
  * @author Robert Futrell
  * @version 1.0
  */
-public class AppIconLoader {
+public final class AppIconLoader {
 
 	/**
 	 * Private constructor to prevent instantiation.

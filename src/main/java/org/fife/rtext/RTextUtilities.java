@@ -69,7 +69,7 @@ import org.fife.util.TranslucencyUtil;
  * @author Robert Futrell
  * @version 1.0
  */
-public class RTextUtilities {
+public final class RTextUtilities {
 
 	/**
 	 * The extension at the end of all macro files.
@@ -89,6 +89,14 @@ public class RTextUtilities {
 	 * Whether the experimental "drop shadows" option is enabled.
 	 */
 	private static boolean dropShadowsEnabledInEditor;
+
+
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private RTextUtilities() {
+		// Do nothing (comment for Sonar)
+	}
 
 
 	/**

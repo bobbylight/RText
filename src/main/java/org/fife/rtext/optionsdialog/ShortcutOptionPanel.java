@@ -52,7 +52,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 	 *        appears.
 	 * @param msg The resource bundle to use.
 	 */
-	public ShortcutOptionPanel(final RText rtext, final ResourceBundle msg) {
+	ShortcutOptionPanel(final RText rtext, final ResourceBundle msg) {
 
 		super(msg.getString("OptSCName"));
 		this.rtext = rtext;
@@ -69,7 +69,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 
 		model = new DefaultTableModel(new Object[] {
 				msg.getString("OptSCCol1"), msg.getString("OptSCCol2")},
-				RTextActionInfo.actionNames.length);
+				RTextActionInfo.ACTION_NAMES.length);
 		shortcutTable = new ModifiableTable(model, ModifiableTable.BOTTOM,
 										ModifiableTable.MODIFY);
 		shortcutTable.addModifiableTableListener(this);
@@ -240,7 +240,7 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 		for (int i=0; i<num; i++) {
 			masterActionList[i].putValue(Action.ACCELERATOR_KEY,
 									model.getValueAt(i,1));
-		}	
+		}
 	}
 
 

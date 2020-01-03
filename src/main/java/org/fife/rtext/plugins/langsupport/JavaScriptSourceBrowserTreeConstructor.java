@@ -21,7 +21,7 @@ import org.fife.rtext.RTextEditorPane;
  * Constructs the source browser tree for JS source files.  This is a more
  * sophisticated one than the default one created from ctags output.  Features
  * include:
- * 
+ *
  * <ul>
  *    <li>Informative icons for each node that describe the access modifiers of
  *        an element (public/protected/private, static, final, etc.) and
@@ -32,7 +32,7 @@ import org.fife.rtext.RTextEditorPane;
  *    <li>The tree automatically updates after a small delay whenever the user
  *        types - no need to wait for them to save the file.</li>
  * </ul>
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */

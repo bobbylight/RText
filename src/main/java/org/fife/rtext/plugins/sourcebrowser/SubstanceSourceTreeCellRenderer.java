@@ -23,7 +23,7 @@ import org.pushingpixels.substance.api.renderer.SubstanceDefaultTreeCellRenderer
 /**
  * Cell renderer for <code>DefaultSourceTree</code> when Substance is
  * installed.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -44,7 +44,7 @@ class SubstanceSourceTreeCellRenderer extends SubstanceDefaultTreeCellRenderer {
 	 *
 	 * @param tree The source tree we're rendering in.
 	 */
-	public SubstanceSourceTreeCellRenderer(DefaultSourceTree tree) {
+	SubstanceSourceTreeCellRenderer(DefaultSourceTree tree) {
 		this.tree = tree;
 		Class<?> clazz = getClass();
 		blueBullet = new ImageIcon(clazz.getResource(BLUE_BULLET));

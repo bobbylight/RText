@@ -94,8 +94,8 @@ class NewToolDialog extends EscapableDialog implements ActionListener {
 	 */
 	private String origName;
 
-	private static final String MSG = "org.fife.rtext.plugins.tools.NewToolDialog";
-	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.tools.NewToolDialog";
+	private static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
 
 
 	/**
@@ -103,7 +103,7 @@ class NewToolDialog extends EscapableDialog implements ActionListener {
 	 *
 	 * @param parent The parent window.
 	 */
-	public NewToolDialog(JDialog parent) {
+	NewToolDialog(JDialog parent) {
 		super(parent);
 		createGUI();
 	}
@@ -114,7 +114,7 @@ class NewToolDialog extends EscapableDialog implements ActionListener {
 	 *
 	 * @param parent The parent window.
 	 */
-	public NewToolDialog(JFrame parent) {
+	NewToolDialog(JFrame parent) {
 		super(parent);
 		createGUI();
 	}
@@ -178,7 +178,7 @@ class NewToolDialog extends EscapableDialog implements ActionListener {
 	 */
 	private static void addToolVarCompletion(DefaultCompletionProvider p,
 			String key) {
-		String temp = msg.getString(key);
+		String temp = MSG.getString(key);
 		int split = temp.indexOf(" - ");
 		if (split>-1) { // Always true
 			String input = temp.substring(0, split);
@@ -270,19 +270,19 @@ class NewToolDialog extends EscapableDialog implements ActionListener {
 
 		JPanel springPanel = new JPanel(new SpringLayout());
 		springPanel.setBorder(UIUtil.getEmpty5Border());
-		JLabel nameLabel = new JLabel(msg.getString("Name"));
+		JLabel nameLabel = new JLabel(MSG.getString("Name"));
 		nameField = new JTextField(40);
 		JPanel nameFieldPanel = RTextUtilities.createAssistancePanel(nameField, null);
-		JLabel descLabel = new JLabel(msg.getString("Description"));
+		JLabel descLabel = new JLabel(MSG.getString("Description"));
 		descField = new JTextField(40);
 		JPanel descFieldPanel = RTextUtilities.createAssistancePanel(descField, null);
-		JLabel programLabel = new JLabel(msg.getString("Program"));
+		JLabel programLabel = new JLabel(MSG.getString("Program"));
 		programField = new FSATextField();
 		JPanel programFieldPanel = RTextUtilities.createAssistancePanel(programField, null);
-		JButton programBrowseButton = new JButton(msg.getString("Browse"));
+		JButton programBrowseButton = new JButton(MSG.getString("Browse"));
 		programBrowseButton.setActionCommand("BrowseProgram");
 		programBrowseButton.addActionListener(this);
-		JLabel dirLabel = new JLabel(msg.getString("Directory"));
+		JLabel dirLabel = new JLabel(MSG.getString("Directory"));
 		dirField = new FSATextField();
 DefaultCompletionProvider provider = new DefaultCompletionProvider();
 provider.addCompletion(new BasicCompletion(provider, "${file_dir}", "Directory of the current file"));
@@ -293,10 +293,10 @@ ac.install(dirField);
 		AssistanceIconPanel aip = new AssistanceIconPanel(dirField);
 		aip.setAssistanceEnabled(AbstractSearchDialog.getContentAssistImage());
 		JPanel dirFieldPanel = RTextUtilities.createAssistancePanel(dirField, aip);
-		JButton dirBrowseButton = UIUtil.newTabbedPaneButton(msg.getString("Browse"));
+		JButton dirBrowseButton = UIUtil.newTabbedPaneButton(MSG.getString("Browse"));
 		dirBrowseButton.setActionCommand("BrowseDir");
 		dirBrowseButton.addActionListener(this);
-		JLabel shortcutLabel = new JLabel(msg.getString("Shortcut"));
+		JLabel shortcutLabel = new JLabel(MSG.getString("Shortcut"));
 		shortcutField = new KeyStrokeField();
 		JPanel shortcutFieldPanel = RTextUtilities.createAssistancePanel(shortcutField, null);
 
@@ -329,16 +329,16 @@ ac.install(dirField);
 		argTable.getTable().setPreferredScrollableViewportSize(s);
 		argTable.setRowHandler(new ArgTableRowHandler());
 		JPanel temp2 = new JPanel(new BorderLayout());
-		temp2.setBorder(BorderFactory.createTitledBorder(msg.getString("CommandLineArgs")));
+		temp2.setBorder(BorderFactory.createTitledBorder(MSG.getString("CommandLineArgs")));
 		temp2.add(argTable);
 		temp.add(temp2);
-		tabPane.addTab(msg.getString("Tab.Main"), temp);
+		tabPane.addTab(MSG.getString("Tab.Main"), temp);
 
 		JPanel envPanel = new JPanel(new BorderLayout());
 		envPanel.setBorder(UIUtil.getEmpty5Border());
 		ButtonGroup bg = new ButtonGroup();
-		appendRB = UIUtil.newRadio(msg, "AppendEnvVars", bg, null, true);
-		replaceRB = UIUtil.newRadio(msg, "ReplaceEnvVars", bg);
+		appendRB = UIUtil.newRadio(MSG, "AppendEnvVars", bg, null, true);
+		replaceRB = UIUtil.newRadio(MSG, "ReplaceEnvVars", bg);
 		temp = new JPanel(new GridLayout(2,1, 5,0));
 		temp.add(appendRB);
 		temp.add(replaceRB);
@@ -347,8 +347,8 @@ ac.install(dirField);
 		temp2.add(temp, BorderLayout.LINE_START);
 		envPanel.add(temp2, BorderLayout.NORTH);
 		envModel = new DefaultTableModel(
-				new Object[] { msg.getString("VariableName"),
-								msg.getString("VariableValue") }, 0);
+				new Object[] { MSG.getString("VariableName"),
+								MSG.getString("VariableValue") }, 0);
 		ModifiableTable envTable = new ModifiableTable(envModel,
 				BorderLayout.SOUTH, ModifiableTable.ALL_BUTTONS);
 		s = envTable.getTable().getPreferredScrollableViewportSize();
@@ -356,12 +356,12 @@ ac.install(dirField);
 		envTable.getTable().setPreferredScrollableViewportSize(s);
 		envTable.setRowHandler(new EnvVarTableRowHandler());
 		envPanel.add(envTable);
-		tabPane.addTab(msg.getString("Tab.Environment"), envPanel);
+		tabPane.addTab(MSG.getString("Tab.Environment"), envPanel);
 
-		JButton okButton = new JButton(msg.getString("OK"));
+		JButton okButton = new JButton(MSG.getString("OK"));
 		okButton.setActionCommand("OK");
 		okButton.addActionListener(this);
-		JButton cancelButton = UIUtil.newTabbedPaneButton(msg.getString("Cancel"));
+		JButton cancelButton = UIUtil.newTabbedPaneButton(MSG.getString("Cancel"));
 		cancelButton.setActionCommand("Cancel");
 		cancelButton.addActionListener(this);
 		Container buttonPanel=UIUtil.createButtonFooter(okButton, cancelButton);
@@ -369,7 +369,7 @@ ac.install(dirField);
 
 		setContentPane(cp);
 		getRootPane().setDefaultButton(okButton);
-		setTitle(msg.getString("Title"));
+		setTitle(MSG.getString("Title"));
 		setModal(true);
 		applyComponentOrientation(o);
 		pack();
@@ -492,11 +492,11 @@ ac.install(dirField);
 	 *        be <code>null</code>.
 	 */
 	private void showError(JComponent comp, String key, String param) {
-		String desc = msg.getString(key);
+		String desc = MSG.getString(key);
 		if (param!=null) {
 			desc = MessageFormat.format(desc, param);
 		}
-		String title = msg.getString("Error.Title");
+		String title = MSG.getString("Error.Title");
 		JOptionPane.showMessageDialog(this, desc, title,
 									JOptionPane.ERROR_MESSAGE);
 		comp.requestFocusInWindow();
@@ -526,7 +526,7 @@ ac.install(dirField);
 			cp.setBorder(UIUtil.getEmpty5Border());
 
 			JPanel temp = new JPanel(new BorderLayout());
-			JLabel argLabel = new JLabel(msg.getString("ArgumentDialog.Argument"));
+			JLabel argLabel = new JLabel(MSG.getString("ArgumentDialog.Argument"));
 			temp.add(argLabel, BorderLayout.LINE_START);
 			argField = new JTextField(20);
 			CompletionProvider provider = createToolVarCompletionProvider();
@@ -560,17 +560,17 @@ ac.install(dirField);
 			}
 			cp.add(temp, BorderLayout.NORTH);
 
-			okButton = new JButton(msg.getString("OK"));
+			okButton = new JButton(MSG.getString("OK"));
 			okButton.setEnabled(false);
 			okButton.setActionCommand("OK");
 			okButton.addActionListener(this);
-			JButton cancelButton = new JButton(msg.getString("Cancel"));
+			JButton cancelButton = new JButton(MSG.getString("Cancel"));
 			cancelButton.setActionCommand("Cancel");
 			cancelButton.addActionListener(this);
 			Container buttons=UIUtil.createButtonFooter(okButton, cancelButton);
 			cp.add(buttons, BorderLayout.SOUTH);
 
-			setTitle(msg.getString("ArgumentDialog.Title"));
+			setTitle(MSG.getString("ArgumentDialog.Title"));
 			getRootPane().setDefaultButton(okButton);
 			setContentPane(cp);
 			applyComponentOrientation(o);
@@ -657,11 +657,11 @@ ac.install(dirField);
 			JPanel cp = new ResizableFrameContentPane(new BorderLayout());
 			cp.setBorder(UIUtil.getEmpty5Border());
 
-			JLabel nameLabel = new JLabel(msg.getString("EnvVarDialog.Name"));
+			JLabel nameLabel = new JLabel(MSG.getString("EnvVarDialog.Name"));
 			nameField = new JTextField(20);
 			nameField.getDocument().addDocumentListener(this);
 			JPanel nameFieldPanel = RTextUtilities.createAssistancePanel(nameField, null);
-			JLabel valueLabel = new JLabel(msg.getString("EnvVarDialog.Value"));
+			JLabel valueLabel = new JLabel(MSG.getString("EnvVarDialog.Value"));
 			valueField = new JTextField(20);
 			CompletionProvider provider = createToolVarCompletionProvider();
 			AutoCompletion ac = new AutoCompletion(provider);
@@ -702,17 +702,17 @@ ac.install(dirField);
 			}
 			cp.add(temp, BorderLayout.NORTH);
 
-			okButton = new JButton(msg.getString("OK"));
+			okButton = new JButton(MSG.getString("OK"));
 			okButton.setEnabled(false);
 			okButton.setActionCommand("OK");
 			okButton.addActionListener(this);
-			JButton cancelButton = new JButton(msg.getString("Cancel"));
+			JButton cancelButton = new JButton(MSG.getString("Cancel"));
 			cancelButton.setActionCommand("Cancel");
 			cancelButton.addActionListener(this);
 			Container buttons=UIUtil.createButtonFooter(okButton, cancelButton);
 			cp.add(buttons, BorderLayout.SOUTH);
 
-			setTitle(msg.getString("EnvVarDialog.Title"));
+			setTitle(MSG.getString("EnvVarDialog.Title"));
 			getRootPane().setDefaultButton(okButton);
 			setContentPane(cp);
 			applyComponentOrientation(o);
@@ -794,7 +794,7 @@ ac.install(dirField);
 
 		VariableAction(String nameKey, String replacement,
 								JTextField field) {
-			putValue(NAME, msg.getString(nameKey));
+			putValue(NAME, MSG.getString(nameKey));
 			this.field = field;
 			this.replacement = replacement;
 		}
@@ -816,7 +816,7 @@ ac.install(dirField);
 
 		VariableButton(JTextField field) {
 			super(null);
-			setText(msg.getString("Variables"));
+			setText(MSG.getString("Variables"));
 			setHorizontalTextPosition(SwingConstants.LEADING);
 			addMenuItem(new VariableAction("Variable.FileName", "${file_name}", field));
 			addMenuItem(new VariableAction("Variable.FileNameNoExt", "${file_name_no_ext}", field));

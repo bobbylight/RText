@@ -4,8 +4,9 @@
     "-//Puppy Crawl//DTD Suppressions 1.1//EN"
     "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 <suppressions>
+    <suppress files=".*AbstractMainView" checks="FileLength"/>
     <suppress files=".*org[\\/]fife[\\/]rtext[\\/]RTextPrefs" checks="[a-zA-Z0-9]*"/>
-    <suppress files=".*org[\\/]fife[\\/]rtext[\\/]plugins[\\/]langsupport[\\/]LangSupportPreferences"
+    <suppress files=".*org[\\/]fife[\\/]rtext[\\/]plugins[\\/][a-zA-Z]*[\\/][a-zA-Z0-9]*Pref(?:s|erences)"
               checks="[a-zA-Z0-9]*"/>
     <suppress files=".*src[\\/]test[\\/].*" checks="[a-zA-Z0-9]*"/>
 </suppressions>

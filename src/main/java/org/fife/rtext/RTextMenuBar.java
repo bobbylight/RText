@@ -175,15 +175,229 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		this.rtext = rtext;
 
 		// Variables to create the menu.
-		JMenu menu;
-		JMenuItem menuItem;
 		ResourceBundle msg = rtext.getResourceBundle();
 		ResourceBundle menuMsg = ResourceBundle.getBundle("org.fife.rtext.MenuBar");
+		int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+		final int shift = InputEvent.SHIFT_DOWN_MASK;
 
 		// File submenu.
-		fileMenu = createMenu(menuMsg, "MenuFile");
+		fileMenu = createFileMenu(menuMsg);
 		registerMenuByName(MENU_FILE, fileMenu);
 		add(fileMenu);
+
+		// Edit submenu.
+		JMenu menu = createEditMenu(menuMsg, defaultModifier, shift);
+		registerMenuByName(MENU_EDIT, menu);
+		add(menu);
+
+		// Search menu.
+		menu = createSearchMenu(menuMsg, defaultModifier, shift);
+		registerMenuByName(MENU_SEARCH, menu);
+		add(menu);
+
+		// View submenu.
+		viewMenu = createViewMenu(menuMsg, properties);
+		registerMenuByName(MENU_VIEW, viewMenu);
+		viewMenu.getPopupMenu().addPopupMenuListener(this);
+		add(viewMenu);
+
+		// Window menu (only visible when in MDI mode).
+		windowMenu = createWindowMenu(menuMsg, msg);
+		add(windowMenu);
+
+		// Help submenu.
+		menu = createHelpMenu(menuMsg, rtext);
+		registerMenuByName(MENU_HELP, menu);
+		add(menu);
+	}
+
+
+	private void addCopyAsSubMenu(JMenu menu) {
+
+		ResourceBundle msg = ResourceBundle.getBundle("org.fife.rtext.actions.Actions");
+
+		JMenu subMenu = new JMenu(msg.getString("CopyAs"));
+
+		copyAsStyledTextItem = createMenuItem(rtext.getAction(RText.COPY_AS_STYLED_TEXT_ACTION));
+		subMenu.add(copyAsStyledTextItem);
+
+		String[] themes = { "dark", "default", "eclipse", "idea", "monokai" };
+		try {
+
+			for (String theme : themes) {
+
+				String themeTitleCase = Character.toUpperCase(theme.charAt(0)) +
+					theme.substring(1);
+				String title = MessageFormat.format(msg.getString(
+					"CopyAsStyledTextAction.Themed"), themeTitleCase);
+
+				subMenu.add(createCopyAsStyledTextMenuItem(title, theme));
+			}
+		} catch (IOException ioe) {
+			rtext.displayException(ioe);
+		}
+
+		menu.add(subMenu);
+	}
+
+	private JMenuItem createCopyAsStyledTextMenuItem(String title, String themeName)
+		throws IOException {
+		Theme theme = Theme.load(getClass().getResourceAsStream(
+			"/org/fife/ui/rsyntaxtextarea/themes/" + themeName + ".xml"));
+		RSyntaxTextAreaEditorKit.CopyAsStyledTextAction action =
+			new RSyntaxTextAreaEditorKit.CopyAsStyledTextAction(themeName, theme);
+		action.setName(title);
+		return createMenuItem(action);
+	}
+
+	/**
+	 * Adds the file specified to the file history.
+	 *
+	 * @param fileFullPath Full path to a file to add to the file history in
+	 *        the File menu.
+	 * @see #getFileHistoryString
+	 */
+	private void addFileToFileHistory(String fileFullPath) {
+		// We don't remember just-created empty text files.
+		// Also, due to the Preferences API needing a non-null key for all
+		// values, a "-" filename means no files were found for the file
+		// history.  So, we won't add this file in either.
+		if (fileFullPath.endsWith(File.separatorChar + rtext.getNewFileName()) ||
+				fileFullPath.equals("-")) {
+			return;
+		}
+		recentFilesMenu.addFileToFileHistory(fileFullPath);
+	}
+
+
+	@Override
+	public void addNotify() {
+
+		super.addNotify();
+
+		// Populate file history here to avoid issue with Darcula
+		List<FileLocation> recentFiles = rtext.getRecentFiles();
+		List<FileLocation> recentFilesCopy = new ArrayList<>(recentFiles);
+		Collections.reverse(recentFilesCopy);
+		for (FileLocation file : recentFilesCopy) {
+			recentFilesMenu.addFileToFileHistory(file.getFileFullPath());
+		}
+	}
+
+
+	private JMenu createEditMenu(ResourceBundle menuMsg, int defaultModifier, int shift) {
+
+		JMenu menu = createMenu(menuMsg, "MenuEdit");
+
+		// Edit submenu's items.
+		undoItem = createMenuItem(RTextArea.getAction(RTextArea.UNDO_ACTION));
+		menu.add(undoItem);
+
+		redoItem = createMenuItem(RTextArea.getAction(RTextArea.REDO_ACTION));
+		menu.add(redoItem);
+
+		menu.addSeparator();
+
+		cutItem = createMenuItem(RTextArea.getAction(RTextArea.CUT_ACTION));
+		menu.add(cutItem);
+
+		copyItem = createMenuItem(RTextArea.getAction(RTextArea.COPY_ACTION));
+		menu.add(copyItem);
+
+		addCopyAsSubMenu(menu);
+
+		pasteItem = createMenuItem(RTextArea.getAction(RTextArea.PASTE_ACTION));
+		menu.add(pasteItem);
+
+		deleteItem = createMenuItem(RTextArea.getAction(RTextArea.DELETE_ACTION));
+		menu.add(deleteItem);
+
+		menu.addSeparator();
+
+		selectAllItem = createMenuItem(RTextArea.getAction(RTextArea.SELECT_ALL_ACTION));
+		menu.add(selectAllItem);
+
+		timeDateItem = createMenuItem(rtext.getAction(RText.TIME_DATE_ACTION));
+		menu.add(timeDateItem);
+
+		menu.addSeparator();
+
+		// The "text" menu.  Note that keystrokes are okay here, because
+		// these actions are also owned by RSyntaxTextArea and thus we
+		// do not want to be able to change them.
+		JMenu textMenu = createMenu(menuMsg, "MenuText");
+		JMenuItem menuItem = createMenuItem(
+			new RSyntaxTextAreaEditorKit.ToggleCommentAction(),
+			menuMsg, "ToggleComment", "ToggleCommentMnemonic",
+			KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, defaultModifier));
+		UIUtil.setDescription(menuItem, menuMsg, "DescToggleComment");
+		textMenu.add(menuItem);
+		textMenu.addSeparator();
+		menuItem = createMenuItem(
+			new RTextAreaEditorKit.DeleteRestOfLineAction(),
+			menuMsg, "DeleteLineRemainder", "DeleteLineRemainderMnemonic",
+			KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, defaultModifier));
+		UIUtil.setDescription(menuItem, menuMsg, "DescDeleteLineRemainder");
+		textMenu.add(menuItem);
+		menuItem = createMenuItem(
+			new RSyntaxTextAreaEditorKit.JoinLinesAction(),
+			menuMsg, "JoinLines", "JoinLinesMnemonic",
+			KeyStroke.getKeyStroke(KeyEvent.VK_J, defaultModifier));
+		UIUtil.setDescription(menuItem, menuMsg, "DescJoinLines");
+		textMenu.add(menuItem);
+		textMenu.addSeparator();
+		menuItem = createMenuItem(
+			new RTextAreaEditorKit.UpperSelectionCaseAction(),
+			menuMsg, "UpperCase", "UpperCaseMnemonic");
+		UIUtil.setDescription(menuItem, menuMsg, "DescUpperCase");
+		textMenu.add(menuItem);
+		menuItem = createMenuItem(
+			new RTextAreaEditorKit.LowerSelectionCaseAction(),
+			menuMsg, "LowerCase", "LowerCaseMnemonic");
+		UIUtil.setDescription(menuItem, menuMsg, "DescLowerCase");
+		textMenu.add(menuItem);
+		menuItem = createMenuItem(
+			new RTextAreaEditorKit.InvertSelectionCaseAction(),
+			menuMsg, "InvertCase", "InvertCaseMnemonic");
+		UIUtil.setDescription(menuItem, menuMsg, "DescInvertCase");
+		textMenu.add(menuItem);
+		menu.add(textMenu);
+
+		// The "indent" menu.  Note that keystrokes are okay here, because
+		// these actions are also owned by the RSyntaxTextArea and thus we do
+		// not want to be able to change them.
+		JMenu indentMenu = createMenu(menuMsg, "MenuIndent");
+		menuItem = createMenuItem(
+			//new RSyntaxTextAreaEditorKit.IncreaseIndentAction(),
+			new RSyntaxTextAreaEditorKit.InsertTabAction(),
+			menuMsg, "IncreaseIndent", "IncreaseIndentMnemonic",
+			KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0));
+		UIUtil.setDescription(menuItem, menuMsg, "DescIncreaseIndent");
+		indentMenu.add(menuItem);
+		menuItem = createMenuItem(
+			new RSyntaxTextAreaEditorKit.DecreaseIndentAction(),
+			menuMsg, "DecreaseIndent", "DecreaseIndentMnemonic",
+			KeyStroke.getKeyStroke(KeyEvent.VK_TAB, shift));
+		UIUtil.setDescription(menuItem, menuMsg, "DescDecreaseIndent");
+		indentMenu.add(menuItem);
+		menu.add(indentMenu);
+
+		// 1.5.2004/pwy: On OS X the Options menu item is in the standard
+		// application menu and is always generated by the system. No need
+		// to have an additional Options in the menu.
+		if (rtext.getOS()!=OS.MAC_OS_X) {
+			menu.addSeparator();
+			optionsItem = createMenuItem(rtext.getAction(RText.OPTIONS_ACTION));
+			menu.add(optionsItem);
+		}
+
+		return menu;
+	}
+
+
+	private JMenu createFileMenu(ResourceBundle menuMsg) {
+
+		JMenu fileMenu = createMenu(menuMsg, "MenuFile");
 
 		// File submenu's items.
 		newItem = createMenuItem(rtext.getAction(RText.NEW_ACTION));
@@ -238,7 +452,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 			@Override
 			protected Action createOpenAction(String fileFullPath) {
 				OpenFileFromHistoryAction action =
-						new OpenFileFromHistoryAction(rtext);
+					new OpenFileFromHistoryAction(rtext);
 				action.setName(getDisplayPath(fileFullPath));
 				action.setFileFullPath(fileFullPath);
 				return action;
@@ -255,119 +469,36 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 			fileMenu.add(exitItem);
 		}
 
-		// Edit submenu.
-		menu = createMenu(menuMsg, "MenuEdit");
-		registerMenuByName(MENU_EDIT, menu);
-		add(menu);
+		return fileMenu;
+	}
 
-		// Edit submenu's items.
-		undoItem = createMenuItem(RTextArea.getAction(RTextArea.UNDO_ACTION));
-		menu.add(undoItem);
 
-		redoItem = createMenuItem(RTextArea.getAction(RTextArea.REDO_ACTION));
-		menu.add(redoItem);
+	private JMenu createHelpMenu(ResourceBundle menuMsg, RText rtext) {
 
-		menu.addSeparator();
+		JMenu menu = createMenu(menuMsg, "MenuHelp");
 
-		cutItem = createMenuItem(RTextArea.getAction(RTextArea.CUT_ACTION));
-		menu.add(cutItem);
+		// Help submenu's items.
+		helpItem = createMenuItem(rtext.getAction(RText.HELP_ACTION_KEY));
+		menu.add(helpItem);
 
-		copyItem = createMenuItem(RTextArea.getAction(RTextArea.COPY_ACTION));
-		menu.add(copyItem);
+		homePageItem = createMenuItem(rtext.getAction(RText.HOME_PAGE_ACTION));
+		menu.add(homePageItem);
 
-		addCopyAsSubMenu(menu);
-
-		pasteItem = createMenuItem(RTextArea.getAction(RTextArea.PASTE_ACTION));
-		menu.add(pasteItem);
-
-		deleteItem = createMenuItem(RTextArea.getAction(RTextArea.DELETE_ACTION));
-		menu.add(deleteItem);
+		updatesItem = createMenuItem(rtext.getAction(RText.UPDATES_ACTION));
+		menu.add(updatesItem);
 
 		menu.addSeparator();
 
-		selectAllItem = createMenuItem(RTextArea.getAction(RTextArea.SELECT_ALL_ACTION));
-		menu.add(selectAllItem);
+		aboutItem = createMenuItem(rtext.getAction(RText.ABOUT_ACTION_KEY));
+		menu.add(aboutItem);
 
-		timeDateItem = createMenuItem(rtext.getAction(RText.TIME_DATE_ACTION));
-		menu.add(timeDateItem);
+		return menu;
+	}
 
-		menu.addSeparator();
 
-		// The "text" menu.  Note that keystrokes are okay here, because
-		// these actions are also owned by RSyntaxTextArea and thus we
-		// do not want to be able to change them.
-		JMenu textMenu = createMenu(menuMsg, "MenuText");
-		int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
-		menuItem = createMenuItem(
-				new RSyntaxTextAreaEditorKit.ToggleCommentAction(),
-				menuMsg, "ToggleComment", "ToggleCommentMnemonic",
-				KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, defaultModifier));
-		UIUtil.setDescription(menuItem, menuMsg, "DescToggleComment");
-		textMenu.add(menuItem);
-		textMenu.addSeparator();
-		menuItem = createMenuItem(
-				new RTextAreaEditorKit.DeleteRestOfLineAction(),
-				menuMsg, "DeleteLineRemainder", "DeleteLineRemainderMnemonic",
-				KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, defaultModifier));
-		UIUtil.setDescription(menuItem, menuMsg, "DescDeleteLineRemainder");
-		textMenu.add(menuItem);
-		menuItem = createMenuItem(
-				new RSyntaxTextAreaEditorKit.JoinLinesAction(),
-				menuMsg, "JoinLines", "JoinLinesMnemonic",
-				KeyStroke.getKeyStroke(KeyEvent.VK_J, defaultModifier));
-		UIUtil.setDescription(menuItem, menuMsg, "DescJoinLines");
-		textMenu.add(menuItem);
-		textMenu.addSeparator();
-		menuItem = createMenuItem(
-				new RTextAreaEditorKit.UpperSelectionCaseAction(),
-				menuMsg, "UpperCase", "UpperCaseMnemonic");
-		UIUtil.setDescription(menuItem, menuMsg, "DescUpperCase");
-		textMenu.add(menuItem);
-		menuItem = createMenuItem(
-				new RTextAreaEditorKit.LowerSelectionCaseAction(),
-				menuMsg, "LowerCase", "LowerCaseMnemonic");
-		UIUtil.setDescription(menuItem, menuMsg, "DescLowerCase");
-		textMenu.add(menuItem);
-		menuItem = createMenuItem(
-				new RTextAreaEditorKit.InvertSelectionCaseAction(),
-				menuMsg, "InvertCase", "InvertCaseMnemonic");
-		UIUtil.setDescription(menuItem, menuMsg, "DescInvertCase");
-		textMenu.add(menuItem);
-		menu.add(textMenu);
+	private JMenu createSearchMenu(ResourceBundle menuMsg, int defaultModifier, int shift) {
 
-		// The "indent" menu.  Note that keystrokes are okay here, because
-		// these actions are also owned by the RSyntaxTextArea and thus we do
-		// not want to be able to change them.
-		JMenu indentMenu = createMenu(menuMsg, "MenuIndent");
-		final int shift = InputEvent.SHIFT_DOWN_MASK;
-		menuItem = createMenuItem(
-						//new RSyntaxTextAreaEditorKit.IncreaseIndentAction(),
-						new RSyntaxTextAreaEditorKit.InsertTabAction(),
-						menuMsg, "IncreaseIndent", "IncreaseIndentMnemonic",
-						KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0));
-		UIUtil.setDescription(menuItem, menuMsg, "DescIncreaseIndent");
-		indentMenu.add(menuItem);
-		menuItem = createMenuItem(
-						new RSyntaxTextAreaEditorKit.DecreaseIndentAction(),
-						menuMsg, "DecreaseIndent", "DecreaseIndentMnemonic",
-						KeyStroke.getKeyStroke(KeyEvent.VK_TAB, shift));
-		UIUtil.setDescription(menuItem, menuMsg, "DescDecreaseIndent");
-		indentMenu.add(menuItem);
-		menu.add(indentMenu);
-
-		// 1.5.2004/pwy: On OS X the Options menu item is in the standard
-		// application menu and is always generated by the system. No need
-		// to have an additional Options in the menu.
-		if (rtext.getOS()!=OS.MAC_OS_X) {
-			menu.addSeparator();
-			optionsItem = createMenuItem(rtext.getAction(RText.OPTIONS_ACTION));
-			menu.add(optionsItem);
-		}
-
-		// Search menu.
-		menu = createMenu(menuMsg, "MenuSearch");
-		registerMenuByName(MENU_SEARCH, menu);
-		add(menu);
+		JMenu menu = createMenu(menuMsg, "MenuSearch");
 
 		// Search menu's items.
 		findItem = createMenuItem(rtext.getAction(RText.FIND_ACTION));
@@ -388,7 +519,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		menu.add(findInFilesItem);
 
 		replaceInFilesItem = createMenuItem(
-				rtext.getAction(RText.REPLACE_IN_FILES_ACTION));
+			rtext.getAction(RText.REPLACE_IN_FILES_ACTION));
 		menu.add(replaceInFilesItem);
 
 		menu.addSeparator();
@@ -396,7 +527,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		goToItem = createMenuItem(rtext.getAction(RText.GOTO_ACTION));
 		menu.add(goToItem);
 
-		menuItem = createMenuItem(
+		JMenuItem menuItem = createMenuItem(
 			new RSyntaxTextAreaEditorKit.GoToMatchingBracketAction(),
 			menuMsg, "GoToMatchingBracket", "GoToMatchingBracketMnemonic",
 			KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, defaultModifier));
@@ -406,33 +537,35 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		menu.addSeparator();
 
 		menuItem = createMenuItem(
-				new RTextAreaEditorKit.NextBookmarkAction(
-					RTextAreaEditorKit.rtaNextBookmarkAction, true),
-				menuMsg, "NextBookmark", "NextBookmarkMnemonic",
-				KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+			new RTextAreaEditorKit.NextBookmarkAction(
+				RTextAreaEditorKit.rtaNextBookmarkAction, true),
+			menuMsg, "NextBookmark", "NextBookmarkMnemonic",
+			KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 		UIUtil.setDescription(menuItem, menuMsg, "DescNextBookmark");
 		menu.add(menuItem);
 
 		menuItem = createMenuItem(
-				new RTextAreaEditorKit.NextBookmarkAction(
-					RTextAreaEditorKit.rtaNextBookmarkAction, false),
-				menuMsg, "PreviousBookmark", "PreviousBookmarkMnemonic",
-				KeyStroke.getKeyStroke(KeyEvent.VK_F2, shift));
+			new RTextAreaEditorKit.NextBookmarkAction(
+				RTextAreaEditorKit.rtaNextBookmarkAction, false),
+			menuMsg, "PreviousBookmark", "PreviousBookmarkMnemonic",
+			KeyStroke.getKeyStroke(KeyEvent.VK_F2, shift));
 		UIUtil.setDescription(menuItem, menuMsg, "DescPreviousBookmark");
 		menu.add(menuItem);
 
 		menuItem = createMenuItem(
-				new RTextAreaEditorKit.ToggleBookmarkAction(),
-				menuMsg, "ToggleBookmark", "ToggleBookmarkMnemonic",
-				KeyStroke.getKeyStroke(KeyEvent.VK_F2, defaultModifier));
+			new RTextAreaEditorKit.ToggleBookmarkAction(),
+			menuMsg, "ToggleBookmark", "ToggleBookmarkMnemonic",
+			KeyStroke.getKeyStroke(KeyEvent.VK_F2, defaultModifier));
 		UIUtil.setDescription(menuItem, menuMsg, "DescToggleBookmark");
 		menu.add(menuItem);
 
-		// View submenu.
-		viewMenu = createMenu(menuMsg, "MenuView");
-		registerMenuByName(MENU_VIEW, viewMenu);
-		viewMenu.getPopupMenu().addPopupMenuListener(this);
-		add(viewMenu);
+		return menu;
+	}
+
+
+	private JMenu createViewMenu(ResourceBundle menuMsg, RTextPrefs properties) {
+
+		JMenu viewMenu = createMenu(menuMsg, "MenuView");
 
 		// View submenu's items.
 		JMenu toolbarsMenu = new JMenu(menuMsg.getString("Toolbars"));
@@ -528,12 +661,16 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		viewMenu.addSeparator();
 
 		filePropItem = createMenuItem(rtext.getAction(
-										RText.FILE_PROPERTIES_ACTION));
+			RText.FILE_PROPERTIES_ACTION));
 		viewMenu.add(filePropItem);
 
-		// Window menu (only visible when in MDI mode).
-		windowMenu = createMenu(menuMsg, "MenuWindow");
-		add(windowMenu);
+		return viewMenu;
+	}
+
+
+	private JMenu createWindowMenu(ResourceBundle menuMsg, ResourceBundle msg) {
+
+		JMenu windowMenu = createMenu(menuMsg, "MenuWindow");
 
 		JMenuItem item = new JMenuItem(menuMsg.getString("TileVertically"));
 		UIUtil.setDescription(item, msg, "DescTileVertically");
@@ -558,99 +695,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		// Add listener that will create open document list.
 		windowMenu.getPopupMenu().addPopupMenuListener(this);
 
-		// Help submenu.
-		menu = createMenu(menuMsg, "MenuHelp");
-		registerMenuByName(MENU_HELP, menu);
-		add(menu);
-
-		// Help submenu's items.
-		helpItem = createMenuItem(rtext.getAction(RText.HELP_ACTION_KEY));
-		menu.add(helpItem);
-
-		homePageItem = createMenuItem(rtext.getAction(RText.HOME_PAGE_ACTION));
-		menu.add(homePageItem);
-
-		updatesItem = createMenuItem(rtext.getAction(RText.UPDATES_ACTION));
-		menu.add(updatesItem);
-
-		menu.addSeparator();
-
-		aboutItem = createMenuItem(rtext.getAction(RText.ABOUT_ACTION_KEY));
-		menu.add(aboutItem);
-
-	}
-
-
-	private void addCopyAsSubMenu(JMenu menu) {
-
-		ResourceBundle msg = ResourceBundle.getBundle("org.fife.rtext.actions.Actions");
-
-		JMenu subMenu = new JMenu(msg.getString("CopyAs"));
-
-		copyAsStyledTextItem = createMenuItem(rtext.getAction(RText.COPY_AS_STYLED_TEXT_ACTION));
-		subMenu.add(copyAsStyledTextItem);
-
-		String[] themes = { "dark", "default", "eclipse", "idea", "monokai" };
-		try {
-
-			for (String theme : themes) {
-
-				String themeTitleCase = Character.toUpperCase(theme.charAt(0)) +
-					theme.substring(1);
-				String title = MessageFormat.format(msg.getString(
-					"CopyAsStyledTextAction.Themed"), themeTitleCase);
-
-				subMenu.add(createCopyAsStyledTextMenuItem(title, theme));
-			}
-		} catch (IOException ioe) {
-			rtext.displayException(ioe);
-		}
-
-		menu.add(subMenu);
-	}
-
-	private JMenuItem createCopyAsStyledTextMenuItem(String title, String themeName)
-		throws IOException {
-		Theme theme = Theme.load(getClass().getResourceAsStream(
-			"/org/fife/ui/rsyntaxtextarea/themes/" + themeName + ".xml"));
-		RSyntaxTextAreaEditorKit.CopyAsStyledTextAction action =
-			new RSyntaxTextAreaEditorKit.CopyAsStyledTextAction(themeName, theme);
-		action.setName(title);
-		return createMenuItem(action);
-	}
-
-	/**
-	 * Adds the file specified to the file history.
-	 *
-	 * @param fileFullPath Full path to a file to add to the file history in
-	 *        the File menu.
-	 * @see #getFileHistoryString
-	 */
-	private void addFileToFileHistory(String fileFullPath) {
-		// We don't remember just-created empty text files.
-		// Also, due to the Preferences API needing a non-null key for all
-		// values, a "-" filename means no files were found for the file
-		// history.  So, we won't add this file in either.
-		if (fileFullPath.endsWith(File.separatorChar + rtext.getNewFileName()) ||
-				fileFullPath.equals("-")) {
-			return;
-		}
-		recentFilesMenu.addFileToFileHistory(fileFullPath);
-	}
-
-
-	@Override
-	public void addNotify() {
-
-		super.addNotify();
-
-		// Populate file history here to avoid issue with Darcula
-		List<FileLocation> recentFiles = rtext.getRecentFiles();
-		List<FileLocation> recentFilesCopy = new ArrayList<>(recentFiles);
-		Collections.reverse(recentFilesCopy);
-		for (FileLocation file : recentFilesCopy) {
-			recentFilesMenu.addFileToFileHistory(file.getFileFullPath());
-		}
+		return windowMenu;
 	}
 
 

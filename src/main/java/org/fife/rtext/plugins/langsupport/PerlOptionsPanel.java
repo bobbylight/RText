@@ -86,7 +86,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	 */
 	PerlOptionsPanel() {
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.Perl.Name"));
 		listener = new Listener();
 		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/epic.gif")));
@@ -222,7 +222,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		if (key.indexOf('.')==-1) {
 			key = "Options.Perl." + key;
 		}
-		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
 	}
@@ -321,7 +321,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			File file = new File(text);
 			if (!file.isDirectory()) {
 				res = new OptionsPanelCheckResult(this, installLocField,
-					Plugin.msg.getString("Options.Perl.Error.InvalidPerlHome"));
+					Plugin.MSG.getString("Options.Perl.Error.InvalidPerlHome"));
 			}
 		}
 
@@ -597,7 +597,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			Box topPanel = Box.createVerticalBox();
 			JPanel temp = new JPanel(new BorderLayout());
 			temp.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
-			JLabel label = UIUtil.newLabel(Plugin.msg,
+			JLabel label = UIUtil.newLabel(Plugin.MSG,
 								"Options.Perl.Perl5LibItem");
 			JPanel temp2 = new JPanel(new BorderLayout());
 			temp2.add(label);
@@ -612,7 +612,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			field.getDocument().addDocumentListener(this);
 			label.setLabelFor(field);
 			temp.add(field);
-			JButton browseButton = new JButton(Plugin.msg.getString("Browse"));
+			JButton browseButton = new JButton(Plugin.MSG.getString("Browse"));
 			browseButton.setActionCommand("Browse");
 			browseButton.addActionListener(this);
 			temp2 = new JPanel(new BorderLayout());
@@ -628,16 +628,16 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			contentPane.add(topPanel, BorderLayout.NORTH);
 
 			// Panel containing buttons for the bottom.
-			okButton = new JButton(Plugin.msg.getString("Options.General.OK"));
+			okButton = new JButton(Plugin.MSG.getString("Options.General.OK"));
 			okButton.addActionListener(this);
-			cancelButton = new JButton(Plugin.msg.
+			cancelButton = new JButton(Plugin.MSG.
 										getString("Options.General.Cancel"));
 			cancelButton.addActionListener(this);
 			Container buttons=UIUtil.createButtonFooter(okButton, cancelButton);
 			contentPane.add(buttons, BorderLayout.SOUTH);
 
 			// Get ready to go.
-			setTitle(Plugin.msg.
+			setTitle(Plugin.MSG.
 					getString("Options.Perl.Perl5LibItem.DialogTitle"));
 			setContentPane(contentPane);
 			getRootPane().setDefaultButton(okButton);

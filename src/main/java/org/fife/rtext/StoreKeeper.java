@@ -24,9 +24,17 @@ import javax.swing.SwingUtilities;
  * @author Robert Futrell
  * @version 1.0
  */
-public class StoreKeeper {
+public final class StoreKeeper {
 
 	private static List<RText> rtextInstances;
+
+
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private StoreKeeper() {
+		// Do nothing (comment for Sonar)
+	}
 
 
 	/**

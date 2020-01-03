@@ -30,7 +30,7 @@ import org.fife.ui.WebLookAndFeelUtils;
  * @version 1.0
  * @see SubstanceLanguageListCellRenderer
  */
-class LanguageListCellRenderer extends DefaultListCellRenderer {
+final class LanguageListCellRenderer extends DefaultListCellRenderer {
 
 	/**
 	 * For certain LAFs, we delegate to their custom renderer for simplicity.

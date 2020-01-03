@@ -40,7 +40,7 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 	private final NameChecker nameChecker;
 	final boolean isForFile;
 
-	private static Icon ERROR_ICON;
+	private static Icon errorIcon;
 
 
 	/**
@@ -155,10 +155,10 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 	 * @return The icon.
 	 */
 	public static Icon getErrorIcon() {
-		if (ERROR_ICON==null) {
-			ERROR_ICON = AppIconLoader.getIcon("toolbarError_dark.svg", "error_co.gif", 12, 12);
+		if (errorIcon ==null) {
+			errorIcon = AppIconLoader.getIcon("toolbarError_dark.svg", "error_co.gif", 12, 12);
 		}
-		return ERROR_ICON;
+		return errorIcon;
 	}
 
 

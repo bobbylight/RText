@@ -361,11 +361,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			SyntaxScheme defaultScheme = new SyntaxScheme(true);
 
 			if (!getTextAreaFont().equals(defaultFont) ||
-				getUnderline() ||
-				!getTextAreaForeground().equals(defaultForeground) ||
-				!Color.WHITE.equals(background) ||
-				!currentScheme.equals(defaultScheme))
-			{
+					getUnderline() ||
+					!getTextAreaForeground().equals(defaultForeground) ||
+					!Color.WHITE.equals(background) ||
+					!currentScheme.equals(defaultScheme)) {
 				setBackgroundObject(Color.WHITE);
 				setTextAreaFont(defaultFont, false);
 				setTextAreaForeground(defaultForeground);

@@ -81,8 +81,8 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 	static final int DECORATIVE_ICON_WIDTH = 12;
 
-	private static final String MSG = "org.fife.ui.search.Search";
-	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	private static final String MSG_BUNDLE = "org.fife.ui.search.Search";
+	private static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
 
 
 	/**
@@ -165,10 +165,10 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		findButton = UIUtil.newButton(getBundle(), "Find");
 		findButton.setActionCommand("FindInFiles");
 		findButton.addActionListener(this);
-		browseButton = UIUtil.newButton(msg, "Browse");
+		browseButton = UIUtil.newButton(MSG, "Browse");
 		browseButton.setActionCommand("Browse");
 		browseButton.addActionListener(this);
-		cancelButton = UIUtil.newButton(msg, "Close");
+		cancelButton = UIUtil.newButton(MSG, "Close");
 		cancelButton.setActionCommand("Close");
 		cancelButton.addActionListener(this);
 		rightPanel2.add(findButton);
@@ -615,7 +615,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 * @return The localized text.
 	 */
 	String getString2(String key) {
-		return msg.getString(key);
+		return MSG.getString(key);
 	}
 
 

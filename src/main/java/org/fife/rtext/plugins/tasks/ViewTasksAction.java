@@ -37,7 +37,7 @@ class ViewTasksAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param plugin The tasks plugin.
 	 */
-	public ViewTasksAction(final RText owner, ResourceBundle msg,
+	ViewTasksAction(final RText owner, ResourceBundle msg,
 							TasksPlugin plugin) {
 		super(owner, msg, "ViewTasksAction");
 		this.plugin = plugin;

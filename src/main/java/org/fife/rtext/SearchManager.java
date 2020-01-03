@@ -41,8 +41,8 @@ public class SearchManager {
 	private SearchingMode searchingMode;
 	private FindDialog findDialog;
 	private ReplaceDialog replaceDialog;
-	public FindToolBar findToolBar;
-	public ReplaceToolBar replaceToolBar;
+	private FindToolBar findToolBar;
+	private ReplaceToolBar replaceToolBar;
 
 
 	/**
@@ -142,7 +142,7 @@ public class SearchManager {
 	 *        what search is performed to be different from what is in the
 	 *        current search dialog's UI (e.g. if the user uses a keyboard
 	 *        shortcut to search backwards).
-	 * @see #replaceNext(SearchContext) 
+	 * @see #replaceNext(SearchContext)
 	 */
 	public void findNext(SearchContext context) {
 
@@ -284,7 +284,7 @@ public class SearchManager {
 	 *        what search is performed to be different from what is in the
 	 *        current search dialog's UI (e.g. if the user uses a keyboard
 	 *        shortcut to search backwards).
-	 * @see #findNext(SearchContext) 
+	 * @see #findNext(SearchContext)
 	 */
 	public void replaceNext(SearchContext context) {
 

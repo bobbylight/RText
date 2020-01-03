@@ -444,7 +444,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	 */
 	private static class TemplateWrapper {
 
-		public CodeTemplate template;
+		private CodeTemplate template;
 
 		TemplateWrapper(CodeTemplate template) {
 			this.template = template;

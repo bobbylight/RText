@@ -53,7 +53,7 @@ class COptionsPanel extends OptionsDialogPanel {
 	 */
 	COptionsPanel() {
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.C.Name"));
 		listener = new Listener();
 		setIcon(new ImageIcon(getClass().getResource("page_white_c.png")));
@@ -120,7 +120,7 @@ class COptionsPanel extends OptionsDialogPanel {
 		if (key.indexOf('.')==-1) {
 			key = "Options.C." + key;
 		}
-		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
 	}

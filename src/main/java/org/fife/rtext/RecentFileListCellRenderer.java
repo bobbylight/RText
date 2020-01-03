@@ -29,7 +29,7 @@ import org.fife.ui.rsyntaxtextarea.FileLocation;
  */
 class RecentFileListCellRenderer extends DefaultListCellRenderer {
 
-	private static final FileSystemView fileSystemView = FileSystemView.
+	private static final FileSystemView FILE_SYSTEM_VIEW = FileSystemView.
 			getFileSystemView();
 
 
@@ -45,7 +45,7 @@ class RecentFileListCellRenderer extends DefaultListCellRenderer {
 
 		if (loc.isLocalAndExists()) {
 			File file = new File(loc.getFileFullPath());
-			setIcon(fileSystemView.getSystemIcon(file));
+			setIcon(FILE_SYSTEM_VIEW.getSystemIcon(file));
 		}
 
 		return this;

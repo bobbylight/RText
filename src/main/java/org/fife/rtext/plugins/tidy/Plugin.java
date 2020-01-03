@@ -61,12 +61,12 @@ public class Plugin extends AbstractPlugin
 
 	private static final String TIDY_ACTION = "PrettyPrintAction";
 
-	private static final String MSG = "org.fife.rtext.plugins.tidy.Plugin";
+	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.tidy.Plugin";
 
 	/**
 	 * The resource bundle used across this plugin.
 	 */
-	static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
 
 
 	/**
@@ -181,7 +181,7 @@ public class Plugin extends AbstractPlugin
 
 	@Override
 	public String getPluginName() {
-		return msg.getString("Name");
+		return MSG.getString("Name");
 	}
 
 

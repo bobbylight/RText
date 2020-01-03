@@ -42,7 +42,7 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 	private SpellingTableModel model;
 
 
-	public SpellingErrorWindow(RText rtext) {
+	SpellingErrorWindow(RText rtext) {
 
 		super(rtext);
 		AbstractMainView  mainView = rtext.getMainView();
@@ -119,7 +119,7 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 
 	private class SpellingTableModel extends ParserNoticeTableModel {
 
-		public SpellingTableModel(String lastColHeader) {
+		SpellingTableModel(String lastColHeader) {
 			super(lastColHeader);
 		}
 

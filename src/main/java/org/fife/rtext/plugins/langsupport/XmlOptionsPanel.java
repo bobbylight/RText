@@ -56,7 +56,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 	 */
 	XmlOptionsPanel() {
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.Xml.Name"));
 		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/xml.png")));
 
@@ -130,7 +130,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 		if (key.indexOf('.')==-1) {
 			key = "Options.Xml." + key;
 		}
-		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(this);
 		return cb;
 	}

@@ -50,8 +50,8 @@ public class Plugin extends GUIPlugin {
 	private Icon darkThemeIcon;
 	private Icon lightThemeIcon;
 
-	private static final String MSG = "org.fife.rtext.plugins.console.Plugin";
-	static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.console.Plugin";
+	static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
 
 	private static final String VIEW_CONSOLE_ACTION	= "viewConsoleAction";
 
@@ -70,7 +70,7 @@ public class Plugin extends GUIPlugin {
 		ConsolePrefs prefs = loadPrefs();
 		setSyntaxHighlightInput(prefs.syntaxHighlightInput);
 
-		AppAction<RText> a = new ViewConsoleAction(this.app, msg, this);
+		AppAction<RText> a = new ViewConsoleAction(this.app, MSG, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
 		app.addAction(VIEW_CONSOLE_ACTION, a);
 
@@ -118,7 +118,7 @@ public class Plugin extends GUIPlugin {
 
 	@Override
 	public String getPluginName() {
-		return msg.getString("Plugin.Name");
+		return MSG.getString("Plugin.Name");
 	}
 
 
@@ -157,7 +157,7 @@ public class Plugin extends GUIPlugin {
 	 * @return The localized message.
 	 */
 	public String getString(String key, String... params) {
-		String temp = msg.getString(key);
+		String temp = MSG.getString(key);
 		return MessageFormat.format(temp, (Object[])params);
 	}
 

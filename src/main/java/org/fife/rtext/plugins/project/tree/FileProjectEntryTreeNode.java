@@ -58,7 +58,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 	public String getDisplayName() {
 		return FileDisplayNames.get().getName(getFile());
 	}
-	
+
 
 	/**
 	 * Returns the file or directory represented by this tree node's project

@@ -215,7 +215,7 @@ public class SpellingSupport implements SpellingParserListener {
 
 	/**
 	 * Returns the file used to store words the user chooses to "add to the
-	 * dictionary."
+	 * dictionary".
 	 *
 	 * @return The user dictionary file, or <code>null</code> if there is none.
 	 * @see #setUserDictionary(File)
@@ -480,7 +480,7 @@ public class SpellingSupport implements SpellingParserListener {
 	 */
 	private class ViewSpellingErrorWindowAction extends AppAction<RText> {
 
-		public ViewSpellingErrorWindowAction(RText app) {
+		ViewSpellingErrorWindowAction(RText app) {
 			super(app, app.getResourceBundle(), "SpellingErrorList.MenuItem");
 		}
 

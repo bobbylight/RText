@@ -160,7 +160,9 @@ class RTextSplitPaneView extends AbstractMainView
 							newTitle = newTitle + "*";
 						try {
 							setDocumentDisplayNameAt(j, newTitle);
-						} catch (Exception e) { System.err.println("Exception: " + e); }
+						} catch (Exception e) {
+							System.err.println("Exception: " + e);
+						}
 					}
 				}
 				break;
@@ -170,7 +172,7 @@ class RTextSplitPaneView extends AbstractMainView
 
 	}
 
-	
+
 	@Override
 	protected synchronized boolean closeCurrentDocumentImpl() {
 
@@ -207,7 +209,7 @@ class RTextSplitPaneView extends AbstractMainView
 		return true;
 
 	}
-	
+
 
 	/**
 	 * Overridden to remove our file list dockable window.
@@ -482,8 +484,8 @@ class RTextSplitPaneView extends AbstractMainView
 	 */
 	private static class DocumentInfo {
 
-		public String text;
-		public Icon icon;
+		private String text;
+		private Icon icon;
 
 		DocumentInfo(String text, Icon icon) {
 			this.text = text;

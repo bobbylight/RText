@@ -108,8 +108,7 @@ class OpenInNewWindowAction extends AppAction<RText> {
 				RText owner = getApplication();
 				if (newMainView.getNumDocuments()==1 &&
 					newCurrentTextArea.getFileName().equals(owner.getNewFileName()) &&
-					newCurrentTextArea.getDocument().getLength()==0)
-				{
+					newCurrentTextArea.getDocument().getLength()==0) {
 						newMainView.closeCurrentDocument();
 				}
 

@@ -81,7 +81,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 	 */
 	JavaScriptOptionsPanel() {
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.JavaScript.Name"));
 		listener = new Listener();
 		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/script_code.png")));
@@ -184,7 +184,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		if (key.indexOf('.')==-1) {
 			key = "Options.JavaScript." + key;
 		}
-		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
 	}
@@ -220,7 +220,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		if (key.indexOf('.')==-1) {
 			key = "Options.JavaScript." + key;
 		}
-		JRadioButton rb = new JRadioButton(Plugin.msg.getString(key));
+		JRadioButton rb = new JRadioButton(Plugin.MSG.getString(key));
 		rb.addActionListener(listener);
 		return rb;
 	}
@@ -328,7 +328,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		if (jshintrcField.isEnabled()) {
 			File jshintrc = jshintrcField.getSelectedFile();
 			if (jshintrc!=null && !jshintrc.isFile()) {
-				String msg = Plugin.msg.getString(
+				String msg = Plugin.MSG.getString(
 						"Options.JavaScirpt.Error.JSHint");
 				result = new OptionsPanelCheckResult(this, jshintrcField, msg);
 			}

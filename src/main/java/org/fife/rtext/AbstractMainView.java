@@ -67,6 +67,7 @@ import org.fife.ui.search.*;
  * @author Robert Futrell
  * @version 0.5
  */
+@SuppressWarnings("checkstyle:VisibilityModifier")
 public abstract class AbstractMainView extends JPanel
 		implements PropertyChangeListener, ActionListener, SearchListener,
 				FindInFilesListener, HyperlinkListener {
@@ -431,8 +432,8 @@ public abstract class AbstractMainView extends JPanel
 					public void run() {
 						actionPerformed(new ActionEvent(this,
 							ActionEvent.ACTION_PERFORMED, actionCommand));
-					}}
-				);
+					}
+				});
 			}
 
 
@@ -2701,8 +2702,8 @@ public abstract class AbstractMainView extends JPanel
 			for (int i=0; i<numDocuments; i++) {
 				if (doneYet[i])
 					continue;
-				RTextEditorPane pane_I = getRTextEditorPaneAt(i);
-				String fileFullPath = pane_I.getFileFullPath();
+				RTextEditorPane textArea = getRTextEditorPaneAt(i);
+				String fileFullPath = textArea.getFileFullPath();
 				int count = 1;
 				for (int j=i+1; j<numDocuments; j++) {
 					RTextEditorPane pane = getRTextEditorPaneAt(j);
@@ -2715,14 +2716,14 @@ public abstract class AbstractMainView extends JPanel
 					}
 				}
 				if (count>1) {
-					String title = pane_I.getFileName() + " (1)";
-					if (pane_I.isDirty())
+					String title = textArea.getFileName() + " (1)";
+					if (textArea.isDirty())
 						title = title + "*";
 					setDocumentDisplayNameAt(i, title);
 				}
 				else {
-					String title = pane_I.getFileName();
-					if (pane_I.isDirty())
+					String title = textArea.getFileName();
+					if (textArea.isDirty())
 						title = title + "*";
 					setDocumentDisplayNameAt(i, title);
 				}

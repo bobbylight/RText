@@ -71,7 +71,7 @@ class SourceBrowserOptionPanel
 	/**
 	 * Constructor.
 	 */
-	public SourceBrowserOptionPanel(RText rtext, SourceBrowserPlugin plugin) {
+	SourceBrowserOptionPanel(RText rtext, SourceBrowserPlugin plugin) {
 
 		super(plugin);
 		ResourceBundle gpb = ResourceBundle.getBundle(

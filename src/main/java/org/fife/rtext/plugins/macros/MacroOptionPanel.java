@@ -62,7 +62,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel<MacroPlugin>
 	 *
 	 * @param plugin The plugin.
 	 */
-	public MacroOptionPanel(MacroPlugin plugin) {
+	MacroOptionPanel(MacroPlugin plugin) {
 
 		super(plugin);
 
@@ -239,7 +239,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel<MacroPlugin>
 	protected void setValuesImpl(Frame owner) {
 		MacroManager tm = MacroManager.get();
 		model.setRowCount(0);
-		for (Iterator<Macro> i = tm.getMacroIterator(); i.hasNext(); ) {
+		for (Iterator<Macro> i = tm.getMacroIterator(); i.hasNext();) {
 			Macro macro = i.next();
 			addTableRowForMacro(macro);
 		}

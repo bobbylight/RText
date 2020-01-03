@@ -33,7 +33,7 @@ class RTextWindowListener extends WindowAdapter {
 	 *
 	 * @param owner The first rtext window to register under this listener.
 	 */
-	public RTextWindowListener(RText owner) {
+	RTextWindowListener(RText owner) {
 		this.owner = owner;
 	}
 

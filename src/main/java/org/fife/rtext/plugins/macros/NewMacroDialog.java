@@ -62,24 +62,24 @@ class NewMacroDialog extends EscapableDialog {
 	private JButton cancelButton;
 	private Macro macro;
 	private boolean isNew;
-	private static Icon ERROR_ICON;
-	private static Icon WARN_ICON;
+	private static Icon errorIcon;
+	private static Icon warnIcon;
 
 	private static final int DECORATIVE_ICON_WIDTH = 12;
 
 	private static final String[] EXTENSIONS = { ".js", ".groovy", };
 
-	private static final String MSG = "org.fife.rtext.plugins.macros.NewMacroDialog";
-	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.macros.NewMacroDialog";
+	private static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
 
 
-	public NewMacroDialog(MacroPlugin plugin, JDialog parent) {
+	NewMacroDialog(MacroPlugin plugin, JDialog parent) {
 		super(parent);
 		createGUI(plugin);
 	}
 
 
-	public NewMacroDialog(MacroPlugin plugin, JFrame parent) {
+	NewMacroDialog(MacroPlugin plugin, JFrame parent) {
 		super(parent);
 		createGUI(plugin);
 	}
@@ -96,7 +96,7 @@ class NewMacroDialog extends EscapableDialog {
 
 		Box topPanel = Box.createVerticalBox();
 		cp.add(topPanel, BorderLayout.NORTH);
-		String descText = msg.getString("Header.Text");
+		String descText = MSG.getString("Header.Text");
 		SelectableLabel desc = new SelectableLabel(descText);
 		topPanel.add(desc);
 		topPanel.add(Box.createVerticalStrut(5));
@@ -104,21 +104,21 @@ class NewMacroDialog extends EscapableDialog {
 		// Panel for defining the macro
 		SpringLayout sl = new SpringLayout();
 		JPanel formPanel = new JPanel(sl);
-		JLabel nameLabel = UIUtil.newLabel(msg, "Label.Name");
+		JLabel nameLabel = UIUtil.newLabel(MSG, "Label.Name");
 		nameField = new JTextField(40);
 		nameField.getDocument().addDocumentListener(l);
 		nameLabel.setLabelFor(nameField);
 		nameDIP = new DecorativeIconPanel(DECORATIVE_ICON_WIDTH);
 		JPanel namePanel = RTextUtilities.createAssistancePanel(nameField, nameDIP);
-		JLabel descLabel = UIUtil.newLabel(msg, "Label.Desc");
+		JLabel descLabel = UIUtil.newLabel(MSG, "Label.Desc");
 		descField = new JTextField(40);
 		descLabel.setLabelFor(descField);
 		JPanel descPanel = RTextUtilities.createAssistancePanel(descField, DECORATIVE_ICON_WIDTH);
-		JLabel shortcutLabel = UIUtil.newLabel(msg, "Label.Shortcut");
+		JLabel shortcutLabel = UIUtil.newLabel(MSG, "Label.Shortcut");
 		shortcutField = new KeyStrokeField();
 		shortcutLabel.setLabelFor(shortcutField);
 		JPanel shortcutPanel = RTextUtilities.createAssistancePanel(shortcutField, DECORATIVE_ICON_WIDTH);
-		JLabel typeLabel = UIUtil.newLabel(msg, "Label.Type");
+		JLabel typeLabel = UIUtil.newLabel(MSG, "Label.Type");
 		String[] items = { "Rhino (JavaScript)", "Groovy" };
 		typeCombo = new JComboBox<>(items);
 		typeCombo.addActionListener(l);
@@ -155,7 +155,7 @@ class NewMacroDialog extends EscapableDialog {
 		cp.add(buttonPanel, BorderLayout.SOUTH);
 
 		setContentPane(cp);
-		setTitle(msg.getString("Title.New"));
+		setTitle(MSG.getString("Title.New"));
 		getRootPane().setDefaultButton(okButton);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(true);
@@ -195,12 +195,12 @@ class NewMacroDialog extends EscapableDialog {
 
 		if (file.isFile()) { // Should always be true
 			rtext.openFile(file);
-			text = msg.getString("Message.MacroOpened");
+			text = MSG.getString("Message.MacroOpened");
 			text = MessageFormat.format(text, macro.getName());
 		}
 
 		else { // Macro script was deleted outside of RText.
-			text = msg.getString("Error.ScriptDoesntExist");
+			text = MSG.getString("Error.ScriptDoesntExist");
 			text = MessageFormat.format(text, file.getAbsolutePath());
 			messageType = JOptionPane.ERROR_MESSAGE;
 		}
@@ -217,10 +217,10 @@ class NewMacroDialog extends EscapableDialog {
 	 * @return The icon.
 	 */
 	private Icon getErrorIcon() {
-		if (ERROR_ICON==null) {
-			ERROR_ICON = AppIconLoader.getIcon("toolbarError_dark.svg", "error_co.gif", 12, 12);
+		if (errorIcon ==null) {
+			errorIcon = AppIconLoader.getIcon("toolbarError_dark.svg", "error_co.gif", 12, 12);
 		}
-		return ERROR_ICON;
+		return errorIcon;
 	}
 
 
@@ -241,10 +241,10 @@ class NewMacroDialog extends EscapableDialog {
 	 * @return The icon.
 	 */
 	private Icon getWarningIcon() {
-		if (WARN_ICON==null) {
-			WARN_ICON = AppIconLoader.getIcon("warning_dark.svg", "warning_co.gif", 12, 12);
+		if (warnIcon ==null) {
+			warnIcon = AppIconLoader.getIcon("warning_dark.svg", "warning_co.gif", 12, 12);
 		}
-		return WARN_ICON;
+		return warnIcon;
 	}
 
 
@@ -263,7 +263,7 @@ class NewMacroDialog extends EscapableDialog {
 			// would overwrite a Groovy macro named "test".
 			String name = nameField.getText();
 			if (MacroManager.get().containsMacroNamed(name)) {
-				String text = msg.getString("Prompt.MacroExists");
+				String text = MSG.getString("Prompt.MacroExists");
 				text = MessageFormat.format(text, name);
 				String title = rtext.getString("ConfDialogTitle");
 				rc = JOptionPane.showConfirmDialog(NewMacroDialog.this,
@@ -274,7 +274,7 @@ class NewMacroDialog extends EscapableDialog {
 			// no macro (highly unlikely, but possible, say if they manually
 			// mucked with their macros).
 			else if (file.isFile()) {
-				String text = msg.getString("Prompt.OverwriteFile");
+				String text = MSG.getString("Prompt.OverwriteFile");
 				text = MessageFormat.format(text, file.getName());
 				String title = rtext.getString("ConfDialogTitle");
 				rc = JOptionPane.showConfirmDialog(NewMacroDialog.this,
@@ -324,7 +324,7 @@ class NewMacroDialog extends EscapableDialog {
 
 	private void setBadMacroName(String reasonKey) {
 		nameDIP.setShowIcon(true);
-		String reason = msg.getString("InvalidMacroName." + reasonKey);
+		String reason = MSG.getString("InvalidMacroName." + reasonKey);
 		nameDIP.setIcon(getErrorIcon());
 		nameDIP.setToolTipText(reason);
 		okButton.setEnabled(false);
@@ -371,7 +371,7 @@ class NewMacroDialog extends EscapableDialog {
 		typeCombo.setSelectedIndex(index);
 		typeCombo.setEnabled(false); // Can't change language
 
-		editButton = UIUtil.newButton(msg, "Button.Edit", "Button.Edit.Mnemonic");
+		editButton = UIUtil.newButton(MSG, "Button.Edit", "Button.Edit.Mnemonic");
 		editButton.addActionListener(l);
 		Container buttonPanel = okButton.getParent();
 		Container bpParent = buttonPanel.getParent();
@@ -394,7 +394,7 @@ class NewMacroDialog extends EscapableDialog {
 //		buttonPanel.setLayout(new GridLayout(1,3, 5,0));
 //		buttonPanel.add(editButton, 1);
 
-		setTitle(msg.getString("Title.Edit"));
+		setTitle(MSG.getString("Title.Edit"));
 
 		packSpecial();
 
@@ -422,7 +422,7 @@ class NewMacroDialog extends EscapableDialog {
 
 	private void setWarnMacroName() {
 		nameDIP.setShowIcon(true);
-		String reason = msg.getString("Warning.MacroNameTaken");
+		String reason = MSG.getString("Warning.MacroNameTaken");
 		nameDIP.setIcon(getWarningIcon());
 		nameDIP.setToolTipText(reason);
 	}

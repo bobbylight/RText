@@ -49,42 +49,42 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	private DefaultSourceTree tree;
 
 	private static final int MAX_NUM_HASH_MAPS = 12;	// Longest string length in tagTypesMap.
-	private static final Map<String, String> tagTypesMap;
+	private static final Map<String, String> TAG_TYPES_MAP;
 
 	static {
 
-		tagTypesMap = new HashMap<>();
-		tagTypesMap.put(SYNTAX_STYLE_NONE,				"");
-		tagTypesMap.put(SYNTAX_STYLE_ACTIONSCRIPT,		"fcmpvx");
-		tagTypesMap.put(SYNTAX_STYLE_ASSEMBLER_X86,		"");
-		tagTypesMap.put(SYNTAX_STYLE_C,				"cdfgmnstv");
-		tagTypesMap.put(SYNTAX_STYLE_CLOJURE,			"");
-		tagTypesMap.put(SYNTAX_STYLE_CPLUSPLUS,			"cdfgmnstv");
-		tagTypesMap.put(SYNTAX_STYLE_CSHARP,			"cdEfgimnpqst");
-		tagTypesMap.put(SYNTAX_STYLE_CSS,				"");
-		tagTypesMap.put(SYNTAX_STYLE_DELPHI,			"fp");
-		tagTypesMap.put(SYNTAX_STYLE_FORTRAN,			"bcefklmnpstv");
-		tagTypesMap.put(SYNTAX_STYLE_GROOVY,			"");
-		tagTypesMap.put(SYNTAX_STYLE_HTML,				"af");
-		tagTypesMap.put(SYNTAX_STYLE_JAVA,				"cfimp");
-		tagTypesMap.put(SYNTAX_STYLE_JAVASCRIPT,		"f");
-		tagTypesMap.put(SYNTAX_STYLE_JSP,				"");
-		tagTypesMap.put(SYNTAX_STYLE_LISP,				"f");
-		tagTypesMap.put(SYNTAX_STYLE_LUA,				"f");
-		tagTypesMap.put(SYNTAX_STYLE_MAKEFILE,			"m");
-		tagTypesMap.put(SYNTAX_STYLE_MXML,				"fcmpvx");
-		tagTypesMap.put(SYNTAX_STYLE_PERL,				"cls");
-		tagTypesMap.put(SYNTAX_STYLE_PHP,				"cidfvj");
-		tagTypesMap.put(SYNTAX_STYLE_PROPERTIES_FILE,	"");
-		tagTypesMap.put(SYNTAX_STYLE_PYTHON,			"cfm");
-		tagTypesMap.put(SYNTAX_STYLE_RUBY,				"cfmF");
-		tagTypesMap.put(SYNTAX_STYLE_SAS,				"");
-		tagTypesMap.put(SYNTAX_STYLE_SCALA,				"");
-		tagTypesMap.put(SYNTAX_STYLE_SQL,				"cfFLPprstTv");
-		tagTypesMap.put(SYNTAX_STYLE_TCL,				"cmp");
-		tagTypesMap.put(SYNTAX_STYLE_UNIX_SHELL,		"f");
-		tagTypesMap.put(SYNTAX_STYLE_WINDOWS_BATCH,		"lv");
-		tagTypesMap.put(SYNTAX_STYLE_XML,				"");
+		TAG_TYPES_MAP = new HashMap<>();
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_NONE,				"");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_ACTIONSCRIPT,		"fcmpvx");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_ASSEMBLER_X86,		"");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_C,				"cdfgmnstv");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_CLOJURE,			"");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_CPLUSPLUS,			"cdfgmnstv");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_CSHARP,			"cdEfgimnpqst");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_CSS,				"");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_DELPHI,			"fp");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_FORTRAN,			"bcefklmnpstv");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_GROOVY,			"");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_HTML,				"af");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_JAVA,				"cfimp");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_JAVASCRIPT,		"f");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_JSP,				"");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_LISP,				"f");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_LUA,				"f");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_MAKEFILE,			"m");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_MXML,				"fcmpvx");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_PERL,				"cls");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_PHP,				"cidfvj");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_PROPERTIES_FILE,	"");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_PYTHON,			"cfm");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_RUBY,				"cfmF");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_SAS,				"");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_SCALA,				"");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_SQL,				"cfFLPprstTv");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_TCL,				"cmp");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_UNIX_SHELL,		"f");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_WINDOWS_BATCH,		"lv");
+		TAG_TYPES_MAP.put(SYNTAX_STYLE_XML,				"");
 
 	}
 
@@ -92,9 +92,9 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	/**
 	 * Constructor.
 	 *
-	 * @param plugin The soruce browser plugin.
+	 * @param plugin The source browser plugin.
 	 */
-	public SourceBrowserThread(SourceBrowserPlugin plugin) {
+	SourceBrowserThread(SourceBrowserPlugin plugin) {
 
 		this.plugin = plugin;
 		map = new HashMap<>();
@@ -118,7 +118,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 
 		// SYNTAX_STYLE_ACTIONSCRIPT is handled below with MXML
 
-		if (SYNTAX_STYLE_C.equals(style) || 
+		if (SYNTAX_STYLE_C.equals(style) ||
 				SYNTAX_STYLE_CPLUSPLUS.equals(style)) {
 			addTagTypeNode(root, "Classes", map.get("c"));
 			addTagTypeNode(root, "Macros", map.get("d"));
@@ -321,7 +321,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 
 		// Create data structures in which we can store the tags.
 		map.clear();
-		String knownTagTypes = tagTypesMap.get(style);
+		String knownTagTypes = TAG_TYPES_MAP.get(style);
 		int count = knownTagTypes.length();
 		for (int i=0; i<count; i++) {
 			arrayListBuffer.get(i).clear();

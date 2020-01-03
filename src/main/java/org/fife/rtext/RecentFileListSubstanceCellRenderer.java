@@ -30,7 +30,7 @@ import org.pushingpixels.substance.api.renderer.SubstanceDefaultListCellRenderer
 class RecentFileListSubstanceCellRenderer
 		extends SubstanceDefaultListCellRenderer {
 
-	private static final FileSystemView fileSystemView = FileSystemView.
+	private static final FileSystemView FILE_SYSTEM_VIEW = FileSystemView.
 			getFileSystemView();
 
 
@@ -46,7 +46,7 @@ class RecentFileListSubstanceCellRenderer
 
 		if (loc.isLocalAndExists()) {
 			File file = new File(loc.getFileFullPath());
-			setIcon(fileSystemView.getSystemIcon(file));
+			setIcon(FILE_SYSTEM_VIEW.getSystemIcon(file));
 		}
 
 		return this;

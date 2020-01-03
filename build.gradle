@@ -5,7 +5,7 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-['java', 'distribution', /*'checkstyle', */'maven-publish', 'eclipse' ].each { apply plugin: it }
+['java', 'distribution', 'checkstyle', 'maven-publish', 'eclipse' ].each { apply plugin: it }
 
 group = 'com.fifesoft'
 
@@ -43,10 +43,9 @@ wrapper {
 	gradleVersion '6.0.1'
 }
 
-//checkstyle {
-//	toolVersion = '8.14'
-//	configFile = 'config/checkstyle/checkstyle.xml' as File
-//}
+checkstyle {
+	toolVersion = '8.28'
+}
 
 static isSubstanceJar(jarName) {
 	return jarName.startsWith('radiance-')

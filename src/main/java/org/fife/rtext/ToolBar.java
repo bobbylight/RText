@@ -57,7 +57,7 @@ class ToolBar extends CustomizableToolBar {
 	 * @param mouseListener The status bar that displays a status message
 	 *        when the mouse hovers over this toolbar.
 	 */
-	public ToolBar(String title, RText rtext, StatusBar mouseListener) {
+	ToolBar(String title, RText rtext, StatusBar mouseListener) {
 
 		super(title);
 

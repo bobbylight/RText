@@ -52,7 +52,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	private final StopAction stopAction;
 
 
-	public ConsoleWindow(RText app, Plugin plugin) {
+	ConsoleWindow(RText app, Plugin plugin) {
 
 //		this.plugin = plugin;
 		setDockableWindowName(plugin.getString("DockableWindow.Title"));
@@ -99,7 +99,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 		toolbar.add(temp2);
 		toolbar.add(Box.createHorizontalGlue());
 
-		stopAction = new StopAction(app, Plugin.msg, plugin);
+		stopAction = new StopAction(app, Plugin.MSG, plugin);
 		JButton b = new JButton(stopAction);
 		b.setText(null);
 		toolbar.add(b);

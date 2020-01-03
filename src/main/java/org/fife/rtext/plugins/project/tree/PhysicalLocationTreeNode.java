@@ -105,15 +105,19 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 		}
 
 		@Override
-		protected void handleDelete() {}
+		protected void handleDelete() {
+		}
 
 		@Override
-		protected void handleProperties() {}
+		protected void handleProperties() {
+		}
 
-		protected void handleRefresh() {}
+		protected void handleRefresh() {
+		}
 
 		@Override
-		protected void handleRename() {}
+		protected void handleRename() {
+		}
 
 	}
 

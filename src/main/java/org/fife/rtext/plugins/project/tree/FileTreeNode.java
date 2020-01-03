@@ -110,7 +110,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	public String getDisplayName() {
 		return FileDisplayNames.get().getName(getFile());
 	}
-	
+
 
 	@Override
 	public File getFile() {

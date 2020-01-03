@@ -89,7 +89,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	 */
 	JavaOptionsPanel() {
 
-		ResourceBundle msg = Plugin.msg;
+		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.Java.Name"));
 		listener = new Listener();
 		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/java.png")));
@@ -233,7 +233,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		if (key.indexOf('.')==-1) {
 			key = "Options.Java." + key;
 		}
-		JCheckBox cb = new JCheckBox(Plugin.msg.getString(key));
+		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
 	}
@@ -385,7 +385,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	}
 
 
-	private static class RowHandlerDialog extends EscapableDialog
+	private static final class RowHandlerDialog extends EscapableDialog
 							implements ActionListener {
 
 		private final FSATextField jarField;
@@ -427,9 +427,9 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 			UIUtil.makeSpringCompactGrid(topPanel, 2, 2, 5, 5, 5, 5);
 			cp.add(topPanel, BorderLayout.NORTH);
 
-			okButton = new JButton(Plugin.msg.getString("Options.General.OK"));
+			okButton = new JButton(Plugin.MSG.getString("Options.General.OK"));
 			okButton.addActionListener(this);
-			cancelButton = new JButton(Plugin.msg.
+			cancelButton = new JButton(Plugin.MSG.
 								getString("Options.General.Cancel"));
 			cancelButton.addActionListener(this);
 			Container buttons=UIUtil.createButtonFooter(okButton, cancelButton);
@@ -464,7 +464,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 		private static String getString(String keySuffix) {
 			String key = "Options.Java.BuildPathDialog." + keySuffix;
-			return Plugin.msg.getString(key);
+			return Plugin.MSG.getString(key);
 		}
 
 	}

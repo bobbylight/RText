@@ -58,7 +58,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		panel = new UIOptionPanel(rtext, msg);
 		setIcon(panel, "ui.png");
 		panels.add(panel);
-		
+
 		OptionsDialogPanel panel2 = new LanguageOptionPanel(rtext, msg);
 		setIcon(panel2, "language.png");
 		panel.addChildPanel(panel2);

@@ -41,7 +41,7 @@
 
     <property name="fileExtensions" value="java"/>
 
-    <!-- Part of turning off indivial checks: -->
+    <!-- Part of turning off individual checks: -->
     <!-- http://stackoverflow.com/questions/4023185/how-to-disable-a-particular-checkstyle-rule-for-a-particular-line-of-code -->
     <module name="SuppressWarningsFilter" />
 
@@ -63,6 +63,10 @@
     <!-- See http://checkstyle.sf.net/config_sizes.html -->
     <module name="FileLength">
         <property name="max" value="3100"/>
+    </module>
+
+    <module name="LineLength">
+        <property name="max" value="150"/>
     </module>
 
     <!-- Checks for whitespace                               -->
@@ -102,6 +106,7 @@
         -->
         <module name="JavadocStyle"/>
 
+        <module name="JavadocContentLocationCheck"/>
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See http://checkstyle.sf.net/config_naming.html -->
@@ -127,9 +132,6 @@
 
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
-        <module name="LineLength">
-            <property name="max" value="150"/>
-        </module>
         <module name="MethodLength">
             <property name="max" value="300"/>
         </module>
@@ -163,7 +165,7 @@
         <!-- Checks for blocks. You know, those {}'s         -->
         <!-- See http://checkstyle.sf.net/config_blocks.html -->
         <module name="AvoidNestedBlocks"/>
-        <module name="EmptyBlock"/>
+        <!--<module name="EmptyBlock"/>-->
         <module name="LeftCurly"/>
         <!--<module name="NeedBraces"> &lt;!&ndash; Allow stuff like "while (doSomething(minus-minus-count));" &ndash;&gt;-->
         <!--<property name="allowEmptyLoopBody" value="true"/>-->
@@ -213,7 +215,7 @@
     </module>
 
     <module name="SuppressionFilter">
-        <property name="file" value="config/checkstyle/suppressions.xml"/>
+        <property name="file" value="${config_loc}/suppressions.xml"/>
     </module>
 
 </module>

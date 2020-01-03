@@ -80,7 +80,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	 * @param msg The resource bundle to use.
 	 */
 	@SuppressWarnings("unchecked") // We must use DefaultListCellRenderer
-	public LanguageOptionPanel(GUIApplication app, ResourceBundle msg) {
+	LanguageOptionPanel(GUIApplication app, ResourceBundle msg) {
 
 		super(msg.getString("OptLaName"));
 		this.app = app;
@@ -214,7 +214,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 		return code;
 	}
 
-	
+
 	@Override
 	public JComponent getTopJComponent() {
 		return languageList;

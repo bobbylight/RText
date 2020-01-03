@@ -37,7 +37,7 @@ class ViewTypeScriptBuildResultsAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 * @param plugin The language support plugin.
 	 */
-	public ViewTypeScriptBuildResultsAction(final RText owner,
+	ViewTypeScriptBuildResultsAction(final RText owner,
 			ResourceBundle msg, Plugin plugin) {
 		super(owner, msg, "TypeScript.ViewBuildResultsAction");
 		this.plugin = plugin;

@@ -33,7 +33,7 @@ import java.util.TreeSet;
  * @author Robert Futrell
  * @version 1.0
  */
-public class MacroManager {
+public final class MacroManager {
 
 	/**
 	 * Event fired when a macro is added or removed.

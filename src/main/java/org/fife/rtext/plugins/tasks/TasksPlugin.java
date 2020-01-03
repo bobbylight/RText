@@ -69,8 +69,8 @@ public class TasksPlugin extends GUIPlugin {
 	 */
 	private String taskIdentifiers;
 
-	private static final String MSG = "org.fife.rtext.plugins.tasks.TasksPlugin";
-	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.tasks.TasksPlugin";
+	private static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
 
 	private static final String VERSION					= "3.0.3";
 	private static final String VIEW_TASKS_ACTION		= "viewTasksAction";
@@ -93,7 +93,7 @@ public class TasksPlugin extends GUIPlugin {
 
 		loadIcons();
 
-		ViewTasksAction a = new ViewTasksAction(rtext, msg, this);
+		ViewTasksAction a = new ViewTasksAction(rtext, MSG, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
 		rtext.addAction(VIEW_TASKS_ACTION, a);
 
@@ -124,7 +124,7 @@ public class TasksPlugin extends GUIPlugin {
 
 	@Override
 	public String getPluginName() {
-		return msg.getString("PluginName");
+		return MSG.getString("PluginName");
 	}
 
 
@@ -152,7 +152,7 @@ public class TasksPlugin extends GUIPlugin {
 	 * @return The localized text.
 	 */
 	String getString(String key) {
-		return msg.getString(key);
+		return MSG.getString(key);
 	}
 
 

@@ -39,12 +39,12 @@ class SourceTreeNode extends DefaultMutableTreeNode {
 	private int sortPriority;
 
 
-	public SourceTreeNode(Object userObject) {
+	SourceTreeNode(Object userObject) {
 		this(userObject, false);
 	}
 
 
-	public SourceTreeNode(Object userObject, boolean sorted) {
+	SourceTreeNode(Object userObject, boolean sorted) {
 		super(userObject);
 		visibleChildren = new Vector<>();
 		setSortable(true);

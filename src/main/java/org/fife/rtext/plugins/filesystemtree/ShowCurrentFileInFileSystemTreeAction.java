@@ -21,7 +21,7 @@ class ShowCurrentFileInFileSystemTreeAction extends AppAction<RText> {
 
 	private final FileSystemTreePlugin plugin;
 
-	public ShowCurrentFileInFileSystemTreeAction(RText app,
+	ShowCurrentFileInFileSystemTreeAction(RText app,
 				 	FileSystemTreePlugin plugin, ResourceBundle msg) {
 		super(app, msg, "Action.SelectCurrentFile");
 		this.plugin = plugin;

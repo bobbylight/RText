@@ -43,7 +43,7 @@ class TabbedPaneViewTransferHandler extends TabbedPaneTransferHandler {
 	 *
 	 * @param mainView An instance of <code>RTextTabbedPaneView</code>.
 	 */
-	public TabbedPaneViewTransferHandler(AbstractMainView mainView) {
+	TabbedPaneViewTransferHandler(AbstractMainView mainView) {
 		this.mainView = mainView;
 	}
 

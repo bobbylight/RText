@@ -33,7 +33,7 @@ class WorkspaceTreeRootCreator implements WorkspaceVisitor {
 	private final Stack<AbstractWorkspaceTreeNode> entryParentNodeStack;
 
 
-	public WorkspaceTreeRootCreator(ProjectPlugin plugin) {
+	WorkspaceTreeRootCreator(ProjectPlugin plugin) {
 		this.plugin = plugin;
 		entryParentNodeStack = new Stack<>();
 	}
@@ -49,13 +49,14 @@ class WorkspaceTreeRootCreator implements WorkspaceVisitor {
 	 *
 	 * @return The tree root.
 	 */
-	public WorkspaceRootTreeNode getRoot() {
+	WorkspaceRootTreeNode getRoot() {
 		return root;
 	}
 
 
 	@Override
-	public void postVisit(Workspace workspace) {}
+	public void postVisit(Workspace workspace) {
+	}
 
 
 	@Override
@@ -65,11 +66,13 @@ class WorkspaceTreeRootCreator implements WorkspaceVisitor {
 
 
 	@Override
-	public void postVisit(FileProjectEntry entry) {}
+	public void postVisit(FileProjectEntry entry) {
+	}
 
 
 	@Override
-	public void postVisit(FolderProjectEntry entry) {}
+	public void postVisit(FolderProjectEntry entry) {
+	}
 
 
 	@Override

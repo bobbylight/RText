@@ -20,7 +20,7 @@ import org.pushingpixels.substance.api.renderer.SubstanceDefaultListCellRenderer
 /**
  * Cell renderer for the Language option panel when Substance is installed.
  * I love how Substance makes custom renderers a pain in the ass!
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  * @see LanguageListCellRenderer

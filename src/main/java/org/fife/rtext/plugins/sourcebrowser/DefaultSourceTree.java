@@ -67,7 +67,7 @@ class DefaultSourceTree extends JTree {
 	private final String cantFindLineText;
 
 
-	public DefaultSourceTree(SourceBrowserPlugin plugin, RText owner) {
+	DefaultSourceTree(SourceBrowserPlugin plugin, RText owner) {
 
 		this.plugin = plugin;
 		this.owner = owner;

@@ -76,12 +76,12 @@ public class Plugin extends GUIPlugin {
 	private static final String PLUGIN_VERSION			= "3.0.3";
 	private static final String PREFS_FILE_NAME			= "langSupport.properties";
 
-	private static final String MSG = "org.fife.rtext.plugins.langsupport.Plugin";
+	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.langsupport.Plugin";
 
 	/**
 	 * The resource bundle used across this plugin.
 	 */
-	static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
 
 
 	/**
@@ -134,7 +134,7 @@ public class Plugin extends GUIPlugin {
 	 * @return The resource bundle.
 	 */
 	public ResourceBundle getBundle() {
-		return msg;
+		return MSG;
 	}
 
 
@@ -172,7 +172,7 @@ public class Plugin extends GUIPlugin {
 
 	@Override
 	public String getPluginName() {
-		return msg.getString("Name");
+		return MSG.getString("Name");
 	}
 
 
