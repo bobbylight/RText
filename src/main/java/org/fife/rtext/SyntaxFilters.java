@@ -296,6 +296,7 @@ public class SyntaxFilters implements SyntaxConstants {
 
 		//filters.put(SYNTAX_STYLE_NONE,			createValue());
 		filters.put(SYNTAX_STYLE_ACTIONSCRIPT,		createValue("*.as", "*.asc"));
+		filters.put(SYNTAX_STYLE_ASSEMBLER_6502,	createValue("*.s"));
 		filters.put(SYNTAX_STYLE_ASSEMBLER_X86,		createValue("*.asm"));
 		filters.put(SYNTAX_STYLE_BBCODE,			createValue("*.bbc"));
 		filters.put(SYNTAX_STYLE_C,				createValue("*.c"));

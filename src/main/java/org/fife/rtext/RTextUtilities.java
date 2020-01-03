@@ -272,6 +272,7 @@ public final class RTextUtilities {
 
 			// Add (localized) file filters.
 			addFilter(chooser, msg, "ActionScript", "as", "asc");
+			addFilter(chooser, msg, "Assembler6502", "s");
 			addFilter(chooser, msg, "AssemblerX86", "asm");
 			addFilter(chooser, msg, "BBCode", "bbc");
 			addFilter(chooser, msg, "CPlusPlus",
@@ -341,6 +342,7 @@ public final class RTextUtilities {
 					ExtensionFileFilter.CaseCheck.SYSTEM_CASE_CHECK,
 					false,
 						"as", "asc",
+						"s",
 						"asm",
 						"bbc",
 						"c", "cpp", "cxx", "h",
@@ -380,7 +382,7 @@ public final class RTextUtilities {
 						"sh", "bsh", "csh", "ksh",
 						"vb",
 						"bat", "cmd",
-						"xml", "xsl", "xsd", "xslt", "wsdl", "jnlp", "macro", "manifest",
+						"xml", "xsl", "xsd", "xslt", "wsdl", "svg", "tmx", "tsx", "pom", "manifest",
 						"yml", "yaml"
 			));
 			chooser.setFileFilter(null);

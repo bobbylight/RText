@@ -5,9 +5,10 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-['java', 'distribution', 'checkstyle', 'maven-publish', 'eclipse' ].each { apply plugin: it }
+['java', 'distribution', 'checkstyle', 'maven-publish', 'signing', 'eclipse' ].each { apply plugin: it }
 
 group = 'com.fifesoft'
+ext.isReleaseVersion = !project.version.endsWith('SNAPSHOT')
 
 assert JavaVersion.current().isJava11Compatible()
 
@@ -307,6 +308,73 @@ srcDistZip {
 	include 'src/**'
 	include 'TO-DO'
 }
+
+
+publishing {
+	repositories {
+		maven {
+			def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+			def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+			url = isReleaseVersion ? releasesRepoUrl : snapshotsRepoUrl
+			credentials { // Credentials usually kept in user's .gradle/gradle.properties
+				// We must defensively check for these properties so Travis CI build works
+				username = project.hasProperty('ossrhUsername') ? ossrhUsername : 'unknown'
+				password = project.hasProperty('ossrhPassword') ? ossrhPassword : 'unknown'
+			}
+		}
+	}
+	publications {
+		maven(MavenPublication) {
+
+			groupId = 'com.fifesoft.rtext'
+			artifactId = 'rtext'
+			version = version
+
+			from components.java
+
+			pom {
+				name = 'rtext'
+				description = 'RText is a powerful, cross-platform programmer\'s text editor written in Java. It is designed ' +
+					'to be easy to use, highly customizable and flexible. Part of RText\'s design is for the source code ' +
+					'to be simple, easy to understand, and well documented, so that other programmers can look into its ' +
+					'inner-workings and figure out how RText ticks with ease. A good place to start (besides the source ' +
+					'code) is the Javadoc for all classes used in the project. '
+				url = 'https://github.com/bobbylight/RText'
+				inceptionYear = '2003'
+				packaging = 'jar'
+				licenses {
+					license {
+						name = 'BSD-3-Clause'
+						url = 'https://github.com/bobbylight/RText/blob/master/src/main/dist/License.txt'
+					}
+				}
+				developers {
+					developer {
+						name = 'Robert Futrell'
+					}
+				}
+				scm {
+					url = 'https://github.com/bobbylight/RText'
+					connection = 'scm:git:git://github.com/bobbylight/RText'
+					developerConnection = 'scm:git:git@github.com:bobbylight/RText'
+					if (isReleaseVersion) {
+						tag = project.version
+					}
+				}
+			}
+		}
+	}
+}
+
+signing {
+	// Don't require signing for e.g. ./gradlew install
+	required { gradle.taskGraph.hasTask('publish') && isReleaseVersion }
+	sign publishing.publications.maven
+}
+tasks.withType(Sign) {
+	onlyIf { isReleaseVersion }
+}
+
 
 def getJreDependencyList = { installDistDir ->
 
