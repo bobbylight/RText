@@ -4,11 +4,11 @@
    <PropertiesFile name="RTextHelpDialog.properties"/>
    <RootNode name="rootNodeKey" visible="true" page="RText.html">
       <Page name="introKey" page="Introduction.html"/>
-      <Page name="whatsNewKey" page="Changes.txt"/>
+      <Page name="whatsNewKey" page="Changes.txt" monospaced="true"/>
       <Page name="faqKey" page="FAQ.html"/>
       <Page name="bugsKey" page="BugList.html"/>
-	 <Page name="licenseKey" page="License.txt"/>
-	 <Page name="developersKey" page="Developers.html"/>
+      <Page name="licenseKey" page="License.txt" monospaced="true"/>
+      <Page name="developersKey" page="Developers.html"/>
       <Node name="managingTextDocumentsNodeKey">
          <Page name="newKey" page="New.html"/>
          <Page name="openKey" page="Open.html"/>
