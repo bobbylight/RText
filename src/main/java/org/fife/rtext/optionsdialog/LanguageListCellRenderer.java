@@ -53,7 +53,7 @@ final class LanguageListCellRenderer extends DefaultListCellRenderer {
 	 *
 	 * @return The renderer to use.
 	 */
-	public static ListCellRenderer create() {
+	public static ListCellRenderer<Object> create() {
 
 		JLabel delegate = null;
 

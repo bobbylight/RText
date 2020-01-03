@@ -364,7 +364,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.clear();
 
 		int oldSpacePos = 0;
-		int spacePos = filterString.indexOf(' ', 0);
+		int spacePos = filterString.indexOf(' ');
 		while (spacePos!=-1) {
 			if (spacePos>oldSpacePos+1) {
 				filters.add(filterString.substring(oldSpacePos,spacePos));

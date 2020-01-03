@@ -337,7 +337,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @return The <code>Document</code>.
 	 * @see #getTextComponent(JComboBox)
 	 */
-	private static Document getDocument(JComboBox combo) {
+	private static Document getDocument(JComboBox<?> combo) {
 		return getTextComponent(combo).getDocument();
 	}
 
@@ -367,7 +367,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 * @return The text component.
 	 * @see #getDocument(JComboBox)
 	 */
-	private static JTextComponent getTextComponent(JComboBox combo) {
+	private static JTextComponent getTextComponent(JComboBox<?> combo) {
 		return (JTextComponent)combo.getEditor().getEditorComponent();
 	}
 

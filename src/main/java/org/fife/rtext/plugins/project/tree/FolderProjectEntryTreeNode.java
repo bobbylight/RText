@@ -139,13 +139,11 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		File file = getFile();
 		FolderFilterInfo filterInfo = getFilterInfo();
 		return Messages.getString("ProjectPlugin.ToolTip.FolderProjectEntry",
-			new String[] { escapeForHtml(getDisplayName()),
-				escapeForHtml(file.getAbsolutePath()),
-				escapeForHtml(FileTreeNode.getFilterString(filterInfo.getAllowedFileFilters(), "*")),
-				escapeForHtml(FileTreeNode.getFilterString(filterInfo.getHiddenFileFilters())),
-				escapeForHtml(FileTreeNode.getFilterString(filterInfo.getHiddenFolderFilters()))
-			}
-		);
+			escapeForHtml(getDisplayName()),
+			escapeForHtml(file.getAbsolutePath()),
+			escapeForHtml(FileTreeNode.getFilterString(filterInfo.getAllowedFileFilters(), "*")),
+			escapeForHtml(FileTreeNode.getFilterString(filterInfo.getHiddenFileFilters())),
+			escapeForHtml(FileTreeNode.getFilterString(filterInfo.getHiddenFolderFilters())));
 	}
 
 

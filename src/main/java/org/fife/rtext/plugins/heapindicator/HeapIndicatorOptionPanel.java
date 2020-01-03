@@ -219,8 +219,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlu
 			ResourceBundle msg = getPlugin().getBundle();
 			String error = msg.getString(
 							"Plugin.OptionPanel.Error.RefreshRate.text");
-			error = MessageFormat.format(error,
-						new Object[] { refreshRateSpinner.getValue() });
+			error = MessageFormat.format(error, refreshRateSpinner.getValue());
 			res = new OptionsPanelCheckResult(this,refreshRateSpinner,error);
 		}
 		return res;

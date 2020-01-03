@@ -625,7 +625,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 * @param combo The combo box.
 	 * @return The text component.
 	 */
-	protected static JTextComponent getTextComponent(JComboBox combo) {
+	protected static JTextComponent getTextComponent(JComboBox<?> combo) {
 		return org.fife.rsta.ui.UIUtil.getTextComponent(combo);
 	}
 
@@ -879,7 +879,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 				// Make the status bar indicate that searching completed.
 				String temp = MessageFormat.format(searchingCompleteString,
-								new Object[] { ""+(time/1000.0f) });
+					""+(time/1000.0f));
 				setStatusText(temp);
 
 				// Update the results list and notify the user if the

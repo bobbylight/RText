@@ -217,7 +217,7 @@ public class MacroPlugin extends AbstractPlugin
 				text = ioe.toString();
 			}
 			String desc = getString("Error.LoadingMacros");
-			desc = MessageFormat.format(desc, new Object[] { text });
+			desc = MessageFormat.format(desc, text);
 			app.displayException(ioe, desc);
 		}
 
@@ -302,7 +302,7 @@ public class MacroPlugin extends AbstractPlugin
 				text = ioe.toString();
 			}
 			String desc = getString("Error.SavingMacros");
-			desc = MessageFormat.format(desc, new Object[] { text });
+			desc = MessageFormat.format(desc, text);
 			app.displayException(ioe, desc);
 		}
 	}

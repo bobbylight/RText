@@ -90,7 +90,7 @@ public class RecentFileDialog extends EscapableDialog {
 	 *
 	 * @return The cell renderer.
 	 */
-	private static ListCellRenderer createCellRenderer() {
+	private static ListCellRenderer<Object> createCellRenderer() {
 		if (SubstanceUtil.isSubstanceInstalled()) {
 			return new RecentFileListSubstanceCellRenderer();
 		}

@@ -317,7 +317,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 				text = ioe.toString();
 			}
 			String desc = MSG.getString("Error.LoadingTools");
-			desc = MessageFormat.format(desc, new Object[] { text });
+			desc = MessageFormat.format(desc, text);
 			app.displayException(ioe, desc);
 		}
 	}
@@ -413,7 +413,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 				text = ioe.toString();
 			}
 			String desc = MSG.getString("Error.SavingTools");
-			desc = MessageFormat.format(desc, new Object[] { text });
+			desc = MessageFormat.format(desc, text);
 			app.displayException(ioe, desc);
 		}
 	}

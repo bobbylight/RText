@@ -50,7 +50,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 	private JCheckBox linkCB;
 	private JLabel modKeyLabel;
-	private JComboBox modKeyCombo;
+	private JComboBox<Integer> modKeyCombo;
 	private JLabel linkColorLabel;
 	private RColorSwatchesButton linkColorButton;
 
@@ -480,7 +480,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	private JComboBox createModKeyCombo() {
+	private JComboBox<Integer> createModKeyCombo() {
 		Integer[] items = new Integer[] {
 			InputEvent.CTRL_DOWN_MASK,
 			InputEvent.META_DOWN_MASK,

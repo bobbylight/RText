@@ -247,7 +247,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 
-			JComboBox source = (JComboBox)e.getSource();
+			JComboBox<?> source = (JComboBox<?>)e.getSource();
 			if (source==shellCombo) {
 				int index = shellCombo.getSelectedIndex();
 				if (index==0) {

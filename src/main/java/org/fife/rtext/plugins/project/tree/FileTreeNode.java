@@ -194,12 +194,10 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 		}
 		else if (file.isDirectory()) {
 			return Messages.getString("ProjectPlugin.ToolTip.Folder",
-				new String[] { file.getAbsolutePath(),
-					getFilterString(filterInfo.getAllowedFileFilters(), "*"),
-					getFilterString(filterInfo.getHiddenFileFilters()),
-					getFilterString(filterInfo.getHiddenFolderFilters())
-				}
-			);
+				file.getAbsolutePath(),
+				getFilterString(filterInfo.getAllowedFileFilters(), "*"),
+				getFilterString(filterInfo.getHiddenFileFilters()),
+				getFilterString(filterInfo.getHiddenFolderFilters()));
 		}
 		return null; // File does not exist
 	}

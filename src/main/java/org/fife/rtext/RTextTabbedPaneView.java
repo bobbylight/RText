@@ -708,8 +708,7 @@ inCloseCurrentDocument = false;
 		}
 
 		public void setDocumentName(String name) {
-			String text = MessageFormat.format(template,
-										new Object[] { name });
+			String text = MessageFormat.format(template, name);
 			putValue(AbstractAction.NAME, text);
 		}
 
