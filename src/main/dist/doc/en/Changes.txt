@@ -2,6 +2,23 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
+3.0.3 (01/04/2020)
+------------------
+   - Added 6502 Assembler syntax highlighting
+   - Fix RSTA #264: Fixing typo in German localization of 'Close all blocks'
+   - Fix RSTA #317: Background color of Token paints over parser notices
+     (squiggle underlines)
+   - Fix RSTA #xxx: Errors copying characters that aren't 7-bit ASCII out of
+     RSTA as "styled text" (i.e. RTF or HTML).
+   - Fix #45: Better 'error' and 'warning' icons with Darcula for
+     DecorativeIconPanel
+   - Fixes to support Ctrl+Enter/Shift+Enter searching in the opposite
+     direction, in both find/replace dialogs and toolbars
+   - Fix #46: Increase/decrease font size actions are broken and not symmetric
+   - Fix #47: Add 'open containing folder' to editor tabs' context menus
+   - Fix #49: Warning about reflective access to system LaFs
+
+
 3.0.2 (10/19/2019)
 ------------------
    - Fix #28: Add 'Show in File System Tree' action to editor's context menu
