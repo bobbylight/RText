@@ -13,8 +13,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.PatternSyntaxException;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.rsta.ui.search.AbstractFindReplaceDialog;
@@ -183,6 +182,10 @@ public class SearchManager {
 				JOptionPane.showMessageDialog(null, temp,
 							rtext.getString("InfoDialogHeader"),
 							JOptionPane.INFORMATION_MESSAGE);
+			}
+			else if (result.isWrapped()) {
+				// Beep if we wrapped
+				UIManager.getLookAndFeel().provideErrorFeedback(textArea);
 			}
 
 			// If they used the "find next" tool bar button, make sure the

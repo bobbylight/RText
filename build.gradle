@@ -17,19 +17,19 @@ configurations.all { // Check for updates every build
 }
 
 dependencies {
-	implementation('com.fifesoft.rtext:fife.common:3.0.3') { changing = true }
+	implementation('com.fifesoft.rtext:fife.common:3.0.4-SNAPSHOT') { changing = true }
 
-	implementation('com.fifesoft:rsyntaxtextarea:3.0.8') { changing = true }
-	implementation('com.fifesoft:autocomplete:3.0.4') { changing = true }
-	implementation('com.fifesoft:rstaui:3.0.3') { changing = true }
-	implementation('com.fifesoft:spellchecker:3.0.3') { changing = true }
-	implementation('com.fifesoft:languagesupport:3.0.1')
+	implementation('com.fifesoft:rsyntaxtextarea:3.0.9-SNAPSHOT') { changing = true }
+	implementation('com.fifesoft:autocomplete:3.0.5') { changing = true }
+	implementation('com.fifesoft:rstaui:3.0.7-SNAPSHOT') { changing = true }
+	implementation('com.fifesoft:spellchecker:3.0.4') { changing = true }
+	implementation('com.fifesoft:languagesupport:3.0.2')
 
 	implementation 'net.sf.jtidy:jtidy:r938'
 	implementation 'org.codehaus.groovy:groovy-all:2.5.+'
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
 
-	testImplementation 'junit:junit:4.12'
+	testImplementation 'junit:junit:4.13'
 }
 repositories {
 	mavenCentral()
