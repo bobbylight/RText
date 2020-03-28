@@ -43,7 +43,7 @@ final class IconGroupLoader extends DefaultHandler {
 	 * The name of the default icon group.  This icon group MUST be defined
 	 * in ExtraIcons.xml, or RText will not start!
 	 */
-	public static final String DEFAULT_ICON_GROUP_NAME = "Eclipse Icons";
+	public static final String DEFAULT_ICON_GROUP_NAME = "IntelliJ Icons (Dark)";
 
 	private RText owner;
 	private Map<String, IconGroup> iconGroupMap;
@@ -117,7 +117,7 @@ final class IconGroupLoader extends DefaultHandler {
 			addOfficeLnFsIconGroups();
 		}
 
-		IconGroup flatIconGroup = new SvgIconGroup("IntelliJ Icons (Dark)",
+		IconGroup flatIconGroup = new SvgIconGroup(DEFAULT_ICON_GROUP_NAME,
 			"icongroups/intellij-icons.jar");
 		iconGroupMap.put(flatIconGroup.getName(), flatIconGroup);
 

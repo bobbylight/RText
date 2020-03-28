@@ -1024,10 +1024,10 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		initRecentFileManager(prefs);
 
 		// Make the split pane positions same as last time.
-		setSplitPaneDividerLocation(TOP, prefs.dividerLocations[TOP]);
-		setSplitPaneDividerLocation(LEFT, prefs.dividerLocations[LEFT]);
-		setSplitPaneDividerLocation(BOTTOM, prefs.dividerLocations[BOTTOM]);
-		setSplitPaneDividerLocation(RIGHT, prefs.dividerLocations[RIGHT]);
+		setSplitPaneDividerLocation(TOP, prefs.dividerLocations[TOP], prefs.dividerVisible[TOP]);
+		setSplitPaneDividerLocation(LEFT, prefs.dividerLocations[LEFT], prefs.dividerVisible[LEFT]);
+		setSplitPaneDividerLocation(BOTTOM, prefs.dividerLocations[BOTTOM], prefs.dividerVisible[BOTTOM]);
+		setSplitPaneDividerLocation(RIGHT, prefs.dividerLocations[RIGHT], prefs.dividerVisible[RIGHT]);
 
 		// Show any docked windows
 		setSpellingWindowVisible(prefs.viewSpellingList);
@@ -1766,6 +1766,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+//UIManager.put("TabbedPane.highlight", new Color(0x4b, 0x4b, 0x4b));//"4b4b4b"));
 
 			// The default speed of Substance animations is too slow
 			// (200ms), looks bad moving through JMenuItems quickly.

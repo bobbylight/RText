@@ -30,6 +30,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaOptionPanel;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.IconGroup;
 import org.fife.ui.rtextarea.RTextAreaOptionPanel;
+import org.fife.util.DarculaUtil;
 import org.fife.util.SubstanceUtil;
 
 
@@ -47,6 +48,12 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * ID used to identify this option panel, so others can attach to it.
 	 */
 	public static final String OPTION_PANEL_ID = "UIOptionPanel";
+
+	/**
+	 * The color to use when rendering the name of modified documents in tabs when the current Look
+	 * and Feel is dark.
+	 */
+	public static final Color DARK_MODIFIED_DOCUMENT_NAME_COLOR = new Color(255, 128, 128);
 
 	private LabelValueComboBox<String, String> themeCombo;
 	private JButton applyButton;
@@ -189,13 +196,13 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		}
 
 		else if ("dark".equals(theme)) {
-			laf = "com.bulenkov.darcula.DarculaLaf";
+			laf = DarculaUtil.CLASS_NAME;
 			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/dark.xml";
 			iconGroup = flatIconGroup;
 		}
 
 		else if ("monokai".equals(theme)) {
-			laf = "com.bulenkov.darcula.DarculaLaf";
+			laf = DarculaUtil.CLASS_NAME;
 			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/monokai.xml";
 			iconGroup = flatIconGroup;
 		}
@@ -605,18 +612,16 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		OtherColors colors = new OtherColors();
 
-		Color darkModifiedDocumentNameColor = new Color(255, 128, 128);
-
 		if ("eclipse".equals(theme)) {
 			colors.setModifiedDocumentNameColor(Color.RED);
 		}
 
 		else if ("dark".equals(theme)) {
-			colors.setModifiedDocumentNameColor(darkModifiedDocumentNameColor);
+			colors.setModifiedDocumentNameColor(DARK_MODIFIED_DOCUMENT_NAME_COLOR);
 		}
 
 		else if ("monokai".equals(theme)) {
-			colors.setModifiedDocumentNameColor(darkModifiedDocumentNameColor);
+			colors.setModifiedDocumentNameColor(DARK_MODIFIED_DOCUMENT_NAME_COLOR);
 		}
 
 		else {//if ("default".equals(theme)) {

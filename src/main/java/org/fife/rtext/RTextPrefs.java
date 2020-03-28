@@ -18,21 +18,23 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.StringTokenizer;
 import java.util.prefs.Preferences;
 
 import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
 
 import org.fife.rtext.SearchManager.SearchingMode;
+import org.fife.rtext.optionsdialog.UIOptionPanel;
 import org.fife.ui.OS;
 import org.fife.ui.StatusBar;
 import org.fife.ui.app.GUIApplicationPrefs;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Style;
+import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.CaretStyle;
 import org.fife.ui.rtextarea.RTextArea;
+import org.fife.util.DarculaUtil;
 
 
 /**
@@ -49,7 +51,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	/**
 	 * The default Look and Feel.
 	 */
-	private static final String DEFAULT_LAF = UIManager.getSystemLookAndFeelClassName();
+	private static final String DEFAULT_LAF = DarculaUtil.CLASS_NAME;
 
 	/**
 	 * The default maximum number of spelling errors to display for a single
@@ -115,6 +117,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	public int caretBlinkRate;
 	public boolean searchToolBarVisible;
 	public int[] dividerLocations;				// Dividers for plugin JSplitPanes.
+	public boolean[] dividerVisible;
 	public String defaultLineTerminator;
 	public String defaultEncoding;				// Encoding of new text files.
 	public boolean guessFileContentType;
@@ -227,6 +230,10 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		dividerLocations[RText.LEFT] = rtext.getSplitPaneDividerLocation(RText.LEFT);
 		dividerLocations[RText.BOTTOM] = rtext.getSplitPaneDividerLocation(RText.BOTTOM);
 		dividerLocations[RText.RIGHT]= rtext.getSplitPaneDividerLocation(RText.RIGHT);
+		dividerVisible[RText.TOP]	= rtext.isDockableWindowGroupExpanded(RText.TOP);
+		dividerVisible[RText.LEFT] = rtext.isDockableWindowGroupExpanded(RText.LEFT);
+		dividerVisible[RText.BOTTOM] = rtext.isDockableWindowGroupExpanded(RText.BOTTOM);
+		dividerVisible[RText.RIGHT]= rtext.isDockableWindowGroupExpanded(RText.RIGHT);
 		defaultLineTerminator		= mainView.getLineTerminator();
 		defaultEncoding			= mainView.getDefaultEncoding();
 		guessFileContentType		= mainView.getGuessFileContentType();
@@ -305,8 +312,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	 */
 	public static String getLookAndFeelToLoad() {
 		Preferences prefs = Preferences.userNodeForPackage(RText.class);
-		String defaultLAF = UIManager.getSystemLookAndFeelClassName();
-		return prefs.get("lookAndFeel", defaultLAF);
+		return prefs.get("lookAndFeel", DEFAULT_LAF);
 	}
 
 
@@ -322,8 +328,10 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 			lineNumbersVisible			= prefs.getBoolean("lineNumbersVisible", lineNumbersVisible);
 			tabSize					= prefs.getInt("tabSize", tabSize);
 			mainView					= prefs.getInt("mainView", mainView);
-			String temp					= prefs.get("colorScheme", null);
-			colorScheme				= SyntaxScheme.loadFromString(temp);
+			if (colorScheme == null) { // Use the default, fall back to whatever was stored
+				String temp = prefs.get("colorScheme", null);
+				colorScheme = SyntaxScheme.loadFromString(temp);
+			}
 			statusBarStyle			= prefs.getInt("statusBarStyle", statusBarStyle);
 			workingDirectory			= prefs.get("workingDirectory", workingDirectory);
 			searchToolBarVisible		= prefs.getBoolean("searchToolBarVisible", searchToolBarVisible);
@@ -331,10 +339,14 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 			dividerLocations[RText.LEFT] = prefs.getInt("pluginDividerLocation.left", dividerLocations[RText.LEFT]);
 			dividerLocations[RText.BOTTOM] = prefs.getInt("pluginDividerLocation.bottom", dividerLocations[RText.BOTTOM]);
 			dividerLocations[RText.RIGHT]= prefs.getInt("pluginDividerLocation.right", dividerLocations[RText.RIGHT]);
+			dividerVisible[RText.TOP]	= prefs.getBoolean("pluginDividerVisible.top", dividerVisible[RText.TOP]);
+			dividerVisible[RText.LEFT] = prefs.getBoolean("pluginDividerVisible.left", dividerVisible[RText.LEFT]);
+			dividerVisible[RText.BOTTOM] = prefs.getBoolean("pluginDividerVisible.bottom", dividerVisible[RText.BOTTOM]);
+			dividerVisible[RText.RIGHT]= prefs.getBoolean("pluginDividerVisible.right", dividerVisible[RText.RIGHT]);
 			showHostName				= prefs.getBoolean("showHostName", showHostName);
 			bomInUtf8				= prefs.getBoolean("bomInUtf8", bomInUtf8);
 			bookmarksEnabled			= prefs.getBoolean("bookmarksEnabled", bookmarksEnabled);
-			temp							= prefs.get("lineNumberFont", null);
+			String temp							= prefs.get("lineNumberFont", null);
 			if (temp!=null) {
 				lineNumberFont			= getFontImpl(temp);
 			}
@@ -555,6 +567,10 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		prefs.putInt("pluginDividerLocation.left",		dividerLocations[RText.LEFT]);
 		prefs.putInt("pluginDividerLocation.bottom",		dividerLocations[RText.BOTTOM]);
 		prefs.putInt("pluginDividerLocation.right",		dividerLocations[RText.RIGHT]);
+		prefs.putBoolean("pluginDividerVisible.top",		dividerVisible[RText.TOP]);
+		prefs.putBoolean("pluginDividerVisible.left",		dividerVisible[RText.LEFT]);
+		prefs.putBoolean("pluginDividerVisible.bottom",		dividerVisible[RText.BOTTOM]);
+		prefs.putBoolean("pluginDividerVisible.right",		dividerVisible[RText.RIGHT]);
 		prefs.putBoolean("showHostName",				showHostName);
 		prefs.putBoolean("bomInUtf8",					bomInUtf8);
 		prefs.putBoolean("bookmarksEnabled",			bookmarksEnabled);
@@ -665,6 +681,16 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	 */
 	@Override
 	protected void setDefaults() {
+
+		Theme theme = null;
+		try {
+			theme = Theme.load(getClass().getResourceAsStream(
+				"/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return;
+		}
+
 		location = new Point(0,0);
 		size = new Dimension(650,500);
 		lookAndFeel = DEFAULT_LAF;
@@ -677,51 +703,51 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		textMode = RTextArea.INSERT_MODE;
 		tabPlacement = JTabbedPane.TOP;
 		printFont = null;	// i.e., use RText's font.
-		backgroundObject = Color.WHITE;
+		backgroundObject = theme.bgColor;
 		imageAlpha = 0.3f;	// Arbitrary initial value.
 		wordWrap = false;
-		caretColor = RTextArea.getDefaultCaretColor();
-		selectionColor = RSyntaxTextArea.getDefaultSelectionColor();
-		selectedTextColor = Color.white;
-		useSelectedTextColor = false;
-		colorScheme = new SyntaxScheme(true);
+		caretColor = theme.caretColor;
+		selectionColor = theme.selectionBG;
+		selectedTextColor = theme.selectionFG;
+		useSelectedTextColor = theme.useSelctionFG;
+		colorScheme = theme.scheme;
 		SyntaxFilters syntaxFilters = new SyntaxFilters();
 		syntaxFilters.restoreDefaultFileFilters();
 		syntaxFiltersString = syntaxFilters.toString();
 		maxFileHistorySize = 20;
 		fileHistoryString = null;
 		currentLineHighlightEnabled = true;
-		currentLineHighlightColor = RTextArea.getDefaultCurrentLineHighlightColor();
+		currentLineHighlightColor = theme.currentLineHighlight;
 		mainView = RText.TABBED_VIEW;
 		highlightModifiedDocNames = true;
-		modifiedDocumentNamesColor = Color.RED;
+		modifiedDocumentNamesColor = UIOptionPanel.DARK_MODIFIED_DOCUMENT_NAME_COLOR;
 		language = "en";	// Default to English.
 		bracketMatchingEnabled = true;
 		matchBothBrackets = false;
-		matchedBracketBGColor = RSyntaxTextArea.getDefaultBracketMatchBGColor();
-		matchedBracketBorderColor = RSyntaxTextArea.getDefaultBracketMatchBorderColor();
+		matchedBracketBGColor = theme.matchedBracketBG;
+		matchedBracketBorderColor = theme.matchedBracketFG;
 		marginLineEnabled = true;
 		marginLinePosition = RTextArea.getDefaultMarginLinePosition();
 		marginLineColor = RTextArea.getDefaultMarginLineColor();
 		highlightSecondaryLanguages = false;
 		secondaryLanguageColors = new Color[3];
-		secondaryLanguageColors[0] = new Color(0xfff0cc);
-		secondaryLanguageColors[1] = new Color(0xdafeda);
-		secondaryLanguageColors[2] = new Color(0xffe0f0);
+		secondaryLanguageColors[0] = theme.secondaryLanguages[0];
+		secondaryLanguageColors[1] = theme.secondaryLanguages[1];
+		secondaryLanguageColors[2] = theme.secondaryLanguages[2];
 		hyperlinksEnabled = true;
-		hyperlinkColor = Color.BLUE;
+		hyperlinkColor = theme.hyperlinkFG;
 		hyperlinkModifierKey = InputEvent.CTRL_DOWN_MASK;
 		visibleWhitespace = false;
 		showEOLMarkers = false;
 		showTabLines = false;
-		tabLinesColor = Color.gray;
+		tabLinesColor = theme.marginLineColor;
 		rememberWhitespaceLines = true;
 		autoInsertClosingCurlys = false;
 		aaEnabled = File.separatorChar=='\\' || OS.get() == OS.MAC_OS_X;
 		fractionalMetricsEnabled = false;
-		markAllHighlightColor = RTextArea.getDefaultMarkAllHighlightColor();
+		markAllHighlightColor = theme.markAllHighlightColor;
 		markOccurrences = true;
-		markOccurrencesColor = new Color(224, 224, 224);
+		markOccurrencesColor = theme.markOccurrencesColor;
 		statusBarStyle = StatusBar.WINDOWS_XP_STYLE;
 		roundedSelectionEdges = false;
 		workingDirectory = System.getProperty("user.dir");
@@ -734,6 +760,10 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		for (int i=0; i<4; i++) {
 			dividerLocations[i] = -1; // negative => left components preferred size.
 		}
+		dividerVisible = new boolean[4];
+		for (int i = 0; i < 4; i++) {
+			dividerVisible[i] = false;
+		}
 		defaultLineTerminator = null; // Use system default.
 		defaultEncoding = null; // Use system default encoding.
 		guessFileContentType = true;
@@ -745,13 +775,13 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		textAreaUnderline	= false;
 		textAreaForeground	= RTextArea.getDefaultForeground();
 		textAreaOrientation = ComponentOrientation.LEFT_TO_RIGHT;
-		foldBackground		= Color.WHITE;
-		armedFoldBackground	= Color.WHITE;
+		foldBackground		= theme.foldBG;
+		armedFoldBackground	= theme.armedFoldBG;
 		showHostName		= false;
 		bomInUtf8			= false;
 		bookmarksEnabled	= true;
 		lineNumberFont		= new Font("Monospaced", Font.PLAIN, 12);
-		lineNumberColor	= Color.GRAY;
+		lineNumberColor	= theme.lineNumberColor;
 		gutterBorderColor	= new Color(221, 221, 221);
 		spellCheckingEnabled = File.separatorChar=='\\';
 		spellCheckingColor   = DEFAULT_SPELLING_ERROR_COLOR;

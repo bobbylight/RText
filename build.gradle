@@ -19,11 +19,13 @@ configurations.all { // Check for updates every build
 dependencies {
 	implementation('com.fifesoft.rtext:fife.common:3.0.4-SNAPSHOT') { changing = true }
 
-	implementation('com.fifesoft:rsyntaxtextarea:3.0.9-SNAPSHOT') { changing = true }
-	implementation('com.fifesoft:autocomplete:3.0.5') { changing = true }
-	implementation('com.fifesoft:rstaui:3.0.7-SNAPSHOT') { changing = true }
-	implementation('com.fifesoft:spellchecker:3.0.4') { changing = true }
-	implementation('com.fifesoft:languagesupport:3.0.2')
+	implementation('com.fifesoft:rsyntaxtextarea:3.1.0') { changing = true }
+	implementation('com.fifesoft:autocomplete:3.1.0') { changing = true }
+	implementation('com.fifesoft:rstaui:3.1.0') { changing = true }
+	implementation('com.fifesoft:spellchecker:3.1.0') { changing = true }
+	implementation('com.fifesoft:languagesupport:3.1.0')
+
+	//implementation 'com.formdev:flatlaf:0.25.1'
 
 	implementation 'net.sf.jtidy:jtidy:r938'
 	implementation 'org.codehaus.groovy:groovy-all:2.5.+'
@@ -41,11 +43,11 @@ repositories {
 
 // Regenerate local gradlew
 wrapper {
-	gradleVersion '6.0.1'
+	gradleVersion '6.2.2'
 }
 
 checkstyle {
-	toolVersion = '8.28'
+	toolVersion = '8.30'
 }
 
 static isSubstanceJar(jarName) {
