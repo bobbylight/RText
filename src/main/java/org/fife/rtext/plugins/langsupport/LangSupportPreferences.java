@@ -114,6 +114,8 @@ public class LangSupportPreferences extends Prefs {
 	public boolean php_autoAddClosingTags;
 	public boolean php_folding_enabled;
 
+	public boolean python_folding_enabled;
+
 	public boolean scala_folding_enabled;
 
 	public boolean sh_enabled;
@@ -234,6 +236,8 @@ public class LangSupportPreferences extends Prefs {
 		php_autoActivationDelay = AUTO_ACTIVATION_DELAY;
 		php_autoAddClosingTags = true;
 		php_folding_enabled = true;
+
+		python_folding_enabled = true;
 
 		scala_folding_enabled = true;
 

@@ -709,7 +709,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		caretColor = theme.caretColor;
 		selectionColor = theme.selectionBG;
 		selectedTextColor = theme.selectionFG;
-		useSelectedTextColor = theme.useSelctionFG;
+		useSelectedTextColor = theme.useSelectionFG;
 		colorScheme = theme.scheme;
 		SyntaxFilters syntaxFilters = new SyntaxFilters();
 		syntaxFilters.restoreDefaultFileFilters();

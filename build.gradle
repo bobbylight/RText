@@ -19,7 +19,7 @@ configurations.all { // Check for updates every build
 dependencies {
 	implementation('com.fifesoft.rtext:fife.common:3.0.4-SNAPSHOT') { changing = true }
 
-	implementation('com.fifesoft:rsyntaxtextarea:3.1.0') { changing = true }
+	implementation('com.fifesoft:rsyntaxtextarea:3.1.1') { changing = true }
 	implementation('com.fifesoft:autocomplete:3.1.0') { changing = true }
 	implementation('com.fifesoft:rstaui:3.1.0') { changing = true }
 	implementation('com.fifesoft:spellchecker:3.1.0') { changing = true }
@@ -41,13 +41,12 @@ repositories {
 	}
 }
 
-// Regenerate local gradlew
 wrapper {
-	gradleVersion '6.2.2'
+	gradleVersion '6.3'
 }
 
 checkstyle {
-	toolVersion = '8.30'
+	toolVersion = '8.31'
 }
 
 static isSubstanceJar(jarName) {

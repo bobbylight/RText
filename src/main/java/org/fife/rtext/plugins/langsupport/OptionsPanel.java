@@ -135,6 +135,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 		addChildPanel(new NsisOptionsPanel());
 		addChildPanel(new PerlOptionsPanel());
 		addChildPanel(new PhpOptionsPanel());
+		addChildPanel(new PythonOptionsPanel());
 		addChildPanel(new ScalaOptionsPanel());
 		addChildPanel(new ShellOptionsPanel());
 		addChildPanel(new TypeScriptOptionsPanel());

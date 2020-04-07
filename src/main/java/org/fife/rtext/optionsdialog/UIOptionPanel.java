@@ -722,7 +722,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		if (theme.selectionFG != null) {
 			mainView.setSelectedTextColor(theme.selectionFG);
 		}
-		mainView.setUseSelectedTextColor(theme.useSelctionFG);
+		mainView.setUseSelectedTextColor(theme.useSelectionFG);
 		mainView.setRoundedSelectionEdges(theme.selectionRoundedEdges);
 
 		mainView.setFoldBackground(theme.foldBG);

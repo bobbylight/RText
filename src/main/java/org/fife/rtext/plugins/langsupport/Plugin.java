@@ -424,6 +424,9 @@ public class Plugin extends GUIPlugin {
 		phpls.setAutoAddClosingTags(prefs.php_autoAddClosingTags);
 		view.setCodeFoldingEnabledFor(language, prefs.php_folding_enabled);
 
+		language = SyntaxConstants.SYNTAX_STYLE_PYTHON;
+		view.setCodeFoldingEnabledFor(language, prefs.python_folding_enabled);
+
 		language = SyntaxConstants.SYNTAX_STYLE_SCALA;
 		view.setCodeFoldingEnabledFor(language, prefs.scala_folding_enabled);
 
@@ -611,6 +614,9 @@ public class Plugin extends GUIPlugin {
 		PhpLanguageSupport phpls = (PhpLanguageSupport)ls;
 		prefs.php_autoAddClosingTags = phpls.getAutoAddClosingTags();
 		prefs.php_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_PYTHON;
+		prefs.python_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_SCALA;
 		prefs.scala_folding_enabled = view.isCodeFoldingEnabledFor(language);
