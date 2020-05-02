@@ -2,6 +2,17 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
+3.1.0
+------------------
+   - Adding search wrapping
+   - Change verbiage in Options dialog to stop referencing Java 6u10 and
+     simply stating that translucency in search dialogs only works in some
+     Look and Feels
+   - Dockable windows remember their collapsed/expanded state between
+     startups. Making 'Dark' theme the default with a vanilla install
+   - Fix #51: Add Python code folding
+
+
 3.0.3 (01/04/2020)
 ------------------
    - Added 6502 Assembler syntax highlighting
@@ -1859,7 +1870,7 @@ http://bobbylight.github.io/RText/
    - Find in Files dialog now fully operational (added Regular Expression
      searching, searching subdirectories, and some UI "prettiness"
      enhancements).
-   - Fixed JRE 1.4 bug cauing popup menus to disappear when a modal dialog
+   - Fixed JRE 1.4 bug causing popup menus to disappear when a modal dialog
      is displayed (See
 	http://developer.java.sun.com/developer/bugParade/bugs/4911422.html
      for more details).  Hopefully this won't break anything else...

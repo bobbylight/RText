@@ -26,7 +26,7 @@ all unit tests, and create the jar, and run:
     ./gradlew build installDist
     java -jar build/install/rtext/RText.jar
 
-Note that RText requires Java 11 or later to build.
+Note that RText requires Java 14 or later to build.
 
 ## Building the Windows application and installer
 
@@ -36,7 +36,7 @@ and a starter `RText.exe` file is added into `build/install/rtext`:
 
     ./gradlew build installDist generateWindowsStarterExe
 
-The `generateWindowsStarterExe` task uses a JDK 11 install and `launch4j` as defined in
+The `generateWindowsStarterExe` task uses a JDK 14 install and `launch4j` as defined in
 `gradle.properties`.
 
 After building the installable image, you can create the win32 installer by
