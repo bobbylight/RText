@@ -1,15 +1,26 @@
 #!/bin/bash
 #
-# Builds RText.app for OS X.
+# Builds RText.app for OS X.  This assumes you've already run
+# ./gradlew clean build installDist.  In fact, you usually don't
+# run this directly but rather just run
+# ./gradlew clena build installDist generateJre generateMacApp
+#
+
+# The version of RText you're building.  This appears in the generated
+# .dmg file name.
+APP_VERSION=3.1.0
+
+#
+# You probably don't want to change anything below this line.
 #
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-APP_DIR=${SCRIPT_DIR}/../build/install/RText.app
 
-cd ${SCRIPT_DIR}
+cd "${SCRIPT_DIR}/../build/install" || exit
 
-rm -fr ${APP_DIR}
-mkdir ${APP_DIR}
-cp ./RText ${APP_DIR}/
-chmod 755 ${APP_DIR}/RText
-cp -r ${APP_DIR}/../rtext ${APP_DIR}/app
+jpackage --input rtext \
+  --icon "${SCRIPT_DIR}/RText.icns" \
+  --name RText \
+  --app-version "${APP_VERSION}" \
+  --main-class org.fife.rtext.RText \
+  --main-jar RText.jar
