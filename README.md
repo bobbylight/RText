@@ -40,7 +40,7 @@ The `generateWindowsStarterExe` task uses a JDK 14 install and `launch4j` as def
 `gradle.properties`.
 
 Note this gradle task runs `jlink` directly and uses `launch4j` rather than using
-`jpackage` directly since our app needs loose file and `jpackage` seems to require
+`jpackage` directly since our app needs loose files and `jpackage` seems to require
 all files being wrapped into the generated .exe.  This is different than our OS X
 app task (discussed below) which uses `jpackage`.
 
@@ -51,11 +51,11 @@ script at the root of the project.
 ## Building the OS X application
 
 Building the OS X package has just been revamped.  To build the .app bundle into
-`build/install/RText.app`:
+`build/install/RText-<version>.dmg`:
 
     ./gradlew clean build generateMacApp
 
-The generated `RText-xxx.dmg` can be used to install `RText.app` to the Applications
+The generated `RText-<version>.dmg` can be used to install `RText.app` to the Applications
 folder.  Note that this app currently isn't signed, so Gatekeeper will likely prevent
 you from installing.  In order to get around this you'll need to tweak your security
 policy to allow installing of apps from outside the App Store.
