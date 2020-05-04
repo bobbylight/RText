@@ -34,10 +34,15 @@ To create the Windows version of the application, run the `generateWindowsStarte
 task in addition to `installDist`.  This ensures a trimmed-down JRE is generated,
 and a starter `RText.exe` file is added into `build/install/rtext`:
 
-    ./gradlew build installDist generateWindowsStarterExe
+    ./gradlew clean build installDist generateWindowsStarterExe
 
 The `generateWindowsStarterExe` task uses a JDK 14 install and `launch4j` as defined in
 `gradle.properties`.
+
+Note this gradle task runs `jlink` directly and uses `launch4j` rather than using
+`jpackage` directly since our app needs loose file and `jpackage` seems to require
+all files being wrapped into the generated .exe.  This is different than our OS X
+app task (discussed below) which uses `jpackage`.
 
 After building the installable image, you can create the win32 installer by
 running the `MakeRTextInstaller.nsi` [NSIS](http://nsis.sourceforge.net/Main_Page)
@@ -45,16 +50,12 @@ script at the root of the project.
 
 ## Building the OS X application
 
-Building the OS X package has just been revamped.  Everything seems to be
-working, except for the fact that the app icon in the doc doesn't take
-(the default Java icon is used).  The .app bundle uses the proper icon
-however.
-
-Here's how to build the .app bundle into `build/install/RText.app`:
+Building the OS X package has just been revamped.  To build the .app bundle into
+`build/install/RText.app`:
 
     ./gradlew clean build generateMacApp
 
-Then, open `build/install` in Finder.  Right-click `RText.app` ->
-`Get Info`.  Drag-and-drop `./mac/RText.icns` on top of the icon in the
-top-left of this dialog to update the app bundle's icon.  Now you can
-double-click RText.app to run it.
+The generated `RText-xxx.dmg` can be used to install `RText.app` to the Applications
+folder.  Note that this app currently isn't signed, so Gatekeeper will likely prevent
+you from installing.  In order to get around this you'll need to tweak your security
+policy to allow installing of apps from outside the App Store.

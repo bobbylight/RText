@@ -377,7 +377,7 @@ tasks.withType(Sign) {
 }
 
 
-def getJreDependencyList = { installDistDir ->
+def getWindowsJreDependencyList = { installDistDir ->
 
 	// Store the output instead of printing to the console
 	def stdout = new ByteArrayOutputStream()
@@ -406,7 +406,7 @@ task generateWindowsJre {
 
 		def installDistDir = 'build/install/rtext'
 
-		def moduleList = getJreDependencyList(installDistDir)
+		def moduleList = getWindowsJreDependencyList(installDistDir)
 		println "Generating JRE with modules: ${moduleList}"
 
 		exec {

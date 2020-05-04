@@ -15,7 +15,7 @@
   <manifest></manifest>
   <icon>rtext.ico</icon>
   <jre>
-    <path>jre-11.0.1</path>
+    <path>jre-14.0.1</path>
     <bundledJre64Bit>true</bundledJre64Bit>
     <bundledJreAsFallback>false</bundledJreAsFallback>
     <minVersion></minVersion>
