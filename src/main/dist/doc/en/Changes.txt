@@ -2,7 +2,7 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
-3.1.0
+3.1.0 (05/04/2020)
 ------------------
    - Adding search wrapping
    - Change verbiage in Options dialog to stop referencing Java 6u10 and
@@ -11,6 +11,8 @@ http://bobbylight.github.io/RText/
    - Dockable windows remember their collapsed/expanded state between
      startups. Making 'Dark' theme the default with a vanilla install
    - Fix #51: Add Python code folding
+   - Windows and OS X builds now run with Java 14
+   - OS X build now uses proper icon (fixed .app bundle)
 
 
 3.0.3 (01/04/2020)
