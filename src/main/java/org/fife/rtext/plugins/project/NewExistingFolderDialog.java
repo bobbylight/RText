@@ -16,7 +16,6 @@ import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -89,7 +88,7 @@ public class NewExistingFolderDialog extends EscapableDialog {
 	 */
 	public NewExistingFolderDialog(RText parent, FolderProjectEntry entry) {
 		super(parent);
-		init(parent);
+		init();
 		if (entry!=null) {
 			setFolderProjectEntryInfo(entry);
 		}
@@ -177,10 +176,8 @@ public class NewExistingFolderDialog extends EscapableDialog {
 
 	/**
 	 * Initializes this directory chooser.
-	 *
-	 * @param parent The window that owns this directory chooser.
 	 */
-	private void init(Window parent) {
+	private void init() {
 
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());

@@ -228,7 +228,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 */
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		handleDocumentUpdate(e);
+		handleDocumentUpdate();
 	}
 
 
@@ -375,9 +375,8 @@ public class RemoteFileChooser extends EscapableDialog
 	/**
 	 * Called when a text field being listened to is modified.
 	 *
-	 * @param e The document event.
 	 */
-	private void handleDocumentUpdate(DocumentEvent e) {
+	private void handleDocumentUpdate() {
 		updateOKButton();
 	}
 
@@ -400,7 +399,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 */
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		handleDocumentUpdate(e);
+		handleDocumentUpdate();
 	}
 
 
@@ -505,7 +504,7 @@ public class RemoteFileChooser extends EscapableDialog
 	 */
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		handleDocumentUpdate(e);
+		handleDocumentUpdate();
 	}
 
 

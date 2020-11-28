@@ -233,7 +233,7 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 		public void changedUpdate(DocumentEvent e) {
 		}
 
-		private void handleDocumentEvent(DocumentEvent e) {
+		private void handleDocumentEvent() {
 
 			if (nameField.getDocument().getLength()==0) {
 				setBadNameValue("empty");
@@ -259,12 +259,12 @@ setGoodNameValue();
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 	}

@@ -48,11 +48,11 @@ public final class AppIconLoader {
 		if (resource.endsWith(".svg")) {
 			return getSvgIcon(resource, w, h);
 		}
-		return getRegularIcon(resource, w, h);
+		return getRegularIcon(resource);
 	}
 
 
-	private static Icon getRegularIcon(String resource, int w, int h) {
+	private static Icon getRegularIcon(String resource) {
 
 		try (InputStream in = AppIconLoader.class.getResourceAsStream(resource)) {
 			return new ImageIcon(ImageIO.read(in));

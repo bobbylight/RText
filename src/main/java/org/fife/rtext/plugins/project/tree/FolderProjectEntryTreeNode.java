@@ -52,7 +52,6 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	 */
 	private void addChildrenFilteredAndSorted(File[] files) {
 
-		int num = files.length;
 		ArrayList<File> dirList = new ArrayList<>();
 		ArrayList<File> fileList = new ArrayList<>();
 		FolderFilterInfo filterInfo = getFilterInfo();

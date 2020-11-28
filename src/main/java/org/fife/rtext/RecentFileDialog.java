@@ -101,7 +101,6 @@ public class RecentFileDialog extends EscapableDialog {
 	/**
 	 * Creates the content of this dialog.
 	 */
-	@SuppressWarnings("unchecked") // Must use DefaultListCellRenderer
 	private void createUI() {
 
 		Listener listener = new Listener();
@@ -297,27 +296,23 @@ public class RecentFileDialog extends EscapableDialog {
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
-		private void handleDocumentEvent(DocumentEvent e) {
+		private void handleDocumentEvent() {
 			setFilter(filterField.getText());
 		}
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 		@Override
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
-				case KeyEvent.VK_DOWN:
-					selectNextVisibleRow();
-					break;
-				case KeyEvent.VK_UP:
-					selectPreviousVisibleRow();
-					break;
+				case KeyEvent.VK_DOWN -> selectNextVisibleRow();
+				case KeyEvent.VK_UP -> selectPreviousVisibleRow();
 			}
 		}
 
@@ -338,7 +333,7 @@ public class RecentFileDialog extends EscapableDialog {
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 	}

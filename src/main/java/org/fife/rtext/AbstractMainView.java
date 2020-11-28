@@ -2895,7 +2895,6 @@ public abstract class AbstractMainView extends JPanel
 					// If the file name they entered has no extension,
 					// add this extension to it.
 					if (chosenFileName.indexOf('.')==-1) {
-						chosenFileName = chosenFileName + extension;
 						chosenFilePath = chosenFilePath + extension;
 						chosenFile = new File(chosenFilePath);
 					}

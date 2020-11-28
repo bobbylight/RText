@@ -330,22 +330,22 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
-		private void handleDocumentEvent(DocumentEvent e) {
+		private void handleDocumentEvent() {
 			hasUnsavedChanges = true;
 			firePropertyChange(PROPERTY, null, null);
 		}
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 	}

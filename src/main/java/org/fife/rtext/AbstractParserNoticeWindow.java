@@ -184,21 +184,12 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 
 		@Override
 		public Class<?> getColumnClass(int col) {
-			Class<?> clazz;
-			switch (col) {
-				case 0:
-					clazz = Icon.class;
-					break;
-				case 1:
-					clazz = TextAreaWrapper.class;
-					break;
-				case 2:
-					clazz = Integer.class;
-					break;
-				default:
-					clazz = super.getColumnClass(col);
-			}
-			return clazz;
+			return switch (col) {
+				case 0 -> Icon.class;
+				case 1 -> TextAreaWrapper.class;
+				case 2 -> Integer.class;
+				default -> super.getColumnClass(col);
+			};
 		}
 
 		@Override

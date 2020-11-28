@@ -26,6 +26,7 @@ import javax.swing.event.PopupMenuListener;
 import org.fife.rtext.*;
 import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.RScrollPane;
+import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.*;
 import org.fife.ui.dockablewindows.DockableWindow;
@@ -143,7 +144,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 		wind.setActive(prefs.active);
 		wind.setPosition(prefs.position);
-		wind.setIcon(getPluginIcon(isDarkLookAndFeel()));
+		wind.setIcon(getPluginIcon(UIUtil.isDarkLookAndFeel()));
 
 		ComponentOrientation o = ComponentOrientation.
 									getOrientation(Locale.getDefault());

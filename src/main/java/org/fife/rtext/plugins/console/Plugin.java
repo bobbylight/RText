@@ -158,7 +158,6 @@ public class Plugin extends GUIPlugin {
 	 */
 	public String getString(String key, String... params) {
 		String temp = MSG.getString(key);
-		//noinspection RedundantCast
 		return MessageFormat.format(temp, (Object[])params);
 	}
 

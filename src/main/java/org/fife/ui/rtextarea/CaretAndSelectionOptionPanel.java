@@ -138,7 +138,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		topPanel.add(createSelectionPanel(msg, o));
 		topPanel.add(Box.createVerticalStrut(5));
 
-		topPanel.add(createMarkOccurrencesPanel(msg, o));
+		topPanel.add(createMarkOccurrencesPanel(msg));
 		topPanel.add(Box.createVerticalStrut(5));
 
 		topPanel.add(createSecondaryLanguagesPanel(msg, o));
@@ -426,11 +426,9 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 * Creates a panel containing the "mark occurrences"-related options.
 	 *
 	 * @param msg The resource bundle to use for localization.
-	 * @param o The component orientation.
 	 * @return The panel.
 	 */
-	private Box createMarkOccurrencesPanel(ResourceBundle msg,
-								ComponentOrientation o) {
+	private Box createMarkOccurrencesPanel(ResourceBundle msg) {
 
 		Box p = Box.createVerticalBox();
 		p.setBorder(new OptionPanelBorder(msg.getString("MarkOccurrences")));
@@ -636,16 +634,10 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 */
 	private void setCaretStyle(int mode, CaretStyle style) {
 		switch (mode) {
-			case RTextArea.INSERT_MODE:
-				insCaretCombo.setSelectedIndex(style.ordinal());
-				break;
-			case RTextArea.OVERWRITE_MODE:
-				overCaretCombo.setSelectedIndex(style.ordinal());
-				break;
-			default:
-				throw new IllegalArgumentException("mode must be " +
-					RTextArea.INSERT_MODE + " or " +
-					RTextArea.OVERWRITE_MODE);
+			case RTextArea.INSERT_MODE -> insCaretCombo.setSelectedIndex(style.ordinal());
+			case RTextArea.OVERWRITE_MODE -> overCaretCombo.setSelectedIndex(style.ordinal());
+			default -> throw new IllegalArgumentException("mode must be " + RTextArea.INSERT_MODE + " or " +
+				RTextArea.OVERWRITE_MODE);
 		}
 	}
 

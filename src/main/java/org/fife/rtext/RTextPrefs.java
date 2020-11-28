@@ -682,7 +682,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	@Override
 	protected void setDefaults() {
 
-		Theme theme = null;
+		Theme theme;
 		try {
 			theme = Theme.load(getClass().getResourceAsStream(
 				"/org/fife/ui/rsyntaxtextarea/themes/dark.xml"));

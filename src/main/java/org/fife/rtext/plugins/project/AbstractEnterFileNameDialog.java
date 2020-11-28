@@ -291,7 +291,7 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 		public void changedUpdate(DocumentEvent e) {
 		}
 
-		private void handleDocumentEvent(DocumentEvent e) {
+		private void handleDocumentEvent() {
 
 			if (nameField.getDocument().getLength()==0) {
 				setBadNameValue("empty");
@@ -311,12 +311,12 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 	}

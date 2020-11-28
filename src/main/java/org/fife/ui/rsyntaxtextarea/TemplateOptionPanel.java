@@ -143,7 +143,6 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 		tableModel.setRowCount(0);
 		if (manager!=null) {
 			CodeTemplate[] templates = manager.getTemplates();
-			int count = templates.length;
 			for (CodeTemplate template : templates) {
 				tableModel.addRow(new Object[]{
 					template.getID(),

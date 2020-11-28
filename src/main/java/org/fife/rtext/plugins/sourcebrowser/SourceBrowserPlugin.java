@@ -410,77 +410,33 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 
 	private static String getLanguageForStyle(String style) {
-		String language = null;
-		switch (style) {
-			case SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT:
-				language = "Flex"; // Same as MXML to Exuberant Ctags
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_C:
-				language = "C";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS:
-				language = "C++";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_CSHARP:
-				language = "C#";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_DELPHI:
-				language = "Pascal";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_FORTRAN:
-				language = "Fortran";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_GROOVY:
-				language = "Groovy";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_HTML:
-				language = "HTML";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_JAVA:
-				language = "Java";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT:
-				language = "JavaScript";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_LISP:
-				language = "Lisp";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_LUA:
-				language = "Lua";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_MAKEFILE:
-				language = "Make";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_MXML:
-				language = "Flex"; // Same as ActionScript to Exuberant Ctags
-
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_PERL:
-				language = "Perl";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_PHP:
-				language = "PHP";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_PYTHON:
-				language = "Python";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_RUBY:
-				language = "Ruby";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_SQL:
-				language = "SQL";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_TCL:
-				language = "Tcl";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL:
-				language = "Sh";
-				break;
-			case SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH:
-				language = "DosBatch";
-				break;
-		}
-		return language;
+		return switch (style) {
+			// Same as MXML to Exuberant Ctags
+			case SyntaxConstants.SYNTAX_STYLE_ACTIONSCRIPT -> "Flex";
+			case SyntaxConstants.SYNTAX_STYLE_C -> "C";
+			case SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS -> "C++";
+			case SyntaxConstants.SYNTAX_STYLE_CSHARP -> "C#";
+			case SyntaxConstants.SYNTAX_STYLE_DELPHI -> "Pascal";
+			case SyntaxConstants.SYNTAX_STYLE_FORTRAN -> "Fortran";
+			case SyntaxConstants.SYNTAX_STYLE_GROOVY -> "Groovy";
+			case SyntaxConstants.SYNTAX_STYLE_HTML -> "HTML";
+			case SyntaxConstants.SYNTAX_STYLE_JAVA -> "Java";
+			case SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT -> "JavaScript";
+			case SyntaxConstants.SYNTAX_STYLE_LISP -> "Lisp";
+			case SyntaxConstants.SYNTAX_STYLE_LUA -> "Lua";
+			case SyntaxConstants.SYNTAX_STYLE_MAKEFILE -> "Make";
+			// Same as ActionScript to Exuberant Ctags
+			case SyntaxConstants.SYNTAX_STYLE_MXML -> "Flex";
+			case SyntaxConstants.SYNTAX_STYLE_PERL -> "Perl";
+			case SyntaxConstants.SYNTAX_STYLE_PHP -> "PHP";
+			case SyntaxConstants.SYNTAX_STYLE_PYTHON -> "Python";
+			case SyntaxConstants.SYNTAX_STYLE_RUBY -> "Ruby";
+			case SyntaxConstants.SYNTAX_STYLE_SQL -> "SQL";
+			case SyntaxConstants.SYNTAX_STYLE_TCL -> "Tcl";
+			case SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL -> "Sh";
+			case SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH -> "DosBatch";
+			default -> null;
+		};
 	}
 
 

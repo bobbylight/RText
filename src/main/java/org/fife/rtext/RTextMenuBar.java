@@ -826,7 +826,6 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		int textWidth = 0;
 
 		char[] txt = s.toCharArray();
-		int n = txt.length;
 		for (char c : txt) {
 			// Ignore newlines, they take up space and we shouldn't be
 			// counting them.

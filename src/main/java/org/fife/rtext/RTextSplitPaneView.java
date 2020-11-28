@@ -386,26 +386,13 @@ class RTextSplitPaneView extends AbstractMainView
 			if (location!=listWindowPosition) {
 
 				listWindowPosition = location;
-				int pos = 0;
-				switch (listWindowPosition) {
-
-					case DOCUMENT_SELECT_TOP:
-						pos = DockableWindow.TOP;
-						break;
-
-					case DOCUMENT_SELECT_BOTTOM:
-						pos = DockableWindow.BOTTOM;
-						break;
-
-					case DOCUMENT_SELECT_LEFT:
-						pos = DockableWindow.LEFT;
-						break;
-
-					case DOCUMENT_SELECT_RIGHT:
-						pos = DockableWindow.RIGHT;
-						break;
-
-				}
+				int pos = switch (listWindowPosition) {
+					case DOCUMENT_SELECT_TOP -> DockableWindow.TOP;
+					case DOCUMENT_SELECT_BOTTOM -> DockableWindow.BOTTOM;
+					case DOCUMENT_SELECT_LEFT -> DockableWindow.LEFT;
+					case DOCUMENT_SELECT_RIGHT -> DockableWindow.RIGHT;
+					default -> 0;
+				};
 
 				listWindow.setPosition(pos);
 //				owner.pack();

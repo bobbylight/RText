@@ -14,7 +14,6 @@ import javax.swing.UIManager;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextEditorPane;
 import org.fife.ui.app.AppAction;
 
 
@@ -45,7 +44,6 @@ abstract class AbstractFontSizeAction extends AppAction<RText> {
 
 		RText rtext = getApplication();
 		AbstractMainView view = rtext.getMainView();
-		RTextEditorPane textArea = view.getCurrentTextArea();
 
 		Font oldFont = view.getTextAreaFont();
 		Font font = updateFontSize(oldFont);

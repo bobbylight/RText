@@ -523,7 +523,6 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 */
 	public void tileWindowsHorizontally() {
 
-		int numFrames = frames.size();
 		int numToResize = 0;
 
 		for (JInternalFrame frame : frames) {
@@ -574,7 +573,6 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 */
 	public void tileWindowsVertically() {
 
-		int numFrames = frames.size();
 		int numToResize = 0;
 
 		for (JInternalFrame frame : frames) {

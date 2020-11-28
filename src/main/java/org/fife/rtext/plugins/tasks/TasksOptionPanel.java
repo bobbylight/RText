@@ -363,25 +363,25 @@ class TasksOptionPanel extends PluginOptionsDialogPanel<TasksPlugin>
 			return accepted ? idField.getText() : null;
 		}
 
-		private void handleDocumentEvent(DocumentEvent e) {
+		private void handleDocumentEvent() {
 			boolean empty = idField.getDocument().getLength()==0;
 			okButton.setEnabled(!empty);
 		}
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 		void setIdentifier(String identifier) {
 			idField.setText(identifier);
 			idField.selectAll();
-			handleDocumentEvent(null); // Force proper OK button state
+			handleDocumentEvent(); // Force proper OK button state
 		}
 
 	}

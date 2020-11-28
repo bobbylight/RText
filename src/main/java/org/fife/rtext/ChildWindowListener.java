@@ -151,22 +151,12 @@ class ChildWindowListener extends ComponentAdapter
 			return;
 		}
 
+		// TODO: Convert p1 and p2 appropriately for multi-monitors.
 		switch (translucencyRule) {
-
-			case TRANSLUCENT_ALWAYS:
-				setTranslucent(window, true);
-				break;
-
-			case TRANSLUCENT_NEVER:
-				setTranslucent(window, false);
-				break;
-
-			case TRANSLUCENT_WHEN_NOT_FOCUSED:
-				setTranslucent(window, !window.isFocused());
-				break;
-
-			case TRANSLUCENT_WHEN_OVERLAPPING_APP:
-				// TODO: Convert p1 and p2 appropriately for multi-monitors.
+			case TRANSLUCENT_ALWAYS -> setTranslucent(window, true);
+			case TRANSLUCENT_NEVER -> setTranslucent(window, false);
+			case TRANSLUCENT_WHEN_NOT_FOCUSED -> setTranslucent(window, !window.isFocused());
+			case TRANSLUCENT_WHEN_OVERLAPPING_APP -> {
 				Point p1 = window.getLocationOnScreen();
 				Rectangle bounds1 = window.getBounds();
 				bounds1.setLocation(p1);
@@ -174,8 +164,7 @@ class ChildWindowListener extends ComponentAdapter
 				Rectangle bounds2 = app.getBounds();
 				bounds2.setLocation(p2);
 				setTranslucent(window, bounds2.intersects(bounds1));
-				break;
-
+			}
 		}
 
 	}

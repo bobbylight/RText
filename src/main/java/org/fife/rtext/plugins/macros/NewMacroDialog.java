@@ -451,10 +451,10 @@ class NewMacroDialog extends EscapableDialog {
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
-		void handleDocumentEvent(DocumentEvent e) {
+		void handleDocumentEvent() {
 
 			if (nameField.getDocument().getLength()==0) {
 				setBadMacroName("empty");
@@ -482,12 +482,12 @@ class NewMacroDialog extends EscapableDialog {
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			handleDocumentEvent(e);
+			handleDocumentEvent();
 		}
 
 	}
