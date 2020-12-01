@@ -9,6 +9,7 @@ import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.Plugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
+import org.fife.ui.app.console.AbstractConsoleTextArea;
 
 import javax.swing.*;
 import java.awt.*;
@@ -305,13 +306,13 @@ public abstract class AbstractConsoleTextAreaOptionPanel<T extends Plugin>
 
 		boolean isDark = RTextUtilities.isDarkLookAndFeel();
 		Color defaultStdout = isDark ? AbstractConsoleTextArea.DEFAULT_DARK_STDOUT_FG :
-			AbstractConsoleTextArea.DEFAULT_STDOUT_FG;
+			AbstractConsoleTextArea.DEFAULT_LIGHT_STDOUT_FG;
 		Color defaultStderr = isDark ? AbstractConsoleTextArea.DEFAULT_DARK_STDERR_FG :
-			AbstractConsoleTextArea.DEFAULT_STDERR_FG;
+			AbstractConsoleTextArea.DEFAULT_LIGHT_STDERR_FG;
 		Color defaultPrompt = isDark ? AbstractConsoleTextArea.DEFAULT_DARK_PROMPT_FG :
-			AbstractConsoleTextArea.DEFAULT_PROMPT_FG;
+			AbstractConsoleTextArea.DEFAULT_LIGHT_PROMPT_FG;
 		Color defaultException = isDark ? AbstractConsoleTextArea.DEFAULT_DARK_EXCEPTION_FG :
-			AbstractConsoleTextArea.DEFAULT_EXCEPTION_FG;
+			AbstractConsoleTextArea.DEFAULT_LIGHT_EXCEPTION_FG;
 
 		return !visibleCB.isSelected() ||
 			locationCombo.getSelectedIndex()!=2 ||
@@ -370,10 +371,10 @@ public abstract class AbstractConsoleTextAreaOptionPanel<T extends Plugin>
 			exceptionsButton.setColor(AbstractConsoleTextArea.DEFAULT_DARK_EXCEPTION_FG);
 		}
 		else {
-			stdoutButton.setColor(AbstractConsoleTextArea.DEFAULT_STDOUT_FG);
-			stderrButton.setColor(AbstractConsoleTextArea.DEFAULT_STDERR_FG);
-			promptButton.setColor(AbstractConsoleTextArea.DEFAULT_PROMPT_FG);
-			exceptionsButton.setColor(AbstractConsoleTextArea.DEFAULT_EXCEPTION_FG);
+			stdoutButton.setColor(AbstractConsoleTextArea.DEFAULT_LIGHT_STDOUT_FG);
+			stderrButton.setColor(AbstractConsoleTextArea.DEFAULT_LIGHT_STDERR_FG);
+			promptButton.setColor(AbstractConsoleTextArea.DEFAULT_LIGHT_PROMPT_FG);
+			exceptionsButton.setColor(AbstractConsoleTextArea.DEFAULT_LIGHT_EXCEPTION_FG);
 		}
 	}
 

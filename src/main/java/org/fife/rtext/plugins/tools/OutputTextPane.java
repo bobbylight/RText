@@ -10,6 +10,7 @@
  */
 package org.fife.rtext.plugins.tools;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -22,9 +23,10 @@ import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.TextAction;
 
-import org.fife.rtext.AbstractConsoleTextArea;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.StandardAction;
+import org.fife.ui.app.console.AbstractConsoleTextArea;
+import org.fife.ui.rtextarea.RTextArea;
 
 
 /**
@@ -90,6 +92,12 @@ class OutputTextPane extends AbstractConsoleTextArea {
 		// doesn't expose the delegate for us to call into.
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, ctrl), "invalid");
 
+	}
+
+
+	@Override
+	protected Font getDefaultFont() {
+		return RTextArea.getDefaultFont();
 	}
 
 

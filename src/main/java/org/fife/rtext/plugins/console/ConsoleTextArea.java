@@ -39,11 +39,12 @@ import javax.swing.text.StyledDocument;
 import javax.swing.text.TextAction;
 import javax.swing.text.Utilities;
 
-import org.fife.rtext.AbstractConsoleTextArea;
 import org.fife.ui.OptionsDialog;
+import org.fife.ui.app.console.AbstractConsoleTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Token;
+import org.fife.ui.rtextarea.RTextArea;
 
 
 /**
@@ -285,6 +286,12 @@ abstract class ConsoleTextArea extends AbstractConsoleTextArea {
 			ble.printStackTrace();
 			return null;
 		}
+	}
+
+
+	@Override
+	protected Font getDefaultFont() {
+		return RTextArea.getDefaultFont();
 	}
 
 

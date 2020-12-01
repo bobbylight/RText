@@ -28,8 +28,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import org.fife.io.ProcessRunnerOutputListener;
-import org.fife.rtext.AbstractConsoleTextArea;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.app.console.AbstractConsoleTextArea;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.dockablewindows.DockableWindow;

@@ -94,14 +94,14 @@ public class ConsolePrefs extends Prefs {
 		if (isDark) {
 			stdoutFG = ConsoleTextArea.DEFAULT_DARK_STDOUT_FG;
 			stderrFG = ConsoleTextArea.DEFAULT_DARK_STDERR_FG;
-			exceptionFG = ConsoleTextArea.DEFAULT_EXCEPTION_FG;
+			exceptionFG = ConsoleTextArea.DEFAULT_DARK_EXCEPTION_FG;
 			promptFG = ConsoleTextArea.DEFAULT_DARK_PROMPT_FG;
 		}
 		else {
-			stdoutFG = ConsoleTextArea.DEFAULT_STDOUT_FG;
-			stderrFG = ConsoleTextArea.DEFAULT_STDERR_FG;
-			exceptionFG = ConsoleTextArea.DEFAULT_EXCEPTION_FG;
-			promptFG = ConsoleTextArea.DEFAULT_PROMPT_FG;
+			stdoutFG = ConsoleTextArea.DEFAULT_LIGHT_STDOUT_FG;
+			stderrFG = ConsoleTextArea.DEFAULT_LIGHT_STDERR_FG;
+			exceptionFG = ConsoleTextArea.DEFAULT_LIGHT_EXCEPTION_FG;
+			promptFG = ConsoleTextArea.DEFAULT_LIGHT_PROMPT_FG;
 		}
 	}
 

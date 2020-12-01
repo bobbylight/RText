@@ -16,11 +16,11 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import org.fife.rtext.AbstractConsoleTextArea;
 import org.fife.rtext.AbstractConsoleTextAreaOptionPanel;
 import org.fife.ui.KeyStrokeCellRenderer;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIApplicationConstants;
+import org.fife.ui.app.console.AbstractConsoleTextArea;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.modifiabletable.AbstractRowHandler;
 import org.fife.ui.modifiabletable.ModifiableTable;
