@@ -48,7 +48,7 @@ import org.fife.ui.rtextarea.RTextArea;
  * @version 1.0
  * @see FindInFilesDialog
  */
-class FindInFilesThread extends GUIWorkerThread {
+class FindInFilesThread extends GUIWorkerThread<Object> {
 
 	protected static final String NO_LINE_NUMBER	= "--";
 

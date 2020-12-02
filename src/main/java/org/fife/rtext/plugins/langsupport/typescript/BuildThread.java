@@ -24,7 +24,7 @@ import org.fife.ui.GUIWorkerThread;
  * @author Robert Futrell
  * @version 1.0
  */
-class BuildThread extends GUIWorkerThread {
+class BuildThread extends GUIWorkerThread<Object> {
 
 	private final Plugin plugin;
 	private final TypeScriptNoticeWindow window;

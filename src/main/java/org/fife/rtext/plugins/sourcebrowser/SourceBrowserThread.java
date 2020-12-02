@@ -36,7 +36,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
+class SourceBrowserThread extends GUIWorkerThread<SourceTreeNode> implements SyntaxConstants {
 
 	private Map<String, List<TagEntry>> map;
 	private SourceBrowserPlugin plugin;
@@ -317,7 +317,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	 *         If something goes wrong, this value will be <code>null</code>.
 	 */
 	@Override
-	public Object construct() {
+	public SourceTreeNode construct() {
 
 		// Create data structures in which we can store the tags.
 		map.clear();
@@ -455,7 +455,7 @@ class SourceBrowserThread extends GUIWorkerThread implements SyntaxConstants {
 	 */
 	@Override
 	public void finished() {
-		tree.setRoot((SourceTreeNode)get());
+		tree.setRoot(get());
 	}
 
 
