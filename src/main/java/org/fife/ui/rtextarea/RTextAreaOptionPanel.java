@@ -659,17 +659,13 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 * @see java.awt.event.InputEvent
 	 */
 	private int getHyperlinkModifierKey() {
-		switch (modKeyCombo.getSelectedIndex()) {
-			default:
-			case 0:
-				return InputEvent.CTRL_DOWN_MASK;
-			case 1:
-				return InputEvent.META_DOWN_MASK;
-			case 2:
-				return InputEvent.SHIFT_DOWN_MASK;
-			case 3:
-				return InputEvent.ALT_DOWN_MASK;
-		}
+		return switch (modKeyCombo.getSelectedIndex()) {
+			// 0 and anything bogus
+			default -> InputEvent.CTRL_DOWN_MASK;
+			case 1 -> InputEvent.META_DOWN_MASK;
+			case 2 -> InputEvent.SHIFT_DOWN_MASK;
+			case 3 -> InputEvent.ALT_DOWN_MASK;
+		};
 	}
 
 
@@ -890,19 +886,11 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	private void setHyperlinkModifierKey(int key) {
 		switch (key) {
-			default:
-			case InputEvent.CTRL_DOWN_MASK:
-				modKeyCombo.setSelectedIndex(0);
-				break;
-			case InputEvent.META_DOWN_MASK:
-				modKeyCombo.setSelectedIndex(1);
-				break;
-			case InputEvent.SHIFT_DOWN_MASK:
-				modKeyCombo.setSelectedIndex(2);
-				break;
-			case InputEvent.ALT_DOWN_MASK:
-				modKeyCombo.setSelectedIndex(3);
-				break;
+			// default == CTRL_DOWN_MASK
+			default -> modKeyCombo.setSelectedIndex(0);
+			case InputEvent.META_DOWN_MASK -> modKeyCombo.setSelectedIndex(1);
+			case InputEvent.SHIFT_DOWN_MASK -> modKeyCombo.setSelectedIndex(2);
+			case InputEvent.ALT_DOWN_MASK -> modKeyCombo.setSelectedIndex(3);
 		}
 	}
 

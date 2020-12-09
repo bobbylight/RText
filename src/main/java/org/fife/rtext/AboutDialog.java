@@ -30,6 +30,7 @@ import org.fife.ui.rtextfilechooser.Utilities;
 
 class AboutDialog extends EscapableDialog {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	private RText parent;
@@ -181,6 +182,7 @@ class AboutDialog extends EscapableDialog {
 	 */
 	private class CreditsDialog extends EscapableDialog {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		CreditsDialog() {
@@ -243,6 +245,7 @@ class AboutDialog extends EscapableDialog {
 	 */
 	private class LicenseDialog extends EscapableDialog {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		LicenseDialog() {
@@ -332,6 +335,7 @@ class AboutDialog extends EscapableDialog {
 	 */
 	private static class TopBorder extends AbstractBorder {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public Insets getBorderInsets(Component c) {

@@ -422,21 +422,11 @@ public final class RTextUtilities {
 		for (int i=0; i<filter.length(); i++) {
 			char ch = filter.charAt(i);
 			switch (ch) {
-				case '.':
-					sb.append("\\.");
-					break;
-				case '*':
-					sb.append(".*");
-					break;
-				case '?':
-					sb.append('.');
-					break;
-				case '$':
-					sb.append("\\$");
-					break;
-				default:
-					sb.append(ch);
-					break;
+				case '.' -> sb.append("\\.");
+				case '*' -> sb.append(".*");
+				case '?' -> sb.append('.');
+				case '$' -> sb.append("\\$");
+				default -> sb.append(ch);
 			}
 		}
 		return sb.append('$').toString();
