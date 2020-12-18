@@ -28,23 +28,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.text.Element;
 
 import org.fife.help.HelpDialog;
-import org.fife.jgoodies.looks.common.ShadowPopupFactory;
 import org.fife.rsta.ui.CollapsibleSectionPanel;
 import org.fife.rtext.actions.ActionFactory;
 import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
 import org.fife.ui.StandardAction;
+import org.fife.ui.app.*;
 import org.fife.ui.rtextarea.RTextArea;
-import org.fife.util.DarculaUtil;
-import org.fife.util.SubstanceUtil;
-import org.fife.ui.UIUtil;
-import org.fife.ui.WebLookAndFeelUtils;
-import org.fife.ui.app.AbstractGUIApplication;
-import org.fife.ui.app.AbstractPluggableGUIApplication;
-import org.fife.ui.app.ExceptionDialog;
-import org.fife.ui.app.Plugin;
-import org.fife.ui.app.ThirdPartyLookAndFeelManager;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.dockablewindows.DockableWindowPanel;
@@ -181,32 +172,20 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 */
 	private static final String PROPERTY_PRINT_START_TIMES = "printStartTimes";
 
-	public static final String VERSION_STRING		= "3.1.0";
+	public static final String VERSION_STRING		= "4.0.0";
 
 
 	/**
 	 * Creates an instance of the <code>RText</code> editor.
 	 *
-	 * @param filesToOpen Array of <code>java.lang.String</code>s containing
-	 *        the files we want to open initially.  This can be
-	 *        <code>null</code> if no files are to be opened.
-	 */
-	public RText(String[] filesToOpen) {
-		super("rtext");
-		init(filesToOpen);
-	}
-
-
-	/**
-	 * Creates an instance of the <code>RText</code> editor.
-	 *
+	 * @param context The application context that started this instance.
 	 * @param filesToOpen Array of <code>java.lang.String</code>s containing
 	 *        the files we want to open initially.  This can be
 	 *        <code>null</code> if no files are to be opened.
 	 * @param preferences The preferences with which to initialize this RText.
 	 */
-	public RText(String[] filesToOpen, RTextPrefs preferences) {
-		super("rtext", preferences);
+	public RText(RTextAppContext context, String[] filesToOpen, RTextPrefs preferences) {
+		super(context, "rtext", preferences);
 		init(filesToOpen);
 	}
 
@@ -323,7 +302,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		//splashScreen.updateStatus(msg.getString("CreatingMenuBar"), 75);
 
-		// Create the menu bar.
 		menuBar = new RTextMenuBar(this, prefs);
 		mainView.addPropertyChangeListener(menuBar);
 
@@ -335,11 +313,24 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	/**
+	 * Creates a new instance of an RText window with properties identical
+	 * to this one.
+	 *
+	 * @param filesToOpen The set of files to open.  Can be {@code null}.
+	 * @return The instance.
+	 */
+	public RText createNewInstance(String[] filesToOpen) {
+		RTextAppContext context = (RTextAppContext)getAppContext();
+		return new RText(context, filesToOpen, getActivePreferencesState());
+	}
+
+
+	/**
 	 * Returns the splash screen to display while this GUI application is
 	 * loading.
 	 *
 	 * @return The splash screen.  If <code>null</code> is returned, no
-	 *         splash screen is displayed.
+	 *          splash screen is displayed.
 	 */
 	@Override
 	protected SplashScreen createSplashScreen() {
@@ -460,7 +451,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 				if (chooser!=null) {
 					RTextUtilities.saveFileChooserFavorites(this);
 				}
-				AWTExceptionHandler.shutdown();
 				System.exit(0);
 			}
 
@@ -647,12 +637,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 */
 	public int getMainViewStyle() {
 		return mainViewStyle;
-	}
-
-
-	@Override
-	protected String getPreferencesClassName() {
-		return "org.fife.rtext.RTextPrefs";
 	}
 
 
@@ -1183,7 +1167,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	public void savePreferences() {
 
 		// Save preferences for RText itself.
-		new RTextPrefs().populate(this).save();
+		super.savePreferences();
 		saveActionShortcuts(getShortcutsFile());
 
 		// Save preferences for any plugins.
@@ -1314,7 +1298,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			mainViewStyle = viewStyle;
 			AbstractMainView fromView = mainView;
 
-			RTextPrefs prefs = new RTextPrefs().populate(this);
+			RTextPrefs prefs = getActivePreferencesState();
 
 			// Create the new view.
 			switch (viewStyle) {
@@ -1663,137 +1647,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		if (action != null) { // Can be null when the app is first starting up
 			action.putValue(Action.SMALL_ICON, icon);
 		}
-	}
-
-	private static void setLookAndFeel(ThirdPartyLookAndFeelManager lafManager,
-						   String lafName) throws ReflectiveOperationException,
-							UnsupportedLookAndFeelException {
-
-		ClassLoader cl = lafManager.getLAFClassLoader();
-
-		// Set these properties before instantiating WebLookAndFeel
-		if (WebLookAndFeelUtils.isWebLookAndFeel(lafName)) {
-			WebLookAndFeelUtils.installWebLookAndFeelProperties(cl);
-		}
-		else {
-			ShadowPopupFactory.install();
-		}
-
-		// Must set UIManager's ClassLoader before instantiating
-		// the LAF.  Substance is so high-maintenance!
-		UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
-
-		// Java 11+ won't let us reflectively access system LookAndFeel
-		// classes, so we need a little extra logic here
-		if (UIManager.getSystemLookAndFeelClassName().equals(lafName)) {
-			UIManager.setLookAndFeel(lafName);
-		}
-		else {
-			Class<?> clazz;
-			try {
-				clazz = cl.loadClass(lafName);
-			} catch (UnsupportedClassVersionError ucve) {
-				// A LookAndFeel requiring Java X or later, but we're
-				// now restarting with a Java version earlier than X
-				lafName = UIManager.getSystemLookAndFeelClassName();
-				clazz = cl.loadClass(lafName);
-			}
-			LookAndFeel laf = (LookAndFeel)clazz.getDeclaredConstructor().
-				newInstance();
-			UIManager.setLookAndFeel(laf);
-		}
-
-		UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
-		UIUtil.installOsSpecificLafTweaks();
-	}
-
-	/**
-	 * Program entry point.
-	 *
-	 * @param args Command line arguments.
-	 */
-	public static void main(final String[] args) {
-
-		// 1.5.2004/pwy: Setting this property makes the menu appear on top
-		// of the screen on Apple Mac OS X systems. It is ignored by all other
-		// other Java implementations.
-		System.setProperty("apple.laf.useScreenMenuBar","true");
-
-		// Make Darcula and Metal not use bold fonts
-		UIManager.put("swing.boldMetal", Boolean.FALSE);
-
-		// Catch any uncaught Throwables on the EDT and log them.
-		AWTExceptionHandler.register();
-
-		// 1.5.2004/pwy: Setting this property defines the standard
-		// Application menu name on Apple Mac OS X systems. It is ignored by
-		// all other Java implementations.
-		// NOTE: Although you can set the useScreenMenuBar property above at
-		// runtime, it appears that for this one, you must set it before
-		// (such as in your *.app definition).
-		//System.setProperty("com.apple.mrj.application.apple.menu.about.name", "RText");
-
-		// Swing stuff should always be done on the EDT...
-		SwingUtilities.invokeLater(() -> {
-
-			String lafName = RTextPrefs.getLookAndFeelToLoad();
-
-			// Allow Substance to paint window titles, etc.  We don't allow
-			// Metal (for example) to do this, because setting these
-			// properties to "true", then toggling to a LAF that doesn't
-			// support this property, such as Windows, causes the
-			// OS-supplied frame to not appear (as of 6u20).
-			if (SubstanceUtil.isASubstanceLookAndFeel(lafName) ||
-				DarculaUtil.isDarculaLookAndFeel(lafName)) {
-				JFrame.setDefaultLookAndFeelDecorated(true);
-				JDialog.setDefaultLookAndFeelDecorated(true);
-			}
-
-			String rootDir = AbstractGUIApplication.getLocationOfJar();
-			ThirdPartyLookAndFeelManager lafManager =
-				new ThirdPartyLookAndFeelManager(rootDir);
-
-			try {
-				setLookAndFeel(lafManager, lafName);
-			} catch (RuntimeException re) { // FindBugs
-				throw re;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-//UIManager.put("TabbedPane.highlight", new Color(0x4b, 0x4b, 0x4b));//"4b4b4b"));
-
-			// The default speed of Substance animations is too slow
-			// (200ms), looks bad moving through JMenuItems quickly.
-			if (SubstanceUtil.isSubstanceInstalled()) {
-				try {
-					SubstanceUtil.setAnimationSpeed(100);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-
-			if (lafName.contains(".Darcula")) {
-				UIManager.getLookAndFeelDefaults().put("Tree.rendererFillBackground", Boolean.FALSE);
-			}
-			else {
-				UIManager.getLookAndFeelDefaults().put("Tree.rendererFillBackground", null);
-			}
-
-			RText rtext = new RText(args);
-			rtext.setLookAndFeelManager(lafManager);
-
-			// For some reason, when using MDI_VIEW, the first window
-			// isn't selected (although it is activated)...
-			// INVESTIGATE ME!!
-			if (rtext.getMainViewStyle()==MDI_VIEW) {
-				rtext.getMainView().setSelectedIndex(0);
-			}
-
-			// We currently have one RText instance running.
-			StoreKeeper.addRTextInstance(rtext);
-
-		});
-
 	}
 
 

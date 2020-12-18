@@ -221,15 +221,14 @@ class Tree extends FileSystemTree {
 		public void actionPerformed(ActionEvent e) {
 			if (newWindow) {
 				// Create a new RText window.
-				RText r = new RText(null,
-						new RTextPrefs().populate(plugin.getRText()));
+				RText r = plugin.getRText().createNewInstance(null);
 				StoreKeeper.addRTextInstance(r);
 				String file = getSelectedFileName();
-				// Open the new RText's file chooser.  Do this in an
-				// invokeLater() call as RText's constructor leaves some
-				// stuff to do via invokeLater() as well, and we must wait
-				// for this stuff to complete before we can continue (e.g.
-				// RText's "working directory" must be set).
+				// Open the new file in an invokeLater() call as RText's
+				// constructor leaves some stuff to do via invokeLater()
+				// as well, and we must wait for this stuff to complete
+				// before we can continue (e.g. RText's "working directory"
+				// must be set).
 				SwingUtilities.invokeLater(new OpenInNewWindowRunnable(
 										r, file));
 			}

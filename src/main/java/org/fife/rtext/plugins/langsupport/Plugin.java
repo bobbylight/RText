@@ -73,7 +73,7 @@ public class Plugin extends GUIPlugin {
 	private Map<ParserNotice.Level, Icon> icons;
 	private TypeScriptSupport typeScriptSupport;
 
-	private static final String PLUGIN_VERSION			= "3.1.0";
+	private static final String PLUGIN_VERSION			= "4.0.0";
 	private static final String PREFS_FILE_NAME			= "langSupport.properties";
 
 	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.langsupport.Plugin";

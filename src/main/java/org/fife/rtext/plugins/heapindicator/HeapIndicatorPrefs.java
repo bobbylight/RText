@@ -9,8 +9,9 @@
  */
 package org.fife.rtext.plugins.heapindicator;
 
+import org.fife.ui.app.prefs.Prefs;
+
 import java.awt.Color;
-import org.fife.ui.app.Prefs;
 
 
 /**

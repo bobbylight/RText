@@ -8,7 +8,7 @@
 
 # The version of RText you're building.  This appears in the generated
 # .dmg file name.
-APP_VERSION=3.1.0
+APP_VERSION=4.0.0
 
 #
 # You probably don't want to change anything below this line.

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.swing.KeyStroke;
 
-import org.fife.ui.app.Prefs;
+import org.fife.ui.app.prefs.Prefs;
 import org.fife.ui.dockablewindows.DockableWindow;
 
 

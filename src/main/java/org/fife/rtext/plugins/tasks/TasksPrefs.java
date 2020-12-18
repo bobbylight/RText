@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.util.regex.Pattern;
 import javax.swing.KeyStroke;
 
-import org.fife.ui.app.Prefs;
+import org.fife.ui.app.prefs.Prefs;
 import org.fife.ui.dockablewindows.DockableWindow;
 
 

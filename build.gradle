@@ -17,7 +17,7 @@ configurations.all { // Check for updates every build
 }
 
 dependencies {
-	implementation('com.fifesoft.rtext:fife.common:3.1.2-SNAPSHOT') { changing = true }
+	implementation('com.fifesoft.rtext:fife.common:4.0.0-SNAPSHOT') { changing = true }
 
 	implementation('com.fifesoft:rsyntaxtextarea:3.1.1') { changing = true }
 	implementation('com.fifesoft:autocomplete:3.1.0') { changing = true }
@@ -74,7 +74,7 @@ ext.sharedManifest = manifest {
 		'Implementation-Title': 'org.fife.rtext',
 		'Implementation-Version': version,
 		'Build-Date': Instant.now().toString(),
-		'Main-Class': 'org/fife/rtext/RText',
+		'Main-Class': 'org/fife/rtext/Main',
 		// OfficeLnFs are only available on Windows but still need to be on the classpath
 		'Class-Path': configurations.runtimeClasspath.findAll { !isPluginJar(it.name) }.collect {
 							def name = it.name

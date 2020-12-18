@@ -9,13 +9,13 @@
  */
 package org.fife.rtext.plugins.tidy;
 
+import org.fife.ui.app.prefs.Prefs;
+
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.KeyStroke;
-
-import org.fife.ui.app.Prefs;
 
 
 /**

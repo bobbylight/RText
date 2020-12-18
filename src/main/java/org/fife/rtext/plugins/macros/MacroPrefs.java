@@ -9,9 +9,9 @@
  */
 package org.fife.rtext.plugins.macros;
 
-import javax.swing.KeyStroke;
+import org.fife.ui.app.prefs.Prefs;
 
-import org.fife.ui.app.Prefs;
+import javax.swing.KeyStroke;
 
 
 /**

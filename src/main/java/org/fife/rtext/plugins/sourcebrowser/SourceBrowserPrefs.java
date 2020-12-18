@@ -12,7 +12,7 @@ package org.fife.rtext.plugins.sourcebrowser;
 import javax.swing.KeyStroke;
 
 import org.fife.ui.app.GUIPlugin;
-import org.fife.ui.app.Prefs;
+import org.fife.ui.app.prefs.Prefs;
 
 
 /**

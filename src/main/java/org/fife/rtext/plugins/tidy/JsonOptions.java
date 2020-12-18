@@ -9,7 +9,7 @@
  */
 package org.fife.rtext.plugins.tidy;
 
-import org.fife.ui.app.Prefs;
+import org.fife.ui.app.prefs.Prefs;
 
 
 /**

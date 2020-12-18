@@ -2,6 +2,10 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
+4.0.0
+------------------
+
+
 3.1.0 (05/04/2020)
 ------------------
    - Adding search wrapping

@@ -14,21 +14,20 @@ import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.prefs.Preferences;
 
 import javax.swing.JTabbedPane;
 
-import org.fife.rtext.SearchManager.SearchingMode;
 import org.fife.rtext.optionsdialog.UIOptionPanel;
 import org.fife.ui.OS;
 import org.fife.ui.StatusBar;
-import org.fife.ui.app.GUIApplicationPrefs;
+import org.fife.ui.app.prefs.AppPrefs;
+import org.fife.ui.app.prefs.TypeLoader;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Style;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -43,10 +42,9 @@ import org.fife.util.DarculaUtil;
  * only of public data members for ease of use.
  *
  * @author Robert Futrell
- * @version 0.3
+ * @version 1.0
  */
-public class RTextPrefs extends GUIApplicationPrefs<RText>
-		implements RTextActionInfo {
+public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 
 	/**
 	 * The default Look and Feel.
@@ -156,120 +154,12 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	 */
 	public RTextPrefs() {
 		setDefaults();
+		addAppSpecificTypeLoaders();
 	}
 
 
-	@Override
-	public RTextPrefs populate(RText rtext) {
-
-		AbstractMainView mainView = rtext.getMainView();
-		SpellingSupport spelling = mainView.getSpellingSupport();
-		RTextMenuBar menuBar = (RTextMenuBar)rtext.getJMenuBar();
-
-		//String lnfString = UIManager.getLookAndFeel().getClass().getName();
-		String lnfString = RTextUtilities.getLookAndFeelToSave();
-
-		populateCommonPreferences(rtext, lnfString);
-		iconGroupName				= rtext.getIconGroup().getName();
-		lineNumbersVisible			= mainView.getLineNumbersEnabled();
-		tabSize					= mainView.getTabSize();
-		emulateTabsWithSpaces		= mainView.areTabsEmulated();
-		textMode					= mainView.getTextMode();
-		tabPlacement				= mainView.getDocumentSelectionPlacement();
-		printFont				= mainView.getPrintFont();
-		backgroundObject			= mainView.getBackgroundObject();
-		imageAlpha				= mainView.getBackgroundImageAlpha();
-		wordWrap					= mainView.getLineWrap();
-		caretColor				= mainView.getCaretColor();
-		selectionColor			= mainView.getSelectionColor();
-		selectedTextColor			= mainView.getSelectedTextColor();
-		useSelectedTextColor		= mainView.getUseSelectedTextColor();
-		colorScheme				= rtext.getSyntaxScheme();
-		syntaxFiltersString		= mainView.getSyntaxFilters().toString();
-		maxFileHistorySize			= menuBar.getMaximumFileHistorySize();
-		fileHistoryString			= menuBar.getFileHistoryString();
-		currentLineHighlightEnabled	= mainView.isCurrentLineHighlightEnabled();
-		currentLineHighlightColor	= mainView.getCurrentLineHighlightColor();
-		this.mainView				= rtext.getMainViewStyle();
-		highlightModifiedDocNames	= mainView.highlightModifiedDocumentDisplayNames();
-		modifiedDocumentNamesColor	= mainView.getModifiedDocumentDisplayNamesColor();
-		bracketMatchingEnabled		= mainView.isBracketMatchingEnabled();
-		matchBothBrackets			= mainView.getMatchBothBrackets();
-		matchedBracketBGColor		= mainView.getMatchedBracketBGColor();
-		matchedBracketBorderColor	= mainView.getMatchedBracketBorderColor();
-		marginLineEnabled			= mainView.isMarginLineEnabled();
-		marginLinePosition			= mainView.getMarginLinePosition();
-		marginLineColor			= mainView.getMarginLineColor();
-		highlightSecondaryLanguages = mainView.getHighlightSecondaryLanguages();
-		secondaryLanguageColors = new Color[3];
-		for (int i=0; i<secondaryLanguageColors.length; i++) {
-			secondaryLanguageColors[i] = mainView.getSecondaryLanguageColor(i);
-		}
-		hyperlinksEnabled			= mainView.getHyperlinksEnabled();
-		hyperlinkColor			= mainView.getHyperlinkColor();
-		hyperlinkModifierKey		= mainView.getHyperlinkModifierKey();
-		visibleWhitespace			= mainView.isWhitespaceVisible();
-		showEOLMarkers			= mainView.getShowEOLMarkers();
-		showTabLines				= mainView.getShowTabLines();
-		tabLinesColor				= mainView.getTabLinesColor();
-		rememberWhitespaceLines	= mainView.getRememberWhitespaceLines();
-		autoInsertClosingCurlys	= mainView.getAutoInsertClosingCurlys();
-		aaEnabled					= mainView.isAntiAliasEnabled();
-		fractionalMetricsEnabled	= mainView.isFractionalFontMetricsEnabled();
-		markAllHighlightColor		= mainView.getMarkAllHighlightColor();
-		markOccurrences			= mainView.getMarkOccurrences();
-		markOccurrencesColor		= mainView.getMarkOccurrencesColor();
-		statusBarStyle			= rtext.getStatusBar().getStyle();
-		roundedSelectionEdges		= mainView.getRoundedSelectionEdges();
-		workingDirectory			= rtext.getWorkingDirectory();
-		carets[RTextArea.INSERT_MODE]= mainView.getCaretStyle(RTextArea.INSERT_MODE).ordinal();
-		carets[RTextArea.OVERWRITE_MODE]= mainView.getCaretStyle(RTextArea.OVERWRITE_MODE).ordinal();
-		caretBlinkRate			= mainView.getCaretBlinkRate();
-		searchToolBarVisible		= rtext.isSearchToolBarVisible();
-		dividerLocations[RText.TOP]	= rtext.getSplitPaneDividerLocation(RText.TOP);
-		dividerLocations[RText.LEFT] = rtext.getSplitPaneDividerLocation(RText.LEFT);
-		dividerLocations[RText.BOTTOM] = rtext.getSplitPaneDividerLocation(RText.BOTTOM);
-		dividerLocations[RText.RIGHT]= rtext.getSplitPaneDividerLocation(RText.RIGHT);
-		dividerVisible[RText.TOP]	= rtext.isDockableWindowGroupExpanded(RText.TOP);
-		dividerVisible[RText.LEFT] = rtext.isDockableWindowGroupExpanded(RText.LEFT);
-		dividerVisible[RText.BOTTOM] = rtext.isDockableWindowGroupExpanded(RText.BOTTOM);
-		dividerVisible[RText.RIGHT]= rtext.isDockableWindowGroupExpanded(RText.RIGHT);
-		defaultLineTerminator		= mainView.getLineTerminator();
-		defaultEncoding			= mainView.getDefaultEncoding();
-		guessFileContentType		= mainView.getGuessFileContentType();
-		doFileSizeCheck			= mainView.getDoFileSizeCheck();
-		maxFileSize				= mainView.getMaxFileSize();
-		maxFileSizeForCodeFolding = mainView.getMaxFileSizeForCodeFolding();
-		ignoreBackupExtensions	= mainView.getIgnoreBackupExtensions();
-		textAreaFont				= mainView.getTextAreaFont();
-		textAreaUnderline			= mainView.getTextAreaUnderline();
-		textAreaForeground			= mainView.getTextAreaForeground();
-		textAreaOrientation		= mainView.getTextAreaOrientation();
-		foldBackground			= mainView.getFoldBackground();
-		armedFoldBackground		= mainView.getArmedFoldBackground();
-		showHostName				= rtext.getShowHostName();
-		bomInUtf8				= mainView.getWriteBOMInUtf8Files();
-		bookmarksEnabled			= mainView.getBookmarksEnabled();
-		lineNumberFont			= mainView.getLineNumberFont();
-		lineNumberColor			= mainView.getLineNumberColor();
-		gutterBorderColor			= mainView.getGutterBorderColor();
-		spellCheckingEnabled		= spelling.isSpellCheckingEnabled();
-		spellCheckingColor		= spelling.getSpellCheckingColor();
-		spellingDictionary		= spelling.getSpellingDictionary();
-		userDictionary			= spelling.getUserDictionary();
-		maxSpellingErrors			= spelling.getMaxSpellingErrors();
-		viewSpellingList			= rtext.isSpellingWindowVisible();
-		searchWindowOpacityEnabled= rtext.isSearchWindowOpacityEnabled();
-		searchWindowOpacity		= rtext.getSearchWindowOpacity();
-		searchWindowOpacityRule	= rtext.getSearchWindowOpacityRule();
-		dropShadowsInEditor		= RTextUtilities.getDropShadowsEnabledInEditor();
-		codeFoldingEnabledFor		= mainView.getCodeFoldingEnabledForString();
-
-		useSearchDialogs			= mainView.getSearchManager().
-								getSearchingMode()==SearchingMode.DIALOGS;
-
-		return this;
-
+	private void addAppSpecificTypeLoaders() {
+		addTypeLoader(SyntaxScheme.class, new SyntaxSchemeTypeLoader());
 	}
 
 
@@ -298,203 +188,6 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 			font = new Font(fontName, fontStyle, fontSize);
 		}
 		return font;
-	}
-
-
-	/**
-	 * Returns just the LookAndFeel saved in the application preferences.
-	 * This is so we can set the LAF before loading the application, to allow
-	 * finnicky LAF's like Substance to work properly (Substance only works if
-	 * it's set before the first JFrame is created).
-	 *
-	 * @return The name of the LookAndFeel to load, or the system default LAF
-	 *         if no LAF is currently saved.
-	 */
-	public static String getLookAndFeelToLoad() {
-		Preferences prefs = Preferences.userNodeForPackage(RText.class);
-		return prefs.get("lookAndFeel", DEFAULT_LAF);
-	}
-
-
-	@Override
-	public RTextPrefs load() {
-
-		try {
-
-			// Get all properties associated with the RText class.
-			Preferences prefs = Preferences.userNodeForPackage(RText.class);
-			loadCommonPreferences(prefs);
-			iconGroupName				= prefs.get("iconGroupName", iconGroupName);
-			lineNumbersVisible			= prefs.getBoolean("lineNumbersVisible", lineNumbersVisible);
-			tabSize					= prefs.getInt("tabSize", tabSize);
-			mainView					= prefs.getInt("mainView", mainView);
-			if (colorScheme == null) { // Use the default, fall back to whatever was stored
-				String temp = prefs.get("colorScheme", null);
-				colorScheme = SyntaxScheme.loadFromString(temp);
-			}
-			statusBarStyle			= prefs.getInt("statusBarStyle", statusBarStyle);
-			workingDirectory			= prefs.get("workingDirectory", workingDirectory);
-			searchToolBarVisible		= prefs.getBoolean("searchToolBarVisible", searchToolBarVisible);
-			dividerLocations[RText.TOP]	= prefs.getInt("pluginDividerLocation.top", dividerLocations[RText.TOP]);
-			dividerLocations[RText.LEFT] = prefs.getInt("pluginDividerLocation.left", dividerLocations[RText.LEFT]);
-			dividerLocations[RText.BOTTOM] = prefs.getInt("pluginDividerLocation.bottom", dividerLocations[RText.BOTTOM]);
-			dividerLocations[RText.RIGHT]= prefs.getInt("pluginDividerLocation.right", dividerLocations[RText.RIGHT]);
-			dividerVisible[RText.TOP]	= prefs.getBoolean("pluginDividerVisible.top", dividerVisible[RText.TOP]);
-			dividerVisible[RText.LEFT] = prefs.getBoolean("pluginDividerVisible.left", dividerVisible[RText.LEFT]);
-			dividerVisible[RText.BOTTOM] = prefs.getBoolean("pluginDividerVisible.bottom", dividerVisible[RText.BOTTOM]);
-			dividerVisible[RText.RIGHT]= prefs.getBoolean("pluginDividerVisible.right", dividerVisible[RText.RIGHT]);
-			showHostName				= prefs.getBoolean("showHostName", showHostName);
-			bomInUtf8				= prefs.getBoolean("bomInUtf8", bomInUtf8);
-			bookmarksEnabled			= prefs.getBoolean("bookmarksEnabled", bookmarksEnabled);
-			String temp							= prefs.get("lineNumberFont", null);
-			if (temp!=null) {
-				lineNumberFont			= getFontImpl(temp);
-			}
-			lineNumberColor			= new Color(
-				prefs.getInt("lineNumberColor", lineNumberColor.getRGB()));
-			gutterBorderColor			= new Color(
-				prefs.getInt("gutterBorderColor", gutterBorderColor.getRGB()));
-
-			// Get all properties associated with the MainView class.
-			prefs = Preferences.userNodeForPackage(AbstractMainView.class);
-			bracketMatchingEnabled		= prefs.getBoolean("bracketMatchingEnabled", bracketMatchingEnabled);
-			matchBothBrackets				= prefs.getBoolean("matchBothBrackets", matchBothBrackets);
-			currentLineHighlightEnabled	= prefs.getBoolean("currentLineHighlightEnabled", currentLineHighlightEnabled);
-			emulateTabsWithSpaces		= prefs.getBoolean("emulateTabs", emulateTabsWithSpaces);
-			highlightModifiedDocNames	= prefs.getBoolean("highlightModifiedDocNames", highlightModifiedDocNames);
-			imageAlpha				= prefs.getFloat("imageAlpha", imageAlpha);
-			marginLineEnabled			= prefs.getBoolean("marginLineEnabled", marginLineEnabled);
-			marginLinePosition			= prefs.getInt("marginLinePosition", marginLinePosition);
-			syntaxFiltersString		= prefs.get("syntaxFilters", syntaxFiltersString);
-			textMode					= prefs.getInt("textMode", textMode);
-			tabPlacement				= prefs.getInt("tabPlacement", tabPlacement);
-			wordWrap					= prefs.getBoolean("wordWrap", wordWrap);
-			temp							= prefs.get("printFont", null);
-			if (temp!=null) {
-				printFont = getFontImpl(temp);
-			}
-			temp						= prefs.get("backgroundObject", null);
-			if (temp!=null) {
-				StringTokenizer t2 = new StringTokenizer(temp, ",");
-				String temp2 = t2.nextToken();
-				if (temp2.equals("color"))
-					backgroundObject = new Color(
-						Integer.parseInt(temp.substring(temp.indexOf(',')+1)));
-				else if (temp2.equals("image"))
-					backgroundObject = t2.nextToken();
-				else
-					backgroundObject = Color.WHITE;
-			}
-			possiblyFixSyntaxSchemeBackground(this);
-			caretColor = new Color(
-				prefs.getInt("caretColor", caretColor.getRGB()));
-			selectionColor = new Color(
-				prefs.getInt("selectionColor", selectionColor.getRGB()), true);
-			selectedTextColor = new Color(
-					prefs.getInt("selectedTextColor", selectedTextColor.getRGB()), true);
-			useSelectedTextColor = prefs.getBoolean("useSelectedTextColor", useSelectedTextColor);
-			currentLineHighlightColor = new Color(
-				prefs.getInt("currentLineHighlightColor", currentLineHighlightColor.getRGB()), true);
-			modifiedDocumentNamesColor = new Color(
-				prefs.getInt("modifiedDocumentNamesColor", modifiedDocumentNamesColor.getRGB()));
-			matchedBracketBGColor = new Color(
-				prefs.getInt("matchedBracketBGColor", matchedBracketBGColor.getRGB()));
-			matchedBracketBorderColor = new Color(
-				prefs.getInt("matchedBracketBorderColor", matchedBracketBorderColor.getRGB()));
-			marginLineColor = new Color(
-				prefs.getInt("marginLineColor", marginLineColor.getRGB()));
-			highlightSecondaryLanguages = prefs.getBoolean("highlightSecondaryLanguages", highlightSecondaryLanguages);
-			for (int i=0; i<secondaryLanguageColors.length; i++) {
-				secondaryLanguageColors[i] = new Color(prefs.getInt(
-				"secondaryLanguageColor_" + i, secondaryLanguageColors[i].getRGB()));
-			}
-			hyperlinksEnabled = prefs.getBoolean("hyperlinksEnabled", hyperlinksEnabled);
-			hyperlinkColor = new Color(
-				prefs.getInt("hyperlinkColor", hyperlinkColor.getRGB()));
-			hyperlinkModifierKey		= prefs.getInt("hyperlinkModifierKey", hyperlinkModifierKey);
-			visibleWhitespace			= prefs.getBoolean("visibleWhitespace", visibleWhitespace);
-			showEOLMarkers			= prefs.getBoolean("showEOL", showEOLMarkers);
-			showTabLines				= prefs.getBoolean("showTabLines", showTabLines);
-			tabLinesColor				= new Color(
-				prefs.getInt("tabLinesColor", tabLinesColor.getRGB()));
-			rememberWhitespaceLines	= prefs.getBoolean("rememberWhitespaceLines", rememberWhitespaceLines);
-			autoInsertClosingCurlys	= prefs.getBoolean("autoInsertClosingCurlys", autoInsertClosingCurlys);
-			aaEnabled					= prefs.getBoolean("editorAntiAlias", aaEnabled);
-			fractionalMetricsEnabled	= prefs.getBoolean("fractionalMetrics", fractionalMetricsEnabled);
-			markAllHighlightColor = new Color(
-				prefs.getInt("markAllHighlightColor", markAllHighlightColor.getRGB()));
-			markOccurrences		= prefs.getBoolean("markOccurrences", markOccurrences);
-			markOccurrencesColor	= new Color(
-				prefs.getInt("markOccurrencesColor", markOccurrencesColor.getRGB()));
-			roundedSelectionEdges	= prefs.getBoolean("roundedSelectionEdges", roundedSelectionEdges);
-			carets[RTextArea.INSERT_MODE]= prefs.getInt("insertCaretStyle", carets[RTextArea.INSERT_MODE]);
-			carets[RTextArea.OVERWRITE_MODE]= prefs.getInt("overwriteCaretStyle", carets[RTextArea.OVERWRITE_MODE]);
-			caretBlinkRate		= prefs.getInt("caretBlinkRate", caretBlinkRate);
-			defaultLineTerminator	= prefs.get("defaultLineTerminator", defaultLineTerminator);
-			if ("".equals(defaultLineTerminator)) {
-				defaultLineTerminator = null;
-			}
-			defaultEncoding		= prefs.get("defaultEncoding", defaultEncoding);
-			if ("".equals(defaultEncoding)) {
-				defaultEncoding = null;
-			}
-			guessFileContentType	= prefs.getBoolean("guessFileContentType", guessFileContentType);
-			doFileSizeCheck		= prefs.getBoolean("fileSizeCheck", doFileSizeCheck);
-			maxFileSize			= prefs.getFloat("maxFileSize", maxFileSize);
-			maxFileSizeForCodeFolding = prefs.getInt("maxFileSizeForCodeFolding", maxFileSizeForCodeFolding);
-			ignoreBackupExtensions= prefs.getBoolean("ignoreBackupExtensions", ignoreBackupExtensions);
-			temp						= prefs.get("textAreaFont", null);
-			if (temp!=null) {
-				textAreaFont = getFontImpl(temp);
-			}
-			textAreaUnderline		= prefs.getBoolean("textAreaUnderline", textAreaUnderline);
-			textAreaForeground		= new Color(
-				prefs.getInt("textAreaForeground", textAreaForeground.getRGB()));
-			temp = prefs.get("textAreaOrientation", "ltr");
-			textAreaOrientation	= "rtl".equals(temp) ?
-						ComponentOrientation.RIGHT_TO_LEFT :
-						ComponentOrientation.LEFT_TO_RIGHT;
-			foldBackground			= new Color(
-				prefs.getInt("foldBackground", foldBackground.getRGB()));
-			armedFoldBackground		= new Color(
-				prefs.getInt("armedFoldBackground", armedFoldBackground.getRGB()));
-			spellCheckingEnabled	= prefs.getBoolean("spellCheckingEnabled", spellCheckingEnabled);
-			spellCheckingColor	= new Color(
-				prefs.getInt("spellCheckingColor", spellCheckingColor.getRGB()));
-			spellingDictionary	= prefs.get("spellingDictionary", spellingDictionary);
-			String tempVal = prefs.get("userDictionary", null);
-			if (tempVal!=null) { // No previous value => use default already set
-				if (tempVal.isEmpty()) { // Empty string => no user dictionary
-					userDictionary = null;
-				}
-				else {
-					userDictionary = new File(tempVal);
-				}
-			}
-			maxSpellingErrors		= prefs.getInt("maxSpellingErrors", maxSpellingErrors);
-			viewSpellingList	= prefs.getBoolean("viewSpellingList", viewSpellingList);
-			searchWindowOpacityEnabled = prefs.getBoolean("searchWindowOpacityEnabled", searchWindowOpacityEnabled);
-			searchWindowOpacity = prefs.getFloat("searchWindowOpacity", searchWindowOpacity);
-			searchWindowOpacityRule = prefs.getInt("searchWindowOpacityRule", searchWindowOpacityRule);
-			dropShadowsInEditor = prefs.getBoolean("dropShadowsInEditor", getDefaultDropShadowsInEditorValue());
-			codeFoldingEnabledFor = prefs.get("codeFoldingEnabledFor", codeFoldingEnabledFor);
-			useSearchDialogs = prefs.getBoolean("useSearchDialogs", useSearchDialogs);
-
-			// Get all properties associated with the RTextMenuBar class.
-			prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
-			fileHistoryString		= prefs.get("fileHistoryString", fileHistoryString);
-			maxFileHistorySize		= prefs.getInt("maxFileHistorySize", maxFileHistorySize);
-
-		// If anything at all goes wrong, just use default property values.
-		} catch (RuntimeException re) {
-			throw re; // Let RuntimeExceptions through (FindBugs warning)
-		} catch (Exception e) {
-			e.printStackTrace();
-			setDefaults();
-		}
-
-		return this;
-
 	}
 
 
@@ -531,156 +224,8 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	}
 
 
-	/**
-	 * A null-safe means of storing the integer value of a color.  If the color
-	 * is {@code null}, any value for that key is removed from the preferences.
-	 *
-	 * @param prefs The preferences to check.
-	 * @param key The key for the preference.
-	 * @param color The color to store, which may be {@code null}.
-	 */
-	private void putOrRemoveInt(Preferences prefs, String key, Color color) {
-
-		if (color != null) {
-			prefs.putInt(key, color.getRGB());
-		}
-		else {
-			prefs.remove(key); // There may be a prior value
-		}
-	}
-
-
 	@Override
-	public void save() {
-
-		// Save all properties related to the RText class.
-		Preferences prefs = Preferences.userNodeForPackage(RText.class);
-		saveCommonPreferences(prefs);
-		prefs.put("colorScheme",						colorScheme.toCommaSeparatedString());
-		prefs.put("iconGroupName",					iconGroupName);
-		prefs.putBoolean("lineNumbersVisible",			lineNumbersVisible);
-		prefs.putInt("mainView",						mainView);
-		prefs.putInt("statusBarStyle",				statusBarStyle);
-		prefs.put("workingDirectory",				workingDirectory);
-		prefs.putBoolean("searchToolBarVisible",		searchToolBarVisible);
-		prefs.putInt("pluginDividerLocation.top",		dividerLocations[RText.TOP]);
-		prefs.putInt("pluginDividerLocation.left",		dividerLocations[RText.LEFT]);
-		prefs.putInt("pluginDividerLocation.bottom",		dividerLocations[RText.BOTTOM]);
-		prefs.putInt("pluginDividerLocation.right",		dividerLocations[RText.RIGHT]);
-		prefs.putBoolean("pluginDividerVisible.top",		dividerVisible[RText.TOP]);
-		prefs.putBoolean("pluginDividerVisible.left",		dividerVisible[RText.LEFT]);
-		prefs.putBoolean("pluginDividerVisible.bottom",		dividerVisible[RText.BOTTOM]);
-		prefs.putBoolean("pluginDividerVisible.right",		dividerVisible[RText.RIGHT]);
-		prefs.putBoolean("showHostName",				showHostName);
-		prefs.putBoolean("bomInUtf8",					bomInUtf8);
-		prefs.putBoolean("bookmarksEnabled",			bookmarksEnabled);
-		prefs.put("lineNumberFont",					lineNumberFont==null ? "null" : lineNumberFont.getName() + ","
-													+ lineNumberFont.getSize() + "," + lineNumberFont.isBold() +
-													"," + lineNumberFont.isItalic());
-		prefs.putInt("lineNumberColor",				lineNumberColor.getRGB());
-		prefs.putInt("gutterBorderColor",				gutterBorderColor.getRGB());
-
-		// Save all properties related to the AbstractMainView class.
-		prefs = Preferences.userNodeForPackage(AbstractMainView.class);
-		prefs.putBoolean("bracketMatchingEnabled",		bracketMatchingEnabled);
-		prefs.putBoolean("matchBothBrackets",			matchBothBrackets);
-		prefs.putInt("caretColor",				caretColor.getRGB());
-		prefs.putInt("currentLineHighlightColor",	currentLineHighlightColor.getRGB());
-		prefs.putBoolean("currentLineHighlightEnabled",	currentLineHighlightEnabled);
-		prefs.putBoolean("emulateTabs",				emulateTabsWithSpaces);
-		prefs.putBoolean("highlightModifiedDocNames",highlightModifiedDocNames);
-		prefs.putFloat("imageAlpha",					imageAlpha);
-		prefs.putInt("marginLineColor",				marginLineColor.getRGB());
-		prefs.putBoolean("highlightSecondaryLanguages",highlightSecondaryLanguages);
-		for (int i=0; i<3; i++) {
-			prefs.putInt("secondaryLanguageColor_" + i, secondaryLanguageColors[i].getRGB());
-		}
-		prefs.putBoolean("hyperlinksEnabled",			hyperlinksEnabled);
-		prefs.putInt("hyperlinkColor",				hyperlinkColor.getRGB());
-		prefs.putInt("hyperlinkModifierKey",			hyperlinkModifierKey);
-		prefs.putBoolean("marginLineEnabled",			marginLineEnabled);
-		prefs.putInt("marginLinePosition",				marginLinePosition);
-		putOrRemoveInt(prefs, "matchedBracketBGColor", matchedBracketBGColor);
-		prefs.putInt("matchedBracketBorderColor",		matchedBracketBorderColor.getRGB());
-		prefs.putInt("modifiedDocumentNamesColor",	modifiedDocumentNamesColor.getRGB());
-		prefs.put("printFont",						printFont==null ? "null" : printFont.getName() + ","
-													+ printFont.getSize() + "," + printFont.isBold() +
-													"," + printFont.isItalic());
-		prefs.putInt("selectionColor",				selectionColor.getRGB());
-		prefs.putInt("selectedTextColor",			selectedTextColor.getRGB());
-		prefs.putBoolean("useSelectedTextColor",	useSelectedTextColor);
-		prefs.put("syntaxFilters",					syntaxFiltersString);
-		prefs.putInt("tabSize",						tabSize);
-		prefs.putInt("tabPlacement",					tabPlacement);
-		prefs.putInt("textMode",						textMode);
-		prefs.putBoolean("wordWrap",					wordWrap);
-		if (backgroundObject instanceof Color) {
-			Color c = (Color)backgroundObject;
-			prefs.put("backgroundObject",				"color," + c.getRGB());
-		}
-		else if (backgroundObject instanceof Image) {
-			// TODO
-			//prefs.put("backgroundObject",				"image," + rtext.getMainView().getBackgroundImageFileName());
-			prefs.put("backgroundObject", "color," + Color.WHITE);
-		}
-		prefs.putBoolean("visibleWhitespace",			visibleWhitespace);
-		prefs.putBoolean("showEOL",						showEOLMarkers);
-		prefs.putBoolean("showTabLines",				showTabLines);
-		prefs.putInt("tabLinesColor",					tabLinesColor.getRGB());
-		prefs.putBoolean("rememberWhitespaceLines",		rememberWhitespaceLines);
-		prefs.putBoolean("autoInsertClosingCurlys",		autoInsertClosingCurlys);
-		prefs.putBoolean("editorAntiAlias",					aaEnabled);
-		prefs.putBoolean("fractionalMetrics",			fractionalMetricsEnabled);
-		prefs.putInt("markAllHighlightColor",			markAllHighlightColor.getRGB());
-		prefs.putBoolean("markOccurrences",			markOccurrences);
-		prefs.putInt("markOccurrencesColor",			markOccurrencesColor.getRGB());
-		prefs.putBoolean("roundedSelectionEdges",		roundedSelectionEdges);
-		prefs.putInt("insertCaretStyle",				carets[RTextArea.INSERT_MODE]);
-		prefs.putInt("overwriteCaretStyle",			carets[RTextArea.OVERWRITE_MODE]);
-		prefs.putInt("caretBlinkRate",				caretBlinkRate);
-		prefs.put("defaultLineTerminator",				defaultLineTerminator==null ? "" : defaultLineTerminator);
-		prefs.put("defaultEncoding",					defaultEncoding==null ? "" : defaultEncoding);
-		prefs.putBoolean("guessFileContentType",		guessFileContentType);
-		prefs.putBoolean("fileSizeCheck",				doFileSizeCheck);
-		prefs.putFloat("maxFileSize",					maxFileSize);
-		prefs.putInt("maxFileSizeForCodeFolding",		maxFileSizeForCodeFolding);
-		prefs.putBoolean("ignoreBackupExtensions",		ignoreBackupExtensions);
-		prefs.put("textAreaFont",					textAreaFont==null ? "null" : textAreaFont.getName() + ","
-													+ textAreaFont.getSize() + "," + textAreaFont.isBold() +
-													"," + textAreaFont.isItalic());
-		prefs.putBoolean("textAreaUnderline",			textAreaUnderline);
-		prefs.putInt("textAreaForeground",				textAreaForeground.getRGB());
-		prefs.put("textAreaOrientation",				textAreaOrientation.isLeftToRight() ? "ltr" : "rtl");
-		prefs.putInt("foldBackground",					foldBackground.getRGB());
-		prefs.putInt("armedFoldBackground",				armedFoldBackground.getRGB());
-		prefs.putBoolean("spellCheckingEnabled",		spellCheckingEnabled);
-		prefs.putInt("spellCheckingColor",				spellCheckingColor.getRGB());
-		prefs.put("spellingDictionary", 				spellingDictionary);
-		prefs.put("userDictionary",						userDictionary==null ? "" : userDictionary.getAbsolutePath());
-		prefs.putInt("maxSpellingErrors",				maxSpellingErrors);
-		prefs.putBoolean("viewSpellingList",			viewSpellingList);
-		prefs.putBoolean("searchWindowOpacityEnabled",	searchWindowOpacityEnabled);
-		prefs.putFloat("searchWindowOpacity",			searchWindowOpacity);
-		prefs.putInt("searchWindowOpacityRule",			searchWindowOpacityRule);
-		prefs.putBoolean("dropShadowsInEditor",			dropShadowsInEditor);
-		prefs.put("codeFoldingEnabledFor",				codeFoldingEnabledFor);
-		prefs.putBoolean("useSearchDialogs",			useSearchDialogs);
-
-		// Save all properties related to the RTextMenuBar class.
-		prefs = Preferences.userNodeForPackage(RTextMenuBar.class);
-		prefs.put("fileHistoryString",				(fileHistoryString==null ? "-" : fileHistoryString));
-		prefs.putInt("maxFileHistorySize",				maxFileHistorySize);
-
-		//prefs.flush();
-
-	}
-
-
-	/**
-	 * Sets this preferences instance to contain all default values.
-	 */
-	@Override
-	protected void setDefaults() {
+	public void setDefaults() {
 
 		Theme theme;
 		try {
@@ -698,7 +243,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		toolbarVisible = true;
 		statusBarVisible = true;
 		lineNumbersVisible = true;
-		tabSize = 5;
+		tabSize = RTextArea.getDefaultTabSize();
 		emulateTabsWithSpaces = false;
 		textMode = RTextArea.INSERT_MODE;
 		tabPlacement = JTabbedPane.TOP;
@@ -728,7 +273,7 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		matchedBracketBorderColor = theme.matchedBracketFG;
 		marginLineEnabled = true;
 		marginLinePosition = RTextArea.getDefaultMarginLinePosition();
-		marginLineColor = RTextArea.getDefaultMarginLineColor();
+		marginLineColor = theme.marginLineColor;
 		highlightSecondaryLanguages = false;
 		secondaryLanguageColors = new Color[3];
 		secondaryLanguageColors[0] = theme.secondaryLanguages[0];
@@ -780,9 +325,9 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 		showHostName		= false;
 		bomInUtf8			= false;
 		bookmarksEnabled	= true;
-		lineNumberFont		= new Font("Monospaced", Font.PLAIN, 12);
+		lineNumberFont		= new Font(textAreaFont.getName(), Font.PLAIN, 12);
 		lineNumberColor	= theme.lineNumberColor;
-		gutterBorderColor	= new Color(221, 221, 221);
+		gutterBorderColor	= theme.gutterBorderColor;
 		spellCheckingEnabled = File.separatorChar=='\\';
 		spellCheckingColor   = DEFAULT_SPELLING_ERROR_COLOR;
 		spellingDictionary   = SpellingSupport.DICTIONARIES[1];
@@ -808,8 +353,20 @@ public class RTextPrefs extends GUIApplicationPrefs<RText>
 	 */
 	@Override
 	public String toString() {
-		return "[Class: RTextPreferences]";
+		return "[Class: RTextPrefs]";
 	}
 
 
+	private static class SyntaxSchemeTypeLoader implements TypeLoader<SyntaxScheme> {
+
+		@Override
+		public SyntaxScheme load(String name, String value, Properties props) {
+			return SyntaxScheme.loadFromString(value); // Handles nulls
+		}
+
+		@Override
+		public String save(String name, Object value, Properties props) {
+			return value != null ? ((SyntaxScheme)value).toCommaSeparatedString() : null;
+		}
+	}
 }
