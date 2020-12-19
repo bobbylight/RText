@@ -503,7 +503,7 @@ class RTextSplitPaneView extends AbstractMainView
 				setBackground(list.getBackground());
 
 				RTextEditorPane textArea = getRTextEditorPaneAt(index);
-				if (textArea==null) // Happens in JRE 1.5.0, not in 1.4.x...
+				if (textArea==null)
 					setForeground(list.getForeground());
 				else if (textArea.isDirty() && highlightModifiedDocumentDisplayNames())
 					setForeground(getModifiedDocumentDisplayNamesColor());
