@@ -495,8 +495,6 @@ public final class RTextUtilities {
 		}
 		String tabString = "   ";
 
-		// TODO: When updating to 1.5, replace with StringBuilder, and change
-		// loop to use new append(str, offs,len) method.
 		StringBuilder sb = new StringBuilder();
 
 		for (int i=0; i<s.length(); i++) {
