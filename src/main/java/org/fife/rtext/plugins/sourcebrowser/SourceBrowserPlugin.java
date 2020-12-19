@@ -21,7 +21,6 @@ import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.tree.TreeCellRenderer;
 
 import org.fife.ctags.TagEntry;
@@ -537,21 +536,6 @@ public class SourceBrowserPlugin extends GUIPlugin
 		item.applyComponentOrientation(app.getComponentOrientation());
 		JMenu viewMenu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
 		viewMenu.add(item);
-		JPopupMenu popup = viewMenu.getPopupMenu();
-		popup.pack();
-		// Only needed for pre-1.6 support
-		popup.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				item.setSelected(getDockableWindow(getPluginName()).isActive());
-			}
-		});
 
 	}
 

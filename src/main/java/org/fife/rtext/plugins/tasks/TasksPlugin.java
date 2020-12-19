@@ -17,9 +17,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
@@ -193,21 +190,6 @@ public class TasksPlugin extends GUIPlugin {
 		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
 		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
 		menu.add(item);
-		JPopupMenu popup = menu.getPopupMenu();
-		popup.pack();
-		// Only needed for pre-1.6 support
-		popup.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				item.setSelected(isTaskWindowVisible());
-			}
-		});
 
 	}
 

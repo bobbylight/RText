@@ -23,9 +23,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
@@ -225,23 +222,9 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 		a = rtext.getAction(VIEW_TOOL_OUTPUT_ACTION);
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(a);
 		item.setToolTipText(null);
+		item.setSelected(isToolOutputWindowVisible());
 		item.applyComponentOrientation(app.getComponentOrientation());
 		menu.add(item);
-		JPopupMenu popup = menu.getPopupMenu();
-		popup.pack();
-		// Only needed for pre-1.6 support
-		popup.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				item.setSelected(isToolOutputWindowVisible());
-			}
-		});
 
 		loadTools(); // Do after menu has been added
 

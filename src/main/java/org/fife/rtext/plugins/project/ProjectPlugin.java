@@ -19,11 +19,8 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -241,23 +238,9 @@ public class ProjectPlugin extends GUIPlugin {
 		Action a = rtext.getAction(VIEW_CONSOLE_ACTION);
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(a);
 		item.setToolTipText(null);
+		item.setSelected(isProjectWindowVisible());
 		item.applyComponentOrientation(app.getComponentOrientation());
 		menu.add(item);
-		JPopupMenu popup = menu.getPopupMenu();
-		popup.pack();
-		// Only needed for pre-1.6 support
-		popup.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				item.setSelected(isProjectWindowVisible());
-			}
-		});
 
 	}
 

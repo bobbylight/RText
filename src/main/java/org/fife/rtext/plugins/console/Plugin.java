@@ -19,9 +19,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
@@ -183,24 +180,10 @@ public class Plugin extends GUIPlugin {
 		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
 		Action a = rtext.getAction(VIEW_CONSOLE_ACTION);
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(a);
+		item.setSelected(isConsoleWindowVisible());
 		item.setToolTipText(null);
 		item.applyComponentOrientation(app.getComponentOrientation());
 		menu.add(item);
-		JPopupMenu popup = menu.getPopupMenu();
-		popup.pack();
-		// Only needed for pre-1.6 support
-		popup.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				item.setSelected(isConsoleWindowVisible());
-			}
-		});
 
 		window.clearConsoles(); // Needed to pick up styles
 

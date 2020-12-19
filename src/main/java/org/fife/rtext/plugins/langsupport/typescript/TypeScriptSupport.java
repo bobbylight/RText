@@ -14,10 +14,7 @@ import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
@@ -58,21 +55,6 @@ public class TypeScriptSupport {
 		item.setToolTipText(null);
 		item.applyComponentOrientation(rtext.getComponentOrientation());
 		menu.add(item);
-		JPopupMenu popup = menu.getPopupMenu();
-		popup.pack();
-		// Only needed for pre-1.6 support
-		popup.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				item.setSelected(isBuildResultsWindowVisible());
-			}
-		});
 
 	}
 

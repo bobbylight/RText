@@ -16,10 +16,7 @@ import java.io.IOException;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 
 import org.fife.ui.app.AppAction;
 import org.fife.ui.rsyntaxtextarea.spell.SpellingParser;
@@ -78,24 +75,10 @@ public class SpellingSupport implements SpellingParserListener {
 		rtext.addAction(VIEW_SPELLING_ERROR_WINDOW, viewAction);
 		RTextMenuBar mb = (RTextMenuBar)rtext.getJMenuBar();
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(viewAction);
+		item.setSelected(rtext.isSpellingWindowVisible());
 		item.applyComponentOrientation(rtext.getComponentOrientation());
 		JMenu viewMenu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
 		viewMenu.add(item);
-		JPopupMenu popup = viewMenu.getPopupMenu();
-		popup.pack();
-		// Only needed for pre-1.6 support
-		popup.addPopupMenuListener(new PopupMenuListener() {
-			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			}
-			@Override
-			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				item.setSelected(rtext.isSpellingWindowVisible());
-			}
-		});
 
 	}
 
