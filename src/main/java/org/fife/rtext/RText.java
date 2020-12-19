@@ -918,17 +918,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	/**
-	 * Thanks to Java Bug ID 5026829, JMenuItems (among other Swing components)
-	 * don't update their accelerators, etc. when the properties on which they
-	 * were created update them.  Thus, we have to do this manually.  This is
-	 * still broken as of 1.5.
-	 */
-	public void menuItemAcceleratorWorkaround() {
-		menuBar.menuItemAcceleratorWorkaround();
-	}
-
-
-	/**
 	 * Opens the specified files.
 	 *
 	 * @param filesToOpen The files to open.  This can be <code>null</code>.
@@ -1157,7 +1146,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 				((StandardAction)a).restoreDefaultAccelerator();
 			}
 		}
-		menuItemAcceleratorWorkaround();
 	}
 
 

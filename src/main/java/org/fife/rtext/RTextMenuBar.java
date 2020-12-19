@@ -837,57 +837,6 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 
 	/**
-	 * Thanks to Java Bug ID 5026829, JMenuItems (among other Swing components)
-	 * don't update their accelerators, etc. when the properties on which they
-	 * were created update them.  Thus, we have to do this manually.  This is
-	 * still broken as of 1.5.
-	 */
-	protected void menuItemAcceleratorWorkaround() {
-
-		updateAction(newItem, RText.NEW_ACTION);
-		updateAction(openItem, RText.OPEN_ACTION);
-		updateAction(openInNewWindowItem, RText.OPEN_NEWWIN_ACTION);
-		updateAction(openRecentItem, RText.OPEN_RECENT_ACTION);
-		updateAction(openRemoteItem, RText.OPEN_REMOTE_ACTION);
-		updateAction(closeItem, RText.CLOSE_ACTION);
-		updateAction(closeAllItem, RText.CLOSE_ALL_ACTION);
-		if (rtext.getOS()!=OS.MAC_OS_X) {
-			updateAction(exitItem, RText.EXIT_ACTION_KEY);
-		}
-		updateAction(saveItem, RText.SAVE_ACTION);
-		updateAction(saveAsItem, RText.SAVE_AS_ACTION);
-		updateAction(saveAsRemoteItem, RText.SAVE_AS_REMOTE_ACTION);
-		updateAction(saveAsWebPageItem, RText.SAVE_WEBPAGE_ACTION);
-		updateAction(saveAllItem, RText.SAVE_ALL_ACTION);
-		updateAction(printItem, RText.PRINT_ACTION);
-		updateAction(printPreviewItem, RText.PRINT_PREVIEW_ACTION);
-		updateAction(findItem, RText.FIND_ACTION);
-		updateAction(findNextItem, RText.FIND_NEXT_ACTION);
-		updateAction(replaceItem, RText.REPLACE_ACTION);
-		updateAction(replaceNextItem, RText.REPLACE_NEXT_ACTION);
-		updateAction(findInFilesItem, RText.FIND_IN_FILES_ACTION);
-		updateAction(replaceInFilesItem, RText.REPLACE_IN_FILES_ACTION);
-		updateAction(goToItem, RText.GOTO_ACTION);
-		updateAction(copyAsStyledTextItem, RText.COPY_AS_STYLED_TEXT_ACTION);
-		updateAction(timeDateItem, RText.TIME_DATE_ACTION);
-		if (rtext.getOS()!=OS.MAC_OS_X) {
-			updateAction(optionsItem, RText.OPTIONS_ACTION);
-		}
-		updateAction(toolbarItem, RText.TOOL_BAR_ACTION);
-		updateAction(statusBarItem, RText.STATUS_BAR_ACTION);
-		updateAction(lineNumbersItem, RText.LINE_NUMBER_ACTION);
-		updateAction(nextDocItem, RText.NEXT_DOCUMENT_ACTION);
-		updateAction(prevDocItem, RText.PREVIOUS_DOCUMENT_ACTION);
-		updateAction(filePropItem, RText.FILE_PROPERTIES_ACTION);
-		updateAction(helpItem, RText.HELP_ACTION_KEY);
-		updateAction(homePageItem, RText.HOME_PAGE_ACTION);
-		updateAction(updatesItem, RText.UPDATES_ACTION);
-		updateAction(aboutItem, RText.ABOUT_ACTION_KEY);
-
-	}
-
-
-	/**
 	 * Called whenever a property changes on a component we're listening to.
 	 */
 	@Override

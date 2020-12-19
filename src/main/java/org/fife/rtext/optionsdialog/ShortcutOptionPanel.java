@@ -136,12 +136,6 @@ class ShortcutOptionPanel extends OptionsDialogPanel
 				System.err.println("err0r!!!!");
 		}
 
-		// HORRIBLE workaround for Java Bug ID 5026829 (JMenuItems,
-		// among other Swing components, don't update themselves
-		// when the Actions on which they were created have their
-		// properties changed).
-		rtext.menuItemAcceleratorWorkaround();
-
 	}
 
 
