@@ -260,7 +260,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 
 		translucentSearchDialogsCB.setSelected(selected); // Probably already done
 
-		// The sub-options always stay disabled if we're not using Java 6u10+.
+		// Not all systems support per-pixel translucency
 		if (!TranslucencyUtil.get().isTranslucencySupported(false)) {
 			translucentSearchDialogsCB.setEnabled(false);
 			selected = false;

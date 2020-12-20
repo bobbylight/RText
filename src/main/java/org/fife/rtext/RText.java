@@ -123,10 +123,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 	/**
 	 * Whether <code>searchWindowOpacityListener</code> has been attempted to be
-	 * created yet. This is kept in a variable instead of checking for
-	 * <code>null</code> because the creation is done via reflection (since
-	 * we're 1.4-compatible), so it is a fairly common case that creation is
-	 * attempted but fails.
+	 * created yet.
 	 */
 	private boolean windowListenersInited;
 

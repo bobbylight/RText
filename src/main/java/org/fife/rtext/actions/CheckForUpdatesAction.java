@@ -96,7 +96,7 @@ class CheckForUpdatesAction extends AppAction<RText> {
 					msg = rtext.getString("UpdateStatus.ShutdownReminder");
 					JOptionPane.showMessageDialog(rtext, msg, title,
 										JOptionPane.WARNING_MESSAGE);
-					if (!UIUtil.browse(DOWNLOAD_URL)) { // Not Java 6
+					if (!UIUtil.browse(DOWNLOAD_URL)) {
 						UIManager.getLookAndFeel().provideErrorFeedback(rtext);
 					}
 				}

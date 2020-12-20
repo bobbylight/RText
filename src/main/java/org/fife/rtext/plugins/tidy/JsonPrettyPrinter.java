@@ -13,7 +13,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
 import javax.swing.JOptionPane;
 
 import com.esotericsoftware.jsonbeans.Json;
@@ -167,7 +166,6 @@ class JsonPrettyPrinter implements PrettyPrinter {
 
 		JsonOptions opts = plugin.getJsonOptions();
 
-		// We use reflection since jsonbeans is built with Java 6.
 		Json jsonFormatter = new Json();
 		jsonFormatter.setOutputType(getOutputType(opts.getOutputStyle()));
 
@@ -201,10 +199,6 @@ class JsonPrettyPrinter implements PrettyPrinter {
 			return new PrettyPrintResult(RESULT_OK, result, null);
 
 		} catch (Throwable e) {
-			// Remove wrapper exception caused by our using reflection
-			if (e instanceof InvocationTargetException) {
-				e = ((InvocationTargetException)e).getTargetException();
-			}
 			return new PrettyPrintResult(RESULT_ERRORS, null, e.getMessage());
 		}
 
