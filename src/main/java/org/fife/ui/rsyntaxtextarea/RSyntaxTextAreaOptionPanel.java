@@ -25,7 +25,6 @@ import javax.swing.event.*;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.optionsdialog.UIOptionPanel;
 import org.fife.ui.*;
 import org.fife.ui.rtextarea.RTextArea;
@@ -696,7 +695,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		Object sampleBG = background;
 		if (sampleBG instanceof Image) { // Lighten as RText will
 			RText parent = (RText)getOptionsDialog().getParent();
-			sampleBG = RTextUtilities.getTranslucentImage(parent,
+			sampleBG = UIUtil.getTranslucentImage(parent,
 					(Image)sampleBG,
 					parent.getMainView().getBackgroundImageAlpha());
 		}

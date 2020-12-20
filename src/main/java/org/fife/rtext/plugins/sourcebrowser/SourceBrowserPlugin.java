@@ -29,6 +29,7 @@ import org.fife.rtext.*;
 import org.fife.rtext.optionsdialog.OptionsDialog;
 import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.RScrollPane;
+import org.fife.ui.UIUtil;
 import org.fife.util.SubstanceUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.*;
@@ -173,10 +174,10 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		sourceTree = new DefaultSourceTree(this, owner);
 		wind.setPrimaryComponent(sourceTree);
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
 
 		scrollPane = new DockableWindowScrollPane(sourceTree);
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(scrollPane);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(scrollPane);
 		//scrollPane.setViewportBorder(
 		//					BorderFactory.createEmptyBorder(3,3,3,3));
 		wind.add(scrollPane);
@@ -251,7 +252,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 								new Object[] { owner });
 						checkTreeCellRenderer(sourceTree);
 						wind.setPrimaryComponent(sourceTree);
-						RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
+						UIUtil.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
 						ensureSourceTreeSortedProperly();
 						scrollPane.setViewportView(sourceTree);
 						textArea.putClientProperty(CACHED_SOURCE_TREE, sourceTree);
@@ -267,7 +268,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 			if (!(sourceTree instanceof DefaultSourceTree)) {
 				sourceTree = new DefaultSourceTree(this, owner);
 				wind.setPrimaryComponent(sourceTree);
-				RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
+				UIUtil.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
 				scrollPane.setViewportView(sourceTree);
 				textArea.putClientProperty(CACHED_SOURCE_TREE, sourceTree);
 			}

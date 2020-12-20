@@ -29,12 +29,12 @@ import javax.swing.tree.TreeNode;
 import org.fife.help.HelpDialog;
 import org.fife.rtext.BottomLineBorder;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.model.Workspace;
 import org.fife.rtext.plugins.project.tree.PhysicalLocationTreeNode;
 import org.fife.rtext.plugins.project.tree.WorkspaceRootTreeNode;
 import org.fife.rtext.plugins.project.tree.WorkspaceTree;
 import org.fife.ui.MenuButton;
+import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
@@ -68,10 +68,10 @@ class ProjectWindow extends DockableWindow {
 		add(toolbar, BorderLayout.NORTH);
 
 		tree = new WorkspaceTree(plugin, plugin.getWorkspace());
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(tree);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(tree);
 		setPrimaryComponent(tree);
 		DockableWindowScrollPane sp = new DockableWindowScrollPane(tree);
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(sp);
 		add(sp);
 
 		setPosition(prefs.windowPosition);

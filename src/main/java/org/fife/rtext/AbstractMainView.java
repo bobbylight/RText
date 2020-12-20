@@ -853,7 +853,7 @@ public abstract class AbstractMainView extends JPanel
 		gutter.setFoldBackground(foldBackground);
 		gutter.setArmedFoldBackground(armedFoldBackground);
 
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(scrollPane);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(scrollPane);
 		return scrollPane;
 	}
 
@@ -2216,7 +2216,7 @@ public abstract class AbstractMainView extends JPanel
 		setBackgroundImageAlpha(prefs.imageAlpha);
 		Object prefsBackgroundObject = prefs.backgroundObject;
 		if (prefsBackgroundObject instanceof String) {
-			Image image = RTextUtilities.getImageFromFile(
+			Image image = UIUtil.getImageFromFile(
 									(String)prefsBackgroundObject);
 			if (image!=null) {
 				setBackgroundObject(image);
@@ -3113,7 +3113,7 @@ public abstract class AbstractMainView extends JPanel
 			backgroundObject = newBackground;
 		}
 		else if (newBackground instanceof Image) {
-			backgroundObject = RTextUtilities.getTranslucentImage(owner,
+			backgroundObject = UIUtil.getTranslucentImage(owner,
 										(Image)newBackground, imageAlpha);
 		}
 

@@ -27,8 +27,8 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextUtilities;
 import org.fife.ui.RScrollPane;
+import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.dockablewindows.DockableWindow;
 
@@ -72,12 +72,12 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 		shellTextArea.addPropertyChangeListener(
 							ConsoleTextArea.PROPERTY_PROCESS_RUNNING, this);
 		RScrollPane sp = new RScrollPane(shellTextArea);
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(sp);
 		mainPanel.add(sp, "System");
 
 		jsTextArea = new JavaScriptShellTextArea(plugin);
 		sp = new RScrollPane(jsTextArea);
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(sp);
 		mainPanel.add(sp, "JavaScript");
 
 		// Create a "toolbar" for the shells.

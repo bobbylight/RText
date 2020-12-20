@@ -27,10 +27,10 @@ import javax.swing.JTable;
 import org.fife.rtext.AbstractParserNoticeWindow;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
-import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.langsupport.Plugin;
 import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.RScrollPane;
+import org.fife.ui.UIUtil;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 
@@ -56,9 +56,9 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 
 		model = new TypeScriptNoticeTableModel(msg.getString("TypeScript.Message"));
 		JTable table = createTable(model);
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(table);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(table);
 		RScrollPane sp = new DockableWindowScrollPane(table);
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(sp);
 
 		setLayout(new BorderLayout());
 		add(sp);

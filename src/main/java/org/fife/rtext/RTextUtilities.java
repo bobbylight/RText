@@ -9,35 +9,19 @@
  */
 package org.fife.rtext;
 
-import java.awt.AlphaComposite;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.Rectangle;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JWindow;
-import javax.swing.KeyStroke;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.text.BadLocationException;
@@ -557,27 +541,6 @@ public final class RTextUtilities {
 
 
 	/**
-	 * Returns an image from a file in a safe fashion.
-	 *
-	 * @param fileName The file from which to get the image (must be .jpg,
-	 *        .gif or .png).
-	 * @return The image contained in the file, or <code>null</code> if the
-	 *         image file was invalid.
-	 */
-	public static Image getImageFromFile(String fileName) {
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(new URL("file:///" + fileName));
-		} catch (MalformedURLException mue) {
-			mue.printStackTrace(); // This is our fault.
-		} catch (IOException e) {
-			// Do nothing.
-		}
-		return image; // null if there was an exception thrown.
-	}
-
-
-	/**
 	 * Returns the name of the LookAndFeel to load RText with the next time it
 	 * starts up.  This may not be the same thing as the currently active LAF,
 	 * if the user chose a LAF that used custom window decorations, for example.
@@ -744,44 +707,6 @@ public final class RTextUtilities {
 
 
 	/**
-	 * Returns a translucent version of a given <code>java.awt.Image</code>.
-	 *
-	 * @param rtext The parent RText instance.
-	 * @param image The <code>java.awt.Image</code> on which to apply the
-	 *        alpha filter.
-	 * @param alpha The alpha value to use when defining how translucent you
-	 *        want the image to be. This should be in the range 0.0f to 1.0f.
-	 * @return The translucent version of the image.
-	 */
-	public static BufferedImage getTranslucentImage(RText rtext, Image image,
-												float alpha) {
-
-		// Ensure valid alpha value
-		alpha = Math.max(0, alpha);
-		alpha = Math.min(alpha, 1);
-
-		// Create fast image
-		BufferedImage bi;
-		int w = image.getWidth(null);
-		int h = image.getHeight(null);
-		bi = rtext.getGraphicsConfiguration().createCompatibleImage(w, h);
-		Graphics2D g2d = bi.createGraphics();
-		try {
-			g2d.setColor(Color.white);
-			g2d.fillRect(0, 0, w, h);
-			g2d.setComposite(AlphaComposite.getInstance(
-									AlphaComposite.SRC_OVER, alpha));
-			g2d.drawImage(image, 0,0, null);
-		} finally {
-			g2d.dispose();
-		}
-
-		return bi;
-
-	}
-
-
-	/**
 	 * Returns whether the current Look and Feel (the one that will be saved,
 	 * not necessarily the active one) is primarily dark.
 	 *
@@ -854,25 +779,6 @@ public final class RTextUtilities {
 				}
 			}
 		}
-	}
-
-
-	/**
-	 * Remove problematic actions that prevent Ctrl+PageUp/PageDown from
-	 * being used for cycling through active documents.
-	 *
-	 * @param c The component to modify.
-	 */
-	public static void removeTabbedPaneFocusTraversalKeyBindings(JComponent c) {
-
-		InputMap im = c.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, InputEvent.CTRL_DOWN_MASK), "nothing");
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, InputEvent.CTRL_DOWN_MASK), "nothing");
-
-		im = c.getInputMap();
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, InputEvent.CTRL_DOWN_MASK), "nothing");
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, InputEvent.CTRL_DOWN_MASK), "nothing");
-
 	}
 
 

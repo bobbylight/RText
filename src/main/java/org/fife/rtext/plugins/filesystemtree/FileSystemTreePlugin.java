@@ -134,9 +134,9 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		WebLookAndFeelUtils.fixToolbar(dockableWindowTB);
 
 		tree = new Tree(this);
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(tree);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(tree);
 		RScrollPane scrollPane = new DockableWindowScrollPane(tree);
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(scrollPane);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(scrollPane);
 		wind.add(scrollPane);
 		wind.setPrimaryComponent(tree);
 

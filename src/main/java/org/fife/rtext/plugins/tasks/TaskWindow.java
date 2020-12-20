@@ -20,8 +20,8 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.AbstractParserNoticeWindow;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
-import org.fife.rtext.RTextUtilities;
 import org.fife.ui.RScrollPane;
+import org.fife.ui.UIUtil;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.parser.Parser;
@@ -55,9 +55,9 @@ class TaskWindow extends AbstractParserNoticeWindow
 
 		model = new TaskNoticeTableModel(rtext.getString("TaskList.Task"));
 		JTable table = createTable(model);
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(table);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(table);
 		RScrollPane sp = new DockableWindowScrollPane(table);
-		RTextUtilities.removeTabbedPaneFocusTraversalKeyBindings(sp);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(sp);
 
 		setLayout(new BorderLayout());
 		add(sp);
