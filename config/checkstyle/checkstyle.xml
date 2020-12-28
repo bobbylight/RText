@@ -106,6 +106,8 @@
         -->
         <module name="JavadocStyle"/>
 
+        <module name="JavadocMissingLeadingAsterisk"/>
+
         <module name="JavadocContentLocationCheck"/>
 
         <!-- Checks for Naming Conventions.                  -->
