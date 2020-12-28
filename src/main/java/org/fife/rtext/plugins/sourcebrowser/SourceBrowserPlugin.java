@@ -75,6 +75,8 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private File ctagsFile;				// Just for speed.
 	private String ctagsType;
 
+	private ConfigureAction configureAction;
+
 	private SortAction sortAction;
 	private JToggleButton sortButton;
 
@@ -164,6 +166,9 @@ public class SourceBrowserPlugin extends GUIPlugin
 		wind.add(dockableWindowTB, BorderLayout.NORTH);
 
 		dockableWindowTB.add(Box.createHorizontalGlue());
+		configureAction = new ConfigureAction(owner, msg);
+		JButton configureButton = new JButton(configureAction);
+		dockableWindowTB.add(configureButton);
 		sortAction = new SortAction(owner, msg);
 		sortButton = new JToggleButton(sortAction);
 		dockableWindowTB.add(sortButton);
@@ -583,6 +588,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		if (RText.ICON_STYLE_PROPERTY.equals(propertyName)) {
 			sortAction.refreshIcon();
+			configureAction.refreshIcon();
 		}
 
 		// Clean up cached source tree and listeners to aid GC
@@ -728,6 +734,39 @@ public class SourceBrowserPlugin extends GUIPlugin
 		DockableWindow wind = getDockableWindow(getPluginName());
 		SwingUtilities.updateComponentTreeUI(wind);
 		WebLookAndFeelUtils.fixToolbar(dockableWindowTB);
+	}
+
+
+	/**
+	 * Opens the options dialog to the configuration options for this plugin.
+	 */
+	private class ConfigureAction extends AppAction<RText> {
+
+		ConfigureAction(RText app, ResourceBundle msg) {
+			super(app, msg, "Action.Configure");
+			refreshIcon();
+			setName(null); // No text on button
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			org.fife.ui.OptionsDialog od = getApplication().getOptionsDialog();
+			od.initialize();
+			od.setSelectedOptionsPanel(msg.getString("Name"));
+			od.setVisible(true);
+		}
+
+		void refreshIcon() {
+
+			// Allow themes, such as the dark theme, to provide an icon
+			Icon icon = getApplication().getIconGroup().getIcon("options");
+			if (icon != null) {
+				setIcon(icon);
+			}
+			else {
+				setIcon(new EmptyIcon(16, 16));
+			}
+		}
 	}
 
 

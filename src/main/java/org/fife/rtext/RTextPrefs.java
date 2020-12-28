@@ -303,7 +303,9 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		searchToolBarVisible = false;
 		dividerLocations = new int[4];
 		for (int i=0; i<4; i++) {
-			dividerLocations[i] = -1; // negative => left components preferred size.
+			// negative => left components preferred size.
+			// A negative value also helps the component know when it isn't expanded
+			dividerLocations[i] = -1;
 		}
 		dividerVisible = new boolean[4];
 		for (int i = 0; i < 4; i++) {
