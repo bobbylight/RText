@@ -321,6 +321,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_JSP,				createValue("*.jsp"));
 		filters.put(SYNTAX_STYLE_JSON_WITH_COMMENTS,createValue(".jshintrc", "tslint.json"));
 		filters.put(SYNTAX_STYLE_JSON,				createValue("*.json"));
+		filters.put(SYNTAX_STYLE_KOTLIN,			createValue("*.kt", "*.kts"));
 		filters.put(SYNTAX_STYLE_LATEX,				createValue("*.tex", "*.ltx", "*.latex"));
 		filters.put(SYNTAX_STYLE_LESS, 				createValue("*.less"));
 		filters.put(SYNTAX_STYLE_LISP, 				createValue("*.cl", "*.clisp", "*.el", "*.l", "*.lisp",

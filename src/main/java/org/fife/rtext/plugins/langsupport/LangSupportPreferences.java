@@ -87,6 +87,8 @@ public class LangSupportPreferences extends Prefs {
 	public boolean jsp_autoAddClosingTags;
 	public boolean jsp_folding_enabled;
 
+	public boolean kotlin_folding_enabled;
+
 	public boolean latex_folding_enabled;
 
 	public boolean less_folding_enabled;
@@ -202,6 +204,8 @@ public class LangSupportPreferences extends Prefs {
 		jsp_enabled = true;
 		jsp_autoAddClosingTags = true;
 		jsp_folding_enabled = true;
+
+		kotlin_folding_enabled = true;
 
 		latex_folding_enabled = true;
 

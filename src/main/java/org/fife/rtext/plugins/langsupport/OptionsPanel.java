@@ -129,6 +129,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 		addChildPanel(new JSHintOptionsPanel());
 		addChildPanel(new JsonOptionsPanel());
 		addChildPanel(new JspOptionsPanel());
+		addChildPanel(new KotlinOptionsPanel());
 		addChildPanel(new LatexOptionsPanel());
 		addChildPanel(new LessOptionsPanel());
 		addChildPanel(new MxmlOptionsPanel());

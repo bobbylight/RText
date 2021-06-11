@@ -1,7 +1,7 @@
 RText is a programmer's text editor written in Java.  It has all the features
 you would expect:
 
-* Syntax highlighting for 45+ languages
+* Syntax highlighting for 50+ languages
 * Code folding
 * Regex search and replace
 * Find/replace in files

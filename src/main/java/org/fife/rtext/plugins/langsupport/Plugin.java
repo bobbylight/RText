@@ -379,6 +379,9 @@ public class Plugin extends GUIPlugin {
 		jspls.setAutoAddClosingTags(prefs.jsp_autoAddClosingTags);
 		view.setCodeFoldingEnabledFor(language, prefs.jsp_folding_enabled);
 
+		language = SyntaxConstants.SYNTAX_STYLE_KOTLIN;
+		view.setCodeFoldingEnabledFor(language, prefs.kotlin_folding_enabled);
+
 		language = SyntaxConstants.SYNTAX_STYLE_LATEX;
 		view.setCodeFoldingEnabledFor(language, prefs.latex_folding_enabled);
 
@@ -577,6 +580,9 @@ public class Plugin extends GUIPlugin {
 		prefs.jsp_enabled = jspls.isAutoCompleteEnabled();
 		prefs.jsp_autoAddClosingTags = jspls.getAutoAddClosingTags();
 		prefs.jsp_folding_enabled = view.isCodeFoldingEnabledFor(language);
+
+		language = SyntaxConstants.SYNTAX_STYLE_KOTLIN;
+		prefs.kotlin_folding_enabled = view.isCodeFoldingEnabledFor(language);
 
 		language = SyntaxConstants.SYNTAX_STYLE_LATEX;
 		prefs.latex_folding_enabled = view.isCodeFoldingEnabledFor(language);

@@ -84,11 +84,12 @@ public final class FileTypeIconManager {
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_HTML,				PATH + "html.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_JAVA,				PATH + "java.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT,		PATH + "script_code.png");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_KOTLIN,			PATH + "kotlin.svg");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_PERL,				PATH + "epic.gif");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_PHP,				PATH + "page_white_php.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_SAS,				PATH + "sas.gif");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_SCALA,			PATH + "scala.png");
-		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL,		PATH + "page_white_tux.png");
+		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL,		PATH + "shFile.svg");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT,		PATH + "ts.png");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH,	PATH + "bat.gif");
 		type2IconNameMap.put(SyntaxConstants.SYNTAX_STYLE_XML,				PATH + "xml.png");
