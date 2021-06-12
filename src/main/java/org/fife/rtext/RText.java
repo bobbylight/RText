@@ -988,10 +988,18 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		initRecentFileManager(prefs);
 
 		// Make the split pane positions same as last time.
-		setSplitPaneDividerLocation(TOP, prefs.dividerLocations[TOP], prefs.dividerVisible[TOP]);
-		setSplitPaneDividerLocation(LEFT, prefs.dividerLocations[LEFT], prefs.dividerVisible[LEFT]);
-		setSplitPaneDividerLocation(BOTTOM, prefs.dividerLocations[BOTTOM], prefs.dividerVisible[BOTTOM]);
-		setSplitPaneDividerLocation(RIGHT, prefs.dividerLocations[RIGHT], prefs.dividerVisible[RIGHT]);
+		setSplitPaneDividerLocation(DockableWindowConstants.TOP,
+			prefs.dividerLocations[DockableWindowConstants.TOP],
+			prefs.dividerVisible[DockableWindowConstants.TOP]);
+		setSplitPaneDividerLocation(DockableWindowConstants.LEFT,
+			prefs.dividerLocations[DockableWindowConstants.LEFT],
+			prefs.dividerVisible[DockableWindowConstants.LEFT]);
+		setSplitPaneDividerLocation(DockableWindowConstants.BOTTOM,
+			prefs.dividerLocations[DockableWindowConstants.BOTTOM],
+			prefs.dividerVisible[DockableWindowConstants.BOTTOM]);
+		setSplitPaneDividerLocation(DockableWindowConstants.RIGHT,
+			prefs.dividerLocations[DockableWindowConstants.RIGHT],
+			prefs.dividerVisible[DockableWindowConstants.RIGHT]);
 
 		// Show any docked windows
 		setSpellingWindowVisible(prefs.viewSpellingList);

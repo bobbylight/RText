@@ -40,6 +40,7 @@ import javax.swing.event.ListSelectionListener;
 import org.fife.ui.RListSelectionModel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -101,7 +102,7 @@ class RTextSplitPaneView extends AbstractMainView
 		URL res = getClass().getResource(IMAGE_FILE);
 		listWindow.setIcon(new ImageIcon(res));
 		listWindow.add(documentListScrollPane);
-		listWindow.setPosition(DockableWindow.LEFT);
+		listWindow.setPosition(DockableWindowConstants.LEFT);
 		listWindow.setActive(true);
 		owner.addDockableWindow(listWindow);
 
@@ -387,10 +388,10 @@ class RTextSplitPaneView extends AbstractMainView
 
 				listWindowPosition = location;
 				int pos = switch (listWindowPosition) {
-					case DOCUMENT_SELECT_TOP -> DockableWindow.TOP;
-					case DOCUMENT_SELECT_BOTTOM -> DockableWindow.BOTTOM;
-					case DOCUMENT_SELECT_LEFT -> DockableWindow.LEFT;
-					case DOCUMENT_SELECT_RIGHT -> DockableWindow.RIGHT;
+					case DOCUMENT_SELECT_TOP -> DockableWindowConstants.TOP;
+					case DOCUMENT_SELECT_BOTTOM -> DockableWindowConstants.BOTTOM;
+					case DOCUMENT_SELECT_LEFT -> DockableWindowConstants.LEFT;
+					case DOCUMENT_SELECT_RIGHT -> DockableWindowConstants.RIGHT;
 					default -> 0;
 				};
 

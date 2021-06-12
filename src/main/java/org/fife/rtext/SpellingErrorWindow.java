@@ -23,6 +23,7 @@ import javax.swing.*;
 import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.UIUtil;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
@@ -58,7 +59,7 @@ class SpellingErrorWindow extends AbstractParserNoticeWindow
 		setLayout(new BorderLayout());
 		add(sp);
 
-		setPosition(BOTTOM);
+		setPosition(DockableWindowConstants.BOTTOM);
 		setActive(true);
 		setDockableWindowName(rtext.getString("SpellingErrorList.Spelling"));
 

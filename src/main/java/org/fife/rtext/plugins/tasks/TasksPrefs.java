@@ -16,6 +16,7 @@ import javax.swing.KeyStroke;
 
 import org.fife.ui.app.prefs.Prefs;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 
 
 /**
@@ -68,7 +69,7 @@ public class TasksPrefs extends Prefs {
 
 		// Ensure window position is valid.
 		if (!DockableWindow.isValidPosition(windowPosition)) {
-			windowPosition = DockableWindow.BOTTOM;
+			windowPosition = DockableWindowConstants.BOTTOM;
 		}
 
 	}
@@ -77,7 +78,7 @@ public class TasksPrefs extends Prefs {
 	@Override
 	public void setDefaults() {
 		windowVisible = true;
-		windowPosition = DockableWindow.BOTTOM;
+		windowPosition = DockableWindowConstants.BOTTOM;
 		windowVisibilityAccelerator = null;
 		taskIdentifiers = DEFAULT_TASK_IDS;
 	}

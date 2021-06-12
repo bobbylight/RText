@@ -22,6 +22,7 @@ import org.fife.rsta.ac.js.JsErrorParser;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 import org.fife.ui.app.prefs.Prefs;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 
 
 /**
@@ -251,7 +252,7 @@ public class LangSupportPreferences extends Prefs {
 
 		ts_folding_enabled = true;
 		ts_build_output_window_visible = false;
-		ts_build_output_window_position = DockableWindow.BOTTOM;
+		ts_build_output_window_position = DockableWindowConstants.BOTTOM;
 		int ctrlShift = InputEvent.SHIFT_DOWN_MASK;
 		ctrlShift |= Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 		ts_build_accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_F6, ctrlShift);

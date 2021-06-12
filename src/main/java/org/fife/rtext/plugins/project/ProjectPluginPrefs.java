@@ -15,6 +15,7 @@ import javax.swing.KeyStroke;
 
 import org.fife.ui.app.prefs.Prefs;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 
 
 /**
@@ -59,7 +60,7 @@ public class ProjectPluginPrefs extends Prefs {
 		super.load(in);
 		// Ensure window position is valid.
 		if (!DockableWindow.isValidPosition(windowPosition)) {
-			windowPosition = DockableWindow.BOTTOM;
+			windowPosition = DockableWindowConstants.BOTTOM;
 		}
 	}
 
@@ -67,7 +68,7 @@ public class ProjectPluginPrefs extends Prefs {
 	@Override
 	public void setDefaults() {
 		windowVisible = true;
-		windowPosition = DockableWindow.LEFT;
+		windowPosition = DockableWindowConstants.LEFT;
 		windowVisibilityAccelerator = null;
 		openWorkspaceName = null;
 		treeRootVisible = false;

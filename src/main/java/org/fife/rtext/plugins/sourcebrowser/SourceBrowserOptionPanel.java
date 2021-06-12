@@ -25,9 +25,9 @@ import org.fife.rtext.*;
 import org.fife.ui.FSATextField;
 import org.fife.ui.Hyperlink;
 import org.fife.ui.UIUtil;
-import org.fife.ui.app.GUIApplicationConstants;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 
 
@@ -46,8 +46,7 @@ import org.fife.ui.rtextfilechooser.RTextFileChooser;
  */
 class SourceBrowserOptionPanel
 		extends PluginOptionsDialogPanel<SourceBrowserPlugin>
-		implements ActionListener, DocumentListener, ItemListener,
-				GUIApplicationConstants {
+		implements ActionListener, DocumentListener, ItemListener {
 
 	private final JCheckBox visibleCB;
 	private final JComboBox<String> locationCombo;
@@ -409,12 +408,12 @@ class SourceBrowserOptionPanel
 	 * Sets the source browser placement displayed by this panel.
 	 *
 	 * @param placement The tab placement displayed; one of
-	 *        <code>GUIApplication.LEFT</code>, <code>TOP</code>,
+	 *        <code>DockableWindowConstants.LEFT</code>, <code>TOP</code>,
 	 *        <code>RIGHT</code>, <code>BOTTOM</code> or <code>FLOATING</code>.
 	 */
 	private void setSourceBrowserPlacement(int placement) {
 		if (!DockableWindow.isValidPosition(placement))
-			placement = LEFT;
+			placement = DockableWindowConstants.LEFT;
 		locationCombo.setSelectedIndex(placement);
 	}
 

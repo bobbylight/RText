@@ -31,6 +31,7 @@ import org.fife.ui.RScrollPane;
 import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 
 
 /**
@@ -57,7 +58,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 //		this.plugin = plugin;
 		setDockableWindowName(plugin.getString("DockableWindow.Title"));
 		setIcon(plugin.getPluginIcon());
-		setPosition(DockableWindow.BOTTOM);
+		setPosition(DockableWindowConstants.BOTTOM);
 		setLayout(new BorderLayout());
 
 		Listener listener = new Listener();

@@ -37,6 +37,7 @@ import org.fife.ui.MenuButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.ui.rtextfilechooser.filters.ExtensionFileFilter;
@@ -61,7 +62,7 @@ class ProjectWindow extends DockableWindow {
 		this.plugin = plugin;
 		setDockableWindowName(Messages.getString("Project.DockableWindow.Title"));
 		setIcon(plugin.getPluginIcon());
-		setPosition(DockableWindow.LEFT);
+		setPosition(DockableWindowConstants.LEFT);
 		setLayout(new BorderLayout());
 
 		toolbar = createToolBar(prefs);

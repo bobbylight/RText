@@ -13,6 +13,7 @@ import javax.swing.KeyStroke;
 
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.prefs.Prefs;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 
 
 /**
@@ -43,7 +44,7 @@ public class FileSystemTreePrefs extends Prefs {
 	@Override
 	public void setDefaults() {
 		active = true;
-		position = GUIPlugin.LEFT;
+		position = DockableWindowConstants.LEFT;
 		windowVisibilityAccelerator = null;
 	}
 

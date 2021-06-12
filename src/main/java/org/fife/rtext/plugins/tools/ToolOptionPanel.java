@@ -19,9 +19,9 @@ import javax.swing.table.TableColumnModel;
 import org.fife.rtext.AbstractConsoleTextAreaOptionPanel;
 import org.fife.ui.KeyStrokeCellRenderer;
 import org.fife.ui.UIUtil;
-import org.fife.ui.app.GUIApplicationConstants;
 import org.fife.ui.app.console.AbstractConsoleTextArea;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.modifiabletable.AbstractRowHandler;
 import org.fife.ui.modifiabletable.ModifiableTable;
 import org.fife.ui.modifiabletable.ModifiableTableChangeEvent;
@@ -35,7 +35,7 @@ import org.fife.ui.modifiabletable.ModifiableTableListener;
  * @version 1.1
  */
 class ToolOptionPanel extends AbstractConsoleTextAreaOptionPanel<ToolPlugin>
-			implements ModifiableTableListener, GUIApplicationConstants {
+			implements ModifiableTableListener {
 
 	static final String MSG = "org.fife.rtext.plugins.tools.OptionPanel";
 
@@ -204,12 +204,12 @@ class ToolOptionPanel extends AbstractConsoleTextAreaOptionPanel<ToolPlugin>
 	 * Sets the tool output panel placement placement displayed by this panel.
 	 *
 	 * @param placement The placement displayed; one of
-	 *        <code>GUIApplication.LEFT</code>, <code>TOP</code>,
+	 *        <code>DockableWindowConstants.LEFT</code>, <code>TOP</code>,
 	 *        <code>RIGHT</code>, <code>BOTTOM</code> or <code>FLOATING</code>.
 	 */
 	private void setToolOutputPanelPlacement(int placement) {
 		if (!DockableWindow.isValidPosition(placement))
-			placement = LEFT;
+			placement = DockableWindowConstants.LEFT;
 		locationCombo.setSelectedIndex(placement);
 	}
 

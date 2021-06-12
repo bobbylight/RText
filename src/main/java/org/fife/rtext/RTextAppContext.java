@@ -6,6 +6,7 @@
 package org.fife.rtext;
 
 import org.fife.ui.app.AppContext;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.rtextarea.RTextArea;
 
 import java.awt.*;
@@ -125,14 +126,14 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 		prefs.carets[RTextArea.OVERWRITE_MODE]= mainView.getCaretStyle(RTextArea.OVERWRITE_MODE).ordinal();
 		prefs.caretBlinkRate			= mainView.getCaretBlinkRate();
 		prefs.searchToolBarVisible		= rtext.isSearchToolBarVisible();
-		prefs.dividerLocations[RText.TOP]	= rtext.getSplitPaneDividerLocation(RText.TOP);
-		prefs.dividerLocations[RText.LEFT] = rtext.getSplitPaneDividerLocation(RText.LEFT);
-		prefs.dividerLocations[RText.BOTTOM] = rtext.getSplitPaneDividerLocation(RText.BOTTOM);
-		prefs.dividerLocations[RText.RIGHT]= rtext.getSplitPaneDividerLocation(RText.RIGHT);
-		prefs.dividerVisible[RText.TOP]	= rtext.isDockableWindowGroupExpanded(RText.TOP);
-		prefs.dividerVisible[RText.LEFT] = rtext.isDockableWindowGroupExpanded(RText.LEFT);
-		prefs.dividerVisible[RText.BOTTOM] = rtext.isDockableWindowGroupExpanded(RText.BOTTOM);
-		prefs.dividerVisible[RText.RIGHT]= rtext.isDockableWindowGroupExpanded(RText.RIGHT);
+		prefs.dividerLocations[DockableWindowConstants.TOP]	= rtext.getSplitPaneDividerLocation(DockableWindowConstants.TOP);
+		prefs.dividerLocations[DockableWindowConstants.LEFT] = rtext.getSplitPaneDividerLocation(DockableWindowConstants.LEFT);
+		prefs.dividerLocations[DockableWindowConstants.BOTTOM] = rtext.getSplitPaneDividerLocation(DockableWindowConstants.BOTTOM);
+		prefs.dividerLocations[DockableWindowConstants.RIGHT]= rtext.getSplitPaneDividerLocation(DockableWindowConstants.RIGHT);
+		prefs.dividerVisible[DockableWindowConstants.TOP]	= rtext.isDockableWindowGroupExpanded(DockableWindowConstants.TOP);
+		prefs.dividerVisible[DockableWindowConstants.LEFT] = rtext.isDockableWindowGroupExpanded(DockableWindowConstants.LEFT);
+		prefs.dividerVisible[DockableWindowConstants.BOTTOM] = rtext.isDockableWindowGroupExpanded(DockableWindowConstants.BOTTOM);
+		prefs.dividerVisible[DockableWindowConstants.RIGHT]= rtext.isDockableWindowGroupExpanded(DockableWindowConstants.RIGHT);
 		prefs.defaultLineTerminator		= mainView.getLineTerminator();
 		prefs.defaultEncoding			= mainView.getDefaultEncoding();
 		prefs.guessFileContentType		= mainView.getGuessFileContentType();

@@ -18,6 +18,7 @@ import javax.swing.KeyStroke;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.prefs.Prefs;
 import org.fife.ui.dockablewindows.DockableWindow;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 
 
 /**
@@ -77,7 +78,7 @@ public class ConsolePrefs extends Prefs {
 		super.load(in);
 		// Ensure window position is valid.
 		if (!DockableWindow.isValidPosition(windowPosition)) {
-			windowPosition = DockableWindow.BOTTOM;
+			windowPosition = DockableWindowConstants.BOTTOM;
 		}
 	}
 
@@ -86,7 +87,7 @@ public class ConsolePrefs extends Prefs {
 	public void setDefaults() {
 
 		windowVisible = false;
-		windowPosition = DockableWindow.BOTTOM;
+		windowPosition = DockableWindowConstants.BOTTOM;
 		windowVisibilityAccelerator = null;
 		syntaxHighlightInput = true;
 

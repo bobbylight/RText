@@ -13,6 +13,7 @@ import javax.swing.KeyStroke;
 
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.prefs.Prefs;
+import org.fife.ui.dockablewindows.DockableWindowConstants;
 
 
 /**
@@ -57,7 +58,7 @@ public class SourceBrowserPrefs extends Prefs {
 	@Override
 	public void setDefaults() {
 		active = true;
-		position = GUIPlugin.LEFT;
+		position = DockableWindowConstants.LEFT;
 		windowVisibilityAccelerator = null;
 		ctagsExecutable = "/usr/contrib/bin/ctags";
 		ctagsType = SourceBrowserPlugin.CTAGS_TYPE_EXUBERANT;
