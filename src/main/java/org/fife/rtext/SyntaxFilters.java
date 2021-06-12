@@ -327,6 +327,7 @@ public class SyntaxFilters implements SyntaxConstants {
 		filters.put(SYNTAX_STYLE_LISP, 				createValue("*.cl", "*.clisp", "*.el", "*.l", "*.lisp",
 			"*.lsp", "*.ml"));
 		filters.put(SYNTAX_STYLE_LUA,				createValue("*.lua"));
+		filters.put(SYNTAX_STYLE_MARKDOWN,			createValue("*.md"));
 		filters.put(SYNTAX_STYLE_MAKEFILE,			createValue("Makefile", "makefile"));
 		filters.put(SYNTAX_STYLE_MXML,				createValue("*.mxml"));
 		filters.put(SYNTAX_STYLE_NSIS,				createValue("*.nsi"));

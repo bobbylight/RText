@@ -282,12 +282,14 @@ public final class RTextUtilities {
 			addFilter(chooser, msg, "JavaScript", "js");
 			addFilter(chooser, msg, "JSON", "json");
 			addFilter(chooser, msg, "JSP", "jsp");
+			addFilter(chooser, msg, "Kotlin", "kt", "ktm", "kts");
 			addFilter(chooser, msg, "LaTeX", "tex", "ltx", "latex");
 			addFilter(chooser, msg, "Lisp",
 				"cl", "clisp", "el", "l", "lisp", "lsp", "ml");
 			addFilter(chooser, msg, "Lua", "lua");
 			addFilter(chooser, msg, "Makefile",
 				"Makefile", "makefile");
+			addFilter(chooser, msg, "Markdown", "md");
 			addFilter(chooser, msg, "Nsis", "nsi");
 			addFilter(chooser, msg, "Perl",
 				"pl", "perl", "pm");
