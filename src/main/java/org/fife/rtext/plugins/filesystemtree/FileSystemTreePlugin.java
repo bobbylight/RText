@@ -337,7 +337,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	void selectInFileChooser(File file) {
 		DockableWindow window = getDockableWindow(getPluginName());
 		window.setActive(true);
-		window.focusInDockableWindowGroup();
+		window.focusInDockableWindowGroup(true);
 		tree.setSelectedFile(file);
 	}
 

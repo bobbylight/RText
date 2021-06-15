@@ -91,7 +91,7 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 			setActive(true);
 		}
 
-		this.focusInDockableWindowGroup();
+		this.focusInDockableWindowGroup(true);
 		getRText().getMainView().getCurrentTextArea().requestFocusInWindow();
 		model.update(null, null); // Clear prior results
 		new BuildThread(plugin, this).start();
