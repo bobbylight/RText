@@ -2,8 +2,37 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
-4.0.0
+4.0.0 (06/15/2021)
 ------------------
+   - Bumping gradle version and versions of other dependencies. Fixing minor
+     linting issues from IntelliJ's 'Inspect Code' feature
+   - Removing EOL standardization from .editorconfig - this would wreck our
+     history, unfortunately
+   - Moving AbstractConsoleTextArea from RText to FifeCommon
+   - Parameterizing uses of GUIWorkerThread
+   - Use Java 14 language features - enhanced switch and @serial annotation -
+     where appropriate
+   - Bumping version to 4.0.0 and using new FifeCommon API's so preferences are
+     loaded and saved in a flat file instead of the registry on Windows
+   - Removing workaround for JMenuItems not having accelerator text updated
+     when an action's shortcut was updated, which was a bug in Java 5 and
+     earlier
+   - Removing workaround for a focus issue in Java 5 and earlier with the
+     tabbed pane
+   - Removing obsolete comment about todo when migrating to Java 5
+   - Removing legacy code to sync JCheckBoxMenuItems with visibility of docked
+     windows
+   - Removing outdated Javadoc and reflection error-handling code around
+     tidy/jsonbeans where we haven't used inflation in years
+   - Moving general utility methods from RText to FifeCommon
+   - Add a toolbar button to the SourceBrowser plugin to make it more obvious
+     how to configure it
+   - Bumping versions of RSTA libraries to latest
+   - Updating to RSTA 3.1.3-SNAPSHOT and adding Kotlin support
+   - Fix #55: Adding Markdown syntax highlighting support
+   - Updates to stay in sync with fifecommon-4.0.0-SNAPSHOT
+   - Fix #50: Right click -> 'Show in File System Tree' should expand side
+     panel if it is collapsed
 
 
 3.1.0 (05/04/2020)

@@ -22,5 +22,5 @@ jpackage --input rtext \
   --icon "${SCRIPT_DIR}/RText.icns" \
   --name RText \
   --app-version "${APP_VERSION}" \
-  --main-class org.fife.rtext.RText \
+  --main-class org.fife.rtext.Main \
   --main-jar RText.jar
