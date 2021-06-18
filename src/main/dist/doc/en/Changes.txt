@@ -2,6 +2,10 @@ RText Change Log
 http://bobbylight.github.io/RText/
 ----------------------------------
 
+4.0.1
+------------------
+
+
 4.0.0 (06/15/2021)
 ------------------
    - Bumping gradle version and versions of other dependencies. Fixing minor

@@ -62,7 +62,7 @@ public class ProjectPlugin extends GUIPlugin {
 
 	private static final String VIEW_CONSOLE_ACTION	= "viewProjectWindowAction";
 	private static final String DOCKABLE_WINDOW_PROJECTS = "projectsDockableWindow";
-	private static final String VERSION_STRING = "4.0.0";
+	private static final String VERSION_STRING = "4.0.1";
 
 
 	public ProjectPlugin(AbstractPluggableGUIApplication<?> app) {

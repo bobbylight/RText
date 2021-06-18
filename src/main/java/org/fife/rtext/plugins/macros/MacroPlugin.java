@@ -40,7 +40,7 @@ import org.fife.ui.rtextarea.IconGroup;
 public class MacroPlugin extends AbstractPlugin
 		implements PropertyChangeListener {
 
-	private static final String VERSION				= "4.0.0";
+	private static final String VERSION				= "4.0.1";
 
 	private final RText app;
 	private JMenu macrosMenu;
