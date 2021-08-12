@@ -59,8 +59,6 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 	private final JCheckBox foldingEnabledCB;
 	private final JButton rdButton;
 
-	private static final String PROPERTY		= "Property";
-
 
 	/**
 	 * Constructor.
@@ -285,25 +283,21 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 			if (enabledCB==source) {
 				// Trick related components to toggle enabled states
 				setEnabledCBSelected(enabledCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (autoAddClosingTagsCB==source) {
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (autoActivateCB==source) {
 				setAutoActivateCBSelected(autoActivateCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (foldingEnabledCB==source ||
 					showDescWindowCB==source) {
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (rdButton==source) {
@@ -319,8 +313,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 					setAutoActivateCBSelected(true);
 					aaDelayField.setText("300");
 					foldingEnabledCB.setSelected(true);
-					hasUnsavedChanges = true;
-					firePropertyChange(PROPERTY, null, null);
+					setDirty(true);
 				}
 			}
 
@@ -332,8 +325,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		}
 
 		private void handleDocumentEvent() {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, null, null);
+			setDirty(true);
 		}
 
 		@Override

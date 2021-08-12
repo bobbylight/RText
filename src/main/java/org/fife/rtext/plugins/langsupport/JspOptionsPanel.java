@@ -31,7 +31,6 @@ import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
-
 /**
  * Options panel for JSP code completion.
  *
@@ -45,8 +44,6 @@ class JspOptionsPanel extends OptionsDialogPanel {
 	private final JCheckBox autoAddClosingTagsCB;
 	private final JCheckBox foldingEnabledCB;
 	private final JButton rdButton;
-
-	private static final String PROPERTY		= "Property";
 
 
 	/**
@@ -184,18 +181,15 @@ class JspOptionsPanel extends OptionsDialogPanel {
 			if (enabledCB==source) {
 				// Trick related components to toggle enabled states
 				setEnabledCBSelected(enabledCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (autoAddClosingTagsCB==source) {
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (foldingEnabledCB==source) {
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (rdButton==source) {
@@ -205,8 +199,7 @@ class JspOptionsPanel extends OptionsDialogPanel {
 					enabledCB.setSelected(true);
 					autoAddClosingTagsCB.setSelected(true);
 					foldingEnabledCB.setSelected(true);
-					hasUnsavedChanges = true;
-					firePropertyChange(PROPERTY, null, null);
+					setDirty(true);
 				}
 			}
 

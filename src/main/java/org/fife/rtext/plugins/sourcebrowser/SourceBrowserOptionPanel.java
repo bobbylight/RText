@@ -58,12 +58,6 @@ class SourceBrowserOptionPanel
 
 	private RTextFileChooser exeFileChooser;
 
-	private static final String CTAGS_LOCATION_PROPERTY = "CTagsLocation";
-	private static final String CTAGS_TYPE_PROPERTY = "CTagsType";
-	private static final String HTML_TOOLTIPS_PROPERTY = "HTMLToolTips";
-	private static final String PROPERTY				= "Property";
-	private static final String SB_LOCATION_PROPERTY = "SBLoc";
-
 	private static final String CTAGS_HOME_PAGE	= "http://ctags.sourceforge.net";
 
 
@@ -219,9 +213,7 @@ class SourceBrowserOptionPanel
 		String command = e.getActionCommand();
 
 		if (visibleCB==source) {
-			hasUnsavedChanges = true;
-			boolean visible = visibleCB.isSelected();
-			firePropertyChange(PROPERTY, !visible, visible);
+			setDirty(true);
 		}
 
 		else if ("Browse".equals(command)) {
@@ -244,24 +236,18 @@ class SourceBrowserOptionPanel
 		else if (exubCtagsRB==source) {
 			if (lastSelectedCtagsRB!=exubCtagsRB) {
 				lastSelectedCtagsRB = exubCtagsRB;
-				hasUnsavedChanges = true;
-				String value = SourceBrowserPlugin.CTAGS_TYPE_EXUBERANT;
-				firePropertyChange(CTAGS_TYPE_PROPERTY, null, value);
+				setDirty(true);
 			}
 		}
 
 		else if ("HTMLToolTips".equals(command)) {
-			hasUnsavedChanges = true;
-			boolean value = htmlToolTipCheckBox.isSelected();
-			firePropertyChange(HTML_TOOLTIPS_PROPERTY, !value, value);
+			setDirty(true);
 		}
 
 		else if (standardCtagsRB==source) {
 			if (lastSelectedCtagsRB!=standardCtagsRB) {
 				lastSelectedCtagsRB = standardCtagsRB;
-				hasUnsavedChanges = true;
-				String value = SourceBrowserPlugin.CTAGS_TYPE_STANDARD;
-				firePropertyChange(CTAGS_TYPE_PROPERTY, null, value);
+				setDirty(true);
 			}
 		}
 
@@ -298,14 +284,11 @@ class SourceBrowserOptionPanel
 	 */
 	private void doDocumentUpdated(DocumentEvent e) {
 
-		hasUnsavedChanges = true;
-
 		// Fire the property change so the "Apply" button gets enabled.
 		// We must check documents as DocumentEvent does not have getSource().
 		Document modifiedDocument = e.getDocument();
 		if (modifiedDocument==ctagsExecutableTextField.getDocument()) {
-			firePropertyChange(CTAGS_LOCATION_PROPERTY, null,
-								ctagsExecutableTextField.getText());
+			setDirty(true);
 		}
 
 	}
@@ -376,9 +359,7 @@ class SourceBrowserOptionPanel
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource()==locationCombo &&
 				e.getStateChange()==ItemEvent.SELECTED) {
-			hasUnsavedChanges = true;
-			int placement = locationCombo.getSelectedIndex();
-			firePropertyChange(SB_LOCATION_PROPERTY, -1, placement);
+			setDirty(true);
 		}
 	}
 

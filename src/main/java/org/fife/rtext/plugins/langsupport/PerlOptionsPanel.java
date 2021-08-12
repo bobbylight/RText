@@ -78,7 +78,6 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	private final JButton rdButton;
 
 	private static final String PERL5LIB		= "PERL5LIB";
-	private static final String PROPERTY		= "Property";
 
 
 	/**
@@ -436,8 +435,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			if (enabledCB==source) {
 				// Trick related components to toggle enabled states
 				setEnabledCBSelected(enabledCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (paramAssistanceCB==source ||
@@ -445,15 +443,13 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 					useParensCB==source ||
 					warningsCB==source ||
 					taintModeCB==source) {
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (compileCB==source) {
 				// Trick related components to toggle enabled states
 				setCompileCBSelected(compileCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (installBrowseButton==source) {
@@ -465,16 +461,14 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 					installLocField.setFileSystemAware(false);
 					installLocField.setText(dir);
 					installLocField.setFileSystemAware(true);
-					hasUnsavedChanges = true;
-					firePropertyChange(PROPERTY, null, null);
+					setDirty(true);
 				}
 			}
 
 			else if (overridePerl5LibCB==source) {
 				boolean enabled = overridePerl5LibCB.isSelected();
 				perl5Table.setEnabled(enabled);
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (rdButton==source) {
@@ -511,8 +505,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 					overridePerl5LibCB.setSelected(false);
 					perl5Table.setEnabled(false);
 					setPerl5TableContents(IOUtil.getEnvSafely(PERL5LIB));
-					hasUnsavedChanges = true;
-					firePropertyChange(PROPERTY, null, null);
+					setDirty(true);
 				}
 
 			}
@@ -525,8 +518,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		}
 
 		private void handleDocumentEvent() {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, null, null);
+			setDirty(true);
 		}
 
 		@Override
@@ -536,8 +528,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 
 		@Override
 		public void modifiableTableChanged(ModifiableTableChangeEvent e) {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, null, null);
+			setDirty(true);
 		}
 
 		@Override

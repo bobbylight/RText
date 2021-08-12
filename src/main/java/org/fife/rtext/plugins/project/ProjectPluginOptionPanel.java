@@ -45,8 +45,6 @@ class ProjectPluginOptionPanel extends PluginOptionsDialogPanel<ProjectPlugin>
 	private final JLabel locationLabel;
 	private final JComboBox<String> locationCombo;
 
-	private static final String PROPERTY = "Property";
-
 
 	/**
 	 * Constructor.
@@ -115,9 +113,7 @@ class ProjectPluginOptionPanel extends PluginOptionsDialogPanel<ProjectPlugin>
 
 		if (visibleCB==source) {
 			setVisibleCBSelected(visibleCB.isSelected());
-			hasUnsavedChanges = true;
-			boolean visible = visibleCB.isSelected();
-			firePropertyChange(PROPERTY, !visible, visible);
+			setDirty(true);
 		}
 
 	}
@@ -172,9 +168,7 @@ class ProjectPluginOptionPanel extends PluginOptionsDialogPanel<ProjectPlugin>
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource()==locationCombo &&
 				e.getStateChange()==ItemEvent.SELECTED) {
-			hasUnsavedChanges = true;
-			int placement = getDockableWindowPlacement();
-			firePropertyChange(PROPERTY, -1, placement);
+			setDirty(true);
 		}
 	}
 

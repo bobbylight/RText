@@ -46,8 +46,6 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel<FileSystemTreeP
 	private final JLabel locationLabel;
 	private final JComboBox<String> locationCombo;
 
-	private static final String PROPERTY = "Property";
-
 
 	/**
 	 * Constructor.
@@ -115,9 +113,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel<FileSystemTreeP
 
 		if (visibleCB==source) {
 			setVisibleCBSelected(visibleCB.isSelected());
-			hasUnsavedChanges = true;
-			boolean visible = visibleCB.isSelected();
-			firePropertyChange(PROPERTY, !visible, visible);
+			setDirty(true);
 		}
 
 	}
@@ -172,9 +168,7 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel<FileSystemTreeP
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource()==locationCombo &&
 				e.getStateChange()==ItemEvent.SELECTED) {
-			hasUnsavedChanges = true;
-			int placement = getFileSystemTreePlacement();
-			firePropertyChange(PROPERTY, -1, placement);
+			setDirty(true);
 		}
 	}
 

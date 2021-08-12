@@ -55,8 +55,6 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	private DefaultTableModel tableModel;
 	private ResourceBundle msg;
 
-	private static final String TEMPLATE_PROPERTY	= "template";
-
 
 	/**
 	 * Constructor.
@@ -198,9 +196,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 		// A row was added, removed or modified in the template table.
 		@Override
 		public void modifiableTableChanged(ModifiableTableChangeEvent e) {
-			hasUnsavedChanges = true;
-			TemplateOptionPanel.this.firePropertyChange(TEMPLATE_PROPERTY,
-											null, templateTable);
+			setDirty(true);
 		}
 
 	}

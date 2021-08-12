@@ -73,8 +73,6 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 	private JTextField aaDelayField;
 	private final JButton rdButton;
 
-	private static final String PROPERTY		= "Property";
-
 
 	/**
 	 * Constructor.
@@ -435,34 +433,29 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 			if (enabledCB==source) {
 				// Trick related components to toggle enabled states
 				setEnabledCBSelected(enabledCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (paramAssistanceCB==source ||
 					showDescWindowCB==source ||
 					strictCB==source || e4xCB==source) {
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (rhinoRB==source) {
 				setSyntaxCheckingEngine(JsErrorParser.RHINO);
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (jshintRB==source) {
 				setSyntaxCheckingEngine(JsErrorParser.JSHINT);
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (autoActivateCB==source) {
 				// Trick related components to toggle enabled states
 				setAutoActivateCBSelected(autoActivateCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (rdButton==source) {
@@ -485,8 +478,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 					jshintrcField.setText(null);
 					setAutoActivateCBSelected(true);
 					aaDelayField.setText("300");
-					hasUnsavedChanges = true;
-					firePropertyChange(PROPERTY, null, null);
+					setDirty(true);
 				}
 
 			}
@@ -499,8 +491,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		}
 
 		private void handleDocumentEvent() {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, null, null);
+			setDirty(true);
 		}
 
 		@Override

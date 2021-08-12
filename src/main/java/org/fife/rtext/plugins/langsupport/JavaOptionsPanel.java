@@ -81,8 +81,6 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	private final JTextField aaDelayField;
 	private final JButton rdButton;
 
-	private static final String PROPERTY		= "Property";
-
 
 	/**
 	 * Constructor.
@@ -484,22 +482,19 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 			if (enabledCB==source) {
 				// Trick related components to toggle enabled states
 				setEnabledCBSelected(enabledCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (paramAssistanceCB==source ||
 					showDescWindowCB==source ||
 					buildPathModsCB==source) {
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (autoActivateCB==source) {
 				// Trick related components to toggle enabled states
 				setAutoActivateCBSelected(autoActivateCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (addJREButton==source) {
@@ -516,8 +511,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 						}
 						File rtJar = new File(info.getLocationAsString());
 						model.addRow(new Object[] { rtJar, src });
-						hasUnsavedChanges = true;
-						firePropertyChange(PROPERTY, null, null);
+						setDirty(true);
 					}
 				}
 			}
@@ -552,8 +546,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 					model.addRow(new Object[] {
 							jreInfo.getJarFile(),
 							src });
-					hasUnsavedChanges = true;
-					firePropertyChange(PROPERTY, null, null);
+					setDirty(true);
 				}
 
 			}
@@ -566,8 +559,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		}
 
 		private void handleDocumentEvent() {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, null, null);
+			setDirty(true);
 		}
 
 		@Override
@@ -577,8 +569,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 		@Override
 		public void modifiableTableChanged(ModifiableTableChangeEvent e) {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, null, null);
+			setDirty(true);
 		}
 
 		@Override

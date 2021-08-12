@@ -47,8 +47,6 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 	private final JCheckBox useSystemManCB;
 	private final JButton rdButton;
 
-	private static final String PROPERTY		= "Property";
-
 
 	/**
 	 * Constructor.
@@ -186,13 +184,11 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 			if (enabledCB==source) {
 				// Trick related components to toggle enabled states
 				setEnabledCBSelected(enabledCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (showDescWindowCB==source) {
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (rdButton==source) {
@@ -202,8 +198,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 					setEnabledCBSelected(true);
 					showDescWindowCB.setSelected(true);
 					useSystemManCB.setSelected(defaultSystemManSelected);
-					hasUnsavedChanges = true;
-					firePropertyChange(PROPERTY, null, null);
+					setDirty(true);
 				}
 			}
 

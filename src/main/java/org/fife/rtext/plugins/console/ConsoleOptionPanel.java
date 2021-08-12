@@ -94,9 +94,7 @@ class ConsoleOptionPanel extends AbstractConsoleTextAreaOptionPanel<Plugin>
 		Object source = e.getSource();
 
 		if (highlightInputCB==source) {
-			boolean selected = highlightInputCB.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 	}

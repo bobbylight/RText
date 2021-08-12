@@ -53,7 +53,6 @@ class MacroOptionPanel extends PluginOptionsDialogPanel<MacroPlugin>
 	private final DefaultTableModel model;
 	private final ModifiableTable macroTable;
 
-	private static final String PROPERTY		= "property";
 	static final String TITLE_KEY				= "Plugin.Name";
 
 
@@ -230,8 +229,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel<MacroPlugin>
 
 	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, null, e.getRow());
+		setDirty(true);
 	}
 
 

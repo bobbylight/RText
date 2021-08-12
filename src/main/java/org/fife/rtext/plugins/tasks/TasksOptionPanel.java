@@ -63,8 +63,6 @@ class TasksOptionPanel extends PluginOptionsDialogPanel<TasksPlugin>
 	private final DefaultTableModel model;
 	private final ModifiableTable table;
 
-	private static final String PROPERTY			= "Property";
-
 
 	/**
 	 * Constructor.
@@ -154,8 +152,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel<TasksPlugin>
 		String command = e.getActionCommand();
 
 		if (visibleCB==e.getSource()) {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, null, null);
+			setDirty(true);
 		}
 
 		else if ("RestoreDefaults".equals(command)) {
@@ -168,8 +165,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel<TasksPlugin>
 				visibleCB.setSelected(true);
 				locationCombo.setSelectedIndex(2);
 				setDisplayedTaskIds(TasksPrefs.DEFAULT_TASK_IDS);
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 		}
@@ -217,17 +213,14 @@ class TasksOptionPanel extends PluginOptionsDialogPanel<TasksPlugin>
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource()==locationCombo &&
 				e.getStateChange()==ItemEvent.SELECTED) {
-			hasUnsavedChanges = true;
-			int placement = locationCombo.getSelectedIndex();
-			firePropertyChange(PROPERTY, -1, placement);
+			setDirty(true);
 		}
 	}
 
 
 	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, null, null);
+		setDirty(true);
 	}
 
 

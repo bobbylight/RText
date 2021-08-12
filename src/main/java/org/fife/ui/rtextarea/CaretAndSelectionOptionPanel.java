@@ -69,7 +69,6 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	private RColorSwatchesButton[] secLangButtons;
 
 	private static final int SEC_LANG_COUNT		= 3;
-	private static final String PROPERTY		= "property";
 
 
 	/**
@@ -211,35 +210,27 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 				for (int i=0; i<SEC_LANG_COUNT; i++) {
 					secLangButtons[i].setColor(defaultSecLangColor[i]);
 				}
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, defaultCaretColor);
+				setDirty(true);
 			}
 
 		}
 
 		else if ("InsertCaretCombo".equals(command)) {
-			int style = insCaretCombo.getSelectedIndex();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, -1, style);
+			setDirty(true);
 		}
 
 		else if ("OverwriteCaretCombo".equals(command)) {
-			int style = overCaretCombo.getSelectedIndex();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, -1, style);
+			setDirty(true);
 		}
 
 		else if ("RoundedSelectionCheckBox".equals(command)) {
-			boolean selected = roundedSelCheckBox.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if (selectedTextColorCB==source) {
 			boolean selected = ((JCheckBox)source).isSelected();
 			setSelectedTextColorEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if (systemSelectionButton==source) {
@@ -254,23 +245,20 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 				selColorButton.setColor(systemSelectionColor);
 				setSelectedTextColorEnabled(true);
 				selectedTextColorButton.setColor(selectedTextColor);
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, false, true);
+				setDirty(true);
 			}
 		}
 
 		else if ("MarkOccurrences".equals(command)) {
 			boolean selected = enableMOCheckBox.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
 			moColorButton.setEnabled(selected);
+			setDirty(true);
 		}
 
 		else if (secLangCB==source) {
 			boolean selected = ((JCheckBox)source).isSelected();
 			setHighlightSecondaryLanguages(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 	}
@@ -590,8 +578,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		// We need to forward this on to the options dialog, whatever
 		// it is, so that the "Apply" button gets updated.
 		if (RColorButton.COLOR_CHANGED_PROPERTY.equals(e.getPropertyName())) {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, e.getOldValue(), e.getNewValue());
+			setDirty(true);
 		}
 	}
 
@@ -726,8 +713,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, null, blinkRateSpinner.getValue());
+		setDirty(true);
 	}
 
 

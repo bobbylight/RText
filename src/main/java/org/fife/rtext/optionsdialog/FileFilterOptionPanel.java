@@ -53,8 +53,6 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	private final JCheckBox ignoreExtsCB;
 	private final RText rtext;
 
-	private static final String DEFAULTS_RESTORED	= "defaultsRestored";
-
 
 	/**
 	 * Constructor.
@@ -138,20 +136,16 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 					!ignoreExtsCB.isSelected()) {
 				guessTypeCB.setSelected(true);
 				ignoreExtsCB.setSelected(true);
-				hasUnsavedChanges = true;
-				firePropertyChange(DEFAULTS_RESTORED,
-								Boolean.FALSE,Boolean.TRUE);
+				setDirty(true);
 			}
 		}
 
 		else if ("GuessContentType".equals(command)) {
-			hasUnsavedChanges = true;
-			firePropertyChange(DEFAULTS_RESTORED, false, true);
+			setDirty(true);
 		}
 
 		else if ("IgnoreTheseExtensions".equals(command)) {
-			hasUnsavedChanges = true;
-			firePropertyChange(DEFAULTS_RESTORED, false, true);
+			setDirty(true);
 		}
 
 	}
@@ -227,8 +221,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	 */
 	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
-		hasUnsavedChanges = true;
-		firePropertyChange("fileFilterChanged", null, e.getRow());
+		setDirty(true);
 	}
 
 

@@ -56,11 +56,6 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlu
 	private final JLabel borderLabel;
 	private final RColorSwatchesButton borderButton;
 
-	private static final String COLOR_PROPERTY		= "ColorProperty";
-	private static final String REFRESH_RATE_PROPERTY	= "RefreshRateProperty";
-	private static final String SYSTEM_COLORS_PROPERTY= "SystemColorsProperty";
-	private static final String VISIBILITY_PROPERTY	= "VisibilityProperty";
-
 
 	/**
 	 * Constructor.
@@ -179,16 +174,13 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlu
 		Object source = e.getSource();
 
 		if (source==visibilityCheckBox) {
-			hasUnsavedChanges = true;
-			boolean visible = visibilityCheckBox.isSelected();
-			firePropertyChange(VISIBILITY_PROPERTY, !visible, visible);
+			setDirty(true);
 		}
 
 		else if (source==systemColorsCheckBox) {
-			hasUnsavedChanges = true;
 			boolean use = systemColorsCheckBox.isSelected();
 			setColorOptionsEnabled(!use);
-			firePropertyChange(SYSTEM_COLORS_PROPERTY, !use, use);
+			setDirty(true);
 		}
 
 	}
@@ -248,9 +240,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlu
 	public void propertyChange(PropertyChangeEvent e) {
 		String name = e.getPropertyName();
 		if (name.equals(RColorSwatchesButton.COLOR_CHANGED_PROPERTY)) {
-			hasUnsavedChanges = true;
-			firePropertyChange(COLOR_PROPERTY, e.getOldValue(),
-										e.getNewValue());
+			setDirty(true);
 		}
 	}
 
@@ -295,9 +285,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlu
 	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		hasUnsavedChanges = true;
-		firePropertyChange(REFRESH_RATE_PROPERTY,
-						null, refreshRateSpinner.getValue());
+		setDirty(true);
 	}
 
 

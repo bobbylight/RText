@@ -48,8 +48,6 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 	private final JCheckBox foldingEnabledCB;
 	private final JButton rdButton;
 
-	private static final String PROPERTY		= "property";
-
 
 	/**
 	 * Constructor.
@@ -108,8 +106,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 
 		if (autoCompleteClosingTagsCB==source || codeCompletionEnabledCB==source ||
 				foldingEnabledCB==source) {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, null, null);
+			setDirty(true);
 		}
 
 		else if (rdButton==source &&
@@ -119,8 +116,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 			autoCompleteClosingTagsCB.setSelected(true);
 			codeCompletionEnabledCB.setSelected(true);
 			foldingEnabledCB.setSelected(true);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, null, null);
+			setDirty(true);
 		}
 
 	}

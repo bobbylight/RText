@@ -65,8 +65,6 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 	private LabelValueComboBox<String, String> jsonStyleCombo;
 	private JCheckBox jsonIndentFirstLevelCB;
 
-	private static final String PROPERTY		= "Property";
-
 
 	/**
 	 * Constructor.
@@ -122,8 +120,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 		Object source = e.getSource();
 
 		if (source instanceof JCheckBox || source instanceof JComboBox) {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, false, true);
+			setDirty(true);
 		}
 
 		else if ("RestoreDefaults".equals(e.getActionCommand())) {
@@ -156,8 +153,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 				jsonIndentFirstLevelCB.setSelected(false);
 				jsonSpaceSpinner.setValue(3);
 				jsonStyleCombo.setSelectedValue(defaultJsonStyle);
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 		}
 
@@ -406,7 +402,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		firePropertyChange(PROPERTY, false, true);
+		setDirty(true);
 	}
 
 

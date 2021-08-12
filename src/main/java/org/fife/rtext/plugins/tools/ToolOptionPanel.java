@@ -171,8 +171,7 @@ class ToolOptionPanel extends AbstractConsoleTextAreaOptionPanel<ToolPlugin>
 
 	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, null, e.getRow());
+		setDirty(true);
 	}
 
 

@@ -78,8 +78,6 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		{ "English (United States)", SpellingSupport.DICTIONARIES[1] },
 	};
 
-	private static final String MISC_PROPERTY			= "Miscellaneous";
-
 
 	public SpellingOptionPanel() {
 
@@ -321,13 +319,11 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 			if ("Enabled".equals(command)) {
 				boolean enabled = enabledCB.isSelected();
 				setSpellCheckingEnabled(enabled);
-				hasUnsavedChanges = true;
-				firePropertyChange(MISC_PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if ("Dictionary".equals(command)) {
-				hasUnsavedChanges = true;
-				firePropertyChange(MISC_PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if ("BrowseUserDictionary".equals(command)) {
@@ -340,14 +336,12 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 					userDictField.setFileSystemAware(false);
 					userDictField.setText(file.getAbsolutePath());
 					userDictField.setFileSystemAware(true);
-					hasUnsavedChanges = true;
-					firePropertyChange(MISC_PROPERTY, null, null);
+					setDirty(true);
 				}
 			}
 
 			else if ("ViewSpellingWindow".equals(command)) {
-				hasUnsavedChanges = true;
-				firePropertyChange(MISC_PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if ("RestoreDefaults".equals(command)) {
@@ -376,8 +370,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 					maxErrorsField.setText(defaultMaxErrors);
 					viewSpellingWindowCB.setSelected(false);
 
-					hasUnsavedChanges = true;
-					firePropertyChange(MISC_PROPERTY, null, null);
+					setDirty(true);
 
 				}
 			}
@@ -390,8 +383,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			hasUnsavedChanges = true;
-			firePropertyChange(MISC_PROPERTY, null, null);
+			setDirty(true);
 		}
 
 		@Override
@@ -400,16 +392,14 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 			String prop = e.getPropertyName();
 
 			if (RColorSwatchesButton.COLOR_CHANGED_PROPERTY.equals(prop)) {
-				hasUnsavedChanges = true;
-				firePropertyChange(MISC_PROPERTY, null, null);
+				setDirty(true);
 			}
 
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			hasUnsavedChanges = true;
-			firePropertyChange(MISC_PROPERTY, null, null);
+			setDirty(true);
 		}
 
 	}

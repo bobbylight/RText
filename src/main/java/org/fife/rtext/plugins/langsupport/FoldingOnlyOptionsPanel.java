@@ -39,8 +39,6 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	private final JButton rdButton;
 	private final Listener listener;
 
-	private static final String PROPERTY		= "Property";
-
 
 	/**
 	 * Constructor.
@@ -181,15 +179,13 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 
 			if (enabledCB==source) {
 				setEnabledCBSelected(enabledCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (rdButton==source &&
 					!enabledCB.isSelected()) {
 				setEnabledCBSelected(true);
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 		}

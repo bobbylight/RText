@@ -127,51 +127,31 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		switch (actionCommand) {
 			case "ViewComboBox":
-				hasUnsavedChanges = true;
-				int old = mainViewStyle;
-				mainViewStyle = viewCombo.getSelectedIndex();
-				firePropertyChange("UIOptionPanel.mainViewStyle", old, mainViewStyle);
+				setDirty(true);
 				break;
 			case "DocSelCombo":
-				hasUnsavedChanges = true;
-				old = documentSelectionPlacement;
-				documentSelectionPlacement = docSelCombo.getSelectedIndex() +
-					JTabbedPane.TOP;
-				firePropertyChange("UIOptionPanel.documentSelectionPlacement",
-					old, documentSelectionPlacement);
+				setDirty(true);
 				break;
 			case "LookAndFeelComboBox":
-				hasUnsavedChanges = true;
 				possiblyUpdateSubstanceThemeWidgets();
-				String newLnF = getLookAndFeelClassName();
-				firePropertyChange("UIOptionPanel.lookAndFeel", null, newLnF);
+				setDirty(true);
 				break;
 			case "SubstanceThemeComboBox":
-				hasUnsavedChanges = true;
-				newLnF = getLookAndFeelClassName();
-				firePropertyChange("UIOptionPanel.lookAndFeel", null, newLnF);
+				setDirty(true);
 				break;
 			case "IconComboBox":
-				hasUnsavedChanges = true;
-				String name = imageLnFCombo.getSelectedValue();
-				firePropertyChange("UIOptionPanel.iconStyle", null, name);
+				setDirty(true);
 				break;
 			case "StatusBarComboBox":
-				hasUnsavedChanges = true;
-				old = statusBarStyle;
-				statusBarStyle = statusBarCombo.getSelectedIndex();
-				firePropertyChange("UIOptionPanel.statusBarStyle", old, statusBarStyle);
+				setDirty(true);
 				break;
 			case "HighlightModifiedCheckBox":
 				boolean highlight = highlightModifiedDocumentDisplayNames();
 				hmColorButton.setEnabled(highlight);
-				hasUnsavedChanges = true;
-				firePropertyChange("UIOptionPanel.highlightModified", !highlight, highlight);
+				setDirty(true);
 				break;
 			case "ShowHostNameCB":
-				boolean show = getShowHostName();
-				hasUnsavedChanges = true;
-				firePropertyChange("UIOptionPanel.showHostName", !show, show);
+				setDirty(true);
 				break;
 		}
 
@@ -747,9 +727,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		String propName = e.getPropertyName();
 
 		if (propName.equals(RColorSwatchesButton.COLOR_CHANGED_PROPERTY)) {
-			hasUnsavedChanges = true;
-			firePropertyChange("UIOptionPanel." + propName,
-								e.getOldValue(), e.getNewValue());
+			setDirty(true);
 		}
 
 	}

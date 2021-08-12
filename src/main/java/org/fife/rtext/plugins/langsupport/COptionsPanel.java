@@ -45,8 +45,6 @@ class COptionsPanel extends OptionsDialogPanel {
 	private final JCheckBox foldingEnabledCB;
 	private final JButton rdButton;
 
-	private static final String PROPERTY		= "Property";
-
 
 	/**
 	 * Constructor.
@@ -189,18 +187,15 @@ class COptionsPanel extends OptionsDialogPanel {
 			if (enabledCB==source) {
 				// Trick related components to toggle enabled states
 				setEnabledCBSelected(enabledCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (showDescWindowCB==source) {
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (foldingEnabledCB==source) {
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (rdButton==source) {
@@ -212,8 +207,7 @@ class COptionsPanel extends OptionsDialogPanel {
 					foldingEnabledCB.setSelected(true);
 					paramAssistanceCB.setSelected(true);
 					showDescWindowCB.setSelected(true);
-					hasUnsavedChanges = true;
-					firePropertyChange(PROPERTY, null, null);
+					setDirty(true);
 				}
 			}
 

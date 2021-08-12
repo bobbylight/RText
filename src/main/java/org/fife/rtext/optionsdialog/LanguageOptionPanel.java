@@ -61,8 +61,6 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	private final Map<String, String> languageMap;
 	private final GUIApplication app;
 
-	private static final String LANGUAGE_PROPERTY	= "language";
-
 	private static final String ROOT_ELEMENT		= "RText-languages";
 	private static final String LANGUAGE			= "language";
 	private static final String NAME				= "name";
@@ -363,9 +361,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		hasUnsavedChanges = true;
-		firePropertyChange(LANGUAGE_PROPERTY,
-						-1, languageList.getSelectedIndex());
+		setDirty(true);
 	}
 
 

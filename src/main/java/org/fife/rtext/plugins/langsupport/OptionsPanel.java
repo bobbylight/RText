@@ -51,7 +51,6 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 	private final JButton rdButton;
 
 	private static final Color DEFAULT_ALT_ROW_COLOR	= new Color(0xf4f4f4);
-	private static final String PROPERTY				= "Property";
 
 
 	OptionsPanel(Plugin plugin) {
@@ -202,19 +201,16 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 			Object source = e.getSource();
 
 			if (codeFoldingThresholdCB == source) {
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (altColorCB==source) {
 				altColorButton.setEnabled(altColorCB.isSelected());
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (altColorButton==source) {
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 			else if (rdButton==source) {
@@ -227,8 +223,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 					altColorCB.setSelected(false);
 					altColorButton.setEnabled(false);
 					altColorButton.setColor(DEFAULT_ALT_ROW_COLOR);
-					hasUnsavedChanges = true;
-					firePropertyChange(PROPERTY, null, null);
+					setDirty(true);
 				}
 
 			}

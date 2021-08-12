@@ -50,8 +50,6 @@ public abstract class AbstractConsoleTextAreaOptionPanel<T extends Plugin>
 
 	protected JButton defaultsButton;
 
-	protected static final String PROPERTY = "Property";
-
 	private static final ResourceBundle MSG = ResourceBundle.getBundle(
 		"org.fife.rtext.RText");
 
@@ -78,45 +76,38 @@ public abstract class AbstractConsoleTextAreaOptionPanel<T extends Plugin>
 
 		if (visibleCB==source) {
 			setVisibleCBSelected(visibleCB.isSelected());
-			hasUnsavedChanges = true;
-			boolean visible = visibleCB.isSelected();
-			firePropertyChange(PROPERTY, !visible, visible);
+			setDirty(true);
 		}
 
 		else if (exceptionsCB==source) {
 			boolean selected = exceptionsCB.isSelected();
 			exceptionsButton.setEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if (promptCB==source) {
 			boolean selected = promptCB.isSelected();
 			promptButton.setEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if (stderrCB==source) {
 			boolean selected = stderrCB.isSelected();
 			stderrButton.setEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if (stdoutCB==source) {
 			boolean selected = stdoutCB.isSelected();
 			stdoutButton.setEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 
 		else if (defaultsButton==source) {
 			if (notDefaults()) {
 				restoreDefaults();
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, false, true);
+				setDirty(true);
 			}
 		}
 	}
@@ -289,9 +280,7 @@ public abstract class AbstractConsoleTextAreaOptionPanel<T extends Plugin>
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getSource()==locationCombo &&
 			e.getStateChange()==ItemEvent.SELECTED) {
-			hasUnsavedChanges = true;
-			int placement = locationCombo.getSelectedIndex();
-			firePropertyChange(PROPERTY, -1, placement);
+			setDirty(true);
 		}
 	}
 
@@ -334,8 +323,7 @@ public abstract class AbstractConsoleTextAreaOptionPanel<T extends Plugin>
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, false, true);
+		setDirty(true);
 	}
 
 

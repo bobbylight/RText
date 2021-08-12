@@ -179,28 +179,23 @@ class SearchOptionPanel extends OptionsDialogPanel
 		String command = e.getActionCommand();
 
 		if (dialogRB==source) {
-			hasUnsavedChanges = true;
 			setUseSearchToolbars(false);
-			firePropertyChange(PROPERTY, true, false);
+			setDirty(true);
 		}
 
 		else if (toolbarRB==source) {
-			hasUnsavedChanges = true;
 			setUseSearchToolbars(true);
-			firePropertyChange(PROPERTY, false, true);
+			setDirty(true);
 		}
 
 		else if (translucentSearchDialogsCB==source) {
-			hasUnsavedChanges = true;
 			boolean selected = translucentSearchDialogsCB.isSelected();
 			setTranslucentSearchDialogsSelected(selected);
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if (ruleCombo==source) {
-			hasUnsavedChanges = true;
-			int value = ruleCombo.getSelectedIndex();
-			firePropertyChange(PROPERTY, -1, value);
+			setDirty(true);
 		}
 
 		else if ("RestoreDefaults".equals(command)) {
@@ -215,8 +210,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 				setTranslucentSearchDialogsSelected(false);
 				ruleCombo.setSelectedIndex(2);
 				slider.setValue(defaultOpacity);
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, false, true);
+				setDirty(true);
 			}
 		}
 
@@ -325,8 +319,7 @@ class SearchOptionPanel extends OptionsDialogPanel
 	public void stateChanged(ChangeEvent e) {
 		float value = slider.getValue() / 100f;
 		opacityDisplay.setText(format.format(value));
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, -1, slider.getValue());
+		setDirty(true);
 	}
 
 

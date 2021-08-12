@@ -54,8 +54,6 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	private RColorSwatchesButton foldBackgroundButton;
 	private RColorSwatchesButton armedFoldBackgroundButton;
 
-	private static final String PROPERTY = "property";
-
 
 	/**
 	 * Constructor.
@@ -211,8 +209,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 				foldBackgroundButton.setColor(Color.WHITE);
 				armedFoldBackgroundButton.setColor(Color.WHITE);
 
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, false, true);
+				setDirty(true);
 
 			}
 
@@ -267,8 +264,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, false, true);
+		setDirty(true);
 	}
 
 
@@ -279,8 +275,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	public void propertyChange(PropertyChangeEvent e) {
 		// We need to forward this on to the options dialog, whatever
 		// it is, so that the "Apply" button gets updated.
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, e.getOldValue(), e.getNewValue());
+		setDirty(true);
 	}
 
 

@@ -315,8 +315,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				setBackgroundImageFileName(backgroundDialog.
 										getCurrentImageFileName());
 				refreshSyntaxHighlightingSection();
-				hasUnsavedChanges = true;
-				firePropertyChange(UNKNOWN_PROPERTY, oldBG, newBG);
+				setDirty(true);
 			}
 		}
 
@@ -329,8 +328,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			colorScheme.getStyle(indexToStyle(i)).foreground =
 						selected ? foregroundButton.getColor() : null;
 			refreshSyntaxHighlightingSection();
-			hasUnsavedChanges = true;
-			firePropertyChange(SYNTAX_COLOR_PROPERTY, null, null);
+			setDirty(true);
 		}
 
 		// If the user clicked the "background" check box.
@@ -342,8 +340,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			colorScheme.getStyle(indexToStyle(i)).background =
 						selected ? backgroundButton.getColor() : null;
 			refreshSyntaxHighlightingSection();
-			hasUnsavedChanges = true;
-			firePropertyChange(SYNTAX_COLOR_PROPERTY, null, null);
+			setDirty(true);
 		}
 
 		// Changing the canned sample text.
@@ -369,8 +366,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				setTextAreaForeground(defaultForeground);
 				setSyntaxScheme(defaultScheme);
 				refreshSyntaxHighlightingSection();
-				hasUnsavedChanges = true;
-				firePropertyChange(DEFAULTS_RESTORED, null, null);
+				setDirty(true);
 				// Force a repaint of the preview panel.
 				valueChanged(null);
 			}
@@ -544,8 +540,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			sampleArea.setForeground(mainFontSelector.getFontColor());
 			refreshSyntaxHighlightingSection();
 			valueChanged(null); // Just to refresh fontSelector.  TODO: refactor
-			hasUnsavedChanges = true;
-			firePropertyChange(UNKNOWN_PROPERTY, false, true);
+			setDirty(true);
 		}
 
 		// FontSelectors fire properties when users interactively update
@@ -567,9 +562,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			}
 
 			refreshSyntaxHighlightingSection();
-			hasUnsavedChanges = true;
-			firePropertyChange(SYNTAX_FONT_PROPERTY, e.getOldValue(),
-							e.getNewValue());
+			setDirty(true);
 
 		}
 
@@ -588,9 +581,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				int i = syntaxList.getSelectedIndex();
 				colorScheme.getStyle(indexToStyle(i)).foreground = fg;
 				refreshSyntaxHighlightingSection();
-				hasUnsavedChanges = true;
-				firePropertyChange(SYNTAX_COLOR_PROPERTY, e.getOldValue(),
-												e.getNewValue());
+				setDirty(true);
 			}
 		}
 
@@ -610,17 +601,13 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				int i = syntaxList.getSelectedIndex();
 				colorScheme.getStyle(indexToStyle(i)).background = bg;
 				refreshSyntaxHighlightingSection();
-				hasUnsavedChanges = true;
-				firePropertyChange(SYNTAX_COLOR_PROPERTY, e.getOldValue(),
-												e.getNewValue());
+				setDirty(true);
 			}
 		}
 
 		else {
 			refreshSyntaxHighlightingSection();
-			hasUnsavedChanges = true;
-			firePropertyChange(UNKNOWN_PROPERTY,
-							e.getOldValue(), e.getNewValue());
+			setDirty(true);
 		}
 
 	}

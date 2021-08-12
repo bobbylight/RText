@@ -21,7 +21,6 @@ import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
@@ -83,8 +82,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	private RColorSwatchesButton tabLineColorButton;
 
 	private JButton restoreDefaultsButton;
-
-	private static final String PROPERTY		= "property";
 
 
 	/**
@@ -351,37 +348,30 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				bothBracketsCB.setSelected(false);
 				setTabLinesEnabled(false);
 				tabLineColorButton.setColor(Color.gray);
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, null, null);
+				setDirty(true);
 			}
 
 		}
 
 		else if ("WordWrapCheckBox".equals(command)) {
-			boolean ww = wordWrapCheckBox.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !ww, ww);
+			setDirty(true);
 		}
 
 		else if ("HighlightCurrentLineCheckBox".equals(command)) {
 			boolean selected = highlightCurrentLineCheckBox.isSelected();
 			hclColorButton.setEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if ("EmulateTabsCheckBox".equals(command)) {
-			boolean selected = emulateTabsCheckBox.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if ("MarginLineCheckBox".equals(command)) {
 			boolean selected = marginLineCheckBox.isSelected();
 			marginLinePositionField.setEnabled(selected);
 			marginLineColorButton.setEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if ("MakeLinksClickable".equals(command)) {
@@ -390,52 +380,40 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			modKeyCombo.setEnabled(selected);
 			linkColorLabel.setEnabled(selected);
 			linkColorButton.setEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if ("ModKeyCombo".equals(command)) {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, -1, modKeyCombo.getSelectedIndex());
+			setDirty(true);
 		}
 
 		else if ("VisibleWhitespace".equals(command)) {
 			boolean visible = visibleWhitespaceCheckBox.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !visible, visible);
+			setDirty(true);
 		}
 
 		else if ("VisibleEOL".equals(command)) {
 			boolean visible = visibleEOLCheckBox.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !visible, visible);
+			setDirty(true);
 		}
 
 		else if ("AutoIndent".equals(command)) {
 		}
 
 		else if ("RemWhitespaceLines".equals(command)) {
-			boolean visible = remWhitespaceLinesCheckBox.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !visible, visible);
+			setDirty(true);
 		}
 
 		else if ("AutoCloseCurlys".equals(command)) {
-			boolean visible = autoInsertClosingCurlyCheckBox.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !visible, visible);
+			setDirty(true);
 		}
 
 		else if ("aaCB".equals(command)) {
-			boolean selected = aaCheckBox.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if ("FracFM".equals(command)) {
-			boolean frac = fractionalMetricsCheckBox.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !frac, frac);
+			setDirty(true);
 		}
 
 		else if ("BracketMatchCheckBox".equals(command)) {
@@ -443,21 +421,17 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			bmBGColorButton.setEnabled(selected);
 			bmBorderColorButton.setEnabled(selected);
 			bothBracketsCB.setEnabled(selected);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if ("BothBracketsCB".equals(command)) {
-			boolean selected = bothBracketsCB.isSelected();
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !selected, selected);
+			setDirty(true);
 		}
 
 		else if ("ShowIndentGuide".equals(command)) {
 			boolean show = showTabLinesCheckBox.isSelected();
 			tabLineColorButton.setEnabled(show);
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, !show, show);
+			setDirty(true);
 		}
 
 	}
@@ -551,19 +525,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 * Called when a text field in this panel gets updated.
 	 */
 	private void doDocumentUpdated(DocumentEvent e) {
-
-		hasUnsavedChanges = true;
-
-		Document modifiedDocument = e.getDocument();
-
-		if (modifiedDocument==tabSizeField.getDocument()) {
-			firePropertyChange(PROPERTY, null, tabSizeField.getText());
-		}
-		else if (modifiedDocument==marginLinePositionField.getDocument()) {
-			firePropertyChange(PROPERTY,
-							null, marginLinePositionField.getText());
-		}
-
+		setDirty(true);
 	}
 
 
@@ -793,8 +755,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	public void propertyChange(PropertyChangeEvent e) {
 		// We need to forward this on to the options dialog, whatever
 		// it is, so that the "Apply" button gets updated.
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, e.getOldValue(), e.getNewValue());
+		setDirty(true);
 	}
 
 

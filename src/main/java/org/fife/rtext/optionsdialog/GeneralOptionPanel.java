@@ -60,8 +60,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	private static final String TERM_CRLF	= "\r\n";
 	private static final String TERM_SYSTEM	= System.getProperty("line.separator");
 
-	private static final String PROPERTY	= "property";
-
 
 	/**
 	 * Constructor.
@@ -239,39 +237,31 @@ class GeneralOptionPanel extends OptionsDialogPanel
 				if (dir.isDirectory() &&
 						!chosenDir.equals(dirField.getText())) {
 					dirField.setText(chosenDir);
-					hasUnsavedChanges = true;
-					firePropertyChange(PROPERTY, null, chosenDir);
+					setDirty(true);
 				}
 			}
 		}
 
 		else if ("LineTerminator".equals(command)) {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, null,
-							terminatorCombo.getSelectedItem());
+			setDirty(true);
 		}
 
 		else if ("Encoding".equals(command)) {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, null, encCombo.getSelectedItem());
+			setDirty(true);
 		}
 
 		else if ("Utf8BomCB".equals(command)) {
-			hasUnsavedChanges = true;
-			boolean bom = utf8BomCB.isSelected();
-			firePropertyChange(PROPERTY, !bom, bom);
+			setDirty(true);
 		}
 
 		else if ("SizeCheckCB".equals(command)) {
-			hasUnsavedChanges = true;
 			boolean sizeCheck = sizeCheckCB.isSelected();
 			sizeField.setEditable(sizeCheck);
-			firePropertyChange(PROPERTY, !sizeCheck, sizeCheck);
+			setDirty(true);
 		}
 
 		else if (dropShadowsInEditorCB==e.getSource()) {
-			hasUnsavedChanges = true;
-			firePropertyChange(PROPERTY, false, true);
+			setDirty(true);
 		}
 
 		else if ("RestoreDefaults".equals(command)) {
@@ -300,8 +290,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 				sizeField.setText(defaultSizeFieldText);
 				dropShadowsInEditorCB.setSelected(defaultDropShadowsInEditor);
 
-				hasUnsavedChanges = true;
-				firePropertyChange(PROPERTY, false, true);
+				setDirty(true);
 
 			}
 		}
@@ -429,8 +418,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 */
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, null, "fake");
+		setDirty(true);
 	}
 
 
@@ -441,8 +429,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 */
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		hasUnsavedChanges = true;
-		firePropertyChange(PROPERTY, null, "fake");
+		setDirty(true);
 	}
 
 

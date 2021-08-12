@@ -40,8 +40,6 @@ class PrintingOptionPanel extends OptionsDialogPanel
 	//private boolean useHeader;		// Internal variable used to remember what the user clicked.
 	//private boolean useFooter;		// Internal variable used to remember what the user clicked.
 
-	private static final String FONT_PROPERTY	= "PrintingOptionPanel.font";
-
 
 	/**
 	 * Constructor.
@@ -117,9 +115,7 @@ class PrintingOptionPanel extends OptionsDialogPanel
 
 		// If the user changed the print font...
 		if (propertyName.equals(FontSelector.FONT_PROPERTY)) {
-			hasUnsavedChanges = true;
-			Font font = fontSelector.getDisplayedFont();
-			firePropertyChange(FONT_PROPERTY, null, font);
+			setDirty(true);
 		}
 
 	}
