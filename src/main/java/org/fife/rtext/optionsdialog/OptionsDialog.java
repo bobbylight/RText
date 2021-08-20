@@ -91,7 +91,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		setIcon(panel, "file_filters.png");
 		panels.add(panel);
 
-		panel = new ShortcutOptionPanel(rtext, msg);
+		panel = new ShortcutOptionPanel(rtext);
 		setIcon(panel, "shortcuts.png");
 		panels.add(panel);
 
