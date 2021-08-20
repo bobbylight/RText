@@ -33,7 +33,6 @@ import org.fife.rtext.actions.ActionFactory;
 import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
-import org.fife.ui.StandardAction;
 import org.fife.ui.app.*;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.dockablewindows.DockableWindow;
@@ -1139,18 +1138,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	// TODO
 	void removeDockableWindow(DockableWindow wind) {
 		((DockableWindowPanel)mainContentPanel).removeDockableWindow(wind);
-	}
-
-
-	/**
-	 * Makes all actions use default accelerators.
-	 */
-	public void restoreDefaultAccelerators() {
-		for (Action a : getActions()) {
-			if (a instanceof StandardAction) {
-				((StandardAction)a).restoreDefaultAccelerator();
-			}
-		}
 	}
 
 

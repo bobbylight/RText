@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.app.Plugin;
+import org.fife.ui.app.options.ShortcutOptionPanel;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaOptionPanel;
 import org.fife.ui.rsyntaxtextarea.SpellingOptionPanel;
 import org.fife.ui.rsyntaxtextarea.TemplateOptionPanel;
