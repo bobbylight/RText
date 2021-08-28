@@ -40,7 +40,7 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 
 
 	@Override
-	protected RText createApplication(String[] filesToOpen, RTextPrefs preferences) {
+	protected RText createApplicationImpl(String[] filesToOpen, RTextPrefs preferences) {
 
 		RText rtext = new RText(this, filesToOpen, preferences);
 

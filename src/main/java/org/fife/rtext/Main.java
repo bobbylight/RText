@@ -6,6 +6,8 @@
 package org.fife.rtext;
 
 
+import javax.swing.*;
+
 /**
  * Program entry point.
  */
@@ -27,6 +29,6 @@ public final class Main {
 	 */
 	public static void main(String[] args) {
 		RTextAppContext context = new RTextAppContext();
-		context.startApplication(args);
+		SwingUtilities.invokeLater(() -> context.createApplication(args).setVisible(true));
 	}
 }
