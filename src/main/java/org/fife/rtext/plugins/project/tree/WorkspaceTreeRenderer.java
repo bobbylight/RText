@@ -15,8 +15,6 @@ import javax.swing.border.Border;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-import org.fife.util.SubstanceUtil;
-
 
 /**
  * The renderer for workspace tree views.
@@ -37,9 +35,6 @@ class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
 	 * @return The renderer.
 	 */
 	public static TreeCellRenderer create() {
-		if (SubstanceUtil.isSubstanceInstalled()) {
-			return new SubstanceWorkspaceTreeRenderer();
-		}
 		return new WorkspaceTreeRenderer();
 	}
 

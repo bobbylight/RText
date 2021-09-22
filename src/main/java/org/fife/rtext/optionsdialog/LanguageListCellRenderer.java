@@ -18,7 +18,6 @@ import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 
 import org.fife.rtext.optionsdialog.LanguageOptionPanel.IconTextInfo;
-import org.fife.util.SubstanceUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 
 
@@ -28,7 +27,6 @@ import org.fife.ui.WebLookAndFeelUtils;
  *
  * @author Robert Futrell
  * @version 1.0
- * @see SubstanceLanguageListCellRenderer
  */
 final class LanguageListCellRenderer extends DefaultListCellRenderer {
 
@@ -48,8 +46,8 @@ final class LanguageListCellRenderer extends DefaultListCellRenderer {
 
 	/**
 	 * Creates the cell renderer to use for the Language option panel.  Note
-	 * that this may not be an instance of this class (or a subclass), as some
-	 * Look and Feels require inheritance to look good (e.g. Substance).
+	 * that this may not be an instance of this class (or a subclass) for
+	 * certain high-maintenance Look and Feels.
 	 *
 	 * @return The renderer to use.
 	 */
@@ -57,12 +55,7 @@ final class LanguageListCellRenderer extends DefaultListCellRenderer {
 
 		JLabel delegate = null;
 
-		if (SubstanceUtil.isSubstanceInstalled()) {
-			// Can't delegate with Substance, because it unfortunately
-			// has hard dependencies on renderer types.  Yuck.
-			return new SubstanceLanguageListCellRenderer();
-		}
-		else if (WebLookAndFeelUtils.isWebLookAndFeelInstalled()) {
+		if (WebLookAndFeelUtils.isWebLookAndFeelInstalled()) {
 			delegate = (JLabel)UIManager.get("List.cellRenderer");
 		}
 

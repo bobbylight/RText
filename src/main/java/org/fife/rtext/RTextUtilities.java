@@ -30,7 +30,6 @@ import org.fife.jgoodies.looks.common.ShadowPopupBorder;
 import org.fife.jgoodies.looks.common.ShadowPopupFactory;
 import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.ui.OS;
-import org.fife.util.SubstanceUtil;
 import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
@@ -724,7 +723,7 @@ public final class RTextUtilities {
 
 		return laf != null && (
 				laf.contains("Darcula") ||
-				laf.contains("SubstanceGraphite")
+				laf.contains("FlatDark")
 				);
 	}
 
@@ -906,16 +905,10 @@ public final class RTextUtilities {
 
 				// If we're changing to a LAF that supports window decorations
 				// and our current one doesn't, or vice versa, inform the
-				// user that this change will occur on restart.  Substance
-				// seems to be the only troublemaker here (Metal, for example,
-				// supports window decorations, but works fine without special
-				// logic).
-				boolean curSubstance = SubstanceUtil.isSubstanceInstalled();
-				boolean nextSubstance = SubstanceUtil.
-											isASubstanceLookAndFeel(lnf);
+				// user that this change will occur on restart.
 				boolean curDarcula = DarculaUtil.isDarculaInstalled();
 				boolean nextDarcula = DarculaUtil.isDarculaLookAndFeel(lnf);
-				if (curSubstance!=nextSubstance || curDarcula || nextDarcula) {
+				if (curDarcula || nextDarcula) {
 					String message = rtext.getString(
 									"Info.LookAndFeel.LoadOnNextRestart");
 					String title = rtext.getString("InfoDialogHeader");

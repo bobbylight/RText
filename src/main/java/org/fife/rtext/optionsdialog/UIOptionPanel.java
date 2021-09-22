@@ -31,7 +31,6 @@ import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.IconGroup;
 import org.fife.ui.rtextarea.RTextAreaOptionPanel;
 import org.fife.util.DarculaUtil;
-import org.fife.util.SubstanceUtil;
 
 
 /**
@@ -68,8 +67,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	private JComboBox<String> viewCombo;
 	private JComboBox<String> docSelCombo;
 	private LabelValueComboBox<String, String> lnfCombo;
-	private JLabel substanceSkinLabel;
-	private LabelValueComboBox<String, String> substanceSkinCombo;
 	private LabelValueComboBox<String, String> imageLnFCombo;
 	private JComboBox<String> statusBarCombo;
 
@@ -77,11 +74,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	private RColorSwatchesButton hmColorButton;
 
 	private JCheckBox showHostNameCheckBox;
-
-	/**
-	 * The value displayed in the Look and Feel dropdown when a Substance skin is selected.
-	 */
-	private static final String LNF_VALUE_SUBSTANCE = "SUBSTANCE_STUB_VALUE";
 
 	/**
 	 * Constructor.
@@ -133,10 +125,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 				setDirty(true);
 				break;
 			case "LookAndFeelComboBox":
-				possiblyUpdateSubstanceThemeWidgets();
-				setDirty(true);
-				break;
-			case "SubstanceThemeComboBox":
 				setDirty(true);
 				break;
 			case "IconComboBox":
@@ -239,12 +227,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		lnfCombo.setActionCommand("LookAndFeelComboBox");
 		lnfCombo.addActionListener(this);
 
-		substanceSkinLabel = new JLabel(msg.getString("OptUISubstanceSkin"));
-
-		substanceSkinCombo = createSubstanceThemeComboBox();
-		substanceSkinCombo.setActionCommand("SubstanceThemeComboBox");
-		substanceSkinCombo.addActionListener(this);
-
 		imageLnFCombo = new LabelValueComboBox<>();
 		UIUtil.fixComboOrientation(imageLnFCombo);
 		imageLnFCombo.setActionCommand("IconComboBox");
@@ -268,30 +250,22 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		if (orientation.isLeftToRight()) {
 			springPanel2.add(new JLabel(msg.getString("OptUILnFT")));
 			springPanel2.add(lnfCombo);
-			springPanel2.add(substanceSkinLabel);
-			springPanel2.add(substanceSkinCombo);
 			springPanel2.add(new JLabel(msg.getString("OptUIIAT")));
 			springPanel2.add(imageLnFCombo);
-			springPanel2.add(new JPanel()); springPanel2.add(new JPanel());
 			springPanel2.add(new JLabel(msg.getString("OptUISBT")));
 			springPanel2.add(statusBarCombo);
-			springPanel2.add(new JPanel()); springPanel2.add(new JPanel());
 		}
 		else {
 			springPanel2.add(lnfCombo);
 			springPanel2.add(new JLabel(msg.getString("OptUILnFT")));
-			springPanel2.add(substanceSkinCombo);
-			springPanel2.add(substanceSkinLabel);
-			springPanel2.add(new JPanel()); springPanel2.add(new JPanel());
 			springPanel2.add(imageLnFCombo);
 			springPanel2.add(new JLabel(msg.getString("OptUIIAT")));
-			springPanel2.add(new JPanel()); springPanel2.add(new JPanel());
 			springPanel2.add(statusBarCombo);
 			springPanel2.add(new JLabel(msg.getString("OptUISBT")));
 		}
 		temp2.add(springPanel2, BorderLayout.LINE_START);
 		UIUtil.makeSpringCompactGrid(springPanel2,
-			3,4,		// rows,cols,
+			3,2,		// rows,cols,
 			0,0,		// initial-x, initial-y,
 			5,5);	// x-spacing, y-spacing.
 
@@ -377,7 +351,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		combo.addLabelValuePair("Flat Light", "com.formdev.flatlaf.FlatLightLaf");
 		combo.addLabelValuePair("Flat Dark", "com.formdev.flatlaf.FlatDarkLaf");
-		combo.addLabelValuePair("Substance", LNF_VALUE_SUBSTANCE);
 
 		// Add any 3rd party Look and Feels in the lnfs subdirectory.
 		ExtendedLookAndFeelInfo[] info = rtext.get3rdPartyLookAndFeelInfo();
@@ -417,48 +390,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		temp.add(Box.createVerticalGlue());
 		return temp;
-	}
-
-	/**
-	 * Creates and returns a special value combo box containing all available
-	 * Substance themes.
-	 *
-	 * @return The combo box.
-	 */
-	private static LabelValueComboBox<String, String> createSubstanceThemeComboBox() {
-
-		LabelValueComboBox<String, String> combo = new LabelValueComboBox<>();
-		UIUtil.fixComboOrientation(combo);
-
-		String root = "org.pushingpixels.substance.api.skin.Substance";
-
-		combo.addLabelValuePair("Business", root + "BusinessLookAndFeel");
-		combo.addLabelValuePair("Business Black Steel", root + "BusinessBlackSteelLookAndFeel");
-		combo.addLabelValuePair("Business Blue Steel", root + "BusinessBlueSteelLookAndFeel");
-		combo.addLabelValuePair("Cerulean", root + "CeruleanLookAndFeel");
-		combo.addLabelValuePair("Creme", root + "CremeLookAndFeel");
-		combo.addLabelValuePair("Creme Coffee", root + "CremeCoffeeLookAndFeel");
-		combo.addLabelValuePair("Dust", root + "DustLookAndFeel");
-		combo.addLabelValuePair("Dust Coffee", root + "DustCoffeeLookAndFeel");
-		combo.addLabelValuePair("Gemini", root + "GeminiLookAndFeel");
-		combo.addLabelValuePair("Graphite", root + "GraphiteLookAndFeel");
-		combo.addLabelValuePair("Graphite Aqua", root + "GraphiteAquaLookAndFeel");
-		combo.addLabelValuePair("Graphite Chalk", root + "GraphiteChalkLookAndFeel");
-		combo.addLabelValuePair("Graphite Electric", root + "GraphiteElectricLookAndFeel");
-		combo.addLabelValuePair("Graphite Glass", root + "GraphiteGlassLookAndFeel");
-		combo.addLabelValuePair("Graphite Sunset", root + "GraphiteSunsetLookAndFeel");
-		combo.addLabelValuePair("Mariner", root + "MarinerLookAndFeel");
-		combo.addLabelValuePair("Mist Aqua", root + "MistAquaLookAndFeel");
-		combo.addLabelValuePair("Mist Silver", root + "MistSilverLookAndFeel");
-		combo.addLabelValuePair("Moderate", root + "ModerateLookAndFeel");
-		combo.addLabelValuePair("Nebula", root + "NebulaLookAndFeel");
-		combo.addLabelValuePair("Nebula Amethyst", root + "NebulaAmethystLookAndFeel");
-		combo.addLabelValuePair("Nebula Brick Wall", root + "NebulaBrickWallLookAndFeel");
-		combo.addLabelValuePair("Night Shade", root + "NightShadeLookAndFeel");
-		combo.addLabelValuePair("Sahara", root + "SaharaLookAndFeel");
-		combo.addLabelValuePair("Twilight", root + "TwilightLookAndFeel");
-
-		return combo;
 	}
 
 
@@ -546,14 +477,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @see #setLookAndFeelByClassName
 	 */
 	private String getLookAndFeelClassName() {
-
-		String value = lnfCombo.getSelectedValue();
-
-		if (LNF_VALUE_SUBSTANCE.equals(value)) {
-			return substanceSkinCombo.getSelectedValue();
-		}
-
-		return value;
+		return lnfCombo.getSelectedValue();
 	}
 
 
@@ -713,13 +637,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	}
 
 
-	private void possiblyUpdateSubstanceThemeWidgets() {
-		boolean substanceSelected = LNF_VALUE_SUBSTANCE.equals(lnfCombo.getSelectedValue());
-		substanceSkinLabel.setVisible(substanceSelected);
-		substanceSkinCombo.setVisible(substanceSelected);
-	}
-
-
 	/**
 	 * Called whenever a property change occurs in this panel.
 	 */
@@ -803,31 +720,15 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 */
 	private void setLookAndFeelByClassName(String name) {
 
-		// If we're a substance theme, set the main LaF dropdown to the "Substance" value,
-		// ensure the Substance skin widgets are visible, and update them as well
-		if (SubstanceUtil.isASubstanceLookAndFeel(name)) {
-
-			for (int i = 0; i < substanceSkinCombo.getItemCount(); i++) {
-				if (name.equals(substanceSkinCombo.getValueAt(i))) {
-					substanceSkinCombo.setSelectedIndex(i);
-					break;
-				}
-			}
-
-			name = LNF_VALUE_SUBSTANCE;
-		}
-
 		int count = lnfCombo.getItemCount();
 		for (int i=0; i<count; i++) {
 			String specialValue = lnfCombo.getValueAt(i);
 			if (specialValue.equals(name)) {
 				lnfCombo.setSelectedIndex(i);
-				possiblyUpdateSubstanceThemeWidgets();
 				return;
 			}
 		}
 
-		possiblyUpdateSubstanceThemeWidgets();
 		lnfCombo.setSelectedIndex(0); // Default value???
 	}
 
@@ -926,7 +827,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		}
 		if (springPanel2!=null) {
 			UIUtil.makeSpringCompactGrid(springPanel2,
-								3,4,		// rows,cols,
+								3,2,		// rows,cols,
 								0,0,		// initial-x, initial-y,
 								5,5);	// x-spacing, y-spacing.
 		}

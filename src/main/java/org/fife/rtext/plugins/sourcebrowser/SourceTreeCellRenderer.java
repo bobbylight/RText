@@ -16,10 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
-
-import org.fife.util.SubstanceUtil;
 
 
 /**
@@ -39,30 +36,15 @@ final class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
 
 
 	/**
-	 * Private constructor to prevent direct instantiation.
+	 * Constructor.
 	 *
 	 * @param tree The source tree we're rendering in.
 	 */
-	private SourceTreeCellRenderer(DefaultSourceTree tree) {
+	SourceTreeCellRenderer(DefaultSourceTree tree) {
 		this.tree = tree;
 		Class<?> clazz = getClass();
 		blueBullet = new ImageIcon(clazz.getResource(BLUE_BULLET));
 		greenBullet = new ImageIcon(clazz.getResource(GREEN_BULLET));
-	}
-
-
-	/**
-	 * Creates and returns a renderer to use for the nodes in source trees.
-	 * This may not be of this class type (or a subclass), thanks to Substance
-	 * requiring inheritance for renderers to look good (!).
-	 *
-	 * @return The renderer to use.
-	 */
-	static TreeCellRenderer createTreeCellRenderer(DefaultSourceTree tree) {
-		if (SubstanceUtil.isSubstanceInstalled()) {
-			return new SubstanceSourceTreeCellRenderer(tree);
-		}
-		return new SourceTreeCellRenderer(tree);
 	}
 
 

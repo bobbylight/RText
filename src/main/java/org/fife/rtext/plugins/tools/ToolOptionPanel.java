@@ -246,9 +246,7 @@ class ToolOptionPanel extends AbstractConsoleTextAreaOptionPanel<ToolPlugin>
 
 
 	/**
-	 * Wrapper to renderer a Tool nicely in a table.  Needed since Substance
-	 * requires inheritance for renderers, so we can avoid a hard dependency
-	 * on any Substance classes.  What a pain in the ass.
+	 * Wrapper to renderer a Tool nicely in a table.
 	 */
 	private static class ToolWrapper {
 

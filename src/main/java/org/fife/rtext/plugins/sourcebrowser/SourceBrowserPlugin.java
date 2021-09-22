@@ -16,12 +16,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.*;
-import javax.swing.tree.TreeCellRenderer;
 
 import org.fife.ctags.TagEntry;
 import org.fife.rsta.ac.AbstractSourceTree;
@@ -30,7 +28,6 @@ import org.fife.rtext.optionsdialog.OptionsDialog;
 import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.UIUtil;
-import org.fife.util.SubstanceUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.*;
 import org.fife.ui.dockablewindows.DockableWindow;
@@ -92,9 +89,6 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 	private static final String CACHED_SOURCE_TREE = "sourceBrowser.fileSystemTree";
 
-	private static final String RENDERER_WRAPPER_CLASS_NAME =
-		"org.fife.rtext.plugins.sourcebrowser.SubstanceTreeCellRendererWrapper";
-
 
 	/**
 	 * Creates a new <code>SourceBrowserPlugin</code>.
@@ -126,28 +120,6 @@ public class SourceBrowserPlugin extends GUIPlugin
 		sourceBrowserThread = new SourceBrowserThread(this);
 		workingRoot = new SourceTreeNode(msg.getString("Working"));
 
-	}
-
-
-	/**
-	 * If the Substance Look and Feel is installed, wraps a tree's renderer in
-	 * a Substance-happy renderer.
-	 *
-	 * @param tree The tree whose renderer should be checked.
-	 */
-	private static void checkTreeCellRenderer(JTree tree) {
-		if (SubstanceUtil.isSubstanceInstalled()) {
-			TreeCellRenderer renderer = tree.getCellRenderer();
-			try {
-				Class<?> clazz = Class.forName(RENDERER_WRAPPER_CLASS_NAME);
-				Constructor<?> cons = clazz.getConstructor(TreeCellRenderer.class);
-				renderer = (TreeCellRenderer)cons.newInstance(
-						new Object[] { renderer });
-				tree.setCellRenderer(renderer);
-			} catch (Exception e) { // Never happens
-				e.printStackTrace();
-			}
-		}
 	}
 
 
@@ -255,7 +227,6 @@ public class SourceBrowserPlugin extends GUIPlugin
 								"constructSourceBrowserTree", RText.class);
 						sourceTree = (JTree)m.invoke(handler,
 								new Object[] { owner });
-						checkTreeCellRenderer(sourceTree);
 						wind.setPrimaryComponent(sourceTree);
 						UIUtil.removeTabbedPaneFocusTraversalKeyBindings(sourceTree);
 						ensureSourceTreeSortedProperly();

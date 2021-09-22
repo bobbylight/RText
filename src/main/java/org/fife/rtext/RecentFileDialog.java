@@ -27,7 +27,6 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -36,7 +35,6 @@ import org.fife.ui.EscapableDialog;
 import org.fife.ui.RListSelectionModel;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.ResizableFrameContentPane;
-import org.fife.util.SubstanceUtil;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
@@ -85,20 +83,6 @@ public class RecentFileDialog extends EscapableDialog {
 
 
 	/**
-	 * Creates and returns the cell renderer to use for the file list.
-	 * The renderer cannot be parameterized because Substance uses DefaultListCellRenderer.
-	 *
-	 * @return The cell renderer.
-	 */
-	private static ListCellRenderer<Object> createCellRenderer() {
-		if (SubstanceUtil.isSubstanceInstalled()) {
-			return new RecentFileListSubstanceCellRenderer();
-		}
-		return new RecentFileListCellRenderer();
-	}
-
-
-	/**
 	 * Creates the content of this dialog.
 	 */
 	private void createUI() {
@@ -128,7 +112,7 @@ public class RecentFileDialog extends EscapableDialog {
 		list = new JList<>(model);
 		setFilter(null); // Do initial population.
 		list.addMouseListener(listener);
-		list.setCellRenderer(createCellRenderer());
+		list.setCellRenderer(new RecentFileListCellRenderer());
 		list.setSelectionModel(new RListSelectionModel());
 		RScrollPane sp = new RScrollPane(list);
 		cp.add(sp);

@@ -22,7 +22,6 @@ import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.plaf.FontUIResource;
 
 import org.fife.ui.*;
 import org.fife.ui.rtextarea.RTextArea;
@@ -202,9 +201,6 @@ class AboutDialog extends EscapableDialog {
 				msg.getString("Desc.Jazzy"));
 			appendLibrary(sb, "JGoodies:", "http://jgoodies.com",
 				msg.getString("Desc.JGoodies"));
-			appendLibrary(sb, "Substance:",
-				"https://github.com/kirill-grouchnikov/radiance/",
-				msg.getString("Desc.Substance"));
 			appendLibrary(sb, "Groovy:",
 				"http://groovy.codehaus.org/",
 				msg.getString("Desc.Groovy"));
@@ -257,9 +253,6 @@ class AboutDialog extends EscapableDialog {
 
 			JTextArea textArea = new JTextArea(25, 80);
             Font font = RTextArea.getDefaultFont();
-            if (font instanceof FontUIResource) { // Substance!  argh!!!
-                font = new Font(font.getFamily(), font.getStyle(), font.getSize());
-            }
             textArea.setFont(font);
 			loadLicense(textArea);
 			textArea.setEditable(false);

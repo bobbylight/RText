@@ -30,7 +30,6 @@ import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 
 import org.fife.rtext.RTextUtilities;
-import org.fife.util.SubstanceUtil;
 import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.StatusBarPlugin;
@@ -130,17 +129,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 		Color c = iconBorderColor;
 
 		if (getUseSystemColors()) {
-			if (SubstanceUtil.isSubstanceInstalled()) {
-				try {
-					c = SubstanceUtil.getUltraDarkColor();
-				} catch (Exception e) {
-					c = UIManager.getColor("textInactiveText");
-					e.printStackTrace();
-				}
-			}
-			else {
-				c = UIManager.getColor("textInactiveText");
-			}
+			c = UIManager.getColor("textInactiveText");
 		}
 
 		return c;
@@ -153,17 +142,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 		Color c = iconForeground;
 
 		if (getUseSystemColors()) {
-			if (SubstanceUtil.isSubstanceInstalled()) {
-				try {
-					c = SubstanceUtil.getMidColor();
-				} catch (Exception e) {
-					c = UIManager.getColor("ProgressBar.foreground");
-					e.printStackTrace();
-				}
-			}
-			else {
-				c = UIManager.getColor("ProgressBar.foreground");
-			}
+			c = UIManager.getColor("ProgressBar.foreground");
 		}
 
 		return c;

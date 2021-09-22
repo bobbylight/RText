@@ -434,8 +434,6 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 
 	/**
 	 * A wrapper around RSTA's template objects for rendering purposes.
-	 * SubstanceLookAndFeel makes it impossible to subclass Default*Renderer
-	 * and still look "right," so we instead render wrapper classes.
 	 */
 	private static class TemplateWrapper {
 

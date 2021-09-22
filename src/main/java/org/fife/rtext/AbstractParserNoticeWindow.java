@@ -265,9 +265,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 
 
 	/**
-	 * A wrapper around text areas that overrides toString() appropriately, so
-	 * we don't have to create two separate custom renderers, one for Substance
-	 * and another for all other LookAndFeels.  Substance sucks.
+	 * TODO: Remove the need for me.  I'm silly.
 	 */
 	private static class TextAreaWrapper implements Comparable<TextAreaWrapper> {
 

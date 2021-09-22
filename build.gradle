@@ -25,7 +25,7 @@ dependencies {
 	implementation('com.fifesoft:spellchecker:3.1.2') { changing = true }
 	implementation('com.fifesoft:languagesupport:3.1.2')
 
-	//implementation 'com.formdev:flatlaf:0.25.1'
+	implementation 'com.formdev:flatlaf:1.6'
 
 	implementation 'net.sf.jtidy:jtidy:r938'
 	implementation 'org.codehaus.groovy:groovy-all:2.5.+'
@@ -49,9 +49,6 @@ checkstyle {
 	toolVersion = '8.43'
 }
 
-static isSubstanceJar(jarName) {
-	return jarName.startsWith('radiance-')
-}
 static isPluginJar(jarName) {
 	return jarName.startsWith('plugin-') ||
 		jarName.startsWith('groovy') || jarName.startsWith('jsonbeans') ||
@@ -78,9 +75,6 @@ ext.sharedManifest = manifest {
 		// OfficeLnFs are only available on Windows but still need to be on the classpath
 		'Class-Path': configurations.runtimeClasspath.findAll { !isPluginJar(it.name) }.collect {
 							def name = it.name
-							if (isSubstanceJar(name)) {
-								name = 'lnfs/substance/' + name
-							}
 							return name
 						}.join(' ') + ' lnfs/OfficeLnFs.jar'
 	)
@@ -273,11 +267,7 @@ distributions {
 			from { getDistributionFiles(configurations) }
 			eachFile { details ->
 				def path = details.path
-				if (isSubstanceJar(path)) {
-					//println "Is a substance jar: ${path}"
-					details.path = "lnfs/substance/" + path
-				}
-				else if (isPluginJar(path)) {
+				if (isPluginJar(path)) {
 					//println "Is a plugin jar: ${path}"
 					details.path = "plugins/" + path
 				}
@@ -288,7 +278,6 @@ distributions {
 					details.path = "RText.jar"
 				}
 			}
-//			rename 'substance\\-.+', 'lnfs/substance/$0'
 //			rename "(.+)\\-${version}\\.jar", '$1.jar'
 		}
 	}

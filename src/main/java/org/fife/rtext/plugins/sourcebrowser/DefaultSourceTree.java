@@ -74,7 +74,7 @@ class DefaultSourceTree extends JTree {
 		listener = new Listener();
 
 		setToggleClickCount(1);
-		treeRenderer = SourceTreeCellRenderer.createTreeCellRenderer(this);
+		treeRenderer = new SourceTreeCellRenderer(this);
 		setCellRenderer(treeRenderer);
 		setSelectionModel(new RTreeSelectionModel());
 		addTreeSelectionListener(listener);
@@ -269,7 +269,7 @@ class DefaultSourceTree extends JTree {
 	@Override
 	public void updateUI() {
 		super.updateUI();
-		treeRenderer = SourceTreeCellRenderer.createTreeCellRenderer(this);
+		treeRenderer = new SourceTreeCellRenderer(this);
 		setCellRenderer(treeRenderer); // So it picks up new LnF's colors??
 	}
 

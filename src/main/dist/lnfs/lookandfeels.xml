@@ -12,9 +12,6 @@
     situation by simply removing the entry for the rogue LookAndFeel from this
     XML file and restarting RText.  It will fall back to a standard LookAndFeel.
 
-    Note also that Substance support is very touchy; updating substance.jar or
-    trident.jar with newer versions is also done at your own risk!
-
     If you want a 3rd party Look and Feel (such as the JGoodies looks or
     Kunststoff), you must add it here.  The format is as follows:
 
@@ -47,12 +44,12 @@
            class="com.jgoodies.looks.plastic.PlasticLookAndFeel"
            jars="lnfs/looks-1.3.jar"/>
 
-    Note that RText works with Java 1.5+.  If you define a LookAndFeel here that
-    only works with, say, Java 6+, you should specify this by adding a
+    Note that RText works with Java 14+.  If you define a LookAndFeel here that
+    only works with, say, Java 16+, you should specify this by adding a
     "minJavaVersion" parameter in the form:
     
-       minJavaVersion="1.6"
-       minJavaVersion="1.7"
+       minJavaVersion="16"
+       minJavaVersion="17"
        etc.
 
     Doing so will cause RText to not even suggest that LookAndFeel if the
@@ -64,12 +61,10 @@
 <!--
 <LookAndFeel name="WebLaF"
    class="com.alee.laf.WebLookAndFeel"
-   jars="lnfs/weblaf-1.27.jar"
-   minJavaVersion="1.6"/>
+   jars="lnfs/weblaf-1.27.jar"/>
 -->
 <LookAndFeel name="Darcula"
    class="com.bulenkov.darcula.DarculaLaf"
-   jars="lnfs/darcula.jar"
-   minJavaVersion="1.6"/>
+   jars="lnfs/darcula.jar"/>
 
 </ThirdPartyLookAndFeels>
