@@ -375,6 +375,8 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 			combo.addLabelValuePair(systemInfo.getName(), systemInfo.getClassName());
 		}
 
+		combo.addLabelValuePair("Flat Light", "com.formdev.flatlaf.FlatLightLaf");
+		combo.addLabelValuePair("Flat Dark", "com.formdev.flatlaf.FlatDarkLaf");
 		combo.addLabelValuePair("Substance", LNF_VALUE_SUBSTANCE);
 
 		// Add any 3rd party Look and Feels in the lnfs subdirectory.
