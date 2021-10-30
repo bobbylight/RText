@@ -6,11 +6,14 @@
 package org.fife.rtext;
 
 import org.fife.ui.app.AppContext;
+import org.fife.ui.app.AppTheme;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.rtextarea.RTextArea;
 
 import java.awt.*;
 import java.io.File;
+import java.util.List;
+
 
 /**
  * The application context for {@code RText}.
@@ -19,6 +22,12 @@ import java.io.File;
  * @version 1.0
  */
 public class RTextAppContext extends AppContext<RText, RTextPrefs> {
+
+
+	@Override
+	public List<AppTheme> getAvailableAppThemes() {
+		return RTextAppThemes.get();
+	}
 
 
 	@Override
@@ -63,14 +72,13 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 
 		// The "common" preferences
 		super.populatePrefsFromApplication(rtext, prefs);
-		prefs.lookAndFeel = RTextUtilities.getLookAndFeelToSave(); // Override this
+		prefs.appTheme = RTextUtilities.getAppThemeToSave(rtext);
 
 		// Stuff specific to this application.
 		AbstractMainView mainView = rtext.getMainView();
 		SpellingSupport spelling = mainView.getSpellingSupport();
 		RTextMenuBar menuBar = (RTextMenuBar)rtext.getJMenuBar();
 
-		prefs.iconGroupName				= rtext.getIconGroup().getName();
 		prefs.lineNumbersVisible			= mainView.getLineNumbersEnabled();
 		prefs.tabSize					= mainView.getTabSize();
 		prefs.emulateTabsWithSpaces		= mainView.areTabsEmulated();

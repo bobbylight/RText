@@ -10,11 +10,10 @@
  */
 package org.fife.rtext;
 
+import org.fife.ui.app.AppTheme;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.LookAndFeel;
-import javax.swing.SwingUtilities;
 
 
 /**
@@ -70,24 +69,22 @@ public final class StoreKeeper {
 	public static void removeRTextInstance(RText rtext) {
 		int index = rtextInstances.indexOf(rtext);
 		if (index==-1)
-			//throw new RTextNotFoundException();
 			return;
 		rtextInstances.remove(index);
 	}
 
 
 	/**
-	 * Updates the Look and Feel of all <code>RText</code> instances.
+	 * Updates the application theme  <code>RText</code> instances.
+	 * This should only be called on the EDT.
 	 *
-	 * @param lnf The Look and Feel to change to.
+	 * @param theme The theme to change to.
 	 */
-	public static void updateLookAndFeels(final LookAndFeel lnf) {
-		SwingUtilities.invokeLater(() -> {
-			int count = getInstanceCount();
-			for (int i=0; i<count; i++) {
-				rtextInstances.get(i).updateLookAndFeel(lnf);
-			}
-		});
+	public static void updateAppThemes(AppTheme theme) {
+		int count = getInstanceCount();
+		for (int i=0; i<count; i++) {
+			rtextInstances.get(i).setTheme(theme);
+		}
 	}
 
 

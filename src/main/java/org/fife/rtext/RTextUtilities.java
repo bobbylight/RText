@@ -32,6 +32,7 @@ import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.ui.OS;
 import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
+import org.fife.ui.app.AppTheme;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
 import org.fife.ui.rsyntaxtextarea.PopupWindowDecorator;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -62,11 +63,11 @@ public final class RTextUtilities {
 	private static final String FILE_FILTERS_FILE	  = "ExtraFileChooserFilters.xml";
 
 	/**
-	 * The last LookAndFeel (attempted to be) installed.  This may not be
-	 * the actual currently-active LookAndFeel, if the user tries to install
-	 * one with different window decoration properties.
+	 * The last application theme (attempted to be) installed.  This may not be
+	 * the actual currently-active theme, if the user tries to install one with
+	 * different window decoration properties.
 	 */
-	private static String currentLaF;
+	private static String currentAppTheme;
 
 	/**
 	 * Whether the experimental "drop shadows" option is enabled.
@@ -545,18 +546,19 @@ public final class RTextUtilities {
 
 
 	/**
-	 * Returns the name of the LookAndFeel to load RText with the next time it
-	 * starts up.  This may not be the same thing as the currently active LAF,
-	 * if the user chose a LAF that used custom window decorations, for example.
+	 * Returns the name of the theme to load RText with the next time it
+	 * starts up.  This may not be the same thing as the currently active theme,
+	 * if the user chose a theme that used custom window decorations, for example.
 	 *
-	 * @return The name of the LookAndFeel to save in the RText preferences.
+	 * @param rtext The parent application.
+	 * @return The name of the theme to save in the RText preferences.
 	 */
-	static String getLookAndFeelToSave() {
-		String laf = currentLaF;
-		if (laf==null) {
-			laf = UIManager.getLookAndFeel().getClass().getName();
+	static String getAppThemeToSave(RText rtext) {
+		String appoTheme = currentAppTheme;
+		if (appoTheme ==null) {
+			appoTheme = rtext.getTheme().getName();
 		}
-		return laf;
+		return appoTheme;
 	}
 
 
@@ -715,11 +717,11 @@ public final class RTextUtilities {
 	 * not necessarily the active one) is primarily dark.
 	 *
 	 * @return Whether the current Look and Feel is primarily dark.
-	 * @see #getLookAndFeelToSave()
+	 * @see #getAppThemeToSave(RText)
 	 */
 	public static boolean isDarkLookAndFeel() {
 
-		String laf = getLookAndFeelToSave();
+		String laf = UIManager.getLookAndFeel().getClass().getName();
 
 		return laf != null && (
 				laf.contains("Darcula") ||
@@ -853,53 +855,42 @@ public final class RTextUtilities {
 
 
 	/**
-	 * Sets the Look and Feel for all open RText instances.
+	 * Sets the theme for all open RText instances.
 	 *
 	 * @param rtext An RText instance to display a message if an exception is
 	 *        thrown.
-	 * @param lnfClassName The class name of the Look and Feel to set.
+	 * @param theme The theme to install.
 	 */
 	// TODO: Shouldn't this be in UIUtil somehow, for other GUIApplications?
-	public static void setLookAndFeel(final RText rtext, String lnfClassName) {
+	public static void setThemeForAllOpenAppInstances(final RText rtext, AppTheme theme) {
 
 		// Only set the Look and Feel if we're not already using that Look.
 		// Compare against currently active one, not the one we want to change
 		// to on restart, seems more logical to the end-user.
 		//String current = currentLaF;
 		String current = UIManager.getLookAndFeel().getClass().getName();
+		String lnfClassName = theme.getLookAndFeel();
+		currentAppTheme = theme.getName();
 
 		if (lnfClassName!=null && !current.equals(lnfClassName)) {
 			try {
-
-				currentLaF = lnfClassName;
-
-				// Use RText's LaF class loader, not a system one, as it
-				// can access any additional 3rd-party LaF jars that
-				// weren't on the classpath when RText started.  Also,
-				// don't necessarily trust UIDefaults.get("ClassLoader") to
-				// be this class loader, as on Windows if the user changes
-				// the UxTheme the LaF is updated outside of this call,
-				// and the property value is reset to null.
-				ClassLoader cl = rtext.getLookAndFeelManager().
-													getLAFClassLoader();
 
 				// Set these properties before instantiating WebLookAndFeel.
 				// Note it does its own menu shadowing
 				if (WebLookAndFeelUtils.isWebLookAndFeel(lnfClassName)) {
 					ShadowPopupFactory.uninstall();
-					WebLookAndFeelUtils.installWebLookAndFeelProperties(cl);
+					WebLookAndFeelUtils.installWebLookAndFeelProperties();
 				}
 				else {
 					ShadowPopupFactory.install();
 				}
 
-				// Load the Look and Feel class via our special classloader.
 				// Java 11+ won't let us reflectively access system LookAndFeels,
 				// so in that case we keep lnf == null and have more complicated
 				// logic below.
 				LookAndFeel lnf = null;
 				if (!UIManager.getSystemLookAndFeelClassName().equals(lnfClassName)) {
-					Class<?> c = cl.loadClass(lnfClassName);
+					Class<?> c = RTextUtilities.class.getClassLoader().loadClass(lnfClassName);
 					lnf = (LookAndFeel)c.getDeclaredConstructor().newInstance();
 				}
 
@@ -922,19 +913,9 @@ public final class RTextUtilities {
 				}
 				else { // System LaF
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					lnf = UIManager.getLookAndFeel();
 				}
 
-				// Re-save the class loader BEFORE calling
-				// updateLookAndFeels(), as the UIManager.setLookAndFeel()
-				// call above resets this property to null, and we need
-				// this class loader to be set as it's the one that's aware
-				// of our 3rd party JARs.  Swing uses this property (if
-				// non-null) to load classes from, and if we don't set it,
-				// exceptions will be thrown.
-				UIManager.getLookAndFeelDefaults().put("ClassLoader", cl);
 				UIUtil.installOsSpecificLafTweaks();
-				StoreKeeper.updateLookAndFeels(lnf);
 
 			} catch (Exception e) {
 				rtext.displayException(e);
@@ -942,6 +923,10 @@ public final class RTextUtilities {
 
 		}
 
+		// Once the LookAndFeel is (possibly) updated, update every RText instance with other
+		// theme info.  This is always done, even if the same AppTheme is reapplied, since it
+		// may override some previously user-specified values.
+		StoreKeeper.updateAppThemes(theme);
 	}
 
 

@@ -19,6 +19,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.*;
@@ -34,6 +35,7 @@ import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
 import org.fife.ui.app.*;
+import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
@@ -161,6 +163,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * too early, before all plugins have added their options to it.
 	 */
 	private int lastPluginCount;
+
+	private static final String DEFAULT_ICON_GROUP_NAME = "IntelliJ Icons (Dark)";
 
 	/**
 	 * System property that, if set, causes RText to print timing information
@@ -602,16 +606,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	/**
-	 * Returns the icon groups available to RText.
-	 *
-	 * @return The icon groups.
-	 */
-	public Map<String, IconGroup> getIconGroupMap() {
-		return iconGroupMap;
-	}
-
-
-	/**
 	 * Returns the actual main view.
 	 *
 	 * @return The main view.
@@ -869,6 +863,60 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	/**
+	 * Installs all properties in an RSTA <code>Theme</code> instance properly.
+	 *
+	 * @param theme The theme instance.
+	 */
+	private void installRstaTheme(Theme theme) {
+
+		setSyntaxScheme(theme.scheme);
+
+		if (mainView == null) {
+			return;
+		}
+
+		//themeObj.activeLineRangeColor;
+		mainView.setBackgroundObject(theme.bgColor);
+		mainView.setCaretColor(theme.caretColor);
+		mainView.setCurrentLineHighlightColor(theme.currentLineHighlight);
+		//themeObj.fadeCurrentLineHighlight
+		//themeObj.foldBG
+		mainView.setGutterBorderColor(theme.gutterBorderColor);
+		mainView.setHyperlinkColor(theme.hyperlinkFG);
+		//themeObj.iconRowHeaderInheritsGutterBG
+		mainView.setLineNumberColor(theme.lineNumberColor);
+		if (theme.lineNumberFont != null) {
+			int fontSize = theme.lineNumberFontSize > 0 ? theme.lineNumberFontSize : 11;
+			mainView.setLineNumberFont(new Font(theme.lineNumberFont, Font.PLAIN, fontSize));
+		}
+		mainView.setMarginLineColor(theme.marginLineColor);
+		mainView.setMarkAllHighlightColor(theme.markAllHighlightColor);
+		//themeObj.markOccurrencesBorder;
+		mainView.setMarkOccurrencesColor(theme.markOccurrencesColor);
+		//themeObj.matchedBracketAnimate;
+		if (theme.matchedBracketBG != null) {
+			mainView.setMatchedBracketBorderColor(theme.matchedBracketFG);
+		}
+		mainView.setMatchedBracketBGColor(theme.matchedBracketBG);
+		if (theme.secondaryLanguages != null) {
+			for (int i = 0; i < theme.secondaryLanguages.length; i++) {
+				mainView.setSecondaryLanguageColor(i, theme.secondaryLanguages[i]);
+			}
+		}
+		mainView.setSelectionColor(theme.selectionBG);
+		if (theme.selectionFG != null) {
+			mainView.setSelectedTextColor(theme.selectionFG);
+		}
+		mainView.setUseSelectedTextColor(theme.useSelectionFG);
+		mainView.setRoundedSelectionEdges(theme.selectionRoundedEdges);
+
+		mainView.setFoldBackground(theme.foldBG);
+		mainView.setArmedFoldBackground(theme.armedFoldBG);
+
+	}
+
+
+	/**
 	 * Returns whether or not the QuickSearch toolbar is visible.  This
 	 * method should be used over <code>getSearchToolBar().isVisible()</code>
 	 * because the latter will allocate the toolbar if it isn't already
@@ -908,8 +956,18 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * Loads and validates the icon groups available to RText.
 	 */
 	private void loadPossibleIconGroups() {
-		iconGroupMap = IconGroupLoader.loadIconGroups(this,
-					getInstallLocation() + "/icongroups/ExtraIcons.xml");
+
+		iconGroupMap = new HashMap<>();
+
+		String root = getInstallLocation();
+		iconGroupMap.put(DEFAULT_ICON_GROUP_NAME,
+			new SvgIconGroup(this, DEFAULT_ICON_GROUP_NAME, "icongroups/intellij-icons-dark.jar"));
+		iconGroupMap.put("IntelliJ Icons (Light)",
+			new SvgIconGroup(this, "IntelliJ Icons (Light)", "icongroups/intellij-icons-light.jar"));
+		iconGroupMap.put("Eclipse Icons", new IconGroup("Eclipse Icons",
+			"", null, "gif",
+			new File(root, "icongroups/EclipseIcons.jar").getAbsolutePath()));
+
 	}
 
 
@@ -1031,12 +1089,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		splashScreen.updateStatus(getString("CreatingView"), 20);
 
 		loadPossibleIconGroups();
-		try {
-			setIconGroupByName(prefs.iconGroupName);
-		} catch (InternalError ie) {
-			displayException(ie);
-			System.exit(0);
-		}
+		setIconGroupByName((String)getTheme().getExtraUiDefaults().get("rtext.iconGroupName"));
 
 		// Initialize our view object.
 		switch (prefs.mainView) {
@@ -1172,14 +1225,11 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * @param name The name of the icon group to use.  If this name is not
 	 *        recognized, a default icon set will be used.
 	 */
-	public void setIconGroupByName(String name) {
+	private void setIconGroupByName(String name) {
 
 		IconGroup newGroup = iconGroupMap.get(name);
 		if (newGroup==null)
-			newGroup = iconGroupMap.get(
-							IconGroupLoader.DEFAULT_ICON_GROUP_NAME);
-		if (newGroup==null)
-			throw new InternalError("No icon groups!");
+			newGroup = iconGroupMap.get(DEFAULT_ICON_GROUP_NAME);
 		if (iconGroup!=null && iconGroup.equals(newGroup))
 			return;
 
@@ -1544,6 +1594,33 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	}
 
 
+	@Override
+	protected void setThemeAdditionalProperties(AppTheme theme) {
+
+		if (iconGroupMap != null) {
+			setIconGroupByName((String)theme.getExtraUiDefaults().get("rtext.iconGroupName"));
+		}
+
+		String editorTheme = (String)theme.getExtraUiDefaults().get("rtext.editorTheme");
+		if (editorTheme != null) {
+			Theme themeObj;
+			try {
+				themeObj = Theme.load(getClass().getResourceAsStream(editorTheme));
+				installRstaTheme(themeObj);
+			} catch (Exception ioe) {
+				displayException(ioe);
+				return;
+			}
+		}
+
+		if (mainView != null) {
+			Color labelErrorForeground = (Color)theme.getExtraUiDefaults().get("rtext.labelErrorForeground");
+			mainView.setHighlightModifiedDocumentDisplayNames(labelErrorForeground != null);
+			mainView.setModifiedDocumentDisplayNamesColor(labelErrorForeground);
+		}
+	}
+
+
 	/**
 	 * Sets the "working directory;" that is, the directory in which
 	 * new, empty files are placed.
@@ -1576,7 +1653,9 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			this.setSize(size);
 
 			// So mainView knows to update it's popup menus, etc.
-			mainView.updateLookAndFeel();
+			if (mainView != null) {
+				mainView.updateLookAndFeel();
+			}
 
 			// Update any dialogs.
 			if (optionsDialog != null) {

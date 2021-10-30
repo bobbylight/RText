@@ -13,4 +13,5 @@ rtext-*-src.zip
 .settings/
 .project
 .classpath
-intellij-icons/
+intellij-icons-light/
+intellij-icons-dark/

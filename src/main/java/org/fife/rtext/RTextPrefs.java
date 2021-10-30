@@ -23,17 +23,16 @@ import java.util.StringTokenizer;
 
 import javax.swing.JTabbedPane;
 
-import org.fife.rtext.optionsdialog.UIOptionPanel;
 import org.fife.ui.OS;
 import org.fife.ui.StatusBar;
 import org.fife.ui.app.prefs.AppPrefs;
 import org.fife.ui.app.prefs.TypeLoader;
+import org.fife.ui.app.themes.FlatLightTheme;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Style;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.CaretStyle;
 import org.fife.ui.rtextarea.RTextArea;
-import org.fife.util.DarculaUtil;
 
 
 /**
@@ -49,7 +48,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	/**
 	 * The default Look and Feel.
 	 */
-	private static final String DEFAULT_LAF = DarculaUtil.CLASS_NAME;
+	private static final String DEFAULT_APP_THEME = FlatLightTheme.NAME;
 
 	/**
 	 * The default maximum number of spelling errors to display for a single
@@ -62,7 +61,6 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	 */
 	public static final Color DEFAULT_SPELLING_ERROR_COLOR = new Color(255,128,64);
 
-	public String iconGroupName;
 	public boolean lineNumbersVisible;
 	public int tabSize;							// In spaces.
 	public boolean emulateTabsWithSpaces;			// Whether or not to emulate tabs with spaces.
@@ -238,8 +236,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 
 		location = new Point(0,0);
 		size = new Dimension(650,500);
-		lookAndFeel = DEFAULT_LAF;
-		iconGroupName = IconGroupLoader.DEFAULT_ICON_GROUP_NAME;
+		appTheme = DEFAULT_APP_THEME;
 		toolbarVisible = true;
 		statusBarVisible = true;
 		lineNumbersVisible = true;
@@ -265,7 +262,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		currentLineHighlightColor = theme.currentLineHighlight;
 		mainView = RText.TABBED_VIEW;
 		highlightModifiedDocNames = true;
-		modifiedDocumentNamesColor = UIOptionPanel.DARK_MODIFIED_DOCUMENT_NAME_COLOR;
+		modifiedDocumentNamesColor = RTextAppThemes.DARK_MODIFIED_DOCUMENT_NAME_COLOR;
 		language = "en";	// Default to English.
 		bracketMatchingEnabled = true;
 		matchBothBrackets = false;

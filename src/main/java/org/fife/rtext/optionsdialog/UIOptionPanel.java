@@ -15,22 +15,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Collection;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.*;
-import org.fife.ui.app.ExtendedLookAndFeelInfo;
+import org.fife.ui.app.AppTheme;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaOptionPanel;
-import org.fife.ui.rsyntaxtextarea.Theme;
-import org.fife.ui.rtextarea.IconGroup;
 import org.fife.ui.rtextarea.RTextAreaOptionPanel;
-import org.fife.util.DarculaUtil;
 
 
 /**
@@ -48,16 +43,9 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 */
 	public static final String OPTION_PANEL_ID = "UIOptionPanel";
 
-	/**
-	 * The color to use when rendering the name of modified documents in tabs when the current Look
-	 * and Feel is dark.
-	 */
-	public static final Color DARK_MODIFIED_DOCUMENT_NAME_COLOR = new Color(255, 128, 128);
-
-	private LabelValueComboBox<String, String> themeCombo;
+	private final RText rtext;
+	private LabelValueComboBox<String, AppTheme> themeCombo;
 	private JButton applyButton;
-	private final IconGroup eclipseIconGroup;
-	private final IconGroup flatIconGroup;
 
 	private int mainViewStyle;
 	private int documentSelectionPlacement;
@@ -66,12 +54,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	private JPanel springPanel, springPanel2;
 	private JComboBox<String> viewCombo;
 	private JComboBox<String> docSelCombo;
-	private LabelValueComboBox<String, String> lnfCombo;
-	private LabelValueComboBox<String, String> imageLnFCombo;
 	private JComboBox<String> statusBarCombo;
-
-	private JCheckBox highlightModifiedCheckBox;
-	private RColorSwatchesButton hmColorButton;
 
 	private JCheckBox showHostNameCheckBox;
 
@@ -82,6 +65,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		super(msg.getString("OptUIName"));
 		setId(OPTION_PANEL_ID);
+		this.rtext = rtext;
 		Listener listener = new Listener();
 
 		ComponentOrientation orientation = ComponentOrientation.
@@ -103,9 +87,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		// change then the user stretches the dialog.
 		add(cp, BorderLayout.NORTH);
 		applyComponentOrientation(orientation);
-
-		eclipseIconGroup = rtext.getIconGroupMap().get("Eclipse Icons");
-		flatIconGroup = rtext.getIconGroupMap().get("IntelliJ Icons (Dark)");
 	}
 
 
@@ -124,18 +105,10 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 			case "DocSelCombo":
 				setDirty(true);
 				break;
-			case "LookAndFeelComboBox":
-				setDirty(true);
-				break;
-			case "IconComboBox":
+			case "AppThemeComboBox":
 				setDirty(true);
 				break;
 			case "StatusBarComboBox":
-				setDirty(true);
-				break;
-			case "HighlightModifiedCheckBox":
-				boolean highlight = highlightModifiedDocumentDisplayNames();
-				hmColorButton.setEnabled(highlight);
 				setDirty(true);
 				break;
 			case "ShowHostNameCB":
@@ -148,55 +121,10 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 	private void applySelectedTheme() {
 
-		String theme = themeCombo.getSelectedValue();
-		String laf = null;
-		String editorTheme = null;
-		IconGroup iconGroup = eclipseIconGroup;
-
-		if ("default".equals(theme)) {
-			laf = UIManager.getSystemLookAndFeelClassName();
-			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/default-alt.xml";
-		}
-
-		else if ("eclipse".equals(theme)) {
-			laf = UIManager.getSystemLookAndFeelClassName();
-			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/eclipse.xml";
-		}
-
-		else if ("dark".equals(theme)) {
-			laf = DarculaUtil.CLASS_NAME;
-			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/dark.xml";
-			iconGroup = flatIconGroup;
-		}
-
-		else if ("monokai".equals(theme)) {
-			laf = DarculaUtil.CLASS_NAME;
-			editorTheme = "/org/fife/ui/rsyntaxtextarea/themes/monokai.xml";
-			iconGroup = flatIconGroup;
-		}
+		AppTheme theme = themeCombo.getSelectedValue();
 
 		RText rtext = (RText)getOptionsDialog().getOwner();
-		if (laf != null) {
-			RTextUtilities.setLookAndFeel(rtext, laf); // Doesn't update if...
-		}
-		rtext.setIconGroupByName(iconGroup.getName());
-
-		if (editorTheme != null) {
-			Theme themeObj;
-			try {
-				themeObj = Theme.load(getClass().getResourceAsStream(editorTheme));
-				installRstaTheme(rtext, themeObj);
-			} catch (Exception ioe) {
-				rtext.displayException(ioe);
-				return;
-			}
-		}
-
-		// Any colors not specific to the LAF or the RSTA theme.
-		OtherColors otherColors = getOtherColorsForTheme(theme);
-		AbstractMainView mainView = rtext.getMainView();
-		mainView.setModifiedDocumentDisplayNamesColor(
-			otherColors.getModifiedDocumentNameColor());
+		RTextUtilities.setThemeForAllOpenAppInstances(rtext, theme); // Doesn't update if...
 
 		// Refresh other option panels whose properties were affected
 		org.fife.ui.OptionsDialog dialog = getOptionsDialog();
@@ -223,19 +151,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		label.setText(msg.getString("OptAppearanceDesc"));
 		temp.add(label, BorderLayout.NORTH);
 
-		lnfCombo = createLookAndFeelComboBox(rtext);
-		lnfCombo.setActionCommand("LookAndFeelComboBox");
-		lnfCombo.addActionListener(this);
-
-		imageLnFCombo = new LabelValueComboBox<>();
-		UIUtil.fixComboOrientation(imageLnFCombo);
-		imageLnFCombo.setActionCommand("IconComboBox");
-		imageLnFCombo.addActionListener(this);
-		Collection<IconGroup> iconGroups = rtext.getIconGroupMap().values();
-		for (IconGroup group : iconGroups) {
-			imageLnFCombo.addLabelValuePair(group.getName(), group.getName());
-		}
-
 		statusBarCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(statusBarCombo);
 		statusBarCombo.setActionCommand("StatusBarComboBox");
@@ -248,30 +163,41 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		JPanel temp2 = new JPanel(new BorderLayout());
 		temp.setBorder(new OptionPanelBorder(msg.getString("OptUIAT")));
 		if (orientation.isLeftToRight()) {
-			springPanel2.add(new JLabel(msg.getString("OptUILnFT")));
-			springPanel2.add(lnfCombo);
-			springPanel2.add(new JLabel(msg.getString("OptUIIAT")));
-			springPanel2.add(imageLnFCombo);
 			springPanel2.add(new JLabel(msg.getString("OptUISBT")));
 			springPanel2.add(statusBarCombo);
 		}
 		else {
-			springPanel2.add(lnfCombo);
-			springPanel2.add(new JLabel(msg.getString("OptUILnFT")));
-			springPanel2.add(imageLnFCombo);
-			springPanel2.add(new JLabel(msg.getString("OptUIIAT")));
 			springPanel2.add(statusBarCombo);
 			springPanel2.add(new JLabel(msg.getString("OptUISBT")));
 		}
 		temp2.add(springPanel2, BorderLayout.LINE_START);
 		UIUtil.makeSpringCompactGrid(springPanel2,
-			3,2,		// rows,cols,
+			1,2,		// rows,cols,
 			0,0,		// initial-x, initial-y,
 			5,5);	// x-spacing, y-spacing.
 
 		temp.add(temp2);
 
 		return temp;
+	}
+
+	/**
+	 * Creates and returns a special value combo box containing all available
+	 * application themes.
+	 *
+	 * @return The combo box.
+	 */
+	private LabelValueComboBox<String, AppTheme> createAppThemeComboBox() {
+
+		LabelValueComboBox<String, AppTheme> combo = new LabelValueComboBox<>();
+		UIUtil.fixComboOrientation(combo);
+
+		for (AppTheme theme : rtext.getAppThemes()) {
+			combo.addLabelValuePair(theme.getName(), theme);
+		}
+
+		return combo;
+
 	}
 
 
@@ -322,64 +248,11 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		return temp;
 	}
 
-	/**
-	 * Creates and returns a special value combo box containing all available
-	 * Look and Feels.
-	 *
-	 * @param rtext The parent RText instance.
-	 * @return The combo box.
-	 */
-	private static LabelValueComboBox<String, String> createLookAndFeelComboBox(
-			RText rtext) {
-
-		LabelValueComboBox<String, String> combo = new LabelValueComboBox<>();
-		UIUtil.fixComboOrientation(combo);
-
-		// Get the system look and feel.
-		LookAndFeelInfo systemInfo = null;
-		for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-			String clazzName = info.getClassName();
-			if (clazzName.equals(UIManager.getSystemLookAndFeelClassName())) {
-				systemInfo = info;
-				break;
-			}
-		}
-
-		if (systemInfo != null) {
-			combo.addLabelValuePair(systemInfo.getName(), systemInfo.getClassName());
-		}
-
-		combo.addLabelValuePair("Flat Light", "com.formdev.flatlaf.FlatLightLaf");
-		combo.addLabelValuePair("Flat Dark", "com.formdev.flatlaf.FlatDarkLaf");
-
-		// Add any 3rd party Look and Feels in the lnfs subdirectory.
-		ExtendedLookAndFeelInfo[] info = rtext.get3rdPartyLookAndFeelInfo();
-		if (info!=null && info.length>0) {
-			for (ExtendedLookAndFeelInfo extendedLookAndFeelInfo : info) {
-				combo.addLabelValuePair(extendedLookAndFeelInfo.getName(), extendedLookAndFeelInfo.getClassName());
-			}
-		}
-
-		return combo;
-
-	}
-
 
 	private Container createOtherPanel(ResourceBundle msg) {
 
 		Box temp = Box.createVerticalBox();
 		temp.setBorder(new OptionPanelBorder(msg.getString("OptOtherTitle")));
-
-		Container modifiedDocsPanel = createHorizontalBox();
-		highlightModifiedCheckBox = new JCheckBox(msg.getString("OptUIHMDN"));
-		highlightModifiedCheckBox.setActionCommand("HighlightModifiedCheckBox");
-		highlightModifiedCheckBox.addActionListener(this);
-		hmColorButton = new RColorSwatchesButton(Color.RED);
-		hmColorButton.addPropertyChangeListener(this);
-		modifiedDocsPanel.add(highlightModifiedCheckBox);
-		modifiedDocsPanel.add(hmColorButton);
-		modifiedDocsPanel.add(Box.createHorizontalGlue());
-		temp.add(modifiedDocsPanel);
 
 		JPanel showHostNamePanel = new JPanel(new BorderLayout());
 		showHostNameCheckBox = new JCheckBox(msg.getString("OptUIShowHostName"));
@@ -403,11 +276,9 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		label.setText(msg.getString("OptThemeDesc"));
 		temp.add(label, BorderLayout.NORTH);
 
-		themeCombo = new LabelValueComboBox<>();
-		themeCombo.addLabelValuePair("Default", "default");
-		themeCombo.addLabelValuePair("Eclipse", "eclipse");
-		themeCombo.addLabelValuePair("Dark", "dark");
-		themeCombo.addLabelValuePair("Dark (Monokai)", "monokai");
+		themeCombo = createAppThemeComboBox();
+		themeCombo.setActionCommand("AppThemeComboBox");
+		themeCombo.addActionListener(this);
 		UIUtil.fixComboOrientation(themeCombo);
 		Box temp2 = createHorizontalBox();
 		temp2.add(themeCombo);
@@ -431,10 +302,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
 		mainView.setDocumentSelectionPlacement(getDocumentSelectionPlacement());	// Doesn't update if it doesn't have to.
-		RTextUtilities.setLookAndFeel(rtext, getLookAndFeelClassName()); // Doesn't update if...
-		rtext.setIconGroupByName(getIconGroupName());		// Doesn't update if it doesn't have to.
-		mainView.setHighlightModifiedDocumentDisplayNames(highlightModifiedDocumentDisplayNames());
-		mainView.setModifiedDocumentDisplayNamesColor(getModifiedDocumentDisplayNamesColor());
+		RTextUtilities.setThemeForAllOpenAppInstances(rtext, getTheme()); // Doesn't update if...
 		rtext.setMainViewStyle(getMainViewStyle());			// Doesn't update if it doesn't have to.
 		rtext.getStatusBar().setStyle(getStatusBarStyle());
 		rtext.setShowHostName(getShowHostName());	// Doesn't update if doesn't have to.
@@ -460,28 +328,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 
 	/**
-	 * Returns the icon style the user chose.
-	 *
-	 * @return The icon style.
-	 * @see #setIconGroupByName
-	 */
-	private String getIconGroupName() {
-		return imageLnFCombo.getSelectedValue();
-	}
-
-
-	/**
-	 * Returns the selected Look and Feel.
-	 *
-	 * @return The look and feel.
-	 * @see #setLookAndFeelByClassName
-	 */
-	private String getLookAndFeelClassName() {
-		return lnfCombo.getSelectedValue();
-	}
-
-
-	/**
 	 * Returns the main view style the user chose.
 	 *
 	 * @return The main view style, either <code>RText.TABBED_VIEW</code> or
@@ -490,52 +336,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 */
 	private int getMainViewStyle() {
 		return mainViewStyle;
-	}
-
-
-	/**
-	 * Gets the color the user chose to highlight modified documents'
-	 * display names.
-	 *
-	 * @return color The color chosen.
-	 * @see #setModifiedDocumentDisplayNamesColor
-	 * @see #highlightModifiedDocumentDisplayNames
-	 * @see #setHighlightModifiedDocumentDisplayNames
-	 */
-	private Color getModifiedDocumentDisplayNamesColor() {
-		return hmColorButton.getColor();
-	}
-
-
-	/**
-	 * Returns other colors to install that aren't tied to the LAF or the
-	 * RSTA theme.
-	 *
-	 * @param theme The selected theme.
-	 * @return The other colors.
-	 */
-	private static OtherColors getOtherColorsForTheme(String theme) {
-
-		OtherColors colors = new OtherColors();
-
-		if ("eclipse".equals(theme)) {
-			colors.setModifiedDocumentNameColor(Color.RED);
-		}
-
-		else if ("dark".equals(theme)) {
-			colors.setModifiedDocumentNameColor(DARK_MODIFIED_DOCUMENT_NAME_COLOR);
-		}
-
-		else if ("monokai".equals(theme)) {
-			colors.setModifiedDocumentNameColor(DARK_MODIFIED_DOCUMENT_NAME_COLOR);
-		}
-
-		else {//if ("default".equals(theme)) {
-			colors.setModifiedDocumentNameColor(Color.RED);
-		}
-
-		return colors;
-
 	}
 
 
@@ -562,78 +362,20 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	}
 
 
+	/**
+	 * Returns the selected Theme.
+	 *
+	 * @return The theme
+	 * @see #setTheme(AppTheme)
+	 */
+	private AppTheme getTheme() {
+		return themeCombo.getSelectedValue();
+	}
+
+
 	@Override
 	public JComponent getTopJComponent() {
 		return themeCombo;
-	}
-
-
-	/**
-	 * Returns whether the user chose to highlight documents' display names
-	 * with a different color.
-	 *
-	 * @return Whether or not the user chose to highlight documents' display
-	 *         names with a different color.
-	 *
-	 * @see #setHighlightModifiedDocumentDisplayNames
-	 * @see #getModifiedDocumentDisplayNamesColor
-	 * @see #setModifiedDocumentDisplayNamesColor
-	 */
-	private boolean highlightModifiedDocumentDisplayNames() {
-		return highlightModifiedCheckBox.isSelected();
-	}
-
-
-	/**
-	 * Installs all properties in an RSTA <code>Theme</code> instance properly
-	 * into RText.
-	 *
-	 * @param rtext The application.
-	 * @param theme The theme instance.
-	 */
-	private static void installRstaTheme(RText rtext, Theme theme) {
-
-		rtext.setSyntaxScheme(theme.scheme);
-		AbstractMainView mainView = rtext.getMainView();
-
-		//themeObj.activeLineRangeColor;
-		mainView.setBackgroundObject(theme.bgColor);
-		mainView.setCaretColor(theme.caretColor);
-		mainView.setCurrentLineHighlightColor(theme.currentLineHighlight);
-		//themeObj.fadeCurrentLineHighlight
-		//themeObj.foldBG
-		mainView.setGutterBorderColor(theme.gutterBorderColor);
-		mainView.setHyperlinkColor(theme.hyperlinkFG);
-		//themeObj.iconRowHeaderInheritsGutterBG
-		mainView.setLineNumberColor(theme.lineNumberColor);
-		if (theme.lineNumberFont != null) {
-			int fontSize = theme.lineNumberFontSize > 0 ? theme.lineNumberFontSize : 11;
-			mainView.setLineNumberFont(new Font(theme.lineNumberFont, Font.PLAIN, fontSize));
-		}
-		mainView.setMarginLineColor(theme.marginLineColor);
-		mainView.setMarkAllHighlightColor(theme.markAllHighlightColor);
-		//themeObj.markOccurrencesBorder;
-		mainView.setMarkOccurrencesColor(theme.markOccurrencesColor);
-		//themeObj.matchedBracketAnimate;
-		if (theme.matchedBracketBG != null) {
-			mainView.setMatchedBracketBorderColor(theme.matchedBracketFG);
-		}
-		mainView.setMatchedBracketBGColor(theme.matchedBracketBG);
-		if (theme.secondaryLanguages != null) {
-			for (int i = 0; i < theme.secondaryLanguages.length; i++) {
-				mainView.setSecondaryLanguageColor(i, theme.secondaryLanguages[i]);
-			}
-		}
-		mainView.setSelectionColor(theme.selectionBG);
-		if (theme.selectionFG != null) {
-			mainView.setSelectedTextColor(theme.selectionFG);
-		}
-		mainView.setUseSelectedTextColor(theme.useSelectionFG);
-		mainView.setRoundedSelectionEdges(theme.selectionRoundedEdges);
-
-		mainView.setFoldBackground(theme.foldBG);
-		mainView.setArmedFoldBackground(theme.armedFoldBG);
-
 	}
 
 
@@ -679,57 +421,22 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 
 	/**
-	 * Sets whether the "highlight modified documents' display names"
-	 * checkbox is checked.
-	 *
-	 * @param highlight Whether or not the checkbox is to be checked.
-	 * @see #highlightModifiedDocumentDisplayNames
-	 * @see #getModifiedDocumentDisplayNamesColor
-	 * @see #setModifiedDocumentDisplayNamesColor
-	 */
-	private void setHighlightModifiedDocumentDisplayNames(boolean highlight) {
-		highlightModifiedCheckBox.setSelected(highlight);
-		hmColorButton.setEnabled(highlight);
-	}
-
-
-	/**
-	 * Sets the icon style displayed by this panel.
-	 *
-	 * @param name The name of the icon group.
-	 * @see #getIconGroupName
-	 */
-	private void setIconGroupByName(String name) {
-		int count = imageLnFCombo.getItemCount();
-		for (int i=0; i<count; i++) {
-			String specialValue = imageLnFCombo.getValueAt(i);
-			if (specialValue.equals(name)) {
-				imageLnFCombo.setSelectedIndex(i);
-				return;
-			}
-		}
-		imageLnFCombo.setSelectedIndex(0); // Default value???
-	}
-
-
-	/**
 	 * Sets the look and feel displayed in this panel.
 	 *
-	 * @param name The class name for the Look.
-	 * @see #getLookAndFeelClassName
+	 * @param theme The currently installed theme.
+	 * @see #getTheme()
 	 */
-	private void setLookAndFeelByClassName(String name) {
+	private void setTheme(AppTheme theme) {
 
-		int count = lnfCombo.getItemCount();
-		for (int i=0; i<count; i++) {
-			String specialValue = lnfCombo.getValueAt(i);
-			if (specialValue.equals(name)) {
-				lnfCombo.setSelectedIndex(i);
+		for (int i = 0; i < themeCombo.getItemCount(); i++) {
+			AppTheme comboTheme = themeCombo.getValueAt(i);
+			if (comboTheme.getName().equals(theme.getName())) {
+				themeCombo.setSelectedIndex(i);
 				return;
 			}
 		}
 
-		lnfCombo.setSelectedIndex(0); // Default value???
+		themeCombo.setSelectedIndex(0); // Default value???
 	}
 
 
@@ -748,23 +455,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		else
 			mainViewStyle = RText.TABBED_VIEW;
 		viewCombo.setSelectedIndex(mainViewStyle);
-	}
-
-
-	/**
-	 * Sets the color for the button used for selecting the color used
-	 * to highlight modified documents' display names.
-	 *
-	 * @param color The color to use.
-	 * @throws NullPointerException If <code>color</code> is <code>null</code>.
-	 * @see #getModifiedDocumentDisplayNamesColor
-	 * @see #highlightModifiedDocumentDisplayNames
-	 * @see #setHighlightModifiedDocumentDisplayNames
-	 */
-	private void setModifiedDocumentDisplayNamesColor(Color color) {
-		if (color==null)
-			throw new NullPointerException();
-		hmColorButton.setColor(color);
 	}
 
 
@@ -806,12 +496,9 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
 		setDocumentSelectionPlacement(mainView.getDocumentSelectionPlacement());
-		setLookAndFeelByClassName(UIManager.getLookAndFeel().getClass().getName());
-		setIconGroupByName(rtext.getIconGroup().getName());
+		setTheme(rtext.getTheme());
 		setMainViewStyle(rtext.getMainViewStyle());
-		setHighlightModifiedDocumentDisplayNames(mainView.highlightModifiedDocumentDisplayNames());
 		setStatusBarStyle(rtext.getStatusBar().getStyle());
-		setModifiedDocumentDisplayNamesColor(mainView.getModifiedDocumentDisplayNamesColor());
 		setShowHostName(rtext.getShowHostName());
 	}
 
@@ -827,7 +514,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		}
 		if (springPanel2!=null) {
 			UIUtil.makeSpringCompactGrid(springPanel2,
-								3,2,		// rows,cols,
+								1,2,		// rows,cols,
 								0,0,		// initial-x, initial-y,
 								5,5);	// x-spacing, y-spacing.
 		}
@@ -852,21 +539,4 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 	}
 
-
-	/**
-	 * Miscellaneous extra colors set as part of an RText theme.
-	 */
-	private static class OtherColors {
-
-		private Color modifiedDocumentNameColor;
-
-		Color getModifiedDocumentNameColor() {
-			return modifiedDocumentNameColor;
-		}
-
-		void setModifiedDocumentNameColor(Color color) {
-			modifiedDocumentNameColor = color;
-		}
-
-	}
 }
