@@ -1354,7 +1354,7 @@ public abstract class AbstractMainView extends JPanel
 		// Fetch an icon from the theme first, then from the general icon manager if
 		// the theme doesn't supply its own icons for file types.
 		Icon icon = owner.getIconGroup() != null ?
-			owner.getIconGroup().getFileTypeIcon(textArea.getSyntaxEditingStyle()) : null;
+			owner.getIconGroup().getIcon("fileTypes/" + textArea.getSyntaxEditingStyle()) : null;
 		if (icon == null || icon.getIconWidth() == -1) { // Allow for bogus URLs returning no-data images
 			icon = FileTypeIconManager.get().getIconFor(textArea);
 		}

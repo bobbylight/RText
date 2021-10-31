@@ -13,7 +13,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 
 import org.fife.ui.CustomizableToolBar;
-import org.fife.ui.rtextarea.IconGroup;
+import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.rtextarea.RTextArea;
 
 

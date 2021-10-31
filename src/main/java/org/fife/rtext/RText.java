@@ -35,6 +35,9 @@ import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
 import org.fife.ui.app.*;
+import org.fife.ui.app.icons.IconGroup;
+import org.fife.ui.app.icons.RasterImageIconGroup;
+import org.fife.ui.app.icons.SvgIconGroup;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.dockablewindows.DockableWindow;
@@ -43,7 +46,6 @@ import org.fife.ui.dockablewindows.DockableWindowPanel;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
-import org.fife.ui.rtextarea.IconGroup;
 import org.fife.ui.rtextfilechooser.FileChooserOwner;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.util.TranslucencyUtil;
@@ -90,7 +92,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	public static final int MDI_VIEW					= 2;
 
 	// Properties fired.
-	public static final String ICON_STYLE_PROPERTY		= "RText.iconStyle";
 	private static final String MAIN_VIEW_STYLE_PROPERTY	= "RText.mainViewStyle";
 
 	private Map<String, IconGroup> iconGroupMap;
@@ -111,8 +112,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	private SpellingErrorWindow spellingWindow;
 
 	private SyntaxScheme colorScheme;
-
-	private IconGroup iconGroup;
 
 	private String workingDirectory;	// The directory for new empty files.
 
@@ -570,8 +569,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			helpDialog = new HelpDialog(this,
 						contentsPath + "HelpDialogContents.xml",
 						helpPath);
-			helpDialog.setBackButtonIcon(iconGroup.getIcon("back"));
-			helpDialog.setForwardButtonIcon(iconGroup.getIcon("forward"));
+			helpDialog.setBackButtonIcon(getIconGroup().getIcon("back"));
+			helpDialog.setForwardButtonIcon(getIconGroup().getIcon("forward"));
 		}
 		helpDialog.setLocationRelativeTo(this);
 		return helpDialog;
@@ -592,16 +591,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			}
 		}
 		return hostName;
-	}
-
-
-	/**
-	 * Returns the icon group being used for icons for actions.
-	 *
-	 * @return The icon group.
-	 */
-	public IconGroup getIconGroup() {
-		return iconGroup;
 	}
 
 
@@ -964,7 +953,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			new SvgIconGroup(this, DEFAULT_ICON_GROUP_NAME, "icongroups/intellij-icons-dark.jar"));
 		iconGroupMap.put("IntelliJ Icons (Light)",
 			new SvgIconGroup(this, "IntelliJ Icons (Light)", "icongroups/intellij-icons-light.jar"));
-		iconGroupMap.put("Eclipse Icons", new IconGroup("Eclipse Icons",
+		iconGroupMap.put("Eclipse Icons", new RasterImageIconGroup("Eclipse Icons",
 			"", null, "gif",
 			new File(root, "icongroups/EclipseIcons.jar").getAbsolutePath()));
 
@@ -1109,7 +1098,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		// Change all RTextAreas' open documents' icon sets.  This must be done
 		// after the main view is instantiated.
-		RTextEditorPane.setIconGroup(iconGroup);
+		RTextEditorPane.setIconGroup(RTextUtilities.toRstaIconGroup(getIconGroup()));
 
 		csp = new CollapsibleSectionPanel(false);
 		csp.add(mainView);
@@ -1230,84 +1219,11 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		IconGroup newGroup = iconGroupMap.get(name);
 		if (newGroup==null)
 			newGroup = iconGroupMap.get(DEFAULT_ICON_GROUP_NAME);
+		IconGroup iconGroup = getIconGroup();
 		if (iconGroup!=null && iconGroup.equals(newGroup))
 			return;
 
-		Dimension size = getSize();
-		IconGroup old = iconGroup;
-		iconGroup = newGroup;
-
-		// Text area icons
-		updateTextAreaIcon(RTextArea.CUT_ACTION, "cut");
-		updateTextAreaIcon(RTextArea.COPY_ACTION, "copy");
-		updateTextAreaIcon(RTextArea.PASTE_ACTION, "paste");
-		updateTextAreaIcon(RTextArea.DELETE_ACTION, "delete");
-		updateTextAreaIcon(RTextArea.UNDO_ACTION, "undo");
-		updateTextAreaIcon(RTextArea.REDO_ACTION, "redo");
-		updateTextAreaIcon(RTextArea.SELECT_ALL_ACTION, "selectall");
-
-		// All other icons
-		Icon icon = iconGroup.getIcon("new");
-		getAction(NEW_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("open");
-		getAction(OPEN_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("save");
-		getAction(SAVE_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("saveall");
-		getAction(SAVE_ALL_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("openinnewwindow");
-		getAction(OPEN_NEWWIN_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("saveas");
-		getAction(SAVE_AS_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("options");
-		getAction(OPTIONS_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("help");
-		getAction(HELP_ACTION_KEY).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("about");
-		getAction(ABOUT_ACTION_KEY).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("close");
-		getAction(CLOSE_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("find");
-		getAction(FIND_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("findnext");
-		getAction(FIND_NEXT_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("replace");
-		getAction(REPLACE_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("replacenext");
-		getAction(REPLACE_NEXT_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("print");
-		getAction(PRINT_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("printpreview");
-		getAction(PRINT_PREVIEW_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("closeall");
-		getAction(CLOSE_ALL_ACTION).putValue(Action.SMALL_ICON, icon);
-
-		Icon gotoIcon = iconGroup.getIcon("goto");
-		if (gotoIcon == null) {
-			gotoIcon = ActionFactory.getDefaultGoToActionIcon();
-		}
-		getAction(GOTO_ACTION).putValue(Action.SMALL_ICON, gotoIcon);
-
-		// The toolbar uses the large versions of the icons, if available.
-		// FIXME:  Make this toggle-able.
-		ToolBar toolBar = (ToolBar)getToolBar();
-		if (toolBar!=null)
-			toolBar.checkForLargeIcons();
-
-		// Do this because the toolbar has changed it's size.
-		if (isDisplayable()) {
-			pack();
-			setSize(size);
-		}
-
-		// Make the help dialog use appropriate "back" and "forward" icons.
-		if (helpDialog!=null) {
-			helpDialog.setBackButtonIcon(iconGroup.getIcon("back"));
-			helpDialog.setForwardButtonIcon(iconGroup.getIcon("forward"));
-		}
-
-		firePropertyChange(ICON_STYLE_PROPERTY, old, iconGroup);
-
+		setIconGroup(newGroup);
 	}
 
 
@@ -1639,6 +1555,82 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	@Override
+	protected void updateIconsForNewIconGroup(IconGroup iconGroup) {
+
+		Dimension size = getSize();
+
+		// Text area icons
+		updateTextAreaIcon(RTextArea.CUT_ACTION, "cut");
+		updateTextAreaIcon(RTextArea.COPY_ACTION, "copy");
+		updateTextAreaIcon(RTextArea.PASTE_ACTION, "paste");
+		updateTextAreaIcon(RTextArea.DELETE_ACTION, "delete");
+		updateTextAreaIcon(RTextArea.UNDO_ACTION, "undo");
+		updateTextAreaIcon(RTextArea.REDO_ACTION, "redo");
+		updateTextAreaIcon(RTextArea.SELECT_ALL_ACTION, "selectall");
+
+		// All other icons
+		Icon icon = iconGroup.getIcon("new");
+		getAction(NEW_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("open");
+		getAction(OPEN_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("save");
+		getAction(SAVE_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("saveall");
+		getAction(SAVE_ALL_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("openinnewwindow");
+		getAction(OPEN_NEWWIN_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("saveas");
+		getAction(SAVE_AS_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("options");
+		getAction(OPTIONS_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("help");
+		getAction(HELP_ACTION_KEY).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("about");
+		getAction(ABOUT_ACTION_KEY).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("close");
+		getAction(CLOSE_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("find");
+		getAction(FIND_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("findnext");
+		getAction(FIND_NEXT_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("replace");
+		getAction(REPLACE_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("replacenext");
+		getAction(REPLACE_NEXT_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("print");
+		getAction(PRINT_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("printpreview");
+		getAction(PRINT_PREVIEW_ACTION).putValue(Action.SMALL_ICON, icon);
+		icon = iconGroup.getIcon("closeall");
+		getAction(CLOSE_ALL_ACTION).putValue(Action.SMALL_ICON, icon);
+
+		Icon gotoIcon = iconGroup.getIcon("goto");
+		if (gotoIcon == null) {
+			gotoIcon = ActionFactory.getDefaultGoToActionIcon();
+		}
+		getAction(GOTO_ACTION).putValue(Action.SMALL_ICON, gotoIcon);
+
+		// The toolbar uses the large versions of the icons, if available.
+		// FIXME:  Make this toggle-able.
+		ToolBar toolBar = (ToolBar)getToolBar();
+		if (toolBar!=null)
+			toolBar.checkForLargeIcons();
+
+		// Do this because the toolbar has changed it's size.
+		if (isDisplayable()) {
+			pack();
+			setSize(size);
+		}
+
+		// Make the help dialog use appropriate "back" and "forward" icons.
+		if (helpDialog!=null) {
+			helpDialog.setBackButtonIcon(iconGroup.getIcon("back"));
+			helpDialog.setForwardButtonIcon(iconGroup.getIcon("forward"));
+		}
+	}
+
+
+	@Override
 	public void updateLookAndFeel(LookAndFeel lnf) {
 
 		super.updateLookAndFeel(lnf);
@@ -1700,7 +1692,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 	private void updateTextAreaIcon(int actionName, String iconName) {
 
-		Icon icon = iconGroup.getIcon(iconName);
+		Icon icon = getIconGroup().getIcon(iconName);
 
 		Action action = RTextArea.getAction(actionName);
 		if (action != null) { // Can be null when the app is first starting up

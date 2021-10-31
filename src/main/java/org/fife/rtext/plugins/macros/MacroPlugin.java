@@ -28,7 +28,7 @@ import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.AppAction;
-import org.fife.ui.rtextarea.IconGroup;
+import org.fife.ui.app.icons.IconGroup;
 
 
 /**

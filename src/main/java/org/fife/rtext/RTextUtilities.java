@@ -17,13 +17,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JWindow;
-import javax.swing.LookAndFeel;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 
 import org.fife.jgoodies.looks.common.ShadowPopupBorder;
@@ -33,6 +27,7 @@ import org.fife.ui.OS;
 import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.AppTheme;
+import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
 import org.fife.ui.rsyntaxtextarea.PopupWindowDecorator;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -951,4 +946,20 @@ public final class RTextUtilities {
 	}
 
 
+	/**
+	 * Returns an icon group fit for {@code RSyntaxTextArea} from an application
+	 * icon group.
+	 *
+	 * @param iconGroup The application's icon group.
+	 * @return The text area icon group.
+	 */
+	static org.fife.ui.rtextarea.IconGroup toRstaIconGroup(IconGroup iconGroup) {
+		return new org.fife.ui.rtextarea.IconGroup(iconGroup.getName(), "") {
+			@Override
+			public Icon getIconImpl(String iconFullPath) {
+				iconFullPath = iconFullPath.substring(0, iconFullPath.lastIndexOf('.'));
+				return iconGroup.getIcon(iconFullPath);
+			}
+		};
+	}
 }
