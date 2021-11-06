@@ -43,7 +43,7 @@ class StopAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 */
 	StopAction(ToolPlugin plugin, ResourceBundle msg) {
-		super(plugin.getRText(), msg, "Action.StopTool");
+		super(plugin.getApplication(), msg, "Action.StopTool");
 		initIcon();
 		setEnabled(false);
 		this.plugin = plugin;
@@ -71,7 +71,7 @@ class StopAction extends AppAction<RText> {
 				InputStream in = getClass().getResourceAsStream("suspend.svg");
 				setIcon(new ImageIcon(ImageTranscodingUtil.rasterize("suspend.svg", in, 16, 16)));
 			} catch (IOException ioe) {
-				plugin.getRText().displayException(ioe);
+				plugin.getApplication().displayException(ioe);
 			}
 		}
 

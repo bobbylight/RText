@@ -121,7 +121,7 @@ class Tree extends FileSystemTree {
 			// We'll make sure the file exists and is a regular file
 			// (as opposed to a directory) before attempting to open it.
 			if (file.isFile()) {
-				AbstractMainView mainView = plugin.getRText().getMainView();
+				AbstractMainView mainView = plugin.getApplication().getMainView();
 				// null encoding means check for Unicode first, and
 				// if it isn't, use system default encoding.
 				mainView.openFile(file.getAbsolutePath(), null, true);
@@ -189,11 +189,11 @@ class Tree extends FileSystemTree {
 		public void propertyChange(PropertyChangeEvent e) {
 			String name = e.getPropertyName();
 			if (name.equals(FileSystemTree.WILL_EXPAND_PROPERTY)) {
-				plugin.getRText().setCursor(Cursor.
+				plugin.getApplication().setCursor(Cursor.
 							getPredefinedCursor(Cursor.WAIT_CURSOR));
 			}
 			else if (name.equals(FileSystemTree.EXPANDED_PROPERTY)) {
-				plugin.getRText().setCursor(Cursor.
+				plugin.getApplication().setCursor(Cursor.
 							getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
 		}
@@ -221,7 +221,7 @@ class Tree extends FileSystemTree {
 		public void actionPerformed(ActionEvent e) {
 			if (newWindow) {
 				// Create a new RText window.
-				RText r = plugin.getRText().createNewInstance(null);
+				RText r = plugin.getApplication().createNewInstance(null);
 				StoreKeeper.addRTextInstance(r);
 				String file = getSelectedFileName();
 				// Open the new file in an invokeLater() call as RText's

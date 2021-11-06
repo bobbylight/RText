@@ -60,7 +60,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 
 	SystemShellTextArea(Plugin plugin) {
 		super(plugin);
-		isWindows = plugin.getRText().getOS()==OS.WINDOWS;
+		isWindows = plugin.getApplication().getOS()==OS.WINDOWS;
 	}
 
 
@@ -95,7 +95,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 
 	@Override
 	protected String getSyntaxStyle() {
-		return plugin.getRText().getOS()==OS.WINDOWS ?
+		return plugin.getApplication().getOS()==OS.WINDOWS ?
 				SyntaxConstants.SYNTAX_STYLE_WINDOWS_BATCH :
 				SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL;
 	}
@@ -173,7 +173,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 			}
 			dir = temp.getAbsolutePath();
 		}
-		else if (plugin.getRText().getOS()==OS.WINDOWS &&
+		else if (plugin.getApplication().getOS()==OS.WINDOWS &&
 				dir.length()==2 && Character.isLetter(dir.charAt(0)) &&
 				dir.charAt(1)==':') {
 			// e.g. "cd U:" converts to "cd U:\" so it actually does something;
@@ -256,7 +256,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 		}
 
 		if (temp.isFile()) {
-			(plugin.getRText()).openFile(temp);
+			plugin.getApplication().openFile(temp);
 		}
 		else if (temp.exists()) {
 			append(plugin.getString("Error.NotAFile", cmd, dir), STYLE_STDERR);
@@ -299,7 +299,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	@Override
 	protected void handleSubmit(String text) {
 
-		if (plugin.getRText().getOS()==OS.WINDOWS) {
+		if (plugin.getApplication().getOS()==OS.WINDOWS) {
 
 			// On Windows, allow format e.g. "cd\temp" => "cd C:\temp".
 			if (text.startsWith(CD + '\\')) {

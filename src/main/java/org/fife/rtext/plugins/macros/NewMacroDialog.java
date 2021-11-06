@@ -88,7 +88,7 @@ class NewMacroDialog extends EscapableDialog {
 	private void createGUI(MacroPlugin plugin) {
 
 		this.plugin = plugin;
-		rtext = plugin.getRText();
+		rtext = plugin.getApplication();
 		ResourceBundle parentMsg = rtext.getResourceBundle();
 		JPanel cp = new ResizableFrameContentPane(new BorderLayout());
 		cp.setBorder(UIUtil.getEmpty5Border());

@@ -347,7 +347,7 @@ public class Workspace implements ModelEntity {
 	 */
 	public boolean setName(String name) {
 
-		RText rtext = plugin.getRText();
+		RText rtext = plugin.getApplication();
 
 		File tempFile = new File(file.getParentFile(), name + ".xml");
 		if (tempFile.isFile()) {

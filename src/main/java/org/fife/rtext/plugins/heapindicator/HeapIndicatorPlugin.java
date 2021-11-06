@@ -29,10 +29,11 @@ import javax.swing.Timer;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 
+import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
-import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.StatusBarPlugin;
+import org.fife.ui.app.icons.IconGroup;
 
 
 /**
@@ -41,9 +42,8 @@ import org.fife.ui.app.StatusBarPlugin;
  * @author Robert Futrell
  * @version 1.0
  */
-public class HeapIndicatorPlugin extends StatusBarPlugin {
+public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 
-	private final AbstractPluggableGUIApplication<?> app;
 	private Timer timer;
 	private TimerEvent timerEvent;
 	private long usedMem;
@@ -68,10 +68,10 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 *
 	 * @param app The GUI application.
 	 */
-	public HeapIndicatorPlugin(AbstractPluggableGUIApplication<?> app) {
+	public HeapIndicatorPlugin(RText app) {
 
+		super(app);
 		msg = ResourceBundle.getBundle(BUNDLE_NAME);
-		this.app = app;
 
 		HeapIndicatorPrefs prefs = loadPrefs();
 
@@ -159,7 +159,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	@Override
 	public PluginOptionsDialogPanel<HeapIndicatorPlugin> getOptionsDialogPanel() {
 		if (optionPanel==null)
-			optionPanel = new HeapIndicatorOptionPanel(app, this);
+			optionPanel = new HeapIndicatorOptionPanel(getApplication(), this);
 		return optionPanel;
 	}
 
@@ -187,7 +187,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 
 
 	@Override
-	public Icon getPluginIcon(boolean darkLookAndFeel) {
+	public Icon getPluginIcon() {
 		return pluginIcon;
 	}
 
@@ -281,11 +281,10 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 	 * should use this method to register any listeners to the GUI application
 	 * and do any other necessary setup.
 	 *
-	 * @param app The application to which this plugin was just added.
 	 * @see #uninstall
 	 */
 	@Override
-	public void install(AbstractPluggableGUIApplication<?> app) {
+	public void install() {
 	}
 
 
@@ -315,7 +314,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 			try {
 				prefs.load(prefsFile);
 			} catch (IOException ioe) {
-				app.displayException(ioe);
+				getApplication().displayException(ioe);
 				// (Some) defaults will be used
 			}
 		}
@@ -336,7 +335,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 					String text = msg.getString(
 									"Plugin.PopupDialog.GC.text");
 					text = MessageFormat.format(text, bytesToKb(difference));
-					JOptionPane.showMessageDialog(app, text,
+					JOptionPane.showMessageDialog(getApplication(), text,
 							msg.getString("Plugin.PopupDialog.GC.title"),
 							JOptionPane.INFORMATION_MESSAGE);
 				}
@@ -359,7 +358,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 		try {
 			prefs.save(prefsFile);
 		} catch (IOException ioe) {
-			app.displayException(ioe);
+			getApplication().displayException(ioe);
 		}
 	}
 
@@ -437,6 +436,13 @@ public class HeapIndicatorPlugin extends StatusBarPlugin {
 			timerEvent = null;	// May help GC.
 			timer = null;		// May help GC.
 		}
+	}
+
+
+	@Override
+	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
+		System.out.println("HeapIndicatorPlugin: Refreshing icons to: " + getPluginIcon());
+		optionPanel.setIcon(getPluginIcon());
 	}
 
 

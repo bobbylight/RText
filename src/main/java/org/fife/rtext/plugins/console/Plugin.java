@@ -24,10 +24,11 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.app.AbstractPluggableGUIApplication;
+import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.AppAction;
+import org.fife.ui.app.icons.IconGroup;
 
 
 /**
@@ -36,16 +37,16 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Plugin extends GUIPlugin {
+public class Plugin extends GUIPlugin<RText> {
 
 	private static final String VERSION					= "4.0.1";
 	private static final String DOCKABLE_WINDOW_CONSOLE	= "consoleDockableWindow";
 
-	private final RText app;
 	private boolean highlightInput;
 	private ConsoleWindow window;
 	private Icon darkThemeIcon;
 	private Icon lightThemeIcon;
+	private ConsoleOptionPanel optionPanel;
 
 	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.console.Plugin";
 	static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
@@ -58,21 +59,20 @@ public class Plugin extends GUIPlugin {
 	 *
 	 * @param app The parent application.
 	 */
-	public Plugin(AbstractPluggableGUIApplication<?> app) {
+	public Plugin(RText app) {
 
-		this.app = (RText)app;
-
+		super(app);
 		loadIcons();
 
 		ConsolePrefs prefs = loadPrefs();
 		setSyntaxHighlightInput(prefs.syntaxHighlightInput);
 
-		AppAction<RText> a = new ViewConsoleAction(this.app, MSG, this);
+		AppAction<RText> a = new ViewConsoleAction(app, MSG, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
 		app.addAction(VIEW_CONSOLE_ACTION, a);
 
 		// Window MUST always be created for preference saving on shutdown
-		window = new ConsoleWindow(this.app, this);
+		window = new ConsoleWindow(app, this);
 		window.setPosition(prefs.windowPosition);
 		window.setActive(prefs.windowVisible);
 		putDockableWindow(DOCKABLE_WINDOW_CONSOLE, window);
@@ -97,7 +97,10 @@ public class Plugin extends GUIPlugin {
 
 	@Override
 	public PluginOptionsDialogPanel<Plugin> getOptionsDialogPanel() {
-		return new ConsoleOptionPanel(this);
+		if (optionPanel == null) {
+			optionPanel = new ConsoleOptionPanel(this);
+		}
+		return optionPanel;
 	}
 
 
@@ -108,8 +111,8 @@ public class Plugin extends GUIPlugin {
 
 
 	@Override
-	public Icon getPluginIcon(boolean darkLookAndFeel) {
-		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
+	public Icon getPluginIcon() {
+		return UIUtil.isDarkLookAndFeel() ? darkThemeIcon : lightThemeIcon;
 	}
 
 
@@ -133,16 +136,6 @@ public class Plugin extends GUIPlugin {
 	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"console.properties");
-	}
-
-
-	/**
-	 * Returns the parent application.
-	 *
-	 * @return The parent application.
-	 */
-	public RText getRText() {
-		return app;
 	}
 
 
@@ -171,14 +164,14 @@ public class Plugin extends GUIPlugin {
 
 
 	@Override
-	public void install(AbstractPluggableGUIApplication<?> app) {
+	public void install() {
 
-		RText rtext = (RText)app;
+		RText app = getApplication();
 		RTextMenuBar mb = (RTextMenuBar)app.getJMenuBar();
 
 		// Add an item to the "View" menu to toggle console visibility
 		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
-		Action a = rtext.getAction(VIEW_CONSOLE_ACTION);
+		Action a = app.getAction(VIEW_CONSOLE_ACTION);
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(a);
 		item.setSelected(isConsoleWindowVisible());
 		item.setToolTipText(null);
@@ -229,7 +222,7 @@ public class Plugin extends GUIPlugin {
 			try {
 				prefs.load(prefsFile);
 			} catch (IOException ioe) {
-				app.displayException(ioe);
+				getApplication().displayException(ioe);
 				// (Some) defaults will be used
 			}
 		}
@@ -252,7 +245,7 @@ public class Plugin extends GUIPlugin {
 		ConsolePrefs prefs = new ConsolePrefs();
 		prefs.syntaxHighlightInput = getSyntaxHighlightInput();
 		prefs.windowPosition = window.getPosition();
-		AppAction<?> a = (AppAction<?>)app.getAction(VIEW_CONSOLE_ACTION);
+		AppAction<?> a = (AppAction<?>)getApplication().getAction(VIEW_CONSOLE_ACTION);
 		prefs.windowVisibilityAccelerator = a.getAccelerator();
 		prefs.windowVisible = window.isActive();
 
@@ -265,7 +258,7 @@ public class Plugin extends GUIPlugin {
 		try {
 			prefs.save(prefsFile);
 		} catch (IOException ioe) {
-			app.displayException(ioe);
+			getApplication().displayException(ioe);
 		}
 
 	}
@@ -280,8 +273,8 @@ public class Plugin extends GUIPlugin {
 	void setConsoleWindowVisible(boolean visible) {
 		if (visible!=isConsoleWindowVisible()) {
 			if (visible && window==null) {
-				window = new ConsoleWindow(app, this);
-				app.addDockableWindow(window);
+				window = new ConsoleWindow(getApplication(), this);
+				getApplication().addDockableWindow(window);
 			}
 			window.setActive(visible);
 		}
@@ -315,6 +308,14 @@ public class Plugin extends GUIPlugin {
 	@Override
 	public boolean uninstall() {
 		return true;
+	}
+
+
+	@Override
+	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
+		System.out.println("ConsolePlugin: Refreshing icons to: " + getPluginIcon());
+		optionPanel.setIcon(getPluginIcon());
+		window.setIcon(getPluginIcon());
 	}
 
 

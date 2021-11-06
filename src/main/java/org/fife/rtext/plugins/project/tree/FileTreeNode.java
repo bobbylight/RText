@@ -210,7 +210,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 
 		String text = Messages.getString("Action.DeleteFile.Confirm",
 				file.getName());
-		RText rtext = plugin.getRText();
+		RText rtext = plugin.getApplication();
 		String title = rtext.getString("ConfDialogTitle");
 
 		int rc = JOptionPane.showConfirmDialog(rtext, text, title,
@@ -231,7 +231,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 
 	@Override
 	protected void handleProperties() {
-		handleProperties(plugin.getRText(), getFile());
+		handleProperties(plugin.getApplication(), getFile());
 	}
 
 
@@ -254,7 +254,7 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 
 	@Override
 	protected void handleRename() {
-		RText rtext = plugin.getRText();
+		RText rtext = plugin.getApplication();
 		boolean directory = getFile().isDirectory();
 		String key = "ProjectPlugin." + (directory ? "Folder" : "File");
 		String type = Messages.getString(key);

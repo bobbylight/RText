@@ -113,7 +113,7 @@ public class LogicalFolderProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 	@Override
 	protected void handleRename() {
-		RText parent = plugin.getRText();
+		RText parent = plugin.getApplication();
 		LogicalFolderNameDialog dialog = new LogicalFolderNameDialog(parent,
 				entry.getSaveData(), new LogicalFolderNameChecker());
 		dialog.setVisible(true);

@@ -27,12 +27,12 @@ import java.util.ResourceBundle;
  * renders stdout, stderr, etc.  This base class provides the infrastructure
  * to allow the user to customize the styles used in the console.
  *
- * @param <T> The type of plugin this option panel is for.
+ * @param <P> The type of plugin this option panel is for.
  * @author Robert Futrell
  * @version 1.0
  */
-public abstract class AbstractConsoleTextAreaOptionPanel<T extends Plugin>
-		extends PluginOptionsDialogPanel<T>
+public abstract class AbstractConsoleTextAreaOptionPanel<P extends Plugin<?>>
+		extends PluginOptionsDialogPanel<P>
 	implements ActionListener, ItemListener, PropertyChangeListener {
 
 	protected JCheckBox visibleCB;
@@ -59,7 +59,7 @@ public abstract class AbstractConsoleTextAreaOptionPanel<T extends Plugin>
 	 *
 	 * @param plugin The plugin.
 	 */
-	public AbstractConsoleTextAreaOptionPanel(T plugin) {
+	public AbstractConsoleTextAreaOptionPanel(P plugin) {
 		super(plugin);
 	}
 

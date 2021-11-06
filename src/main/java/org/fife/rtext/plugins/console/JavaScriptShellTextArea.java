@@ -109,8 +109,8 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 			// We always reset the value of "rtext" and "textArea", but
 			// all other variables they've modified are persistent.
-			bindings.put("rtext", plugin.getRText());
-			bindings.put("textArea", plugin.getRText().getMainView().getCurrentTextArea());
+			bindings.put("rtext", plugin.getApplication());
+			bindings.put("textArea", plugin.getApplication().getMainView().getCurrentTextArea());
 
 			Object obj = jsEngine.eval(code);
 			if (obj!=null) {

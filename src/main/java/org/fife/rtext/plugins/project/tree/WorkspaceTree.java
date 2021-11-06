@@ -192,7 +192,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		Object sel = getLastSelectedPathComponent();
 
 		if (dir != null && dir.isDirectory()) {
-			RText rtext = plugin.getRText();
+			RText rtext = plugin.getApplication();
 			rtext.getMainView().getFindInFilesDialog().setSearchIn(dir);
 			// Note the ActionEvent isn't actually used; we're just doing
 			// this for completeness.
@@ -309,7 +309,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			// We'll make sure the file exists and is a regular file
 			// (as opposed to a directory) before attempting to open it.
 			if (file.isFile()) {
-				AbstractMainView mainView = plugin.getRText().getMainView();
+				AbstractMainView mainView = plugin.getApplication().getMainView();
 				mainView.openFile(file.getAbsolutePath(), null, true);
 			}
 			else if (getLastSelectedPathComponent() instanceof
@@ -390,7 +390,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			public void actionPerformed(ActionEvent e) {
 				File file = getSelectedFile();
 				if (file != null && file.isFile()) {
-					plugin.getRText().openFile(file);
+					plugin.getApplication().openFile(file);
 				}
 				else {
 					UIManager.getLookAndFeel().provideErrorFeedback(null);
@@ -456,7 +456,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		}
 		String msg = Messages.getString("Prompt.FileDoesntExist.Remove",
 				node.getFile().getAbsolutePath());
-		RText rtext = plugin.getRText();
+		RText rtext = plugin.getApplication();
 		String title = rtext.getString("ConfDialogTitle");
 		int rc = JOptionPane.showConfirmDialog(rtext, msg, title,
 				JOptionPane.YES_NO_OPTION);

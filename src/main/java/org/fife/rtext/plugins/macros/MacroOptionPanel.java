@@ -197,7 +197,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel<MacroPlugin>
 	 * @return The directory.
 	 */
 	private File getExampleMacrosDir() {
-		RText app = getPlugin().getRText();
+		RText app = getPlugin().getApplication();
 		String installDir = app.getInstallLocation();
 		return new File(installDir, "exampleMacros");
 	}

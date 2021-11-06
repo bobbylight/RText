@@ -211,7 +211,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		public void actionPerformed(ActionEvent e) {
 
 			FolderProjectEntry fpe = (FolderProjectEntry)entry;
-			NewExistingFolderDialog dialog = new NewExistingFolderDialog(plugin.getRText(),fpe);
+			NewExistingFolderDialog dialog = new NewExistingFolderDialog(plugin.getApplication(),fpe);
 			dialog.setVisible(true);
 
 			FolderFilterInfo info = dialog.getFilterInfo();

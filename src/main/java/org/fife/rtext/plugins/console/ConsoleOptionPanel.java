@@ -173,7 +173,7 @@ class ConsoleOptionPanel extends AbstractConsoleTextAreaOptionPanel<Plugin>
 	private void restoreDefaultColors() {
 		Plugin plugin = getPlugin();
 		plugin.restoreDefaultColors();
-		setValues(plugin.getRText());
+		setValues(plugin.getApplication());
 	}
 
 

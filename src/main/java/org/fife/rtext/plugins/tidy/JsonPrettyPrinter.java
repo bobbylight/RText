@@ -145,7 +145,7 @@ class JsonPrettyPrinter implements PrettyPrinter {
 		// First, do a sanity check to ensure everything is wrapped in curlys.
 		char ch = getFirstNonWhitespaceChar(json);
 		if (ch!='{' && ch!='[') {
-			RText rtext = plugin.getRText();
+			RText rtext = plugin.getApplication();
 			String msg = Plugin.MSG.getString("Dialog.Confirm.Json.WrapInCurlys");
 			String title = rtext.getString("ConfDialogTitle");
 			int rc = JOptionPane.showConfirmDialog(rtext, msg, title,

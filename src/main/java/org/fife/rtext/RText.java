@@ -1557,6 +1557,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	@Override
 	protected void updateIconsForNewIconGroup(IconGroup iconGroup) {
 
+		super.updateIconsForNewIconGroup(iconGroup);
+
 		Dimension size = getSize();
 
 		// Text area icons

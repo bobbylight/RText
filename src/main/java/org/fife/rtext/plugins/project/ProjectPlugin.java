@@ -33,10 +33,11 @@ import org.fife.rtext.plugins.project.model.Workspace;
 import org.fife.rtext.plugins.project.tree.AbstractWorkspaceTreeNode;
 import org.fife.rtext.plugins.project.tree.WorkspaceTree;
 import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.app.AbstractPluggableGUIApplication;
+import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.AppAction;
+import org.fife.ui.app.icons.IconGroup;
 
 
 /**
@@ -45,7 +46,7 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ProjectPlugin extends GUIPlugin {
+public class ProjectPlugin extends GUIPlugin<RText> {
 
 	/**
 	 * System property that, if defined, overrides the workspace initially
@@ -54,7 +55,6 @@ public class ProjectPlugin extends GUIPlugin {
 	 */
 	private static final String PROPERTY_INITIAL_WORKSPACE = "workspace.override";
 
-	private final RText rtext;
 	private Icon darkThemeIcon;
 	private Icon lightThemeIcon;
 	private Workspace workspace;
@@ -65,10 +65,9 @@ public class ProjectPlugin extends GUIPlugin {
 	private static final String VERSION_STRING = "4.0.1";
 
 
-	public ProjectPlugin(AbstractPluggableGUIApplication<?> app) {
+	public ProjectPlugin(RText app) {
 
-		rtext = (RText)app; // Needed now in case of XML errors below.
-
+		super(app);
 		loadIcons();
 		ProjectPluginPrefs prefs = loadPrefs();
 
@@ -86,7 +85,7 @@ public class ProjectPlugin extends GUIPlugin {
 		loadInitialWorkspace(prefs.openWorkspaceName);
 
 		// Window MUST always be created for preference saving on shutdown
-		ProjectWindow window = new ProjectWindow(rtext, this, prefs);
+		ProjectWindow window = new ProjectWindow(app, this, prefs);
 		ComponentOrientation o = ComponentOrientation.
 				getOrientation(Locale.getDefault());
 		window.applyComponentOrientation(o);
@@ -123,8 +122,8 @@ public class ProjectPlugin extends GUIPlugin {
 
 
 	@Override
-	public Icon getPluginIcon(boolean darkLookAndFeel) {
-		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
+	public Icon getPluginIcon() {
+		return UIUtil.isDarkLookAndFeel() ? darkThemeIcon : lightThemeIcon;
 	}
 
 
@@ -148,16 +147,6 @@ public class ProjectPlugin extends GUIPlugin {
 	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 				"projects.properties");
-	}
-
-
-	/**
-	 * Returns the parent RText instance.
-	 *
-	 * @return The parent RText instance.
-	 */
-	public RText getRText() {
-		return rtext;
 	}
 
 
@@ -224,18 +213,19 @@ public class ProjectPlugin extends GUIPlugin {
 
 
 	@Override
-	public void install(AbstractPluggableGUIApplication<?> app) {
+	public void install() {
 
 		File workspaceDir = getWorkspacesDir();
 		if (!workspaceDir.isDirectory()) {
 			workspaceDir.mkdirs();
 		}
 
+		RText app = getApplication();
 		RTextMenuBar mb = (RTextMenuBar)app.getJMenuBar();
 
 		// Add an item to the "View" menu to toggle console visibility
 		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
-		Action a = rtext.getAction(VIEW_CONSOLE_ACTION);
+		Action a = app.getAction(VIEW_CONSOLE_ACTION);
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(a);
 		item.setToolTipText(null);
 		item.setSelected(isProjectWindowVisible());
@@ -283,7 +273,7 @@ public class ProjectPlugin extends GUIPlugin {
 				try {
 					workspace = Workspace.load(this, workspaceFile);
 				} catch (IOException ioe) {
-					rtext.displayException(ioe);
+					getApplication().displayException(ioe);
 				}
 			}
 		}
@@ -307,7 +297,7 @@ public class ProjectPlugin extends GUIPlugin {
 			try {
 				prefs.load(prefsFile);
 			} catch (IOException ioe) {
-				rtext.displayException(ioe);
+				getApplication().displayException(ioe);
 				// (Some) defaults will be used
 			}
 		}
@@ -331,7 +321,7 @@ public class ProjectPlugin extends GUIPlugin {
 			node.moveProjectEntityDown(false);
 		}
 		else {
-			UIManager.getLookAndFeel().provideErrorFeedback(rtext);
+			UIManager.getLookAndFeel().provideErrorFeedback(getApplication());
 		}
 	}
 
@@ -353,7 +343,7 @@ public class ProjectPlugin extends GUIPlugin {
 			node.moveProjectEntityDown(true);
 		}
 		else {
-			UIManager.getLookAndFeel().provideErrorFeedback(rtext);
+			UIManager.getLookAndFeel().provideErrorFeedback(getApplication());
 		}
 	}
 
@@ -375,7 +365,7 @@ public class ProjectPlugin extends GUIPlugin {
 			node.moveProjectEntityUp(true);
 		}
 		else {
-			UIManager.getLookAndFeel().provideErrorFeedback(rtext);
+			UIManager.getLookAndFeel().provideErrorFeedback(getApplication());
 		}
 	}
 
@@ -396,7 +386,7 @@ public class ProjectPlugin extends GUIPlugin {
 			node.moveProjectEntityUp(false);
 		}
 		else {
-			UIManager.getLookAndFeel().provideErrorFeedback(rtext);
+			UIManager.getLookAndFeel().provideErrorFeedback(getApplication());
 		}
 	}
 
@@ -422,6 +412,7 @@ public class ProjectPlugin extends GUIPlugin {
 	@Override
 	public void savePreferences() {
 
+		RText rtext = getApplication();
 		ProjectWindow window = getDockableWindow();
 
 		ProjectPluginPrefs prefs = new ProjectPluginPrefs();
@@ -491,6 +482,16 @@ public class ProjectPlugin extends GUIPlugin {
 	@Override
 	public boolean uninstall() {
 		return false;
+	}
+
+
+	@Override
+	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
+		System.out.println("ProjectPlugin: Refreshing icons to: " + getPluginIcon());
+		optionPanel.setIcon(getPluginIcon());
+		if (getDockableWindow() != null) {
+			getDockableWindow().setIcon(getPluginIcon());
+		}
 	}
 
 

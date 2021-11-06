@@ -414,7 +414,7 @@ abstract class ConsoleTextArea extends AbstractConsoleTextArea {
 
 		try {
 
-			SyntaxScheme scheme = plugin.getRText().getSyntaxScheme();
+			SyntaxScheme scheme = plugin.getApplication().getSyntaxScheme();
 			shDoc.replace(0, shDoc.getLength(), getCurrentInput(), null);
 			Token t = shDoc.getTokenListForLine(0);
 			int offs = inputMinOffs;
@@ -477,7 +477,7 @@ abstract class ConsoleTextArea extends AbstractConsoleTextArea {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			OptionsDialog od = plugin.getRText().getOptionsDialog();
+			OptionsDialog od = plugin.getApplication().getOptionsDialog();
 			od.initialize();
 			od.setSelectedOptionsPanel(plugin.getString("Plugin.Name"));
 			od.setVisible(true);

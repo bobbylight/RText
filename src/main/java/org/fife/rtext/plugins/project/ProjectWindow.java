@@ -182,7 +182,7 @@ class ProjectWindow extends DockableWindow {
 
 		boolean saveWorkspace(Workspace workspace) {
 
-			RText rtext = plugin.getRText();
+			RText rtext = plugin.getApplication();
 			boolean success = true;
 
 			try {
@@ -214,7 +214,7 @@ class ProjectWindow extends DockableWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			RText rtext = plugin.getRText();
+			RText rtext = plugin.getApplication();
 			HelpDialog helpDialog = rtext.getHelpDialog();
 			// TODO: Open to documentation specific to the workspace plugin.
 			helpDialog.setVisible(true);
@@ -236,7 +236,7 @@ class ProjectWindow extends DockableWindow {
 		public void actionPerformed(ActionEvent e) {
 
 			// Save the currently active workspace.
-			RText rtext = plugin.getRText();
+			RText rtext = plugin.getApplication();
 			Workspace workspace = plugin.getWorkspace();
 			if (!saveWorkspace(workspace)) {
 				return;
@@ -289,7 +289,7 @@ class ProjectWindow extends DockableWindow {
 		public void actionPerformed(ActionEvent e) {
 
 			// Save the currently active workspace.
-			RText rtext = plugin.getRText();
+			RText rtext = plugin.getApplication();
 			Workspace workspace = plugin.getWorkspace();
 			if (!saveWorkspace(workspace)) {
 				return;

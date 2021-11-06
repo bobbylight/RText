@@ -47,7 +47,7 @@ abstract class ProjectEntryTreeNode extends AbstractWorkspaceTreeNode {
 	 */
 	public void handleRemove() {
 
-		RText rtext = plugin.getRText();
+		RText rtext = plugin.getApplication();
 		String title = rtext.getString("ConfDialogTitle");
 		String selectedEntry = entry.getSaveData();
 		String key = (entry instanceof LogicalFolderProjectEntry) ?

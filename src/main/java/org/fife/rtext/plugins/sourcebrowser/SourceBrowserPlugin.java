@@ -30,6 +30,7 @@ import org.fife.ui.RScrollPane;
 import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.*;
+import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -47,7 +48,7 @@ import org.fife.ui.rsyntaxtextarea.Token;
  * @author Robert Futrell
  * @version 1.2
  */
-public class SourceBrowserPlugin extends GUIPlugin
+public class SourceBrowserPlugin extends GUIPlugin<RText>
 				implements CurrentTextAreaListener, PropertyChangeListener {
 
 	public static final String CTAGS_TYPE_EXUBERANT	= "Exuberant";
@@ -55,8 +56,6 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 	public static final String CUSTOM_HANDLER_PREFIX = "sbp.customHandler.";
 
-
-	private final RText owner;
 	private final String name;
 	private JTree sourceTree;
 	private RScrollPane scrollPane;
@@ -95,10 +94,10 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 *
 	 * @param app The RText instance.
 	 */
-	public SourceBrowserPlugin(AbstractPluggableGUIApplication<?> app) {
+	public SourceBrowserPlugin(RText app) {
 
-		this.owner = (RText)app;
-		this.owner.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, this);
+		super(app);
+		app.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, this);
 
 		loadIcons();
 
@@ -107,7 +106,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 		SourceBrowserPrefs sbp = loadPrefs();
 
-		viewAction = new ViewAction(owner, msg);
+		viewAction = new ViewAction(app, msg);
 		viewAction.setAccelerator(sbp.windowVisibilityAccelerator);
 
 		// Set any preferences saved from the last time this plugin was used.
@@ -131,6 +130,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 */
 	private DockableWindow createDockableWindow(SourceBrowserPrefs sbp) {
 
+		RText owner = getApplication();
 		DockableWindow wind = new DockableWindow(this.name, new BorderLayout());
 
 		dockableWindowTB = new JToolBar();
@@ -191,6 +191,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 				(type==CurrentTextAreaEvent.IS_MODIFIED_CHANGED &&
 					(Boolean.FALSE.equals(e.getNewValue()))) ||
 				(type==CurrentTextAreaEvent.SYNTAX_STYLE_CNANGED);
+		RText owner = getApplication();
 
 		// If we should parse the file...
 		if (doChange) {
@@ -373,7 +374,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * @return An HTML representation of the line.
 	 */
 	String getHTMLForLine(int line) {
-		RSyntaxTextArea textArea = owner.getMainView().getCurrentTextArea();
+		RSyntaxTextArea textArea = getApplication().getMainView().getCurrentTextArea();
 		Token t = textArea.getTokenListForLine(line);
 		StringBuilder text = new StringBuilder("<html>");
 		while (t!=null && t.isPaintable()) {
@@ -424,7 +425,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	@Override
 	public synchronized PluginOptionsDialogPanel<SourceBrowserPlugin> getOptionsDialogPanel() {
 		if (optionPanel==null) {
-			optionPanel = new SourceBrowserOptionPanel(owner, this);
+			optionPanel = new SourceBrowserOptionPanel(getApplication(), this);
 		}
 		return optionPanel;
 	}
@@ -442,8 +443,8 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 
 	@Override
-	public Icon getPluginIcon(boolean darkLookAndFeel) {
-		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
+	public Icon getPluginIcon() {
+		return UIUtil.isDarkLookAndFeel() ? darkThemeIcon : lightThemeIcon;
 	}
 
 
@@ -496,12 +497,12 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * notified when the current document changes (so we can update the
 	 * displayed ctags).
 	 *
-	 * @param app The application to which this plugin was just added.
 	 * @see #uninstall
 	 */
 	@Override
-	public void install(AbstractPluggableGUIApplication<?> app) {
+	public void install() {
 
+		RText owner = getApplication();
 		owner.getMainView().addCurrentTextAreaListener(this);
 		owner.getMainView().addPropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
 
@@ -510,7 +511,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 		RTextMenuBar mb = (RTextMenuBar)owner.getJMenuBar();
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(viewAction);
 		item.setSelected(getDockableWindow(getPluginName()).isActive());
-		item.applyComponentOrientation(app.getComponentOrientation());
+		item.applyComponentOrientation(owner.getComponentOrientation());
 		JMenu viewMenu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
 		viewMenu.add(item);
 
@@ -545,7 +546,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 			try {
 				prefs.load(prefsFile);
 			} catch (IOException ioe) {
-				owner.displayException(ioe);
+				getApplication().displayException(ioe);
 				// (Some) defaults will be used
 			}
 		}
@@ -576,6 +577,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	private void refresh() {
 		// Tricks this browser into refreshing its tree using the new
 		// ctags location.
+		RText owner = getApplication();
 		currentTextAreaPropertyChanged(new CurrentTextAreaEvent(
 					owner.getMainView(),
 					CurrentTextAreaEvent.TEXT_AREA_CHANGED,
@@ -585,6 +587,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 
 	@Override
 	public void savePreferences() {
+		RText owner = getApplication();
 		SourceBrowserPrefs prefs = new SourceBrowserPrefs();
 		prefs.active = getDockableWindow(name).isActive();
 		prefs.position = getDockableWindow(name).getPosition();
@@ -661,7 +664,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 * Shows this plugin's options in the Options dialog.
 	 */
 	void showOptions() {
-		OptionsDialog od = (OptionsDialog)owner.getOptionsDialog();
+		OptionsDialog od = (OptionsDialog)getApplication().getOptionsDialog();
 		od.initialize();
 		od.setSelectedOptionsPanel(msg.getString("Name"));
 		od.setVisible(true);
@@ -676,6 +679,7 @@ public class SourceBrowserPlugin extends GUIPlugin
 	 */
 	@Override
 	public boolean uninstall() {
+		RText owner = getApplication();
 		owner.getMainView().removeCurrentTextAreaListener(this);
 		owner.getMainView().removePropertyChangeListener(AbstractMainView.TEXT_AREA_REMOVED_PROPERTY, this);
 		return true;
@@ -694,6 +698,13 @@ public class SourceBrowserPlugin extends GUIPlugin
 			((AbstractSourceTree)tree).uninstall();
 		}
 		textArea.putClientProperty(CACHED_SOURCE_TREE, null);
+	}
+
+
+	@Override
+	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
+		System.out.println("SourceBrowserPlugin: Refreshing icons to: " + getPluginIcon());
+		optionPanel.setIcon(getPluginIcon());
 	}
 
 

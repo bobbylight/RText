@@ -118,7 +118,7 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 		String text = Messages.getString("Action.DeleteFile.Confirm",
 				getFile().getName());
-		RText rtext = plugin.getRText();
+		RText rtext = plugin.getApplication();
 		String title = rtext.getString("ConfDialogTitle");
 
 		int rc = JOptionPane.showConfirmDialog(rtext, text, title,
@@ -141,13 +141,13 @@ public class FileProjectEntryTreeNode extends ProjectEntryTreeNode {
 
 	@Override
 	protected void handleProperties() {
-		FileTreeNode.handleProperties(plugin.getRText(), getFile());
+		FileTreeNode.handleProperties(plugin.getApplication(), getFile());
 	}
 
 
 	@Override
 	protected void handleRename() {
-		RText rtext = plugin.getRText();
+		RText rtext = plugin.getApplication();
 		boolean directory = entry.getFile().isDirectory();
 		String key = "ProjectPlugin." + (directory ? "Folder" : "File");
 		String type = Messages.getString(key);

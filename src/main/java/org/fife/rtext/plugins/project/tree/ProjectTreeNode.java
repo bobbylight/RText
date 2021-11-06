@@ -108,7 +108,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 		String text = Messages.getString("Action.DeleteProject.Confirm",
 				getProject().getName());
-		RText rtext = plugin.getRText();
+		RText rtext = plugin.getApplication();
 		String title = rtext.getString("ConfDialogTitle");
 
 		int rc = JOptionPane.showConfirmDialog(rtext, text, title,
@@ -130,7 +130,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 	@Override
 	protected void handleRename() {
-		RText rtext = plugin.getRText();
+		RText rtext = plugin.getApplication();
 		String type = Messages.getString("ProjectPlugin.Project");
 		RenameDialog dialog = new RenameDialog(rtext, false, type,
 				new ProjectNameChecker(project.getWorkspace()));

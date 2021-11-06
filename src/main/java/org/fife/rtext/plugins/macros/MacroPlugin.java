@@ -23,7 +23,6 @@ import javax.swing.JMenuItem;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
-import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginOptionsDialogPanel;
@@ -37,12 +36,12 @@ import org.fife.ui.app.icons.IconGroup;
  * @author Robert Futrell
  * @version 1.0
  */
-public class MacroPlugin extends AbstractPlugin
+public class MacroPlugin extends AbstractPlugin<RText>
 		implements PropertyChangeListener {
 
 	private static final String VERSION				= "4.0.1";
 
-	private final RText app;
+	private MacroOptionPanel optionPanel;
 	private JMenu macrosMenu;
 	private final NewMacroAction newMacroAction;
 	private final EditMacrosAction editMacrosAction;
@@ -57,14 +56,13 @@ public class MacroPlugin extends AbstractPlugin
 	/**
 	 * Constructor.
 	 *
-	 * @param app The parent RText application.
+	 * @param rtext The parent RText application.
 	 */
-	public MacroPlugin(AbstractPluggableGUIApplication<?> app) {
+	public MacroPlugin(RText rtext) {
 
+		super(rtext);
 		MacroPrefs prefs = loadPrefs();
 
-		RText rtext = (RText)app;
-		this.app = rtext;
 		newMacroAction = new NewMacroAction(this, rtext, MSG);
 		newMacroAction.setAccelerator(prefs.newMacroAccelerator);
 		rtext.addAction(NEW_MACRO_ACTION, newMacroAction);
@@ -74,7 +72,6 @@ public class MacroPlugin extends AbstractPlugin
 		rtext.addAction(EDIT_MACROS_ACTION, editMacrosAction);
 
 		updateActionIcons(rtext.getIconGroup());
-		rtext.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, this);
 	}
 
 
@@ -103,7 +100,10 @@ public class MacroPlugin extends AbstractPlugin
 
 	@Override
 	public PluginOptionsDialogPanel<MacroPlugin> getOptionsDialogPanel() {
-		return new MacroOptionPanel(this);
+		if (optionPanel == null) {
+			optionPanel = new MacroOptionPanel(this);
+		}
+		return optionPanel;
 	}
 
 
@@ -114,7 +114,7 @@ public class MacroPlugin extends AbstractPlugin
 
 
 	@Override
-	public Icon getPluginIcon(boolean darkLookAndFeel) {
+	public Icon getPluginIcon() {
 		// This allows us to get a theme-specific icon if there is one
 		return newMacroAction != null ? newMacroAction.getIcon() : null;
 	}
@@ -140,11 +140,6 @@ public class MacroPlugin extends AbstractPlugin
 	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"macros.properties");
-	}
-
-
-	public RText getRText() {
-		return app;
 	}
 
 
@@ -174,13 +169,13 @@ public class MacroPlugin extends AbstractPlugin
 
 
 	@Override
-	public void install(AbstractPluggableGUIApplication<?> app) {
+	public void install() {
 
 		MacroManager.get().addPropertyChangeListener(
 				MacroManager.PROPERTY_MACROS, this);
 
 		// Add a new menu for selecting macros
-		RText rtext = (RText)app;
+		RText rtext = getApplication();
 		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
 		macrosMenu = new JMenu(getString("Plugin.Name"));
 		Action a = rtext.getAction(MacroPlugin.NEW_MACRO_ACTION);
@@ -218,7 +213,7 @@ public class MacroPlugin extends AbstractPlugin
 			}
 			String desc = getString("Error.LoadingMacros");
 			desc = MessageFormat.format(desc, text);
-			app.displayException(ioe, desc);
+			getApplication().displayException(ioe, desc);
 		}
 
 	}
@@ -237,7 +232,7 @@ public class MacroPlugin extends AbstractPlugin
 			try {
 				prefs.load(prefsFile);
 			} catch (IOException ioe) {
-				app.displayException(ioe);
+				getApplication().displayException(ioe);
 				// (Some) defaults will be used
 			}
 		}
@@ -252,10 +247,6 @@ public class MacroPlugin extends AbstractPlugin
 
 		if (MacroManager.PROPERTY_MACROS.equals(prop)) {
 			refreshMacrosMenu();
-		}
-
-		else if (RText.ICON_STYLE_PROPERTY.equals(prop)) {
-			updateActionIcons((IconGroup)e.getNewValue());
 		}
 	}
 
@@ -274,7 +265,7 @@ public class MacroPlugin extends AbstractPlugin
 			Iterator<Macro> i = MacroManager.get().getMacroIterator();
 			while (i.hasNext()) {
 				Macro macro = i.next();
-				RunMacroAction a = new RunMacroAction(app, this, macro);
+				RunMacroAction a = new RunMacroAction(getApplication(), this, macro);
 				macrosMenu.add(createMenuItem(a));
 			}
 		}
@@ -303,7 +294,7 @@ public class MacroPlugin extends AbstractPlugin
 			}
 			String desc = getString("Error.SavingMacros");
 			desc = MessageFormat.format(desc, text);
-			app.displayException(ioe, desc);
+			getApplication().displayException(ioe, desc);
 		}
 	}
 
@@ -315,6 +306,7 @@ public class MacroPlugin extends AbstractPlugin
 
 		MacroPrefs prefs = new MacroPrefs();
 
+		RText app = getApplication();
 		AppAction<?> a = (AppAction<?>)app.getAction(NEW_MACRO_ACTION);
 		prefs.newMacroAccelerator = a.getAccelerator();
 		a = (AppAction<?>)app.getAction(EDIT_MACROS_ACTION);
@@ -353,5 +345,13 @@ public class MacroPlugin extends AbstractPlugin
 		else {
 			editMacrosAction.setIcon((Icon)null);
 		}
+	}
+
+
+	@Override
+	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
+		System.out.println("MacroPlugin: Refreshing icons to: " + getPluginIcon());
+		updateActionIcons(iconGroup);
+		optionPanel.setIcon(getPluginIcon());
 	}
 }

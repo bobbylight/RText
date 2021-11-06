@@ -195,7 +195,7 @@ class ToolOptionPanel extends AbstractConsoleTextAreaOptionPanel<ToolPlugin>
 	private void restoreDefaultColors() {
 		ToolPlugin plugin = getPlugin();
 		plugin.restoreDefaultColors();
-		setValues(plugin.getRText());
+		setValues(plugin.getApplication());
 	}
 
 

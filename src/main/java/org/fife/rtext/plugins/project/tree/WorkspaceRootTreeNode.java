@@ -95,13 +95,13 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	@Override
 	protected void handleProperties() {
 		File file = new File(workspace.getFileFullPath());
-		FileTreeNode.handleProperties(plugin.getRText(), file);
+		FileTreeNode.handleProperties(plugin.getApplication(), file);
 	}
 
 
 	@Override
 	protected void handleRename() {
-		RText rtext = plugin.getRText();
+		RText rtext = plugin.getApplication();
 		String type = Messages.getString("ProjectPlugin.Workspace");
 		RenameDialog dialog = new RenameDialog(rtext, false, type, new WorkspaceNameChecker());
 		dialog.setFileName(workspace.getName());
@@ -139,7 +139,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			RText rtext = plugin.getRText();
+			RText rtext = plugin.getApplication();
 			RenameDialog dialog = new RenameDialog(rtext, false, "Project",
 					new ProjectTreeNode.ProjectNameChecker(workspace));
 			Icon icon = ProjectTreeNode.getProjectIcon();

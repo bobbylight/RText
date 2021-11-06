@@ -148,7 +148,7 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 				return;
 			}
 
-			RText rtext = node.getPlugin().getRText();
+			RText rtext = node.getPlugin().getApplication();
 			NameChecker nameChecker = new FileNameChecker(parent, !isFile);
 			NewFileOrFolderDialog dialog = new NewFileOrFolderDialog(rtext,
 					!isFile, nameChecker);

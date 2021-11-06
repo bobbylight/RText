@@ -28,11 +28,10 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.app.AbstractPluggableGUIApplication;
-import org.fife.ui.app.GUIPlugin;
+import org.fife.ui.UIUtil;
+import org.fife.ui.app.*;
 import org.fife.ui.app.MenuBar;
-import org.fife.ui.app.PluginOptionsDialogPanel;
-import org.fife.ui.app.AppAction;
+import org.fife.ui.app.icons.IconGroup;
 
 
 /**
@@ -41,14 +40,16 @@ import org.fife.ui.app.AppAction;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
+public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListener {
 
 	private static final String VERSION				= "4.0.1";
 
-	private final RText app;
+	private ToolOptionPanel optionPanel;
 	private Icon darkThemeIcon;
 	private Icon lightThemeIcon;
 	private JMenu toolsMenu;
+	private NewToolAction newToolAction;
+	private ToolDockableWindow window;
 
 	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.tools.ToolPlugin";
 	static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
@@ -61,21 +62,20 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	/**
 	 * Constructor.
 	 *
-	 * @param app The parent RText application.
+	 * @param rtext The parent RText application.
 	 */
-	public ToolPlugin(AbstractPluggableGUIApplication<?> app) {
+	public ToolPlugin(RText rtext) {
 
-		RText rtext = (RText)app;
-		this.app = rtext;
+		super(rtext);
 		loadIcons();
 		ToolsPrefs prefs = loadPrefs();
 
-		AppAction<RText> a = new NewToolAction(rtext, MSG, null);
-		a.setIcon(getPluginIcon());
-		a.setAccelerator(prefs.newToolAccelerator);
-		rtext.addAction(NEW_TOOL_ACTION, a);
+		newToolAction = new NewToolAction(rtext, MSG, null);
+		newToolAction.setIcon(getPluginIcon());
+		newToolAction.setAccelerator(prefs.newToolAccelerator);
+		rtext.addAction(NEW_TOOL_ACTION, newToolAction);
 
-		a = new EditToolsAction(rtext, MSG, null);
+		AppAction<RText> a = new EditToolsAction(rtext, MSG, null);
 		a.setAccelerator(prefs.editToolsAccelerator);
 		rtext.addAction(EDIT_TOOLS_ACTION, a);
 
@@ -85,7 +85,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 		// Current design forces the dockable window to always be created,
 		// even if it isn't initially visible
-		ToolDockableWindow window = new ToolDockableWindow(this);
+		window = new ToolDockableWindow(this);
 		window.setPosition(prefs.windowPosition);
 		window.setActive(prefs.windowVisible);
 		putDockableWindow(DOCKABLE_WINDOW_TOOLS, window);
@@ -130,7 +130,10 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 	@Override
 	public PluginOptionsDialogPanel<ToolPlugin> getOptionsDialogPanel() {
-		return new ToolOptionPanel(this);
+		if (optionPanel == null) {
+			optionPanel = new ToolOptionPanel(this);
+		}
+		return optionPanel;
 	}
 
 
@@ -141,7 +144,8 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 
 	@Override
-	public Icon getPluginIcon(boolean darkLookAndFeel) {
+	public Icon getPluginIcon() {
+		boolean darkLookAndFeel = UIUtil.isDarkLookAndFeel();
 		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
 	}
 
@@ -169,16 +173,6 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 
 	/**
-	 * Returns the parent application.
-	 *
-	 * @return the parent application.
-	 */
-	RText getRText() {
-		return app;
-	}
-
-
-	/**
 	 * Returns localized text for the given key.
 	 *
 	 * @param key The key.
@@ -200,13 +194,13 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 
 
 	@Override
-	public void install(AbstractPluggableGUIApplication<?> app) {
+	public void install() {
 
 		ToolManager.get().addPropertyChangeListener(ToolManager.PROPERTY_TOOLS,
 													this);
 
 		// Add a new menu for selecting tools
-		RText rtext = (RText)app;
+		RText rtext = getApplication();
 		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
 		toolsMenu = new JMenu(MSG.getString("Plugin.Name"));
 		Action a = rtext.getAction(ToolPlugin.NEW_TOOL_ACTION);
@@ -223,7 +217,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(a);
 		item.setToolTipText(null);
 		item.setSelected(isToolOutputWindowVisible());
-		item.applyComponentOrientation(app.getComponentOrientation());
+		item.applyComponentOrientation(getApplication().getComponentOrientation());
 		menu.add(item);
 
 		loadTools(); // Do after menu has been added
@@ -271,7 +265,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 			try {
 				prefs.load(prefsFile);
 			} catch (IOException ioe) {
-				app.displayException(ioe);
+				getApplication().displayException(ioe);
 				// (Some) defaults will be used
 			}
 		}
@@ -301,7 +295,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 			}
 			String desc = MSG.getString("Error.LoadingTools");
 			desc = MessageFormat.format(desc, text);
-			app.displayException(ioe, desc);
+			getApplication().displayException(ioe, desc);
 		}
 	}
 
@@ -332,6 +326,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 			for (Iterator<Tool> i=ToolManager.get().getToolIterator();
 					i.hasNext();){
 				Tool tool = i.next();
+				RText app = getApplication();
 				RunToolAction a = new RunToolAction(app, tool, getDockableWindow());
 				toolsMenu.add(createMenuItem(a));
 			}
@@ -359,6 +354,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 	public void savePreferences() {
 
 		saveTools();
+		RText app = getApplication();
 		ToolDockableWindow window = getDockableWindow();
 
 		ToolsPrefs prefs = new ToolsPrefs();
@@ -397,7 +393,7 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 			}
 			String desc = MSG.getString("Error.SavingTools");
 			desc = MessageFormat.format(desc, text);
-			app.displayException(ioe, desc);
+			getApplication().displayException(ioe, desc);
 		}
 	}
 
@@ -413,20 +409,28 @@ public class ToolPlugin extends GUIPlugin implements PropertyChangeListener {
 			ToolDockableWindow window = getDockableWindow();
 			if (visible && window==null) {
 				window = new ToolDockableWindow(this);
-				app.addDockableWindow(window);
+				getApplication().addDockableWindow(window);
 			}
 			window.setActive(visible);
 		}
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean uninstall() {
 		// TODO: Remove dockable window from application.
 		return true;
+	}
+
+
+	@Override
+	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
+		System.out.println("ToolPlugin: Refreshing icons to: " + getPluginIcon());
+		window.setIcon(getPluginIcon());
+		newToolAction.setIcon(getPluginIcon());
+		if (optionPanel != null) {
+			optionPanel.setIcon(getPluginIcon());
+		}
 	}
 
 

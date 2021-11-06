@@ -27,6 +27,7 @@ import org.fife.ui.RScrollPane;
 import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.*;
+import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 
@@ -38,9 +39,8 @@ import org.fife.ui.dockablewindows.DockableWindowScrollPane;
  * @author Robert Futrell
  * @version 1.0
  */
-public class FileSystemTreePlugin extends GUIPlugin {
+public class FileSystemTreePlugin extends GUIPlugin<RText> {
 
-	private final RText owner;
 	private final String name;
 	private Tree tree;
 	private FileSystemTreeOptionPanel optionPanel;
@@ -70,16 +70,16 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	 *
 	 * @param app The RText instance.
 	 */
-	public FileSystemTreePlugin(AbstractPluggableGUIApplication<?> app) {
+	public FileSystemTreePlugin(RText app) {
 
-		this.owner = (RText)app;
+		super(app);
 		loadIcons();
 
 		ResourceBundle msg = ResourceBundle.getBundle(BUNDLE_NAME);
 		this.name = msg.getString("Name");
 
 		FileSystemTreePrefs prefs = loadPrefs();
-		viewAction = new ViewAction(owner, msg);
+		viewAction = new ViewAction(app, msg);
 		viewAction.setAccelerator(prefs.windowVisibilityAccelerator);
 
 		DockableWindow wind = createDockableWindow(prefs);
@@ -115,8 +115,8 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		wind.add(dockableWindowTB, BorderLayout.NORTH);
 
 		ResourceBundle msg = ResourceBundle.getBundle(BUNDLE_NAME);
-		backAction = new BackAction(getRText(), msg);
-		forwardAction = new ForwardAction(getRText(), msg);
+		backAction = new BackAction(getApplication(), msg);
+		forwardAction = new ForwardAction(getApplication(), msg);
 
 //		tb.add(Box.createHorizontalStrut(3));
 		dirLabel = new JLabel();
@@ -142,7 +142,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 		wind.setActive(prefs.active);
 		wind.setPosition(prefs.position);
-		wind.setIcon(getPluginIcon(UIUtil.isDarkLookAndFeel()));
+		wind.setIcon(getPluginIcon());
 
 		ComponentOrientation o = ComponentOrientation.
 									getOrientation(Locale.getDefault());
@@ -161,7 +161,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	@Override
 	public synchronized PluginOptionsDialogPanel<FileSystemTreePlugin> getOptionsDialogPanel() {
 		if (optionPanel==null) {
-			optionPanel = new FileSystemTreeOptionPanel(owner, this);
+			optionPanel = new FileSystemTreeOptionPanel(getApplication(), this);
 		}
 		return optionPanel;
 	}
@@ -179,8 +179,8 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 
 	@Override
-	public Icon getPluginIcon(boolean darkLookAndFeel) {
-		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
+	public Icon getPluginIcon() {
+		return UIUtil.isDarkLookAndFeel() ? darkThemeIcon : lightThemeIcon;
 	}
 
 
@@ -212,16 +212,6 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	private static File getPrefsFile() {
 		return new File(RTextUtilities.getPreferencesDirectory(),
 						"fileSystemTree.properties");
-	}
-
-
-	/**
-	 * Returns the parent RText instance.
-	 *
-	 * @return The parent RText instance.
-	 */
-	RText getRText() {
-		return owner;
 	}
 
 
@@ -261,18 +251,18 @@ public class FileSystemTreePlugin extends GUIPlugin {
 
 
 	@Override
-	public void install(AbstractPluggableGUIApplication<?> app) {
+	public void install() {
 
-		RText rtext = (RText)app;
+		RText app = getApplication();
 
 		// Register an action to show the current file in this plugin
 		ShowCurrentFileInFileSystemTreeAction a = new ShowCurrentFileInFileSystemTreeAction(
-			rtext,this, ResourceBundle.getBundle(BUNDLE_NAME));
-		rtext.addAction(SELECT_CURRENT_FILE_ACTION_NAME, a);
+			app,this, ResourceBundle.getBundle(BUNDLE_NAME));
+		app.addAction(SELECT_CURRENT_FILE_ACTION_NAME, a);
 
 		// Add a menu item to toggle the visibility of the dockable window
-		owner.addAction(VIEW_FST_ACTION, viewAction);
-		RTextMenuBar mb = (RTextMenuBar)owner.getJMenuBar();
+		app.addAction(VIEW_FST_ACTION, viewAction);
+		RTextMenuBar mb = (RTextMenuBar)app.getJMenuBar();
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(viewAction);
 		item.setSelected(getDockableWindow(getPluginName()).isActive());
 		item.setSelected(getDockableWindow(getPluginName()).isActive());
@@ -311,7 +301,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 			try {
 				prefs.load(prefsFile);
 			} catch (IOException ioe) {
-				getRText().displayException(ioe);
+				getApplication().displayException(ioe);
 				// (Some) defaults will be used
 			}
 		}
@@ -329,7 +319,7 @@ public class FileSystemTreePlugin extends GUIPlugin {
 		try {
 			prefs.save(prefsFile);
 		} catch (IOException ioe) {
-			getRText().displayException(ioe);
+			getApplication().displayException(ioe);
 		}
 	}
 
@@ -372,6 +362,14 @@ public class FileSystemTreePlugin extends GUIPlugin {
 	@Override
 	public boolean uninstall() {
 		return true;
+	}
+
+
+	@Override
+	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
+		System.out.println("FileSystemTreePlugin: Refreshing icons to: " + getPluginIcon());
+		optionPanel.setIcon(getPluginIcon());
+		getDockableWindow(getPluginName()).setIcon(getPluginIcon());
 	}
 
 

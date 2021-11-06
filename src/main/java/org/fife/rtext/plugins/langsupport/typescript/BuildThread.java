@@ -43,7 +43,7 @@ class BuildThread extends GUIWorkerThread<Object> {
 		try {
 			tsConfig = getTsConfig();
 		} catch (final IllegalArgumentException iae) {
-			SwingUtilities.invokeLater(() -> plugin.getRText().displayException(iae));
+			SwingUtilities.invokeLater(() -> plugin.getApplication().displayException(iae));
 			return null;
 		}
 
@@ -87,7 +87,7 @@ class BuildThread extends GUIWorkerThread<Object> {
 	 */
 	private File getTsConfig() {
 
-		RTextEditorPane textArea = plugin.getRText().getMainView().
+		RTextEditorPane textArea = plugin.getApplication().getMainView().
 				getCurrentTextArea();
 		if (!textArea.isLocal()) {
 			throw new IllegalArgumentException("TypeScript.Error.NotLocalFile");

@@ -24,10 +24,11 @@ import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.app.AbstractPluggableGUIApplication;
+import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginOptionsDialogPanel;
+import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.rsyntaxtextarea.parser.Parser;
 
@@ -38,12 +39,7 @@ import org.fife.ui.rsyntaxtextarea.parser.Parser;
  * @author Robert Futrell
  * @version 1.0
  */
-public class TasksPlugin extends GUIPlugin {
-
-	/**
-	 * The parent application.
-	 */
-	private final RText app;
+public class TasksPlugin extends GUIPlugin<RText> {
 
 	/**
 	 * The tasks dockable window.
@@ -79,20 +75,18 @@ public class TasksPlugin extends GUIPlugin {
 	 *
 	 * @param app The parent RText application.
 	 */
-	public TasksPlugin(AbstractPluggableGUIApplication<?> app) {
+	public TasksPlugin(RText app) {
 
-		RText rtext = (RText)app;
-		this.app = rtext;
-
+		super(app);
 		TasksPrefs prefs = loadPrefs();
 		taskIdentifiers = prefs.taskIdentifiers;
 		windowPosition = prefs.windowPosition;
 
 		loadIcons();
 
-		ViewTasksAction a = new ViewTasksAction(rtext, MSG, this);
+		ViewTasksAction a = new ViewTasksAction(app, MSG, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
-		rtext.addAction(VIEW_TASKS_ACTION, a);
+		app.addAction(VIEW_TASKS_ACTION, a);
 
 		if (prefs.windowVisible) {
 			toggleTaskWindowVisible(); // Will create and add task window.
@@ -103,7 +97,7 @@ public class TasksPlugin extends GUIPlugin {
 
 	@Override
 	public PluginOptionsDialogPanel<TasksPlugin> getOptionsDialogPanel() {
-		return new TasksOptionPanel(app, this);
+		return new TasksOptionPanel(getApplication(), this);
 	}
 
 
@@ -114,8 +108,8 @@ public class TasksPlugin extends GUIPlugin {
 
 
 	@Override
-	public Icon getPluginIcon(boolean darkLookAndFeel) {
-		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
+	public Icon getPluginIcon() {
+		return UIUtil.isDarkLookAndFeel() ? darkThemeIcon : lightThemeIcon;
 	}
 
 
@@ -177,15 +171,15 @@ public class TasksPlugin extends GUIPlugin {
 
 
 	@Override
-	public void install(AbstractPluggableGUIApplication<?> app) {
+	public void install() {
 
-		RText rtext = (RText)app;
+		RText rtext = getApplication();
 
 		ViewTasksAction vta = (ViewTasksAction)rtext.getAction(VIEW_TASKS_ACTION);
 		final JCheckBoxMenuItem item = new JCheckBoxMenuItem(vta);
 		item.setToolTipText(null);
 		item.setSelected(isTaskWindowVisible());
-		item.applyComponentOrientation(app.getComponentOrientation());
+		item.applyComponentOrientation(rtext.getComponentOrientation());
 
 		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
 		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
@@ -232,7 +226,7 @@ public class TasksPlugin extends GUIPlugin {
 			try {
 				prefs.load(prefsFile);
 			} catch (IOException ioe) {
-				app.displayException(ioe);
+				getApplication().displayException(ioe);
 				// (Some) defaults will be used
 			}
 		}
@@ -245,7 +239,7 @@ public class TasksPlugin extends GUIPlugin {
 	 * identifier list changes.
 	 */
 	private void reparseForTasks() {
-		AbstractMainView view = app.getMainView();
+		AbstractMainView view = getApplication().getMainView();
 		for (int i=0; i<view.getNumDocuments(); i++) {
 			RTextEditorPane textArea = view.getRTextEditorPaneAt(i);
 			for (int j=0; j<textArea.getParserCount(); j++) {
@@ -265,13 +259,13 @@ public class TasksPlugin extends GUIPlugin {
 		prefs.taskIdentifiers = taskIdentifiers;
 		prefs.windowVisible = isTaskWindowVisible();
 		prefs.windowPosition = windowPosition;
-		ViewTasksAction vta = (ViewTasksAction)app.getAction(VIEW_TASKS_ACTION);
+		ViewTasksAction vta = (ViewTasksAction)getApplication().getAction(VIEW_TASKS_ACTION);
 		prefs.windowVisibilityAccelerator = vta.getAccelerator();
 		File prefsFile = getPrefsFile();
 		try {
 			prefs.save(prefsFile);
 		} catch (IOException ioe) {
-			app.displayException(ioe);
+			getApplication().displayException(ioe);
 		}
 	}
 
@@ -334,10 +328,10 @@ public class TasksPlugin extends GUIPlugin {
 	 */
 	void toggleTaskWindowVisible() {
 		if (window==null) { // First time through
-			window = new TaskWindow(this, app, taskIdentifiers);
+			window = new TaskWindow(this, getApplication(), taskIdentifiers);
 			window.setPosition(windowPosition);
 			window.setActive(true);
-			app.addDockableWindow(window);
+			getApplication().addDockableWindow(window);
 			putDockableWindow(DOCKABLE_WINDOW_TASKS, window);
 		}
 		else {
@@ -349,6 +343,13 @@ public class TasksPlugin extends GUIPlugin {
 	@Override
 	public boolean uninstall() {
 		return true;
+	}
+
+
+	@Override
+	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
+		System.out.println("TasksPlugin: Refreshing icons to: " + getPluginIcon());
+		window.setIcon(getPluginIcon());
 	}
 
 

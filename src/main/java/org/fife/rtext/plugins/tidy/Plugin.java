@@ -32,9 +32,9 @@ import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.OS;
-import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
+import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextAreaOptionPanel;
 
@@ -46,10 +46,9 @@ import org.fife.ui.rtextarea.RTextAreaOptionPanel;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Plugin extends AbstractPlugin
+public class Plugin extends AbstractPlugin<RText>
 		implements CurrentTextAreaListener {
 
-	private final RText rtext;
 	private TidyAction action;
 	private Icon icon;
 
@@ -74,8 +73,8 @@ public class Plugin extends AbstractPlugin
 	 *
 	 * @param app The parent application.
 	 */
-	public Plugin(AbstractPluggableGUIApplication<?> app) {
-		this.rtext = (RText)app; // Needed in loadPreferences if error
+	public Plugin(RText app) {
+		super(app);
 	}
 
 
@@ -164,14 +163,14 @@ public class Plugin extends AbstractPlugin
 
 
 	@Override
-	public Icon getPluginIcon(boolean darkLookAndFeel) {
+	public Icon getPluginIcon() {
 		if (icon==null) {
 			URL url = getClass().getResource("lightning.png");
 			if (url!=null) { // Should always be true
 				try {
 					icon = new ImageIcon(ImageIO.read(url));
 				} catch (IOException ioe) {
-					rtext.displayException(ioe);
+					getApplication().displayException(ioe);
 				}
 			}
 		}
@@ -203,16 +202,6 @@ public class Plugin extends AbstractPlugin
 
 
 	/**
-	 * Returns the parent application.
-	 *
-	 * @return The parent application.
-	 */
-	RText getRText() {
-		return rtext;
-	}
-
-
-	/**
 	 * Returns the options related to tidying XML.
 	 *
 	 * @return The XML tidying-options.
@@ -223,14 +212,15 @@ public class Plugin extends AbstractPlugin
 
 
 	@Override
-	public void install(AbstractPluggableGUIApplication<?> app) {
+	public void install() {
 
 		PluginPrefs prefs = loadPreferences();
+		RText rtext = getApplication();
 
 		RTextMenuBar mb = (RTextMenuBar)rtext.getJMenuBar();
 		JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_EDIT);
 
-		action = new TidyAction((RText)app, this);
+		action = new TidyAction(rtext, this);
 		action.setAccelerator(prefs.tidyActionAccelerator);
 		rtext.addAction(TIDY_ACTION, action);
 		action.setEnabled(false); // Gets enabled for appropriate files below
@@ -296,7 +286,7 @@ public class Plugin extends AbstractPlugin
 				prefs.load(props);
 
 			} catch (IOException ioe) {
-				rtext.displayException(ioe);
+				getApplication().displayException(ioe);
 			}
 
 		}
@@ -307,7 +297,7 @@ public class Plugin extends AbstractPlugin
 
 
 	private void possiblyEnableAction() {
-		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
+		RTextEditorPane textArea = getApplication().getMainView().getCurrentTextArea();
 		if (textArea != null) { // Possibly null on startup
 			String style = textArea.getSyntaxEditingStyle();
 			action.setEnabled(isSupportedLanguage(style));
@@ -343,7 +333,7 @@ public class Plugin extends AbstractPlugin
 			}
 
 		} catch (IOException ioe) {
-			rtext.displayException(ioe);
+			getApplication().displayException(ioe);
 		}
 
 	}
@@ -352,6 +342,13 @@ public class Plugin extends AbstractPlugin
 	@Override
 	public boolean uninstall() {
 		return true;
+	}
+
+
+	@Override
+	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
+		icon = null; // Force a reload for the new theme
+		System.out.println("TidyPlugin: Refreshing icons to: " + getPluginIcon());
 	}
 
 

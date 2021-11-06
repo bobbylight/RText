@@ -190,7 +190,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			RTextFileChooser chooser = getFileChooser();
-			int rc = chooser.showOpenDialog(plugin.getRText());
+			int rc = chooser.showOpenDialog(plugin.getApplication());
 			if (rc==RTextFileChooser.APPROVE_OPTION) {
 				File[] toAdd = chooser.getSelectedFiles();
 				for (File file : toAdd) {
@@ -222,7 +222,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			RText rtext = plugin.getRText();
+			RText rtext = plugin.getApplication();
 			NewExistingFolderDialog chooser = new NewExistingFolderDialog(rtext);
 			chooser.setVisible(true);
 			String dir = chooser.getChosenDirectory();
@@ -268,7 +268,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Frame parent = plugin.getRText();
+			Frame parent = plugin.getApplication();
 			LogicalFolderNameDialog dialog = new LogicalFolderNameDialog(
 					parent, null, new LogicalFolderNameChecker());
 			dialog.setVisible(true);
@@ -452,7 +452,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 					return;
 				}
 			}
-			plugin.getRText().openFile(file);
+			plugin.getApplication().openFile(file);
 		}
 
 	}

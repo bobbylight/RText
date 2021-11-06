@@ -45,9 +45,9 @@ import org.fife.rsta.ac.xml.XmlLanguageSupport;
 import org.fife.rtext.*;
 import org.fife.rtext.plugins.langsupport.typescript.TypeScriptSupport;
 import org.fife.rtext.plugins.sourcebrowser.SourceBrowserPlugin;
-import org.fife.ui.app.AbstractPluggableGUIApplication;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
+import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.autocomplete.CompletionXMLParser;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -66,9 +66,9 @@ import org.fife.ui.rtextarea.RTextScrollPane;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Plugin extends GUIPlugin {
+public class Plugin extends GUIPlugin<RText> {
 
-	private RText rtext;
+	private OptionsPanel optionsPanel;
 	private Listener listener;
 	private Map<ParserNotice.Level, Icon> icons;
 	private TypeScriptSupport typeScriptSupport;
@@ -89,7 +89,8 @@ public class Plugin extends GUIPlugin {
 	 *
 	 * @param app The parent application.
 	 */
-	public Plugin(AbstractPluggableGUIApplication<?> app) {
+	public Plugin(RText app) {
+		super(app);
 		setOptionsDialogPanelParentPanelID(RTextAreaOptionPanel.OPTION_PANEL_ID);
 	}
 
@@ -99,6 +100,7 @@ public class Plugin extends GUIPlugin {
 	 */
 	private void addActionsToMenus() {
 
+		RText rtext = getApplication();
 		RTextMenuBar mb = (RTextMenuBar)rtext.getJMenuBar();
 
 		// Add "Go to Member" action to the end of the "Go to..." menu section.
@@ -154,7 +156,10 @@ public class Plugin extends GUIPlugin {
 
 	@Override
 	public PluginOptionsDialogPanel<Plugin> getOptionsDialogPanel() {
-		return new OptionsPanel(this);
+		if (optionsPanel == null) {
+			optionsPanel = new OptionsPanel(this);
+		}
+		return optionsPanel;
 	}
 
 
@@ -165,7 +170,7 @@ public class Plugin extends GUIPlugin {
 
 
 	@Override
-	public Icon getPluginIcon(boolean darkLookAndFeel) {
+	public Icon getPluginIcon() {
 		return null;
 	}
 
@@ -183,16 +188,6 @@ public class Plugin extends GUIPlugin {
 
 
 	/**
-	 * Returns the parent application.
-	 *
-	 * @return The parent application.
-	 */
-	public RText getRText() {
-		return rtext;
-	}
-
-
-	/**
 	 * Returns the TypeScript support object.  This has methods to control
 	 * TypeScript-specific features of this plugin.
 	 *
@@ -204,7 +199,7 @@ public class Plugin extends GUIPlugin {
 
 
 	@Override
-	public void install(AbstractPluggableGUIApplication<?> app) {
+	public void install() {
 
 		icons = new HashMap<>();
 		icons.put(ParserNotice.Level.ERROR,
@@ -214,7 +209,7 @@ public class Plugin extends GUIPlugin {
 		// Informational icons are annoying - spelling errors, etc.
 		//icons.put(ParserNotice.Level.INFO, createIcon("info_obj.gif"));
 
-		rtext = (RText)app;
+		RText rtext = getApplication();
 		listener = new Listener();
 		AbstractMainView view = rtext.getMainView();
 		for (int i=0; i<view.getNumDocuments(); i++) {
@@ -250,6 +245,7 @@ public class Plugin extends GUIPlugin {
 
 	private LangSupportPreferences loadPreferences() {
 
+		RText rtext = getApplication();
 		LangSupportPreferences prefs = new LangSupportPreferences();
 
 		File file = new File(RTextUtilities.getPreferencesDirectory(),
@@ -484,6 +480,7 @@ public class Plugin extends GUIPlugin {
 
 		LangSupportPreferences prefs = new LangSupportPreferences();
 		LanguageSupportFactory fact = LanguageSupportFactory.get();
+		RText rtext = getApplication();
 		AbstractMainView view = rtext.getMainView();
 
 		String language = SyntaxConstants.SYNTAX_STYLE_C;
@@ -658,12 +655,21 @@ public class Plugin extends GUIPlugin {
 
 	@Override
 	public boolean uninstall() {
-		AbstractMainView view = rtext.getMainView();
+		AbstractMainView view = getApplication().getMainView();
 		for (int i=0; i<view.getNumDocuments(); i++) {
 			removeSupport(view.getRTextEditorPaneAt(i));
 		}
 		view.removePropertyChangeListener(listener);
 		return true;
+	}
+
+
+	@Override
+	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
+		System.out.println("LangSupportPlugin: Refreshing icons to: " + getPluginIcon());
+		if (optionsPanel != null) {
+			optionsPanel.setIcon(getPluginIcon());
+		}
 	}
 
 

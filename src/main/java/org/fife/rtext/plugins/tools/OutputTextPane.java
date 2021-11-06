@@ -190,7 +190,7 @@ class OutputTextPane extends AbstractConsoleTextArea {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			OptionsDialog od = plugin.getRText().getOptionsDialog();
+			OptionsDialog od = plugin.getApplication().getOptionsDialog();
 			od.initialize();
 			od.setSelectedOptionsPanel(plugin.getString("Plugin.Name"));
 			od.setVisible(true);
