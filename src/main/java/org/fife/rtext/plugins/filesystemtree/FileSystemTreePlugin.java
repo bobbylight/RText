@@ -15,10 +15,8 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import javax.swing.*;
 
 import org.fife.rtext.*;
@@ -28,6 +26,9 @@ import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.*;
 import org.fife.ui.app.icons.IconGroup;
+import org.fife.ui.app.themes.FlatDarkTheme;
+import org.fife.ui.app.themes.FlatLightTheme;
+import org.fife.ui.app.themes.NativeTheme;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 
@@ -44,8 +45,7 @@ public class FileSystemTreePlugin extends GUIPlugin<RText> {
 	private final String name;
 	private Tree tree;
 	private FileSystemTreeOptionPanel optionPanel;
-	private Icon lightThemeIcon;
-	private Icon darkThemeIcon;
+	private Map<String, Icon> icons;
 	private final ViewAction viewAction;
 	private JToolBar dockableWindowTB;
 
@@ -180,7 +180,7 @@ public class FileSystemTreePlugin extends GUIPlugin<RText> {
 
 	@Override
 	public Icon getPluginIcon() {
-		return UIUtil.isDarkLookAndFeel() ? darkThemeIcon : lightThemeIcon;
+		return icons.get(getApplication().getTheme().getId());
 	}
 
 
@@ -275,13 +275,19 @@ public class FileSystemTreePlugin extends GUIPlugin<RText> {
 
 	private void loadIcons() {
 
+		icons = new HashMap<>();
+
 		try {
 
-			lightThemeIcon = new ImageIcon(getClass().getResource("filesystemtree.gif"));
+			icons.put(NativeTheme.ID, new ImageIcon(getClass().getResource("eclipse/filesystemtree.gif")));
 
-			Image darkThemeImage = ImageTranscodingUtil.rasterize("showAsTree dark",
-				getClass().getResourceAsStream("showAsTree_dark.svg"), 16, 16);
-			darkThemeIcon = new ImageIcon(darkThemeImage);
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("fst dark",
+				getClass().getResourceAsStream("flat-dark/filesystemtree.svg"), 16, 16);
+			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("fst light",
+				getClass().getResourceAsStream("flat-light/filesystemtree.svg"), 16, 16);
+			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}

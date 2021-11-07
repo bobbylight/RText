@@ -10,16 +10,10 @@
 package org.fife.rtext.plugins.tools;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ResourceBundle;
 
 import org.fife.rtext.RText;
-import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.UIUtil;
 import org.fife.ui.app.AppAction;
-
-import javax.swing.*;
 
 
 /**
@@ -43,10 +37,13 @@ class StopAction extends AppAction<RText> {
 	 * @param msg The resource bundle to use for localization.
 	 */
 	StopAction(ToolPlugin plugin, ResourceBundle msg) {
+
 		super(plugin.getApplication(), msg, "Action.StopTool");
-		initIcon();
-		setEnabled(false);
 		this.plugin = plugin;
+		updateIcon();
+		setEnabled(false);
+
+		plugin.getApplication().addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, e -> updateIcon());
 	}
 
 
@@ -64,19 +61,7 @@ class StopAction extends AppAction<RText> {
 	}
 
 
-	private void initIcon() {
-
-		if (UIUtil.isLightForeground(new JLabel().getForeground())) {
-			try {
-				InputStream in = getClass().getResourceAsStream("suspend.svg");
-				setIcon(new ImageIcon(ImageTranscodingUtil.rasterize("suspend.svg", in, 16, 16)));
-			} catch (IOException ioe) {
-				plugin.getApplication().displayException(ioe);
-			}
-		}
-
-		else {
-			setIcon("stop.png");
-		}
+	private void updateIcon() {
+		setIcon(plugin.getApplication().getIconGroup().getIcon("stop"));
 	}
 }

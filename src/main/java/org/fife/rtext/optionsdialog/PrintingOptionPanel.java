@@ -86,6 +86,9 @@ class PrintingOptionPanel extends OptionsDialogPanel
 		add(temp, BorderLayout.NORTH);
 		applyComponentOrientation(orientation);
 		setIcon((Icon)rtext.getAction(RText.PRINT_ACTION).getValue(Action.SMALL_ICON));
+		rtext.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, (e) -> {
+			setIcon((Icon)rtext.getAction(RText.PRINT_ACTION).getValue(Action.SMALL_ICON));
+		});
 	}
 
 

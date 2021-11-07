@@ -16,6 +16,10 @@ import java.util.ResourceBundle;
 import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.app.AppAction;
+import org.fife.ui.app.themes.FlatDarkTheme;
+import org.fife.ui.app.themes.FlatLightTheme;
+
+import javax.swing.*;
 
 
 /**
@@ -50,7 +54,11 @@ class EditMacrosAction extends AppAction<RText> {
 
 
 	void restoreDefaultIcon() {
-		setIcon("cog.png");
+		// In flat themes, cog_add === just a cog, so show no icon for this action
+		switch (getApplication().getTheme().getId()) {
+			case FlatDarkTheme.ID, FlatLightTheme.ID -> setIcon((Icon)null);
+			default -> setIcon("eclipse/cog.png");
+		}
 	}
 
 

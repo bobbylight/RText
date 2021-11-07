@@ -343,7 +343,7 @@ public class MacroPlugin extends AbstractPlugin<RText>
 			editMacrosAction.setIcon(icon);
 		}
 		else {
-			editMacrosAction.setIcon((Icon)null);
+			editMacrosAction.restoreDefaultIcon();
 		}
 	}
 

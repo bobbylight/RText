@@ -9,17 +9,18 @@
  */
 package org.fife.rtext.plugins.tidy;
 
+import java.awt.*;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
@@ -31,10 +32,14 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.OS;
 import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.icons.IconGroup;
+import org.fife.ui.app.themes.FlatDarkTheme;
+import org.fife.ui.app.themes.FlatLightTheme;
+import org.fife.ui.app.themes.NativeTheme;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextAreaOptionPanel;
 
@@ -50,8 +55,9 @@ public class Plugin extends AbstractPlugin<RText>
 		implements CurrentTextAreaListener {
 
 	private TidyAction action;
-	private Icon icon;
+	private Map<String, Icon> icons;
 
+	private OptionsPanel optionPanel;
 	private HtmlOptions htmlOptions;
 	private XmlOptions xmlOptions;
 	private JsonOptions jsonOptions;
@@ -75,6 +81,7 @@ public class Plugin extends AbstractPlugin<RText>
 	 */
 	public Plugin(RText app) {
 		super(app);
+		loadIcons();
 	}
 
 
@@ -141,7 +148,10 @@ public class Plugin extends AbstractPlugin<RText>
 
 	@Override
 	public PluginOptionsDialogPanel<Plugin> getOptionsDialogPanel() {
-		return new OptionsPanel(this);
+		if (optionPanel == null) {
+			optionPanel = new OptionsPanel(this);
+		}
+		return optionPanel;
 	}
 
 
@@ -164,17 +174,7 @@ public class Plugin extends AbstractPlugin<RText>
 
 	@Override
 	public Icon getPluginIcon() {
-		if (icon==null) {
-			URL url = getClass().getResource("lightning.png");
-			if (url!=null) { // Should always be true
-				try {
-					icon = new ImageIcon(ImageIO.read(url));
-				} catch (IOException ioe) {
-					getApplication().displayException(ioe);
-				}
-			}
-		}
-		return icon;
+		return icons.get(getApplication().getTheme().getId());
 	}
 
 
@@ -256,6 +256,27 @@ public class Plugin extends AbstractPlugin<RText>
 		return SyntaxConstants.SYNTAX_STYLE_HTML.equals(style) ||
 				SyntaxConstants.SYNTAX_STYLE_XML.equals(style) ||
 				SyntaxConstants.SYNTAX_STYLE_JSON.equals(style);
+	}
+
+
+	private void loadIcons() {
+
+		icons = new HashMap<>();
+
+		try {
+
+			icons.put(NativeTheme.ID, new ImageIcon(getClass().getResource("eclipse/tidy.png")));
+
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("tidy dark",
+				getClass().getResourceAsStream("flat-dark/tidy.svg"), 16, 16);
+			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("tidy light",
+				getClass().getResourceAsStream("flat-light/tidy.svg"), 16, 16);
+			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 
@@ -347,8 +368,8 @@ public class Plugin extends AbstractPlugin<RText>
 
 	@Override
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		icon = null; // Force a reload for the new theme
 		System.out.println("TidyPlugin: Refreshing icons to: " + getPluginIcon());
+		optionPanel.setIcon(getPluginIcon());
 	}
 
 

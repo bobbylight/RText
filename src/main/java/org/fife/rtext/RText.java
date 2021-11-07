@@ -950,12 +950,12 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		String root = getInstallLocation();
 		iconGroupMap.put(DEFAULT_ICON_GROUP_NAME,
-			new SvgIconGroup(this, DEFAULT_ICON_GROUP_NAME, "icongroups/intellij-icons-dark.jar"));
+			new SvgIconGroup(this, DEFAULT_ICON_GROUP_NAME, "icongroups/intellij-icons-dark.zip"));
 		iconGroupMap.put("IntelliJ Icons (Light)",
-			new SvgIconGroup(this, "IntelliJ Icons (Light)", "icongroups/intellij-icons-light.jar"));
+			new SvgIconGroup(this, "IntelliJ Icons (Light)", "icongroups/intellij-icons-light.zip"));
 		iconGroupMap.put("Eclipse Icons", new RasterImageIconGroup("Eclipse Icons",
 			"", null, "gif",
-			new File(root, "icongroups/EclipseIcons.jar").getAbsolutePath()));
+			new File(root, "icongroups/eclipse-icons.zip").getAbsolutePath()));
 
 	}
 

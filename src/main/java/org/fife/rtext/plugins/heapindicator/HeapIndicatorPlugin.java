@@ -9,17 +9,16 @@
  */
 package org.fife.rtext.plugins.heapindicator;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -31,9 +30,13 @@ import javax.swing.UIManager;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.StatusBarPlugin;
 import org.fife.ui.app.icons.IconGroup;
+import org.fife.ui.app.themes.FlatDarkTheme;
+import org.fife.ui.app.themes.FlatLightTheme;
+import org.fife.ui.app.themes.NativeTheme;
 
 
 /**
@@ -50,7 +53,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 	private long totalMem;
 	private final ResourceBundle msg;
 	private HeapIndicatorOptionPanel optionPanel;
-	private Icon pluginIcon;
+	private Map<String, Icon> icons;
 
 	private boolean useSystemColors;
 	private Color iconForeground;
@@ -72,6 +75,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 
 		super(app);
 		msg = ResourceBundle.getBundle(BUNDLE_NAME);
+		loadIcons();
 
 		HeapIndicatorPrefs prefs = loadPrefs();
 
@@ -89,13 +93,6 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 		setRefreshInterval(prefs.refreshInterval); // Must be called!
 
 		ToolTipManager.sharedInstance().registerComponent(this);
-
-		try {
-			URL res = getClass().getResource("indicator.png");
-			pluginIcon = new ImageIcon(ImageIO.read(res));
-		} catch (IOException ioe) { // Never happens
-			app.displayException(ioe);
-		}
 
 	}
 
@@ -188,7 +185,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 
 	@Override
 	public Icon getPluginIcon() {
-		return pluginIcon;
+		return icons.get(getApplication().getTheme().getId());
 	}
 
 
@@ -298,6 +295,27 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 			timer.setDelay(interval);
 		}
 		timer.start();
+	}
+
+
+	private void loadIcons() {
+
+		icons = new HashMap<>();
+
+		try {
+
+			icons.put(NativeTheme.ID, new ImageIcon(getClass().getResource("eclipse/indicator.png")));
+
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("indicator dark",
+				getClass().getResourceAsStream("flat-dark/indicator.svg"), 16, 16);
+			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("indicator light",
+				getClass().getResourceAsStream("flat-light/indicator.svg"), 16, 16);
+			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 

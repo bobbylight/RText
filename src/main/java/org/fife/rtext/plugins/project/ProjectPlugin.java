@@ -12,7 +12,9 @@ package org.fife.rtext.plugins.project;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -33,11 +35,13 @@ import org.fife.rtext.plugins.project.model.Workspace;
 import org.fife.rtext.plugins.project.tree.AbstractWorkspaceTreeNode;
 import org.fife.rtext.plugins.project.tree.WorkspaceTree;
 import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.AppAction;
 import org.fife.ui.app.icons.IconGroup;
+import org.fife.ui.app.themes.FlatDarkTheme;
+import org.fife.ui.app.themes.FlatLightTheme;
+import org.fife.ui.app.themes.NativeTheme;
 
 
 /**
@@ -55,8 +59,7 @@ public class ProjectPlugin extends GUIPlugin<RText> {
 	 */
 	private static final String PROPERTY_INITIAL_WORKSPACE = "workspace.override";
 
-	private Icon darkThemeIcon;
-	private Icon lightThemeIcon;
+	private Map<String, Icon> icons;
 	private Workspace workspace;
 	private ProjectPluginOptionPanel optionPanel;
 
@@ -123,7 +126,7 @@ public class ProjectPlugin extends GUIPlugin<RText> {
 
 	@Override
 	public Icon getPluginIcon() {
-		return UIUtil.isDarkLookAndFeel() ? darkThemeIcon : lightThemeIcon;
+		return icons.get(getApplication().getTheme().getId());
 	}
 
 
@@ -248,13 +251,19 @@ public class ProjectPlugin extends GUIPlugin<RText> {
 
 	private void loadIcons() {
 
+		icons = new HashMap<>();
+
 		try {
 
-			lightThemeIcon = new ImageIcon(getClass().getResource("application_side_list.png"));
+			icons.put(NativeTheme.ID, new ImageIcon(getClass().getResource("eclipse/project.png")));
 
-			Image darkThemeImage = ImageTranscodingUtil.rasterize("projectStructure dark",
-				getClass().getResourceAsStream("projectStructure_dark.svg"), 16, 16);
-			darkThemeIcon = new ImageIcon(darkThemeImage);
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("project dark",
+				getClass().getResourceAsStream("flat-dark/project.svg"), 16, 16);
+			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("project light",
+				getClass().getResourceAsStream("flat-light/project.svg"), 16, 16);
+			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}

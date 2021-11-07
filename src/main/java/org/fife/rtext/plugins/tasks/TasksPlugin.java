@@ -12,6 +12,8 @@ package org.fife.rtext.plugins.tasks;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -24,11 +26,13 @@ import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.icons.IconGroup;
+import org.fife.ui.app.themes.FlatDarkTheme;
+import org.fife.ui.app.themes.FlatLightTheme;
+import org.fife.ui.app.themes.NativeTheme;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.rsyntaxtextarea.parser.Parser;
 
@@ -46,8 +50,8 @@ public class TasksPlugin extends GUIPlugin<RText> {
 	 */
 	private TaskWindow window;
 
-	private Icon darkThemeIcon;
-	private Icon lightThemeIcon;
+	private TasksOptionPanel optionPanel;
+	private Map<String, Icon> icons;
 
 	/**
 	 * The location of the task window.
@@ -81,7 +85,6 @@ public class TasksPlugin extends GUIPlugin<RText> {
 		TasksPrefs prefs = loadPrefs();
 		taskIdentifiers = prefs.taskIdentifiers;
 		windowPosition = prefs.windowPosition;
-
 		loadIcons();
 
 		ViewTasksAction a = new ViewTasksAction(app, MSG, this);
@@ -97,7 +100,10 @@ public class TasksPlugin extends GUIPlugin<RText> {
 
 	@Override
 	public PluginOptionsDialogPanel<TasksPlugin> getOptionsDialogPanel() {
-		return new TasksOptionPanel(getApplication(), this);
+		if (optionPanel == null) {
+			optionPanel = new TasksOptionPanel(getApplication(), this);
+		}
+		return optionPanel;
 	}
 
 
@@ -109,7 +115,7 @@ public class TasksPlugin extends GUIPlugin<RText> {
 
 	@Override
 	public Icon getPluginIcon() {
-		return UIUtil.isDarkLookAndFeel() ? darkThemeIcon : lightThemeIcon;
+		return icons.get(getApplication().getTheme().getId());
 	}
 
 
@@ -200,13 +206,19 @@ public class TasksPlugin extends GUIPlugin<RText> {
 
 	private void loadIcons() {
 
+		icons = new HashMap<>();
+
 		try {
 
-			lightThemeIcon = new ImageIcon(getClass().getResource("page_white_edit.png"));
+			icons.put(NativeTheme.ID, new ImageIcon(getClass().getResource("eclipse/tasks.png")));
 
-			Image darkThemeImage = ImageTranscodingUtil.rasterize("showAsTree dark",
-				getClass().getResourceAsStream("todoQuestion_dark.svg"), 16, 16);
-			darkThemeIcon = new ImageIcon(darkThemeImage);
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("tasks dark",
+				getClass().getResourceAsStream("flat-dark/tasks.svg"), 16, 16);
+			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("tasks light",
+				getClass().getResourceAsStream("flat-light/tasks.svg"), 16, 16);
+			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -350,6 +362,9 @@ public class TasksPlugin extends GUIPlugin<RText> {
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
 		System.out.println("TasksPlugin: Refreshing icons to: " + getPluginIcon());
 		window.setIcon(getPluginIcon());
+		if (optionPanel != null) {
+			optionPanel.setIcon(getPluginIcon());
+		}
 	}
 
 

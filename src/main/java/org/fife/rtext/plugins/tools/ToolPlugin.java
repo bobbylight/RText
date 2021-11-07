@@ -15,7 +15,9 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -28,10 +30,12 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.UIUtil;
 import org.fife.ui.app.*;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.icons.IconGroup;
+import org.fife.ui.app.themes.FlatDarkTheme;
+import org.fife.ui.app.themes.FlatLightTheme;
+import org.fife.ui.app.themes.NativeTheme;
 
 
 /**
@@ -45,8 +49,7 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 	private static final String VERSION				= "4.0.1";
 
 	private ToolOptionPanel optionPanel;
-	private Icon darkThemeIcon;
-	private Icon lightThemeIcon;
+	private Map<String, Icon> icons;
 	private JMenu toolsMenu;
 	private NewToolAction newToolAction;
 	private ToolDockableWindow window;
@@ -145,8 +148,7 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 
 	@Override
 	public Icon getPluginIcon() {
-		boolean darkLookAndFeel = UIUtil.isDarkLookAndFeel();
-		return darkLookAndFeel ? darkThemeIcon : lightThemeIcon;
+		return icons.get(getApplication().getTheme().getId());
 	}
 
 
@@ -239,13 +241,19 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 
 	private void loadIcons() {
 
+		icons = new HashMap<>();
+
 		try {
 
-			lightThemeIcon = new ImageIcon(getClass().getResource("tools.png"));
+			icons.put(NativeTheme.ID, new ImageIcon(getClass().getResource("eclipse/tools.png")));
 
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("tools dark",
-				getClass().getResourceAsStream("toolWindowBuild_dark.svg"), 16, 16);
-			darkThemeIcon = new ImageIcon(darkThemeImage);
+				getClass().getResourceAsStream("flat-dark/tools.svg"), 16, 16);
+			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("tools light",
+				getClass().getResourceAsStream("flat-light/tools.svg"), 16, 16);
+			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}

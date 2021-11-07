@@ -10,16 +10,10 @@
 package org.fife.rtext.plugins.console;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ResourceBundle;
 
 import org.fife.rtext.RText;
-import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.UIUtil;
 import org.fife.ui.app.AppAction;
-
-import javax.swing.*;
 
 
 /**
@@ -46,20 +40,11 @@ class StopAction extends AppAction<RText> {
 	StopAction(RText owner, ResourceBundle msg, Plugin plugin) {
 
 		super(owner, msg, "Action.StopProcess");
-
-		if (UIUtil.isLightForeground(new JLabel().getForeground())) {
-			try {
-				InputStream in = getClass().getResourceAsStream("suspend.svg");
-				setIcon(new ImageIcon(ImageTranscodingUtil.rasterize("suspend.svg", in, 16, 16)));
-			} catch (IOException ioe) {
-				owner.displayException(ioe);
-			}
-		}
-		else {
-			setIcon("stop.png");
-		}
-		setEnabled(false);
 		this.plugin = plugin;
+		updateIcon();
+		setEnabled(false);
+
+		plugin.getApplication().addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, e -> updateIcon());
 	}
 
 
@@ -71,6 +56,11 @@ class StopAction extends AppAction<RText> {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		plugin.stopCurrentProcess();
+	}
+
+
+	private void updateIcon() {
+		setIcon(plugin.getApplication().getIconGroup().getIcon("stop"));
 	}
 
 

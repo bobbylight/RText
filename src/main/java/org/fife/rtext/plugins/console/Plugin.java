@@ -13,6 +13,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -24,11 +26,13 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.UIUtil;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.AppAction;
 import org.fife.ui.app.icons.IconGroup;
+import org.fife.ui.app.themes.FlatDarkTheme;
+import org.fife.ui.app.themes.FlatLightTheme;
+import org.fife.ui.app.themes.NativeTheme;
 
 
 /**
@@ -44,8 +48,7 @@ public class Plugin extends GUIPlugin<RText> {
 
 	private boolean highlightInput;
 	private ConsoleWindow window;
-	private Icon darkThemeIcon;
-	private Icon lightThemeIcon;
+	private Map<String, Icon> icons;
 	private ConsoleOptionPanel optionPanel;
 
 	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.console.Plugin";
@@ -112,7 +115,7 @@ public class Plugin extends GUIPlugin<RText> {
 
 	@Override
 	public Icon getPluginIcon() {
-		return UIUtil.isDarkLookAndFeel() ? darkThemeIcon : lightThemeIcon;
+		return icons.get(getApplication().getTheme().getId());
 	}
 
 
@@ -194,15 +197,24 @@ public class Plugin extends GUIPlugin<RText> {
 	}
 
 
+	/**
+	 * Creates a map from application theme ID to icon.
+	 */
 	private void loadIcons() {
+
+		icons = new HashMap<>();
 
 		try {
 
-			lightThemeIcon = new ImageIcon(getClass().getResource("monitor.png"));
+			icons.put(NativeTheme.ID, new ImageIcon(getClass().getResource("eclipse/console.png")));
 
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("console dark",
-				getClass().getResourceAsStream("console_dark.svg"), 16, 16);
-			darkThemeIcon = new ImageIcon(darkThemeImage);
+				getClass().getResourceAsStream("flat-dark/console.svg"), 16, 16);
+			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("console light",
+				getClass().getResourceAsStream("flat-light/console.svg"), 16, 16);
+			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}

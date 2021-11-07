@@ -17,7 +17,9 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.swing.*;
 
@@ -31,6 +33,9 @@ import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.*;
 import org.fife.ui.app.icons.IconGroup;
+import org.fife.ui.app.themes.FlatDarkTheme;
+import org.fife.ui.app.themes.FlatLightTheme;
+import org.fife.ui.app.themes.NativeTheme;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -60,8 +65,7 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 	private JTree sourceTree;
 	private RScrollPane scrollPane;
 	private final ResourceBundle msg;
-	private Icon darkThemeIcon;
-	private Icon lightThemeIcon;
+	private Map<String, Icon> icons;
 	private boolean useHTMLToolTips;
 	private final SourceBrowserThread sourceBrowserThread;
 	private final SourceTreeNode workingRoot;
@@ -98,7 +102,6 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 
 		super(app);
 		app.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, this);
-
 		loadIcons();
 
 		msg = ResourceBundle.getBundle(BUNDLE_NAME);
@@ -444,7 +447,7 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 
 	@Override
 	public Icon getPluginIcon() {
-		return UIUtil.isDarkLookAndFeel() ? darkThemeIcon : lightThemeIcon;
+		return icons.get(getApplication().getTheme().getId());
 	}
 
 
@@ -520,13 +523,19 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 
 	private void loadIcons() {
 
+		icons = new HashMap<>();
+
 		try {
 
-			lightThemeIcon = new ImageIcon(getClass().getResource("source_browser.png"));
+			icons.put(NativeTheme.ID, new ImageIcon(getClass().getResource("eclipse/source_browser.png")));
 
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("source browser dark",
-				getClass().getResourceAsStream("toolWindowTodo_dark.svg"), 16, 16);
-			darkThemeIcon = new ImageIcon(darkThemeImage);
+				getClass().getResourceAsStream("flat-dark/source_browser.svg"), 16, 16);
+			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("source browser light",
+				getClass().getResourceAsStream("flat-light/source_browser.svg"), 16, 16);
+			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -705,6 +714,7 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
 		System.out.println("SourceBrowserPlugin: Refreshing icons to: " + getPluginIcon());
 		optionPanel.setIcon(getPluginIcon());
+		getDockableWindow(getPluginName()).setIcon(getPluginIcon());
 	}
 
 

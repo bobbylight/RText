@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.macros;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,7 +21,12 @@ import java.util.ResourceBundle;
 
 import org.fife.io.IOUtil;
 import org.fife.rtext.RText;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.AppAction;
+import org.fife.ui.app.themes.FlatDarkTheme;
+import org.fife.ui.app.themes.FlatLightTheme;
+
+import javax.swing.*;
 
 
 /**
@@ -104,6 +110,22 @@ class NewMacroAction extends AppAction<RText> {
 
 
 	void restoreDefaultIcon() {
-		setIcon("cog_add.png");
+		try {
+			switch (getApplication().getTheme().getId()) {
+				case FlatDarkTheme.ID -> {
+					Image darkThemeImage = ImageTranscodingUtil.rasterize("macro dark",
+						getClass().getResourceAsStream("flat-dark/cog_add.svg"), 16, 16);
+					setIcon(new ImageIcon(darkThemeImage));
+				}
+				case FlatLightTheme.ID -> {
+					Image lightThemeImage = ImageTranscodingUtil.rasterize("macro light",
+						getClass().getResourceAsStream("flat-light/cog_add.svg"), 16, 16);
+					setIcon(new ImageIcon(lightThemeImage));
+				}
+				default -> setIcon("eclipse/cog_add.png");
+			}
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 }

@@ -9,16 +9,22 @@
  */
 package org.fife.rtext.optionsdialog;
 
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
 import org.fife.rtext.RText;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.app.Plugin;
 import org.fife.ui.app.options.ShortcutOptionPanel;
+import org.fife.ui.app.themes.FlatDarkTheme;
+import org.fife.ui.app.themes.FlatLightTheme;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaOptionPanel;
 import org.fife.ui.rsyntaxtextarea.SpellingOptionPanel;
 import org.fife.ui.rsyntaxtextarea.TemplateOptionPanel;
@@ -37,6 +43,16 @@ import org.fife.ui.rtextfilechooser.RTextFileChooserOptionPanel;
  */
 public class OptionsDialog extends org.fife.ui.OptionsDialog {
 
+	private RText rtext;
+	private OptionsDialogPanel generalPanel;
+	private OptionsDialogPanel uiPanel;
+	private OptionsDialogPanel languagePanel;
+	private OptionsDialogPanel rtaPanel;
+	private OptionsDialogPanel searchPanel;
+	private OptionsDialogPanel fileChooserPanel;
+	private OptionsDialogPanel filtersPanel;
+	private OptionsDialogPanel shortcutPanel;
+
 
 	/**
 	 * Constructor.
@@ -46,58 +62,51 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 	public OptionsDialog(RText rtext) {
 
 		super(rtext);
+		this.rtext = rtext;
 
 		ResourceBundle msg = ResourceBundle.getBundle(
 								"org.fife.rtext.OptionsDialog");
 
 		List<OptionsDialogPanel> panels = new ArrayList<>();
 
-		OptionsDialogPanel panel = new GeneralOptionPanel(rtext, msg);
-		setIcon(panel, "general.png");
-		panels.add(panel);
+		generalPanel = new GeneralOptionPanel(rtext, msg);
+		panels.add(generalPanel);
 
-		panel = new UIOptionPanel(rtext, msg);
-		setIcon(panel, "ui.png");
-		panels.add(panel);
+		uiPanel = new UIOptionPanel(rtext, msg);
+		panels.add(uiPanel);
 
-		OptionsDialogPanel panel2 = new LanguageOptionPanel(rtext, msg);
-		setIcon(panel2, "language.png");
-		panel.addChildPanel(panel2);
+		languagePanel = new LanguageOptionPanel(rtext, msg);
+		uiPanel.addChildPanel(languagePanel);
 
-		panel = new RTextAreaOptionPanel();
-		setIcon(panel, "textarea.png");
-		panels.add(panel);
+		rtaPanel = new RTextAreaOptionPanel();
+		panels.add(rtaPanel);
 
-		panel.addChildPanel(new RSyntaxTextAreaOptionPanel());
-		panel.addChildPanel(new CaretAndSelectionOptionPanel());
-		panel.addChildPanel(new GutterOptionPanel());
-		panel.addChildPanel(new SpellingOptionPanel());
-		panel.addChildPanel(new TemplateOptionPanel());
+		rtaPanel.addChildPanel(new RSyntaxTextAreaOptionPanel());
+		rtaPanel.addChildPanel(new CaretAndSelectionOptionPanel());
+		rtaPanel.addChildPanel(new GutterOptionPanel());
+		rtaPanel.addChildPanel(new SpellingOptionPanel());
+		rtaPanel.addChildPanel(new TemplateOptionPanel());
 
-		panel = new SearchOptionPanel(rtext, msg);
-		setIcon(panel, "search.png");
-		panels.add(panel);
+		searchPanel = new SearchOptionPanel(rtext, msg);
+		panels.add(searchPanel);
 
-		panel = new RTextFileChooserOptionPanel();
-		setIcon(panel, "file_chooser.png");
-		panels.add(panel);
+		fileChooserPanel = new RTextFileChooserOptionPanel();
+		panels.add(fileChooserPanel);
 
-		panel.addChildPanel(new FileChooserFavoritesOptionPanel());
+		fileChooserPanel.addChildPanel(new FileChooserFavoritesOptionPanel());
 
-		panel = new PrintingOptionPanel(rtext, msg);
-		panels.add(panel);
+		OptionsDialogPanel printPanel = new PrintingOptionPanel(rtext, msg);
+		panels.add(printPanel);
 
-		panel = new FileFilterOptionPanel(rtext, msg);
-		setIcon(panel, "file_filters.png");
-		panels.add(panel);
+		filtersPanel = new FileFilterOptionPanel(rtext, msg);
+		panels.add(filtersPanel);
 
-		panel = new ShortcutOptionPanel(rtext);
-		setIcon(panel, "shortcuts.png");
-		panels.add(panel);
+		shortcutPanel = new ShortcutOptionPanel(rtext);
+		panels.add(shortcutPanel);
 
-		Plugin[] plugins = rtext.getPlugins();
-		for (Plugin plugin : plugins) {
-			panel = plugin.getOptionsDialogPanel();
+		Plugin<?>[] plugins = rtext.getPlugins();
+		for (Plugin<?> plugin : plugins) {
+			OptionsDialogPanel panel = plugin.getOptionsDialogPanel();
 			if (panel != null) {
 				panel.setIcon(plugin.getPluginIcon());
 				String parentID = plugin.getOptionsDialogPanelParentPanelID();
@@ -115,6 +124,9 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 				}
 			}
 		}
+
+		rtext.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, (e) -> updateIcons());
+		updateIcons();
 
 		OptionsDialogPanel[] array = new OptionsDialogPanel[panels.size()];
 		array = panels.toArray(array);
@@ -169,18 +181,64 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 	 * Sets the icon for an options panel.
 	 *
 	 * @param panel The options panel.
+	 * @param packageName The package from which to load icons.
 	 * @param iconSuffix The suffix of the icon resource.
 	 */
-	private void setIcon(OptionsDialogPanel panel, String iconSuffix) {
+	private void setIcon(OptionsDialogPanel panel, String packageName, String iconSuffix) {
 
 		ClassLoader cl = getClass().getClassLoader();
-		String prefix = "org/fife/rtext/graphics/options_";
-		URL resource = cl.getResource(prefix + iconSuffix);
+		String prefix = "org/fife/rtext/graphics/" + packageName + "/options_";
+		Icon icon = null;
 
-		if (resource != null) {
-			panel.setIcon(new ImageIcon(resource));
+		if (iconSuffix.endsWith(".svg")) {
+			InputStream in = cl.getResourceAsStream(prefix + iconSuffix);
+			if (in != null) {
+				try {
+					Image image = ImageTranscodingUtil.rasterize(iconSuffix, in, 16, 16);
+					icon = new ImageIcon(image);
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
+			}
 		}
+		else {
+			URL resource = cl.getResource(prefix + iconSuffix);
+			if (resource != null) {
+				icon = new ImageIcon(resource);
+			}
+		}
+
+		panel.setIcon(icon);
 	}
 
 
+	private void updateIcons() {
+
+		String packageName;
+		String extension;
+
+		switch (rtext.getTheme().getId()) {
+			case FlatDarkTheme.ID -> {
+				packageName = "flat-dark";
+				extension = "svg";
+			}
+			case FlatLightTheme.ID -> {
+				packageName = "flat-light";
+				extension = "svg";
+			}
+			default -> {
+				packageName = "eclipse";
+				extension = "png";
+			}
+		}
+
+		setIcon(generalPanel, packageName, "general." + extension);
+		setIcon(uiPanel, packageName, "ui." + extension);
+		setIcon(languagePanel, packageName, "language." + extension);
+		setIcon(rtaPanel, packageName, "textarea." + extension);
+		setIcon(searchPanel, packageName, "search." + extension);
+		setIcon(fileChooserPanel, packageName, "file_chooser." + extension);
+		setIcon(filtersPanel, packageName, "file_filters." + extension);
+		setIcon(shortcutPanel, packageName, "shortcuts." + extension);
+	}
 }
