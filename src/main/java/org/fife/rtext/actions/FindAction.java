@@ -12,7 +12,6 @@ package org.fife.rtext.actions;
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.Icon;
-import javax.swing.JButton;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
@@ -61,22 +60,9 @@ class FindAction extends AppAction<RText> {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		RText rtext = getApplication();
-
-		// If the QuickSearch bar is visible, shift focus to that instead
-		// of displaying the Find dialog if they hit Ctrl+F or chose the
-		// menu item (i.e., the toolbar "Find" button still brings up the
-		// Find dialog).
-		if (!(e.getSource() instanceof JButton) &&
-				rtext.isSearchToolBarVisible()) {
-			rtext.getSearchToolBar().focusFindField();
-			return;
-		}
-
 		AbstractMainView mainView = rtext.getMainView();
 		mainView.getSearchManager().showFindUI();
-
 	}
 
 

@@ -133,7 +133,6 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 		prefs.carets[RTextArea.INSERT_MODE]= mainView.getCaretStyle(RTextArea.INSERT_MODE).ordinal();
 		prefs.carets[RTextArea.OVERWRITE_MODE]= mainView.getCaretStyle(RTextArea.OVERWRITE_MODE).ordinal();
 		prefs.caretBlinkRate			= mainView.getCaretBlinkRate();
-		prefs.searchToolBarVisible		= rtext.isSearchToolBarVisible();
 		prefs.dividerLocations[DockableWindowConstants.TOP]	= rtext.getSplitPaneDividerLocation(DockableWindowConstants.TOP);
 		prefs.dividerLocations[DockableWindowConstants.LEFT] = rtext.getSplitPaneDividerLocation(DockableWindowConstants.LEFT);
 		prefs.dividerLocations[DockableWindowConstants.BOTTOM] = rtext.getSplitPaneDividerLocation(DockableWindowConstants.BOTTOM);

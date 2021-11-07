@@ -117,8 +117,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 	private String newFileName;		// The name for new empty text files.
 
-	private SearchToolBar searchBar;
-
 	private boolean showHostName;
 
 	/**
@@ -660,23 +658,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	/**
-	 * Returns the QuickSearch toolbar.
-	 *
-	 * @return The QuickSearch toolbar.
-	 * @see #isSearchToolBarVisible
-	 */
-	public SearchToolBar getSearchToolBar() {
-		if (searchBar==null) {
-			searchBar = new SearchToolBar("Search", this,
-						(org.fife.rtext.StatusBar)getStatusBar());
-			searchBar.setVisible(false);
-			addToolBar(searchBar, BorderLayout.SOUTH);
-		}
-		return searchBar;
-	}
-
-
-	/**
 	 * Returns the opacity with which to render unfocused child windows, if
 	 * this option is enabled.
 	 *
@@ -906,20 +887,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	/**
-	 * Returns whether or not the QuickSearch toolbar is visible.  This
-	 * method should be used over <code>getSearchToolBar().isVisible()</code>
-	 * because the latter will allocate the toolbar if it isn't already
-	 * created, but this method won't.
-	 *
-	 * @return Whether or not the QuickSearch toolbar is visible.
-	 * @see #getSearchToolBar
-	 */
-	public boolean isSearchToolBarVisible() {
-		return searchBar != null && searchBar.isVisible();
-	}
-
-
-	/**
 	 * Returns whether search window opacity is enabled.
 	 *
 	 * @return Whether search window opacity is enabled.
@@ -987,11 +954,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		// Install any plugins.
 		super.preDisplayInit(prefs, splashScreen);
-
-		if (prefs.searchToolBarVisible) {
-			addToolBar(getSearchToolBar(), BorderLayout.SOUTH);
-			searchBar.setVisible(true);
-		}
 
 		splashScreen.updateStatus(getString("AddingFinalTouches"), 90);
 

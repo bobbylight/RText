@@ -129,7 +129,6 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	private JMenuItem timeDateItem;
 	private JMenuItem optionsItem;
 	private JCheckBoxMenuItem toolbarItem;
-	private JCheckBoxMenuItem searchToolbarMenuItem;
 	private JCheckBoxMenuItem statusBarItem;
 	private JCheckBoxMenuItem lineNumbersItem;
 	private JMenuItem nextDocItem;
@@ -566,12 +565,6 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		toolbarItem.setToolTipText(null);
 		toolbarItem.setSelected(properties.toolbarVisible);
 		toolbarsMenu.add(toolbarItem);
-//		SearchToolBarAction stba = new SearchToolBarAction(rtext);
-//		stba.setName(menuMsg.getString("QuickSearchBar"));
-//		searchToolbarMenuItem = new JCheckBoxMenuItem(stba);
-//		searchToolbarMenuItem.setSelected(properties.searchToolBarVisible);
-//		UIUtil.setDescription(searchToolbarMenuItem, menuMsg,"DescQuickSearch");
-//		toolbarsMenu.add(searchToolbarMenuItem);
 		viewMenu.add(toolbarsMenu);
 
 		// Font sizes submenu.
@@ -853,17 +846,6 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 		}
 
-	}
-
-
-	/**
-	 * Sets whether the "QuickSearch toolbar" menu item is selected.
-	 *
-	 * @param selected Whether the QuickSearch toolbar menu item is
-	 *        selected.
-	 */
-	public void setSearchToolbarMenuItemSelected(boolean selected) {
-		searchToolbarMenuItem.setSelected(selected);
 	}
 
 

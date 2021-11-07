@@ -111,7 +111,6 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	public String workingDirectory;
 	public int[] carets;						// Index 0=>insert, 1=>overwrite.
 	public int caretBlinkRate;
-	public boolean searchToolBarVisible;
 	public int[] dividerLocations;				// Dividers for plugin JSplitPanes.
 	public boolean[] dividerVisible;
 	public String defaultLineTerminator;
@@ -297,7 +296,6 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		carets[RTextArea.INSERT_MODE] = CaretStyle.THICK_VERTICAL_LINE_STYLE.ordinal();
 		carets[RTextArea.OVERWRITE_MODE] = CaretStyle.BLOCK_STYLE.ordinal();
 		caretBlinkRate	= 500;
-		searchToolBarVisible = false;
 		dividerLocations = new int[4];
 		for (int i=0; i<4; i++) {
 			// negative => left components preferred size.
