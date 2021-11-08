@@ -10,8 +10,6 @@
 package org.fife.rtext;
 
 import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.*;
 
@@ -21,8 +19,6 @@ import org.fife.rsta.ui.search.FindDialog;
 import org.fife.rsta.ui.search.FindToolBar;
 import org.fife.rsta.ui.search.ReplaceDialog;
 import org.fife.rsta.ui.search.ReplaceToolBar;
-import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.UIUtil;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.rtextarea.SearchResult;
@@ -52,6 +48,7 @@ public class SearchManager {
 	public SearchManager(RText rtext) {
 		this.rtext = rtext;
 		setSearchingMode(SearchingMode.TOOLBARS);
+		rtext.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, e -> updateContentAssistIcons());
 	}
 
 
@@ -83,10 +80,8 @@ public class SearchManager {
 	 */
 	private void configureSearchDialog(AbstractFindReplaceDialog dialog) {
 
-		if (UIUtil.isDarkLookAndFeel()) {
-			Image image = getDarkLookAndFeelContentAssistImage();
-			dialog.setContentAssistImage(image);
-		}
+		Image image = getLookAndFeelContentAssistImage();
+		dialog.setContentAssistImage(image);
 
 		AbstractMainView mainView = rtext.getMainView();
 		dialog.setSearchContext(mainView.searchContext);
@@ -123,11 +118,9 @@ public class SearchManager {
 			replaceToolBar.setSearchContext(mainView.searchContext);
 			csp.addBottomComponent(replaceToolBar);
 
-			if (UIUtil.isDarkLookAndFeel()) {
-				Image image = getDarkLookAndFeelContentAssistImage();
-				findToolBar.setContentAssistImage(image);
-				replaceToolBar.setContentAssistImage(image);
-			}
+			Image image = getLookAndFeelContentAssistImage();
+			findToolBar.setContentAssistImage(image);
+			replaceToolBar.setContentAssistImage(image);
 		}
 	}
 
@@ -206,18 +199,8 @@ public class SearchManager {
 	}
 
 
-	public static Image getDarkLookAndFeelContentAssistImage() {
-
-		Image image = null;
-		InputStream in = SearchManager.class.getResourceAsStream("graphics/common_icons/intentionBulb_dark.svg");
-
-		try {
-			image = ImageTranscodingUtil.rasterize("bulb", in, 12, 12);
-		} catch (IOException ioe) { // Never happens
-			ioe.printStackTrace();
-		}
-
-		return image;
+	public Image getLookAndFeelContentAssistImage() {
+		return rtext.getIconGroup().getImage("lightbulb");
 	}
 
 
@@ -466,6 +449,22 @@ public class SearchManager {
 					showBottomComponent(replaceToolBar);
 		}
 
+	}
+
+
+	private void updateContentAssistIcons() {
+
+		if (findDialog != null) {
+			Image image = getLookAndFeelContentAssistImage();
+			findDialog.setContentAssistImage(image);
+			replaceDialog.setContentAssistImage(image);
+		}
+
+		if (findToolBar != null) {
+			Image image = getLookAndFeelContentAssistImage();
+			findToolBar.setContentAssistImage(image);
+			replaceToolBar.setContentAssistImage(image);
+		}
 	}
 
 

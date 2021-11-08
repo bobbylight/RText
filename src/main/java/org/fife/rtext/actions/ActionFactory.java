@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
-import javax.swing.*;
-
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextActionInfo;
 import org.fife.rtext.RTextPrefs;
@@ -33,8 +31,6 @@ import org.fife.ui.rtextarea.RTextAreaEditorKit;
  * @version 1.0
  */
 public final class ActionFactory implements RTextActionInfo {
-
-	private static final String COMMON_ICON_PATH = "/org/fife/rtext/graphics/common_icons/";
 
 	/**
 	 * Private constructor to prevent instantiation.
@@ -181,7 +177,7 @@ public final class ActionFactory implements RTextActionInfo {
 		a = new PrintPreviewAction(rtext, msg, null);
 		rtext.addAction(PRINT_PREVIEW_ACTION, a);
 
-		a = new GoToAction(rtext, msg, getDefaultGoToActionIcon());
+		a = new GoToAction(rtext, msg, null);
 		rtext.addAction(GOTO_ACTION, a);
 
 		a = new TextAreaOrientationAction(rtext, msg, "LeftToRightAction", null,
@@ -228,14 +224,5 @@ public final class ActionFactory implements RTextActionInfo {
 		a = new DecreaseFontSizeAction(rtext, msg);
 		rtext.addAction(DEC_FONT_SIZES_ACTION, a);
 
-	}
-
-	private static Icon getDefaultCommonIcon(String name) {
-		return new ImageIcon(ActionFactory.class.getResource(
-			COMMON_ICON_PATH + name));
-	}
-
-	public static Icon getDefaultGoToActionIcon() {
-		return getDefaultCommonIcon("goto16.gif");
 	}
 }

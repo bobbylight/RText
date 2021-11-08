@@ -25,8 +25,8 @@ import org.fife.rsta.ui.AssistanceIconPanel;
 import org.fife.rsta.ui.RComboBoxModel;
 import org.fife.rsta.ui.search.AbstractSearchDialog;
 import org.fife.rsta.ui.search.FindReplaceButtonsEnableResult;
+import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
-import org.fife.rtext.SearchManager;
 import org.fife.ui.FSATextField;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.StatusBar;
@@ -1007,10 +1007,9 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 
 	private void updateIcons() {
-		if (UIUtil.isDarkLookAndFeel()) {
-			Image image = SearchManager.getDarkLookAndFeelContentAssistImage();
-			setContentAssistImage(image);
-		}
+		RText rtext = (RText)getParent();
+		Image image = rtext.getMainView().getSearchManager().getLookAndFeelContentAssistImage();
+		setContentAssistImage(image);
 	}
 
 
@@ -1038,6 +1037,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		inFolderTextField.addFocusListener(focusAdapter);
 		inFolderTextField.getDocument().addDocumentListener(docListener);
 
+		updateIcons();
 	}
 
 

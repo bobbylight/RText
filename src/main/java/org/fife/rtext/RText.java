@@ -1567,12 +1567,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		getAction(PRINT_PREVIEW_ACTION).putValue(Action.SMALL_ICON, icon);
 		icon = iconGroup.getIcon("closeall");
 		getAction(CLOSE_ALL_ACTION).putValue(Action.SMALL_ICON, icon);
-
-		Icon gotoIcon = iconGroup.getIcon("goto");
-		if (gotoIcon == null) {
-			gotoIcon = ActionFactory.getDefaultGoToActionIcon();
-		}
-		getAction(GOTO_ACTION).putValue(Action.SMALL_ICON, gotoIcon);
+		icon = iconGroup.getIcon("goto");
+		getAction(GOTO_ACTION).putValue(Action.SMALL_ICON, icon);
 
 		// The toolbar uses the large versions of the icons, if available.
 		// FIXME:  Make this toggle-able.
