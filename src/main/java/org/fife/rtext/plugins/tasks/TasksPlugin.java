@@ -360,7 +360,6 @@ public class TasksPlugin extends GUIPlugin<RText> {
 
 	@Override
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		System.out.println("TasksPlugin: Refreshing icons to: " + getPluginIcon());
 		window.setIcon(getPluginIcon());
 		if (optionPanel != null) {
 			optionPanel.setIcon(getPluginIcon());

@@ -433,7 +433,6 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 
 	@Override
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		System.out.println("ToolPlugin: Refreshing icons to: " + getPluginIcon());
 		window.setIcon(getPluginIcon());
 		newToolAction.setIcon(getPluginIcon());
 		if (optionPanel != null) {

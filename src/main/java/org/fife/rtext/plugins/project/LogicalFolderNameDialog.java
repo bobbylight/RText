@@ -31,6 +31,7 @@ import javax.swing.event.DocumentListener;
 import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.rsta.ui.EscapableDialog;
 import org.fife.rsta.ui.ResizableFrameContentPane;
+import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.tree.LogicalFolderProjectEntryTreeNode;
 import org.fife.rtext.plugins.project.tree.NameChecker;
@@ -199,7 +200,7 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 
 	private void setBadNameValue(String reason) {
 		nameDIP.setShowIcon(true);
-		nameDIP.setIcon(RenameDialog.getErrorIcon());
+		nameDIP.setIcon(RenameDialog.getErrorIcon((RText)getParent()));
 		nameDIP.setToolTipText(getLocalizedReason(reason));
 		okButton.setEnabled(false);
 	}

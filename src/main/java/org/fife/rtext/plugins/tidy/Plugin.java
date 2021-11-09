@@ -368,7 +368,6 @@ public class Plugin extends AbstractPlugin<RText>
 
 	@Override
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		System.out.println("TidyPlugin: Refreshing icons to: " + getPluginIcon());
 		optionPanel.setIcon(getPluginIcon());
 	}
 

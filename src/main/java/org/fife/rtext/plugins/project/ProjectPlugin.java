@@ -496,7 +496,6 @@ public class ProjectPlugin extends GUIPlugin<RText> {
 
 	@Override
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		System.out.println("ProjectPlugin: Refreshing icons to: " + getPluginIcon());
 		optionPanel.setIcon(getPluginIcon());
 		if (getDockableWindow() != null) {
 			getDockableWindow().setIcon(getPluginIcon());

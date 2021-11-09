@@ -373,7 +373,6 @@ public class FileSystemTreePlugin extends GUIPlugin<RText> {
 
 	@Override
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		System.out.println("FileSystemTreePlugin: Refreshing icons to: " + getPluginIcon());
 		optionPanel.setIcon(getPluginIcon());
 		getDockableWindow(getPluginName()).setIcon(getPluginIcon());
 	}

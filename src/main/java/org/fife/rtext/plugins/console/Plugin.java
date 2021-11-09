@@ -325,7 +325,6 @@ public class Plugin extends GUIPlugin<RText> {
 
 	@Override
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		System.out.println("ConsolePlugin: Refreshing icons to: " + getPluginIcon());
 		optionPanel.setIcon(getPluginIcon());
 		window.setIcon(getPluginIcon());
 	}

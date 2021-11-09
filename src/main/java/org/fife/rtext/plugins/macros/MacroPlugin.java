@@ -350,7 +350,6 @@ public class MacroPlugin extends AbstractPlugin<RText>
 
 	@Override
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		System.out.println("MacroPlugin: Refreshing icons to: " + getPluginIcon());
 		updateActionIcons(iconGroup);
 		optionPanel.setIcon(getPluginIcon());
 	}

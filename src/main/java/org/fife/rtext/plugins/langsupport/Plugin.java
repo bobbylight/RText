@@ -202,15 +202,12 @@ public class Plugin extends GUIPlugin<RText> {
 	public void install() {
 
 		icons = new HashMap<>();
-		icons.put(ParserNotice.Level.ERROR,
-			AppIconLoader.getIcon("toolbarError_dark.svg", "error_obj.gif", 14, 14));
-		icons.put(ParserNotice.Level.WARNING,
-			AppIconLoader.getIcon("warning_dark.svg", "warning_obj.gif", 14, 14));
-		// Informational icons are annoying - spelling errors, etc.
-		//icons.put(ParserNotice.Level.INFO, createIcon("info_obj.gif"));
 
 		RText rtext = getApplication();
 		listener = new Listener();
+		rtext.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, listener);
+		loadWarningAndErrorIcons(); // Have to manually load them the first time
+
 		AbstractMainView view = rtext.getMainView();
 		for (int i=0; i<view.getNumDocuments(); i++) {
 			addSupport(view.getRTextEditorPaneAt(i));
@@ -450,6 +447,16 @@ public class Plugin extends GUIPlugin<RText> {
 	}
 
 
+	private void loadWarningAndErrorIcons() {
+		icons.put(ParserNotice.Level.ERROR,
+			getApplication().getIconGroup().getIcon("error_annotation", 14, 14));
+		icons.put(ParserNotice.Level.WARNING,
+			getApplication().getIconGroup().getIcon("warning_annotation", 14, 14));
+		// Informational icons are annoying - spelling errors, etc.
+		//icons.put(ParserNotice.Level.INFO, createIcon("info_obj.gif"));
+	}
+
+
 	/**
 	 * Changing visibility to public so sub-packages can register dockable
 	 * windows.
@@ -660,13 +667,13 @@ public class Plugin extends GUIPlugin<RText> {
 			removeSupport(view.getRTextEditorPaneAt(i));
 		}
 		view.removePropertyChangeListener(listener);
+		getApplication().removePropertyChangeListener(RText.ICON_STYLE_PROPERTY, listener);
 		return true;
 	}
 
 
 	@Override
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		System.out.println("LangSupportPlugin: Refreshing icons to: " + getPluginIcon());
 		if (optionsPanel != null) {
 			optionsPanel.setIcon(getPluginIcon());
 		}
@@ -721,6 +728,9 @@ public class Plugin extends GUIPlugin<RText> {
 				removeSupport(old);
 			}
 
+			else if (RText.ICON_STYLE_PROPERTY.equals(name)) {
+				loadWarningAndErrorIcons();
+			}
 		}
 
 	}

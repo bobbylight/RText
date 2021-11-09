@@ -21,13 +21,13 @@ import javax.swing.event.DocumentListener;
 
 import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.rsta.ui.EscapableDialog;
-import org.fife.rtext.AppIconLoader;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.tree.NameChecker;
 import org.fife.ui.ResizableFrameContentPane;
 import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
+
 
 abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 
@@ -152,13 +152,13 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 	/**
 	 * Returns the icon to use for fields with errors.
 	 *
+	 * @param rtext The parent application.
 	 * @return The icon.
 	 */
-	public static Icon getErrorIcon() {
-		if (errorIcon ==null) {
-			errorIcon = AppIconLoader.getIcon("toolbarError_dark.svg", "error_co.gif", 12, 12);
-		}
-		return errorIcon;
+	public static Icon getErrorIcon(RText rtext) {
+		// The IconGroup caches this value, so we just always fetch it so we can pick up
+		// changes in themes/icon groups
+		return rtext.getIconGroup().getIcon("error_annotation", 12, 12);
 	}
 
 
@@ -198,7 +198,7 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 
 	private void setBadNameValue(String reason) {
 		renameDIP.setShowIcon(true);
-		renameDIP.setIcon(getErrorIcon());
+		renameDIP.setIcon(getErrorIcon((RText)getParent()));
 		renameDIP.setToolTipText(getLocalizedReason(reason));
 		okButton.setEnabled(false);
 	}

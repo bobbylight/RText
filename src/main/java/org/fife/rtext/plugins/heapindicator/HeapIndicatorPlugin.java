@@ -459,7 +459,6 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 
 	@Override
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		System.out.println("HeapIndicatorPlugin: Refreshing icons to: " + getPluginIcon());
 		optionPanel.setIcon(getPluginIcon());
 	}
 

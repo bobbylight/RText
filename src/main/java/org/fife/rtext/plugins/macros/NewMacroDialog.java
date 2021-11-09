@@ -35,7 +35,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.fife.rsta.ui.DecorativeIconPanel;
-import org.fife.rtext.AppIconLoader;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.*;
@@ -217,10 +216,9 @@ class NewMacroDialog extends EscapableDialog {
 	 * @return The icon.
 	 */
 	private Icon getErrorIcon() {
-		if (errorIcon ==null) {
-			errorIcon = AppIconLoader.getIcon("toolbarError_dark.svg", "error_co.gif", 12, 12);
-		}
-		return errorIcon;
+		// The IconGroup caches this value, so we just always fetch it so we can pick up
+		// changes in themes/icon groups
+		return rtext.getIconGroup().getIcon("error_annotation", 12, 12);
 	}
 
 
@@ -241,10 +239,9 @@ class NewMacroDialog extends EscapableDialog {
 	 * @return The icon.
 	 */
 	private Icon getWarningIcon() {
-		if (warnIcon ==null) {
-			warnIcon = AppIconLoader.getIcon("warning_dark.svg", "warning_co.gif", 12, 12);
-		}
-		return warnIcon;
+		// The IconGroup caches this value, so we just always fetch it so we can pick up
+		// changes in themes/icon groups
+		return rtext.getIconGroup().getIcon("warning_annotation", 12, 12);
 	}
 
 
