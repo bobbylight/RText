@@ -122,7 +122,7 @@ public abstract class AbstractMainView extends JPanel
 	private float imageAlpha;					// Alpha value used to make the bg image translucent.
 	private String backgroundImageFileName;			// Background image, or null if background is a color.
 
-	protected RText owner;						// The owner of this tabbed panel.
+	protected RText owner;
 
 	private SyntaxFilters syntaxFilters;			// Used to decide how to syntax highlight a file.
 
@@ -212,12 +212,6 @@ public abstract class AbstractMainView extends JPanel
 	public AbstractMainView() {
 
 		listenerList = new EventListenerList();
-
-		ClassLoader cl = getClass().getClassLoader();
-		URL url = cl.getResource("org/fife/rtext/graphics/bookmark.png");
-		if (url!=null) {
-			bookmarkIcon = new ImageIcon(url);
-		}
 
 		checkForModification = true;
 		Timer t = new Timer();
@@ -2204,6 +2198,7 @@ public abstract class AbstractMainView extends JPanel
 
 		// Remember the owner of this tabbed pane.
 		this.owner = owner;
+		updateBookmarkIcon();
 		owner.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, this);
 		searchManager = new SearchManager(owner);
 
@@ -2655,6 +2650,7 @@ public abstract class AbstractMainView extends JPanel
 
 			case RText.ICON_STYLE_PROPERTY:
 				refreshTabIcons();
+				updateBookmarkIcon();
 				break;
 		}
 
@@ -4347,6 +4343,17 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public void setWriteBOMInUtf8Files(boolean write) {
 		UnicodeWriter.setWriteUtf8BOM(write);
+	}
+
+
+	private void updateBookmarkIcon() {
+
+		bookmarkIcon = owner.getIconGroup().getIcon("bookmark");
+
+		for (int i = 0; i < getNumDocuments(); i++) {
+			RTextScrollPane scrollPane = getRTextScrollPaneAt(i);
+			scrollPane.getGutter().setBookmarkIcon(bookmarkIcon);
+		}
 	}
 
 

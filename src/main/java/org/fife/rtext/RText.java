@@ -1241,6 +1241,9 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 			// Make mainView have all the properties of the old panel.
 			mainView.copyData(fromView);
+			// Note: removing the listener here is a little bit of a smell, as we
+			// shouldn't know it listens to this property.
+			removePropertyChangeListener(RText.ICON_STYLE_PROPERTY, fromView);
 
 			// If we have switched to a tabbed view, artificially
 			// fire stateChanged if the last document is selected,
