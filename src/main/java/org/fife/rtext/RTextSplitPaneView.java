@@ -19,14 +19,12 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -99,8 +97,6 @@ class RTextSplitPaneView extends AbstractMainView
 		String name = "Files";
 		listWindow = new DockableWindow(name, new BorderLayout());
 		listWindow.setPrimaryComponent(documentList);
-		URL res = getClass().getResource(IMAGE_FILE);
-		listWindow.setIcon(new ImageIcon(res));
 		listWindow.add(documentListScrollPane);
 		listWindow.setPosition(DockableWindowConstants.LEFT);
 		listWindow.setActive(true);
@@ -249,6 +245,11 @@ class RTextSplitPaneView extends AbstractMainView
 	}
 
 
+	private Icon getListWindowIcon() {
+		return owner.getIconGroup().getIcon("open_files");
+	}
+
+
 	/**
 	 * Returns the number of documents open in this container.
 	 *
@@ -293,6 +294,14 @@ class RTextSplitPaneView extends AbstractMainView
 	}
 
 
+	@Override
+	protected void initialize(RText owner, String[] filesToOpen,
+							  RTextPrefs prefs) {
+		super.initialize(owner, filesToOpen, prefs);
+		listWindow.setIcon(getListWindowIcon());
+	}
+
+
 	/**
 	 * Repaints the display names for open documents.
 	 */
@@ -304,11 +313,16 @@ class RTextSplitPaneView extends AbstractMainView
 
 	@Override
 	public void refreshTabIcons() {
+
+		// Icons in the "open files" tabbed pane
 		for (int i = 0; i < getNumDocuments(); i++) {
 			DocumentInfo info = listModel.getElementAt(i);
 			info.icon = getIconFor(getRTextScrollPaneAt(i));
 		}
 		documentList.repaint();
+
+		// The tabbed pane's dockable window icon
+		listWindow.setIcon(getListWindowIcon());
 	}
 
 	/**

@@ -47,10 +47,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	private LabelValueComboBox<String, AppTheme> themeCombo;
 	private JButton applyButton;
 
-	private int mainViewStyle;
-	private int documentSelectionPlacement;
-	private int statusBarStyle;
-
 	private JPanel springPanel, springPanel2;
 	private JComboBox<String> viewCombo;
 	private JComboBox<String> docSelCombo;
@@ -323,7 +319,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @see #setDocumentSelectionPlacement
 	 */
 	private int getDocumentSelectionPlacement() {
-		return documentSelectionPlacement;
+		return docSelCombo.getSelectedIndex() + JTabbedPane.TOP;
 	}
 
 
@@ -335,7 +331,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @see #setMainViewStyle
 	 */
 	private int getMainViewStyle() {
-		return mainViewStyle;
+		return viewCombo.getSelectedIndex();
 	}
 
 
@@ -358,7 +354,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 * @see #setStatusBarStyle
 	 */
 	private int getStatusBarStyle() {
-		return statusBarStyle;
+		return statusBarCombo.getSelectedIndex();
 	}
 
 
@@ -411,11 +407,8 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 			documentSelectionPlacement = JTabbedPane.TOP;
 		}
 
-		if (this.documentSelectionPlacement!=documentSelectionPlacement) {
-			this.documentSelectionPlacement = documentSelectionPlacement;
-			docSelCombo.setSelectedIndex(documentSelectionPlacement -
-									JTabbedPane.TOP);
-		}
+		docSelCombo.setSelectedIndex(documentSelectionPlacement -
+								JTabbedPane.TOP);
 
 	}
 
@@ -448,13 +441,12 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 *        <code>RText.SPLIT_PANE_VIEW</code>.
 	 * @see #getMainViewStyle
 	 */
-	private void setMainViewStyle(final int viewStyle) {
-		if (viewStyle==RText.TABBED_VIEW || viewStyle==RText.SPLIT_PANE_VIEW ||
-			viewStyle==RText.MDI_VIEW)
-			mainViewStyle = viewStyle;
-		else
-			mainViewStyle = RText.TABBED_VIEW;
-		viewCombo.setSelectedIndex(mainViewStyle);
+	private void setMainViewStyle(int viewStyle) {
+		if (viewStyle!=RText.TABBED_VIEW && viewStyle!=RText.SPLIT_PANE_VIEW &&
+				viewStyle!=RText.MDI_VIEW) {
+			viewStyle = RText.TABBED_VIEW;
+		}
+		viewCombo.setSelectedIndex(viewStyle);
 	}
 
 
@@ -479,8 +471,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		if (style!=StatusBar.WINDOWS_98_STYLE &&
 				style!=StatusBar.WINDOWS_XP_STYLE)
 			style = StatusBar.WINDOWS_XP_STYLE;
-		statusBarStyle = style;
-		statusBarCombo.setSelectedIndex(statusBarStyle);
+		statusBarCombo.setSelectedIndex(style);
 	}
 
 
