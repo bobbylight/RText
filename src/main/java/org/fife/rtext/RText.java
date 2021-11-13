@@ -914,15 +914,15 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	private void loadPossibleIconGroups() {
 
 		iconGroupMap = new HashMap<>();
+		String resourceRoot = "org/fife/rtext/graphics/";
 
 		String root = getInstallLocation();
 		iconGroupMap.put(DEFAULT_ICON_GROUP_NAME,
-			new SvgIconGroup(this, DEFAULT_ICON_GROUP_NAME, "icongroups/intellij-icons-dark.zip"));
+			new SvgIconGroup(this, DEFAULT_ICON_GROUP_NAME, resourceRoot + "intellij-icons-dark"));
 		iconGroupMap.put("IntelliJ Icons (Light)",
-			new SvgIconGroup(this, "IntelliJ Icons (Light)", "icongroups/intellij-icons-light.zip"));
+			new SvgIconGroup(this, "IntelliJ Icons (Light)", resourceRoot + "intellij-icons-light"));
 		iconGroupMap.put("Eclipse Icons", new RasterImageIconGroup("Eclipse Icons",
-			"", null, "gif",
-			new File(root, "icongroups/eclipse-icons.zip").getAbsolutePath()));
+			resourceRoot + "eclipse-icons"));
 
 	}
 
