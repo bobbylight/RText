@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -23,9 +24,11 @@ class JSHintOptionsPanel extends FoldingOnlyOptionsPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	JSHintOptionsPanel() {
-		super("Options.JSHint.Name", "jshint.png",
+	JSHintOptionsPanel(RText app) {
+		super(app, "Options.JSHint.Name",
 				SyntaxConstants.SYNTAX_STYLE_JSON_WITH_COMMENTS);
 	}
 

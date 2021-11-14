@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -23,10 +24,11 @@ class MxmlOptionsPanel extends FoldingOnlyOptionsPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	MxmlOptionsPanel() {
-		super("Options.Mxml.Name", "mxml.png",
-				SyntaxConstants.SYNTAX_STYLE_MXML);
+	MxmlOptionsPanel(RText app) {
+		super(app, "Options.Mxml.Name", SyntaxConstants.SYNTAX_STYLE_MXML);
 	}
 
 

@@ -447,7 +447,19 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 
 	@Override
 	public Icon getPluginIcon() {
-		return icons.get(getApplication().getTheme().getId());
+		return getPluginIcon("plugin");
+	}
+
+
+	/**
+	 * Returns a plugin-specific icon, relevant to the current application
+	 * theme and icon group.
+	 *
+	 * @param name The icon name.
+	 * @return The icon.
+	 */
+	Icon getPluginIcon(String name) {
+		return icons.get(getApplication().getTheme().getId() + "-" + name);
 	}
 
 
@@ -525,17 +537,33 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 
 		icons = new HashMap<>();
 
+		// Load the plugin icon and the blue/green "bullet" icons for the default source browser.
 		try {
 
-			icons.put(NativeTheme.ID, new ImageIcon(getClass().getResource("eclipse/source_browser.png")));
+			icons.put(NativeTheme.ID + "-plugin", new ImageIcon(getClass().getResource("eclipse/source_browser.png")));
+			icons.put(NativeTheme.ID + "-blue", new ImageIcon(getClass().getResource("eclipse/bullet_blue.gif")));
+			icons.put(NativeTheme.ID + "-green", new ImageIcon(getClass().getResource("eclipse/bullet_green.gif")));
 
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("source browser dark",
 				getClass().getResourceAsStream("flat-dark/source_browser.svg"), 16, 16);
-			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+			icons.put(FlatDarkTheme.ID + "-plugin", new ImageIcon(darkThemeImage));
+			darkThemeImage = ImageTranscodingUtil.rasterize("source browser dark",
+				getClass().getResourceAsStream("flat-dark/bullet_blue.svg"), 8, 8);
+			icons.put(FlatDarkTheme.ID + "-blue", new ImageIcon(darkThemeImage));
+			darkThemeImage = ImageTranscodingUtil.rasterize("source browser dark",
+				getClass().getResourceAsStream("flat-dark/bullet_green.svg"), 8, 8);
+			icons.put(FlatDarkTheme.ID + "-green", new ImageIcon(darkThemeImage));
 
 			Image lightThemeImage = ImageTranscodingUtil.rasterize("source browser light",
 				getClass().getResourceAsStream("flat-light/source_browser.svg"), 16, 16);
-			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+			icons.put(FlatLightTheme.ID + "-plugin", new ImageIcon(lightThemeImage));
+			lightThemeImage = ImageTranscodingUtil.rasterize("source browser light",
+				getClass().getResourceAsStream("flat-light/bullet_blue.svg"), 8, 8);
+			icons.put(FlatLightTheme.ID + "-blue", new ImageIcon(lightThemeImage));
+			lightThemeImage = ImageTranscodingUtil.rasterize("source browser light",
+				getClass().getResourceAsStream("flat-light/bullet_green.svg"), 8, 8);
+			icons.put(FlatLightTheme.ID + "-green", new ImageIcon(lightThemeImage));
+
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -748,8 +776,6 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 		}
 
 		void refreshIcon() {
-
-			// Allow themes, such as the dark theme, to provide an icon
 			Icon icon = getApplication().getIconGroup().getIcon("options");
 			if (icon != null) {
 				setIcon(icon);
@@ -791,15 +817,7 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 		}
 
 		void refreshIcon() {
-
-			// Allow themes, such as the dark theme, to provide an icon
-			Icon icon = getApplication().getIconGroup().getIcon("sorted");
-			if (icon != null) {
-				setIcon(icon);
-			}
-			else {
-				setIcon("alphab_sort_co.gif");
-			}
+			setIcon(getApplication().getIconGroup().getIcon("sorted"));
 		}
 	}
 

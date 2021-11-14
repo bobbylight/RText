@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -23,9 +24,11 @@ class CSharpOptionsPanel extends FoldingOnlyOptionsPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	CSharpOptionsPanel() {
-		super("Options.CSharp.Name", "page_white_csharp.png",
+	CSharpOptionsPanel(RText app) {
+		super(app, "Options.CSharp.Name",
 				SyntaxConstants.SYNTAX_STYLE_CSHARP);
 	}
 

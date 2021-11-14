@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -24,9 +25,8 @@ class GoOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	GoOptionsPanel() {
-		super("Options.Go.Name", "go.svg",
-				SyntaxConstants.SYNTAX_STYLE_GO);
+	GoOptionsPanel(RText app) {
+		super(app, "Options.Go.Name", SyntaxConstants.SYNTAX_STYLE_GO);
 	}
 
 

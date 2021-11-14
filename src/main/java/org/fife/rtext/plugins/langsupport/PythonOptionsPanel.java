@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -23,10 +24,11 @@ class PythonOptionsPanel extends FoldingOnlyOptionsPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	PythonOptionsPanel() {
-		super("Options.Python.Name", "python.svg",
-				SyntaxConstants.SYNTAX_STYLE_PYTHON);
+	PythonOptionsPanel(RText app) {
+		super(app, "Options.Python.Name", SyntaxConstants.SYNTAX_STYLE_PYTHON);
 	}
 
 

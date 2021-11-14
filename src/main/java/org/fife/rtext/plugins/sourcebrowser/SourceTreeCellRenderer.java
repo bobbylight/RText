@@ -12,7 +12,6 @@ package org.fife.rtext.plugins.sourcebrowser;
 import java.awt.Component;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -31,20 +30,18 @@ final class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
 	private final Icon blueBullet;
 	private final Icon greenBullet;
 
-	private static final String BLUE_BULLET	= "bullet_blue.gif";
-	private static final String GREEN_BULLET	= "bullet_green.gif";
-
 
 	/**
 	 * Constructor.
 	 *
 	 * @param tree The source tree we're rendering in.
+	 * @param blueBullet The blue bullet icon.
+	 * @param greenBullet The green bullet icon.
 	 */
-	SourceTreeCellRenderer(DefaultSourceTree tree) {
+	SourceTreeCellRenderer(DefaultSourceTree tree, Icon blueBullet, Icon greenBullet) {
 		this.tree = tree;
-		Class<?> clazz = getClass();
-		blueBullet = new ImageIcon(clazz.getResource(BLUE_BULLET));
-		greenBullet = new ImageIcon(clazz.getResource(GREEN_BULLET));
+		this.blueBullet = blueBullet;
+		this.greenBullet = greenBullet;
 	}
 
 

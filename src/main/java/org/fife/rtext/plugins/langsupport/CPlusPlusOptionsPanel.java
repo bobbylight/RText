@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -23,9 +24,11 @@ class CPlusPlusOptionsPanel extends FoldingOnlyOptionsPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	CPlusPlusOptionsPanel() {
-		super("Options.CPlusPlus.Name", "page_white_cplusplus.png",
+	CPlusPlusOptionsPanel(RText app) {
+		super(app, "Options.CPlusPlus.Name",
 				SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
 	}
 

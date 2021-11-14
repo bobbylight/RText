@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -23,10 +24,11 @@ class JsonOptionsPanel extends FoldingOnlyOptionsPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	JsonOptionsPanel() {
-		super("Options.JSON.Name", "json.png",
-				SyntaxConstants.SYNTAX_STYLE_JSON);
+	JsonOptionsPanel(RText app) {
+		super(app, "Options.JSON.Name", SyntaxConstants.SYNTAX_STYLE_JSON);
 	}
 
 

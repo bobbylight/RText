@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -23,10 +24,11 @@ class NsisOptionsPanel extends FoldingOnlyOptionsPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	NsisOptionsPanel() {
-		super("Options.Nsis.Name", "nsis.png",
-				SyntaxConstants.SYNTAX_STYLE_NSIS);
+	NsisOptionsPanel(RText app) {
+		super(app, "Options.Nsis.Name", SyntaxConstants.SYNTAX_STYLE_NSIS);
 	}
 
 

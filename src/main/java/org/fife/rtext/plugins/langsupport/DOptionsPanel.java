@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -23,10 +24,11 @@ class DOptionsPanel extends FoldingOnlyOptionsPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app  The parent application.
 	 */
-	DOptionsPanel() {
-		super("Options.D.Name", "/org/fife/rtext/graphics/file_icons/d.png",
-				SyntaxConstants.SYNTAX_STYLE_D);
+	DOptionsPanel(RText app) {
+		super(app, "Options.D.Name", SyntaxConstants.SYNTAX_STYLE_D);
 	}
 
 

@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -23,10 +24,11 @@ class LatexOptionsPanel extends FoldingOnlyOptionsPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	LatexOptionsPanel() {
-		super("Options.Latex.Name", "page_white_latex.png",
-				SyntaxConstants.SYNTAX_STYLE_LATEX);
+	LatexOptionsPanel(RText app) {
+		super(app, "Options.Latex.Name", SyntaxConstants.SYNTAX_STYLE_LATEX);
 	}
 
 

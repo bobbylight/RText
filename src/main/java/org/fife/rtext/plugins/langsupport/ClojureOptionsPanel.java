@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -24,9 +25,8 @@ class ClojureOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	ClojureOptionsPanel() {
-		super("Options.Clojure.Name", "clojure.png",
-				SyntaxConstants.SYNTAX_STYLE_CLOJURE);
+	ClojureOptionsPanel(RText app) {
+		super(app, "Options.Clojure.Name", SyntaxConstants.SYNTAX_STYLE_CLOJURE);
 	}
 
 

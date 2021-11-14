@@ -18,7 +18,6 @@ import java.io.File;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -50,13 +49,18 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	ShellOptionsPanel() {
+	ShellOptionsPanel(RText app) {
 
 		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.Sh.Name"));
 		listener = new Listener();
-		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/page_white_tux.png")));
+		setIcon(app.getIconGroup().getIcon("fileTypes/unix"));
+		app.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, e -> {
+			setIcon(app.getIconGroup().getIcon("fileTypes/unix"));
+		});
 
 		ComponentOrientation o = ComponentOrientation.
 											getOrientation(getLocale());

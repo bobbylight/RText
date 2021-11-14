@@ -20,7 +20,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -76,13 +75,18 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	JavaScriptOptionsPanel() {
+	JavaScriptOptionsPanel(RText app) {
 
 		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.JavaScript.Name"));
 		listener = new Listener();
-		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/script_code.png")));
+		setIcon(app.getIconGroup().getIcon("fileTypes/javascript"));
+		app.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, e -> {
+			setIcon(app.getIconGroup().getIcon("fileTypes/javascript"));
+		});
 
 		setLayout(new BorderLayout());
 		Border empty5Border = UIUtil.getEmpty5Border();
@@ -111,8 +115,8 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 				getOrientation(getLocale());
 		applyComponentOrientation(o);
 
-		addChildPanel(new FoldingOnlyOptionsPanel(null,
-						SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT));
+		addChildPanel(new FoldingOnlyOptionsPanel(app,
+						SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT, false));
 
 	}
 

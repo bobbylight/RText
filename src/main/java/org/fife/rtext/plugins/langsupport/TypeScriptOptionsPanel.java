@@ -8,6 +8,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -22,10 +23,12 @@ class TypeScriptOptionsPanel extends FoldingOnlyOptionsPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	TypeScriptOptionsPanel() {
-		super("Options.TypeScript.Name", "typescript.svg",
-				SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT);
+	TypeScriptOptionsPanel(RText app) {
+		super(app, "Options.TypeScript.Name",
+			SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT);
 	}
 
 

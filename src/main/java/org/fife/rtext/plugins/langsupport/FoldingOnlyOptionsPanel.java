@@ -12,15 +12,12 @@ package org.fife.rtext.plugins.langsupport;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.border.Border;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
-import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.UIUtil;
 
@@ -39,28 +36,52 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 	private final JButton rdButton;
 	private final Listener listener;
 
+	private static final String DEFAULT_PANEL_NAME = "Options.General.Folding.Name";
 
 	/**
 	 * Constructor.
 	 */
-	FoldingOnlyOptionsPanel(String icon, String language) {
-		this("Options.General.Folding.Name", icon, language);
+	FoldingOnlyOptionsPanel(RText app, String language) {
+		this(app, language, true);
 	}
 
 
 	/**
 	 * Constructor.
 	 */
-	FoldingOnlyOptionsPanel(String nameKey, String icon,
-			String language) {
+	FoldingOnlyOptionsPanel(RText app, String language, boolean showIcon) {
+		this(app, DEFAULT_PANEL_NAME, language, showIcon);
+	}
+
+
+	/**
+	 * Constructor.
+	 */
+	FoldingOnlyOptionsPanel(RText app, String nameKey, String language) {
+		this(app, nameKey, language, true);
+	}
+
+
+	/**
+	 * Constructor.
+	 */
+	FoldingOnlyOptionsPanel(RText app, String nameKey, String language, boolean showIcon) {
 
 		this.language = language;
 		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString(nameKey));
-		if (icon!=null) {
-			setIcon(loadIcon(icon));
-		}
 		listener = new Listener();
+
+		// Load the proper icon, and listen for theme changes to update the icon
+		// accordingly.
+		if (showIcon) {
+			String langName = language.substring(language.lastIndexOf('/') + 1);
+			String image = "fileTypes/" + langName;
+			setIcon(app.getIconGroup().getIcon(image));
+			app.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, e -> {
+				setIcon(app.getIconGroup().getIcon(image));
+			});
+		}
 
 		ComponentOrientation o = ComponentOrientation.
 											getOrientation(getLocale());
@@ -134,22 +155,6 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 		return enabledCB;
 	}
 
-
-	private Icon loadIcon(String icon) {
-
-		if (icon.endsWith(".svg")) {
-			InputStream in = getClass().getResourceAsStream(icon);
-			try {
-				Image image = ImageTranscodingUtil.rasterize(icon, in, 16, 16);
-				return new ImageIcon(image);
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-				return null;
-			}
-		}
-
-		return new ImageIcon(getClass().getResource(icon));
-	}
 
 	private void setCodeFoldingValueImpl(RText rtext) {
 		AbstractMainView view = rtext.getMainView();

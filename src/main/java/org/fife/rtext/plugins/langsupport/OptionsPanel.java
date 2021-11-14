@@ -15,7 +15,6 @@ import java.awt.ComponentOrientation;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javax.swing.*;
@@ -57,8 +56,11 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 
 		super(plugin);
 		setId(OPTION_PANEL_ID);
-		URL url = getClass().getResource("comment.png");
-		setIcon(new ImageIcon(url));
+		RText app = plugin.getApplication();
+		setIcon(app.getIconGroup().getIcon("comment"));
+		app.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, e -> {
+			app.getIconGroup().getIcon("comment");
+		});
 
 		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Name"));
@@ -113,33 +115,33 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 		applyComponentOrientation(o);
 
 		// Language-specific child panels
-		addChildPanel(new COptionsPanel());
-		addChildPanel(new CPlusPlusOptionsPanel());
-		addChildPanel(new CSharpOptionsPanel());
-		addChildPanel(new CssOptionsPanel());
-		addChildPanel(new ClojureOptionsPanel());
-		addChildPanel(new DOptionsPanel());
-		addChildPanel(new DartOptionsPanel());
-		addChildPanel(new GoOptionsPanel());
-		addChildPanel(new GroovyOptionsPanel());
-		addChildPanel(new HtmlOptionsPanel());
-		addChildPanel(new JavaOptionsPanel());
-		addChildPanel(new JavaScriptOptionsPanel());
-		addChildPanel(new JSHintOptionsPanel());
-		addChildPanel(new JsonOptionsPanel());
-		addChildPanel(new JspOptionsPanel());
-		addChildPanel(new KotlinOptionsPanel());
-		addChildPanel(new LatexOptionsPanel());
-		addChildPanel(new LessOptionsPanel());
-		addChildPanel(new MxmlOptionsPanel());
-		addChildPanel(new NsisOptionsPanel());
-		addChildPanel(new PerlOptionsPanel());
-		addChildPanel(new PhpOptionsPanel());
-		addChildPanel(new PythonOptionsPanel());
-		addChildPanel(new ScalaOptionsPanel());
-		addChildPanel(new ShellOptionsPanel());
-		addChildPanel(new TypeScriptOptionsPanel());
-		addChildPanel(new XmlOptionsPanel());
+		addChildPanel(new COptionsPanel(app));
+		addChildPanel(new CPlusPlusOptionsPanel(app));
+		addChildPanel(new CSharpOptionsPanel(app));
+		addChildPanel(new CssOptionsPanel(app));
+		addChildPanel(new ClojureOptionsPanel(app));
+		addChildPanel(new DOptionsPanel(app));
+		addChildPanel(new DartOptionsPanel(app));
+		addChildPanel(new GoOptionsPanel(app));
+		addChildPanel(new GroovyOptionsPanel(app));
+		addChildPanel(new HtmlOptionsPanel(app));
+		addChildPanel(new JavaOptionsPanel(app));
+		addChildPanel(new JavaScriptOptionsPanel(app));
+		addChildPanel(new JSHintOptionsPanel(app));
+		addChildPanel(new JsonOptionsPanel(app));
+		addChildPanel(new JspOptionsPanel(app));
+		addChildPanel(new KotlinOptionsPanel(app));
+		addChildPanel(new LatexOptionsPanel(app));
+		addChildPanel(new LessOptionsPanel(app));
+		addChildPanel(new MxmlOptionsPanel(app));
+		addChildPanel(new NsisOptionsPanel(app));
+		addChildPanel(new PerlOptionsPanel(app));
+		addChildPanel(new PhpOptionsPanel(app));
+		addChildPanel(new PythonOptionsPanel(app));
+		addChildPanel(new ScalaOptionsPanel(app));
+		addChildPanel(new ShellOptionsPanel(app));
+		addChildPanel(new TypeScriptOptionsPanel(app));
+		addChildPanel(new XmlOptionsPanel(app));
 	}
 
 

@@ -1345,13 +1345,22 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public Icon getIconFor(RTextEditorPane textArea) {
 
-		// Fetch an icon from the theme first, then from the general icon manager if
-		// the theme doesn't supply its own icons for file types.
-		Icon icon = owner.getIconGroup() != null ?
-			owner.getIconGroup().getIcon("fileTypes/" + textArea.getSyntaxEditingStyle()) : null;
-		if (icon == null || icon.getIconWidth() == -1) { // Allow for bogus URLs returning no-data images
-			icon = FileTypeIconManager.get().getIconFor(textArea);
+		Icon icon = null;
+
+		// Try fetching a language-specific icon first
+		String syntax = textArea.getSyntaxEditingStyle();
+		int slash = syntax.lastIndexOf('/'); // Should be exactly 1
+		if (slash > -1) {
+			String fileType = syntax.substring(slash + 1).toLowerCase();
+			String path = "fileTypes/" + fileType;
+			icon = owner.getIconGroup().getIcon(path);
 		}
+
+		// Fall back to the default (plain text) icon otherwise
+		if (icon == null || icon.getIconWidth() == -1) {
+			icon = owner.getIconGroup().getIcon("fileTypes/plain");
+		}
+
 		return icon;
 	}
 

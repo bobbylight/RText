@@ -17,7 +17,6 @@ import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -25,6 +24,7 @@ import javax.swing.border.Border;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
+import org.fife.rtext.RText;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -48,13 +48,18 @@ class COptionsPanel extends OptionsDialogPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	COptionsPanel() {
+	COptionsPanel(RText app) {
 
 		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.C.Name"));
 		listener = new Listener();
-		setIcon(new ImageIcon(getClass().getResource("page_white_c.png")));
+		setIcon(app.getIconGroup().getIcon("fileTypes/c"));
+		app.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, e -> {
+			setIcon(app.getIconGroup().getIcon("fileTypes/c"));
+		});
 
 		ComponentOrientation o = ComponentOrientation.
 											getOrientation(getLocale());

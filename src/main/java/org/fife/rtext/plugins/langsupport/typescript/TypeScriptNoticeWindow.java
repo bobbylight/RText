@@ -10,8 +10,6 @@ package org.fife.rtext.plugins.langsupport.typescript;
 
 import java.awt.BorderLayout;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,14 +19,12 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
 import org.fife.rtext.AbstractParserNoticeWindow;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.plugins.langsupport.Plugin;
-import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.RScrollPane;
 import org.fife.ui.UIUtil;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
@@ -67,13 +63,8 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 		setDockableWindowName(msg.getString("TypeScript"));
 		setDockableWindowTitle(msg.getString("TypeScript.BuildOutput"));
 
-		try {
-			InputStream in = getClass().getResourceAsStream(
-				"/org/fife/rtext/plugins/langsupport/typescript.svg");
-			setIcon(new ImageIcon(ImageTranscodingUtil.rasterize("ts", in, 16, 16)));
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		updateIcon();
+		rtext.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, e -> updateIcon());
 
 		applyComponentOrientation(rtext.getComponentOrientation());
 
@@ -170,6 +161,11 @@ class TypeScriptNoticeWindow extends AbstractParserNoticeWindow {
 				warningCount, rootDir.getAbsolutePath());
 		setDockableWindowTitle(title);
 
+	}
+
+
+	private void updateIcon() {
+		setIcon(getRText().getIconGroup().getIcon("fileTypes/typescript"));
 	}
 
 

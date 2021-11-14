@@ -65,8 +65,6 @@ class RTextSplitPaneView extends AbstractMainView
 	private int selectedIndex;
 	private int listWindowPosition;	// Location of file list window
 
-	private static final String IMAGE_FILE = "graphics/page_white_stack.png";
-
 
 	/**
 	 * Creates a new <code>RTextSplitPaneView</code>.

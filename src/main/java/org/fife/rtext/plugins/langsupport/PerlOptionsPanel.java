@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -82,13 +81,18 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	PerlOptionsPanel() {
+	PerlOptionsPanel(RText app) {
 
 		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.Perl.Name"));
 		listener = new Listener();
-		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/epic.gif")));
+		setIcon(app.getIconGroup().getIcon("fileTypes/perl"));
+		app.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, e -> {
+			setIcon(app.getIconGroup().getIcon("fileTypes/perl"));
+		});
 
 		ComponentOrientation o = ComponentOrientation.
 											getOrientation(getLocale());

@@ -5,6 +5,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -19,10 +20,11 @@ class KotlinOptionsPanel extends FoldingOnlyOptionsPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	KotlinOptionsPanel() {
-		super("Options.Kotlin.Name", "/org/fife/rtext/graphics/file_icons/kotlin.svg",
-				SyntaxConstants.SYNTAX_STYLE_KOTLIN);
+	KotlinOptionsPanel(RText app) {
+		super(app, "Options.Kotlin.Name", SyntaxConstants.SYNTAX_STYLE_KOTLIN);
 	}
 
 

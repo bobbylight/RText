@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -23,10 +24,11 @@ class LessOptionsPanel extends FoldingOnlyOptionsPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	LessOptionsPanel() {
-		super("Options.Less.Name", "less.png",
-				SyntaxConstants.SYNTAX_STYLE_LESS);
+	LessOptionsPanel(RText app) {
+		super(app, "Options.Less.Name", SyntaxConstants.SYNTAX_STYLE_LESS);
 	}
 
 

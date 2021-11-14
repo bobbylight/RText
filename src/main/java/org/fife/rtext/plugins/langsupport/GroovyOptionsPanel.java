@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
+import org.fife.rtext.RText;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -24,9 +25,8 @@ class GroovyOptionsPanel extends FoldingOnlyOptionsPanel {
 	/**
 	 * Constructor.
 	 */
-	GroovyOptionsPanel() {
-		super("Options.Groovy.Name", "page_white_groovy.png",
-				SyntaxConstants.SYNTAX_STYLE_GROOVY);
+	GroovyOptionsPanel(RText app) {
+		super(app, "Options.Groovy.Name", SyntaxConstants.SYNTAX_STYLE_GROOVY);
 	}
 
 

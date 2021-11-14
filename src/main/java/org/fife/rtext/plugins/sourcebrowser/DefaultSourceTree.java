@@ -74,7 +74,7 @@ class DefaultSourceTree extends JTree {
 		listener = new Listener();
 
 		setToggleClickCount(1);
-		treeRenderer = new SourceTreeCellRenderer(this);
+		treeRenderer = createTreeCellRenderer();
 		setCellRenderer(treeRenderer);
 		setSelectionModel(new RTreeSelectionModel());
 		addTreeSelectionListener(listener);
@@ -88,6 +88,13 @@ class DefaultSourceTree extends JTree {
 		this.lineFoundText = msg.getString("StatusBarMsg.FoundLine");
 		this.cantFindLineText = msg.getString("StatusBarMsg.CantFindLine");
 
+	}
+
+
+	private TreeCellRenderer createTreeCellRenderer() {
+		Icon blueBullet = plugin.getPluginIcon("blue");
+		Icon greenBullet = plugin.getPluginIcon("green");
+		return new SourceTreeCellRenderer(this, blueBullet, greenBullet);
 	}
 
 
@@ -269,8 +276,10 @@ class DefaultSourceTree extends JTree {
 	@Override
 	public void updateUI() {
 		super.updateUI();
-		treeRenderer = new SourceTreeCellRenderer(this);
-		setCellRenderer(treeRenderer); // So it picks up new LnF's colors??
+		if (plugin != null) { // First time through
+			treeRenderer = createTreeCellRenderer();
+			setCellRenderer(treeRenderer); // So it picks up new LnF's colors??
+		}
 	}
 
 

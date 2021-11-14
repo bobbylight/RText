@@ -16,7 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.Box;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -51,12 +50,17 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	XmlOptionsPanel() {
+	XmlOptionsPanel(RText app) {
 
 		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.Xml.Name"));
-		setIcon(new ImageIcon(RText.class.getResource("graphics/file_icons/xml.png")));
+		setIcon(app.getIconGroup().getIcon("fileTypes/xml"));
+		app.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, e -> {
+			setIcon(app.getIconGroup().getIcon("fileTypes/xml"));
+		});
 
 		ComponentOrientation o = ComponentOrientation.
 										getOrientation(getLocale());

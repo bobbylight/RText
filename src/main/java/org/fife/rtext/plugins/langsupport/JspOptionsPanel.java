@@ -16,7 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 import javax.swing.Box;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -48,13 +47,18 @@ class JspOptionsPanel extends OptionsDialogPanel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param app The parent application.
 	 */
-	JspOptionsPanel() {
+	JspOptionsPanel(RText app) {
 
 		ResourceBundle msg = Plugin.MSG;
 		setName(msg.getString("Options.Jsp.Name"));
 		listener = new Listener();
-		setIcon(new ImageIcon(getClass().getResource("page_white_code_red.png")));
+		setIcon(app.getIconGroup().getIcon("fileTypes/jsp"));
+		app.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, e -> {
+			setIcon(app.getIconGroup().getIcon("fileTypes/jsp"));
+		});
 
 		ComponentOrientation o = ComponentOrientation.
 											getOrientation(getLocale());
