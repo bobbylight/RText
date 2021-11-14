@@ -14,7 +14,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
@@ -115,8 +114,9 @@ public class FileSystemTreePlugin extends GUIPlugin<RText> {
 		wind.add(dockableWindowTB, BorderLayout.NORTH);
 
 		ResourceBundle msg = ResourceBundle.getBundle(BUNDLE_NAME);
-		backAction = new BackAction(getApplication(), msg);
-		forwardAction = new ForwardAction(getApplication(), msg);
+		RText app = getApplication();
+		backAction = new BackAction(app, msg);
+		forwardAction = new ForwardAction(app, msg);
 
 //		tb.add(Box.createHorizontalStrut(3));
 		dirLabel = new JLabel();
@@ -375,6 +375,8 @@ public class FileSystemTreePlugin extends GUIPlugin<RText> {
 	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
 		optionPanel.setIcon(getPluginIcon());
 		getDockableWindow(getPluginName()).setIcon(getPluginIcon());
+		backAction.refreshIcon();
+		forwardAction.refreshIcon();
 	}
 
 
@@ -386,12 +388,7 @@ public class FileSystemTreePlugin extends GUIPlugin<RText> {
 		BackAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Back");
 			setName(null); // We're only a toolbar icon
-			try {
-				InputStream in = getClass().getResourceAsStream("arrow_left.svg");
-				setIcon(new ImageIcon(ImageTranscodingUtil.rasterize("arrow_left.svg", in, 16, 16)));
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-			}
+			refreshIcon();
 			setEnabled(false);
 		}
 
@@ -405,6 +402,9 @@ public class FileSystemTreePlugin extends GUIPlugin<RText> {
 			}
 		}
 
+		private void refreshIcon() {
+			setIcon(getApplication().getIconGroup().getIcon("back"));
+		}
 	}
 
 
@@ -417,12 +417,7 @@ public class FileSystemTreePlugin extends GUIPlugin<RText> {
 		ForwardAction(RText app, ResourceBundle msg) {
 			super(app, msg, "Action.Forward");
 			setName(null); // We're only a toolbar icon
-			try {
-				InputStream in = getClass().getResourceAsStream("arrow_right.svg");
-				setIcon(new ImageIcon(ImageTranscodingUtil.rasterize("arrow_right.svg", in, 16, 16)));
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-			}
+			refreshIcon();
 			setEnabled(false);
 		}
 
@@ -434,6 +429,10 @@ public class FileSystemTreePlugin extends GUIPlugin<RText> {
 				backAction.setEnabled(rootHistoryOffs>0);
 				setEnabled(rootHistoryOffs<rootHistory.size()-1);
 			}
+		}
+
+		private void refreshIcon() {
+			setIcon(getApplication().getIconGroup().getIcon("forward"));
 		}
 
 	}
