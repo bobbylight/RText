@@ -99,8 +99,6 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 		prefs.currentLineHighlightEnabled	= mainView.isCurrentLineHighlightEnabled();
 		prefs.currentLineHighlightColor	= mainView.getCurrentLineHighlightColor();
 		prefs.mainView					= rtext.getMainViewStyle();
-		prefs.highlightModifiedDocNames	= mainView.highlightModifiedDocumentDisplayNames();
-		prefs.modifiedDocumentNamesColor	= mainView.getModifiedDocumentDisplayNamesColor();
 		prefs.bracketMatchingEnabled		= mainView.isBracketMatchingEnabled();
 		prefs.matchBothBrackets			= mainView.getMatchBothBrackets();
 		prefs.matchedBracketBGColor		= mainView.getMatchedBracketBGColor();

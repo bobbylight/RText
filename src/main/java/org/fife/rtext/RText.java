@@ -1060,6 +1060,10 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		// after the main view is instantiated.
 		RTextEditorPane.setIconGroup(RTextUtilities.toRstaIconGroup(getIconGroup()));
 
+		// Hack - since mainView is instantiated too late in our app bootstrap,
+		// but it requires some theme additional properties, re-set them here.
+		setThemeAdditionalProperties(getTheme());
+
 		csp = new CollapsibleSectionPanel(false);
 		csp.add(mainView);
 		getContentPane().add(csp);

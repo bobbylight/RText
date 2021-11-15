@@ -2264,8 +2264,6 @@ public abstract class AbstractMainView extends JPanel
 
 		searchContext = new FindInFilesSearchContext();
 
-		setHighlightModifiedDocumentDisplayNames(prefs.highlightModifiedDocNames);
-		setModifiedDocumentDisplayNamesColor(prefs.modifiedDocumentNamesColor);
 		setWhitespaceVisible(prefs.visibleWhitespace);
 		setShowEOLMarkers(prefs.showEOLMarkers);
 		setShowTabLines(prefs.showTabLines);

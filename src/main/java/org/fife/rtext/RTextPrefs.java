@@ -27,7 +27,6 @@ import org.fife.ui.OS;
 import org.fife.ui.app.prefs.AppPrefs;
 import org.fife.ui.app.prefs.TypeLoader;
 import org.fife.ui.app.themes.FlatDarkTheme;
-import org.fife.ui.app.themes.FlatLightTheme;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Style;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -81,8 +80,6 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	public boolean currentLineHighlightEnabled;
 	public Color currentLineHighlightColor;
 	public int mainView;						// Either RText.TABBED_VIEW or RText.SPLIT_PANE_VIEW.
-	public boolean highlightModifiedDocNames;
-	public Color modifiedDocumentNamesColor;
 	public boolean bracketMatchingEnabled;
 	public boolean matchBothBrackets;
 	public Color matchedBracketBGColor;
@@ -259,8 +256,6 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		currentLineHighlightEnabled = true;
 		currentLineHighlightColor = theme.currentLineHighlight;
 		mainView = RText.TABBED_VIEW;
-		highlightModifiedDocNames = true;
-		modifiedDocumentNamesColor = RTextAppThemes.DARK_MODIFIED_DOCUMENT_NAME_COLOR;
 		language = "en";	// Default to English.
 		bracketMatchingEnabled = true;
 		matchBothBrackets = false;
