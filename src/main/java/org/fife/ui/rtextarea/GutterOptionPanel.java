@@ -20,6 +20,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -31,10 +32,12 @@ import javax.swing.JPanel;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.FontSelector;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
+import org.fife.ui.rsyntaxtextarea.Theme;
 
 
 /**
@@ -190,24 +193,40 @@ public class GutterOptionPanel extends OptionsDialogPanel
 
 		if ("RestoreDefaults".equals(command)) {
 
+			// This panel's defaults are based on the current theme.
+			RText app = (RText)getOptionsDialog().getParent();
+			Theme rstaTheme;
+			try {
+				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme());
+			} catch (IOException ioe) {
+				app.displayException(ioe);
+				return;
+			}
+
+			// Note we're a little cheap here and go with RSTA's default font rather
+			// than look for fonts in themes.  This is OK since we don't actually
+			// set fonts in any of the default themes.
 			Font defaultFont = RTextArea.getDefaultFont();
-			Color defBorderColor = new Color(221, 221, 221);
+			Color defLineNumberColor = rstaTheme.lineNumberColor;
+			Color defFoldIconBackground = rstaTheme.foldBG;
+			Color defArmedFoldIconBackground = rstaTheme.armedFoldBG;
+			Color defBorderColor = rstaTheme.gutterBorderColor;
 
 			if (!lnEnabledCB.isSelected() ||
 					!defaultFont.equals(fontSelector.getDisplayedFont()) ||
-					!Color.GRAY.equals(lnColorButton.getColor()) ||
+					!defLineNumberColor.equals(lnColorButton.getColor()) ||
 					!enableBookmarkingCB.isSelected() ||
 					!defBorderColor.equals(borderColorButton.getColor()) ||
-					!Color.WHITE.equals(foldBackgroundButton.getColor()) ||
-					!Color.WHITE.equals(armedFoldBackgroundButton.getColor())) {
+					!defFoldIconBackground.equals(foldBackgroundButton.getColor()) ||
+					!defArmedFoldIconBackground.equals(armedFoldBackgroundButton.getColor())) {
 
 				lnEnabledCB.setSelected(true);
 				fontSelector.setDisplayedFont(defaultFont, false);
-				lnColorButton.setColor(Color.GRAY);
+				lnColorButton.setColor(defLineNumberColor);
+				foldBackgroundButton.setColor(defFoldIconBackground);
+				armedFoldBackgroundButton.setColor(defArmedFoldIconBackground);
+				borderColorButton.setColor(defBorderColor);
 				enableBookmarkingCB.setSelected(true);
-				borderColorButton.setColor(new Color(221, 221, 221));
-				foldBackgroundButton.setColor(Color.WHITE);
-				armedFoldBackgroundButton.setColor(Color.WHITE);
 
 				setDirty(true);
 

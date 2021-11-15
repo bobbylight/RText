@@ -10,15 +10,17 @@ import org.fife.ui.app.AppTheme;
 import org.fife.ui.app.themes.FlatDarkTheme;
 import org.fife.ui.app.themes.FlatLightTheme;
 import org.fife.ui.app.themes.NativeTheme;
+import org.fife.ui.rsyntaxtextarea.Theme;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Application themes available in RText.
  */
-final class RTextAppThemes {
+public final class RTextAppThemes {
 
 	/**
 	 * The color to use when rendering the name of modified documents in tabs when the current Look
@@ -64,5 +66,20 @@ final class RTextAppThemes {
 		themes.add(flatLightTheme);
 
 		return themes;
+	}
+
+
+	/**
+	 * Returns the RSTA editor theme from an application theme.
+	 *
+	 * @param theme The application theme.
+	 * @return The RSTA editor theme.
+	 * @throws java.io.IOException If an IO error occurs.
+	 */
+	public static Theme getRstaTheme(AppTheme theme) throws IOException {
+
+		String rstaThemeName = (String)theme.getExtraUiDefaults().get("rtext.editorTheme");
+
+		return Theme.load(RTextAppThemes.class.getResourceAsStream(rstaThemeName));
 	}
 }

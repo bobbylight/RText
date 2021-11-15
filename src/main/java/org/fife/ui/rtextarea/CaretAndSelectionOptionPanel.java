@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.ResourceBundle;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -36,11 +37,12 @@ import javax.swing.event.ChangeListener;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RColorButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.Theme;
 
 
 /**
@@ -154,6 +156,12 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	}
 
 
+	private static final Color[] DEFAULT_SECONDARY_LANGUAGE_COLORS = {
+		new Color(0xfff0cc),
+		new Color(0xdafeda),
+		new Color(0xffe0f0),
+	};
+
 	/**
 	 * Listens for actions in this panel.
 	 */
@@ -165,18 +173,34 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 
 		if ("RestoreDefaults".equals(command)) {
 
-			Color defaultCaretColor = RTextArea.getDefaultCaretColor();
-			Color defaultSelectionColor = RSyntaxTextArea.getDefaultSelectionColor();
-			Color defaultMarkAllColor = RTextArea.getDefaultMarkAllHighlightColor();
-			Color defaultMarkOccurrencesColor = new Color(224, 224, 224);
-			Color defaultSelectedTextColor = Color.white;
+			// This panel's defaults are based on the current theme.
+			RText app = (RText)getOptionsDialog().getParent();
+			Theme rstaTheme;
+			try {
+				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme());
+			} catch (IOException ioe) {
+				app.displayException(ioe);
+				return;
+			}
+
+			Color defaultCaretColor = rstaTheme.caretColor;
+			Color defaultSelectionColor = rstaTheme.selectionBG;
+			Color defaultMarkAllColor = rstaTheme.markAllHighlightColor;
+			Color defaultMarkOccurrencesColor = rstaTheme.markOccurrencesColor;
+			boolean defaultSelectedTextColorCBChecked = rstaTheme.useSelectionFG;
+			Color defaultSelectedTextColor = rstaTheme.selectionFG;
 			CaretStyle defaultInsertCaret = CaretStyle.THICK_VERTICAL_LINE_STYLE;
 			CaretStyle defaultOverwriteCaret = CaretStyle.BLOCK_STYLE;
 			Integer defaultCaretBlinkRate = 500;
 			Color[] defaultSecLangColor = new Color[SEC_LANG_COUNT];
-			defaultSecLangColor[0] = new Color(0xfff0cc);
-			defaultSecLangColor[1] = new Color(0xdafeda);
-			defaultSecLangColor[2] = new Color(0xffe0f0);
+			for (int i = 0; i < defaultSecLangColor.length; i++) {
+				if (rstaTheme.secondaryLanguages != null && rstaTheme.secondaryLanguages.length > i) {
+					defaultSecLangColor[i] = rstaTheme.secondaryLanguages[i];
+				}
+				if (defaultSecLangColor[i] == null) {
+					defaultSecLangColor[i] = DEFAULT_SECONDARY_LANGUAGE_COLORS[i];
+				}
+			}
 
 			if (!getCaretColor().equals(defaultCaretColor) ||
 				!getSelectionColor().equals(defaultSelectionColor) ||
@@ -187,7 +211,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 				getRoundedSelection() ||
 				!enableMOCheckBox.isSelected() ||
 				!moColorButton.getColor().equals(defaultMarkOccurrencesColor) ||
-				selectedTextColorCB.isSelected() ||
+				selectedTextColorCB.isSelected() != defaultSelectedTextColorCBChecked ||
 				!selectedTextColorButton.getColor().equals(defaultSelectedTextColor) ||
 				secLangCB.isSelected() ||
 				!defaultSecLangColor[0].equals(secLangButtons[0].getColor()) ||
@@ -204,7 +228,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 				enableMOCheckBox.setSelected(true);
 				moColorButton.setEnabled(true);
 				moColorButton.setColor(defaultMarkOccurrencesColor);
-				setSelectedTextColorEnabled(false);
+				setSelectedTextColorEnabled(defaultSelectedTextColorCBChecked);
 				selectedTextColorButton.setColor(Color.white);
 				setHighlightSecondaryLanguages(false);
 				for (int i=0; i<SEC_LANG_COUNT; i++) {
