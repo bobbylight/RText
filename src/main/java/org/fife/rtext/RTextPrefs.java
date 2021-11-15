@@ -24,9 +24,9 @@ import java.util.StringTokenizer;
 import javax.swing.JTabbedPane;
 
 import org.fife.ui.OS;
-import org.fife.ui.StatusBar;
 import org.fife.ui.app.prefs.AppPrefs;
 import org.fife.ui.app.prefs.TypeLoader;
+import org.fife.ui.app.themes.FlatDarkTheme;
 import org.fife.ui.app.themes.FlatLightTheme;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Style;
@@ -48,7 +48,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	/**
 	 * The default Look and Feel.
 	 */
-	private static final String DEFAULT_APP_THEME = FlatLightTheme.NAME;
+	private static final String DEFAULT_APP_THEME = FlatDarkTheme.NAME;
 
 	/**
 	 * The default maximum number of spelling errors to display for a single
@@ -106,7 +106,6 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	public Color markAllHighlightColor;
 	public boolean markOccurrences;
 	public Color markOccurrencesColor;
-	public int statusBarStyle;
 	public boolean roundedSelectionEdges;
 	public String workingDirectory;
 	public int[] carets;						// Index 0=>insert, 1=>overwrite.
@@ -289,7 +288,6 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		markAllHighlightColor = theme.markAllHighlightColor;
 		markOccurrences = true;
 		markOccurrencesColor = theme.markOccurrencesColor;
-		statusBarStyle = StatusBar.WINDOWS_XP_STYLE;
 		roundedSelectionEdges = false;
 		workingDirectory = System.getProperty("user.dir");
 		carets = new int[2];

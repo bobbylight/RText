@@ -127,7 +127,6 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 		prefs.markAllHighlightColor		= mainView.getMarkAllHighlightColor();
 		prefs.markOccurrences			= mainView.getMarkOccurrences();
 		prefs.markOccurrencesColor		= mainView.getMarkOccurrencesColor();
-		prefs.statusBarStyle			= rtext.getStatusBar().getStyle();
 		prefs.roundedSelectionEdges		= mainView.getRoundedSelectionEdges();
 		prefs.workingDirectory			= rtext.getWorkingDirectory();
 		prefs.carets[RTextArea.INSERT_MODE]= mainView.getCaretStyle(RTextArea.INSERT_MODE).ordinal();

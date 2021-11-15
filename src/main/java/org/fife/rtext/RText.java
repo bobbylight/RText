@@ -344,11 +344,9 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 */
 	@Override
 	protected org.fife.ui.StatusBar createStatusBar(RTextPrefs prefs) {
-		StatusBar sb = new StatusBar(this, getString("Ready"),
+		return new StatusBar(this, getString("Ready"),
 					!prefs.wordWrap, 1,1,
 					prefs.textMode==RTextEditorPane.OVERWRITE_MODE);
-		sb.setStyle(prefs.statusBarStyle);
-		return sb;
 	}
 
 

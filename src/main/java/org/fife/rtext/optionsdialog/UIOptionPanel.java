@@ -50,7 +50,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	private JPanel springPanel, springPanel2;
 	private JComboBox<String> viewCombo;
 	private JComboBox<String> docSelCombo;
-	private JComboBox<String> statusBarCombo;
 
 	private JCheckBox showHostNameCheckBox;
 
@@ -75,7 +74,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		cp.add(createThemePanel(msg, listener));
 		cp.add(Box.createVerticalStrut(10));
-		cp.add(createAppearancePanel(msg, rtext));
 		cp.add(createLayoutPanel(msg));
 		cp.add(createOtherPanel(msg));
 
@@ -102,9 +100,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 				setDirty(true);
 				break;
 			case "AppThemeComboBox":
-				setDirty(true);
-				break;
-			case "StatusBarComboBox":
 				setDirty(true);
 				break;
 			case "ShowHostNameCB":
@@ -134,48 +129,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		getOptionsDialog().broadcast("appTheme:" + theme);
 	}
 
-
-	private JPanel createAppearancePanel(ResourceBundle msg, RText rtext) {
-
-		ComponentOrientation orientation = ComponentOrientation.
-			getOrientation(getLocale());
-
-		JPanel temp = new JPanel(new BorderLayout());
-
-		SelectableLabel label = new SelectableLabel();
-		label.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-		label.setText(msg.getString("OptAppearanceDesc"));
-		temp.add(label, BorderLayout.NORTH);
-
-		statusBarCombo = new JComboBox<>();
-		UIUtil.fixComboOrientation(statusBarCombo);
-		statusBarCombo.setActionCommand("StatusBarComboBox");
-		statusBarCombo.addActionListener(this);
-		statusBarCombo.addItem(msg.getString("OptUIW95A"));
-		statusBarCombo.addItem(msg.getString("OptUIWXPA"));
-
-		// Add a panel for the "Appearance" stuff.
-		springPanel2 = new JPanel(new SpringLayout());
-		JPanel temp2 = new JPanel(new BorderLayout());
-		temp.setBorder(new OptionPanelBorder(msg.getString("OptUIAT")));
-		if (orientation.isLeftToRight()) {
-			springPanel2.add(new JLabel(msg.getString("OptUISBT")));
-			springPanel2.add(statusBarCombo);
-		}
-		else {
-			springPanel2.add(statusBarCombo);
-			springPanel2.add(new JLabel(msg.getString("OptUISBT")));
-		}
-		temp2.add(springPanel2, BorderLayout.LINE_START);
-		UIUtil.makeSpringCompactGrid(springPanel2,
-			1,2,		// rows,cols,
-			0,0,		// initial-x, initial-y,
-			5,5);	// x-spacing, y-spacing.
-
-		temp.add(temp2);
-
-		return temp;
-	}
 
 	/**
 	 * Creates and returns a special value combo box containing all available
@@ -300,7 +253,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		mainView.setDocumentSelectionPlacement(getDocumentSelectionPlacement());	// Doesn't update if it doesn't have to.
 		RTextUtilities.setThemeForAllOpenAppInstances(rtext, getTheme()); // Doesn't update if...
 		rtext.setMainViewStyle(getMainViewStyle());			// Doesn't update if it doesn't have to.
-		rtext.getStatusBar().setStyle(getStatusBarStyle());
 		rtext.setShowHostName(getShowHostName());	// Doesn't update if doesn't have to.
 	}
 
@@ -344,17 +296,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 */
 	private boolean getShowHostName() {
 		return showHostNameCheckBox.isSelected();
-	}
-
-
-	/**
-	 * Returns the status bar style selected by the user.
-	 *
-	 * @return The status bar style selected.
-	 * @see #setStatusBarStyle
-	 */
-	private int getStatusBarStyle() {
-		return statusBarCombo.getSelectedIndex();
 	}
 
 
@@ -462,20 +403,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 
 	/**
-	 * Sets the status bar style selected.
-	 *
-	 * @param style The status bar style.
-	 * @see #getStatusBarStyle
-	 */
-	private void setStatusBarStyle(int style) {
-		if (style!=StatusBar.WINDOWS_98_STYLE &&
-				style!=StatusBar.WINDOWS_XP_STYLE)
-			style = StatusBar.WINDOWS_XP_STYLE;
-		statusBarCombo.setSelectedIndex(style);
-	}
-
-
-	/**
 	 * Sets the values displayed by this panel to reflect those in the
 	 * application.  Child panels are not handled.
 	 *
@@ -489,7 +416,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		setDocumentSelectionPlacement(mainView.getDocumentSelectionPlacement());
 		setTheme(rtext.getTheme());
 		setMainViewStyle(rtext.getMainViewStyle());
-		setStatusBarStyle(rtext.getStatusBar().getStyle());
 		setShowHostName(rtext.getShowHostName());
 	}
 
