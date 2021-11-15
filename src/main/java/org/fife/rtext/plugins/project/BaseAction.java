@@ -11,6 +11,8 @@ package org.fife.rtext.plugins.project;
 
 import org.fife.ui.StandardAction;
 
+import javax.swing.*;
+
 
 /**
  * A base class for tree node actions.
@@ -22,17 +24,14 @@ public abstract class BaseAction extends StandardAction implements PopupContent{
 
 
 	protected BaseAction(String keyRoot) {
-		this(keyRoot, null);
+		this(keyRoot, (Icon)null);
 	}
 
 
-	protected BaseAction(String keyRoot, String image) {
+	protected BaseAction(String keyRoot, Icon icon) {
 		setName(Messages.getString(keyRoot));
 		setMnemonic(Messages.getMnemonic(keyRoot + ".Mnemonic"));
-		if (image!=null) {
-			setIcon(image);
-		}
+		setIcon(icon);
 	}
-
 
 }

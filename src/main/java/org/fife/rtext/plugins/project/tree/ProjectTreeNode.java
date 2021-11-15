@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -35,7 +34,6 @@ import org.fife.rtext.plugins.project.model.Workspace;
 class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 	private Project project;
-	private static final Icon ICON;
 
 
 	ProjectTreeNode(ProjectPlugin plugin, Project project) {
@@ -52,7 +50,7 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 
 	@Override
 	public Icon getIcon() {
-		return getProjectIcon();
+		return plugin.getApplication().getIconGroup().getIcon("application");
 	}
 
 
@@ -84,16 +82,6 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 	 */
 	private Project getProject() {
 		return project;
-	}
-
-
-	/**
-	 * Returns the icon shared amongst all project tree nodes.
-	 *
-	 * @return The shared icon.
-	 */
-	public static Icon getProjectIcon() {
-		return ICON;
 	}
 
 
@@ -181,12 +169,6 @@ class ProjectTreeNode extends AbstractWorkspaceTreeNode {
 			return null;
 		}
 
-	}
-
-
-	static {
-		ICON = new ImageIcon(ProjectTreeNode.class.
-				getResource("application.png"));
 	}
 
 

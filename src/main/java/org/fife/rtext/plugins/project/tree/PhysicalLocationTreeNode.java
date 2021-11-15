@@ -25,6 +25,7 @@ import org.fife.rtext.plugins.project.NewFileOrFolderDialog;
 import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.tree.FileTreeNode.FileNameChecker;
+import org.fife.ui.app.icons.IconGroup;
 
 
 /**
@@ -133,8 +134,9 @@ public interface PhysicalLocationTreeNode extends TreeNode {
 
 		NewFileOrFolderAction(PhysicalLocationTreeNode node,
 				boolean isFile) {
-			super(isFile ? "Action.NewFile": "Action.NewFolder",
-				isFile ? "page_white_add.png" : "folder_add.png");
+			super(isFile ? "Action.NewFile": "Action.NewFolder");
+			IconGroup iconGroup = node.getPlugin().getApplication().getIconGroup();
+			setIcon(iconGroup.getIcon(isFile ? "add_file" : "add_folder"));
 			this.node = node;
 			this.isFile = isFile;
 		}

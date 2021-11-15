@@ -245,7 +245,7 @@ class ProjectWindow extends DockableWindow {
 			// Get the name for the new workspace.
 			RenameDialog dialog = new RenameDialog(rtext, false, "Workspace",
 					new WorkspaceRootTreeNode.WorkspaceNameChecker());
-			Icon icon = WorkspaceRootTreeNode.getWorkspaceIcon();
+			Icon icon = plugin.getApplication().getIconGroup().getIcon("application_double");
 			dialog.setDescription(icon, Messages.getString("NewWorkspaceDialog.Desc"));
 			dialog.setTitle(Messages.getString("NewWorkspaceDialog.Title"));
 			dialog.setFileName(null); // Move focus from desc SelectableLabel to field.

@@ -12,10 +12,8 @@ package org.fife.rtext.plugins.project;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.net.URL;
 import javax.swing.Box;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
@@ -48,9 +46,7 @@ public class NewFileOrFolderDialog extends AbstractEnterFileNameDialog {
 		String header = "NewFileOrFolderDialog.Header." +
 				(isForFile ? "File" : "Folder");
 		String descText = Messages.getString(header);
-		String imgName = isForFile ? "page_white_add.png" : "folder_add.png";
-		URL url = getClass().getResource("tree/" + imgName);
-		Icon icon = new ImageIcon(url);
+		Icon icon = getDescPanelIcon();
 		setDescription(icon, descText);
 	}
 
@@ -82,6 +78,12 @@ public class NewFileOrFolderDialog extends AbstractEnterFileNameDialog {
 		box.add(Box.createVerticalGlue());
 		return box;
 
+	}
+
+
+	private Icon getDescPanelIcon() {
+		String iconName = isForFile ? "add_file" : "add_folder";
+		return ((RText)getOwner()).getIconGroup().getIcon(iconName);
 	}
 
 

@@ -14,7 +14,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.tree.TreePath;
 
@@ -37,7 +36,6 @@ import org.fife.rtext.plugins.project.model.Workspace;
 public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 
 	private Workspace workspace;
-	private static final Icon ICON;
 
 
 	public WorkspaceRootTreeNode(ProjectPlugin plugin, Workspace workspace) {
@@ -54,7 +52,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 
 	@Override
 	public Icon getIcon() {
-		return getWorkspaceIcon();
+		return plugin.getApplication().getIconGroup().getIcon("application_double");
 	}
 
 
@@ -73,16 +71,6 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	@Override
 	public String getToolTipText() {
 		return null;
-	}
-
-
-	/**
-	 * Returns the icon shared amongst all workspaces.
-	 *
-	 * @return The shared icon instance.
-	 */
-	public static Icon getWorkspaceIcon() {
-		return ICON;
 	}
 
 
@@ -122,12 +110,6 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 	}
 
 
-	static {
-		ICON = new ImageIcon(WorkspaceRootTreeNode.class.
-								getResource("application_double.png"));
-	}
-
-
 	/**
 	 * Creates a new project in this workspace.
 	 */
@@ -142,7 +124,7 @@ public class WorkspaceRootTreeNode extends AbstractWorkspaceTreeNode {
 			RText rtext = plugin.getApplication();
 			RenameDialog dialog = new RenameDialog(rtext, false, "Project",
 					new ProjectTreeNode.ProjectNameChecker(workspace));
-			Icon icon = ProjectTreeNode.getProjectIcon();
+			Icon icon = plugin.getApplication().getIconGroup().getIcon("application");
 			dialog.setDescription(icon, Messages.getString("NewProjectDialog.Desc"));
 			dialog.setTitle(Messages.getString("NewProjectDialog.Title"));
 			dialog.setFileName(null); // Move focus from desc SelectableLabel to field.

@@ -182,7 +182,8 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		private final MutableTreeNode node;
 
 		AddFileAction(ProjectEntryParent parent, MutableTreeNode node) {
-			super("Action.NewFiles", "page_white_add.png");
+			super("Action.NewFiles",
+				plugin.getApplication().getIconGroup().getIcon("add_file"));
 			this.parent = parent;
 			this.node = node;
 		}
@@ -215,7 +216,8 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		private final MutableTreeNode node;
 
 		AddFolderAction(ProjectEntryParent parent, MutableTreeNode node) {
-			super("Action.AddFolder", "folder_add.png");
+			super("Action.AddFolder",
+				plugin.getApplication().getIconGroup().getIcon("add_folder"));
 			this.parent = parent;
 			this.node = node;
 		}
@@ -252,7 +254,8 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 		AddLogicalFolderAction(ProjectEntryParent parent,
 				MutableTreeNode node) {
 
-			super("Action.NewLogicalFolder", "folder_add.png");
+			super("Action.NewLogicalFolder",
+				plugin.getApplication().getIconGroup().getIcon("add_folder"));
 			this.parent = parent;
 			this.node = node;
 
