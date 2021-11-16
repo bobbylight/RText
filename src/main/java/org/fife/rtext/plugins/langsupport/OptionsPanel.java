@@ -15,6 +15,7 @@ import java.awt.ComponentOrientation;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javax.swing.*;
@@ -48,8 +49,6 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 	private final JCheckBox altColorCB;
 	private final RColorSwatchesButton altColorButton;
 	private final JButton rdButton;
-
-	private static final Color DEFAULT_ALT_ROW_COLOR	= new Color(0xf4f4f4);
 
 
 	OptionsPanel(Plugin plugin) {
@@ -175,12 +174,15 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 	protected void setValuesImpl(Frame owner) {
 
 		RText app = (RText)owner;
+		Map<String, Object> extraUiDefaults = app.getTheme().getExtraUiDefaults();
+		Color defaultAltRowColor = (Color)extraUiDefaults.get("rtext.listAltRowColor");
+
 		codeFoldingThresholdCB.setSelectedItem(app.getMainView().getMaxFileSizeForCodeFolding());
 
 		Color altColor = CompletionCellRenderer.getAlternateBackground();
 		if (altColor==null) {
 			altColorCB.setSelected(false);
-			altColorButton.setColor(DEFAULT_ALT_ROW_COLOR);
+			altColorButton.setColor(defaultAltRowColor);
 			altColorButton.setEnabled(false);
 		}
 		else {
@@ -217,14 +219,19 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 
 			else if (rdButton==source) {
 
+				// This panel's defaults are based on the current theme.
+				RText app = (RText)getOptionsDialog().getParent();
+				Map<String, Object> extraUiDefaults = app.getTheme().getExtraUiDefaults();
+				Color defaultAltRowColor = (Color)extraUiDefaults.get("rtext.listAltRowColor");
+
 				if (!Objects.equals(defaultCodeFoldingThreshold,
 							codeFoldingThresholdCB.getSelectedItem()) ||
 						altColorCB.isSelected() ||
-						!DEFAULT_ALT_ROW_COLOR.equals(altColorButton.getColor())) {
+						!defaultAltRowColor.equals(altColorButton.getColor())) {
 					codeFoldingThresholdCB.setSelectedItem(defaultCodeFoldingThreshold);
 					altColorCB.setSelected(false);
 					altColorButton.setEnabled(false);
-					altColorButton.setColor(DEFAULT_ALT_ROW_COLOR);
+					altColorButton.setColor(defaultAltRowColor);
 					setDirty(true);
 				}
 

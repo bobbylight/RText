@@ -25,6 +25,7 @@ import javax.swing.event.*;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextAppThemes;
 import org.fife.rtext.optionsdialog.UIOptionPanel;
 import org.fife.ui.*;
 import org.fife.ui.rtextarea.RTextArea;
@@ -351,19 +352,33 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		// If the user clicked the "restore defaults" button.
 		else if ("RestoreDefaults".equals(command)) {
 
+			// This panel's defaults are based on the current theme.
+			RText app = (RText)getOptionsDialog().getParent();
+			Theme rstaTheme;
+			try {
+				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme());
+			} catch (IOException ioe) {
+				app.displayException(ioe);
+				return;
+			}
+
+			// Note we're a little cheap here and go with RSTA's default font rather
+			// than look for fonts in themes.  This is OK since we don't actually
+			// set fonts in any of the default themes.
 			Font defaultFont = RTextArea.getDefaultFont();
-			Color defaultForeground = RTextArea.getDefaultForeground();
+			Color defaultForeground = rstaTheme.scheme.getStyle(TokenTypes.IDENTIFIER).foreground;
+			Color defaultBackground = rstaTheme.bgColor;
 			SyntaxScheme currentScheme = getSyntaxScheme();
-			SyntaxScheme defaultScheme = new SyntaxScheme(true);
+			SyntaxScheme defaultScheme = rstaTheme.scheme;
 
 			if (!getTextAreaFont().equals(defaultFont) ||
 					getUnderline() ||
 					!getTextAreaForeground().equals(defaultForeground) ||
-					!Color.WHITE.equals(background) ||
+					!defaultBackground.equals(background) ||
 					!currentScheme.equals(defaultScheme)) {
-				setBackgroundObject(Color.WHITE);
 				setTextAreaFont(defaultFont, false);
 				setTextAreaForeground(defaultForeground);
+				setBackgroundObject(defaultBackground);
 				setSyntaxScheme(defaultScheme);
 				refreshSyntaxHighlightingSection();
 				setDirty(true);

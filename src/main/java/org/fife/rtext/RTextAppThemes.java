@@ -45,24 +45,30 @@ public final class RTextAppThemes {
 
 	static List<AppTheme> get() {
 
+		Color lightListAltRowColor = new Color(0xf4f4f4);
+		Color darkListAltRowColor = new Color(60, 63, 65);
+
 		List<AppTheme> themes = new ArrayList<>();
 
 		NativeTheme nativeTheme = new NativeTheme();
 		nativeTheme.addExtraUiDefault("rtext.editorTheme", "/org/fife/ui/rsyntaxtextarea/themes/default-alt.xml");
 		nativeTheme.addExtraUiDefault("rtext.iconGroupName", "Eclipse Icons");
 		nativeTheme.addExtraUiDefault("rtext.labelErrorForeground", LIGHT_MODIFIED_DOCUMENT_NAME_COLOR);
+		nativeTheme.addExtraUiDefault("rtext.listAltRowColor", lightListAltRowColor);
 		themes.add(nativeTheme);
 
 		FlatDarkTheme flatDarkTheme = new FlatDarkTheme();
 		flatDarkTheme.addExtraUiDefault("rtext.editorTheme", "/org/fife/ui/rsyntaxtextarea/themes/monokai.xml");
 		flatDarkTheme.addExtraUiDefault("rtext.iconGroupName", "IntelliJ Icons (Dark)");
 		flatDarkTheme.addExtraUiDefault("rtext.labelErrorForeground", DARK_MODIFIED_DOCUMENT_NAME_COLOR);
+		flatDarkTheme.addExtraUiDefault("rtext.listAltRowColor", darkListAltRowColor);
 		themes.add(flatDarkTheme);
 
 		FlatLightTheme flatLightTheme = new FlatLightTheme();
 		flatLightTheme.addExtraUiDefault("rtext.editorTheme", "/org/fife/ui/rsyntaxtextarea/themes/default-alt.xml");
 		flatLightTheme.addExtraUiDefault("rtext.iconGroupName", "IntelliJ Icons (Light)");
 		flatLightTheme.addExtraUiDefault("rtext.labelErrorForeground", LIGHT_MODIFIED_DOCUMENT_NAME_COLOR);
+		flatLightTheme.addExtraUiDefault("rtext.listAltRowColor", lightListAltRowColor);
 		themes.add(flatLightTheme);
 
 		return themes;

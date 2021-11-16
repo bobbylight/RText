@@ -17,6 +17,7 @@ import java.awt.event.InputEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -24,8 +25,9 @@ import javax.swing.event.DocumentListener;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.*;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.Theme;
 
 
 /**
@@ -292,13 +294,28 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 		if ("RestoreDefaults".equals(command)) {
 
-			Color defaultCurrentLineHighlightColor = RTextArea.getDefaultCurrentLineHighlightColor();
+			// This panel's defaults are based on the current theme.
+			RText app = (RText)getOptionsDialog().getParent();
+			Theme rstaTheme;
+			try {
+				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme());
+			} catch (IOException ioe) {
+				app.displayException(ioe);
+				return;
+			}
+
+			Color defaultCurrentLineHighlightColor = rstaTheme.currentLineHighlight;
 			int defaultTabSize = RTextArea.getDefaultTabSize();
 			int defaultMarginLinePosition = RTextArea.getDefaultMarginLinePosition();
-			Color defaultMarginLineColor = RTextArea.getDefaultMarginLineColor();
+			Color defaultMarginLineColor = rstaTheme.marginLineColor;
 			boolean defaultAA = File.separatorChar=='\\';
-			Color defaultBMBGColor = RSyntaxTextArea.getDefaultBracketMatchBGColor();
-			Color defaultBMBorderColor = RSyntaxTextArea.getDefaultBracketMatchBorderColor();
+			Color defaultBMBGColor = rstaTheme.matchedBracketBG;
+			Color defaultBMBorderColor = rstaTheme.matchedBracketFG;
+			Color defaultLinkColor = rstaTheme.hyperlinkFG;
+			Color defaultTabLineColor = rstaTheme.tabLineColor;
+			if (defaultTabLineColor == null) { // This is optional in the theme, with no default
+				defaultTabLineColor = Color.GRAY;
+			}
 
 			if (wordWrapCheckBox.isSelected() ||
 				!highlightCurrentLineCheckBox.isSelected() ||
@@ -307,7 +324,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				getEmulateTabs() ||
 				!linkCB.isSelected() ||
 				modKeyCombo.getSelectedIndex()!=0 ||
-				!linkColorButton.getColor().equals(Color.BLUE) ||
+				!linkColorButton.getColor().equals(defaultLinkColor) ||
 				!marginLineCheckBox.isSelected() ||
 				getMarginLinePosition()!=defaultMarginLinePosition ||
 				!getMarginLineColor().equals(defaultMarginLineColor) ||
@@ -322,7 +339,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				!bmBorderColorButton.getColor().equals(defaultBMBorderColor) ||
 				bothBracketsCB.isSelected() ||
 				showTabLinesCheckBox.isSelected() ||
-				!Color.gray.equals(tabLineColorButton.getColor())) {
+				!defaultTabLineColor.equals(tabLineColorButton.getColor())) {
 				wordWrapCheckBox.setSelected(false);
 				highlightCurrentLineCheckBox.setSelected(true);
 				hclColorButton.setEnabled(true);
@@ -331,7 +348,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				setEmulateTabs(false);
 				linkCB.setSelected(true);
 				modKeyCombo.setSelectedIndex(0);
-				linkColorButton.setColor(Color.BLUE);
+				linkColorButton.setColor(defaultLinkColor);
 				setMarginLineEnabled(true);
 				setMarginLinePosition(defaultMarginLinePosition);
 				setMarginLineColor(defaultMarginLineColor);
@@ -347,7 +364,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				bmBorderColorButton.setColor(defaultBMBorderColor);
 				bothBracketsCB.setSelected(false);
 				setTabLinesEnabled(false);
-				tabLineColorButton.setColor(Color.gray);
+				tabLineColorButton.setColor(defaultTabLineColor);
 				setDirty(true);
 			}
 
