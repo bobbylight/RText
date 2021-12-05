@@ -9,11 +9,9 @@
  */
 package org.fife.rtext;
 
-import javax.swing.Icon;
 import javax.swing.JButton;
 
 import org.fife.ui.CustomizableToolBar;
-import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.rtextarea.RTextArea;
 
 
@@ -38,22 +36,16 @@ class ToolBar extends CustomizableToolBar {
 	private JButton undoButton;
 	private JButton redoButton;
 
-	private RText owner;
-	private boolean mouseInNewButton;
-
 
 	/**
 	 * Creates the tool bar.
 	 *
 	 * @param title The title of this toolbar when it is floating.
 	 * @param rtext The main application that owns this toolbar.
-	 * @param mouseListener The status bar that displays a status message
-	 *        when the mouse hovers over this toolbar.
 	 */
-	ToolBar(String title, RText rtext, StatusBar mouseListener) {
+	ToolBar(String title, RText rtext) {
 
 		super(title);
-		this.owner = rtext;
 
 		newButton = createButton(rtext.getAction(RText.NEW_ACTION));
 		add(newButton);
@@ -106,41 +98,6 @@ class ToolBar extends CustomizableToolBar {
 		// Make the toolbar have the right-click customize menu.
 		makeCustomizable();
 
-	}
-
-
-	/**
-	 * Checks whether the current icon group has large icons, and if it does,
-	 * uses these large icons for the toolbar.
-	 */
-	void checkForLargeIcons() {
-		IconGroup group = owner.getIconGroup();
-		if (group.hasSeparateLargeIcons()) {
-			Icon icon = group.getLargeIcon("new");
-			newButton.setIcon(icon);
-			icon = group.getLargeIcon("open");
-			openButton.setIcon(icon);
-			icon = group.getLargeIcon("save");
-			saveButton.setIcon(icon);
-			icon = group.getLargeIcon("print");
-			printButton.setIcon(icon);
-			icon = group.getLargeIcon("cut");
-			cutButton.setIcon(icon);
-			icon = group.getLargeIcon("copy");
-			copyButton.setIcon(icon);
-			icon = group.getLargeIcon("paste");
-			pasteButton.setIcon(icon);
-			icon = group.getLargeIcon("delete");
-			deleteButton.setIcon(icon);
-			icon = group.getLargeIcon("find");
-			findButton.setIcon(icon);
-			icon = group.getLargeIcon("replace");
-			replaceButton.setIcon(icon);
-			icon = group.getLargeIcon("undo");
-			undoButton.setIcon(icon);
-			icon = group.getLargeIcon("redo");
-			redoButton.setIcon(icon);
-		}
 	}
 
 }

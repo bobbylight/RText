@@ -358,16 +358,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 */
 	@Override
 	protected CustomizableToolBar createToolBar(RTextPrefs prefs) {
-
-		ToolBar toolBar = new ToolBar("rtext - Toolbar", this,
-								(StatusBar)getStatusBar());
-
-		// Make the toolbar use the large versions of the icons if available.
-		// FIXME:  Make toggle-able.
-		toolBar.checkForLargeIcons();
-
-		return toolBar;
-
+		return new ToolBar("rtext - Toolbar", this);
 	}
 
 
@@ -916,11 +907,16 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		String root = getInstallLocation();
 		iconGroupMap.put(DEFAULT_ICON_GROUP_NAME,
-			new SvgIconGroup(this, DEFAULT_ICON_GROUP_NAME, resourceRoot + "intellij-icons-dark"));
+			new SvgIconGroup(this, DEFAULT_ICON_GROUP_NAME,
+				resourceRoot + "intellij-icons-dark",
+				resourceRoot + "intellij-icons-light")); // Proper contrast
 		iconGroupMap.put("IntelliJ Icons (Light)",
-			new SvgIconGroup(this, "IntelliJ Icons (Light)", resourceRoot + "intellij-icons-light"));
+			new SvgIconGroup(this, "IntelliJ Icons (Light)",
+				resourceRoot + "intellij-icons-light",
+				null));
 		iconGroupMap.put("Eclipse Icons", new RasterImageIconGroup("Eclipse Icons",
-			resourceRoot + "eclipse-icons"));
+			resourceRoot + "eclipse-icons",
+			null));
 
 	}
 
@@ -1570,12 +1566,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		getAction(CLOSE_ALL_ACTION).putValue(Action.SMALL_ICON, icon);
 		icon = iconGroup.getIcon("goto");
 		getAction(GOTO_ACTION).putValue(Action.SMALL_ICON, icon);
-
-		// The toolbar uses the large versions of the icons, if available.
-		// FIXME:  Make this toggle-able.
-		ToolBar toolBar = (ToolBar)getToolBar();
-		if (toolBar!=null)
-			toolBar.checkForLargeIcons();
 
 		// Do this because the toolbar has changed it's size.
 		if (isDisplayable()) {

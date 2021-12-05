@@ -104,7 +104,7 @@ public final class ActionFactory implements RTextActionInfo {
 		rtext.addAction(RText.EXIT_ACTION_KEY, a);
 
 		String temp = msg.getString("CopyAsStyledTextAction");
-		rtext.addAction(COPY_AS_STYLED_TEXT_ACTION, new RSyntaxTextAreaEditorKit.CopyAsStyledTextAction(temp,
+		rtext.addAction(COPY_AS_STYLED_TEXT_ACTION, new RSyntaxTextAreaEditorKit.CopyCutAsStyledTextAction(temp,
 			null,
 			msg.getString("CopyAsStyledTextAction.ShortDesc"),
 			(int)msg.getString("CopyAsStyledTextAction.Mnemonic").charAt(0),

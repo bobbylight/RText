@@ -39,6 +39,7 @@ import org.fife.ui.OS;
 import org.fife.ui.RecentFilesMenu;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.MenuBar;
+import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.RTextArea;
@@ -54,8 +55,8 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaEditorKit;
  * @author Robert Futrell
  * @version 0.8
  */
-public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
-									PopupMenuListener {
+public class RTextMenuBar extends MenuBar<RText>
+	implements PropertyChangeListener, PopupMenuListener {
 
 	/**
 	 * A key to get the File menu via {@link #getMenuByName(String)}.
@@ -92,8 +93,6 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 */
 	public static final String MENU_HELP		= "Help";
 
-	// These items correspond to actions belonging to RTextEditorPanes, and are
-	// changed in disableEditorActions() below, so we need to remember them.
 	private JMenuItem newItem;
 	private JMenuItem openItem;
 	private JMenuItem openInNewWindowItem;
@@ -149,8 +148,6 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	private RecentFilesMenu recentFilesMenu;
 	private JMenu savedMacroMenu;
 
-	private RText rtext;
-
 
 	/**
 	 * Creates an instance of the menu bar.
@@ -162,8 +159,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	 */
 	public RTextMenuBar(final RText rtext, RTextPrefs properties) {
 
-		// Initialize some private variables.
-		this.rtext = rtext;
+		super(rtext);
 
 		// Variables to create the menu.
 		ResourceBundle msg = rtext.getResourceBundle();
@@ -200,11 +196,15 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		menu = createHelpMenu(menuMsg, rtext);
 		registerMenuByName(MENU_HELP, menu);
 		add(menu);
+
+		// TODO: Have this happen automatically, in the base class somehow.
+		updateIcons(getApplication().getIconGroup());
 	}
 
 
 	private void addCopyAsSubMenu(JMenu menu) {
 
+		RText rtext = getApplication();
 		ResourceBundle msg = ResourceBundle.getBundle("org.fife.rtext.actions.Actions");
 
 		JMenu subMenu = new JMenu(msg.getString("CopyAs"));
@@ -235,8 +235,8 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		throws IOException {
 		Theme theme = Theme.load(getClass().getResourceAsStream(
 			"/org/fife/ui/rsyntaxtextarea/themes/" + themeName + ".xml"));
-		RSyntaxTextAreaEditorKit.CopyAsStyledTextAction action =
-			new RSyntaxTextAreaEditorKit.CopyAsStyledTextAction(themeName, theme);
+		RSyntaxTextAreaEditorKit.CopyCutAsStyledTextAction action =
+			new RSyntaxTextAreaEditorKit.CopyCutAsStyledTextAction(themeName, theme, false);
 		action.setName(title);
 		return createMenuItem(action);
 	}
@@ -253,6 +253,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		// Also, due to the Preferences API needing a non-null key for all
 		// values, a "-" filename means no files were found for the file
 		// history.  So, we won't add this file in either.
+		RText rtext = getApplication();
 		if (fileFullPath.endsWith(File.separatorChar + rtext.getNewFileName()) ||
 				fileFullPath.equals("-")) {
 			return;
@@ -267,6 +268,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		super.addNotify();
 
 		// Populate file history here to avoid issue with Darcula
+		RText rtext = getApplication();
 		List<FileLocation> recentFiles = rtext.getRecentFiles();
 		List<FileLocation> recentFilesCopy = new ArrayList<>(recentFiles);
 		Collections.reverse(recentFilesCopy);
@@ -278,6 +280,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 	private JMenu createEditMenu(ResourceBundle menuMsg, int defaultModifier, int shift) {
 
+		RText rtext = getApplication();
 		JMenu menu = createMenu(menuMsg, "MenuEdit");
 
 		// Edit submenu's items.
@@ -388,6 +391,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 	private JMenu createFileMenu(ResourceBundle menuMsg) {
 
+		RText rtext = getApplication();
 		JMenu fileMenu = createMenu(menuMsg, "MenuFile");
 
 		// File submenu's items.
@@ -489,6 +493,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 	private JMenu createSearchMenu(ResourceBundle menuMsg, int defaultModifier, int shift) {
 
+		RText rtext = getApplication();
 		JMenu menu = createMenu(menuMsg, "MenuSearch");
 
 		// Search menu's items.
@@ -556,6 +561,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 	private JMenu createViewMenu(ResourceBundle menuMsg, RTextPrefs properties) {
 
+		RText rtext = getApplication();
 		JMenu viewMenu = createMenu(menuMsg, "MenuView");
 
 		// View submenu's items.
@@ -655,6 +661,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 	private JMenu createWindowMenu(ResourceBundle menuMsg, ResourceBundle msg) {
 
+		RText rtext = getApplication();
 		JMenu windowMenu = createMenu(menuMsg, "MenuWindow");
 
 		JMenuItem item = new JMenuItem(menuMsg.getString("TileVertically"));
@@ -764,6 +771,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 	@Override
 	public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 
+		RText rtext = getApplication();
 		Object source = e.getSource();
 
 		// Ensure checkmarks for visible stuff are correct.
@@ -866,8 +874,41 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 
 	private void updateAction(JMenuItem item, String key) {
 		item.setAction(null);
-		item.setAction(rtext.getAction(key));
+		item.setAction(getApplication().getAction(key));
 		item.setToolTipText(null);
+	}
+
+
+	@Override
+	protected void updateIcons(IconGroup iconGroup) {
+
+		newItem.setIcon(iconGroup.getNativeIcon("new"));
+		openItem.setIcon(iconGroup.getNativeIcon("open"));
+		openInNewWindowItem.setIcon(iconGroup.getNativeIcon("openinnewwindow"));
+		saveItem.setIcon(iconGroup.getNativeIcon("saave"));
+		saveAsItem.setIcon(iconGroup.getNativeIcon("saveas"));
+		saveAllItem.setIcon(iconGroup.getNativeIcon("saveall"));
+		closeItem.setIcon(iconGroup.getNativeIcon("close"));
+		closeAllItem.setIcon(iconGroup.getNativeIcon("closeall"));
+		printItem.setIcon(iconGroup.getNativeIcon("prin"));
+		printPreviewItem.setIcon(iconGroup.getNativeIcon("printpreview"));
+		undoItem.setIcon(iconGroup.getNativeIcon("undo"));
+		redoItem.setIcon(iconGroup.getNativeIcon("redo"));
+		cutItem.setIcon(iconGroup.getNativeIcon("cut"));
+		copyItem.setIcon(iconGroup.getNativeIcon("copy"));
+		pasteItem.setIcon(iconGroup.getNativeIcon("paste"));
+		deleteItem.setIcon(iconGroup.getNativeIcon("delete"));
+		findItem.setIcon(iconGroup.getNativeIcon("find"));
+		findNextItem.setIcon(iconGroup.getNativeIcon("findnext"));
+		replaceItem.setIcon(iconGroup.getNativeIcon("replace"));
+		replaceNextItem.setIcon(iconGroup.getNativeIcon("replacenext"));
+		goToItem.setIcon(iconGroup.getNativeIcon("goto"));
+		selectAllItem.setIcon(iconGroup.getNativeIcon("selectall"));
+		if (optionsItem != null) {
+			optionsItem.setIcon(iconGroup.getNativeIcon("options"));
+		}
+		helpItem.setIcon(iconGroup.getNativeIcon("help"));
+		aboutItem.setIcon(iconGroup.getNativeIcon("about"));
 	}
 
 
@@ -883,6 +924,7 @@ public class RTextMenuBar extends MenuBar implements PropertyChangeListener,
 		// Update the Window menu only if we're NOT in MDI view (otherwise, it
 		// would have been updated by super.updateUI(ui)).  We must also check
 		// windowMenu for null as this is called during initialization.
+		RText rtext = getApplication();
 		if (rtext!=null && rtext.getMainViewStyle()!=RText.MDI_VIEW &&
 				windowMenu!=null) {
 			SwingUtilities.updateComponentTreeUI(windowMenu);
