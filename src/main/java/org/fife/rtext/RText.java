@@ -299,7 +299,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		//splashScreen.updateStatus(msg.getString("CreatingMenuBar"), 75);
 
-		menuBar = new RTextMenuBar(this, prefs);
+		menuBar = new RTextMenuBar(this);
 		mainView.addPropertyChangeListener(menuBar);
 
 		menuBar.setWindowMenuVisible(prefs.mainView==MDI_VIEW);
@@ -956,8 +956,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		addWindowListener(new RTextWindowListener(this));
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-		mainView.setLineNumbersEnabled(prefs.lineNumbersVisible);
-
 		// Enable templates in text areas.
 		if (RTextUtilities.enableTemplates(this, true)) {
 			// If there are no templates, assume this is the user's first
@@ -1007,6 +1005,10 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		setSpellingWindowVisible(prefs.viewSpellingList);
 
 		setShowHostName(prefs.showHostName);
+
+		mainView.setLineNumbersEnabled(prefs.lineNumbersVisible);
+		setToolBarVisible(prefs.toolbarVisible);
+		setStatusBarVisible(prefs.statusBarVisible);
 
 		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
 			System.err.println("preMenuBarInit: " + (System.currentTimeMillis()-start));

@@ -154,51 +154,9 @@ public class RTextMenuBar extends MenuBar<RText>
 	 *
 	 * @param rtext The instance of the <code>RText</code> editor that this
 	 *        menu bar belongs to.
-	 * @param properties The properties we'll be using to initialize the menu
-	 *        bar.
 	 */
-	public RTextMenuBar(final RText rtext, RTextPrefs properties) {
-
+	public RTextMenuBar(final RText rtext) {
 		super(rtext);
-
-		// Variables to create the menu.
-		ResourceBundle msg = rtext.getResourceBundle();
-		ResourceBundle menuMsg = ResourceBundle.getBundle("org.fife.rtext.MenuBar");
-		int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
-		final int shift = InputEvent.SHIFT_DOWN_MASK;
-
-		// File submenu.
-		fileMenu = createFileMenu(menuMsg);
-		registerMenuByName(MENU_FILE, fileMenu);
-		add(fileMenu);
-
-		// Edit submenu.
-		JMenu menu = createEditMenu(menuMsg, defaultModifier, shift);
-		registerMenuByName(MENU_EDIT, menu);
-		add(menu);
-
-		// Search menu.
-		menu = createSearchMenu(menuMsg, defaultModifier, shift);
-		registerMenuByName(MENU_SEARCH, menu);
-		add(menu);
-
-		// View submenu.
-		viewMenu = createViewMenu(menuMsg, properties);
-		registerMenuByName(MENU_VIEW, viewMenu);
-		viewMenu.getPopupMenu().addPopupMenuListener(this);
-		add(viewMenu);
-
-		// Window menu (only visible when in MDI mode).
-		windowMenu = createWindowMenu(menuMsg, msg);
-		add(windowMenu);
-
-		// Help submenu.
-		menu = createHelpMenu(menuMsg, rtext);
-		registerMenuByName(MENU_HELP, menu);
-		add(menu);
-
-		// TODO: Have this happen automatically, in the base class somehow.
-		updateIcons(getApplication().getIconGroup());
 	}
 
 
@@ -559,7 +517,7 @@ public class RTextMenuBar extends MenuBar<RText>
 	}
 
 
-	private JMenu createViewMenu(ResourceBundle menuMsg, RTextPrefs properties) {
+	private JMenu createViewMenu(ResourceBundle menuMsg) {
 
 		RText rtext = getApplication();
 		JMenu viewMenu = createMenu(menuMsg, "MenuView");
@@ -569,7 +527,7 @@ public class RTextMenuBar extends MenuBar<RText>
 		Action a = rtext.getAction(RText.TOOL_BAR_ACTION);
 		toolbarItem = new JCheckBoxMenuItem(a);
 		toolbarItem.setToolTipText(null);
-		toolbarItem.setSelected(properties.toolbarVisible);
+		toolbarItem.setSelected(rtext.getToolBarVisible());
 		toolbarsMenu.add(toolbarItem);
 		viewMenu.add(toolbarsMenu);
 
@@ -624,11 +582,11 @@ public class RTextMenuBar extends MenuBar<RText>
 
 		statusBarItem = new JCheckBoxMenuItem(rtext.getAction(RText.STATUS_BAR_ACTION));
 		statusBarItem.setToolTipText(null);
-		statusBarItem.setSelected(properties.statusBarVisible);
+		statusBarItem.setSelected(rtext.getStatusBarVisible());
 		viewMenu.add(statusBarItem);
 
 		lineNumbersItem = new JCheckBoxMenuItem(rtext.getAction(RText.LINE_NUMBER_ACTION));
-		lineNumbersItem.setSelected(properties.lineNumbersVisible);
+		lineNumbersItem.setSelected(rtext.getMainView().getLineNumbersEnabled());
 		lineNumbersItem.setToolTipText(null);
 //		UIUtil.setDescription(lineNumbersItem, msg, "DescLineNumbers");
 		viewMenu.add(lineNumbersItem);
@@ -734,6 +692,49 @@ public class RTextMenuBar extends MenuBar<RText>
 	 */
 	public int getMaximumFileHistorySize() {
 		return recentFilesMenu.getMaximumFileHistorySize();
+	}
+
+
+	@Override
+	protected void initializeUI() {
+
+		RText app = getApplication();
+
+		// Variables to create the menu.
+		ResourceBundle msg = app.getResourceBundle();
+		ResourceBundle menuMsg = ResourceBundle.getBundle("org.fife.rtext.MenuBar");
+		int defaultModifier = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+		final int shift = InputEvent.SHIFT_DOWN_MASK;
+
+		// File submenu.
+		fileMenu = createFileMenu(menuMsg);
+		registerMenuByName(MENU_FILE, fileMenu);
+		add(fileMenu);
+
+		// Edit submenu.
+		JMenu menu = createEditMenu(menuMsg, defaultModifier, shift);
+		registerMenuByName(MENU_EDIT, menu);
+		add(menu);
+
+		// Search menu.
+		menu = createSearchMenu(menuMsg, defaultModifier, shift);
+		registerMenuByName(MENU_SEARCH, menu);
+		add(menu);
+
+		// View submenu.
+		viewMenu = createViewMenu(menuMsg);
+		registerMenuByName(MENU_VIEW, viewMenu);
+		viewMenu.getPopupMenu().addPopupMenuListener(this);
+		add(viewMenu);
+
+		// Window menu (only visible when in MDI mode).
+		windowMenu = createWindowMenu(menuMsg, msg);
+		add(windowMenu);
+
+		// Help submenu.
+		menu = createHelpMenu(menuMsg, app);
+		registerMenuByName(MENU_HELP, menu);
+		add(menu);
 	}
 
 
