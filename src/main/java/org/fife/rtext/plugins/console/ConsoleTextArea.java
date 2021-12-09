@@ -162,6 +162,9 @@ abstract class ConsoleTextArea extends AbstractConsoleTextArea {
 				int endOffs = root.getElement(toDelete-1).getEndOffset();
 				try {
 					doc.remove(0, endOffs);
+					if (!treatAsUserInput) {
+						inputMinOffs -= endOffs;
+					}
 				} catch (BadLocationException ble) { // Never happens
 					ble.printStackTrace();
 				}
@@ -280,6 +283,12 @@ abstract class ConsoleTextArea extends AbstractConsoleTextArea {
 		int startOffs = inputMinOffs;
 		Document doc = getDocument();
 		int len = doc.getLength() - startOffs;
+		if (len < 0) {
+			// They've run a command that prints > MAX_LINE_COUNT lines of
+			// output.  The input line has scrolled out of view anyway, so
+			// nothing to print
+			return null;
+		}
 		try {
 			return doc.getText(startOffs, len);
 		} catch (BadLocationException ble) {
