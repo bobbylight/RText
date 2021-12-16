@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -905,7 +906,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		iconGroupMap = new HashMap<>();
 		String resourceRoot = "org/fife/rtext/graphics/";
 
-		String root = getInstallLocation();
 		iconGroupMap.put(DEFAULT_ICON_GROUP_NAME,
 			new SvgIconGroup(this, DEFAULT_ICON_GROUP_NAME,
 				resourceRoot + "intellij-icons-dark",
@@ -1485,7 +1485,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		try {
 			Theme rstaTheme = RTextAppThemes.getRstaTheme(theme);
 			installRstaTheme(rstaTheme);
-		} catch (Exception ioe) {
+		} catch (IOException ioe) {
 			displayException(ioe);
 			return;
 		}

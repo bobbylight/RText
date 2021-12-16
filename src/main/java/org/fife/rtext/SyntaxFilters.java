@@ -12,8 +12,8 @@ package org.fife.rtext;
 
 import java.io.File;
 import java.util.*;
-import java.util.regex.Pattern;
 
+import org.fife.ui.rsyntaxtextarea.FileTypeUtil;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -22,7 +22,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * styles they map to.
  *
  * @author Robert Futrell
- * @version 0.1
+ * @version 1.0
  */
 public class SyntaxFilters implements SyntaxConstants {
 
@@ -119,40 +119,28 @@ public class SyntaxFilters implements SyntaxConstants {
 
 
 	/**
-	 * Creates a value for an entry in the <code>filters</code>
-	 * <code>Map</code>.
-	 *
-	 * @param values An array of values to go into the value.
-	 * @return The value.
-	 */
-	private static List<String> createValue(String... values) {
-		return new ArrayList<>(Arrays.asList(values)); // Mutable
-	}
-
-
-	/**
 	 * Returns the list of filename filters for highlighting with the given
 	 * style.
 	 *
 	 * @param style The style.
-	 * @return The list of filters.
+	 * @return The list of filters.  This may be an empty list but will
+	 *         never be {@code null}.
+	 * @see #setFiltersForSyntaxStyle(String, String)
 	 */
 	private List<String> getFiltersForStyle(String style) {
+
 		List<String> l = filters.get(style);
-		if (l==null) {
-			// Allow plugins to add filters for new languages not built into
-			// RSyntaxTextArea.
+
+		// Allow plugins to add filters for new languages not built into
+		// RSyntaxTextArea.  They're kept in a separate Map to avoid
+		// clearing them out when resetting the main app's filters.
+		if (l == null) {
 			if (addedFilters==null) {
 				addedFilters = new HashMap<>();
 			}
-			else {
-				l = addedFilters.get(style);
-			}
-			if (l==null) {
-				l = new ArrayList<>();
-				addedFilters.put(style, l);
-			}
+			l = addedFilters.computeIfAbsent(style, s -> new ArrayList<>());
 		}
+
 		return l;
 	}
 
@@ -179,78 +167,26 @@ public class SyntaxFilters implements SyntaxConstants {
 
 
 	/**
-	 * Returns the type of syntax highlighting to use for the given text
-	 * file based on its extension and the current filters.
-	 *
-	 * @param fileName The file to syntax highlight.
-	 * @param ignoreBackupExtensions Whether to ignore ".bak", ".old" and
-	 *        ".orig" extensions, if they exist.
-	 * @return The syntax highlighting scheme to use, for example,
-	 *         <code>SYNTAX_STYLE_JAVA</code> or
-	 *         <code>SYNTAX_STYLE_CPLUSPLUS</code>.
-	 * @see org.fife.ui.rsyntaxtextarea.RSyntaxTextArea
-	 * @see org.fife.ui.rsyntaxtextarea.SyntaxConstants
-	 */
-	public String getSyntaxStyleForFile(String fileName,
-									boolean ignoreBackupExtensions) {
-
-		if (fileName==null) {
-			return SYNTAX_STYLE_NONE;
-		}
-
-		// fileName is usually the full path to the file from RText, so
-		// shorten it to make regex faster (and work correctly for things
-		// without wildcards like "makefile").
-		int lastSlash = fileName.lastIndexOf(File.separatorChar);
-		if (lastSlash>-1) {
-			fileName = fileName.substring(lastSlash+1);
-		}
-		fileName = fileName.toLowerCase(); // Ignore casing of extensions
-
-		// Ignore extensions that mean "this is a backup", but don't
-		// denote the actual file type.
-		if (ignoreBackupExtensions) {
-			fileName = RTextUtilities.stripBackupExtensions(fileName);
-		}
-
-		String style = getSyntaxStyleForFileImpl(fileName, filters);
-		if (style==null && addedFilters!=null) {
-			style = getSyntaxStyleForFileImpl(fileName, addedFilters);
-		}
-		return style!=null ? style : SYNTAX_STYLE_NONE;
-
-	}
-
-
-	/**
-	 * Looks for a syntax style for a file name in a given map.
+	 * Looks for the syntax style to use for a given file.
 	 *
 	 * @param fileName The file name.
-	 * @param filters The map of filters.
+	 * @param ignoreBackupExtensions Whether to ignore backup extensions.
 	 * @return The syntax style for the file, or <code>null</code> if not found
 	 *         in that map.
 	 */
-	private static String getSyntaxStyleForFileImpl(String fileName,
-													Map<String, List<String>> filters) {
+	public String getSyntaxStyleForFile(String fileName,
+										boolean ignoreBackupExtensions) {
 
-		String syntaxStyle = null;
-
-		for (Map.Entry<String, List<String>> entry : filters.entrySet()) {
-			for (String filter : entry.getValue()) {
-				Pattern p = RTextUtilities.getPatternForFileFilter(
-									filter, true);
-				if (p!=null && p.matcher(fileName).matches()) {
-					syntaxStyle = entry.getKey();
-					// Stop immediately if we find a non-wildcard match
-					if (!filter.contains("*") && !filter.contains("?")) {
-						break;
-					}
-				}
-			}
+		if (fileName == null) {
+			return SyntaxConstants.SYNTAX_STYLE_NONE;
 		}
 
-		return syntaxStyle;
-
+		Map<String, List<String>> allFilters = new HashMap<>(filters);
+		if (addedFilters != null) {
+			allFilters.putAll(addedFilters);
+		}
+		return FileTypeUtil.get().guessContentType(new File(fileName),
+			allFilters, ignoreBackupExtensions);
 	}
 
 
@@ -291,65 +227,8 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * Sets default values for syntax filters.
 	 */
 	public void restoreDefaultFileFilters() {
-
-		filters.clear();
-
-		//filters.put(SYNTAX_STYLE_NONE,			createValue());
-		filters.put(SYNTAX_STYLE_ACTIONSCRIPT,		createValue("*.as", "*.asc"));
-		filters.put(SYNTAX_STYLE_ASSEMBLER_6502,	createValue("*.s"));
-		filters.put(SYNTAX_STYLE_ASSEMBLER_X86,		createValue("*.asm"));
-		filters.put(SYNTAX_STYLE_BBCODE,			createValue("*.bbc"));
-		filters.put(SYNTAX_STYLE_C,				createValue("*.c"));
-		filters.put(SYNTAX_STYLE_CLOJURE,			createValue("*.clj"));
-		filters.put(SYNTAX_STYLE_CPLUSPLUS,		createValue("*.cpp", "*.cxx", "*.h"));
-		filters.put(SYNTAX_STYLE_CSHARP,			createValue("*.cs"));
-		filters.put(SYNTAX_STYLE_CSS,				createValue("*.css"));
-		filters.put(SYNTAX_STYLE_CSV,				createValue("*.csv"));
-		filters.put(SYNTAX_STYLE_D,					createValue("*.d"));
-		filters.put(SYNTAX_STYLE_DART,				createValue("*.dart"));
-		filters.put(SYNTAX_STYLE_DELPHI,				createValue("*.pas"));
-		filters.put(SYNTAX_STYLE_DTD,				createValue("*.dtd"));
-		filters.put(SYNTAX_STYLE_FORTRAN,			createValue("*.f", "*.for", "*.fort", "*.f77", "*.f90"));
-		filters.put(SYNTAX_STYLE_GO,				createValue("*.go"));
-		filters.put(SYNTAX_STYLE_GROOVY,			createValue("*.groovy", "*.gradle", "*.grv"));
-		filters.put(SYNTAX_STYLE_HOSTS,				createValue("hosts"));
-		filters.put(SYNTAX_STYLE_HTACCESS,			createValue(".htaccess"));
-		filters.put(SYNTAX_STYLE_HTML,			createValue("*.htm", "*.html"));
-		filters.put(SYNTAX_STYLE_INI,			createValue("*.ini", ".editorconfig"));
-		filters.put(SYNTAX_STYLE_JAVA,			createValue("*.java"));
-		filters.put(SYNTAX_STYLE_JAVASCRIPT,		createValue("*.js"));
-		filters.put(SYNTAX_STYLE_JSP,				createValue("*.jsp"));
-		filters.put(SYNTAX_STYLE_JSON_WITH_COMMENTS,createValue(".jshintrc", "tslint.json"));
-		filters.put(SYNTAX_STYLE_JSON,				createValue("*.json"));
-		filters.put(SYNTAX_STYLE_KOTLIN,			createValue("*.kt", "*.kts"));
-		filters.put(SYNTAX_STYLE_LATEX,				createValue("*.tex", "*.ltx", "*.latex"));
-		filters.put(SYNTAX_STYLE_LESS, 				createValue("*.less"));
-		filters.put(SYNTAX_STYLE_LISP, 				createValue("*.cl", "*.clisp", "*.el", "*.l", "*.lisp",
-			"*.lsp", "*.ml"));
-		filters.put(SYNTAX_STYLE_LUA,				createValue("*.lua"));
-		filters.put(SYNTAX_STYLE_MARKDOWN,			createValue("*.md"));
-		filters.put(SYNTAX_STYLE_MAKEFILE,			createValue("Makefile", "makefile"));
-		filters.put(SYNTAX_STYLE_MXML,				createValue("*.mxml"));
-		filters.put(SYNTAX_STYLE_NSIS,				createValue("*.nsi"));
-		filters.put(SYNTAX_STYLE_PERL,			createValue("*.perl", "*.pl", "*.pm"));
-		filters.put(SYNTAX_STYLE_PHP,				createValue("*.php"));
-		filters.put(SYNTAX_STYLE_PROPERTIES_FILE,	createValue("*.properties"));
-		filters.put(SYNTAX_STYLE_PYTHON,			createValue("*.py"));
-		filters.put(SYNTAX_STYLE_RUBY,			createValue("*.rb", "Vagrantfile"));
-		filters.put(SYNTAX_STYLE_SAS,				createValue("*.sas"));
-		filters.put(SYNTAX_STYLE_SCALA,				createValue("*.scala"));
-		filters.put(SYNTAX_STYLE_SQL,				createValue("*.sql"));
-		filters.put(SYNTAX_STYLE_TCL,				createValue("*.tcl", "*.tk"));
-		filters.put(SYNTAX_STYLE_TYPESCRIPT,		createValue("*.ts"));
-		filters.put(SYNTAX_STYLE_UNIX_SHELL,		createValue("*.sh", "*.?sh"));
-		filters.put(SYNTAX_STYLE_VISUAL_BASIC,		createValue("*.vb"));
-		filters.put(SYNTAX_STYLE_WINDOWS_BATCH,		createValue("*.bat", "*.cmd"));
-		filters.put(SYNTAX_STYLE_XML,				createValue("*.xml", "*.xsl", "*.xsd", "*.xslt", "*.wsdl",
-			"*.svg", "*.tmx", "*.tsx", "*.pom", "*.manifest"));
-		filters.put(SYNTAX_STYLE_YAML,				createValue("*.yml", "*.yaml"));
-
+		filters = FileTypeUtil.get().getDefaultContentTypeToFilterMap();
 		// Keep any filters added by the user
-
 	}
 
 
@@ -360,6 +239,7 @@ public class SyntaxFilters implements SyntaxConstants {
 	 * @param filterString A string representing the file filters separated
 	 *        by spaces.  If <code>null</code>, nothing happens.
 	 * @throws IllegalArgumentException If <code>style</code> is invalid.
+	 * @see #getFiltersForStyle(String)
 	 */
 	public void setFiltersForSyntaxStyle(String style, String filterString) {
 

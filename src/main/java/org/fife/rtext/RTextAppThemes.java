@@ -83,7 +83,7 @@ public final class RTextAppThemes {
 	 *
 	 * @param theme The application theme.
 	 * @return The RSTA editor theme.
-	 * @throws java.io.IOException If an IO error occurs.
+	 * @throws IOException If an IO error occurs.
 	 */
 	public static Theme getRstaTheme(AppTheme theme) throws IOException {
 
