@@ -1,3 +1,7 @@
+# RText
+![Java Build](https://github.com/bobbylight/RText/actions/workflows/gradle.yml/badge.svg)
+![Java Build](https://github.com/bobbylight/RText/actions/workflows/codeql-analysis.yml/badge.svg)
+
 RText is a programmer's text editor written in Java.  It has all the features
 you would expect:
 
@@ -18,7 +22,7 @@ you would expect:
 * External tools
 * Much more
 
-# Building
+## Building
 
 RText uses [Gradle](http://gradle.org/) to build.  To compile, run
 all unit tests, and create the jar, and run:
@@ -28,7 +32,7 @@ all unit tests, and create the jar, and run:
 
 Note that RText requires Java 14 or later to build.
 
-## Building the Windows application and installer
+### Building the Windows application and installer
 
 To create the Windows version of the application, run the `generateWindowsStarterExe`
 task in addition to `installDist`.  This ensures a trimmed-down JRE is generated,
@@ -48,7 +52,7 @@ After building the installable image, you can create the win32 installer by
 running the `MakeRTextInstaller.nsi` [NSIS](http://nsis.sourceforge.net/Main_Page)
 script at the root of the project.
 
-## Building the OS X application
+### Building the OS X application
 
 Building the OS X package has just been revamped.  To build the .app bundle into
 `build/install/RText-<version>.dmg`:
