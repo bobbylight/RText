@@ -46,7 +46,7 @@ wrapper {
 }
 
 checkstyle {
-	toolVersion = '8.43'
+	toolVersion = '9.2.1'
 }
 
 static isPluginJar(jarName) {
