@@ -334,6 +334,7 @@ public final class RTextUtilities {
 						"d",
 						"dart",
 						"pas",
+						"Dockerfile", "dockerfile",
 						"dtd",
 						"f", "for", "fort", "f77", "f90",
 						"go",
