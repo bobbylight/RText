@@ -118,18 +118,11 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		caretColorLabel.setLabelFor(caretColorButton);
 		JPanel buttonPanel = new JPanel(new BorderLayout());
 		buttonPanel.add(caretColorButton, BorderLayout.LINE_START);
-		if (o.isLeftToRight()) {
-			temp.add(insLabel);          temp.add(insCaretCombo);
-			temp.add(overLabel);         temp.add(overCaretCombo);
-			temp.add(caretDelayLabel);   temp.add(blinkRateSpinner);
-			temp.add(caretColorLabel);   temp.add(buttonPanel);
-		}
-		else {
-			temp.add(insCaretCombo);     temp.add(insLabel);
-			temp.add(overCaretCombo);    temp.add(overLabel);
-			temp.add(blinkRateSpinner);  temp.add(caretDelayLabel);
-			temp.add(buttonPanel);       temp.add(caretColorLabel);
-		}
+		UIUtil.addLabelValuePairs(temp, o,
+			insLabel, insCaretCombo,
+			overLabel, overCaretCombo,
+			caretDelayLabel, blinkRateSpinner,
+			caretColorLabel, buttonPanel);
 		UIUtil.makeSpringCompactGrid(temp, 4,2, 0,0, 5,5);
 		caretPanel.add(temp);
 		caretPanel.add(Box.createVerticalStrut(5));

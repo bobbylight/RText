@@ -873,13 +873,6 @@ public class RTextMenuBar extends MenuBar<RText>
 	}
 
 
-	private void updateAction(JMenuItem item, String key) {
-		item.setAction(null);
-		item.setAction(getApplication().getAction(key));
-		item.setToolTipText(null);
-	}
-
-
 	@Override
 	protected void updateIcons(IconGroup iconGroup) {
 

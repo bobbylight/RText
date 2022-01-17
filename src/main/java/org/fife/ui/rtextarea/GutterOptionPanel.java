@@ -22,13 +22,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ResourceBundle;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
@@ -112,36 +106,30 @@ public class GutterOptionPanel extends OptionsDialogPanel
 		topPanel.add(Box.createVerticalStrut(5));
 
 		// Fold area options
-		Box foldPanel = new Box(BoxLayout.Y_AXIS);
+		JPanel foldPanel = new JPanel(new SpringLayout());
 		foldPanel.setBorder(new OptionPanelBorder(msg.getString("FoldArea")));
 		JLabel foldBackgroundLabel = new JLabel(msg.getString("FoldBackground"));
 		foldBackgroundButton = new RColorSwatchesButton();
 		foldBackgroundButton.addPropertyChangeListener(
 					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
+		JPanel foldBgButtonPanel = new JPanel(new BorderLayout());
+		addLeftAligned(foldBgButtonPanel, foldBackgroundButton);
 		foldBackgroundLabel.setLabelFor(foldBackgroundButton);
-		temp = new Box(BoxLayout.LINE_AXIS);
-		temp.add(foldBackgroundLabel);
-		temp.add(Box.createHorizontalStrut(5));
-		temp.add(foldBackgroundButton);
-		temp.add(Box.createHorizontalGlue());
-		temp2 = new JPanel(new BorderLayout());
-		temp2.add(temp, BorderLayout.LINE_START);
-		foldPanel.add(temp2);
 		JLabel armedFoldBackgroundLabel = new JLabel(
 				msg.getString("ArmedFoldBackground"));
 		armedFoldBackgroundButton = new RColorSwatchesButton();
 		armedFoldBackgroundButton.addPropertyChangeListener(
 					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
+		JPanel armedFoldBgButtonPanel = new JPanel(new BorderLayout());
+		addLeftAligned(armedFoldBgButtonPanel, armedFoldBackgroundButton);
 		armedFoldBackgroundLabel.setLabelFor(armedFoldBackgroundButton);
-		temp = new Box(BoxLayout.LINE_AXIS);
-		temp.add(armedFoldBackgroundLabel);
-		temp.add(Box.createHorizontalStrut(5));
-		temp.add(armedFoldBackgroundButton);
-		temp.add(Box.createHorizontalGlue());
-		temp2 = new JPanel(new BorderLayout());
-		temp2.add(temp, BorderLayout.LINE_START);
-		foldPanel.add(temp2);
-		topPanel.add(foldPanel);
+		UIUtil.addLabelValuePairs(foldPanel, orientation,
+			foldBackgroundLabel, foldBgButtonPanel,
+			armedFoldBackgroundLabel, armedFoldBgButtonPanel);
+		UIUtil.makeSpringCompactGrid(foldPanel, 2, 2, 0, 0, 5, 5);
+		temp = Box.createVerticalBox();
+		temp.add(foldPanel);
+		topPanel.add(temp);
 		topPanel.add(Box.createVerticalStrut(5));
 
 		// Miscellaneous options

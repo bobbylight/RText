@@ -47,7 +47,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	private LabelValueComboBox<String, AppTheme> themeCombo;
 	private JButton applyButton;
 
-	private JPanel springPanel, springPanel2;
+	private JPanel springPanel;
 	private JComboBox<String> viewCombo;
 	private JComboBox<String> docSelCombo;
 
@@ -176,18 +176,9 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		springPanel = new JPanel(new SpringLayout());
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.setBorder(new OptionPanelBorder(msg.getString("OptUILT")));
-		if (orientation.isLeftToRight()) {
-			springPanel.add(new JLabel(msg.getString("OptUIViewT")));
-			springPanel.add(viewCombo);
-			springPanel.add(new JLabel(msg.getString("OptUIDSPT")));
-			springPanel.add(docSelCombo);
-		}
-		else {
-			springPanel.add(viewCombo);
-			springPanel.add(new JLabel(msg.getString("OptUIViewT")));
-			springPanel.add(docSelCombo);
-			springPanel.add(new JLabel(msg.getString("OptUIDSPT")));
-		}
+		UIUtil.addLabelValuePairs(springPanel, orientation,
+			new JLabel(msg.getString("OptUIViewT")), viewCombo,
+			new JLabel(msg.getString("OptUIDSPT")), docSelCombo);
 		temp.add(springPanel, BorderLayout.LINE_START);
 		UIUtil.makeSpringCompactGrid(springPanel,
 			2,2,		// rows,cols,
@@ -250,9 +241,9 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	protected void doApplyImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
-		mainView.setDocumentSelectionPlacement(getDocumentSelectionPlacement());	// Doesn't update if it doesn't have to.
-		RTextUtilities.setThemeForAllOpenAppInstances(rtext, getTheme()); // Doesn't update if...
-		rtext.setMainViewStyle(getMainViewStyle());			// Doesn't update if it doesn't have to.
+		mainView.setDocumentSelectionPlacement(getDocumentSelectionPlacement()); // Doesn't update if it doesn't have to.
+		applySelectedTheme();
+		rtext.setMainViewStyle(getMainViewStyle());	// Doesn't update if it doesn't have to.
 		rtext.setShowHostName(getShowHostName());	// Doesn't update if doesn't have to.
 	}
 
@@ -426,12 +417,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		if (springPanel!=null) {
 			UIUtil.makeSpringCompactGrid(springPanel,
 								2,2,		// rows,cols,
-								0,0,		// initial-x, initial-y,
-								5,5);	// x-spacing, y-spacing.
-		}
-		if (springPanel2!=null) {
-			UIUtil.makeSpringCompactGrid(springPanel2,
-								1,2,		// rows,cols,
 								0,0,		// initial-x, initial-y,
 								5,5);	// x-spacing, y-spacing.
 		}

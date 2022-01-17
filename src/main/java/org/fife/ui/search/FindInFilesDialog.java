@@ -466,26 +466,11 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 									getOrientation(getLocale());
 
 		// Make a panel of the edit fields and add it to inputPanel.
-		if (orientation.isLeftToRight()) {
-			inputPanel.add(findLabel);
-			inputPanel.add(temp);
-			inputPanel.add(inLabel);
-			inputPanel.add(temp2);
-			inputPanel.add(dirLabel);
-			inputPanel.add(temp3);
-			inputPanel.add(skipLabel);
-			inputPanel.add(temp4);
-		}
-		else {
-			inputPanel.add(temp);
-			inputPanel.add(findLabel);
-			inputPanel.add(temp2);
-			inputPanel.add(inLabel);
-			inputPanel.add(temp3);
-			inputPanel.add(dirLabel);
-			inputPanel.add(temp4);
-			inputPanel.add(skipLabel);
-		}
+		UIUtil.addLabelValuePairs(inputPanel, orientation,
+			findLabel, temp,
+			inLabel, temp2,
+			dirLabel, temp3,
+			skipLabel, temp4);
 		UIUtil.makeSpringCompactGrid(inputPanel,
 									4,2,		// rows,cols,
 									0,0,		// initial-x, initial-y,

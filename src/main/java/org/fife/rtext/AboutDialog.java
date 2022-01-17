@@ -108,14 +108,9 @@ class AboutDialog extends EscapableDialog {
 		JLabel javaLabel = UIUtil.newLabel(msg, "About.JavaHome", javaField);
 		JLabel memoryLabel = UIUtil.newLabel(msg, "About.Memory", memoryField);
 
-		if (o.isLeftToRight()) {
-			temp.add(javaLabel);        temp.add(javaField);
-			temp.add(memoryLabel);      temp.add(memoryField);
-		}
-		else {
-			temp.add(javaField);        temp.add(javaLabel);
-			temp.add(memoryField);      temp.add(memoryLabel);
-		}
+		UIUtil.addLabelValuePairs(temp, o,
+			javaLabel, javaField,
+			memoryLabel, memoryField);
 		UIUtil.makeSpringCompactGrid(temp, 2, 2, 5,5, 15,5);
 		box.add(temp);
 
