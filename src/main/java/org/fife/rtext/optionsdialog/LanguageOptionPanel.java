@@ -340,7 +340,7 @@ class LanguageOptionPanel extends OptionsDialogPanel
 			IconTextInfo obj = listModel.get(i);
 			String langName = obj.getText();
 			String langValue = languageMap.get(langName);
-			if (langValue.equals("en")) {
+			if ("en".equals(langValue)) {
 				languageList.setSelectedIndex(i);
 				return;
 			}

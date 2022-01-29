@@ -34,7 +34,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	private static final int CASCADE_X_INCREMENT		= 30;
 	private static final int CASCADE_Y_INCREMENT		= 30;
 
-	private static int openFrameCount = 0;
+	private static int openFrameCount;
 
 	private JDesktopPane desktopPane;
 	private java.util.List<InternalFrame> frames;
@@ -491,7 +491,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 	 *        <code>LEFT</code>, <code>BOTTOM</code>, or <code>RIGHT</code>.
 	 *        If this value is invalid, nothing happens.
 	 */
-	 @Override
+	@Override
 	public void setDocumentSelectionPlacement(int location) {
 		if (location==DOCUMENT_SELECT_TOP || location==DOCUMENT_SELECT_LEFT ||
 			location==DOCUMENT_SELECT_BOTTOM || location==DOCUMENT_SELECT_RIGHT)

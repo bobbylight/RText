@@ -39,9 +39,29 @@ public interface ProjectEntryParent extends ModelEntity {
 	Iterator<ProjectEntry> getEntryIterator();
 
 
+	/**
+	 * Moves a tree node down in its parent's list of children, if
+	 * possible.
+	 *
+	 * @param entry The node to move down.
+	 * @param toBottom Whether to move it to the bottom, as opposed to
+	 *        just down one position.
+	 * @return Whether the operation was successful.
+	 * @see #moveProjectEntryUp(ProjectEntry, boolean)
+	 */
 	boolean moveProjectEntryDown(ProjectEntry entry, boolean toBottom);
 
 
+	/**
+	 * Moves a tree node up in its parent's list of children, if
+	 * possible.
+	 *
+	 * @param entry The node to move up.
+	 * @param toTop Whether to move it to the top, as opposed to
+	 *        just up one position.
+	 * @return Whether the operation was successful.
+	 * @see #moveProjectEntryDown(ProjectEntry, boolean)
+	 */
 	boolean moveProjectEntryUp(ProjectEntry entry, boolean toTop);
 
 

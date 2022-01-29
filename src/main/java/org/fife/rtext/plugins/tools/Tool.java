@@ -558,6 +558,11 @@ public class Tool implements Comparable<Tool> {
 	}
 
 
+	/**
+	 * An entry point for test purposes.
+	 *
+	 * @param args Command line arguments.
+	 */
 	public static void main(String[] args) {
 		Tool tool = new Tool("Name", "Desc");
 		tool.setProgram("C:/temp/test.bat");

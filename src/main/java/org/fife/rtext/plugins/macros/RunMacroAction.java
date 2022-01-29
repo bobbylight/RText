@@ -10,17 +10,10 @@
 package org.fife.rtext.plugins.macros;
 
 import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.regex.Pattern;
 
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
+import javax.script.*;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
@@ -129,15 +122,15 @@ class RunMacroAction extends AppAction<RText> {
 			try (BufferedReader r = new BufferedReader(new FileReader(file))) {
 				handleSubmit(file.getName(), r);
 			}
-		} catch (Throwable t/*IOException ioe*/) {
-			getApplication().displayException(t/*ioe*/);
+		} catch (IOException | ScriptException e) {
+			getApplication().displayException(e);
 		}
 
 	}
 
 
-	private void handleSubmit(String sourceName, BufferedReader r) throws
-								Throwable {
+	private void handleSubmit(String sourceName, BufferedReader r)
+			throws ScriptException {
 
 		RText app = getApplication();
 

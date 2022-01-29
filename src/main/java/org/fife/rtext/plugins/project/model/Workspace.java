@@ -213,6 +213,14 @@ public class Workspace implements ModelEntity {
 	}
 
 
+	/**
+	 * Moves a project node down in this workspace tree.
+	 *
+	 * @param project The project to move.
+	 * @param toBottom Whether to move the project to the bottom
+	 *        of the tree, or just down one position.
+	 * @return Whether the operation was successful.
+	 */
 	public boolean moveProjectDown(Project project, boolean toBottom) {
 		int index = getProjectIndex(project);
 		if (index>-1 && index<projects.size()-1) {
@@ -225,6 +233,14 @@ public class Workspace implements ModelEntity {
 	}
 
 
+	/**
+	 * Moves a project node up in this workspace tree.
+	 *
+	 * @param project The project to move.
+	 * @param toTop Whether to move the project to the top
+	 *        of the tree, or just up one position.
+	 * @return Whether the operation was successful.
+	 */
 	public boolean moveProjectUp(Project project, boolean toTop) {
 		int index = getProjectIndex(project);
 		if (index>0) {
@@ -300,11 +316,21 @@ public class Workspace implements ModelEntity {
 	}
 
 
+	/**
+	 * Removes a project from this workspace.
+	 *
+	 * @param project The project to remove.
+	 */
 	public void removeProject(Project project) {
 		projects.remove(project);
 	}
 
 
+	/**
+	 * Saves this workspace.
+	 *
+	 * @throws IOException If an IO error occurs.
+	 */
 	public void save() throws IOException {
 		saveImpl(file);
 	}

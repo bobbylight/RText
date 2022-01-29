@@ -316,12 +316,12 @@ class DefaultSourceTree extends JTree {
 			int row = getClosestRowForLocation(mouseX, mouseY);
 
 			// Go to the tag's location in the current file.
-			if (command.equals("JumpToTag")) {
+			if ("JumpToTag".equals(command)) {
 				setSelectionRow(row);
 			}
 
 			// Insert the tag at the current caret position.
-			else if (command.equals("InsertAtCaret")) {
+			else if ("InsertAtCaret".equals(command)) {
 				RTextEditorPane editor = owner.getMainView().getCurrentTextArea();
 				editor.replaceSelection(getTagTextForRow(row));
 				editor.requestFocusInWindow();

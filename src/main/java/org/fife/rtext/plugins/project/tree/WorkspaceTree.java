@@ -479,6 +479,11 @@ public class WorkspaceTree extends JTree implements FileSelector {
 	}
 
 
+	/**
+	 * Sets the workspace to display.
+	 *
+	 * @param workspace The new workspace to display.
+	 */
 	public void setWorkspace(Workspace workspace) {
 		WorkspaceTreeRootCreator creator = new WorkspaceTreeRootCreator(plugin);
 		workspace.accept(creator);

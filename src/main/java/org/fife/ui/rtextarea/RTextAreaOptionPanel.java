@@ -66,7 +66,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 	private JCheckBox visibleWhitespaceCheckBox;
 	private JCheckBox visibleEOLCheckBox;
-//	private JCheckBox autoIndentCheckBox;
+	//private JCheckBox autoIndentCheckBox;
 	private JCheckBox remWhitespaceLinesCheckBox;
 	private JCheckBox autoInsertClosingCurlyCheckBox;
 	private JCheckBox aaCheckBox;
@@ -215,11 +215,11 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		addLeftAligned(bigOtherPanel, autoInsertClosingCurlyCheckBox);
 		bigOtherPanel.add(Box.createVerticalStrut(3));
 
-/*
+		/*
 		autoIndentCheckBox = createCheckBox("AutoIndent");
 		addLeftAligned(bigOtherPanel, autoIndentCheckBox);
 		bigOtherPanel.add(Box.createVerticalStrut(3));
-*/
+		*/
 		remWhitespaceLinesCheckBox = createCheckBox(msg, "RemWhitespaceLines");
 		addLeftAligned(bigOtherPanel, remWhitespaceLinesCheckBox);
 		bigOtherPanel.add(Box.createVerticalStrut(3));
@@ -930,6 +930,11 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
+	/**
+	 * Toggles whether tab lines are enabled.
+	 *
+	 * @param enabled Whether tab lines are enabled.
+	 */
 	public void setTabLinesEnabled(boolean enabled) {
 		showTabLinesCheckBox.setSelected(enabled);
 		tabLineColorButton.setEnabled(enabled);

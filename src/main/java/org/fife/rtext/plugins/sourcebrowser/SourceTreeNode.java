@@ -187,7 +187,7 @@ class SourceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
-    /**
+	/**
 	 * Returns whether this particular node's children can be sorted.
 	 *
 	 * @return Whether this node's children can be sorted.

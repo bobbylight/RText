@@ -214,7 +214,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton);
 
-//		cp.add(Box.createVerticalGlue());
+		//cp.add(Box.createVerticalGlue());
 
 		applyComponentOrientation(o);
 

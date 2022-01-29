@@ -64,7 +64,7 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 	protected String newFilesToExamineString;
 	protected String occurrencesString;
 
-//	private static final Pattern TAB_PATTERN	= Pattern.compile("\\t");
+	//private static final Pattern TAB_PATTERN	= Pattern.compile("\\t");
 
 
 	/**
@@ -515,7 +515,6 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 		if (sb.length()>=maxLen) {
 			sb.append("...");
 		}
-//System.out.println(sb.toString());
 		return sb.toString();
 
 	}

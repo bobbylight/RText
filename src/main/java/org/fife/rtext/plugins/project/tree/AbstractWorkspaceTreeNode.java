@@ -120,9 +120,19 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
+	/**
+	 * Returns the popup menu actions for this tree node.
+	 *
+	 * @return The popup menu actions.
+	 */
 	public abstract List<PopupContent> getPopupActions();
 
 
+	/**
+	 * Returns the tool tip text for this tree node.
+	 *
+	 * @return The tool tip text.
+	 */
 	public abstract String getToolTipText();
 
 

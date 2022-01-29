@@ -42,7 +42,6 @@ import org.fife.ui.dockablewindows.DockableWindowConstants;
  */
 class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 
-//	private Plugin plugin;
 	private final CardLayout cards;
 	private final JPanel mainPanel;
 	private final SystemShellTextArea shellTextArea;
@@ -55,7 +54,6 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 
 	ConsoleWindow(RText app, Plugin plugin) {
 
-//		this.plugin = plugin;
 		setDockableWindowName(plugin.getString("DockableWindow.Title"));
 		setIcon(plugin.getPluginIcon());
 		setPosition(DockableWindowConstants.BOTTOM);

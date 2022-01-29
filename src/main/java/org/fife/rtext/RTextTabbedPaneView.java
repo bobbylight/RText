@@ -203,10 +203,10 @@ inCloseCurrentDocument = true;
 
 		// Remove listeners from current text area IFF stateChanged() won't do it
 		// (i.e., we're removing any document except the "rightmost" document).
-//		boolean removingLastDocument = (getSelectedIndex()==getNumDocuments()-1);
-//		if (removingLastDocument==false) {
-			oldTextArea.removeCaretListener(owner);
-//		}
+		//boolean removingLastDocument = (getSelectedIndex()==getNumDocuments()-1);
+		//if (removingLastDocument==false) {
+		oldTextArea.removeCaretListener(owner);
+		//}
 
 		// Remove the document from this tabbed pane.
 		removeComponentAt(getSelectedIndex());
@@ -249,11 +249,11 @@ inCloseCurrentDocument = true;
 		// change (i.e., they closed any document except the "rightmost" one).
 		// Closing the "rightmost" document means stateChanged() will handle
 		// the listeners.
-//		if (removingLastDocument==false) {
-			currentTextArea.addCaretListener(owner);
-//		}
+		//if (removingLastDocument==false) {
+		currentTextArea.addCaretListener(owner);
+		//}
 
-inCloseCurrentDocument = false;
+		inCloseCurrentDocument = false;
 
 		// Let any listeners know that the current document changed.
 		firePropertyChange(CURRENT_DOCUMENT_PROPERTY, -1, getSelectedIndex());
@@ -453,7 +453,7 @@ inCloseCurrentDocument = false;
 	 *        <code>LEFT</code>, <code>BOTTOM</code>, or <code>RIGHT</code>.
 	 *        If this value is invalid, nothing happens.
 	 */
-	 @Override
+	@Override
 	public void setDocumentSelectionPlacement(int location) {
 		if (location==DOCUMENT_SELECT_TOP || location==DOCUMENT_SELECT_LEFT ||
 			location==DOCUMENT_SELECT_BOTTOM || location==DOCUMENT_SELECT_RIGHT)
@@ -542,7 +542,10 @@ inCloseCurrentDocument = false;
 	class TabbedPane extends JTabbedPane
 							implements DrawDnDIndicatorTabbedPane {
 
-		private int x,y, width,height;
+		private int x;
+		private int y;
+		private int width;
+		private int height;
 		private Stroke wideStroke;
 		private JPopupMenu popup;
 		private TabbedPaneCloseAction closeAction;

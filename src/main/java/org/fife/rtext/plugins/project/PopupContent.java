@@ -23,9 +23,15 @@ import javax.swing.JMenu;
 public interface PopupContent {
 
 
+	/**
+	 * Defines a popup menu action.
+	 */
 	interface PopupAction extends Action, PopupContent {}
 
 
+	/**
+	 * Defines a submenu.
+	 */
 	class PopupSubMenu extends JMenu implements PopupContent {
 
 		public PopupSubMenu(String text) {

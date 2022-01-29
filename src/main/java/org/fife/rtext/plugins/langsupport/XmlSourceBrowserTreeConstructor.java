@@ -30,6 +30,12 @@ import org.fife.rtext.RTextEditorPane;
 public class XmlSourceBrowserTreeConstructor {
 
 
+	/**
+	 * Creates an instance of this class.
+	 *
+	 * @param rtext The parent application.
+	 * @return An instance of this class.
+	 */
 	public JTree constructSourceBrowserTree(RText rtext) {
 		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
 		XmlOutlineTree tree = new XmlOutlineTree(false);

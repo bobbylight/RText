@@ -107,7 +107,7 @@ public final class MacroManager {
 	 *         empty, but will never be <code>null</code>.
 	 */
 	public SortedSet<Macro> clearMacros() {
-		TreeSet<Macro> copy = new TreeSet<>(macros);
+		SortedSet<Macro> copy = new TreeSet<>(macros);
 		macros.clear();
 		support.firePropertyChange(PROPERTY_MACROS, null, null);
 		return copy;

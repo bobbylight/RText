@@ -203,7 +203,11 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	}
 
 
-	// TODO
+	/**
+	 * Adds a dockable window to this application.
+	 *
+	 * @param wind The window to add.
+	 */
 	public void addDockableWindow(DockableWindow wind) {
 		((DockableWindowPanel)mainContentPanel).addDockableWindow(wind);
 	}

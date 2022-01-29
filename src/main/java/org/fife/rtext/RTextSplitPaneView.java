@@ -390,7 +390,7 @@ class RTextSplitPaneView extends AbstractMainView
 	 *        <code>LEFT</code>, <code>BOTTOM</code>, or <code>RIGHT</code>).
 	 *        If this value is invalid, nothing happens.
 	 */
-	 @Override
+	@Override
 	public void setDocumentSelectionPlacement(int location) {
 
 		if (location==DOCUMENT_SELECT_TOP || location==DOCUMENT_SELECT_LEFT ||
@@ -408,7 +408,7 @@ class RTextSplitPaneView extends AbstractMainView
 				};
 
 				listWindow.setPosition(pos);
-//				owner.pack();
+				//owner.pack();
 
 			}
 

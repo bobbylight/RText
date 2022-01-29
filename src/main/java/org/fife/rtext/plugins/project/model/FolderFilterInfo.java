@@ -148,6 +148,13 @@ public class FolderFilterInfo {
 	}
 
 
+	/**
+	 * Sets file filters to apply to dictate what to show in
+	 * this tree node.
+	 *
+	 * @param filters The file filters, which may be {@code null}.
+	 * @see #setHiddenFileFilters(String[])
+	 */
 	public void setAllowedFileFilters(String[] filters) {
 		if (filters!=null && filters.length==1 &&
 				("*".equals(filters[0]) || filters[0].isEmpty())) {
@@ -158,6 +165,13 @@ public class FolderFilterInfo {
 	}
 
 
+	/**
+	 * Sets file filters to dictate what folders are hidden in
+	 * this tree node (e.g. {@code .git}, {@code .svn}, etc.).
+	 *
+	 * @param filters The filters, which may be {@code null}.
+	 * @see #setHiddenFileFilters(String[])
+	 */
 	public void setHiddenFolderFilters(String[] filters) {
 		if (filters!=null && filters.length==1 && filters[0].isEmpty()) {
 			filters = null;
@@ -167,6 +181,14 @@ public class FolderFilterInfo {
 	}
 
 
+	/**
+	 * Sets file filters to dictate what files are hidden in
+	 * this tree node (e.g. {@code .git}, {@code .svn}, etc.).
+	 *
+	 * @param filters The filters, which may be {@code null}.
+	 * @see #setHiddenFolderFilters(String[])
+	 * @see #setAllowedFileFilters(String[])
+	 */
 	public void setHiddenFileFilters(String[] filters) {
 		if (filters!=null && filters.length==1 && filters[0].isEmpty()) {
 			filters = null;

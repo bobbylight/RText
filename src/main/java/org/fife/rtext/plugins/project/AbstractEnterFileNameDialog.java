@@ -279,10 +279,10 @@ abstract class AbstractEnterFileNameDialog extends EscapableDialog {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();
-			if (command.equals("OK")) {
+			if ("OK".equals(command)) {
 				setVisible(false);
 			}
-			else if (command.equals("Cancel")) {
+			else if ("Cancel".equals(command)) {
 				escapePressed();
 			}
 		}

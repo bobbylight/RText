@@ -118,7 +118,7 @@ public class FileSystemTreePlugin extends GUIPlugin<RText> {
 		backAction = new BackAction(app, msg);
 		forwardAction = new ForwardAction(app, msg);
 
-//		tb.add(Box.createHorizontalStrut(3));
+		//tb.add(Box.createHorizontalStrut(3));
 		dirLabel = new JLabel();
 		// Allow label to be resized very small so it doesn't hog space
 		dirLabel.setMinimumSize(new Dimension(8, 8));

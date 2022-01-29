@@ -298,6 +298,12 @@ public class FileTreeNode extends AbstractWorkspaceTreeNode
 	}
 
 
+	/**
+	 * Configures how this node should filter its children.
+	 *
+	 * @param info How to filter child nodes.  This may be
+	 *        {@code null} if no filtering is to be done.
+	 */
 	public void setFilterInfo(FolderFilterInfo info) {
 		this.filterInfo = info;
 		for (int i=0; i<getChildCount(); i++) {

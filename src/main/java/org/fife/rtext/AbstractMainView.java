@@ -215,15 +215,16 @@ public abstract class AbstractMainView extends JPanel
 
 		checkForModification = true;
 		Timer t = new Timer();
+		// Check for files modified outside the editor
+		// every 30 seconds
 		t.schedule(new TimerTask() {
 				@Override
 				public void run() {
 					checkFilesForOutsideModification();
 				}
 			},
-			modificationCheckDelay,	// Initial delay.
-			modificationCheckDelay);	// Check for files modified outside
-								// of the editor every 30 seconds.
+			modificationCheckDelay,
+			modificationCheckDelay);
 
 	}
 
@@ -552,6 +553,12 @@ public abstract class AbstractMainView extends JPanel
 	}
 
 
+	/**
+	 * Copies data from another view into this one.  Useful when
+	 * changing from a tabbed to a list view, for example.
+	 *
+	 * @param fromPanel The panel to copy data from.
+	 */
 	public void copyData(AbstractMainView fromPanel) {
 
 		currentTextArea = fromPanel.currentTextArea;
@@ -3375,7 +3382,7 @@ public abstract class AbstractMainView extends JPanel
 	 *        <code>LEFT</code>, <code>BOTTOM</code>, or <code>RIGHT</code>.
 	 *        If this value is invalid, nothing happens.
 	 */
-	 public abstract void setDocumentSelectionPlacement(int location);
+	public abstract void setDocumentSelectionPlacement(int location);
 
 
 	/**
@@ -3570,7 +3577,7 @@ public abstract class AbstractMainView extends JPanel
 	 * ".orig" when deciding how to open them.
 	 *
 	 * @param ignore Whether to ignore these extensions.
-	 * #see #getIgnoreBackupExtensions()
+	 * @see #getIgnoreBackupExtensions()
 	 */
 	public void setIgnoreBackupExtensions(boolean ignore) {
 

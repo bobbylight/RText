@@ -277,9 +277,9 @@ class ReplaceInFilesThread extends FindInFilesThread {
 				i += len;
 				start = i;
 
+			}
 			// We found a potential match, but "whole word" is enabled
 			// and this match isn't "whole word."
-			}
 			else {
 				// We could probably say "i += len" and get away with it,
 				// but it is possible for someone to search "whole word"

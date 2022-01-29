@@ -213,7 +213,7 @@ public class RTextMenuBar extends MenuBar<RText>
 		// history.  So, we won't add this file in either.
 		RText rtext = getApplication();
 		if (fileFullPath.endsWith(File.separatorChar + rtext.getNewFileName()) ||
-				fileFullPath.equals("-")) {
+				"-".equals(fileFullPath)) {
 			return;
 		}
 		recentFilesMenu.addFileToFileHistory(fileFullPath);
@@ -540,7 +540,7 @@ public class RTextMenuBar extends MenuBar<RText>
 		increaseFontSizesItem = createMenuItem(a);
 		fontSizesMenu.add(increaseFontSizesItem);
 		viewMenu.add(fontSizesMenu);
-/*
+		/*
 		// Text orientation submenu
 		JMenu orientMenu = createMenu(menuMsg, "TextOrientation");
 		ltrItem = createRadioButtonMenuItem(
@@ -574,7 +574,7 @@ public class RTextMenuBar extends MenuBar<RText>
 				null, menuMsg.getString("DescSplitViewNone"));
 		splitViewMenu.add(splitNoneItem);
 		viewMenu.add(splitViewMenu);
-*/
+		*/
 
 		JMenu dwMenu = createMenu(menuMsg, "MenuDockedWindows");
 		registerMenuByName(MENU_DOCKED_WINDOWS, dwMenu);
@@ -588,7 +588,7 @@ public class RTextMenuBar extends MenuBar<RText>
 		lineNumbersItem = new JCheckBoxMenuItem(rtext.getAction(RText.LINE_NUMBER_ACTION));
 		lineNumbersItem.setSelected(rtext.getMainView().getLineNumbersEnabled());
 		lineNumbersItem.setToolTipText(null);
-//		UIUtil.setDescription(lineNumbersItem, msg, "DescLineNumbers");
+		//UIUtil.setDescription(lineNumbersItem, msg, "DescLineNumbers");
 		viewMenu.add(lineNumbersItem);
 
 		viewMenu.addSeparator();

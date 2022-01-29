@@ -215,7 +215,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		fontSelector.setUnderlineSelectable(true);
 		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
 		fontSelector.addPropertyChangeListener(FontSelector.ENABLED_PROPERTY, this);
-		 // Just to keep it right-aligned with stuff above...
+		// Just to keep it right-aligned with stuff above...
 		Box temp = createHorizontalBox();
 		temp.add(fontSelector);
 		temp.add(Box.createHorizontalStrut(5));
@@ -302,7 +302,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		String command = e.getActionCommand();
 
-		if (command.equals("BackgroundButton")) {
+		if ("BackgroundButton".equals(command)) {
 			if (backgroundDialog==null) {
 				backgroundDialog = new BackgroundDialog(getOptionsDialog());
 			}

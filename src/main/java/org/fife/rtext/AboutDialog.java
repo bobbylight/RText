@@ -223,7 +223,7 @@ class AboutDialog extends EscapableDialog {
 			sb.append("<tr><td><b>").append(name).append("</b></td>");
 			sb.append("<td><a href=\"").append(url).append("\">");
 			sb.append(url).append("</a></td></tr>");
-			sb.append("<tr><td colspan=\"2\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\u2022 ");
+			sb.append("<tr><td colspan=\"2\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\u2022 "); // bullet
 			sb.append(desc).append("</td></tr>");
 			// Add an empty row, just for spacing.
 			sb.append("<tr><td>&nbsp;</td><td>&nbsp;</td></tr>");

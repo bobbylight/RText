@@ -183,6 +183,12 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	}
 
 
+	/**
+	 * Configures how this node should filter its children.
+	 *
+	 * @param info How to filter child nodes.  This may be
+	 *        {@code null} if no filtering is to be done.
+	 */
 	public void setFilterInfo(FolderFilterInfo info) {
 		((FolderProjectEntry)entry).setFilterInfo(info);
 		for (int i=0; i<getChildCount(); i++) {

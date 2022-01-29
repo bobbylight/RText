@@ -142,11 +142,19 @@ public class Project implements Comparable<Project>, ProjectEntryParent {
 	}
 
 
+	/**
+	 * Removes this project from its parent workspace.
+	 */
 	public void removeFromWorkspace() {
 		workspace.removeProject(this);
 	}
 
 
+	/**
+	 * Sets the name of this workspace.
+	 *
+	 * @param name The new name.
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}

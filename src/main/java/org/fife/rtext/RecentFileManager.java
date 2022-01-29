@@ -80,7 +80,7 @@ public class RecentFileManager implements PropertyChangeListener {
 				// all values, a "-" filename means no files were found for the
 				// file history.  So, we won't add this file in either.
 				if (fullPath.endsWith(File.separatorChar + rtext.getNewFileName()) ||
-						fullPath.equals("-")) {
+						"-".equals(fullPath)) {
 					return;
 				}
 				addFile(fullPath);

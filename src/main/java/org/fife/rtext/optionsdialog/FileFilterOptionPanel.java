@@ -102,7 +102,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 		addLeftAligned(box, guessTypeCB);
 		addLeftAligned(box, ignoreExtsCB);
 		box.add(Box.createVerticalStrut(5)); // Distance from "Restore Defaults"
-//		box.add(Box.createVerticalGlue());
+		//box.add(Box.createVerticalGlue());
 		bottomPanel.add(box, BorderLayout.NORTH);
 
 		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));

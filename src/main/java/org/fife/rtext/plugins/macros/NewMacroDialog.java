@@ -388,8 +388,8 @@ class NewMacroDialog extends EscapableDialog {
 		okButton.setPreferredSize(editButton.getPreferredSize());
 		cancelButton.setPreferredSize(editButton.getPreferredSize());
 
-//		buttonPanel.setLayout(new GridLayout(1,3, 5,0));
-//		buttonPanel.add(editButton, 1);
+		//buttonPanel.setLayout(new GridLayout(1,3, 5,0));
+		//buttonPanel.add(editButton, 1);
 
 		setTitle(MSG.getString("Title.Edit"));
 

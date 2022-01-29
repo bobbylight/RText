@@ -39,6 +39,12 @@ import org.fife.rtext.RTextEditorPane;
 public class JavaScriptSourceBrowserTreeConstructor {
 
 
+	/**
+	 * Creates an instance of this class.
+	 *
+	 * @param rtext The parent application.
+	 * @return An instance of this class.
+	 */
 	public JTree constructSourceBrowserTree(RText rtext) {
 		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
 		JavaScriptOutlineTree tree = new JavaScriptOutlineTree(false);

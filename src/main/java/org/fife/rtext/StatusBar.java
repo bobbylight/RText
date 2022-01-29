@@ -46,7 +46,8 @@ public class StatusBar extends org.fife.ui.StatusBar
 	private JLabel readOnlyIndicator;
 
 	private RText rtext;
-	private int row, column;
+	private int row;
+	private int column;
 
 	private boolean rowColumnIndicatorVisible;
 
