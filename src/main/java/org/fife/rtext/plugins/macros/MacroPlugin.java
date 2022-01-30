@@ -39,7 +39,7 @@ import org.fife.ui.app.icons.IconGroup;
 public class MacroPlugin extends AbstractPlugin<RText>
 		implements PropertyChangeListener {
 
-	private static final String VERSION				= "4.0.1";
+	private static final String VERSION				= "5.0.0";
 
 	private MacroOptionPanel optionPanel;
 	private JMenu macrosMenu;

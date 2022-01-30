@@ -1,9 +1,16 @@
 RText Change Log
-http://bobbylight.github.io/RText/
-----------------------------------
+https://bobbylight.github.io/RText/
+-----------------------------------
 
-4.0.1
+5.0.0 (01/30/2022)
 ------------------
+   - Major internal refactoring regarding app appearance.  There's little
+     visibly different here but the code has been simplified and future
+     RText releases will see a simplified experience around options and
+     configuration because of this work.
+   - Adding Dockerfile syntax highlighting (this already existed but was
+     not configurable
+   - Fix #58: Terminal locks up when lots of output from processes
 
 
 4.0.0 (06/15/2021)

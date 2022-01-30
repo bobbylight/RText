@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "RText"
-!define PRODUCT_VERSION "4.0.1"
+!define PRODUCT_VERSION "5.0.0"
 !define PRODUCT_WEB_SITE "http://fifesoft.com/rtext/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RText.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -105,6 +105,7 @@ Section Uninstall
   Delete /REBOOTOK "$INSTDIR\readme.unix"
   Delete /REBOOTOK "$INSTDIR\ExtraFileChooserFilters.xml"
   Delete /REBOOTOK "$INSTDIR\localizations.xml"
+  Delete /REBOOTOK "$INSTDIR\uninst.exe"
 
   Delete "$SMPROGRAMS\RText\Uninstall.lnk"
   Delete "$SMPROGRAMS\RText\Website.lnk"
