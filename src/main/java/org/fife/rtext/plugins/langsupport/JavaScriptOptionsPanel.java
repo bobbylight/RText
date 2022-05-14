@@ -105,7 +105,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		cp.add(createAutoActivationPanel(msg));
 		cp.add(Box.createVerticalStrut(5));
 
-		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton, 5);
 

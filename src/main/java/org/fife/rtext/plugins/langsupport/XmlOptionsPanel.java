@@ -93,7 +93,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 		addLeftAligned(box, foldingEnabledCB, 5);
 
 		cp.add(Box.createVerticalStrut(5));
-		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(this);
 		addLeftAligned(cp, rdButton, 5);
 

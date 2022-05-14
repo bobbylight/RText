@@ -100,7 +100,7 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 		box2.add(Box.createVerticalGlue());
 
 		cp.add(Box.createVerticalStrut(5));
-		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton, 5);
 

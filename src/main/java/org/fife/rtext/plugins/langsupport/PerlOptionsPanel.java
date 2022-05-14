@@ -210,7 +210,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 
 		cp.add(Box.createVerticalStrut(10));
 
-		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton);
 

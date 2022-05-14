@@ -89,7 +89,7 @@ class JspOptionsPanel extends OptionsDialogPanel {
 		addLeftAligned(box, foldingEnabledCB, 5);
 		cp.add(Box.createVerticalStrut(5));
 
-		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton);
 

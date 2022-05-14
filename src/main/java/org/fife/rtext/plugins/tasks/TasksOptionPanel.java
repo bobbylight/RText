@@ -127,8 +127,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel<TasksPlugin>
 		realTable.setPreferredScrollableViewportSize(new Dimension(300,200));
 		contentPane.add(table);
 
-		JButton defaultsButton = new JButton(
-								plugin.getString("Options.RestoreDefaults"));
+		JButton defaultsButton = new JButton(rtext.getString("RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
 		JPanel temp = new JPanel(new BorderLayout());

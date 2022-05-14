@@ -164,7 +164,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
 		addLeftAligned(box, foldingEnabledCB, 5);
 
-		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton, 5);
 

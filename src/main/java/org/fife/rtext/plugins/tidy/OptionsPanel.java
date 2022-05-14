@@ -95,7 +95,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 		cp.add(Box.createVerticalStrut(5));
 
 		JButton defaultsButton = new JButton(
-							msg.getString("Options.RestoreDefaults"));
+			plugin.getApplication().getString("RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
 		Box temp = createHorizontalBox();

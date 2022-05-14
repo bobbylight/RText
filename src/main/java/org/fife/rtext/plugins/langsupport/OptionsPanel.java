@@ -105,7 +105,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 		cp.add(temp);
 		cp.add(Box.createVerticalStrut(10));
 
-		rdButton = new JButton(msg.getString("Options.General.RestoreDefaults"));
+		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(listener);
 		addLeftAligned(cp, rdButton, 5);
 
