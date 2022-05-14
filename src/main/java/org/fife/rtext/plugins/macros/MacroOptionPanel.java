@@ -109,6 +109,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel<MacroPlugin>
 		model.addRow(new Object[] { macro.clone(),
 				KeyStroke.getKeyStroke(macro.getAccelerator()),
 				macro.getDesc() });
+		setDirty(true);
 	}
 
 
