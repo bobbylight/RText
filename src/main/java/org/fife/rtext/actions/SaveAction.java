@@ -3,7 +3,7 @@
  *
  * SaveAction.java - Action to save the current document in RText.
  * Copyright (C) 2003 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

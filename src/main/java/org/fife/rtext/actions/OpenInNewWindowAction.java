@@ -4,7 +4,7 @@
  * OpenInNewWindowAction.java - Action to open a document in a new RText
  * window.
  * Copyright (C) 2003 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

@@ -4,7 +4,7 @@
  * ReplaceInFilesTable.java - A table listing replace results in a Replace
  * in Files dialog.
  * Copyright (C) 2006 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

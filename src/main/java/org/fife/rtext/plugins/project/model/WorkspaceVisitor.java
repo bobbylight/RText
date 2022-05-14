@@ -3,7 +3,7 @@
  *
  * WorkspaceVisitor.java - Visitor for a workspace and its project entries.
  * Copyright (C) 2012 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

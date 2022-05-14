@@ -188,16 +188,15 @@ class AboutDialog extends EscapableDialog {
 
 			StringBuilder sb = new StringBuilder("<html><table>");
 			appendLibrary(sb, "RSyntaxTextArea:",
-				"http://fifesoft.com/rsyntaxtextarea",
+				"https://fifesoft.com/rsyntaxtextarea",
 				msg.getString("Desc.RSyntaxTextArea"));
 			appendLibrary(sb, "JTidy:", "http://jtidy.sourceforge.net/",
 				msg.getString("Desc.JTidy"));
 			appendLibrary(sb, "Jazzy:", "http://jazzy.sourceforge.net/",
 				msg.getString("Desc.Jazzy"));
-			appendLibrary(sb, "JGoodies:", "http://jgoodies.com",
+			appendLibrary(sb, "JGoodies:", "https://jgoodies.com",
 				msg.getString("Desc.JGoodies"));
-			appendLibrary(sb, "Groovy:",
-				"http://groovy.codehaus.org/",
+			appendLibrary(sb, "Groovy:", "https://groovy-lang.org/",
 				msg.getString("Desc.Groovy"));
 			sb.append("</table>");
 

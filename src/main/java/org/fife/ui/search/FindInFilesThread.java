@@ -4,7 +4,7 @@
  * FindInFilesThread.java - Thread that does the searching for a
  * Find in Files dialog.
  * Copyright (C) 2005 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

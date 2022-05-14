@@ -8,8 +8,8 @@
  *                      org.fife.rtext.RTextEditorPane.
  *
  * You can use the entire RText and RSyntaxTextArea public API's:
- *   http://javadoc.fifesoft.com/rtext/
- *   http://javadoc.fifesoft.com/rsyntaxtextarea/
+ *   https://javadoc.fifesoft.com/rtext/
+ *   https://javadoc.fifesoft.com/rsyntaxtextarea/
  */
 import javax.swing.*
 

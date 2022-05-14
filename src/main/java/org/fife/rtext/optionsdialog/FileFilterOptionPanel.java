@@ -4,7 +4,7 @@
  * FileFilterOptionPanel.java - Option panel letting the user configure
  * what extensions get opened with what syntax highlighting scheme.
  * Copyright (C) 2004 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

@@ -4,7 +4,7 @@
  * SaveAsWebPageAction.java - Action to save a copy of the current
  * file as HTML in RText.
  * Copyright (C) 2004 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

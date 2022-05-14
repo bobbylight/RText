@@ -3,7 +3,7 @@
  *
  * FindInFilesListener.java - Listens for events from a FindInFilesDialog.
  * Copyright (C) 2004 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

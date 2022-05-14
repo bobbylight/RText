@@ -10,7 +10,7 @@ you would expect:
 * Regex search and replace
 * Find/replace in files
 * Varying degrees of code completion for C, Java, Perl, JavaScript, and more
-* Varying degrees of syntax checking for various languages ([JSHint](http://jshint.com/)
+* Varying degrees of syntax checking for various languages ([JSHint](https://jshint.com/)
   integration for JavaScript, compiler checking for Perl, XML well-formedness checking, etc.)
 * Programmatic macros, write them in either JavaScript or Groovy
 * Application lifecycle (bootstrap, plugin loading, cleanup, shutdown)
@@ -24,7 +24,7 @@ you would expect:
 
 ## Building
 
-RText uses [Gradle](http://gradle.org/) to build.  To compile, run
+RText uses [Gradle](https://gradle.org/) to build.  To compile, run
 all unit tests, and create the jar, and run:
 
     ./gradlew build installDist
@@ -49,7 +49,7 @@ all files being wrapped into the generated .exe.  This is different than our OS 
 app task (discussed below) which uses `jpackage`.
 
 After building the installable image, you can create the win32 installer by
-running the `MakeRTextInstaller.nsi` [NSIS](http://nsis.sourceforge.net/Main_Page)
+running the `MakeRTextInstaller.nsi` [NSIS](https://nsis.sourceforge.io/Main_Page)
 script at the root of the project.
 
 ### Building the OS X application

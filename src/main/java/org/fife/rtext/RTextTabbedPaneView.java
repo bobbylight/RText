@@ -4,7 +4,7 @@
  * RTextTabbedPaneView.java - A JTabbedPane containing multiple
  * text documents.
  * Copyright (C) 2003 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

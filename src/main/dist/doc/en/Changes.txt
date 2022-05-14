@@ -378,7 +378,7 @@ https://bobbylight.github.io/RText/
 
 1.3.0 (11/18/2010):
 -------------------
-   - Adding drop shadows to menus - thanks to JGoodies (http://jgoodies.com).
+   - Adding drop shadows to menus - thanks to JGoodies (https://www.jgoodies.com/).
    - Revamped external LookAndFeel support.  Several Substance 6.1 skins are
      now selectable by default in RText.
    - Text matches in the "Find in Files" dialog are now syntax highlighted.
@@ -516,7 +516,7 @@ https://bobbylight.github.io/RText/
 ---------------------
    - Fixed a bug in RTF copy/paste.
    - Separated RSyntaxTextArea into its own project.  Check out
-     http://fifesoft.com/rsyntaxtextarea for more information.
+     https://fifesoft.com/rsyntaxtextarea for more information.
    - Fixed bug 2056201: Plugins menu wasn't populated on OS X.
    - When doing a find or replace with regular expressions enabled, regex
      errors are now identified on the fly, highlighted in red, and a tooltip
@@ -1263,8 +1263,8 @@ https://bobbylight.github.io/RText/
              - Documentation comments "/// <...>" are identified and painted
                as such.  HTML tags inside of them (such as "<summary>") are
                highlighted as well.
-     These enhancements were made possibly by JFlex (http://www.jflex.de).
-     Thanks also go out to http://www.ostermiller.org/syntax for many ideas,
+     These enhancements were made possibly by JFlex (https://www.jflex.de/).
+     Thanks also go out to https://ostermiller.org/syntax/ for many ideas,
      inspiration, and test cases.
    - Made line numbering code more efficient.  There should be a slight
      performance boost because of this.
@@ -1513,7 +1513,7 @@ https://bobbylight.github.io/RText/
 ---------------------
    - Added a Source Browser component.  This component requires you
      to have Exhuberant Ctags installed on your machine
-     (http://sourceforge.net/projects/ctags).  When the Source
+     (https://sourceforge.net/projects/ctags).  When the Source
      Browser is enabled, an extra panel is visible in RText listing
      all functions/variables, etc. found in the current document's
      code code; clicking on an item in this panel takes you directly
@@ -1918,7 +1918,7 @@ https://bobbylight.github.io/RText/
      enhancements).
    - Fixed JRE 1.4 bug causing popup menus to disappear when a modal dialog
      is displayed (See
-	http://developer.java.sun.com/developer/bugParade/bugs/4911422.html
+     https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4911422
      for more details).  Hopefully this won't break anything else...
      Also note that I didn't fix this for the Mac Look and Feel, so it
      will still have this bug.  All other LnF's should be okay.

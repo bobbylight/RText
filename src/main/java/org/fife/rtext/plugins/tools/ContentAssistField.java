@@ -3,7 +3,7 @@
  *
  * ContentAssistField.java - A text field with content-assist available.
  * Copyright (C) 2010 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

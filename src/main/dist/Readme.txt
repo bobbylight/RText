@@ -1,7 +1,7 @@
-================================
-= RText Readme                 =
-= http://fifesoft.com/rtext    =
-================================
+=======================================
+= RText Readme                        =
+= https://bobbylight.github.io/RText/ =
+=======================================
 
 Contents
 --------
@@ -48,7 +48,7 @@ Using the Source Browser plugin (which comes standard with RText) requires
 either Exuberant Ctags, or the classic "ctags" UNIX command.  If you do not
 have either installed, RText will still work normally, but the Source Browser
 will be disabled.  You can download Exuberant CTags here:
-http://sourceforge.net/projects/ctags
+https://sourceforge.net/projects/ctags
 
 Code completion and syntax checking for some languages, such as Java and Perl,
 requires you to configure RText to know where the compiler and libraries live.
@@ -77,7 +77,7 @@ https://github.com/bobbylight/RText
 -----------
 As of version 2.0.2, RText is distributed under a modified BSD license; please
 see the file named License.txt distributed with this program, or visit
-http://www.opensource.org/licenses/BSD-3-Clause.
+https://opensource.org/licenses/BSD-3-Clause.
 
 All libraries used by RText (which are listed below) come with their license
 files included in both the binary and source packages.
@@ -86,18 +86,18 @@ The editor used in RText is RSyntaxTextArea, an open source, syntax
 highlighting text component licensed under a modified BSD license.  This
 license is included with RText in the file RSyntaxTextArea.License.txt.  For
 more information on RSyntaxTextArea, please visit
-http://fifesoft.com/rsyntaxtextarea.
+https://fifesoft.com/rsyntaxtextarea.
 
 RSyntaxTextArea's RSTALanguageSupport (included as part of the language support
 plugin via language_support.jar) includes Mozilla Rhino for JavaScript code
 completion and parsing, which is licensed under the MPL 1.1.  For more
-information, please visit http://www.mozilla.org/rhino/.
+information, please visit https://github.com/mozilla/rhino.
   
 RText links against RSyntaxTextArea's SpellChecker plugin, which is built on
 top of Jazzy, an open source spell checker library for Java applications.
 Since Jazzy is licensed under the LGPL 2.1, the rsta_spellchecker.jar is also
 licensed under LGPL 2.1.  For more information, please visit the
-RSyntaxTextArea project at http://fifesoft.com/rsyntaxtextarea.
+RSyntaxTextArea project at https://fifesoft.com/rsyntaxtextarea.
 
 The source code tidying plugin uses JTidy, a Java port of HTMLTidy which uses
 an "MIT-like license."  See http://jtidy.sourceforge.net/ for more information.

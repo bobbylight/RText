@@ -3,7 +3,7 @@
  *
  * DartOptionsPanel.java - Options for Dart.
  * Copyright (C) 2014 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

@@ -3,7 +3,7 @@
  *
  * TasksPrefs.java - Preferences for the tasks plugin.
  * Copyright (C) 2010 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

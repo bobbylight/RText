@@ -2,7 +2,7 @@
  * 12/14/2015
  *
  * Copyright (C) 2015 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

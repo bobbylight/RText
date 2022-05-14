@@ -4,7 +4,7 @@
  * AbstractParserNoticeWindow.java - Base class for dockable windows that
  * display parser notices.
  * Copyright (C) 2009 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
@@ -119,7 +119,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 	 * delegating TableCellRenderer on a JTableHeader can cause NPE's.  Then,
 	 * the UI never repaints from then on.  Seems to happen only when the table
 	 * is actually visible during the LaF change.  See
-	 * <a href="http://bugs.sun.com/view_bug.do?bug_id=6429812">6429812</a>.
+	 * <a href="https://bugs.java.com/bugdatabase/view_bug.do?bug_id=6429812">6429812</a>.
 	 */
 	@Override
 	public void updateUI() {

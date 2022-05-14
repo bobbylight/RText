@@ -4,7 +4,7 @@
  * FolderFilterInfo.java - Information about what files a folder in the
  * project tree should display.
  * Copyright (C) 2012 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

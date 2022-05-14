@@ -3,7 +3,7 @@
  *
  * CPlusPlusOptionsPanel.java - Options for C++.
  * Copyright (C) 2011 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

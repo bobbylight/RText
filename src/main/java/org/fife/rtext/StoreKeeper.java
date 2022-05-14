@@ -4,7 +4,7 @@
  * StoreKeeper.java - Keeps track of all RText instances (windows) that are
  * open, and provides an interface to update their Look and Feels together.
  * Copyright (C) 2003 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

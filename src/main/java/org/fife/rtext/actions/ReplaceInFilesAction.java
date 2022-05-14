@@ -3,7 +3,7 @@
  *
  * ReplaceInFilesAction.java - Action for replacing text in a group of files.
  * Copyright (C) 2006 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

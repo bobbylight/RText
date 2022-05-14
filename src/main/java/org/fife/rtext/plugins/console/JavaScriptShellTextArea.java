@@ -4,7 +4,7 @@
  * JavaScriptShellTextArea.java - A shell allowing you to muck with RText's
  * innards via Java's JavaScript engine.
  * Copyright (C) 2010 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

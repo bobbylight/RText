@@ -4,7 +4,7 @@
  * PhysicalLocationTreeNode.java - Marker interface for a tree node
  * representing a physical file or folder.
  * Copyright (C) 2010 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

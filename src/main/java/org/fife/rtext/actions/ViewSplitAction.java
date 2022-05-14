@@ -3,7 +3,7 @@
  *
  * ViewSplitAction.java - Action to split the editor view.
  * Copyright (C) 2006 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

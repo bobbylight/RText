@@ -4,7 +4,7 @@
  * ToolDockableWindow.java - Dockable window that acts as a console for tool
  * output.
  * Copyright (C) 2010 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

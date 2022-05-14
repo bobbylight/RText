@@ -4,7 +4,7 @@
  * BackgroundDialog.java - Dialog allowing you to change the background
  * of RTextAreas.
  * Copyright (C) 2003 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
@@ -387,8 +387,8 @@ class BackgroundDialog extends JDialog implements ActionListener {
 			// Image.SCALE_SMOOTH hint.  So use a different method to
 			// get a scaled version.
 			// See Java bugs:
-			// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4937376
-			// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6196792
+			// https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4937376
+			// https://bugs.java.com/bugdatabase/view_bug.do?bug_id=6196792
 			//image = image.getScaledInstance(IMAGE_DIM,IMAGE_DIM, Image.SCALE_SMOOTH);
 			BufferedImage bi =  new BufferedImage(image.getWidth(this),
 										image.getHeight(this),

@@ -3,7 +3,7 @@
  *
  * SourceTreeNode.java - The tree node used in DefaultSourceTrees.
  * Copyright (C) 2012 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

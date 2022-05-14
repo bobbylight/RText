@@ -3,7 +3,7 @@
  *
  * GeneralOptionPanel.java - Option panel for general RText options.
  * Copyright (C) 2004 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

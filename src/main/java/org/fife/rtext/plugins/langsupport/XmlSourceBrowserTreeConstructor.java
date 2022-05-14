@@ -4,7 +4,7 @@
  * XmlSourceBrowserTreeConstructor.java - "Plug-in" for the SourceBrowser
  * plug-in that creates the tree view to use for XML.
  * Copyright (C) 2008 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

@@ -4,7 +4,7 @@
  * SourceBrowserOptionPanel.java - Option panel for the Source Browser
  * component.
  * Copyright (C) 2004 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

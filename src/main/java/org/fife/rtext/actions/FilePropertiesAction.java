@@ -4,7 +4,7 @@
  * FilePropertiesAction.java - Action to display the information on the
  * current text area.
  * Copyright (C) 2004 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

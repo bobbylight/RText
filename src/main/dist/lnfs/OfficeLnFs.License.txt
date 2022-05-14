@@ -1,7 +1,7 @@
 /* ====================================================================
  * 
  * Office Look and Feels License
- * http://sourceforge.net/projects/officelnfs
+ * https://sourceforge.net/projects/officelnfs
  *
  * Copyright (c) 2003-2006 Robert Futrell.  All rights reserved.
  *

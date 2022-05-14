@@ -4,7 +4,7 @@
  * SyntaxFilters.java - Manages a list of wildcard file filters and what
  * syntax highlighting styles they map to.
  * Copyright (C) 2004 Robert Futrell
- * http://fifesoft.com/rtext
+ * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
