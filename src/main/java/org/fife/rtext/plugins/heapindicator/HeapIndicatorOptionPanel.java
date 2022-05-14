@@ -27,7 +27,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -50,11 +49,6 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlu
 
 	private final JCheckBox visibilityCheckBox;
 	private final JSpinner refreshRateSpinner;
-	private final JCheckBox systemColorsCheckBox;
-	private final JLabel foregroundLabel;
-	private final RColorSwatchesButton foregroundButton;
-	private final JLabel borderLabel;
-	private final RColorSwatchesButton borderButton;
 
 
 	/**
@@ -107,54 +101,6 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlu
 		temp.add(temp2, BorderLayout.LINE_START);
 		topPanel2.add(temp);
 		topPanel.add(topPanel2);
-		topPanel.add(Box.createVerticalStrut(5));
-
-		topPanel2 = Box.createVerticalBox();
-		topPanel2.setBorder(BorderFactory.createCompoundBorder(
-				new OptionPanelBorder(msg.getString(
-								"Plugin.OptionPanel.Title.Appearance")),
-				empty5Border));
-
-		// Panel for the "use system colors" check box.
-		temp = new JPanel(new BorderLayout());
-		systemColorsCheckBox = new JCheckBox(msg.getString(
-						"Plugin.OptionPanel.SystemColors.text"));
-		systemColorsCheckBox.setMnemonic((int)msg.getString(
-			"Plugin.OptionPanel.SystemColors.mnemonic").charAt(0));
-		systemColorsCheckBox.addActionListener(this);
-		temp.add(systemColorsCheckBox, BorderLayout.LINE_START);
-		topPanel2.add(temp);
-		topPanel2.add(Box.createVerticalStrut(5));
-
-		// Panel for the indicator's foreground and border colors.
-		temp = new JPanel(new SpringLayout());
-		Border indentBorder = orientation.isLeftToRight() ?
-				BorderFactory.createEmptyBorder(0,20,0,0) :
-				BorderFactory.createEmptyBorder(0,0,0,20);
-		temp.setBorder(indentBorder);
-		foregroundLabel = UIUtil.newLabel(msg,
-				"Plugin.OptionPanel.ForegroundColor");
-		foregroundButton = new RColorSwatchesButton();
-		foregroundButton.addPropertyChangeListener(this);
-		foregroundLabel.setLabelFor(foregroundButton);
-		borderLabel = UIUtil.newLabel(msg, "Plugin.OptionPanel.BorderColor");
-		borderButton = new RColorSwatchesButton();
-		borderButton.addPropertyChangeListener(this);
-		borderLabel.setLabelFor(borderButton);
-		if (orientation.isLeftToRight()) {
-			temp.add(foregroundLabel);   temp.add(foregroundButton);
-			temp.add(borderLabel);       temp.add(borderButton);
-		}
-		else {
-			temp.add(foregroundButton);  temp.add(foregroundLabel);
-			temp.add(borderButton);      temp.add(borderLabel);
-		}
-		UIUtil.makeSpringCompactGrid(temp, 2,2, 5,5, 5,5);
-		JPanel temp3 = new JPanel(new BorderLayout());
-		temp3.add(temp, BorderLayout.LINE_START);
-		topPanel2.add(temp3);
-
-		topPanel.add(topPanel2);
 
 		// Put it all together!
 		add(topPanel, BorderLayout.NORTH);
@@ -177,12 +123,6 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlu
 			setDirty(true);
 		}
 
-		else if (source==systemColorsCheckBox) {
-			boolean use = systemColorsCheckBox.isSelected();
-			setColorOptionsEnabled(!use);
-			setDirty(true);
-		}
-
 	}
 
 
@@ -196,9 +136,6 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlu
 		p.setVisible(visibilityCheckBox.isSelected());
 		int refresh = (Integer)refreshRateSpinner.getValue();
 		p.setRefreshInterval(refresh*1000);
-		p.setUseSystemColors(systemColorsCheckBox.isSelected());
-		p.setIconBorderColor(borderButton.getColor());
-		p.setIconForeground(foregroundButton.getColor());
 	}
 
 
@@ -227,7 +164,7 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlu
 	 */
 	@Override
 	public JComponent getTopJComponent() {
-		return foregroundButton;
+		return visibilityCheckBox;
 	}
 
 
@@ -254,27 +191,6 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlu
 		HeapIndicatorPlugin p = getPlugin();
 		visibilityCheckBox.setSelected(p.isVisible());
 		refreshRateSpinner.setValue(p.getRefreshInterval() / 1000);
-		boolean useSystemColors = p.getUseSystemColors();
-		systemColorsCheckBox.setSelected(useSystemColors);
-		borderButton.setColor(p.getIconBorderColor());
-		foregroundButton.setColor(p.getIconForeground());
-		setColorOptionsEnabled(!useSystemColors);
-	}
-
-
-	/**
-	 * Enables or disables the widgets concerned with setting colors for
-	 * this heap indicator.
-	 *
-	 * @param enabled Whether or not the widgets should be enabled.
-	 */
-	private void setColorOptionsEnabled(boolean enabled) {
-		if (borderLabel!=null) {
-			borderLabel.setEnabled(enabled);
-			borderButton.setEnabled(enabled);
-			foregroundLabel.setEnabled(enabled);
-			foregroundButton.setEnabled(enabled);
-		}
 	}
 
 

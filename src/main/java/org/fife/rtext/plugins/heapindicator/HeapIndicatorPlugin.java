@@ -55,10 +55,6 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 	private HeapIndicatorOptionPanel optionPanel;
 	private Map<String, Icon> icons;
 
-	private boolean useSystemColors;
-	private Color iconForeground;
-	private Color iconBorderColor;
-
 	private static Object[] objArray;
 
 	private static final String BUNDLE_NAME		=
@@ -84,9 +80,6 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 		setBorder(BorderFactory.createEmptyBorder(2,2,4,2));
 		add(new JLabel(heapIcon));
 
-		setUseSystemColors(prefs.useSystemColors);
-		setIconForeground(prefs.iconForeground);
-		setIconBorderColor(prefs.iconBorderColor);
 		setVisible(prefs.visible);
 
 		getData();
@@ -122,28 +115,12 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 
 
 	Color getIconBorderColor() {
-
-		Color c = iconBorderColor;
-
-		if (getUseSystemColors()) {
-			c = UIManager.getColor("textInactiveText");
-		}
-
-		return c;
-
+		return UIManager.getColor("textInactiveText");
 	}
 
 
 	Color getIconForeground() {
-
-		Color c = iconForeground;
-
-		if (getUseSystemColors()) {
-			c = UIManager.getColor("ProgressBar.foreground");
-		}
-
-		return c;
-
+		return UIManager.getColor("ProgressBar.foreground");
 	}
 
 
@@ -261,18 +238,6 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 
 
 	/**
-	 * Returns whether or not system colors are used when painting the
-	 * heap indicator.
-	 *
-	 * @return Whether or not to use system colors.
-	 * @see #setUseSystemColors
-	 */
-	boolean getUseSystemColors() {
-		return useSystemColors;
-	}
-
-
-	/**
 	 * Called just after a plugin is added to a GUI application.  If this is
 	 * a <code>GUIPlugin</code>, it has already been added visually.  Plugins
 	 * should use this method to register any listeners to the GUI application
@@ -369,27 +334,12 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 		HeapIndicatorPrefs prefs = new HeapIndicatorPrefs();
 		prefs.visible         = isVisible();
 		prefs.refreshInterval = getRefreshInterval();
-		prefs.useSystemColors = getUseSystemColors();
-		prefs.iconForeground  = getIconForeground();
-		prefs.iconBorderColor = getIconBorderColor();
 		File prefsFile = getPrefsFile();
 		try {
 			prefs.save(prefsFile);
 		} catch (IOException ioe) {
 			getApplication().displayException(ioe);
 		}
-	}
-
-
-	void setIconBorderColor(Color iconBorderColor) {
-		this.iconBorderColor = iconBorderColor;
-		repaint();
-	}
-
-
-	void setIconForeground(Color iconForeground) {
-		this.iconForeground = iconForeground;
-		repaint();
 	}
 
 
@@ -403,21 +353,6 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 		if (interval<=0 || interval==getRefreshInterval())
 			return;
 		installTimer(interval);
-	}
-
-
-	/**
-	 * Sets whether or not to use system colors when painting the heap
-	 * indicator.
-	 *
-	 * @param useSystemColors Whether or not to use system colors.
-	 * @see #getUseSystemColors
-	 */
-	void setUseSystemColors(boolean useSystemColors) {
-		if (useSystemColors!=getUseSystemColors()) {
-			this.useSystemColors = useSystemColors;
-			repaint();
-		}
 	}
 
 

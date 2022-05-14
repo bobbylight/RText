@@ -11,8 +11,6 @@ package org.fife.rtext.plugins.heapindicator;
 
 import org.fife.ui.app.prefs.Prefs;
 
-import java.awt.Color;
-
 
 /**
  * Preferences for the heap indicator.
@@ -23,24 +21,15 @@ import java.awt.Color;
 public class HeapIndicatorPrefs extends Prefs {
 
 	public boolean visible;
-	public int     refreshInterval;
-	public boolean useSystemColors;
-	public Color   iconForeground;
-	public Color   iconBorderColor;
+	public int refreshInterval;
 
-	private static final boolean	DEFAULT_VISIBLE			= true;
-	private static final int		DEFAULT_REFRESH_INTERVAL	= 10000;
-	private static final boolean	DEFAULT_USE_SYSTEM_COLORS	= true;
-	private static final Color	DEFAULT_ICON_FOREGROUND		= Color.BLUE;
-	private static final Color	DEFAULT_ICON_BORDER_COLOR	= Color.BLACK;
+	private static final boolean DEFAULT_VISIBLE = true;
+	private static final int DEFAULT_REFRESH_INTERVAL = 10000;
 
 	@Override
 	public void setDefaults() {
 		visible         = DEFAULT_VISIBLE;
 		refreshInterval = DEFAULT_REFRESH_INTERVAL;
-		useSystemColors = DEFAULT_USE_SYSTEM_COLORS;
-		iconForeground  = DEFAULT_ICON_FOREGROUND;
-		iconBorderColor = DEFAULT_ICON_BORDER_COLOR;
 	}
 
 
