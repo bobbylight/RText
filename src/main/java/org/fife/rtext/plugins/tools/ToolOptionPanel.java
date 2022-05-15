@@ -19,7 +19,6 @@ import javax.swing.table.TableColumnModel;
 import org.fife.rtext.AbstractConsoleTextAreaOptionPanel;
 import org.fife.ui.KeyStrokeCellRenderer;
 import org.fife.ui.UIUtil;
-import org.fife.ui.app.console.AbstractConsoleTextArea;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.modifiabletable.AbstractRowHandler;
@@ -66,11 +65,6 @@ class ToolOptionPanel extends AbstractConsoleTextAreaOptionPanel<ToolPlugin>
 		// Add the "general" options panel
 		Container generalPanel = createGeneralPanel();
 		topPanel.add(generalPanel);
-		topPanel.add(Box.createVerticalStrut(5));
-
-		// Add the "colors" option panel
-		Container colorsPanel = createColorsPanel();
-		topPanel.add(colorsPanel);
 		topPanel.add(Box.createVerticalStrut(5));
 
 		// Add the "tools" option panel
@@ -144,15 +138,6 @@ class ToolOptionPanel extends AbstractConsoleTextAreaOptionPanel<ToolPlugin>
 		window.setActive(visibleCB.isSelected());
 		window.setPosition(locationCombo.getSelectedIndex());
 
-		Color c = exceptionsCB.isSelected() ? exceptionsButton.getColor() : null;
-		window.setForeground(AbstractConsoleTextArea.STYLE_EXCEPTION, c);
-		c = promptCB.isSelected() ? promptButton.getColor() : null;
-		window.setForeground(AbstractConsoleTextArea.STYLE_PROMPT, c);
-		c = stdoutCB.isSelected() ? stdoutButton.getColor() : null;
-		window.setForeground(AbstractConsoleTextArea.STYLE_STDOUT, c);
-		c = stderrCB.isSelected() ? stderrButton.getColor() : null;
-		window.setForeground(AbstractConsoleTextArea.STYLE_STDERR, c);
-
 		ToolManager tm = ToolManager.get();
 		tm.clearTools();
 		for (int i=0; i<model.getRowCount(); i++) {
@@ -172,30 +157,6 @@ class ToolOptionPanel extends AbstractConsoleTextAreaOptionPanel<ToolPlugin>
 	@Override
 	public void modifiableTableChanged(ModifiableTableChangeEvent e) {
 		setDirty(true);
-	}
-
-
-	/**
-	 * Overridden to set all colors to values appropriate for the current Look
-	 * and Feel.
-	 *
-	 * @param event The broadcasted event.
-	 */
-	@Override
-	public void optionsEvent(String event) {
-		restoreDefaultColors();
-		super.optionsEvent(event);
-	}
-
-
-	/**
-	 * Changes all consoles to use the default colors for the current
-	 * application theme.
-	 */
-	private void restoreDefaultColors() {
-		ToolPlugin plugin = getPlugin();
-		plugin.restoreDefaultColors();
-		setValues(plugin.getApplication());
 	}
 
 
@@ -220,20 +181,6 @@ class ToolOptionPanel extends AbstractConsoleTextAreaOptionPanel<ToolPlugin>
 		ToolDockableWindow window = p.getDockableWindow();
 		visibleCB.setSelected(window.isActive());
 		setToolOutputPanelPlacement(window.getPosition());
-
-		stdoutCB.setSelected(window.isStyleUsed(AbstractConsoleTextArea.STYLE_STDOUT));
-		stdoutButton.setEnabled(window.isStyleUsed(AbstractConsoleTextArea.STYLE_STDOUT));
-		stderrCB.setSelected(window.isStyleUsed(AbstractConsoleTextArea.STYLE_STDERR));
-		stderrButton.setEnabled(window.isStyleUsed(AbstractConsoleTextArea.STYLE_STDERR));
-		promptCB.setSelected(window.isStyleUsed(AbstractConsoleTextArea.STYLE_PROMPT));
-		promptButton.setEnabled(window.isStyleUsed(AbstractConsoleTextArea.STYLE_PROMPT));
-		exceptionsCB.setSelected(window.isStyleUsed(AbstractConsoleTextArea.STYLE_EXCEPTION));
-		exceptionsButton.setEnabled(window.isStyleUsed(AbstractConsoleTextArea.STYLE_EXCEPTION));
-
-		stdoutButton.setColor(window.getForeground(AbstractConsoleTextArea.STYLE_STDOUT));
-		stderrButton.setColor(window.getForeground(AbstractConsoleTextArea.STYLE_STDERR));
-		promptButton.setColor(window.getForeground(AbstractConsoleTextArea.STYLE_PROMPT));
-		exceptionsButton.setColor(window.getForeground(AbstractConsoleTextArea.STYLE_EXCEPTION));
 
 		ToolManager tm = ToolManager.get();
 		model.setRowCount(0);

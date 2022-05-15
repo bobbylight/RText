@@ -32,6 +32,7 @@ import org.fife.rtext.RTextUtilities;
 import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.*;
 import org.fife.ui.app.MenuBar;
+import org.fife.ui.app.console.AbstractConsoleTextArea;
 import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.app.themes.FlatDarkTheme;
 import org.fife.ui.app.themes.FlatLightTheme;
@@ -93,6 +94,7 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 		window.setActive(prefs.windowVisible);
 		putDockableWindow(DOCKABLE_WINDOW_TOOLS, window);
 
+		rtext.addPropertyChangeListener(AbstractGUIApplication.THEME_PROPERTY, this);
 	}
 
 
@@ -127,7 +129,7 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 	 * @return The dockable window.
 	 */
 	public ToolDockableWindow getDockableWindow() {
-		return (ToolDockableWindow)getDockableWindow(DOCKABLE_WINDOW_TOOLS);
+		return window;
 	}
 
 
@@ -317,6 +319,9 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 			refreshToolMenu();
 		}
 
+		else if (AbstractGUIApplication.THEME_PROPERTY.equals(prop)) {
+			restoreDefaultColors((AppTheme)e.getNewValue());
+		}
 	}
 
 
@@ -353,8 +358,15 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 	 * Changes all consoles to use the default colors for the current
 	 * application theme.
 	 */
-	void restoreDefaultColors() {
-		getDockableWindow().restoreDefaultColors();
+	void restoreDefaultColors(AppTheme theme) {
+		window.setForeground(AbstractConsoleTextArea.STYLE_EXCEPTION,
+			(Color)theme.getExtraUiDefaults().get("rtext.console.exception"));
+		window.setForeground(AbstractConsoleTextArea.STYLE_PROMPT,
+			(Color)theme.getExtraUiDefaults().get("rtext.console.prompt"));
+		window.setForeground(AbstractConsoleTextArea.STYLE_STDOUT,
+			(Color)theme.getExtraUiDefaults().get("rtext.console.stdout"));
+		window.setForeground(AbstractConsoleTextArea.STYLE_STDERR,
+			(Color)theme.getExtraUiDefaults().get("rtext.console.stderr"));
 	}
 
 

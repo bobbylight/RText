@@ -7,6 +7,7 @@ package org.fife.rtext;
 
 
 import org.fife.ui.app.AppTheme;
+import org.fife.ui.app.console.AbstractConsoleTextArea;
 import org.fife.ui.app.themes.FlatDarkTheme;
 import org.fife.ui.app.themes.FlatLightTheme;
 import org.fife.ui.app.themes.NativeTheme;
@@ -56,6 +57,10 @@ public final class RTextAppThemes {
 		nativeTheme.addExtraUiDefault("rtext.iconGroupName", "Eclipse Icons");
 		nativeTheme.addExtraUiDefault("rtext.labelErrorForeground", LIGHT_MODIFIED_DOCUMENT_NAME_COLOR);
 		nativeTheme.addExtraUiDefault("rtext.listAltRowColor", lightListAltRowColor);
+		nativeTheme.addExtraUiDefault("rtext.console.prompt", AbstractConsoleTextArea.DEFAULT_LIGHT_PROMPT_FG);
+		nativeTheme.addExtraUiDefault("rtext.console.stdout", AbstractConsoleTextArea.DEFAULT_LIGHT_STDOUT_FG);
+		nativeTheme.addExtraUiDefault("rtext.console.stderr", AbstractConsoleTextArea.DEFAULT_LIGHT_STDERR_FG);
+		nativeTheme.addExtraUiDefault("rtext.console.exception", AbstractConsoleTextArea.DEFAULT_LIGHT_EXCEPTION_FG);
 		themes.add(nativeTheme);
 
 		FlatDarkTheme flatDarkTheme = new FlatDarkTheme();
@@ -64,6 +69,10 @@ public final class RTextAppThemes {
 		flatDarkTheme.addExtraUiDefault("rtext.iconGroupName", "IntelliJ Icons (Dark)");
 		flatDarkTheme.addExtraUiDefault("rtext.labelErrorForeground", DARK_MODIFIED_DOCUMENT_NAME_COLOR);
 		flatDarkTheme.addExtraUiDefault("rtext.listAltRowColor", darkListAltRowColor);
+		flatDarkTheme.addExtraUiDefault("rtext.console.prompt", AbstractConsoleTextArea.DEFAULT_DARK_PROMPT_FG);
+		flatDarkTheme.addExtraUiDefault("rtext.console.stdout", AbstractConsoleTextArea.DEFAULT_DARK_STDOUT_FG);
+		flatDarkTheme.addExtraUiDefault("rtext.console.stderr", AbstractConsoleTextArea.DEFAULT_DARK_STDERR_FG);
+		flatDarkTheme.addExtraUiDefault("rtext.console.exception", AbstractConsoleTextArea.DEFAULT_DARK_EXCEPTION_FG);
 		themes.add(flatDarkTheme);
 
 		FlatLightTheme flatLightTheme = new FlatLightTheme();
@@ -72,6 +81,10 @@ public final class RTextAppThemes {
 		flatLightTheme.addExtraUiDefault("rtext.iconGroupName", "IntelliJ Icons (Light)");
 		flatLightTheme.addExtraUiDefault("rtext.labelErrorForeground", LIGHT_MODIFIED_DOCUMENT_NAME_COLOR);
 		flatLightTheme.addExtraUiDefault("rtext.listAltRowColor", lightListAltRowColor);
+		flatLightTheme.addExtraUiDefault("rtext.console.prompt", AbstractConsoleTextArea.DEFAULT_LIGHT_PROMPT_FG);
+		flatLightTheme.addExtraUiDefault("rtext.console.stdout", AbstractConsoleTextArea.DEFAULT_LIGHT_STDOUT_FG);
+		flatLightTheme.addExtraUiDefault("rtext.console.stderr", AbstractConsoleTextArea.DEFAULT_LIGHT_STDERR_FG);
+		flatLightTheme.addExtraUiDefault("rtext.console.exception", AbstractConsoleTextArea.DEFAULT_LIGHT_EXCEPTION_FG);
 		themes.add(flatLightTheme);
 
 		return themes;

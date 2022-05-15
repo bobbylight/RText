@@ -26,9 +26,8 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.app.GUIPlugin;
-import org.fife.ui.app.PluginOptionsDialogPanel;
-import org.fife.ui.app.AppAction;
+import org.fife.ui.app.*;
+import org.fife.ui.app.console.AbstractConsoleTextArea;
 import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.app.themes.FlatDarkTheme;
 import org.fife.ui.app.themes.FlatLightTheme;
@@ -46,7 +45,6 @@ public class Plugin extends GUIPlugin<RText> {
 	private static final String VERSION					= "5.0.0";
 	private static final String DOCKABLE_WINDOW_CONSOLE	= "consoleDockableWindow";
 
-	private boolean highlightInput;
 	private ConsoleWindow window;
 	private Map<String, Icon> icons;
 	private ConsoleOptionPanel optionPanel;
@@ -68,7 +66,6 @@ public class Plugin extends GUIPlugin<RText> {
 		loadIcons();
 
 		ConsolePrefs prefs = loadPrefs();
-		setSyntaxHighlightInput(prefs.syntaxHighlightInput);
 
 		AppAction<RText> a = new ViewConsoleAction(app, MSG, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
@@ -80,10 +77,9 @@ public class Plugin extends GUIPlugin<RText> {
 		window.setActive(prefs.windowVisible);
 		putDockableWindow(DOCKABLE_WINDOW_CONSOLE, window);
 
-		window.setForeground(ConsoleTextArea.STYLE_EXCEPTION, prefs.exceptionFG);
-		window.setForeground(ConsoleTextArea.STYLE_PROMPT, prefs.promptFG);
-		window.setForeground(ConsoleTextArea.STYLE_STDERR, prefs.stderrFG);
-		window.setForeground(ConsoleTextArea.STYLE_STDOUT, prefs.stdoutFG);
+		app.addPropertyChangeListener(AbstractGUIApplication.THEME_PROPERTY, e -> {
+			restoreDefaultColors((AppTheme)e.getNewValue());
+		});
 
 	}
 
@@ -152,17 +148,6 @@ public class Plugin extends GUIPlugin<RText> {
 	public String getString(String key, String... params) {
 		String temp = MSG.getString(key);
 		return MessageFormat.format(temp, (Object[])params);
-	}
-
-
-	/**
-	 * Returns whether user input is syntax highlighted.
-	 *
-	 * @return Whether user input is syntax highlighted.
-	 * @see #setSyntaxHighlightInput(boolean)
-	 */
-	boolean getSyntaxHighlightInput() {
-		return highlightInput;
 	}
 
 
@@ -246,8 +231,15 @@ public class Plugin extends GUIPlugin<RText> {
 	 * Changes all consoles to use the default colors for the current
 	 * application theme.
 	 */
-	void restoreDefaultColors() {
-		window.restoreDefaultColors();
+	void restoreDefaultColors(AppTheme theme) {
+		window.setForeground(AbstractConsoleTextArea.STYLE_EXCEPTION,
+			(Color)theme.getExtraUiDefaults().get("rtext.console.exception"));
+		window.setForeground(AbstractConsoleTextArea.STYLE_PROMPT,
+			(Color)theme.getExtraUiDefaults().get("rtext.console.prompt"));
+		window.setForeground(AbstractConsoleTextArea.STYLE_STDOUT,
+			(Color)theme.getExtraUiDefaults().get("rtext.console.stdout"));
+		window.setForeground(AbstractConsoleTextArea.STYLE_STDERR,
+			(Color)theme.getExtraUiDefaults().get("rtext.console.stderr"));
 	}
 
 
@@ -255,16 +247,10 @@ public class Plugin extends GUIPlugin<RText> {
 	public void savePreferences() {
 
 		ConsolePrefs prefs = new ConsolePrefs();
-		prefs.syntaxHighlightInput = getSyntaxHighlightInput();
 		prefs.windowPosition = window.getPosition();
 		AppAction<?> a = (AppAction<?>)getApplication().getAction(VIEW_CONSOLE_ACTION);
 		prefs.windowVisibilityAccelerator = a.getAccelerator();
 		prefs.windowVisible = window.isActive();
-
-		prefs.exceptionFG = window.getForeground(ConsoleTextArea.STYLE_EXCEPTION);
-		prefs.promptFG = window.getForeground(ConsoleTextArea.STYLE_PROMPT);
-		prefs.stderrFG = window.getForeground(ConsoleTextArea.STYLE_STDERR);
-		prefs.stdoutFG = window.getForeground(ConsoleTextArea.STYLE_STDOUT);
 
 		File prefsFile = getPrefsFile();
 		try {
@@ -289,22 +275,6 @@ public class Plugin extends GUIPlugin<RText> {
 				getApplication().addDockableWindow(window);
 			}
 			window.setActive(visible);
-		}
-	}
-
-
-	/**
-	 * Toggles whether user input should be syntax highlighted.
-	 *
-	 * @param highlightInput Whether to syntax highlight user input.
-	 * @see #getSyntaxHighlightInput()
-	 */
-	void setSyntaxHighlightInput(boolean highlightInput) {
-		if (highlightInput!=this.highlightInput) {
-			this.highlightInput = highlightInput;
-			if (window!=null) {
-				window.setSyntaxHighlightInput(highlightInput);
-			}
 		}
 	}
 

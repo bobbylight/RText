@@ -10,15 +10,12 @@
 package org.fife.rtext.plugins.console;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Box;
-import javax.swing.JCheckBox;
 
 import org.fife.rtext.AbstractConsoleTextAreaOptionPanel;
 import org.fife.ui.UIUtil;
@@ -37,8 +34,6 @@ class ConsoleOptionPanel extends AbstractConsoleTextAreaOptionPanel<Plugin>
 	 * ID used to identify this option panel.
 	 */
 	private static final String OPTION_PANEL_ID = "ConsoleOptionPanel";
-
-	private JCheckBox highlightInputCB;
 
 
 	/**
@@ -65,11 +60,6 @@ class ConsoleOptionPanel extends AbstractConsoleTextAreaOptionPanel<Plugin>
 		topPanel.add(generalPanel);
 		topPanel.add(Box.createVerticalStrut(5));
 
-		// Add the "colors" option panel.
-		Container colorsPanel = createColorsPanel();
-		topPanel.add(colorsPanel);
-		topPanel.add(Box.createVerticalStrut(5));
-
 		addRestoreDefaultsButton(topPanel);
 
 		// Put it all together!
@@ -80,39 +70,6 @@ class ConsoleOptionPanel extends AbstractConsoleTextAreaOptionPanel<Plugin>
 	}
 
 
-	/**
-	 * Called when the user toggles various properties in this panel.
-	 *
-	 * @param e The event.
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		// Parent class listens to color buttons and "Restore Defaults"
-		super.actionPerformed(e);
-
-		Object source = e.getSource();
-
-		if (highlightInputCB==source) {
-			setDirty(true);
-		}
-
-	}
-
-
-	/**
-	 * Overridden to add our "syntax highlight user input" checkbox.
-	 *
-	 * @param parent The container to add the content in.
-	 */
-	@Override
-	protected void addExtraColorRelatedContent(Box parent) {
-		highlightInputCB = createColorActivateCB(
-			getPlugin().getString("Highlight.Input"));
-		addLeftAligned(parent, highlightInputCB);
-	}
-
-
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
@@ -120,17 +77,6 @@ class ConsoleOptionPanel extends AbstractConsoleTextAreaOptionPanel<Plugin>
 		ConsoleWindow window = plugin.getDockableWindow();
 		window.setActive(visibleCB.isSelected());
 		window.setPosition(locationCombo.getSelectedIndex());
-
-		plugin.setSyntaxHighlightInput(highlightInputCB.isSelected());
-
-		Color c = exceptionsCB.isSelected() ? exceptionsButton.getColor() : null;
-		window.setForeground(ConsoleTextArea.STYLE_EXCEPTION, c);
-		c = promptCB.isSelected() ? promptButton.getColor() : null;
-		window.setForeground(ConsoleTextArea.STYLE_PROMPT, c);
-		c = stdoutCB.isSelected() ? stdoutButton.getColor() : null;
-		window.setForeground(ConsoleTextArea.STYLE_STDOUT, c);
-		c = stderrCB.isSelected() ? stderrButton.getColor() : null;
-		window.setForeground(ConsoleTextArea.STYLE_STDERR, c);
 
 	}
 
@@ -148,65 +94,12 @@ class ConsoleOptionPanel extends AbstractConsoleTextAreaOptionPanel<Plugin>
 
 
 	@Override
-	protected boolean notDefaults() {
-		return super.notDefaults() || !highlightInputCB.isSelected();
-	}
-
-
-	/**
-	 * Overridden to set all colors to values appropriate for the current Look
-	 * and Feel.
-	 *
-	 * @param event The broadcasted event.
-	 */
-	@Override
-	public void optionsEvent(String event) {
-		restoreDefaultColors();
-		super.optionsEvent(event);
-	}
-
-
-	/**
-	 * Changes all consoles to use the default colors for the current
-	 * application theme.
-	 */
-	private void restoreDefaultColors() {
-		Plugin plugin = getPlugin();
-		plugin.restoreDefaultColors();
-		setValues(plugin.getApplication());
-	}
-
-
-	@Override
-	protected void restoreDefaults() {
-		super.restoreDefaults();
-		highlightInputCB.setSelected(true);
-	}
-
-
-	@Override
 	protected void setValuesImpl(Frame owner) {
 
 		Plugin plugin = getPlugin();
 		ConsoleWindow window = plugin.getDockableWindow();
 		visibleCB.setSelected(window.isActive());
 		locationCombo.setSelectedIndex(window.getPosition());
-
-		highlightInputCB.setSelected(plugin.getSyntaxHighlightInput());
-		stdoutCB.setSelected(window.isStyleUsed(ConsoleTextArea.STYLE_STDOUT));
-		stdoutButton.setEnabled(window.isStyleUsed(ConsoleTextArea.STYLE_STDOUT));
-		stderrCB.setSelected(window.isStyleUsed(ConsoleTextArea.STYLE_STDERR));
-		stderrButton.setEnabled(window.isStyleUsed(ConsoleTextArea.STYLE_STDERR));
-		promptCB.setSelected(window.isStyleUsed(ConsoleTextArea.STYLE_PROMPT));
-		promptButton.setEnabled(window.isStyleUsed(ConsoleTextArea.STYLE_PROMPT));
-		exceptionsCB.setSelected(window.isStyleUsed(ConsoleTextArea.STYLE_EXCEPTION));
-		exceptionsButton.setEnabled(window.isStyleUsed(ConsoleTextArea.STYLE_EXCEPTION));
-
-		stdoutButton.setColor(window.getForeground(ConsoleTextArea.STYLE_STDOUT));
-		stderrButton.setColor(window.getForeground(ConsoleTextArea.STYLE_STDERR));
-		promptButton.setColor(window.getForeground(ConsoleTextArea.STYLE_PROMPT));
-		exceptionsButton.setColor(window.getForeground(ConsoleTextArea.STYLE_EXCEPTION));
-
 	}
 
 

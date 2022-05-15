@@ -398,16 +398,7 @@ abstract class ConsoleTextArea extends AbstractConsoleTextArea {
 			return;
 		}
 
-		// If we're syntax highlighting now, do that
-		if (plugin.getSyntaxHighlightInput()) {
-			syntaxHighlightInput();
-			return;
-		}
-
-		// Otherwise, change all current input to default "input" color.
-		Style style = getStyle(STYLE_STDIN);
-		doc.setCharacterAttributes(start, end, style, true);
-
+		syntaxHighlightInput();
 	}
 
 
@@ -688,10 +679,8 @@ abstract class ConsoleTextArea extends AbstractConsoleTextArea {
 		}
 
 		private void handleDocumentEvent() {
-			if (plugin.getSyntaxHighlightInput()) {
-				// Can't update Document in DocumentListener directly
-				SwingUtilities.invokeLater(ConsoleTextArea.this::syntaxHighlightInput);
-			}
+			// Can't update Document in DocumentListener directly
+			SwingUtilities.invokeLater(ConsoleTextArea.this::syntaxHighlightInput);
 		}
 
 		private void handleMouseEvent(MouseEvent e) {

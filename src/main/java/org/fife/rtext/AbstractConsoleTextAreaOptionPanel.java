@@ -9,7 +9,6 @@ import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.Plugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
-import org.fife.ui.app.console.AbstractConsoleTextArea;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,15 +37,6 @@ public abstract class AbstractConsoleTextAreaOptionPanel<P extends Plugin<?>>
 	protected JCheckBox visibleCB;
 	protected JLabel locationLabel;
 	protected JComboBox<String> locationCombo;
-
-	protected JCheckBox stdoutCB;
-	protected JCheckBox stderrCB;
-	protected JCheckBox promptCB;
-	protected JCheckBox exceptionsCB;
-	protected RColorSwatchesButton stdoutButton;
-	protected RColorSwatchesButton stderrButton;
-	protected RColorSwatchesButton promptButton;
-	protected RColorSwatchesButton exceptionsButton;
 
 	protected JButton defaultsButton;
 
@@ -79,49 +69,12 @@ public abstract class AbstractConsoleTextAreaOptionPanel<P extends Plugin<?>>
 			setDirty(true);
 		}
 
-		else if (exceptionsCB==source) {
-			boolean selected = exceptionsCB.isSelected();
-			exceptionsButton.setEnabled(selected);
-			setDirty(true);
-		}
-
-		else if (promptCB==source) {
-			boolean selected = promptCB.isSelected();
-			promptButton.setEnabled(selected);
-			setDirty(true);
-		}
-
-		else if (stderrCB==source) {
-			boolean selected = stderrCB.isSelected();
-			stderrButton.setEnabled(selected);
-			setDirty(true);
-		}
-
-		else if (stdoutCB==source) {
-			boolean selected = stdoutCB.isSelected();
-			stdoutButton.setEnabled(selected);
-			setDirty(true);
-		}
-
-
 		else if (defaultsButton==source) {
 			if (notDefaults()) {
 				restoreDefaults();
 				setDirty(true);
 			}
 		}
-	}
-
-
-	/**
-	 * Provides a hook for subclasses to add content in the "Colors" section,
-	 * before the color buttons for stdout, stderr, etc.  The default
-	 * implementation does nothing; subclasses can override.
-	 *
-	 * @param parent The container to add the content in.
-	 */
-	protected void addExtraColorRelatedContent(Box parent) {
-		// Do nothing (comment for Sonar)
 	}
 
 
@@ -162,54 +115,6 @@ public abstract class AbstractConsoleTextAreaOptionPanel<P extends Plugin<?>>
 		button.addPropertyChangeListener(
 			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
 		return button;
-	}
-
-
-	/**
-	 * Creates the "Colors" section of options for this plugin.
-	 *
-	 * @return A panel with the "color" options.
-	 */
-	protected Container createColorsPanel() {
-
-		Box temp = Box.createVerticalBox();
-
-		temp.setBorder(new OptionPanelBorder(
-			getString("Options.Colors")));
-
-		addExtraColorRelatedContent(temp);
-
-		stdoutCB = createColorActivateCB(getString("Color.Stdout"));
-		stdoutButton = createColorSwatchesButton();
-		stderrCB = createColorActivateCB(getString("Color.Stderr"));
-		stderrButton = createColorSwatchesButton();
-		promptCB = createColorActivateCB(getString("Color.Prompts"));
-		promptButton = createColorSwatchesButton();
-		exceptionsCB = createColorActivateCB(getString("Color.Exceptions"));
-		exceptionsButton = createColorSwatchesButton();
-
-		JPanel sp = new JPanel(new SpringLayout());
-		if (getComponentOrientation().isLeftToRight()) {
-			sp.add(stdoutCB);     sp.add(stdoutButton);
-			sp.add(stderrCB);     sp.add(stderrButton);
-			sp.add(promptCB);     sp.add(promptButton);
-			sp.add(exceptionsCB); sp.add(exceptionsButton);
-		}
-		else {
-			sp.add(stdoutButton);     sp.add(stdoutCB);
-			sp.add(stderrButton);     sp.add(stderrCB);
-			sp.add(promptButton);     sp.add(promptCB);
-			sp.add(exceptionsButton); sp.add(exceptionsCB);
-		}
-		UIUtil.makeSpringCompactGrid(sp, 4,2, 0,0, 5,5);
-
-		JPanel temp2 = new JPanel(new BorderLayout());
-		temp2.add(sp, BorderLayout.LINE_START);
-		temp.add(temp2);
-		temp.add(Box.createVerticalGlue());
-
-		return temp;
-
 	}
 
 
@@ -292,27 +197,8 @@ public abstract class AbstractConsoleTextAreaOptionPanel<P extends Plugin<?>>
 	 *         value.
 	 */
 	protected boolean notDefaults() {
-
-		boolean isDark = RTextUtilities.isDarkLookAndFeel();
-		Color defaultStdout = isDark ? AbstractConsoleTextArea.DEFAULT_DARK_STDOUT_FG :
-			AbstractConsoleTextArea.DEFAULT_LIGHT_STDOUT_FG;
-		Color defaultStderr = isDark ? AbstractConsoleTextArea.DEFAULT_DARK_STDERR_FG :
-			AbstractConsoleTextArea.DEFAULT_LIGHT_STDERR_FG;
-		Color defaultPrompt = isDark ? AbstractConsoleTextArea.DEFAULT_DARK_PROMPT_FG :
-			AbstractConsoleTextArea.DEFAULT_LIGHT_PROMPT_FG;
-		Color defaultException = isDark ? AbstractConsoleTextArea.DEFAULT_DARK_EXCEPTION_FG :
-			AbstractConsoleTextArea.DEFAULT_LIGHT_EXCEPTION_FG;
-
 		return !visibleCB.isSelected() ||
-			locationCombo.getSelectedIndex()!=2 ||
-			!stdoutCB.isSelected() ||
-			!stderrCB.isSelected() ||
-			!promptCB.isSelected() ||
-			!exceptionsCB.isSelected() ||
-			!defaultStdout.equals(stdoutButton.getColor()) ||
-			!defaultStderr.equals(stderrButton.getColor()) ||
-			!defaultPrompt.equals(promptButton.getColor()) ||
-			!defaultException.equals(exceptionsButton.getColor());
+			locationCombo.getSelectedIndex()!=2;
 	}
 
 
@@ -333,37 +219,6 @@ public abstract class AbstractConsoleTextAreaOptionPanel<P extends Plugin<?>>
 	protected void restoreDefaults() {
 		setVisibleCBSelected(true);
 		locationCombo.setSelectedIndex(2);
-		restoreDefaultsForColorsPanel();
-	}
-
-
-	/**
-	 * Restores defaults values for all widgets in the "Colors" panel.
-	 */
-	protected void restoreDefaultsForColorsPanel() {
-
-		stdoutCB.setSelected(true);
-		stderrCB.setSelected(true);
-		promptCB.setSelected(true);
-		exceptionsCB.setSelected(true);
-		stdoutButton.setEnabled(true);
-		stderrButton.setEnabled(true);
-		promptButton.setEnabled(true);
-		exceptionsButton.setEnabled(true);
-
-		boolean isDark = RTextUtilities.isDarkLookAndFeel();
-		if (isDark) {
-			stdoutButton.setColor(AbstractConsoleTextArea.DEFAULT_DARK_STDOUT_FG);
-			stderrButton.setColor(AbstractConsoleTextArea.DEFAULT_DARK_STDERR_FG);
-			promptButton.setColor(AbstractConsoleTextArea.DEFAULT_DARK_PROMPT_FG);
-			exceptionsButton.setColor(AbstractConsoleTextArea.DEFAULT_DARK_EXCEPTION_FG);
-		}
-		else {
-			stdoutButton.setColor(AbstractConsoleTextArea.DEFAULT_LIGHT_STDOUT_FG);
-			stderrButton.setColor(AbstractConsoleTextArea.DEFAULT_LIGHT_STDERR_FG);
-			promptButton.setColor(AbstractConsoleTextArea.DEFAULT_LIGHT_PROMPT_FG);
-			exceptionsButton.setColor(AbstractConsoleTextArea.DEFAULT_LIGHT_EXCEPTION_FG);
-		}
 	}
 
 

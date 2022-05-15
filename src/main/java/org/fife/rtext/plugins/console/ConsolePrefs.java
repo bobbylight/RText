@@ -9,13 +9,11 @@
  */
 package org.fife.rtext.plugins.console;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.swing.KeyStroke;
 
-import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.prefs.Prefs;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
@@ -44,31 +42,6 @@ public class ConsolePrefs extends Prefs {
 	 */
 	public KeyStroke windowVisibilityAccelerator;
 
-	/**
-	 * Whether user input should be syntax highlighted.
-	 */
-	public boolean syntaxHighlightInput;
-
-	/**
-	 * The color used for stdout in consoles.
-	 */
-	public Color stdoutFG;
-
-	/**
-	 * The color used for stderr in consoles.
-	 */
-	public Color stderrFG;
-
-	/**
-	 * The color used for exceptions in consoles.
-	 */
-	public Color exceptionFG;
-
-	/**
-	 * The color used for prompts in consoles.
-	 */
-	public Color promptFG;
-
 
 	/**
 	 * Overridden to validate the dockable window position value.
@@ -85,25 +58,9 @@ public class ConsolePrefs extends Prefs {
 
 	@Override
 	public void setDefaults() {
-
 		windowVisible = false;
 		windowPosition = DockableWindowConstants.BOTTOM;
 		windowVisibilityAccelerator = null;
-		syntaxHighlightInput = true;
-
-		boolean isDark = RTextUtilities.isDarkLookAndFeel();
-		if (isDark) {
-			stdoutFG = ConsoleTextArea.DEFAULT_DARK_STDOUT_FG;
-			stderrFG = ConsoleTextArea.DEFAULT_DARK_STDERR_FG;
-			exceptionFG = ConsoleTextArea.DEFAULT_DARK_EXCEPTION_FG;
-			promptFG = ConsoleTextArea.DEFAULT_DARK_PROMPT_FG;
-		}
-		else {
-			stdoutFG = ConsoleTextArea.DEFAULT_LIGHT_STDOUT_FG;
-			stderrFG = ConsoleTextArea.DEFAULT_LIGHT_STDERR_FG;
-			exceptionFG = ConsoleTextArea.DEFAULT_LIGHT_EXCEPTION_FG;
-			promptFG = ConsoleTextArea.DEFAULT_LIGHT_PROMPT_FG;
-		}
 	}
 
 

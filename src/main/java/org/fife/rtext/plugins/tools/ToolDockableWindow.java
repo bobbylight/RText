@@ -104,6 +104,8 @@ public class ToolDockableWindow extends DockableWindow
 		WebLookAndFeelUtils.fixToolbar(toolbar);
 		add(toolbar, BorderLayout.NORTH);
 
+		restoreDefaultColors();
+
 		ComponentOrientation o = ComponentOrientation.getOrientation(getLocale());
 		applyComponentOrientation(o);
 
