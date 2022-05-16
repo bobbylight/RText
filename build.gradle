@@ -28,7 +28,7 @@ dependencies {
 	implementation 'com.formdev:flatlaf:1.6.5'
 
 	implementation 'net.sf.jtidy:jtidy:r938'
-	implementation 'org.codehaus.groovy:groovy-all:2.5.+'
+	implementation 'org.codehaus.groovy:groovy-all:3.0.10'
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
 
 	testImplementation 'junit:junit:4.13.2'
