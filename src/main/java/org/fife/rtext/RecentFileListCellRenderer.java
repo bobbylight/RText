@@ -12,8 +12,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.io.File;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JList;
+import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 
 import org.fife.ui.UIUtil;
@@ -46,6 +45,9 @@ class RecentFileListCellRenderer extends DefaultListCellRenderer {
 		if (loc.isLocalAndExists()) {
 			File file = new File(loc.getFileFullPath());
 			setIcon(FILE_SYSTEM_VIEW.getSystemIcon(file));
+		}
+		else {
+			setIcon(UIManager.getIcon("FileView.fileIcon"));
 		}
 
 		return this;
