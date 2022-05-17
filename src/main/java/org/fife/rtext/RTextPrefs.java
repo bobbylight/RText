@@ -15,7 +15,6 @@ import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
-import java.awt.event.InputEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
@@ -89,9 +88,6 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	public Color marginLineColor;
 	public boolean highlightSecondaryLanguages;
 	public Color[] secondaryLanguageColors;
-	public boolean hyperlinksEnabled;
-	public Color hyperlinkColor;
-	public int hyperlinkModifierKey;
 	public boolean visibleWhitespace;
 	public boolean showEOLMarkers;
 	public boolean showTabLines;
@@ -269,9 +265,6 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		secondaryLanguageColors[0] = theme.secondaryLanguages[0];
 		secondaryLanguageColors[1] = theme.secondaryLanguages[1];
 		secondaryLanguageColors[2] = theme.secondaryLanguages[2];
-		hyperlinksEnabled = true;
-		hyperlinkColor = theme.hyperlinkFG;
-		hyperlinkModifierKey = InputEvent.CTRL_DOWN_MASK;
 		visibleWhitespace = false;
 		showEOLMarkers = false;
 		showTabLines = false;

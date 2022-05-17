@@ -13,7 +13,6 @@ package org.fife.ui.rtextarea;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -48,12 +47,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	private JTextField tabSizeField;
 	private int tabSize;
 	private JCheckBox emulateTabsCheckBox;
-
-	private JCheckBox linkCB;
-	private JLabel modKeyLabel;
-	private JComboBox<Integer> modKeyCombo;
-	private JLabel linkColorLabel;
-	private RColorSwatchesButton linkColorButton;
 
 	private JCheckBox wordWrapCheckBox;
 	private JCheckBox highlightCurrentLineCheckBox;
@@ -127,39 +120,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		tabPanel.add(Box.createVerticalGlue());
 		topPanel.add(tabPanel);
 
-		topPanel.add(Box.createVerticalStrut(5));
-
-		Box linkPanel = Box.createVerticalBox();
-		linkPanel.setBorder(new OptionPanelBorder(msg.getString("Hyperlinks")));
-
-		linkCB = new JCheckBox(msg.getString("MakeLinksClickable"));
-		linkCB.setActionCommand("MakeLinksClickable");
-		linkCB.addActionListener(this);
-		addLeftAligned(linkPanel, linkCB, 5);
-
-		modKeyCombo = createModKeyCombo();
-		modKeyLabel = new JLabel(msg.getString("ModifierKey"));
-		modKeyLabel.setLabelFor(modKeyCombo);
-		linkColorButton = new RColorSwatchesButton();
-		linkColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
-		linkColorLabel = new JLabel(msg.getString("HyperlinkColor"));
-		linkColorLabel.setLabelFor(linkColorButton);
-		JPanel modKeyPanel = new JPanel(new BorderLayout());
-		modKeyPanel.add(modKeyCombo, BorderLayout.LINE_START);
-		JPanel linkColorPanel = new JPanel(new BorderLayout());
-		linkColorPanel.add(linkColorButton, BorderLayout.LINE_START);
-		Box box = createHorizontalBox();
-		box.add(Box.createHorizontalStrut(20));
-		box.add(modKeyLabel);
-		box.add(Box.createHorizontalStrut(5));
-		box.add(modKeyCombo);
-		box.add(Box.createHorizontalStrut(40));
-		box.add(linkColorLabel);
-		box.add(Box.createHorizontalStrut(5));
-		box.add(linkColorButton);
-		box.add(Box.createHorizontalGlue());
-		linkPanel.add(box);
-		topPanel.add(linkPanel);
 		topPanel.add(Box.createVerticalStrut(5));
 
 		Box bigOtherPanel = Box.createVerticalBox();
@@ -261,7 +221,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		showTabLinesCheckBox = new JCheckBox(msg.getString("ShowIndentGuide"));
 		showTabLinesCheckBox.setActionCommand("ShowIndentGuide");
 		showTabLinesCheckBox.addActionListener(this);
-		box = createHorizontalBox();
+		Box box = createHorizontalBox();
 		box.add(showTabLinesCheckBox);
 		box.add(Box.createHorizontalStrut(5));
 		tabLineColorButton = new RColorSwatchesButton();
@@ -311,7 +271,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			boolean defaultAA = File.separatorChar=='\\';
 			Color defaultBMBGColor = rstaTheme.matchedBracketBG;
 			Color defaultBMBorderColor = rstaTheme.matchedBracketFG;
-			Color defaultLinkColor = rstaTheme.hyperlinkFG;
 			Color defaultTabLineColor = rstaTheme.tabLineColor;
 			if (defaultTabLineColor == null) { // This is optional in the theme, with no default
 				defaultTabLineColor = Color.GRAY;
@@ -322,9 +281,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				!getCurrentLineHighlightColor().equals(defaultCurrentLineHighlightColor) ||
 				getTabSize()!=defaultTabSize ||
 				getEmulateTabs() ||
-				!linkCB.isSelected() ||
-				modKeyCombo.getSelectedIndex()!=0 ||
-				!linkColorButton.getColor().equals(defaultLinkColor) ||
 				!marginLineCheckBox.isSelected() ||
 				getMarginLinePosition()!=defaultMarginLinePosition ||
 				!getMarginLineColor().equals(defaultMarginLineColor) ||
@@ -346,13 +302,9 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				setCurrentLineHighlightColor(defaultCurrentLineHighlightColor);
 				setTabSize(defaultTabSize);
 				setEmulateTabs(false);
-				linkCB.setSelected(true);
-				modKeyCombo.setSelectedIndex(0);
-				linkColorButton.setColor(defaultLinkColor);
 				setMarginLineEnabled(true);
 				setMarginLinePosition(defaultMarginLinePosition);
 				setMarginLineColor(defaultMarginLineColor);
-				setHyperlinksEnabled(true);
 				setWhitespaceVisible(false);
 				visibleEOLCheckBox.setSelected(false);
 				autoInsertClosingCurlyCheckBox.setSelected(false);
@@ -388,19 +340,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			boolean selected = marginLineCheckBox.isSelected();
 			marginLinePositionField.setEnabled(selected);
 			marginLineColorButton.setEnabled(selected);
-			setDirty(true);
-		}
-
-		else if ("MakeLinksClickable".equals(command)) {
-			boolean selected = linkCB.isSelected();
-			modKeyLabel.setEnabled(selected);
-			modKeyCombo.setEnabled(selected);
-			linkColorLabel.setEnabled(selected);
-			linkColorButton.setEnabled(selected);
-			setDirty(true);
-		}
-
-		else if ("ModKeyCombo".equals(command)) {
 			setDirty(true);
 		}
 
@@ -471,27 +410,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	private JComboBox<Integer> createModKeyCombo() {
-		Integer[] items = new Integer[] {
-			InputEvent.CTRL_DOWN_MASK,
-			InputEvent.META_DOWN_MASK,
-			InputEvent.SHIFT_DOWN_MASK,
-			InputEvent.ALT_DOWN_MASK,
-		};
-		JComboBox<Integer> combo = new JComboBox<>(items) {
-			// Force preferred size to prevent vertical stretching!
-			@Override
-			public Dimension getMaximumSize() {
-				return getPreferredSize();
-			}
-		};
-		combo.setRenderer(new ModKeyCellRenderer());
-		combo.setActionCommand("ModKeyCombo");
-		combo.addActionListener(this);
-		return combo;
-	}
-
-
 	/**
 	 * Applies the settings entered into this dialog on the specified
 	 * application.
@@ -518,9 +436,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		mainView.setMarginLineEnabled(isMarginLineEnabled());	// Doesn't update if unnecessary.
 		mainView.setMarginLinePosition(getMarginLinePosition()); // Doesn't update if unnecessary.
 		mainView.setMarginLineColor(getMarginLineColor());	// Doesn't update if unnecessary.
-		mainView.setHyperlinksEnabled(getHyperlinksEnabled()); // Doesn't update if unnecessary.
-		mainView.setHyperlinkColor(getHyperlinkColor()); // Doesn't update if unnecessary.
-		mainView.setHyperlinkModifierKey(getHyperlinkModifierKey()); // Doesn't update if unnecessary.
 		mainView.setRememberWhitespaceLines(!remWhitespaceLinesCheckBox.isSelected()); // Doesn't update if it doesn't have to.
 		mainView.setAutoInsertClosingCurlys(autoInsertClosingCurlyCheckBox.isSelected()); // Doesn't update if it doesn't have to.
 		mainView.setWhitespaceVisible(isWhitespaceVisible()); // (RSyntaxTextArea) doesn't update if not necessary.
@@ -618,43 +533,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public boolean getEmulateTabs() {
 		return emulateTabsCheckBox.isSelected();
-	}
-
-
-	/**
-	 * Returns the color this dialog shows to use for hyperlinks.
-	 *
-	 * @return The color displayed to use.
-	 */
-	private Color getHyperlinkColor() {
-		return linkColorButton.getColor();
-	}
-
-
-	/**
-	 * Returns the modifier key this dialog shows for hyperlinks.
-	 *
-	 * @return The modifier key(s).
-	 * @see java.awt.event.InputEvent
-	 */
-	private int getHyperlinkModifierKey() {
-		return switch (modKeyCombo.getSelectedIndex()) {
-			// 0 and anything bogus
-			default -> InputEvent.CTRL_DOWN_MASK;
-			case 1 -> InputEvent.META_DOWN_MASK;
-			case 2 -> InputEvent.SHIFT_DOWN_MASK;
-			case 3 -> InputEvent.ALT_DOWN_MASK;
-		};
-	}
-
-
-	/**
-	 * Returns whether the user decided to enable hyperlinks in editors.
-	 *
-	 * @return Whether the user wants hyperlinks enabled.
-	 */
-	public boolean getHyperlinksEnabled() {
-		return linkCB.isSelected();
 	}
 
 
@@ -847,47 +725,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets the color this dialog displays for hyperlinks.
-	 *
-	 * @param c The color to display.  This cannot be <code>null</code>.
-	 */
-	private void setHyperlinkColor(Color c) {
-		linkColorButton.setColor(c);
-	}
-
-
-	/**
-	 * Sets the modifier key this dialog shows for hyperlinks.
-	 *
-	 * @param key The modifier key(s).
-	 * @see java.awt.event.InputEvent
-	 */
-	private void setHyperlinkModifierKey(int key) {
-		switch (key) {
-			// default == CTRL_DOWN_MASK
-			default -> modKeyCombo.setSelectedIndex(0);
-			case InputEvent.META_DOWN_MASK -> modKeyCombo.setSelectedIndex(1);
-			case InputEvent.SHIFT_DOWN_MASK -> modKeyCombo.setSelectedIndex(2);
-			case InputEvent.ALT_DOWN_MASK -> modKeyCombo.setSelectedIndex(3);
-		}
-	}
-
-
-	/**
-	 * Sets the status of the "Enable hyperlinks" checkbox.
-	 *
-	 * @param enabled Whether hyperlinks arer enabled.
-	 */
-	private void setHyperlinksEnabled(boolean enabled) {
-		linkCB.setSelected(enabled);
-		modKeyLabel.setEnabled(enabled);
-		modKeyCombo.setEnabled(enabled);
-		linkColorLabel.setEnabled(enabled);
-		linkColorButton.setEnabled(enabled);
-	}
-
-
-	/**
 	 * Sets the margin line color displayed by this dialog.
 	 *
 	 * @param color The color to display for the margin line color.
@@ -976,9 +813,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		setMarginLineEnabled(mainView.isMarginLineEnabled());
 		setMarginLinePosition(mainView.getMarginLinePosition());
 		setMarginLineColor(mainView.getMarginLineColor());
-		setHyperlinksEnabled(mainView.getHyperlinksEnabled());
-		setHyperlinkColor(mainView.getHyperlinkColor());
-		setHyperlinkModifierKey(mainView.getHyperlinkModifierKey());
 		remWhitespaceLinesCheckBox.setSelected(!mainView.getRememberWhitespaceLines());
 		autoInsertClosingCurlyCheckBox.setSelected(mainView.getAutoInsertClosingCurlys());
 		setWhitespaceVisible(mainView.isWhitespaceVisible());
@@ -1015,24 +849,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	private void setWordWrap(boolean enabled) {
 		wordWrapCheckBox.setSelected(enabled);
-	}
-
-
-	/**
-	 * Renderer for a "modifier key" combo box.
-	 */
-	private static class ModKeyCellRenderer extends DefaultListCellRenderer {
-
-		@Override
-		public Component getListCellRendererComponent(JList list,
-			Object value, int index, boolean selected, boolean hasFocus) {
-			super.getListCellRendererComponent(list, value, index,
-										selected, hasFocus);
-			int i = (Integer)value;
-			setText(InputEvent.getModifiersExText(i));
-			return this;
-		}
-
 	}
 
 

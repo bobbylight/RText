@@ -833,6 +833,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 */
 	private void installRstaTheme(Theme theme) {
 
+		// TODO: Replace all these with mainView.setRstaTheme(theme);
+
 		setSyntaxScheme(theme.scheme);
 
 		if (mainView == null) {

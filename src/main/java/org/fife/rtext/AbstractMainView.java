@@ -14,7 +14,6 @@ package org.fife.rtext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
@@ -145,10 +144,7 @@ public abstract class AbstractMainView extends JPanel
 	private Color marginLineColor;
 	private boolean highlightSecondaryLanguages;
 	private Color[] secondaryLanguageColors;
-
-	private boolean hyperlinksEnabled;
 	private Color hyperlinkColor;
-	private int hyperlinkModifierKey;
 
 	private boolean whitespaceVisible;
 	private boolean showEOLMarkers;
@@ -618,10 +614,6 @@ public abstract class AbstractMainView extends JPanel
 		System.arraycopy(fromPanel.secondaryLanguageColors, 0, secondaryLanguageColors, 0,
 			secondaryLanguageColors.length);
 
-		hyperlinksEnabled = fromPanel.hyperlinksEnabled;
-		hyperlinkColor = fromPanel.hyperlinkColor;
-		hyperlinkModifierKey = fromPanel.hyperlinkModifierKey;
-
 		whitespaceVisible = fromPanel.whitespaceVisible;
 		showEOLMarkers = fromPanel.showEOLMarkers;
 		showTabLines = fromPanel.showTabLines;
@@ -778,9 +770,9 @@ public abstract class AbstractMainView extends JPanel
 		pane.setSelectedTextColor(getSelectedTextColor());
 		pane.setUseSelectedTextColor(getUseSelectedTextColor());
 		pane.setSyntaxScheme(owner.getSyntaxScheme());
-		pane.setHyperlinksEnabled(getHyperlinksEnabled());
-		pane.setHyperlinkForeground(getHyperlinkColor());
-		pane.setLinkScanningMask(getHyperlinkModifierKey());
+		if (hyperlinkColor != null) {
+			pane.setHyperlinkForeground(hyperlinkColor);
+		}
 		pane.setRoundedSelectionEdges(getRoundedSelectionEdges());
 		pane.setCaretStyle(RTextEditorPane.INSERT_MODE,
 							carets[RTextEditorPane.INSERT_MODE]);
@@ -1289,40 +1281,6 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public boolean getHighlightSecondaryLanguages() {
 		return highlightSecondaryLanguages;
-	}
-
-
-	/**
-	 * Returns the color editors use for hyperlinks.
-	 *
-	 * @return The color used.
-	 * @see #setHyperlinkColor(Color)
-	 */
-	public Color getHyperlinkColor() {
-		return hyperlinkColor;
-	}
-
-
-	/**
-	 * Returns the modifier key editors use to scan for hyperlinks.
-	 *
-	 * @return The modifier key(s).
-	 * @see #setHyperlinkModifierKey(int)
-	 * @see java.awt.event.InputEvent
-	 */
-	public int getHyperlinkModifierKey() {
-		return hyperlinkModifierKey;
-	}
-
-
-	/**
-	 * Returns whether hyperlinks are enabled in text editors.
-	 *
-	 * @return Whether hyperlinks are enabled.
-	 * @see #setHyperlinksEnabled(boolean)
-	 */
-	public boolean getHyperlinksEnabled() {
-		return hyperlinksEnabled;
 	}
 
 
@@ -2262,9 +2220,6 @@ public abstract class AbstractMainView extends JPanel
 		for (int i=0; i<secondaryLanguageColors.length; i++) {
 			setSecondaryLanguageColor(i, prefs.secondaryLanguageColors[i]);
 		}
-		setHyperlinksEnabled(prefs.hyperlinksEnabled);
-		setHyperlinkColor(prefs.hyperlinkColor);
-		setHyperlinkModifierKey(prefs.hyperlinkModifierKey);
 		setWriteBOMInUtf8Files(prefs.bomInUtf8);
 
 		syntaxFilters = new SyntaxFilters(prefs.syntaxFiltersString);
@@ -3515,59 +3470,11 @@ public abstract class AbstractMainView extends JPanel
 	 * Sets the color hyperlinks are displayed with in text editors.
 	 *
 	 * @param c The color to display.  This cannot be <code>null</code>.
-	 * @see #getHyperlinkColor()
 	 */
 	public void setHyperlinkColor(Color c) {
-		if (c!=null && !c.equals(getHyperlinkColor())) {
-			this.hyperlinkColor = c;
-			for (int i=0; i<getNumDocuments(); i++) {
-				getRTextEditorPaneAt(i).setHyperlinkForeground(c);
-			}
-		}
-	}
-
-
-	/**
-	 * Sets the modifier key used to start hyperlink scanning in text
-	 * editors.
-	 *
-	 * @param key The modifier key(s).  If an invalid value is passed in,
-	 *        {@link java.awt.event.InputEvent#CTRL_DOWN_MASK} is used.
-	 * @see #getHyperlinkModifierKey()
-	 * @see java.awt.event.InputEvent
-	 */
-	public void setHyperlinkModifierKey(int key) {
-		switch (key) {
-			case InputEvent.CTRL_DOWN_MASK:
-			case InputEvent.META_DOWN_MASK:
-			case InputEvent.SHIFT_DOWN_MASK:
-			case InputEvent.ALT_DOWN_MASK:
-				break;
-			default: // Prevent invalid values.
-				key = InputEvent.CTRL_DOWN_MASK;
-		}
-		if (key!=hyperlinkModifierKey) {
-			hyperlinkModifierKey = key;
-			int docCount = getNumDocuments();
-			for (int i=0; i<docCount; i++) {
-				getRTextEditorPaneAt(i).setLinkScanningMask(key);
-			}
-		}
-	}
-
-
-	/**
-	 * Sets whether hyperlinks are enabled in text editors.
-	 *
-	 * @param enabled Whether hyperlinks should be enabled.
-	 * @see #getHyperlinksEnabled()
-	 */
-	public void setHyperlinksEnabled(boolean enabled) {
-		if (enabled!=hyperlinksEnabled) {
-			hyperlinksEnabled = enabled;
-			for (int i=0; i<getNumDocuments(); i++) {
-				getRTextEditorPaneAt(i).setHyperlinksEnabled(enabled);
-			}
+		hyperlinkColor = c;
+		for (int i=0; i<getNumDocuments(); i++) {
+			getRTextEditorPaneAt(i).setHyperlinkForeground(c);
 		}
 	}
 

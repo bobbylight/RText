@@ -111,9 +111,6 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 		for (int i=0; i<prefs.secondaryLanguageColors.length; i++) {
 			prefs.secondaryLanguageColors[i] = mainView.getSecondaryLanguageColor(i);
 		}
-		prefs.hyperlinksEnabled			= mainView.getHyperlinksEnabled();
-		prefs.hyperlinkColor			= mainView.getHyperlinkColor();
-		prefs.hyperlinkModifierKey		= mainView.getHyperlinkModifierKey();
 		prefs.visibleWhitespace			= mainView.isWhitespaceVisible();
 		prefs.showEOLMarkers			= mainView.getShowEOLMarkers();
 		prefs.showTabLines				= mainView.getShowTabLines();
