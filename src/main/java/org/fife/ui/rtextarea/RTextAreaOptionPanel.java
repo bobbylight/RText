@@ -50,7 +50,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 	private JCheckBox wordWrapCheckBox;
 	private JCheckBox highlightCurrentLineCheckBox;
-	private RColorSwatchesButton hclColorButton;
 	private JCheckBox marginLineCheckBox;
 	private JTextField marginLinePositionField;
 	private JLabel marginLineColorLabel;
@@ -134,10 +133,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		highlightCurrentLineCheckBox = new JCheckBox(msg.getString("HighlightCL"));
 		highlightCurrentLineCheckBox.setActionCommand("HighlightCurrentLineCheckBox");
 		highlightCurrentLineCheckBox.addActionListener(this);
-		hclColorButton = new RColorSwatchesButton();
-		hclColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		otherPanel.add(highlightCurrentLineCheckBox);
-		otherPanel.add(hclColorButton);
 		otherPanel.add(Box.createHorizontalGlue());
 		bigOtherPanel.add(otherPanel);
 
@@ -278,7 +274,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 			if (wordWrapCheckBox.isSelected() ||
 				!highlightCurrentLineCheckBox.isSelected() ||
-				!getCurrentLineHighlightColor().equals(defaultCurrentLineHighlightColor) ||
 				getTabSize()!=defaultTabSize ||
 				getEmulateTabs() ||
 				!marginLineCheckBox.isSelected() ||
@@ -298,8 +293,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				!defaultTabLineColor.equals(tabLineColorButton.getColor())) {
 				wordWrapCheckBox.setSelected(false);
 				highlightCurrentLineCheckBox.setSelected(true);
-				hclColorButton.setEnabled(true);
-				setCurrentLineHighlightColor(defaultCurrentLineHighlightColor);
 				setTabSize(defaultTabSize);
 				setEmulateTabs(false);
 				setMarginLineEnabled(true);
@@ -327,8 +320,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		}
 
 		else if ("HighlightCurrentLineCheckBox".equals(command)) {
-			boolean selected = highlightCurrentLineCheckBox.isSelected();
-			hclColorButton.setEnabled(selected);
 			setDirty(true);
 		}
 
@@ -344,12 +335,10 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		}
 
 		else if ("VisibleWhitespace".equals(command)) {
-			boolean visible = visibleWhitespaceCheckBox.isSelected();
 			setDirty(true);
 		}
 
 		else if ("VisibleEOL".equals(command)) {
-			boolean visible = visibleEOLCheckBox.isSelected();
 			setDirty(true);
 		}
 
@@ -424,13 +413,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 		mainView.setLineWrap(getWordWrap());
 		rtext.setRowColumnIndicatorVisible(!mainView.getLineWrap());
-		if (isCurrentLineHighlightCheckboxSelected()) {
-			mainView.setCurrentLineHighlightEnabled(true);
-			mainView.setCurrentLineHighlightColor(getCurrentLineHighlightColor());
-		}
-		else {
-			mainView.setCurrentLineHighlightEnabled(false);
-		}
+		mainView.setCurrentLineHighlightEnabled(isCurrentLineHighlightCheckboxSelected());
 		mainView.setTabSize(getTabSize());				// Doesn't update if unnecessary.
 		mainView.setTabsEmulated(getEmulateTabs());		// Doesn't update if unnecessary.
 		mainView.setMarginLineEnabled(isMarginLineEnabled());	// Doesn't update if unnecessary.
@@ -512,16 +495,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public Color getBracketMatchBGColor() {
 		return bmBGColorButton.getColor();
-	}
-
-
-	/**
-	 * Returns the current line highlight color chosen by the user.
-	 *
-	 * @return The color.
-	 */
-	public Color getCurrentLineHighlightColor() {
-		return hclColorButton.getColor();
 	}
 
 
@@ -689,19 +662,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets the current line highlight color displayed by this dialog.
-	 *
-	 * @param color The color to display for the current line highlight color.
-	 *        If this parameter is <code>null</code>, <code>Color.BLACK</code>
-	 *        is used (??).
-	 * @see #getCurrentLineHighlightColor
-	 */
-	private void setCurrentLineHighlightColor(Color color) {
-		hclColorButton.setColor(color);
-	}
-
-
-	/**
 	 * Sets whether or not the current line highlight color checkbox is
 	 * selected.
 	 *
@@ -710,7 +670,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	private void setCurrentLineHighlightCheckboxSelected(boolean selected) {
 		highlightCurrentLineCheckBox.setSelected(selected);
-		hclColorButton.setEnabled(selected);
 	}
 
 
@@ -807,7 +766,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		AbstractMainView mainView = rtext.getMainView();
 		setWordWrap(mainView.getLineWrap());
 		setCurrentLineHighlightCheckboxSelected(mainView.isCurrentLineHighlightEnabled());
-		setCurrentLineHighlightColor(mainView.getCurrentLineHighlightColor());
 		setTabSize(mainView.getTabSize());
 		setEmulateTabs(mainView.areTabsEmulated());
 		setMarginLineEnabled(mainView.isMarginLineEnabled());

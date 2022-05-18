@@ -832,53 +832,10 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 * @param theme The theme instance.
 	 */
 	private void installRstaTheme(Theme theme) {
-
-		// TODO: Replace all these with mainView.setRstaTheme(theme);
-
+		if (mainView != null) {
+			mainView.setRstaTheme(theme);
+		}
 		setSyntaxScheme(theme.scheme);
-
-		if (mainView == null) {
-			return;
-		}
-
-		//themeObj.activeLineRangeColor;
-		mainView.setBackgroundObject(theme.bgColor);
-		mainView.setCaretColor(theme.caretColor);
-		mainView.setCurrentLineHighlightColor(theme.currentLineHighlight);
-		//themeObj.fadeCurrentLineHighlight
-		//themeObj.foldBG
-		mainView.setGutterBorderColor(theme.gutterBorderColor);
-		mainView.setHyperlinkColor(theme.hyperlinkFG);
-		//themeObj.iconRowHeaderInheritsGutterBG
-		mainView.setLineNumberColor(theme.lineNumberColor);
-		if (theme.lineNumberFont != null) {
-			int fontSize = theme.lineNumberFontSize > 0 ? theme.lineNumberFontSize : 11;
-			mainView.setLineNumberFont(new Font(theme.lineNumberFont, Font.PLAIN, fontSize));
-		}
-		mainView.setMarginLineColor(theme.marginLineColor);
-		mainView.setMarkAllHighlightColor(theme.markAllHighlightColor);
-		//themeObj.markOccurrencesBorder;
-		mainView.setMarkOccurrencesColor(theme.markOccurrencesColor);
-		//themeObj.matchedBracketAnimate;
-		if (theme.matchedBracketBG != null) {
-			mainView.setMatchedBracketBorderColor(theme.matchedBracketFG);
-		}
-		mainView.setMatchedBracketBGColor(theme.matchedBracketBG);
-		if (theme.secondaryLanguages != null) {
-			for (int i = 0; i < theme.secondaryLanguages.length; i++) {
-				mainView.setSecondaryLanguageColor(i, theme.secondaryLanguages[i]);
-			}
-		}
-		mainView.setSelectionColor(theme.selectionBG);
-		if (theme.selectionFG != null) {
-			mainView.setSelectedTextColor(theme.selectionFG);
-		}
-		mainView.setUseSelectedTextColor(theme.useSelectionFG);
-		mainView.setRoundedSelectionEdges(theme.selectionRoundedEdges);
-
-		mainView.setFoldBackground(theme.foldBG);
-		mainView.setArmedFoldBackground(theme.armedFoldBG);
-
 	}
 
 
@@ -1349,11 +1306,13 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	 */
 	public void setSyntaxScheme(SyntaxScheme colorScheme) {
 		if (colorScheme!=null && !colorScheme.equals(this.colorScheme)) {
-			// Make a deep copy for our copy.  We must be careful to do this
-			// and pass our newly-created deep copy to mainView so that we
-			// do not end up with the same copy passed to us (which could be
-			// in the process of being edited in an options dialog).
+			// Make a deep copy for our copy to avoid oddities as the
+			// passed-in scheme could be actively being edited in the
+			// Options dialog.
 			this.colorScheme = (SyntaxScheme)colorScheme.clone();
+			// NOTE: This may duplicate work with code in AbstractMainView,
+			// but for now is necessary until we refactor the options
+			// around appearance
 			if (mainView!=null)
 				mainView.setSyntaxScheme(this.colorScheme);
 		}

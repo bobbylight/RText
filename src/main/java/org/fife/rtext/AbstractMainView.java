@@ -39,10 +39,7 @@ import org.fife.rtext.actions.CapsLockAction;
 import org.fife.rtext.actions.ToggleTextModeAction;
 import org.fife.ui.UIUtil;
 import org.fife.ui.autocomplete.Util;
-import org.fife.ui.rsyntaxtextarea.ErrorStrip;
-import org.fife.ui.rsyntaxtextarea.FileLocation;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
+import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rtextarea.*;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
@@ -738,7 +735,9 @@ public abstract class AbstractMainView extends JPanel
 		pane.setBackgroundObject(getBackgroundObject());
 		pane.setTabSize(getTabSize());
 		pane.setHighlightCurrentLine(highlightCurrentLine);
-		pane.setCurrentLineHighlightColor(getCurrentLineHighlightColor());
+		if (currentLineColor != null) {
+			pane.setCurrentLineHighlightColor(currentLineColor);
+		}
 		pane.setMarginLineEnabled(marginLineEnabled);
 		pane.setMarginLinePosition(getMarginLinePosition());
 		pane.setMarginLineColor(getMarginLineColor());
@@ -1089,21 +1088,6 @@ public abstract class AbstractMainView extends JPanel
 			sb.setLength(sb.length()-1);
 		}
 		return sb.toString();
-	}
-
-
-	/**
-	 * Returns the color being used to highlight the current line.  Note that
-	 * if highlighting the current line is turned off, you will not be seeing
-	 * this highlight.
-	 *
-	 * @return The color being used to highlight the current line.
-	 * @see #isCurrentLineHighlightEnabled
-	 * @see #setCurrentLineHighlightEnabled
-	 * @see #setCurrentLineHighlightColor
-	 */
-	public Color getCurrentLineHighlightColor() {
-		return currentLineColor;
 	}
 
 
@@ -2207,7 +2191,6 @@ public abstract class AbstractMainView extends JPanel
 		setUseSelectedTextColor(prefs.useSelectedTextColor);
 		setLineWrap(prefs.wordWrap);
 		setCurrentLineHighlightEnabled(prefs.currentLineHighlightEnabled);
-		setCurrentLineHighlightColor(prefs.currentLineHighlightColor);
 		setBracketMatchingEnabled(prefs.bracketMatchingEnabled);
 		setMatchBothBrackets(prefs.matchBothBrackets);
 		setMatchedBracketBGColor(prefs.matchedBracketBGColor);
@@ -2336,8 +2319,6 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @return Whether or the current line is highlighted.
 	 * @see #setCurrentLineHighlightEnabled
-	 * @see #getCurrentLineHighlightColor
-	 * @see #setCurrentLineHighlightColor
 	 */
 	public boolean isCurrentLineHighlightEnabled() {
 		return highlightCurrentLine;
@@ -3251,9 +3232,8 @@ public abstract class AbstractMainView extends JPanel
 	 * @throws NullPointerException if <code>color</code> is <code>null</code>.
 	 * @see #isCurrentLineHighlightEnabled
 	 * @see #setCurrentLineHighlightEnabled
-	 * @see #getCurrentLineHighlightColor
 	 */
-	public void setCurrentLineHighlightColor(Color color) {
+	private void setCurrentLineHighlightColor(Color color) {
 		if (color==null)
 			throw new NullPointerException();
 		currentLineColor = color;
@@ -3269,8 +3249,6 @@ public abstract class AbstractMainView extends JPanel
 	 *
 	 * @param enabled Whether or not to highlight the current line.
 	 * @see #isCurrentLineHighlightEnabled
-	 * @see #getCurrentLineHighlightColor
-	 * @see #setCurrentLineHighlightColor
 	 */
 	public void setCurrentLineHighlightEnabled(boolean enabled) {
 		highlightCurrentLine = enabled;
@@ -3861,6 +3839,57 @@ public abstract class AbstractMainView extends JPanel
 			}
 			firePropertyChange(ROUNDED_SELECTION_PROPERTY, !rounded, rounded);
 		}
+	}
+
+
+	/**
+	 * TODO: Replace contents here with simply Theme.apply() on all text areas.
+	 *
+	 * @param theme The theme to apply. This cannot be {@code null}.
+	 */
+	void setRstaTheme(Theme theme) {
+
+		// Clone the theme to avoid using the same one as e.g.
+		// is activel being edited in the Options dialog
+		setSyntaxScheme((SyntaxScheme)theme.scheme.clone());
+
+		//themeObj.activeLineRangeColor;
+		setBackgroundObject(theme.bgColor);
+		setCaretColor(theme.caretColor);
+		setCurrentLineHighlightColor(theme.currentLineHighlight);
+		//themeObj.fadeCurrentLineHighlight
+		//themeObj.foldBG
+		setGutterBorderColor(theme.gutterBorderColor);
+		setHyperlinkColor(theme.hyperlinkFG);
+		//themeObj.iconRowHeaderInheritsGutterBG
+		setLineNumberColor(theme.lineNumberColor);
+		if (theme.lineNumberFont != null) {
+			int fontSize = theme.lineNumberFontSize > 0 ? theme.lineNumberFontSize : 11;
+			setLineNumberFont(new Font(theme.lineNumberFont, Font.PLAIN, fontSize));
+		}
+		setMarginLineColor(theme.marginLineColor);
+		setMarkAllHighlightColor(theme.markAllHighlightColor);
+		//themeObj.markOccurrencesBorder;
+		setMarkOccurrencesColor(theme.markOccurrencesColor);
+		//themeObj.matchedBracketAnimate;
+		if (theme.matchedBracketBG != null) {
+			setMatchedBracketBorderColor(theme.matchedBracketFG);
+		}
+		setMatchedBracketBGColor(theme.matchedBracketBG);
+		if (theme.secondaryLanguages != null) {
+			for (int i = 0; i < theme.secondaryLanguages.length; i++) {
+				setSecondaryLanguageColor(i, theme.secondaryLanguages[i]);
+			}
+		}
+		setSelectionColor(theme.selectionBG);
+		if (theme.selectionFG != null) {
+			setSelectedTextColor(theme.selectionFG);
+		}
+		setUseSelectedTextColor(theme.useSelectionFG);
+		setRoundedSelectionEdges(theme.selectionRoundedEdges);
+
+		setFoldBackground(theme.foldBG);
+		setArmedFoldBackground(theme.armedFoldBG);
 	}
 
 
