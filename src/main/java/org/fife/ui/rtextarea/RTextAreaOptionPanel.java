@@ -52,8 +52,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	private JCheckBox highlightCurrentLineCheckBox;
 	private JCheckBox marginLineCheckBox;
 	private JTextField marginLinePositionField;
-	private JLabel marginLineColorLabel;
-	private RColorSwatchesButton marginLineColorButton;
 	private int marginLinePosition;
 
 	private JCheckBox visibleWhitespaceCheckBox;
@@ -142,15 +140,8 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		size = new Dimension(40,marginLinePositionField.getPreferredSize().height);
 		marginLinePositionField.setMaximumSize(size);
 		marginLinePositionField.setPreferredSize(size);
-		marginLineColorLabel = new JLabel(msg.getString("WithThisColor"));
-		marginLineColorButton = new RColorSwatchesButton();
-		marginLineColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
-		marginLineColorLabel.setLabelFor(marginLineColorButton);
 		otherPanel.add(marginLineCheckBox);
 		otherPanel.add(marginLinePositionField);
-		otherPanel.add(Box.createHorizontalStrut(5));
-		otherPanel.add(marginLineColorLabel);
-		otherPanel.add(marginLineColorButton);
 
 		otherPanel.add(Box.createHorizontalGlue());
 		bigOtherPanel.add(otherPanel);
@@ -247,7 +238,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 			int defaultTabSize = RTextArea.getDefaultTabSize();
 			int defaultMarginLinePosition = RTextArea.getDefaultMarginLinePosition();
-			Color defaultMarginLineColor = rstaTheme.marginLineColor;
 			boolean defaultAA = File.separatorChar=='\\';
 			Color defaultTabLineColor = rstaTheme.tabLineColor;
 			if (defaultTabLineColor == null) { // This is optional in the theme, with no default
@@ -260,7 +250,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				getEmulateTabs() ||
 				!marginLineCheckBox.isSelected() ||
 				getMarginLinePosition()!=defaultMarginLinePosition ||
-				!getMarginLineColor().equals(defaultMarginLineColor) ||
 				isWhitespaceVisible() ||
 				visibleEOLCheckBox.isSelected() ||
 				autoInsertClosingCurlyCheckBox.isSelected() ||
@@ -277,7 +266,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				setEmulateTabs(false);
 				setMarginLineEnabled(true);
 				setMarginLinePosition(defaultMarginLinePosition);
-				setMarginLineColor(defaultMarginLineColor);
 				setWhitespaceVisible(false);
 				visibleEOLCheckBox.setSelected(false);
 				autoInsertClosingCurlyCheckBox.setSelected(false);
@@ -308,7 +296,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		else if ("MarginLineCheckBox".equals(command)) {
 			boolean selected = marginLineCheckBox.isSelected();
 			marginLinePositionField.setEnabled(selected);
-			marginLineColorButton.setEnabled(selected);
 			setDirty(true);
 		}
 
@@ -394,7 +381,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		mainView.setTabsEmulated(getEmulateTabs());		// Doesn't update if unnecessary.
 		mainView.setMarginLineEnabled(isMarginLineEnabled());	// Doesn't update if unnecessary.
 		mainView.setMarginLinePosition(getMarginLinePosition()); // Doesn't update if unnecessary.
-		mainView.setMarginLineColor(getMarginLineColor());	// Doesn't update if unnecessary.
 		mainView.setRememberWhitespaceLines(!remWhitespaceLinesCheckBox.isSelected()); // Doesn't update if it doesn't have to.
 		mainView.setAutoInsertClosingCurlys(autoInsertClosingCurlyCheckBox.isSelected()); // Doesn't update if it doesn't have to.
 		mainView.setWhitespaceVisible(isWhitespaceVisible()); // (RSyntaxTextArea) doesn't update if not necessary.
@@ -468,16 +454,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public boolean getEmulateTabs() {
 		return emulateTabsCheckBox.isSelected();
-	}
-
-
-	/**
-	 * Returns the color the user chose for the margin line.
-	 *
-	 * @return The color the user chose.
-	 */
-	public Color getMarginLineColor() {
-		return marginLineColorButton.getColor();
 	}
 
 
@@ -633,17 +609,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets the margin line color displayed by this dialog.
-	 *
-	 * @param color The color to display for the margin line color.
-	 * @see #getMarginLineColor
-	 */
-	private void setMarginLineColor(Color color) {
-		marginLineColorButton.setColor(color);
-	}
-
-
-	/**
 	 * Sets whether or not the margin line stuff is enabled (i.e.,
 	 * whether or not the "Margin line" checkbox is checked).
 	 *
@@ -654,7 +619,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	private void setMarginLineEnabled(boolean enabled) {
 		marginLineCheckBox.setSelected(enabled);
 		marginLinePositionField.setEnabled(enabled);
-		marginLineColorButton.setEnabled(enabled);
 	}
 
 
@@ -719,7 +683,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		setEmulateTabs(mainView.areTabsEmulated());
 		setMarginLineEnabled(mainView.isMarginLineEnabled());
 		setMarginLinePosition(mainView.getMarginLinePosition());
-		setMarginLineColor(mainView.getMarginLineColor());
 		remWhitespaceLinesCheckBox.setSelected(!mainView.getRememberWhitespaceLines());
 		autoInsertClosingCurlyCheckBox.setSelected(mainView.getAutoInsertClosingCurlys());
 		setWhitespaceVisible(mainView.isWhitespaceVisible());
