@@ -67,7 +67,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	private JCheckBox bothBracketsCB;
 
 	private JCheckBox showTabLinesCheckBox;
-	private RColorSwatchesButton tabLineColorButton;
 
 	private JButton restoreDefaultsButton;
 
@@ -195,10 +194,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		showTabLinesCheckBox.addActionListener(this);
 		Box box = createHorizontalBox();
 		box.add(showTabLinesCheckBox);
-		box.add(Box.createHorizontalStrut(5));
-		tabLineColorButton = new RColorSwatchesButton();
-		tabLineColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
-		box.add(tabLineColorButton);
 		box.add(Box.createHorizontalGlue());
 		addLeftAligned(bigOtherPanel, box);
 		bigOtherPanel.add(Box.createVerticalStrut(3));
@@ -240,9 +235,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			int defaultMarginLinePosition = RTextArea.getDefaultMarginLinePosition();
 			boolean defaultAA = File.separatorChar=='\\';
 			Color defaultTabLineColor = rstaTheme.tabLineColor;
-			if (defaultTabLineColor == null) { // This is optional in the theme, with no default
-				defaultTabLineColor = Color.GRAY;
-			}
 
 			if (wordWrapCheckBox.isSelected() ||
 				!highlightCurrentLineCheckBox.isSelected() ||
@@ -258,8 +250,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				fractionalMetricsCheckBox.isSelected() ||
 				!bracketMatchCheckBox.isSelected() ||
 				bothBracketsCB.isSelected() ||
-				showTabLinesCheckBox.isSelected() ||
-				!defaultTabLineColor.equals(tabLineColorButton.getColor())) {
+				showTabLinesCheckBox.isSelected()) {
 				wordWrapCheckBox.setSelected(false);
 				highlightCurrentLineCheckBox.setSelected(true);
 				setTabSize(defaultTabSize);
@@ -275,7 +266,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				setBracketMatchCheckboxSelected(true);
 				bothBracketsCB.setSelected(false);
 				setTabLinesEnabled(false);
-				tabLineColorButton.setColor(defaultTabLineColor);
 				setDirty(true);
 			}
 
@@ -337,8 +327,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		}
 
 		else if ("ShowIndentGuide".equals(command)) {
-			boolean show = showTabLinesCheckBox.isSelected();
-			tabLineColorButton.setEnabled(show);
 			setDirty(true);
 		}
 
@@ -391,7 +379,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		mainView.setBracketMatchingEnabled(bmEnabled);	// Doesn't update if it doesn't have to.
 		mainView.setMatchBothBrackets(bothBracketsCB.isSelected());
 		mainView.setShowTabLines(showTabLinesCheckBox.isSelected());
-		mainView.setTabLinesColor(tabLineColorButton.getColor());
 
 	}
 
@@ -646,7 +633,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public void setTabLinesEnabled(boolean enabled) {
 		showTabLinesCheckBox.setSelected(enabled);
-		tabLineColorButton.setEnabled(enabled);
 	}
 
 
@@ -693,7 +679,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		setBracketMatchCheckboxSelected(bmEnabled);
 		bothBracketsCB.setSelected(mainView.getMatchBothBrackets());
 		setTabLinesEnabled(mainView.getShowTabLines());
-		tabLineColorButton.setColor(mainView.getTabLinesColor());
 	}
 
 
