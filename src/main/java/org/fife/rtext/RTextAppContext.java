@@ -149,7 +149,6 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 		prefs.armedFoldBackground		= mainView.getArmedFoldBackground();
 		prefs.showHostName				= rtext.getShowHostName();
 		prefs.bomInUtf8				= mainView.getWriteBOMInUtf8Files();
-		prefs.bookmarksEnabled			= mainView.getBookmarksEnabled();
 		prefs.lineNumberFont			= mainView.getLineNumberFont();
 		prefs.lineNumberColor			= mainView.getLineNumberColor();
 		prefs.gutterBorderColor			= mainView.getGutterBorderColor();

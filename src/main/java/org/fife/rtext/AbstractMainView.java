@@ -181,7 +181,6 @@ public abstract class AbstractMainView extends JPanel
 	private Map<String, Boolean> codeFoldingEnabledStates;
 
 	private Icon bookmarkIcon;
-	private boolean bookmarksEnabled;
 	private Font lineNumberFont;
 	private Color lineNumberColor;
 	private Color gutterBorderColor;
@@ -658,7 +657,6 @@ public abstract class AbstractMainView extends JPanel
 		}
 
 		bookmarkIcon = fromPanel.bookmarkIcon;
-		bookmarksEnabled = fromPanel.bookmarksEnabled;
 		lineNumberFont = fromPanel.lineNumberFont;
 		lineNumberColor = fromPanel.lineNumberColor;
 		gutterBorderColor = fromPanel.gutterBorderColor;
@@ -832,7 +830,7 @@ public abstract class AbstractMainView extends JPanel
 		scrollPane.applyComponentOrientation(getComponentOrientation());
 		Gutter gutter = scrollPane.getGutter();
 		gutter.setBookmarkIcon(bookmarkIcon);
-		gutter.setBookmarkingEnabled(bookmarksEnabled);
+		gutter.setBookmarkingEnabled(true);
 		gutter.setLineNumberFont(lineNumberFont);
 		gutter.setLineNumberColor(lineNumberColor);
 		gutter.setBorderColor(gutterBorderColor);
@@ -1017,17 +1015,6 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public Object getBackgroundObject() {
 		return backgroundObject;
-	}
-
-
-	/**
-	 * Returns whether bookmarks are enabled.
-	 *
-	 * @return Whether bookmarks are enabled.
-	 * @see #setBookmarksEnabled(boolean)
-	 */
-	public boolean getBookmarksEnabled() {
-		return bookmarksEnabled;
 	}
 
 
@@ -2238,7 +2225,6 @@ public abstract class AbstractMainView extends JPanel
 		setFoldBackground(prefs.foldBackground);
 		setArmedFoldBackground(prefs.armedFoldBackground);
 
-		setBookmarksEnabled(prefs.bookmarksEnabled);
 		setLineNumberFont(prefs.lineNumberFont);
 		setLineNumberColor(prefs.lineNumberColor);
 		setGutterBorderColor(prefs.gutterBorderColor);
@@ -3084,25 +3070,6 @@ public abstract class AbstractMainView extends JPanel
 		for (int i=0; i<getNumDocuments(); i++) {
 			getRTextScrollPaneAt(i).getGutter().setBackground(gutterBG);
 			getRTextEditorPaneAt(i).setBackgroundObject(backgroundObject);
-		}
-	}
-
-
-	/**
-	 * Toggles whether bookmarks are enabled.
-	 *
-	 * @param enabled Whether bookmarks are enabled.
-	 * @see #getBookmarksEnabled()
-	 */
-	public void setBookmarksEnabled(boolean enabled) {
-		if (enabled!=bookmarksEnabled) {
-			int docCount = getNumDocuments();
-			for (int i=0; i<docCount; i++) {
-				Gutter g = getRTextScrollPaneAt(i).getGutter();
-				g.setBookmarkingEnabled(enabled);
-				//g.setIconRowHeaderVisible(enabled);
-			}
-			bookmarksEnabled = enabled;
 		}
 	}
 

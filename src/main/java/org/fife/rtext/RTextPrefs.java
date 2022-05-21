@@ -119,7 +119,6 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	public Color armedFoldBackground;
 	public boolean showHostName;
 	public boolean bomInUtf8;
-	public boolean bookmarksEnabled;
 	public Font lineNumberFont;
 	public Color lineNumberColor;
 	public Color gutterBorderColor;
@@ -305,7 +304,6 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		armedFoldBackground	= theme.armedFoldBG;
 		showHostName		= false;
 		bomInUtf8			= false;
-		bookmarksEnabled	= true;
 		lineNumberFont		= new Font(textAreaFont.getName(), Font.PLAIN, 12);
 		lineNumberColor	= theme.lineNumberColor;
 		gutterBorderColor	= theme.gutterBorderColor;

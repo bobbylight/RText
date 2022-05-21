@@ -46,8 +46,6 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	private JCheckBox lnEnabledCB;
 	private FontSelector fontSelector;
 	private RColorSwatchesButton lnColorButton;
-	private JCheckBox enableBookmarkingCB;
-	private RColorSwatchesButton borderColorButton;
 	private RColorSwatchesButton foldBackgroundButton;
 	private RColorSwatchesButton armedFoldBackgroundButton;
 
@@ -132,30 +130,6 @@ public class GutterOptionPanel extends OptionsDialogPanel
 		topPanel.add(temp);
 		topPanel.add(Box.createVerticalStrut(5));
 
-		// Miscellaneous options
-		Box otherPanel = new Box(BoxLayout.Y_AXIS);
-		otherPanel.setBorder(new OptionPanelBorder(msg.getString("Other")));
-		JLabel borderColorLabel = new JLabel(msg.getString("BorderColor"));
-		borderColorButton = new RColorSwatchesButton();
-		borderColorButton.addPropertyChangeListener(
-					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		borderColorLabel.setLabelFor(borderColorButton);
-		temp = new Box(BoxLayout.LINE_AXIS);
-		temp.add(borderColorLabel);
-		temp.add(Box.createHorizontalStrut(5));
-		temp.add(borderColorButton);
-		temp.add(Box.createHorizontalGlue());
-		temp2 = new JPanel(new BorderLayout());
-		temp2.add(temp, BorderLayout.LINE_START);
-		otherPanel.add(temp2);
-		enableBookmarkingCB = new JCheckBox(msg.getString("EnableBookmarks"));
-		enableBookmarkingCB.addItemListener(this);
-		temp = new JPanel(new BorderLayout());
-		temp.add(enableBookmarkingCB, BorderLayout.LINE_START);
-		otherPanel.add(temp);
-		topPanel.add(otherPanel);
-		topPanel.add(Box.createVerticalStrut(5));
-
 		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
 		rdButton.setActionCommand("RestoreDefaults");
 		rdButton.addActionListener(this);
@@ -198,13 +172,10 @@ public class GutterOptionPanel extends OptionsDialogPanel
 			Color defLineNumberColor = rstaTheme.lineNumberColor;
 			Color defFoldIconBackground = rstaTheme.foldBG;
 			Color defArmedFoldIconBackground = rstaTheme.armedFoldBG;
-			Color defBorderColor = rstaTheme.gutterBorderColor;
 
 			if (!lnEnabledCB.isSelected() ||
 					!defaultFont.equals(fontSelector.getDisplayedFont()) ||
 					!defLineNumberColor.equals(lnColorButton.getColor()) ||
-					!enableBookmarkingCB.isSelected() ||
-					!defBorderColor.equals(borderColorButton.getColor()) ||
 					!defFoldIconBackground.equals(foldBackgroundButton.getColor()) ||
 					!defArmedFoldIconBackground.equals(armedFoldBackgroundButton.getColor())) {
 
@@ -213,8 +184,6 @@ public class GutterOptionPanel extends OptionsDialogPanel
 				lnColorButton.setColor(defLineNumberColor);
 				foldBackgroundButton.setColor(defFoldIconBackground);
 				armedFoldBackgroundButton.setColor(defArmedFoldIconBackground);
-				borderColorButton.setColor(defBorderColor);
-				enableBookmarkingCB.setSelected(true);
 
 				setDirty(true);
 
@@ -238,8 +207,6 @@ public class GutterOptionPanel extends OptionsDialogPanel
 		mainView.setLineNumbersEnabled(lnEnabledCB.isSelected());
 		mainView.setLineNumberFont(fontSelector.getDisplayedFont());
 		mainView.setLineNumberColor(lnColorButton.getColor());
-		mainView.setGutterBorderColor(borderColorButton.getColor());
-		mainView.setBookmarksEnabled(enableBookmarkingCB.isSelected());
 		mainView.setFoldBackground(foldBackgroundButton.getColor());
 		mainView.setArmedFoldBackground(armedFoldBackgroundButton.getColor());
 	}
@@ -300,8 +267,6 @@ public class GutterOptionPanel extends OptionsDialogPanel
 		lnEnabledCB.setSelected(mainView.getLineNumbersEnabled());
 		fontSelector.setDisplayedFont(mainView.getLineNumberFont(), false);
 		lnColorButton.setColor(mainView.getLineNumberColor());
-		borderColorButton.setColor(mainView.getGutterBorderColor());
-		enableBookmarkingCB.setSelected(mainView.getBookmarksEnabled());
 		foldBackgroundButton.setColor(mainView.getFoldBackground());
 		armedFoldBackgroundButton.setColor(mainView.getArmedFoldBackground());
 	}
