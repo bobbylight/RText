@@ -66,10 +66,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 	private Box bracketMatchingPanel;
 	private JCheckBox bracketMatchCheckBox;
-	private JLabel bmBGColorLabel;
-	private RColorSwatchesButton bmBGColorButton;
-	private JLabel bmBorderColorLabel;
-	private RColorSwatchesButton bmBorderColorButton;
 	private JCheckBox bothBracketsCB;
 
 	private JCheckBox showTabLinesCheckBox;
@@ -194,18 +190,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		bracketMatchCheckBox = new JCheckBox(msg.getString("HighlightMB"));
 		bracketMatchCheckBox.setActionCommand("BracketMatchCheckBox");
 		bracketMatchCheckBox.addActionListener(this);
-		bmBGColorLabel = new JLabel(msg.getString("BackgroundFill"));
-		bmBGColorButton = new RColorSwatchesButton();
-		bmBGColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
-		bmBorderColorLabel = new JLabel(msg.getString("Border"));
-		bmBorderColorButton = new RColorSwatchesButton();
-		bmBorderColorButton.addPropertyChangeListener(RColorButton.COLOR_CHANGED_PROPERTY, this);
 		bracketMatchingPanel.add(bracketMatchCheckBox);
-		bracketMatchingPanel.add(bmBGColorLabel);
-		bracketMatchingPanel.add(bmBGColorButton);
-		bracketMatchingPanel.add(Box.createHorizontalStrut(5));
-		bracketMatchingPanel.add(bmBorderColorLabel);
-		bracketMatchingPanel.add(bmBorderColorButton);
 		bracketMatchingPanel.add(Box.createHorizontalGlue());
 		addLeftAligned(bigOtherPanel, bracketMatchingPanel);
 		bothBracketsCB = new JCheckBox(msg.getString("HighlightBothBrackets"));
@@ -260,13 +245,10 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				return;
 			}
 
-			Color defaultCurrentLineHighlightColor = rstaTheme.currentLineHighlight;
 			int defaultTabSize = RTextArea.getDefaultTabSize();
 			int defaultMarginLinePosition = RTextArea.getDefaultMarginLinePosition();
 			Color defaultMarginLineColor = rstaTheme.marginLineColor;
 			boolean defaultAA = File.separatorChar=='\\';
-			Color defaultBMBGColor = rstaTheme.matchedBracketBG;
-			Color defaultBMBorderColor = rstaTheme.matchedBracketFG;
 			Color defaultTabLineColor = rstaTheme.tabLineColor;
 			if (defaultTabLineColor == null) { // This is optional in the theme, with no default
 				defaultTabLineColor = Color.GRAY;
@@ -286,8 +268,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				aaCheckBox.isSelected()!=defaultAA ||
 				fractionalMetricsCheckBox.isSelected() ||
 				!bracketMatchCheckBox.isSelected() ||
-				!bmBGColorButton.getColor().equals(defaultBMBGColor) ||
-				!bmBorderColorButton.getColor().equals(defaultBMBorderColor) ||
 				bothBracketsCB.isSelected() ||
 				showTabLinesCheckBox.isSelected() ||
 				!defaultTabLineColor.equals(tabLineColorButton.getColor())) {
@@ -305,8 +285,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				aaCheckBox.setSelected(defaultAA);
 				fractionalMetricsCheckBox.setSelected(false);
 				setBracketMatchCheckboxSelected(true);
-				setBracketMatchBGColor(defaultBMBGColor);
-				bmBorderColorButton.setColor(defaultBMBorderColor);
 				bothBracketsCB.setSelected(false);
 				setTabLinesEnabled(false);
 				tabLineColorButton.setColor(defaultTabLineColor);
@@ -363,8 +341,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 		else if ("BracketMatchCheckBox".equals(command)) {
 			boolean selected = bracketMatchCheckBox.isSelected();
-			bmBGColorButton.setEnabled(selected);
-			bmBorderColorButton.setEnabled(selected);
 			bothBracketsCB.setEnabled(selected);
 			setDirty(true);
 		}
@@ -427,8 +403,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		mainView.setFractionalFontMetricsEnabled(fractionalMetricsCheckBox.isSelected()); // Doesn't update if not necessary.
 		boolean bmEnabled = isBracketMatchCheckboxSelected();
 		mainView.setBracketMatchingEnabled(bmEnabled);	// Doesn't update if it doesn't have to.
-		mainView.setMatchedBracketBGColor(getBracketMatchBGColor()); // Doesn't update if it doesn't have to.
-		mainView.setMatchedBracketBorderColor(bmBorderColorButton.getColor()); // Doesn't update if it doesn't have to.
 		mainView.setMatchBothBrackets(bothBracketsCB.isSelected());
 		mainView.setShowTabLines(showTabLinesCheckBox.isSelected());
 		mainView.setTabLinesColor(tabLineColorButton.getColor());
@@ -483,18 +457,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		// If that went okay then the entire panel is okay.
 		return null;
 
-	}
-
-
-	/**
-	 * Returns the color the user chose for the background of a matched
-	 * bracket.
-	 *
-	 * @return The color the user chose.
-	 * @see #setBracketMatchBGColor
-	 */
-	public Color getBracketMatchBGColor() {
-		return bmBGColorButton.getColor();
 	}
 
 
@@ -637,17 +599,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Sets the color to use for the background of a matched bracket.
-	 *
-	 * @param color The color to use.
-	 * @see #getBracketMatchBGColor
-	 */
-	public void setBracketMatchBGColor(Color color) {
-		bmBGColorButton.setColor(color);
-	}
-
-
-	/**
 	 * Sets whether or not the bracket match color checkbox is selected.
 	 *
 	 * @param selected Whether or not the checkbox is selected.
@@ -655,8 +606,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public void setBracketMatchCheckboxSelected(boolean selected) {
 		bracketMatchCheckBox.setSelected(selected);
-		bmBGColorButton.setEnabled(selected);
-		bmBorderColorButton.setEnabled(selected);
 		bothBracketsCB.setEnabled(selected);
 	}
 
@@ -779,8 +728,6 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		fractionalMetricsCheckBox.setSelected(mainView.isFractionalFontMetricsEnabled());
 		boolean bmEnabled = mainView.isBracketMatchingEnabled();
 		setBracketMatchCheckboxSelected(bmEnabled);
-		setBracketMatchBGColor(mainView.getMatchedBracketBGColor());
-		bmBorderColorButton.setColor(mainView.getMatchedBracketBorderColor());
 		bothBracketsCB.setSelected(mainView.getMatchBothBrackets());
 		setTabLinesEnabled(mainView.getShowTabLines());
 		tabLineColorButton.setColor(mainView.getTabLinesColor());
