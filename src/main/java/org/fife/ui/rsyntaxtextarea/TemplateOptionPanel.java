@@ -19,15 +19,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
@@ -248,8 +240,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			JPanel temp = new JPanel(new GridLayout(2,1, 5,5));
 			temp.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
 			JLabel label = UIUtil.newLabel(msg, "BeforeCaret");
-			bcTextArea = new RTextArea(4, 30);
-			bcTextArea.setHighlightCurrentLine(false);
+			bcTextArea = createTextArea();
 			label.setLabelFor(bcTextArea);
 			RScrollPane sp = new RScrollPane(bcTextArea);
 			JPanel temp2 = new JPanel(new BorderLayout());
@@ -257,8 +248,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			temp2.add(sp);
 			temp.add(temp2);
 			label = UIUtil.newLabel(msg, "AfterCaret");
-			acTextArea = new RTextArea(4, 30);
-			acTextArea.setHighlightCurrentLine(false);
+			acTextArea = createTextArea();
 			label.setLabelFor(acTextArea);
 			sp = new RScrollPane(acTextArea);
 			temp2 = new JPanel(new BorderLayout());
@@ -301,6 +291,17 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
+		}
+
+		private RTextArea createTextArea() {
+			// Yuck = RTextArea defaults to black text on white BG always
+			JTextArea defaults = new JTextArea();
+			RTextArea textArea = new RTextArea(4, 30);
+			textArea.setHighlightCurrentLine(false);
+			textArea.setBackground(defaults.getBackground());
+			textArea.setForeground(defaults.getForeground());
+			textArea.setCaretColor(defaults.getCaretColor());
+			return textArea;
 		}
 
 		@Override
