@@ -25,7 +25,7 @@ import org.fife.rtext.RTextUtilities;
 import org.fife.ui.*;
 import org.fife.ui.app.AppTheme;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaOptionPanel;
-import org.fife.ui.rtextarea.RTextAreaOptionPanel;
+import org.fife.ui.rsyntaxtextarea.RTextAreaOptionPanel;
 
 
 /**

@@ -41,7 +41,7 @@ import org.fife.ui.app.themes.FlatDarkTheme;
 import org.fife.ui.app.themes.FlatLightTheme;
 import org.fife.ui.app.themes.NativeTheme;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rtextarea.RTextAreaOptionPanel;
+import org.fife.ui.rsyntaxtextarea.RTextAreaOptionPanel;
 
 
 /**

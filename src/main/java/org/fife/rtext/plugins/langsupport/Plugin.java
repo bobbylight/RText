@@ -55,7 +55,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.modes.XMLTokenMaker;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rtextarea.Gutter;
-import org.fife.ui.rtextarea.RTextAreaOptionPanel;
+import org.fife.ui.rsyntaxtextarea.RTextAreaOptionPanel;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 

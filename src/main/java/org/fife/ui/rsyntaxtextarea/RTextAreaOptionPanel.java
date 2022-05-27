@@ -8,7 +8,7 @@
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
-package org.fife.ui.rtextarea;
+package org.fife.ui.rsyntaxtextarea;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -26,7 +26,7 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.*;
-import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rtextarea.RTextArea;
 
 
 /**
@@ -81,7 +81,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
 		ResourceBundle msg = ResourceBundle.getBundle(
-								"org.fife.ui.rtextarea.OptionPanel");
+								"org.fife.ui.rsyntaxtextarea.TextAreaOptionPanel");
 
 		setName(msg.getString("Title"));
 

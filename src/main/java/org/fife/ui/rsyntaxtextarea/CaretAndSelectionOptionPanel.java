@@ -8,7 +8,7 @@
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
-package org.fife.ui.rtextarea;
+package org.fife.ui.rsyntaxtextarea;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -42,7 +42,9 @@ import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RColorButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
-import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rtextarea.CaretStyle;
+import org.fife.ui.rtextarea.ConfigurableCaret;
+import org.fife.ui.rtextarea.RTextArea;
 
 
 /**
@@ -82,7 +84,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 									getOrientation(getLocale());
 
 		ResourceBundle msg = ResourceBundle.getBundle(
-					"org.fife.ui.rtextarea.CaretAndSelectionOptionPanel");
+					"org.fife.ui.rsyntaxtextarea.CaretAndSelectionOptionPanel");
 
 		setName(msg.getString("Title"));
 
