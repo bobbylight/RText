@@ -94,7 +94,7 @@ class BackgroundDialog extends JDialog implements ActionListener {
 									getOrientation(getLocale());
 
 		msg = ResourceBundle.getBundle(
-							"org.fife.ui.rtextarea.BackgroundDialog");
+							"org.fife.ui.rsyntaxtextarea.BackgroundDialog");
 		setTitle(msg.getString("BackgroundDialogTitle"));
 
 		Border empty5Border = UIUtil.getEmpty5Border();

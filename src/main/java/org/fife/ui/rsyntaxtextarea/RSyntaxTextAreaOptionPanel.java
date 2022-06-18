@@ -26,7 +26,6 @@ import javax.swing.event.*;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextAppThemes;
-import org.fife.rtext.optionsdialog.UIOptionPanel;
 import org.fife.ui.*;
 import org.fife.ui.rtextarea.RTextArea;
 
@@ -35,27 +34,22 @@ import org.fife.ui.rtextarea.RTextArea;
  * An options panel that can be added to an
  * <code>org.fife.ui.OptionsDialog</code> to display options appropriate
  * for an <code>RSyntaxTextArea</code>.  This panel allows the user to
- * change the following properties of the text area:
- * <ul>
- *    <li>Syntax highlighting colors</li>
- *    <li>Bracket matching and color</li>
- *    <li>Toggle whitespace (spaces and tabs) visibility</li>
- *    <li>Toggle anti-aliasing and fractional font metrics</li>
- * </ul>
- * It also gives the user a button to restore the default color scheme.
+ * customize the fonts and colors used in the editor.
  *
  * @author Robert Futrell
- * @version 0.5
+ * @version 1.0
  */
 public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 					implements ActionListener, PropertyChangeListener,
-								ListSelectionListener{
+								ItemListener, ListSelectionListener{
 
 	/**
 	 * ID used to identify this option panel.
 	 */
 	public static final String OPTION_PANEL_ID = "RTextAreaOptionPanel";
 
+	private JCheckBox overrideThemeCheckBox;
+	private JButton rdButton;
 	private FontSelector mainFontSelector;
 	private JTextField mainBackgroundField;
 	private JButton mainBackgroundButton;
@@ -85,11 +79,12 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	private static final String UNKNOWN_PROPERTY			= "RSTAOpts.unknown";
 
 	private static final String[] SAMPLES = {
-		"previewJava.txt", "previewPerl.txt", "previewXml.txt",
+		"previewJava.txt", "previewJavaScript.txt", "previewPerl.txt", "previewRuby.txt", "previewXml.txt",
 	};
 
 	private static final String[] SAMPLE_STYLES = {
-		SyntaxConstants.SYNTAX_STYLE_JAVA, SyntaxConstants.SYNTAX_STYLE_PERL,
+		SyntaxConstants.SYNTAX_STYLE_JAVA, SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT,
+		SyntaxConstants.SYNTAX_STYLE_PERL, SyntaxConstants.SYNTAX_STYLE_RUBY,
 		SyntaxConstants.SYNTAX_STYLE_XML,
 	};
 
@@ -112,20 +107,19 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		Box cp = Box.createVerticalBox();
 		add(cp, BorderLayout.NORTH);
 
-		SelectableLabel label = new SelectableLabel();
-		label.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
-		label.setText(msg.getString("Note.UseThemesInstead"));
-		label.addHyperlinkListener(e -> {
-			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-				getOptionsDialog().setSelectedOptionsPanel(
-						UIOptionPanel.OPTION_PANEL_ID);
-			}
-		});
-		cp.add(label);
+		// The "Override the theme" checkbox
+		overrideThemeCheckBox = UIUtil.newCheckBox(msg, "OverrideTheme");
+		overrideThemeCheckBox.addItemListener(this);
+		overrideThemeCheckBox.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
+		overrideThemeCheckBox.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+		Box temp = Box.createHorizontalBox();
+		temp.add(overrideThemeCheckBox);
+		temp.add(Box.createHorizontalGlue());
+		cp.add(temp);
 		cp.add(Box.createVerticalStrut(5));
 
-		SpringLayout sl = new SpringLayout();
-		JPanel springPanel = new JPanel(sl);
+		// The "Font" section for configuring the main editor font
+		JPanel springPanel = new JPanel(new SpringLayout());
 		springPanel.setBorder(new OptionPanelBorder(msg.getString("Font")));
 		mainFontSelector = new FontSelector(FontSelector.NOT_LABELED);
 		mainFontSelector.setColorSelectable(true);
@@ -144,14 +138,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		bgRestPanel.add(mainBackgroundField);
 		bgRestPanel.add(Box.createHorizontalStrut(5));
 		bgRestPanel.add(mainBackgroundButton);
-		if (orientation.isLeftToRight()) {
-			springPanel.add(mfsLabel); springPanel.add(mainFontSelector);
-			springPanel.add(bgLabel);  springPanel.add(bgRestPanel);
-		}
-		else {
-			springPanel.add(mainFontSelector); springPanel.add(mfsLabel);
-			springPanel.add(bgRestPanel);  springPanel.add(bgLabel);
-		}
+		UIUtil.addLabelValuePairs(springPanel, orientation,
+			mfsLabel, mainFontSelector,
+			bgLabel, bgRestPanel);
 		UIUtil.makeSpringCompactGrid(springPanel, 2, 2, 0, 0, 5, 5);
 		cp.add(springPanel);
 		cp.add(Box.createVerticalStrut(5));
@@ -215,8 +204,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		fontSelector.setUnderlineSelectable(true);
 		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
 		fontSelector.addPropertyChangeListener(FontSelector.ENABLED_PROPERTY, this);
+		fontSelector.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
+
 		// Just to keep it right-aligned with stuff above...
-		Box temp = createHorizontalBox();
+		temp = createHorizontalBox();
 		temp.add(fontSelector);
 		temp.add(Box.createHorizontalStrut(5));
 		propertiesPanel.add(temp);
@@ -224,30 +215,31 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		// Add the foreground and background buttons to the properties panel.
 		temp = createHorizontalBox();
-		temp.setAlignmentX(Component.LEFT_ALIGNMENT);
 		fgCheckBox = new JCheckBox(msg.getString("Foreground"));
 		fgCheckBox.setActionCommand("fgCheckBox");
 		fgCheckBox.addActionListener(this);
 		foregroundButton = new RColorSwatchesButton(Color.BLACK);
 		foregroundButton.addPropertyChangeListener(
 						RColorButton.COLOR_CHANGED_PROPERTY, this);
+		foregroundButton.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
 		temp.add(fgCheckBox);
+		temp.add(Box.createHorizontalStrut(5));
 		temp.add(foregroundButton);
 		temp.add(Box.createHorizontalGlue());
-		propertiesPanel.add(temp);
-		propertiesPanel.add(Box.createVerticalStrut(8));
+		addLeftAligned(propertiesPanel, temp, 8);
 		temp = createHorizontalBox();
-		temp.setAlignmentX(Component.LEFT_ALIGNMENT);
 		bgCheckBox = new JCheckBox(msg.getString("Background"));
 		bgCheckBox.setActionCommand("bgCheckBox");
 		bgCheckBox.addActionListener(this);
 		backgroundButton = new RColorSwatchesButton(Color.BLACK);
 		backgroundButton.addPropertyChangeListener(
 						RColorButton.COLOR_CHANGED_PROPERTY, this);
+		backgroundButton.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
 		temp.add(bgCheckBox);
+		temp.add(Box.createHorizontalStrut(5));
 		temp.add(backgroundButton);
 		temp.add(Box.createHorizontalGlue());
-		propertiesPanel.add(temp);
+		addLeftAligned(propertiesPanel, temp);
 		propertiesPanel.add(Box.createVerticalGlue());
 
 		JPanel temp2 = new JPanel(new BorderLayout());
@@ -260,14 +252,17 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		// Now create a panel containing all checkbox properties in the
 		// bottom of this panel.
 		temp = Box.createVerticalBox();
+		temp.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
 		temp.setBorder(new OptionPanelBorder(msg.getString("Preview")));
 		Box horizBox = createHorizontalBox();
-		horizBox.add(new JLabel(msg.getString("SampleTextLabel")));
+		JLabel sampleTextLabel = new JLabel(msg.getString("SampleTextLabel"));
+		horizBox.add(sampleTextLabel);
 		horizBox.add(Box.createHorizontalStrut(5));
-		final String[] samples = { "Java", "Perl", "XML", };
+		final String[] samples = { "Java", "JavaScript", "Perl", "Ruby", "XML", };
 		sampleCombo = new JComboBox<>(samples);
 		sampleCombo.setEditable(false);
 		sampleCombo.addActionListener(this);
+
 		horizBox.add(sampleCombo);
 		horizBox.add(Box.createHorizontalGlue());
 		addLeftAligned(temp, horizBox, 3);
@@ -276,9 +271,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		temp.add(Box.createVerticalStrut(3));
 
 		Box rdPanel = createHorizontalBox();
-		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
+		rdButton = new JButton(msg.getString("RestoreDefaults"));
 		rdButton.setActionCommand("RestoreDefaults");
 		rdButton.addActionListener(this);
+		rdButton.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
 		rdPanel.add(rdButton);
 		rdPanel.add(Box.createHorizontalGlue());
 
@@ -288,7 +284,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		advancedPanel.add(rdPanel, BorderLayout.SOUTH);
 
 		cp.add(advancedPanel);
-		//contentPane.add(Box.createVerticalGlue());
 		applyComponentOrientation(orientation);
 
 	}
@@ -371,11 +366,13 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			SyntaxScheme currentScheme = getSyntaxScheme();
 			SyntaxScheme defaultScheme = rstaTheme.scheme;
 
-			if (!getTextAreaFont().equals(defaultFont) ||
+			if (overrideThemeCheckBox.isSelected() ||
+					!getTextAreaFont().equals(defaultFont) ||
 					getUnderline() ||
 					!getTextAreaForeground().equals(defaultForeground) ||
 					!defaultBackground.equals(background) ||
 					!currentScheme.equals(defaultScheme)) {
+				overrideThemeCheckBox.setSelected(false);
 				setTextAreaFont(defaultFont, false);
 				setTextAreaForeground(defaultForeground);
 				setBackgroundObject(defaultBackground);
@@ -384,6 +381,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				setDirty(true);
 				// Force a repaint of the preview panel.
 				valueChanged(null);
+				// Some custom components have child components that enable/disable
+				// on their own criteria, so we're explicit here since it's the most
+				// straightforward way to ensure the UI is disabled as expected
+				setComponentsEnabled(false);
 			}
 
 		}
@@ -406,21 +407,32 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * Applies the settings entered into this dialog on the specified
-	 * application.
-	 *
-	 * @param owner The application.
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
+
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
-		mainView.setTextAreaForeground(getTextAreaForeground());
-		mainView.setTextAreaFont(getTextAreaFont(), getUnderline());
-		mainView.setBackgroundObject(getBackgroundObject());
-		mainView.setBackgroundImageFileName(getBackgroundImageFileName());
-		rtext.setSyntaxScheme(getSyntaxScheme()); // Doesn't update if it doesn't have to.
+		mainView.setOverrideEditorStyles(overrideThemeCheckBox.isSelected());
+
+		if (overrideThemeCheckBox.isSelected()) {
+			mainView.setTextAreaForeground(getTextAreaForeground());
+			mainView.setTextAreaFont(getTextAreaFont(), getUnderline());
+			mainView.setBackgroundObject(getBackgroundObject());
+			mainView.setBackgroundImageFileName(getBackgroundImageFileName());
+			rtext.setSyntaxScheme(getSyntaxScheme()); // Doesn't update if it doesn't have to.
+		}
+		else {
+			try {
+				Theme editorTheme = RTextAppThemes.getRstaTheme(rtext.getTheme());
+				mainView.setTextAreaForeground(editorTheme.scheme.getStyle(TokenTypes.IDENTIFIER).foreground);
+				mainView.setTextAreaFont(editorTheme.baseFont, false);
+				mainView.setBackgroundObject(editorTheme.bgColor);
+				mainView.setBackgroundImageFileName(null);
+				rtext.setSyntaxScheme(editorTheme.scheme); // Doesn't update if it doesn't have to.
+			} catch (IOException ioe) {
+				rtext.displayException(ioe); // Never happens
+			}
+		}
 	}
 
 
@@ -533,6 +545,17 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	private static int indexToStyle(int index) {
 		return index + 1;
+	}
+
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+
+		Object source = e.getItemSelectable();
+
+		if (overrideThemeCheckBox == source) {
+			setComponentsEnabled(e.getStateChange() == ItemEvent.SELECTED);
+		}
 	}
 
 
@@ -706,6 +729,18 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
+	private void setComponentsEnabled(boolean enabled, Component... ignore) {
+
+		UIUtil.setComponentsEnabled(this, enabled, ignore);
+
+		// These components ignore the global change above since they have additional
+		// conditions to check to determine whether they are enabled
+		fontSelector.setEnabled(enabled);
+		foregroundButton.setEnabled(enabled && fgCheckBox.isSelected());
+		backgroundButton.setEnabled(enabled && bgCheckBox.isSelected());
+	}
+
+
 	/**
 	 * Sets the syntax highlighting color scheme being displayed in this
 	 * panel.
@@ -753,17 +788,11 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * Sets the values displayed by this panel to reflect those in the
-	 * application.  Child panels are not handled.
-	 *
-	 * @param owner The parent application.
-	 * @see #setValues(Frame)
-	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
+		overrideThemeCheckBox.setSelected(mainView.getOverrideEditorStyles());
 		setTextAreaForeground(mainView.getTextAreaForeground());
 		setTextAreaFont(mainView.getTextAreaFont(), mainView.getTextAreaUnderline());
 		setBackgroundObject(mainView.getBackgroundObject());
@@ -772,6 +801,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		if (sampleArea.getDocument().getLength()==0) { // First time through
 			refreshDisplayedSample();
 		}
+		setComponentsEnabled(overrideThemeCheckBox.isSelected());
 	}
 
 

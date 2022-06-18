@@ -78,6 +78,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	public String fileHistoryString;				// String representing the file history.
 	public boolean currentLineHighlightEnabled;
 	public int mainView;						// Either RText.TABBED_VIEW or RText.SPLIT_PANE_VIEW.
+	public boolean overrideEditorStyles;
 	public boolean bracketMatchingEnabled;
 	public boolean matchBothBrackets;
 	public Color matchedBracketBGColor;
@@ -249,6 +250,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		fileHistoryString = null;
 		currentLineHighlightEnabled = true;
 		mainView = RText.TABBED_VIEW;
+		overrideEditorStyles = false;
 		language = "en";	// Default to English.
 		bracketMatchingEnabled = true;
 		matchBothBrackets = false;

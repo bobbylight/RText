@@ -131,6 +131,7 @@ public abstract class AbstractMainView extends JPanel
 	private boolean checkForModification;			// Check for files being changed outside of RText?
 	private long modificationCheckDelay = 10000;		// Delay in milliseconds.
 
+	private boolean overrideEditorStyles;
 	private boolean bracketMatchingEnabled;
 	private boolean matchBothBrackets;
 	private Color matchedBracketBGColor;
@@ -572,6 +573,7 @@ public abstract class AbstractMainView extends JPanel
 		}
 		goToDialog		= fromPanel.goToDialog;
 
+		overrideEditorStyles = fromPanel.overrideEditorStyles;
 		textMode			= fromPanel.textMode;
 		tabSize			= fromPanel.tabSize;
 		emulateTabsWithWhitespace = fromPanel.emulateTabsWithWhitespace;
@@ -1579,6 +1581,19 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns whether editor styles should be overridden (vs. just use what
+	 * is specified by the application theme). This property is only preserved
+	 * for options dialog state.
+	 *
+	 * @return Whether editor styles are overridden.
+	 * @see #setOverrideEditorStyles(boolean)
+	 */
+	public boolean getOverrideEditorStyles() {
+		return overrideEditorStyles;
+	}
+
+
+	/**
 	 * Returns the <code>java.awt.Font</code> currently used to print documents.
 	 *
 	 * @return The font used to print documents.  If <code>null</code> is
@@ -2148,6 +2163,7 @@ public abstract class AbstractMainView extends JPanel
 		searchManager = new SearchManager(owner);
 
 		// Initialize some stuff from prefs.
+		overrideEditorStyles = prefs.overrideEditorStyles;
 		printFont = prefs.printFont;
 		tabSize = prefs.tabSize;
 		textMode = prefs.textMode;
@@ -3753,6 +3769,19 @@ public abstract class AbstractMainView extends JPanel
 			throw new NullPointerException();
 		modifiedDocumentDisplayNameColor = color;
 		refreshDisplayNames();	// So the color change takes effect.
+	}
+
+
+	/**
+	 * Sets whether editor styles should be overridden (vs. just use what
+	 * is specified by the application theme). This property is only preserved
+	 * for options dialog state.
+	 *
+	 * @param override Whether editor styles are overridden.
+	 * @see #getOverrideEditorStyles()
+	 */
+	public void setOverrideEditorStyles(boolean override) {
+		overrideEditorStyles = override;
 	}
 
 

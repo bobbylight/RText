@@ -98,6 +98,7 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 		prefs.fileHistoryString			= menuBar.getFileHistoryString();
 		prefs.currentLineHighlightEnabled	= mainView.isCurrentLineHighlightEnabled();
 		prefs.mainView					= rtext.getMainViewStyle();
+		prefs.overrideEditorStyles		= mainView.getOverrideEditorStyles();
 		prefs.bracketMatchingEnabled		= mainView.isBracketMatchingEnabled();
 		prefs.matchBothBrackets			= mainView.getMatchBothBrackets();
 		prefs.matchedBracketBGColor		= mainView.getMatchedBracketBGColor();
