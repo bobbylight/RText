@@ -147,8 +147,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		// Syntax panel contains all of the "syntax highlighting" stuff.
 		syntaxPanel = new JPanel(new BorderLayout());
-		syntaxPanel.setBorder(new OptionPanelBorder(
-								msg.getString("FontsAndColors")));
+		syntaxPanel.setBorder(BorderFactory.createCompoundBorder(
+			new OptionPanelBorder(msg.getString("FontsAndColors")),
+			BorderFactory.createEmptyBorder(5, 0, 0, 0)));
 
 		// Add the token style selection panel to the right.
 		syntaxListModel = new DefaultListModel<>();
@@ -243,6 +244,12 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		propertiesPanel.add(Box.createVerticalGlue());
 
 		JPanel temp2 = new JPanel(new BorderLayout());
+		if (orientation.isLeftToRight()) {
+			temp2.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+		}
+		else {
+			temp2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
+		}
 		temp2.add(propertiesPanel, BorderLayout.NORTH);
 		syntaxPanel.add(temp2);
 
@@ -265,7 +272,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		horizBox.add(sampleCombo);
 		horizBox.add(Box.createHorizontalGlue());
-		addLeftAligned(temp, horizBox, 3);
+		addLeftAligned(temp, horizBox, 5);
 		sampleArea = createSampleTextArea();
 		temp.add(new RScrollPane(sampleArea));
 		temp.add(Box.createVerticalStrut(3));
@@ -554,7 +561,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		Object source = e.getItemSelectable();
 
 		if (overrideThemeCheckBox == source) {
-			setComponentsEnabled(e.getStateChange() == ItemEvent.SELECTED);
+			boolean overrideTheme = e.getStateChange() == ItemEvent.SELECTED;
+			setComponentsEnabled(overrideTheme);
+			updateSampleArea(!overrideTheme);
+			setDirty(true);
 		}
 	}
 
@@ -792,7 +802,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
-		overrideThemeCheckBox.setSelected(mainView.getOverrideEditorStyles());
 		setTextAreaForeground(mainView.getTextAreaForeground());
 		setTextAreaFont(mainView.getTextAreaFont(), mainView.getTextAreaUnderline());
 		setBackgroundObject(mainView.getBackgroundObject());
@@ -801,7 +810,38 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		if (sampleArea.getDocument().getLength()==0) { // First time through
 			refreshDisplayedSample();
 		}
+		// Do this after initializing all values above
+		overrideThemeCheckBox.setSelected(mainView.getOverrideEditorStyles());
 		setComponentsEnabled(overrideThemeCheckBox.isSelected());
+	}
+
+
+	/**
+	 * Updates the sample area to use either the current application theme or the
+	 * selected values in this dialog.
+	 *
+	 * @param themeSettings Whether to use the application themes.
+	 */
+	private void updateSampleArea(boolean themeSettings) {
+
+		if (themeSettings) {
+			RText app = (RText)getOptionsDialog().getParent();
+			try {
+				Theme editorTheme = RTextAppThemes.getRstaTheme(app.getTheme());
+				sampleArea.setForeground(editorTheme.scheme.getStyle(TokenTypes.IDENTIFIER).foreground);
+				sampleArea.setFont(RTextArea.getDefaultFont());
+				sampleArea.setBackgroundObject(editorTheme.bgColor);
+				sampleArea.setSyntaxScheme(editorTheme.scheme);
+			} catch (IOException ioe) {
+				app.displayException(ioe);
+			}
+		}
+		else {
+			sampleArea.setForeground(getTextAreaForeground());
+			sampleArea.setFont(getTextAreaFont());
+			sampleArea.setBackgroundObject(getBackgroundObject());
+			sampleArea.setSyntaxScheme(getSyntaxScheme());
+		}
 	}
 
 
