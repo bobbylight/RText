@@ -38,6 +38,8 @@ import org.fife.rtext.actions.AbstractSearchAction;
 import org.fife.rtext.actions.CapsLockAction;
 import org.fife.rtext.actions.ToggleTextModeAction;
 import org.fife.ui.UIUtil;
+import org.fife.ui.app.AbstractGUIApplication;
+import org.fife.ui.app.AppTheme;
 import org.fife.ui.autocomplete.Util;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
@@ -2160,6 +2162,9 @@ public abstract class AbstractMainView extends JPanel
 		this.owner = owner;
 		updateBookmarkIcon();
 		owner.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, this);
+		owner.addPropertyChangeListener(AbstractGUIApplication.THEME_PROPERTY, e -> {
+			installAppTheme((AppTheme)e.getNewValue());
+		});
 		searchManager = new SearchManager(owner);
 
 		// Initialize some stuff from prefs.
@@ -2275,9 +2280,28 @@ public abstract class AbstractMainView extends JPanel
 		}
 		setSelectedIndex(0);
 
+		// Do this after other initialization
+		installAppTheme(owner.getTheme());
+
 		// Update the title of the RText window.
 		owner.setMessages(currentTextArea.getFileFullPath(), null);
 
+	}
+
+
+	private void installAppTheme(AppTheme theme) {
+
+		Color labelErrorForeground = (Color)theme.getExtraUiDefaults().get("rtext.labelErrorForeground");
+		setHighlightModifiedDocumentDisplayNames(labelErrorForeground != null);
+		setModifiedDocumentDisplayNamesColor(labelErrorForeground);
+
+		try {
+			Theme rstaTheme = RTextAppThemes.getRstaTheme(theme);
+			setRstaTheme(rstaTheme);
+			setSyntaxScheme(owner.getSyntaxScheme()); // Could also get from the theme
+		} catch (IOException ioe) {
+			owner.displayException(ioe);
+		}
 	}
 
 
@@ -3846,7 +3870,7 @@ public abstract class AbstractMainView extends JPanel
 	void setRstaTheme(Theme theme) {
 
 		// Clone the theme to avoid using the same one as e.g.
-		// is activel being edited in the Options dialog
+		// is actively being edited in the Options dialog
 		setSyntaxScheme((SyntaxScheme)theme.scheme.clone());
 
 		//themeObj.activeLineRangeColor;
