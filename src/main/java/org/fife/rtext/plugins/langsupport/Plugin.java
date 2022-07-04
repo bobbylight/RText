@@ -9,7 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
-import java.awt.Component;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -19,10 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import javax.swing.Icon;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 
 import org.fife.rsta.ac.LanguageSupport;
@@ -45,9 +42,13 @@ import org.fife.rsta.ac.xml.XmlLanguageSupport;
 import org.fife.rtext.*;
 import org.fife.rtext.plugins.langsupport.typescript.TypeScriptSupport;
 import org.fife.rtext.plugins.sourcebrowser.SourceBrowserPlugin;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.icons.IconGroup;
+import org.fife.ui.app.themes.FlatDarkTheme;
+import org.fife.ui.app.themes.FlatLightTheme;
+import org.fife.ui.app.themes.NativeTheme;
 import org.fife.ui.autocomplete.CompletionXMLParser;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -55,7 +56,6 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.modes.XMLTokenMaker;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rtextarea.Gutter;
-import org.fife.ui.rsyntaxtextarea.RTextAreaOptionPanel;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 
@@ -70,6 +70,7 @@ public class Plugin extends GUIPlugin<RText> {
 
 	private OptionsPanel optionsPanel;
 	private Listener listener;
+	private Map<String, Icon> pluginIcons;
 	private Map<ParserNotice.Level, Icon> icons;
 	private TypeScriptSupport typeScriptSupport;
 
@@ -91,7 +92,7 @@ public class Plugin extends GUIPlugin<RText> {
 	 */
 	public Plugin(RText app) {
 		super(app);
-		setOptionsDialogPanelParentPanelID(RTextAreaOptionPanel.OPTION_PANEL_ID);
+		loadPluginIcons();
 	}
 
 
@@ -171,7 +172,7 @@ public class Plugin extends GUIPlugin<RText> {
 
 	@Override
 	public Icon getPluginIcon() {
-		return null;
+		return pluginIcons.get(getApplication().getTheme().getId());
 	}
 
 
@@ -195,6 +196,14 @@ public class Plugin extends GUIPlugin<RText> {
 	 */
 	public TypeScriptSupport getTypeScriptSupport() {
 		return typeScriptSupport;
+	}
+
+
+	@Override
+	public void iconGroupChanged(IconGroup iconGroup) {
+		if (optionsPanel != null) {
+			optionsPanel.setIcon(getPluginIcon());
+		}
 	}
 
 
@@ -237,6 +246,30 @@ public class Plugin extends GUIPlugin<RText> {
 		typeScriptSupport = new TypeScriptSupport();
 		typeScriptSupport.install(rtext, this, prefs);
 
+	}
+
+
+	/**
+	 * Creates a map from application theme ID to icon.
+	 */
+	private void loadPluginIcons() {
+
+		pluginIcons = new HashMap<>();
+
+		try {
+
+			pluginIcons.put(NativeTheme.ID, new ImageIcon(getClass().getResource("eclipse/plugin_langsupport.gif")));
+
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("plugin_langsupport dark",
+				getClass().getResourceAsStream("flat-dark/plugin_langsupport.svg"), 16, 16);
+			pluginIcons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("langsupport light",
+				getClass().getResourceAsStream("flat-light/plugin_langsupport.svg"), 16, 16);
+			pluginIcons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 
@@ -669,14 +702,6 @@ public class Plugin extends GUIPlugin<RText> {
 		view.removePropertyChangeListener(listener);
 		getApplication().removePropertyChangeListener(RText.ICON_STYLE_PROPERTY, listener);
 		return true;
-	}
-
-
-	@Override
-	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		if (optionsPanel != null) {
-			optionsPanel.setIcon(getPluginIcon());
-		}
 	}
 
 

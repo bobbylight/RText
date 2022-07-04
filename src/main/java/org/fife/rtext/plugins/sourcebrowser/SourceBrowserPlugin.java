@@ -505,6 +505,13 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 	}
 
 
+	@Override
+	public void iconGroupChanged(IconGroup iconGroup) {
+		optionPanel.setIcon(getPluginIcon());
+		getDockableWindow(getPluginName()).setIcon(getPluginIcon());
+	}
+
+
 	/**
 	 * Called just after a plugin is added to a GUI application.<p>
 	 *
@@ -536,32 +543,33 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 	private void loadIcons() {
 
 		icons = new HashMap<>();
+		Class<?> clazz = getClass();
 
 		// Load the plugin icon and the blue/green "bullet" icons for the default source browser.
 		try {
 
-			icons.put(NativeTheme.ID + "-plugin", new ImageIcon(getClass().getResource("eclipse/source_browser.png")));
-			icons.put(NativeTheme.ID + "-blue", new ImageIcon(getClass().getResource("eclipse/bullet_blue.gif")));
-			icons.put(NativeTheme.ID + "-green", new ImageIcon(getClass().getResource("eclipse/bullet_green.gif")));
+			icons.put(NativeTheme.ID + "-plugin", new ImageIcon(clazz.getResource("eclipse/source_browser.png")));
+			icons.put(NativeTheme.ID + "-blue", new ImageIcon(clazz.getResource("eclipse/bullet_blue.gif")));
+			icons.put(NativeTheme.ID + "-green", new ImageIcon(clazz.getResource("eclipse/bullet_green.gif")));
 
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("source browser dark",
-				getClass().getResourceAsStream("flat-dark/source_browser.svg"), 16, 16);
+				clazz.getResourceAsStream("flat-dark/source_browser.svg"), 16, 16);
 			icons.put(FlatDarkTheme.ID + "-plugin", new ImageIcon(darkThemeImage));
 			darkThemeImage = ImageTranscodingUtil.rasterize("source browser dark",
-				getClass().getResourceAsStream("flat-dark/bullet_blue.svg"), 8, 8);
+				clazz.getResourceAsStream("flat-dark/bullet_blue.svg"), 8, 8);
 			icons.put(FlatDarkTheme.ID + "-blue", new ImageIcon(darkThemeImage));
 			darkThemeImage = ImageTranscodingUtil.rasterize("source browser dark",
-				getClass().getResourceAsStream("flat-dark/bullet_green.svg"), 8, 8);
+				clazz.getResourceAsStream("flat-dark/bullet_green.svg"), 8, 8);
 			icons.put(FlatDarkTheme.ID + "-green", new ImageIcon(darkThemeImage));
 
 			Image lightThemeImage = ImageTranscodingUtil.rasterize("source browser light",
-				getClass().getResourceAsStream("flat-light/source_browser.svg"), 16, 16);
+				clazz.getResourceAsStream("flat-light/source_browser.svg"), 16, 16);
 			icons.put(FlatLightTheme.ID + "-plugin", new ImageIcon(lightThemeImage));
 			lightThemeImage = ImageTranscodingUtil.rasterize("source browser light",
-				getClass().getResourceAsStream("flat-light/bullet_blue.svg"), 8, 8);
+				clazz.getResourceAsStream("flat-light/bullet_blue.svg"), 8, 8);
 			icons.put(FlatLightTheme.ID + "-blue", new ImageIcon(lightThemeImage));
 			lightThemeImage = ImageTranscodingUtil.rasterize("source browser light",
-				getClass().getResourceAsStream("flat-light/bullet_green.svg"), 8, 8);
+				clazz.getResourceAsStream("flat-light/bullet_green.svg"), 8, 8);
 			icons.put(FlatLightTheme.ID + "-green", new ImageIcon(lightThemeImage));
 
 		} catch (IOException ioe) {
@@ -735,13 +743,6 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 			((AbstractSourceTree)tree).uninstall();
 		}
 		textArea.putClientProperty(CACHED_SOURCE_TREE, null);
-	}
-
-
-	@Override
-	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		optionPanel.setIcon(getPluginIcon());
-		getDockableWindow(getPluginName()).setIcon(getPluginIcon());
 	}
 
 

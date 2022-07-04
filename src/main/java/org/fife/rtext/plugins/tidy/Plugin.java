@@ -41,7 +41,6 @@ import org.fife.ui.app.themes.FlatDarkTheme;
 import org.fife.ui.app.themes.FlatLightTheme;
 import org.fife.ui.app.themes.NativeTheme;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.RTextAreaOptionPanel;
 
 
 /**
@@ -155,17 +154,6 @@ public class Plugin extends AbstractPlugin<RText>
 	}
 
 
-	/**
-	 * This panel should be parented under the main text editor panel.
-	 *
-	 * @return The parent panel ID.
-	 */
-	@Override
-	public String getOptionsDialogPanelParentPanelID() {
-		return RTextAreaOptionPanel.OPTION_PANEL_ID;
-	}
-
-
 	@Override
 	public String getPluginAuthor() {
 		return "Robert Futrell";
@@ -208,6 +196,12 @@ public class Plugin extends AbstractPlugin<RText>
 	 */
 	public XmlOptions getXmlOptions() {
 		return xmlOptions;
+	}
+
+
+	@Override
+	public void iconGroupChanged(IconGroup iconGroup) {
+		optionPanel.setIcon(getPluginIcon());
 	}
 
 
@@ -363,12 +357,6 @@ public class Plugin extends AbstractPlugin<RText>
 	@Override
 	public boolean uninstall() {
 		return true;
-	}
-
-
-	@Override
-	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		optionPanel.setIcon(getPluginIcon());
 	}
 
 

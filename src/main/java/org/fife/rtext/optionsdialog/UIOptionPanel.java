@@ -116,11 +116,11 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		RText rtext = (RText)getOptionsDialog().getOwner();
 		RTextUtilities.setThemeForAllOpenAppInstances(rtext, theme); // Doesn't update if...
+		rtext.getMainView().setOverrideEditorStyles(false); // For now any overrides are just lost
 
 		// Refresh other option panels whose properties were affected
 		org.fife.ui.OptionsDialog dialog = getOptionsDialog();
 		setValues(rtext);
-		dialog.getPanelById(UIOptionPanel.OPTION_PANEL_ID).setValues(rtext);
 		dialog.getPanelById(RTextAreaOptionPanel.OPTION_PANEL_ID).setValues(rtext);
 		dialog.getPanelById(RSyntaxTextAreaOptionPanel.OPTION_PANEL_ID).setValues(rtext);
 		// Options panels installed by plugins weren't loaded by the same

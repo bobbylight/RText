@@ -237,6 +237,12 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 	}
 
 
+	@Override
+	public void iconGroupChanged(IconGroup iconGroup) {
+		optionPanel.setIcon(getPluginIcon());
+	}
+
+
 	/**
 	 * Called just after a plugin is added to a GUI application.  If this is
 	 * a <code>GUIPlugin</code>, it has already been added visually.  Plugins
@@ -389,12 +395,6 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 			timerEvent = null;	// May help GC.
 			timer = null;		// May help GC.
 		}
-	}
-
-
-	@Override
-	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		optionPanel.setIcon(getPluginIcon());
 	}
 
 

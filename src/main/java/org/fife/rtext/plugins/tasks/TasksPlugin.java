@@ -177,6 +177,15 @@ public class TasksPlugin extends GUIPlugin<RText> {
 
 
 	@Override
+	public void iconGroupChanged(IconGroup iconGroup) {
+		window.setIcon(getPluginIcon());
+		if (optionPanel != null) {
+			optionPanel.setIcon(getPluginIcon());
+		}
+	}
+
+
+	@Override
 	public void install() {
 
 		RText rtext = getApplication();
@@ -187,7 +196,8 @@ public class TasksPlugin extends GUIPlugin<RText> {
 		item.setSelected(isTaskWindowVisible());
 		item.applyComponentOrientation(rtext.getComponentOrientation());
 
-		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
+		@SuppressWarnings("unchecked")
+		MenuBar<RText> mb = (MenuBar<RText>)rtext.getJMenuBar();
 		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
 		menu.add(item);
 
@@ -355,15 +365,6 @@ public class TasksPlugin extends GUIPlugin<RText> {
 	@Override
 	public boolean uninstall() {
 		return true;
-	}
-
-
-	@Override
-	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		window.setIcon(getPluginIcon());
-		if (optionPanel != null) {
-			optionPanel.setIcon(getPluginIcon());
-		}
 	}
 
 

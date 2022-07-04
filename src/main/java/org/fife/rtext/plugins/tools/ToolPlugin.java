@@ -198,6 +198,16 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 
 
 	@Override
+	public void iconGroupChanged(IconGroup iconGroup) {
+		window.setIcon(getPluginIcon());
+		newToolAction.setIcon(getPluginIcon());
+		if (optionPanel != null) {
+			optionPanel.setIcon(getPluginIcon());
+		}
+	}
+
+
+	@Override
 	public void install() {
 
 		ToolManager.get().addPropertyChangeListener(ToolManager.PROPERTY_TOOLS,
@@ -205,7 +215,8 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 
 		// Add a new menu for selecting tools
 		RText rtext = getApplication();
-		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
+		@SuppressWarnings("unchecked")
+		MenuBar<RText> mb = (MenuBar<RText>)rtext.getJMenuBar();
 		toolsMenu = new JMenu(MSG.getString("Plugin.Name"));
 		Action a = rtext.getAction(ToolPlugin.NEW_TOOL_ACTION);
 		toolsMenu.add(createMenuItem(a));
@@ -440,16 +451,6 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 	public boolean uninstall() {
 		// TODO: Remove dockable window from application.
 		return true;
-	}
-
-
-	@Override
-	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		window.setIcon(getPluginIcon());
-		newToolAction.setIcon(getPluginIcon());
-		if (optionPanel != null) {
-			optionPanel.setIcon(getPluginIcon());
-		}
 	}
 
 

@@ -169,6 +169,13 @@ public class MacroPlugin extends AbstractPlugin<RText>
 
 
 	@Override
+	public void iconGroupChanged(IconGroup iconGroup) {
+		updateActionIcons(iconGroup);
+		optionPanel.setIcon(getPluginIcon());
+	}
+
+
+	@Override
 	public void install() {
 
 		MacroManager.get().addPropertyChangeListener(
@@ -176,7 +183,8 @@ public class MacroPlugin extends AbstractPlugin<RText>
 
 		// Add a new menu for selecting macros
 		RText rtext = getApplication();
-		MenuBar mb = (org.fife.ui.app.MenuBar)rtext.getJMenuBar();
+		@SuppressWarnings("unchecked")
+		MenuBar<RText> mb = (MenuBar<RText>)rtext.getJMenuBar();
 		macrosMenu = new JMenu(getString("Plugin.Name"));
 		Action a = rtext.getAction(MacroPlugin.NEW_MACRO_ACTION);
 		macrosMenu.add(createMenuItem(a));
@@ -345,12 +353,5 @@ public class MacroPlugin extends AbstractPlugin<RText>
 		else {
 			editMacrosAction.restoreDefaultIcon();
 		}
-	}
-
-
-	@Override
-	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		updateActionIcons(iconGroup);
-		optionPanel.setIcon(getPluginIcon());
 	}
 }

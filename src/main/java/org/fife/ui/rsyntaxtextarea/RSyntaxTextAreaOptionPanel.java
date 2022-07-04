@@ -50,7 +50,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 	private JCheckBox overrideThemeCheckBox;
 	private JButton rdButton;
-	private FontSelector mainFontSelector;
 	private JTextField mainBackgroundField;
 	private JButton mainBackgroundButton;
 	private BackgroundDialog backgroundDialog;
@@ -120,13 +119,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		// The "Font" section for configuring the main editor font
 		JPanel springPanel = new JPanel(new SpringLayout());
-		springPanel.setBorder(new OptionPanelBorder(msg.getString("Font")));
-		mainFontSelector = new FontSelector(FontSelector.NOT_LABELED);
-		mainFontSelector.setColorSelectable(true);
-		mainFontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
-		mainFontSelector.addPropertyChangeListener(FontSelector.FONT_COLOR_PROPERTY, this);
-		JLabel mfsLabel = new JLabel(msg.getString("Font"));
-		mfsLabel.setLabelFor(mainFontSelector);
+		springPanel.setBorder(new OptionPanelBorder(msg.getString("Background")));
 		JLabel bgLabel = new JLabel(msg.getString("Background"));
 		mainBackgroundField = new JTextField(20);
 		mainBackgroundField.setEditable(false);
@@ -139,9 +132,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		bgRestPanel.add(Box.createHorizontalStrut(5));
 		bgRestPanel.add(mainBackgroundButton);
 		UIUtil.addLabelValuePairs(springPanel, orientation,
-			mfsLabel, mainFontSelector,
 			bgLabel, bgRestPanel);
-		UIUtil.makeSpringCompactGrid(springPanel, 2, 2, 0, 0, 5, 5);
+		UIUtil.makeSpringCompactGrid(springPanel, 1, 2, 0, 0, 5, 5);
 		cp.add(springPanel);
 		cp.add(Box.createVerticalStrut(5));
 
@@ -364,24 +356,14 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				return;
 			}
 
-			// Note we're a little cheap here and go with RSTA's default font rather
-			// than look for fonts in themes.  This is OK since we don't actually
-			// set fonts in any of the default themes.
-			Font defaultFont = RTextArea.getDefaultFont();
-			Color defaultForeground = rstaTheme.scheme.getStyle(TokenTypes.IDENTIFIER).foreground;
 			Color defaultBackground = rstaTheme.bgColor;
 			SyntaxScheme currentScheme = getSyntaxScheme();
 			SyntaxScheme defaultScheme = rstaTheme.scheme;
 
 			if (overrideThemeCheckBox.isSelected() ||
-					!getTextAreaFont().equals(defaultFont) ||
-					getUnderline() ||
-					!getTextAreaForeground().equals(defaultForeground) ||
 					!defaultBackground.equals(background) ||
 					!currentScheme.equals(defaultScheme)) {
 				overrideThemeCheckBox.setSelected(false);
-				setTextAreaFont(defaultFont, false);
-				setTextAreaForeground(defaultForeground);
 				setBackgroundObject(defaultBackground);
 				setSyntaxScheme(defaultScheme);
 				refreshSyntaxHighlightingSection();
@@ -422,8 +404,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		mainView.setOverrideEditorStyles(overrideThemeCheckBox.isSelected());
 
 		if (overrideThemeCheckBox.isSelected()) {
-			mainView.setTextAreaForeground(getTextAreaForeground());
-			mainView.setTextAreaFont(getTextAreaFont(), getUnderline());
 			mainView.setBackgroundObject(getBackgroundObject());
 			mainView.setBackgroundImageFileName(getBackgroundImageFileName());
 			rtext.setSyntaxScheme(getSyntaxScheme()); // Doesn't update if it doesn't have to.
@@ -431,8 +411,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		else {
 			try {
 				Theme editorTheme = RTextAppThemes.getRstaTheme(rtext.getTheme());
-				mainView.setTextAreaForeground(editorTheme.scheme.getStyle(TokenTypes.IDENTIFIER).foreground);
-				mainView.setTextAreaFont(editorTheme.baseFont, false);
 				mainView.setBackgroundObject(editorTheme.bgColor);
 				mainView.setBackgroundImageFileName(null);
 				rtext.setSyntaxScheme(editorTheme.scheme); // Doesn't update if it doesn't have to.
@@ -504,40 +482,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * Returns the font to use in text areas.
-	 *
-	 * @return The font to use.
-	 */
-	public Font getTextAreaFont() {
-		return mainFontSelector.getDisplayedFont();
-	}
-
-
-	/**
-	 * Returns the text area's foreground color.
-	 *
-	 * @return The foreground color of the text area.
-	 */
-	public Color getTextAreaForeground() {
-		return mainFontSelector.getFontColor();
-	}
-
-
 	@Override
 	public JComponent getTopJComponent() {
-		return mainFontSelector;
-	}
-
-
-	/**
-	 * Returns whether the text area's font should be underlined.
-	 *
-	 * @return Whether the text areas should underline their font.
-	 * @see #getFont()
-	 */
-	public boolean getUnderline() {
-		return mainFontSelector.getUnderline();
+		return mainBackgroundButton;
 	}
 
 
@@ -583,17 +530,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		// We need to forward this on to the options dialog, whatever
 		// it is, so that the "Apply" button gets updated.
 
-		if (source==mainFontSelector) {
-			sampleArea.setFont(mainFontSelector.getDisplayedFont());
-			sampleArea.setForeground(mainFontSelector.getFontColor());
-			refreshSyntaxHighlightingSection();
-			valueChanged(null); // Just to refresh fontSelector.  TODO: refactor
-			setDirty(true);
-		}
-
 		// FontSelectors fire properties when users interactively update
 		// the font or its properties.
-		else if (source==fontSelector && colorScheme!=null) {
+		if (source==fontSelector && colorScheme!=null) {
 
 			int i = syntaxList.getSelectedIndex();
 			Style style = colorScheme.getStyle(indexToStyle(i));
@@ -615,12 +554,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		}
 
 		else if (source==foregroundButton && colorScheme!=null) {
-			Color fg;
+			Color fg = null;
 			if (foregroundButton.isEnabled()) {
 				fg = foregroundButton.getColor();
-			}
-			else {
-				fg = getTextAreaForeground();
 			}
 			// Method valueChanged() will cause this method to get fired,
 			// so we must make sure we're not in it.
@@ -770,40 +706,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * Sets the font/underline status to display for text areas.
-	 *
-	 * @param font The font.
-	 * @param underline Whether the font is underlined.
-	 * @see #getTextAreaFont()
-	 * @see #getUnderline()
-	 */
-	private void setTextAreaFont(Font font, boolean underline) {
-		mainFontSelector.setDisplayedFont(font, underline);
-		sampleArea.setFont(font);
-		refreshDisplayedSample();
-	}
-
-
-	/**
-	 * Sets the foreground color for text areas.
-	 *
-	 * @param fg The new foreground color.
-	 * @see #getTextAreaForeground()
-	 */
-	private void setTextAreaForeground(Color fg) {
-		mainFontSelector.setFontColor(fg);
-		sampleArea.setForeground(fg);
-		refreshDisplayedSample();
-	}
-
-
 	@Override
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
-		setTextAreaForeground(mainView.getTextAreaForeground());
-		setTextAreaFont(mainView.getTextAreaFont(), mainView.getTextAreaUnderline());
 		setBackgroundObject(mainView.getBackgroundObject());
 		setBackgroundImageFileName(mainView.getBackgroundImageFileName());
 		setSyntaxScheme(rtext.getSyntaxScheme());
@@ -837,8 +743,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			}
 		}
 		else {
-			sampleArea.setForeground(getTextAreaForeground());
-			sampleArea.setFont(getTextAreaFont());
+			// TODO: How do we get the state from other option panels???
+			//sampleArea.setForeground(getTextAreaForeground());
+			//sampleArea.setFont(getTextAreaFont());
 			sampleArea.setBackgroundObject(getBackgroundObject());
 			sampleArea.setSyntaxScheme(getSyntaxScheme());
 		}
@@ -878,8 +785,11 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			underline = style.underline;
 		}
 		else {
-			font = getTextAreaFont();
-			underline = getUnderline();
+			// TODO: Get these values from other option panels somehow
+			//font = getTextAreaFont();
+			//underline = getUnderline();
+			font = RTextArea.getDefaultFont();
+			underline = false;
 		}
 
 		// Update our color style.
@@ -890,7 +800,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		fgCheckBox.setSelected(notNull);
 		foregroundButton.setEnabled(notNull);
 		foregroundButton.setColor(notNull ? style.foreground :
-									getTextAreaForeground());
+			// TODO: Get this from other option panels somehow
+			Color.BLACK);//getTextAreaForeground());
 		notNull = style.background!=null;
 		bgCheckBox.setSelected(notNull);
 		backgroundButton.setEnabled(notNull);

@@ -183,6 +183,15 @@ public class ProjectPlugin extends GUIPlugin<RText> {
 	}
 
 
+	@Override
+	public void iconGroupChanged(IconGroup iconGroup) {
+		optionPanel.setIcon(getPluginIcon());
+		if (getDockableWindow() != null) {
+			getDockableWindow().setIcon(getPluginIcon());
+		}
+	}
+
+
 	/**
 	 * Adds a new child to the parent tree node.
 	 *
@@ -491,15 +500,6 @@ public class ProjectPlugin extends GUIPlugin<RText> {
 	@Override
 	public boolean uninstall() {
 		return false;
-	}
-
-
-	@Override
-	public void updateIconsForNewIconGroup(IconGroup iconGroup) {
-		optionPanel.setIcon(getPluginIcon());
-		if (getDockableWindow() != null) {
-			getDockableWindow().setIcon(getPluginIcon());
-		}
 	}
 
 

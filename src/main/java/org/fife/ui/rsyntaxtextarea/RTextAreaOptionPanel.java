@@ -43,6 +43,8 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public static final String OPTION_PANEL_ID = "RTextAreaOptionPanel";
 
+	private FontSelector fontSelector;
+
 	private JLabel tabSizeLabel;
 	private JTextField tabSizeField;
 	private int tabSize;
@@ -91,6 +93,18 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		// We'll add everything to this panel, then add this panel so that
 		// stuff stays at the "top."
 		Box topPanel = Box.createVerticalBox();
+
+		// The "Font" section for configuring the main editor font
+		JPanel fontPanel = new JPanel(new BorderLayout());
+		fontPanel.setBorder(new OptionPanelBorder(msg.getString("Font")));
+		fontSelector = new FontSelector();
+		fontSelector.setColorSelectable(true);
+		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
+		fontSelector.addPropertyChangeListener(FontSelector.FONT_COLOR_PROPERTY, this);
+		fontPanel.add(fontSelector);
+		topPanel.add(fontPanel);
+
+		topPanel.add(Box.createVerticalStrut(5));
 
 		Box tabPanel = Box.createVerticalBox();
 		tabPanel.setBorder(new OptionPanelBorder(msg.getString("Tabs")));
@@ -231,26 +245,36 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 				return;
 			}
 
+			// Note we're a little cheap here and go with RSTA's default font rather
+			// than look for fonts in themes.  This is OK since we don't actually
+			// set fonts in any of the default themes.
+			Font defaultFont = RTextArea.getDefaultFont();
+			Color defaultForeground = rstaTheme.scheme.getStyle(TokenTypes.IDENTIFIER).foreground;
 			int defaultTabSize = RTextArea.getDefaultTabSize();
 			int defaultMarginLinePosition = RTextArea.getDefaultMarginLinePosition();
 			boolean defaultAA = File.separatorChar=='\\';
 			Color defaultTabLineColor = rstaTheme.tabLineColor;
 
-			if (wordWrapCheckBox.isSelected() ||
-				!highlightCurrentLineCheckBox.isSelected() ||
-				getTabSize()!=defaultTabSize ||
-				getEmulateTabs() ||
-				!marginLineCheckBox.isSelected() ||
-				getMarginLinePosition()!=defaultMarginLinePosition ||
-				isWhitespaceVisible() ||
-				visibleEOLCheckBox.isSelected() ||
-				autoInsertClosingCurlyCheckBox.isSelected() ||
-				remWhitespaceLinesCheckBox.isSelected() ||
-				aaCheckBox.isSelected()!=defaultAA ||
-				fractionalMetricsCheckBox.isSelected() ||
-				!bracketMatchCheckBox.isSelected() ||
-				bothBracketsCB.isSelected() ||
-				showTabLinesCheckBox.isSelected()) {
+			if (!fontSelector.getDisplayedFont().equals(defaultFont) ||
+					!fontSelector.getFontColor().equals(defaultForeground) ||
+					fontSelector.getUnderline() ||
+					wordWrapCheckBox.isSelected() ||
+					!highlightCurrentLineCheckBox.isSelected() ||
+					getTabSize()!=defaultTabSize ||
+					getEmulateTabs() ||
+					!marginLineCheckBox.isSelected() ||
+					getMarginLinePosition()!=defaultMarginLinePosition ||
+					isWhitespaceVisible() ||
+					visibleEOLCheckBox.isSelected() ||
+					autoInsertClosingCurlyCheckBox.isSelected() ||
+					remWhitespaceLinesCheckBox.isSelected() ||
+					aaCheckBox.isSelected()!=defaultAA ||
+					fractionalMetricsCheckBox.isSelected() ||
+					!bracketMatchCheckBox.isSelected() ||
+					bothBracketsCB.isSelected() ||
+					showTabLinesCheckBox.isSelected()) {
+				fontSelector.setDisplayedFont(defaultFont, false);
+				fontSelector.setFontColor(defaultForeground);
 				wordWrapCheckBox.setSelected(false);
 				highlightCurrentLineCheckBox.setSelected(true);
 				setTabSize(defaultTabSize);
@@ -362,6 +386,8 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
 
+		mainView.setTextAreaForeground(fontSelector.getFontColor());
+		mainView.setTextAreaFont(fontSelector.getDisplayedFont(), fontSelector.getUnderline());
 		mainView.setLineWrap(getWordWrap());
 		rtext.setRowColumnIndicatorVisible(!mainView.getLineWrap());
 		mainView.setCurrentLineHighlightEnabled(isCurrentLineHighlightCheckboxSelected());
@@ -663,6 +689,8 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
+		fontSelector.setFontColor(mainView.getTextAreaForeground());
+		fontSelector.setDisplayedFont(mainView.getTextAreaFont(), mainView.getTextAreaUnderline());
 		setWordWrap(mainView.getLineWrap());
 		setCurrentLineHighlightCheckboxSelected(mainView.isCurrentLineHighlightEnabled());
 		setTabSize(mainView.getTabSize());
