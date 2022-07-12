@@ -1443,12 +1443,12 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			setIconGroupByName((String)theme.getExtraUiDefaults().get("rtext.iconGroupName"));
 		}
 
+		Font font = getMainView() != null ? getMainView().getTextAreaFont() : null;
 		try {
-			Theme rstaTheme = RTextAppThemes.getRstaTheme(theme);
+			Theme rstaTheme = RTextAppThemes.getRstaTheme(theme, font);
 			installRstaTheme(rstaTheme);
 		} catch (IOException ioe) {
 			displayException(ioe);
-			return;
 		}
 	}
 

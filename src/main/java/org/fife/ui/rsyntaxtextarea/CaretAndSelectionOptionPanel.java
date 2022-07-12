@@ -165,6 +165,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 
 		String command = e.getActionCommand();
 		Object source = e.getSource();
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
 		if ("RestoreDefaults".equals(command)) {
 
@@ -172,7 +173,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 			RText app = (RText)getOptionsDialog().getParent();
 			Theme rstaTheme;
 			try {
-				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme());
+				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
 			} catch (IOException ioe) {
 				app.displayException(ioe);
 				return;

@@ -152,6 +152,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
 		if ("RestoreDefaults".equals(command)) {
 
@@ -159,7 +160,7 @@ public class GutterOptionPanel extends OptionsDialogPanel
 			RText app = (RText)getOptionsDialog().getParent();
 			Theme rstaTheme;
 			try {
-				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme());
+				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
 			} catch (IOException ioe) {
 				app.displayException(ioe);
 				return;

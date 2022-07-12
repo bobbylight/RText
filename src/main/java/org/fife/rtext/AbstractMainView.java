@@ -2296,7 +2296,7 @@ public abstract class AbstractMainView extends JPanel
 		setModifiedDocumentDisplayNamesColor(labelErrorForeground);
 
 		try {
-			Theme rstaTheme = RTextAppThemes.getRstaTheme(theme);
+			Theme rstaTheme = RTextAppThemes.getRstaTheme(theme, getTextAreaFont());
 			setRstaTheme(rstaTheme);
 			setSyntaxScheme(owner.getSyntaxScheme()); // Could also get from the theme
 		} catch (IOException ioe) {

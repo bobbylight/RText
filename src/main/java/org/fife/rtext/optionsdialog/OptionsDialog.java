@@ -18,12 +18,7 @@ import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.app.Plugin;
 import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.app.options.ShortcutOptionPanel;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextAreaOptionPanel;
-import org.fife.ui.rsyntaxtextarea.SpellingOptionPanel;
-import org.fife.ui.rsyntaxtextarea.TemplateOptionPanel;
-import org.fife.ui.rsyntaxtextarea.CaretAndSelectionOptionPanel;
-import org.fife.ui.rsyntaxtextarea.GutterOptionPanel;
-import org.fife.ui.rsyntaxtextarea.RTextAreaOptionPanel;
+import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextfilechooser.FileChooserFavoritesOptionPanel;
 import org.fife.ui.rtextfilechooser.RTextFileChooserOptionPanel;
 
@@ -73,6 +68,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 
 		rtaPanel = new RTextAreaOptionPanel();
 		panels.add(rtaPanel);
+		rtaPanel.addChildPanel(new FontAndTabsOptionPanel());
 		rtaPanel.addChildPanel(new RSyntaxTextAreaOptionPanel());
 		rtaPanel.addChildPanel(new CaretAndSelectionOptionPanel());
 		rtaPanel.addChildPanel(new GutterOptionPanel());

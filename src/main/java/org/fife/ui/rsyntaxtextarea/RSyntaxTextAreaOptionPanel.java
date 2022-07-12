@@ -14,10 +14,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ResourceBundle;
 
 import javax.swing.*;
@@ -27,7 +24,6 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.*;
-import org.fife.ui.rtextarea.RTextArea;
 
 
 /**
@@ -41,7 +37,8 @@ import org.fife.ui.rtextarea.RTextArea;
  */
 public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 					implements ActionListener, PropertyChangeListener,
-								ItemListener, ListSelectionListener{
+								ItemListener, ListSelectionListener,
+								EditorOptionsPreviewContextListener {
 
 	/**
 	 * ID used to identify this option panel.
@@ -49,25 +46,19 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	public static final String OPTION_PANEL_ID = "RTextAreaOptionPanel";
 
 	private JCheckBox overrideThemeCheckBox;
-	private JButton rdButton;
 	private JTextField mainBackgroundField;
 	private JButton mainBackgroundButton;
 	private BackgroundDialog backgroundDialog;
 	private Object background;
 	private String bgImageFileName; // null if background is a color.
 
-	private JPanel syntaxPanel;
-
 	private JList<String> syntaxList;
-	private DefaultListModel<String> syntaxListModel;
 	private FontSelector fontSelector;
 	private RColorSwatchesButton foregroundButton;
 	private JCheckBox fgCheckBox;
 	private JCheckBox bgCheckBox;
 	private RColorSwatchesButton backgroundButton;
 
-	private JComboBox<String> sampleCombo;
-	private RSyntaxTextArea sampleArea;
 	private SyntaxScheme colorScheme;
 
 	private boolean isSettingStyle;
@@ -76,16 +67,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	private static final String SYNTAX_COLOR_PROPERTY		= "RSTAOpts.syntaxColor";
 	private static final String SYNTAX_FONT_PROPERTY		= "RSTAOpts.syntaxFont";
 	private static final String UNKNOWN_PROPERTY			= "RSTAOpts.unknown";
-
-	private static final String[] SAMPLES = {
-		"previewJava.txt", "previewJavaScript.txt", "previewPerl.txt", "previewRuby.txt", "previewXml.txt",
-	};
-
-	private static final String[] SAMPLE_STYLES = {
-		SyntaxConstants.SYNTAX_STYLE_JAVA, SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT,
-		SyntaxConstants.SYNTAX_STYLE_PERL, SyntaxConstants.SYNTAX_STYLE_RUBY,
-		SyntaxConstants.SYNTAX_STYLE_XML,
-	};
 
 	/**
 	 * Constructor.
@@ -97,9 +78,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 									getOrientation(getLocale());
 
 		ResourceBundle msg = ResourceBundle.getBundle(
-							"org.fife.ui.rsyntaxtextarea.OptionPanel");
+							"org.fife.ui.rsyntaxtextarea.TextAreaOptionPanel");
 
-		setName(msg.getString("Title"));
+		setName(msg.getString("Title.SyntaxHighlighting"));
 
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
@@ -138,13 +119,13 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		cp.add(Box.createVerticalStrut(5));
 
 		// Syntax panel contains all of the "syntax highlighting" stuff.
-		syntaxPanel = new JPanel(new BorderLayout());
+		JPanel syntaxPanel = new JPanel(new BorderLayout());
 		syntaxPanel.setBorder(BorderFactory.createCompoundBorder(
 			new OptionPanelBorder(msg.getString("FontsAndColors")),
 			BorderFactory.createEmptyBorder(5, 0, 0, 0)));
 
 		// Add the token style selection panel to the right.
-		syntaxListModel = new DefaultListModel<>();
+		DefaultListModel<String> syntaxListModel = new DefaultListModel<>();
 		syntaxList = new JList<>(syntaxListModel);
 		syntaxList.setSelectionModel(new RListSelectionModel());
 		syntaxList.addListSelectionListener(this);
@@ -248,43 +229,26 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		// Add the syntax panel to us.
 		cp.add(syntaxPanel);
 
-		// Now create a panel containing all checkbox properties in the
-		// bottom of this panel.
-		temp = Box.createVerticalBox();
-		temp.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
-		temp.setBorder(new OptionPanelBorder(msg.getString("Preview")));
-		Box horizBox = createHorizontalBox();
-		JLabel sampleTextLabel = new JLabel(msg.getString("SampleTextLabel"));
-		horizBox.add(sampleTextLabel);
-		horizBox.add(Box.createHorizontalStrut(5));
-		final String[] samples = { "Java", "JavaScript", "Perl", "Ruby", "XML", };
-		sampleCombo = new JComboBox<>(samples);
-		sampleCombo.setEditable(false);
-		sampleCombo.addActionListener(this);
-
-		horizBox.add(sampleCombo);
-		horizBox.add(Box.createHorizontalGlue());
-		addLeftAligned(temp, horizBox, 5);
-		sampleArea = createSampleTextArea();
-		temp.add(new RScrollPane(sampleArea));
-		temp.add(Box.createVerticalStrut(3));
+		// The "preview panel" shows how the editor will look with these (unsaved) changes
+		JPanel previewPanel = new PreviewPanel(msg, 9, 40);
 
 		Box rdPanel = createHorizontalBox();
-		rdButton = new JButton(msg.getString("RestoreDefaults"));
+		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
 		rdButton.setActionCommand("RestoreDefaults");
 		rdButton.addActionListener(this);
 		rdButton.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
 		rdPanel.add(rdButton);
 		rdPanel.add(Box.createHorizontalGlue());
 
-		// Create a panel containing all "Advanced" stuff.
-		JPanel advancedPanel = new JPanel(new BorderLayout());
-		advancedPanel.add(temp);
-		advancedPanel.add(rdPanel, BorderLayout.SOUTH);
+		// Create a panel containing the preview and "Restore Defaults"
+		JPanel bottomPanel = new JPanel(new BorderLayout());
+		bottomPanel.add(previewPanel);
+		bottomPanel.add(rdPanel, BorderLayout.SOUTH);
 
-		cp.add(advancedPanel);
+		cp.add(bottomPanel);
 		applyComponentOrientation(orientation);
 
+		EditorOptionsPreviewContext.get().addListener(this);
 	}
 
 
@@ -295,6 +259,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
 		if ("BackgroundButton".equals(command)) {
 			if (backgroundDialog==null) {
@@ -305,11 +270,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			Object newBG = backgroundDialog.getChosenBackground();
 			// Non-null newBG means user hit OK, not Cancel.
 			if (newBG!=null && !newBG.equals(background)) {
-				Object oldBG = background;
 				setBackgroundObject(newBG);
 				setBackgroundImageFileName(backgroundDialog.
 										getCurrentImageFileName());
-				refreshSyntaxHighlightingSection();
 				setDirty(true);
 			}
 		}
@@ -322,7 +285,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			int i = syntaxList.getSelectedIndex();
 			colorScheme.getStyle(indexToStyle(i)).foreground =
 						selected ? foregroundButton.getColor() : null;
-			refreshSyntaxHighlightingSection();
 			setDirty(true);
 		}
 
@@ -334,13 +296,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			int i = syntaxList.getSelectedIndex();
 			colorScheme.getStyle(indexToStyle(i)).background =
 						selected ? backgroundButton.getColor() : null;
-			refreshSyntaxHighlightingSection();
 			setDirty(true);
-		}
-
-		// Changing the canned sample text.
-		else if (sampleCombo==e.getSource()) {
-			refreshDisplayedSample();
 		}
 
 		// If the user clicked the "restore defaults" button.
@@ -350,14 +306,14 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			RText app = (RText)getOptionsDialog().getParent();
 			Theme rstaTheme;
 			try {
-				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme());
+				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
 			} catch (IOException ioe) {
 				app.displayException(ioe);
 				return;
 			}
 
 			Color defaultBackground = rstaTheme.bgColor;
-			SyntaxScheme currentScheme = getSyntaxScheme();
+			SyntaxScheme currentScheme = colorScheme;
 			SyntaxScheme defaultScheme = rstaTheme.scheme;
 
 			if (overrideThemeCheckBox.isSelected() ||
@@ -366,7 +322,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				overrideThemeCheckBox.setSelected(false);
 				setBackgroundObject(defaultBackground);
 				setSyntaxScheme(defaultScheme);
-				refreshSyntaxHighlightingSection();
 				setDirty(true);
 				// Force a repaint of the preview panel.
 				valueChanged(null);
@@ -381,42 +336,41 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * Creates the text area used to display sample syntax highlighting.
-	 *
-	 * @return The text area.
-	 */
-	private static RSyntaxTextArea createSampleTextArea() {
-		RSyntaxTextArea textArea = new RSyntaxTextArea(9, 40);
-		textArea.setHighlightCurrentLine(false);
-		textArea.setAntiAliasingEnabled(true);
-		textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-		textArea.setPopupMenu(null);
-		return textArea;
-	}
-
-
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
 		mainView.setOverrideEditorStyles(overrideThemeCheckBox.isSelected());
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
 		if (overrideThemeCheckBox.isSelected()) {
 			mainView.setBackgroundObject(getBackgroundObject());
 			mainView.setBackgroundImageFileName(getBackgroundImageFileName());
-			rtext.setSyntaxScheme(getSyntaxScheme()); // Doesn't update if it doesn't have to.
+			rtext.setSyntaxScheme(colorScheme); // Doesn't update if it doesn't have to.
 		}
 		else {
 			try {
-				Theme editorTheme = RTextAppThemes.getRstaTheme(rtext.getTheme());
+				Theme editorTheme = RTextAppThemes.getRstaTheme(rtext.getTheme(), editorContext.getFont());
 				mainView.setBackgroundObject(editorTheme.bgColor);
 				mainView.setBackgroundImageFileName(null);
 				rtext.setSyntaxScheme(editorTheme.scheme); // Doesn't update if it doesn't have to.
 			} catch (IOException ioe) {
 				rtext.displayException(ioe); // Never happens
 			}
+		}
+	}
+
+
+	@Override
+	public void editorOptionsPreviewContextChanged(EditorOptionsPreviewContext context) {
+
+		// If the tracked syntax scheme changed (i.e. the default font changed), we
+		// must update this panel as well
+		SyntaxScheme newScheme = context.getSyntaxScheme();
+		if (!newScheme.equals(colorScheme)) {
+			setSyntaxScheme(newScheme);
+			setDirty(true);
 		}
 	}
 
@@ -471,17 +425,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * Returns the syntax highlighting color scheme the user chose.
-	 *
-	 * @return The syntax highlighting color scheme.
-	 * @see #setSyntaxScheme
-	 */
-	public SyntaxScheme getSyntaxScheme() {
-		return colorScheme;
-	}
-
-
 	@Override
 	public JComponent getTopJComponent() {
 		return mainBackgroundButton;
@@ -509,9 +452,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		if (overrideThemeCheckBox == source) {
 			boolean overrideTheme = e.getStateChange() == ItemEvent.SELECTED;
-			setComponentsEnabled(overrideTheme);
-			updateSampleArea(!overrideTheme);
-			setDirty(true);
+			setOverrideTheme(overrideTheme);
 		}
 	}
 
@@ -548,7 +489,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				style.underline = false;
 			}
 
-			refreshSyntaxHighlightingSection();
 			setDirty(true);
 
 		}
@@ -564,7 +504,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				// Update our color scheme.
 				int i = syntaxList.getSelectedIndex();
 				colorScheme.getStyle(indexToStyle(i)).foreground = fg;
-				refreshSyntaxHighlightingSection();
 				setDirty(true);
 			}
 		}
@@ -584,47 +523,14 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 				// Update our color scheme.
 				int i = syntaxList.getSelectedIndex();
 				colorScheme.getStyle(indexToStyle(i)).background = bg;
-				refreshSyntaxHighlightingSection();
 				setDirty(true);
 			}
 		}
 
 		else {
-			refreshSyntaxHighlightingSection();
 			setDirty(true);
 		}
 
-	}
-
-
-	/**
-	 * Refreshes the displayed sample text.
-	 */
-	private void refreshDisplayedSample() {
-		int index = sampleCombo.getSelectedIndex();
-		if (index<0 || index>SAMPLES.length) {
-			index = 0;
-		}
-		InputStream in = getClass().getResourceAsStream(SAMPLES[index]);
-		BufferedReader br = new BufferedReader(new InputStreamReader(in));
-		try {
-			sampleArea.read(br, null);
-			br.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-		sampleArea.setCaretPosition(0);
-		sampleArea.setSyntaxEditingStyle(SAMPLE_STYLES[index]);
-		sampleArea.discardAllEdits();
-	}
-
-
-	/**
-	 * Refreshes the "Syntax Highlighting" section.  Should be called whenever
-	 * higher-level text area properties (font, background, etc.) are modified.
-	 */
-	private void refreshSyntaxHighlightingSection() {
-		sampleArea.repaint();
 	}
 
 
@@ -670,8 +576,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 					(Image)sampleBG,
 					parent.getMainView().getBackgroundImageAlpha());
 		}
-		sampleArea.setBackgroundObject(sampleBG);
-		refreshSyntaxHighlightingSection();
 	}
 
 
@@ -687,17 +591,38 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
+	@Override
+	public void setDirty(boolean dirty) {
+		// We do this even if dirty isn't changing to ensure the
+		// preview panel is kept in sync
+		if (dirty) {
+			syncEditorOptionsPreviewContext();
+		}
+		super.setDirty(dirty);
+	}
+
+
+	/**
+	 * Updates the sample area to use either the current application theme or the
+	 * selected values in this dialog.
+	 *
+	 * @param overrideTheme Whether to override (vs. use) the application theme settings.
+	 */
+	private void setOverrideTheme(boolean overrideTheme) {
+		setComponentsEnabled(overrideTheme);
+		setDirty(true);
+	}
+
+
 	/**
 	 * Sets the syntax highlighting color scheme being displayed in this
 	 * panel.
 	 *
 	 * @param ss The syntax highlighting color scheme to display.
-	 * @see #getSyntaxScheme
 	 */
 	public void setSyntaxScheme(SyntaxScheme ss) {
 		colorScheme = (SyntaxScheme)ss.clone();
 		syntaxList.setSelectedIndex(0);
-		sampleArea.setSyntaxScheme(colorScheme);
 		// We must do manually call valueChanged() below as, if the selected
 		// index was already 0, the above call won't trigger the valueChanged
 		// callback.  If it isn't triggered, then the syntaxPreviewPanel and
@@ -713,42 +638,23 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		setBackgroundObject(mainView.getBackgroundObject());
 		setBackgroundImageFileName(mainView.getBackgroundImageFileName());
 		setSyntaxScheme(rtext.getSyntaxScheme());
-		if (sampleArea.getDocument().getLength()==0) { // First time through
-			refreshDisplayedSample();
-		}
+
 		// Do this after initializing all values above
 		overrideThemeCheckBox.setSelected(mainView.getOverrideEditorStyles());
 		setComponentsEnabled(overrideThemeCheckBox.isSelected());
+
+		syncEditorOptionsPreviewContext();
 	}
 
 
 	/**
-	 * Updates the sample area to use either the current application theme or the
-	 * selected values in this dialog.
-	 *
-	 * @param themeSettings Whether to use the application themes.
+	 * Synchronizes all preview panels with the values in this options panel.
 	 */
-	private void updateSampleArea(boolean themeSettings) {
-
-		if (themeSettings) {
-			RText app = (RText)getOptionsDialog().getParent();
-			try {
-				Theme editorTheme = RTextAppThemes.getRstaTheme(app.getTheme());
-				sampleArea.setForeground(editorTheme.scheme.getStyle(TokenTypes.IDENTIFIER).foreground);
-				sampleArea.setFont(RTextArea.getDefaultFont());
-				sampleArea.setBackgroundObject(editorTheme.bgColor);
-				sampleArea.setSyntaxScheme(editorTheme.scheme);
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-			}
-		}
-		else {
-			// TODO: How do we get the state from other option panels???
-			//sampleArea.setForeground(getTextAreaForeground());
-			//sampleArea.setFont(getTextAreaFont());
-			sampleArea.setBackgroundObject(getBackgroundObject());
-			sampleArea.setSyntaxScheme(getSyntaxScheme());
-		}
+	private void syncEditorOptionsPreviewContext() {
+		EditorOptionsPreviewContext context = EditorOptionsPreviewContext.get();
+		context.setOverrideTheme(overrideThemeCheckBox.isSelected());
+		context.setBackgroundObject(getBackgroundObject());
+		context.setSyntaxScheme((SyntaxScheme)colorScheme.clone());
 	}
 
 
@@ -785,11 +691,8 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			underline = style.underline;
 		}
 		else {
-			// TODO: Get these values from other option panels somehow
-			//font = getTextAreaFont();
-			//underline = getUnderline();
-			font = RTextArea.getDefaultFont();
-			underline = false;
+			font = EditorOptionsPreviewContext.get().getFont();
+			underline = false; // Default font can't be set to underline
 		}
 
 		// Update our color style.
@@ -800,8 +703,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		fgCheckBox.setSelected(notNull);
 		foregroundButton.setEnabled(notNull);
 		foregroundButton.setColor(notNull ? style.foreground :
-			// TODO: Get this from other option panels somehow
-			Color.BLACK);//getTextAreaForeground());
+			EditorOptionsPreviewContext.get().getFontColor());
 		notNull = style.background!=null;
 		bgCheckBox.setSelected(notNull);
 		backgroundButton.setEnabled(notNull);
@@ -821,6 +723,4 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		isSettingStyle = false;
 
 	}
-
-
 }

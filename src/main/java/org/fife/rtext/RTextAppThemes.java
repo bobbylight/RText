@@ -13,7 +13,7 @@ import org.fife.ui.app.themes.FlatLightTheme;
 import org.fife.ui.app.themes.NativeTheme;
 import org.fife.ui.rsyntaxtextarea.Theme;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,13 +95,13 @@ public final class RTextAppThemes {
 	 * Returns the RSTA editor theme from an application theme.
 	 *
 	 * @param theme The application theme.
+	 * @param baseFont The base font to use for the theme. If this is {@code null},
+	 *        the default RSTA font will be used.
 	 * @return The RSTA editor theme.
 	 * @throws IOException If an IO error occurs.
 	 */
-	public static Theme getRstaTheme(AppTheme theme) throws IOException {
-
+	public static Theme getRstaTheme(AppTheme theme, Font baseFont) throws IOException {
 		String rstaThemeName = (String)theme.getExtraUiDefaults().get("rtext.editorTheme");
-
-		return Theme.load(RTextAppThemes.class.getResourceAsStream(rstaThemeName));
+		return Theme.load(RTextAppThemes.class.getResourceAsStream(rstaThemeName), baseFont);
 	}
 }
