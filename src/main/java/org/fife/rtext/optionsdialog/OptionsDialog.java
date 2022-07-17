@@ -71,6 +71,7 @@ public class OptionsDialog extends org.fife.ui.OptionsDialog {
 		rtaPanel.addChildPanel(new FontAndTabsOptionPanel());
 		rtaPanel.addChildPanel(new RSyntaxTextAreaOptionPanel());
 		rtaPanel.addChildPanel(new CaretAndSelectionOptionPanel());
+		rtaPanel.addChildPanel(new HighlightsOptionPanel());
 		rtaPanel.addChildPanel(new GutterOptionPanel());
 		rtaPanel.addChildPanel(new SpellingOptionPanel());
 		rtaPanel.addChildPanel(new TemplateOptionPanel());
