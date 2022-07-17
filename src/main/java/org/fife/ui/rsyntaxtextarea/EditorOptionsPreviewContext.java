@@ -10,6 +10,7 @@ import java.awt.*;
 import java.util.Objects;
 
 import org.fife.rtext.RText;
+import org.fife.ui.rtextarea.CaretStyle;
 
 
 /**
@@ -19,7 +20,7 @@ import org.fife.rtext.RText;
  */
 final class EditorOptionsPreviewContext {
 
-	private boolean overrideTheme;
+	private boolean overrideEditorTheme;
 	private String previewLanguage;
 
 	// Options in the main "text area" option panel
@@ -46,6 +47,13 @@ final class EditorOptionsPreviewContext {
 	// Options in the child "syntax highlighting" option panel
 	private Object backgroundObject;
 	private SyntaxScheme syntaxScheme;
+
+	// Options in the child "caret and selection" option panel
+	private CaretStyle insertCaret;
+	private CaretStyle overwriteCaret;
+	private int caretBlinkRate;
+	private Color caretColor;
+	// TODO: Selection options
 
 	private EventListenerList listeners;
 
@@ -111,6 +119,16 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+	public int getCaretBlinkRate() {
+		return caretBlinkRate;
+	}
+
+
+	public Color getCaretColor() {
+		return caretColor;
+	}
+
+
 	public boolean getClearWhitespaceLines() {
 		return clearWhitespaceLines;
 	}
@@ -151,6 +169,11 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+
+	public CaretStyle getInsertCaret() {
+		return insertCaret;
+	}
+
 	public boolean getMarginLineEnabled() {
 		return marginLineEnabled;
 	}
@@ -161,8 +184,13 @@ final class EditorOptionsPreviewContext {
 	}
 
 
-	public boolean getOverrideTheme() {
-		return overrideTheme;
+	public boolean getOverrideEditorTheme() {
+		return overrideEditorTheme;
+	}
+
+
+	public CaretStyle getOverwriteCaret() {
+		return overwriteCaret;
 	}
 
 
@@ -243,6 +271,22 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+	public void setCaretBlinkRate(int caretBlinkRate) {
+		if (this.caretBlinkRate != caretBlinkRate) {
+			this.caretBlinkRate = caretBlinkRate;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setCaretColor(Color caretColor) {
+		if (!Objects.equals(this.caretColor, caretColor)) {
+			this.caretColor = caretColor;
+			fireChangeEvent();
+		}
+	}
+
+
 	public void setClearWhitespaceLines(boolean remove) {
 		if (this.clearWhitespaceLines != remove) {
 			this.clearWhitespaceLines = remove;
@@ -307,6 +351,14 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+	public void setInsertCaret(CaretStyle insertCaret) {
+		if (this.insertCaret != insertCaret) {
+			this.insertCaret = insertCaret;
+			fireChangeEvent();
+		}
+	}
+
+
 	public void setMarginLineEnabled(boolean marginLineEnabled) {
 		if (this.marginLineEnabled != marginLineEnabled) {
 			this.marginLineEnabled = marginLineEnabled;
@@ -323,9 +375,17 @@ final class EditorOptionsPreviewContext {
 	}
 
 
-	public void setOverrideTheme(boolean overrideTheme) {
-		if (this.overrideTheme != overrideTheme) {
-			this.overrideTheme = overrideTheme;
+	public void setOverrideEditorTheme(boolean overrideEditorTheme) {
+		if (this.overrideEditorTheme != overrideEditorTheme) {
+			this.overrideEditorTheme = overrideEditorTheme;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setOverwriteCaret(CaretStyle overwriteCaret) {
+		if (this.overwriteCaret != overwriteCaret) {
+			this.overwriteCaret = overwriteCaret;
 			fireChangeEvent();
 		}
 	}

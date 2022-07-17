@@ -15,7 +15,6 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -35,9 +34,8 @@ import org.fife.ui.*;
  * @author Robert Futrell
  * @version 1.0
  */
-public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
-					implements ActionListener, PropertyChangeListener,
-								ItemListener, ListSelectionListener,
+public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
+					implements PropertyChangeListener, ListSelectionListener,
 								EditorOptionsPreviewContextListener {
 
 	/**
@@ -45,7 +43,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	public static final String OPTION_PANEL_ID = "RTextAreaOptionPanel";
 
-	private JCheckBox overrideThemeCheckBox;
 	private JTextField mainBackgroundField;
 	private JButton mainBackgroundButton;
 	private BackgroundDialog backgroundDialog;
@@ -77,10 +74,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
 
-		ResourceBundle msg = ResourceBundle.getBundle(
-							"org.fife.ui.rsyntaxtextarea.TextAreaOptionPanel");
-
-		setName(msg.getString("Title.SyntaxHighlighting"));
+		setName(MSG.getString("Title.SyntaxHighlighting"));
 
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
@@ -88,23 +82,16 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		add(cp, BorderLayout.NORTH);
 
 		// The "Override the theme" checkbox
-		overrideThemeCheckBox = UIUtil.newCheckBox(msg, "OverrideTheme");
-		overrideThemeCheckBox.addItemListener(this);
-		overrideThemeCheckBox.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
-		overrideThemeCheckBox.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-		Box temp = Box.createHorizontalBox();
-		temp.add(overrideThemeCheckBox);
-		temp.add(Box.createHorizontalGlue());
-		cp.add(temp);
+		cp.add(createOverridePanel());
 		cp.add(Box.createVerticalStrut(5));
 
 		// The "Font" section for configuring the main editor font
 		JPanel springPanel = new JPanel(new SpringLayout());
-		springPanel.setBorder(new OptionPanelBorder(msg.getString("Background")));
-		JLabel bgLabel = new JLabel(msg.getString("Background"));
+		springPanel.setBorder(new OptionPanelBorder(MSG.getString("Background")));
+		JLabel bgLabel = new JLabel(MSG.getString("Background"));
 		mainBackgroundField = new JTextField(20);
 		mainBackgroundField.setEditable(false);
-		mainBackgroundButton = new JButton(msg.getString("Change"));
+		mainBackgroundButton = new JButton(MSG.getString("Change"));
 		mainBackgroundButton.setActionCommand("BackgroundButton");
 		mainBackgroundButton.addActionListener(this);
 		bgLabel.setLabelFor(mainBackgroundButton);
@@ -121,7 +108,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		// Syntax panel contains all of the "syntax highlighting" stuff.
 		JPanel syntaxPanel = new JPanel(new BorderLayout());
 		syntaxPanel.setBorder(BorderFactory.createCompoundBorder(
-			new OptionPanelBorder(msg.getString("FontsAndColors")),
+			new OptionPanelBorder(MSG.getString("FontsAndColors")),
 			BorderFactory.createEmptyBorder(5, 0, 0, 0)));
 
 		// Add the token style selection panel to the right.
@@ -130,44 +117,44 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		syntaxList.setSelectionModel(new RListSelectionModel());
 		syntaxList.addListSelectionListener(this);
 		syntaxList.setVisibleRowCount(8);
-		syntaxListModel.addElement(msg.getString("Style.Comment.EndOfLine"));
-		syntaxListModel.addElement(msg.getString("Style.Comment.Multiline"));
-		syntaxListModel.addElement(msg.getString("Style.Comment.Documentation"));
-		syntaxListModel.addElement(msg.getString("Style.Comment.Keyword"));
-		syntaxListModel.addElement(msg.getString("Style.Comment.Markup"));
-		syntaxListModel.addElement(msg.getString("Style.ReservedWord"));
-		syntaxListModel.addElement(msg.getString("Style.ReservedWord2"));
-		syntaxListModel.addElement(msg.getString("Style.Function"));
-		syntaxListModel.addElement(msg.getString("Style.Literal.Boolean"));
-		syntaxListModel.addElement(msg.getString("Style.Literal.Integer"));
-		syntaxListModel.addElement(msg.getString("Style.Literal.Float"));
-		syntaxListModel.addElement(msg.getString("Style.Literal.Hex"));
-		syntaxListModel.addElement(msg.getString("Style.Literal.String"));
-		syntaxListModel.addElement(msg.getString("Style.Literal.Char"));
-		syntaxListModel.addElement(msg.getString("Style.Literal.Backquote"));
-		syntaxListModel.addElement(msg.getString("Style.DataType"));
-		syntaxListModel.addElement(msg.getString("Style.Variable"));
-		syntaxListModel.addElement(msg.getString("Style.RegularExpression"));
-		syntaxListModel.addElement(msg.getString("Style.Annotation"));
-		syntaxListModel.addElement("<html><b>"+msg.getString("Style.Identifier.PlainText"));
-		syntaxListModel.addElement(msg.getString("Style.Whitespace"));
-		syntaxListModel.addElement(msg.getString("Style.Separator"));
-		syntaxListModel.addElement(msg.getString("Style.Operator"));
-		syntaxListModel.addElement(msg.getString("Style.Preprocessor"));
-		syntaxListModel.addElement(msg.getString("Style.MarkupTag.Delimiter"));
-		syntaxListModel.addElement(msg.getString("Style.MarkupTag.TagName"));
-		syntaxListModel.addElement(msg.getString("Style.MarkupTag.Attribute"));
-		syntaxListModel.addElement(msg.getString("Style.MarkupTag.AttributeValue"));
-		syntaxListModel.addElement(msg.getString("Style.MarkupTag.Comment"));
-		syntaxListModel.addElement(msg.getString("Style.MarkupTag.DTD"));
-		syntaxListModel.addElement(msg.getString("Style.MarkupTag.ProcessingInstruction"));
-		syntaxListModel.addElement(msg.getString("Style.MarkupTag.CDataDelimiter"));
-		syntaxListModel.addElement(msg.getString("Style.MarkupTag.CData"));
-		syntaxListModel.addElement(msg.getString("Style.MarkupTag.EntityReference"));
-		syntaxListModel.addElement(msg.getString("Style.Error.Identifier"));
-		syntaxListModel.addElement(msg.getString("Style.Error.Number"));
-		syntaxListModel.addElement(msg.getString("Style.Error.String"));
-		syntaxListModel.addElement(msg.getString("Style.Error.Char"));
+		syntaxListModel.addElement(MSG.getString("Style.Comment.EndOfLine"));
+		syntaxListModel.addElement(MSG.getString("Style.Comment.Multiline"));
+		syntaxListModel.addElement(MSG.getString("Style.Comment.Documentation"));
+		syntaxListModel.addElement(MSG.getString("Style.Comment.Keyword"));
+		syntaxListModel.addElement(MSG.getString("Style.Comment.Markup"));
+		syntaxListModel.addElement(MSG.getString("Style.ReservedWord"));
+		syntaxListModel.addElement(MSG.getString("Style.ReservedWord2"));
+		syntaxListModel.addElement(MSG.getString("Style.Function"));
+		syntaxListModel.addElement(MSG.getString("Style.Literal.Boolean"));
+		syntaxListModel.addElement(MSG.getString("Style.Literal.Integer"));
+		syntaxListModel.addElement(MSG.getString("Style.Literal.Float"));
+		syntaxListModel.addElement(MSG.getString("Style.Literal.Hex"));
+		syntaxListModel.addElement(MSG.getString("Style.Literal.String"));
+		syntaxListModel.addElement(MSG.getString("Style.Literal.Char"));
+		syntaxListModel.addElement(MSG.getString("Style.Literal.Backquote"));
+		syntaxListModel.addElement(MSG.getString("Style.DataType"));
+		syntaxListModel.addElement(MSG.getString("Style.Variable"));
+		syntaxListModel.addElement(MSG.getString("Style.RegularExpression"));
+		syntaxListModel.addElement(MSG.getString("Style.Annotation"));
+		syntaxListModel.addElement("<html><b>"+ MSG.getString("Style.Identifier.PlainText"));
+		syntaxListModel.addElement(MSG.getString("Style.Whitespace"));
+		syntaxListModel.addElement(MSG.getString("Style.Separator"));
+		syntaxListModel.addElement(MSG.getString("Style.Operator"));
+		syntaxListModel.addElement(MSG.getString("Style.Preprocessor"));
+		syntaxListModel.addElement(MSG.getString("Style.MarkupTag.Delimiter"));
+		syntaxListModel.addElement(MSG.getString("Style.MarkupTag.TagName"));
+		syntaxListModel.addElement(MSG.getString("Style.MarkupTag.Attribute"));
+		syntaxListModel.addElement(MSG.getString("Style.MarkupTag.AttributeValue"));
+		syntaxListModel.addElement(MSG.getString("Style.MarkupTag.Comment"));
+		syntaxListModel.addElement(MSG.getString("Style.MarkupTag.DTD"));
+		syntaxListModel.addElement(MSG.getString("Style.MarkupTag.ProcessingInstruction"));
+		syntaxListModel.addElement(MSG.getString("Style.MarkupTag.CDataDelimiter"));
+		syntaxListModel.addElement(MSG.getString("Style.MarkupTag.CData"));
+		syntaxListModel.addElement(MSG.getString("Style.MarkupTag.EntityReference"));
+		syntaxListModel.addElement(MSG.getString("Style.Error.Identifier"));
+		syntaxListModel.addElement(MSG.getString("Style.Error.Number"));
+		syntaxListModel.addElement(MSG.getString("Style.Error.String"));
+		syntaxListModel.addElement(MSG.getString("Style.Error.Char"));
 		syntaxPanel.add(new RScrollPane(syntaxList), BorderLayout.LINE_START);
 
 		// Create a panel for other syntax style properties.
@@ -181,7 +168,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		fontSelector.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
 
 		// Just to keep it right-aligned with stuff above...
-		temp = createHorizontalBox();
+		Box temp = createHorizontalBox();
 		temp.add(fontSelector);
 		temp.add(Box.createHorizontalStrut(5));
 		propertiesPanel.add(temp);
@@ -189,7 +176,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		// Add the foreground and background buttons to the properties panel.
 		temp = createHorizontalBox();
-		fgCheckBox = new JCheckBox(msg.getString("Foreground"));
+		fgCheckBox = new JCheckBox(MSG.getString("Foreground"));
 		fgCheckBox.setActionCommand("fgCheckBox");
 		fgCheckBox.addActionListener(this);
 		foregroundButton = new RColorSwatchesButton(Color.BLACK);
@@ -202,7 +189,7 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		temp.add(Box.createHorizontalGlue());
 		addLeftAligned(propertiesPanel, temp, 8);
 		temp = createHorizontalBox();
-		bgCheckBox = new JCheckBox(msg.getString("Background"));
+		bgCheckBox = new JCheckBox(MSG.getString("Background"));
 		bgCheckBox.setActionCommand("bgCheckBox");
 		bgCheckBox.addActionListener(this);
 		backgroundButton = new RColorSwatchesButton(Color.BLACK);
@@ -229,21 +216,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		// Add the syntax panel to us.
 		cp.add(syntaxPanel);
 
-		// The "preview panel" shows how the editor will look with these (unsaved) changes
-		JPanel previewPanel = new PreviewPanel(msg, 9, 40);
-
-		Box rdPanel = createHorizontalBox();
-		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
-		rdButton.setActionCommand("RestoreDefaults");
-		rdButton.addActionListener(this);
-		rdButton.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
-		rdPanel.add(rdButton);
-		rdPanel.add(Box.createHorizontalGlue());
-
 		// Create a panel containing the preview and "Restore Defaults"
 		JPanel bottomPanel = new JPanel(new BorderLayout());
-		bottomPanel.add(previewPanel);
-		bottomPanel.add(rdPanel, BorderLayout.SOUTH);
+		bottomPanel.add(new PreviewPanel(MSG, 9, 40));
+		bottomPanel.add(createRestoreDefaultsPanel(), BorderLayout.SOUTH);
 
 		cp.add(bottomPanel);
 		applyComponentOrientation(orientation);
@@ -252,14 +228,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * Listens for actions in this panel.
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
-		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
 		if ("BackgroundButton".equals(command)) {
 			if (backgroundDialog==null) {
@@ -299,40 +271,9 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 			setDirty(true);
 		}
 
-		// If the user clicked the "restore defaults" button.
-		else if ("RestoreDefaults".equals(command)) {
-
-			// This panel's defaults are based on the current theme.
-			RText app = (RText)getOptionsDialog().getParent();
-			Theme rstaTheme;
-			try {
-				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-				return;
-			}
-
-			Color defaultBackground = rstaTheme.bgColor;
-			SyntaxScheme currentScheme = colorScheme;
-			SyntaxScheme defaultScheme = rstaTheme.scheme;
-
-			if (overrideThemeCheckBox.isSelected() ||
-					!defaultBackground.equals(background) ||
-					!currentScheme.equals(defaultScheme)) {
-				overrideThemeCheckBox.setSelected(false);
-				setBackgroundObject(defaultBackground);
-				setSyntaxScheme(defaultScheme);
-				setDirty(true);
-				// Force a repaint of the preview panel.
-				valueChanged(null);
-				// Some custom components have child components that enable/disable
-				// on their own criteria, so we're explicit here since it's the most
-				// straightforward way to ensure the UI is disabled as expected
-				setComponentsEnabled(false);
-			}
-
+		else {
+			super.actionPerformed(e);
 		}
-
 	}
 
 
@@ -341,10 +282,10 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
-		mainView.setOverrideEditorStyles(overrideThemeCheckBox.isSelected());
+		mainView.setOverrideEditorStyles(overrideCheckBox.isSelected());
 		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
-		if (overrideThemeCheckBox.isSelected()) {
+		if (overrideCheckBox.isSelected()) {
 			mainView.setBackgroundObject(getBackgroundObject());
 			mainView.setBackgroundImageFileName(getBackgroundImageFileName());
 			rtext.setSyntaxScheme(colorScheme); // Doesn't update if it doesn't have to.
@@ -413,21 +354,40 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * Returns the text to use in the preview label.
-	 *
-	 * @param underline Whether the preview text should be underlined.
-	 * @return The text the label should display.
-	 */
-	protected static String getPreviewText(boolean underline) {
-		return underline ? "<html><u>Hello, world!</u>" :
-							"Hello, world!";
-	}
-
-
 	@Override
-	public JComponent getTopJComponent() {
-		return mainBackgroundButton;
+	protected void handleRestoreDefaults() {
+
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
+
+		// This panel's defaults are based on the current theme.
+		RText app = (RText)getOptionsDialog().getParent();
+		Theme rstaTheme;
+		try {
+			rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
+		} catch (IOException ioe) {
+			app.displayException(ioe);
+			return;
+		}
+
+		Color defaultBackground = rstaTheme.bgColor;
+		SyntaxScheme currentScheme = colorScheme;
+		SyntaxScheme defaultScheme = rstaTheme.scheme;
+
+		if (overrideCheckBox.isSelected() ||
+			!defaultBackground.equals(background) ||
+			!currentScheme.equals(defaultScheme)) {
+			overrideCheckBox.setSelected(false);
+			setBackgroundObject(defaultBackground);
+			setSyntaxScheme(defaultScheme);
+			setDirty(true);
+			// Force a repaint of the preview panel.
+			valueChanged(null);
+			// Some custom components have child components that enable/disable
+			// on their own criteria, so we're explicit here since it's the most
+			// straightforward way to ensure the UI is disabled as expected
+			setComponentsEnabled(false);
+		}
+
 	}
 
 
@@ -442,18 +402,6 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	 */
 	private static int indexToStyle(int index) {
 		return index + 1;
-	}
-
-
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-
-		Object source = e.getItemSelectable();
-
-		if (overrideThemeCheckBox == source) {
-			boolean overrideTheme = e.getStateChange() == ItemEvent.SELECTED;
-			setOverrideTheme(overrideTheme);
-		}
 	}
 
 
@@ -579,38 +527,16 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	private void setComponentsEnabled(boolean enabled, Component... ignore) {
+	@Override
+	protected void setComponentsEnabled(boolean enabled, Component... ignore) {
 
-		UIUtil.setComponentsEnabled(this, enabled, ignore);
+		super.setComponentsEnabled(enabled, ignore);
 
 		// These components ignore the global change above since they have additional
 		// conditions to check to determine whether they are enabled
 		fontSelector.setEnabled(enabled);
 		foregroundButton.setEnabled(enabled && fgCheckBox.isSelected());
 		backgroundButton.setEnabled(enabled && bgCheckBox.isSelected());
-	}
-
-
-	@Override
-	public void setDirty(boolean dirty) {
-		// We do this even if dirty isn't changing to ensure the
-		// preview panel is kept in sync
-		if (dirty) {
-			syncEditorOptionsPreviewContext();
-		}
-		super.setDirty(dirty);
-	}
-
-
-	/**
-	 * Updates the sample area to use either the current application theme or the
-	 * selected values in this dialog.
-	 *
-	 * @param overrideTheme Whether to override (vs. use) the application theme settings.
-	 */
-	private void setOverrideTheme(boolean overrideTheme) {
-		setComponentsEnabled(overrideTheme);
-		setDirty(true);
 	}
 
 
@@ -640,19 +566,17 @@ public class RSyntaxTextAreaOptionPanel extends OptionsDialogPanel
 		setSyntaxScheme(rtext.getSyntaxScheme());
 
 		// Do this after initializing all values above
-		overrideThemeCheckBox.setSelected(mainView.getOverrideEditorStyles());
-		setComponentsEnabled(overrideThemeCheckBox.isSelected());
+		overrideCheckBox.setSelected(mainView.getOverrideEditorStyles());
+		setComponentsEnabled(overrideCheckBox.isSelected());
 
 		syncEditorOptionsPreviewContext();
 	}
 
 
-	/**
-	 * Synchronizes all preview panels with the values in this options panel.
-	 */
-	private void syncEditorOptionsPreviewContext() {
+	@Override
+	protected void syncEditorOptionsPreviewContext() {
 		EditorOptionsPreviewContext context = EditorOptionsPreviewContext.get();
-		context.setOverrideTheme(overrideThemeCheckBox.isSelected());
+		context.setOverrideEditorTheme(overrideCheckBox.isSelected());
 		context.setBackgroundObject(getBackgroundObject());
 		context.setSyntaxScheme((SyntaxScheme)colorScheme.clone());
 	}

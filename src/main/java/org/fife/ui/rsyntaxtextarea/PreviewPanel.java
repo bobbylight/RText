@@ -11,6 +11,7 @@ import org.fife.ui.RScrollPane;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.app.AppTheme;
+import org.fife.ui.rtextarea.RTextArea;
 
 import javax.swing.*;
 import java.awt.*;
@@ -158,7 +159,7 @@ final class PreviewPanel extends JPanel
 
 		// The child "Syntax Highlighting" panel is entirely driven by whether we
 		// override the theme
-		if (context.getOverrideTheme()) {
+		if (context.getOverrideEditorTheme()) {
 			textArea.setBackgroundObject(context.getBackgroundObject());
 			textArea.setSyntaxScheme(context.getSyntaxScheme());
 		}
@@ -172,6 +173,13 @@ final class PreviewPanel extends JPanel
 				app.displayException(ioe);
 			}
 		}
+
+		// Options from the "Caret and Selection" child option panel
+		textArea.setCaretStyle(RTextArea.INSERT_MODE, context.getInsertCaret());
+		textArea.setCaretStyle(RTextArea.OVERWRITE_MODE, context.getOverwriteCaret());
+		textArea.setCaretColor(context.getCaretColor());
+		textArea.getCaret().setBlinkRate(context.getCaretBlinkRate());
+		// TODO: Selection options
 	}
 
 

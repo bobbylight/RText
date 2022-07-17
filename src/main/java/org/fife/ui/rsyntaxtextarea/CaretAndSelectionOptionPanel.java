@@ -15,11 +15,9 @@ import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -27,7 +25,6 @@ import javax.swing.event.ChangeListener;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextAppThemes;
-import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RColorButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
@@ -42,8 +39,8 @@ import org.fife.ui.rtextarea.RTextArea;
  * @author Robert Futrell
  * @version 0.5
  */
-public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
-		implements ActionListener, ChangeListener, PropertyChangeListener {
+public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
+		implements ChangeListener, PropertyChangeListener {
 
 	private JComboBox<String> insCaretCombo;
 	private JComboBox<String> overCaretCombo;
@@ -63,10 +60,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		ComponentOrientation o = ComponentOrientation.
 									getOrientation(getLocale());
 
-		ResourceBundle msg = ResourceBundle.getBundle(
-					"org.fife.ui.rsyntaxtextarea.TextAreaOptionPanel");
-
-		setName(msg.getString("Title.CaretAndSelection"));
+		setName(MSG.getString("Title.CaretAndSelection"));
 
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
@@ -76,24 +70,24 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		Box topPanel = Box.createVerticalBox();
 
 		Box caretPanel = Box.createVerticalBox();
-		caretPanel.setBorder(new OptionPanelBorder(msg.getString("Carets")));
+		caretPanel.setBorder(new OptionPanelBorder(MSG.getString("Carets")));
 		JPanel temp = new JPanel(new SpringLayout());
-		JLabel insLabel = new JLabel(msg.getString("InsertCaret"));
-		insCaretCombo = createCaretComboBox(msg);
+		JLabel insLabel = new JLabel(MSG.getString("InsertCaret"));
+		insCaretCombo = createCaretComboBox();
 		insCaretCombo.setActionCommand("InsertCaretCombo");
 		insCaretCombo.addActionListener(this);
 		insLabel.setLabelFor(insCaretCombo);
-		JLabel overLabel = new JLabel(msg.getString("OverwriteCaret"));
-		overCaretCombo = createCaretComboBox(msg);
+		JLabel overLabel = new JLabel(MSG.getString("OverwriteCaret"));
+		overCaretCombo = createCaretComboBox();
 		overCaretCombo.setActionCommand("OverwriteCaretCombo");
 		overCaretCombo.addActionListener(this);
 		overLabel.setLabelFor(overCaretCombo);
-		JLabel caretDelayLabel = new JLabel(msg.getString("BlinkRate"));
+		JLabel caretDelayLabel = new JLabel(MSG.getString("BlinkRate"));
 		SpinnerNumberModel spinnerModel = new SpinnerNumberModel(500, 0,10000, 50);
 		blinkRateSpinner = new JSpinner(spinnerModel);
 		blinkRateSpinner.addChangeListener(this);
 		caretDelayLabel.setLabelFor(blinkRateSpinner);
-		JLabel caretColorLabel = new JLabel(msg.getString("Color"));
+		JLabel caretColorLabel = new JLabel(MSG.getString("Color"));
 		caretColorButton = new RColorSwatchesButton();
 		caretColorButton.addPropertyChangeListener(
 					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
@@ -110,13 +104,14 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		topPanel.add(caretPanel);
 		topPanel.add(Box.createVerticalStrut(5));
 
-		topPanel.add(createSelectionPanel(msg, o));
+		topPanel.add(createSelectionPanel(o));
 		topPanel.add(Box.createVerticalStrut(5));
 
-		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
-		rdButton.setActionCommand("RestoreDefaults");
-		rdButton.addActionListener(this);
-		addLeftAligned(topPanel, rdButton);
+		// Create a panel containing the preview and "Restore Defaults"
+		JPanel bottomPanel = new JPanel(new BorderLayout());
+		bottomPanel.add(new PreviewPanel(MSG, 9, 40));
+		bottomPanel.add(createRestoreDefaultsPanel(), BorderLayout.SOUTH);
+		topPanel.add(bottomPanel);
 
 		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(o);
@@ -132,49 +127,8 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 
 		String command = e.getActionCommand();
 		Object source = e.getSource();
-		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
-		if ("RestoreDefaults".equals(command)) {
-
-			// This panel's defaults are based on the current theme.
-			RText app = (RText)getOptionsDialog().getParent();
-			Theme rstaTheme;
-			try {
-				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-				return;
-			}
-
-			Color defaultCaretColor = rstaTheme.caretColor;
-			Color defaultSelectionColor = rstaTheme.selectionBG;
-			boolean defaultSelectedTextColorCBChecked = rstaTheme.useSelectionFG;
-			Color defaultSelectedTextColor = rstaTheme.selectionFG;
-			CaretStyle defaultInsertCaret = CaretStyle.THICK_VERTICAL_LINE_STYLE;
-			CaretStyle defaultOverwriteCaret = CaretStyle.BLOCK_STYLE;
-			Integer defaultCaretBlinkRate = 500;
-
-			if (!getCaretColor().equals(defaultCaretColor) ||
-				!getSelectionColor().equals(defaultSelectionColor) ||
-				getCaretStyle(RTextArea.INSERT_MODE)!=defaultInsertCaret ||
-				getCaretStyle(RTextArea.OVERWRITE_MODE)!=defaultOverwriteCaret ||
-				!blinkRateSpinner.getValue().equals(defaultCaretBlinkRate) ||
-				selectedTextColorCB.isSelected() != defaultSelectedTextColorCBChecked ||
-				!selectedTextColorButton.getColor().equals(defaultSelectedTextColor)) {
-
-				setCaretColor(defaultCaretColor);
-				setSelectionColor(defaultSelectionColor);
-				setCaretStyle(RTextArea.INSERT_MODE, defaultInsertCaret);
-				setCaretStyle(RTextArea.OVERWRITE_MODE, defaultOverwriteCaret);
-				blinkRateSpinner.setValue(defaultCaretBlinkRate);
-				setSelectedTextColorEnabled(defaultSelectedTextColorCBChecked);
-				selectedTextColorButton.setColor(Color.white);
-				setDirty(true);
-			}
-
-		}
-
-		else if ("InsertCaretCombo".equals(command)) {
+		if ("InsertCaretCombo".equals(command)) {
 			setDirty(true);
 		}
 
@@ -204,22 +158,25 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 			}
 		}
 
+		else {
+			super.actionPerformed(e);
+		}
 	}
 
 
 	/**
 	 * Creates a combo box with caret choices.
 	 *
-	 * @param msg The resource bundle with localized caret string values.
+	 * @return The combo box.
 	 */
-	private static JComboBox<String> createCaretComboBox(ResourceBundle msg) {
+	private static JComboBox<String> createCaretComboBox() {
 		JComboBox<String> combo = new JComboBox<>();
 		UIUtil.fixComboOrientation(combo);
-		combo.addItem(msg.getString("CaretVerticalLine"));
-		combo.addItem(msg.getString("CaretUnderline"));
-		combo.addItem(msg.getString("CaretBlock"));
-		combo.addItem(msg.getString("CaretRectangle"));
-		combo.addItem(msg.getString("CaretThickVerticalLine"));
+		combo.addItem(MSG.getString("CaretVerticalLine"));
+		combo.addItem(MSG.getString("CaretUnderline"));
+		combo.addItem(MSG.getString("CaretBlock"));
+		combo.addItem(MSG.getString("CaretRectangle"));
+		combo.addItem(MSG.getString("CaretThickVerticalLine"));
 		return combo;
 	}
 
@@ -227,15 +184,13 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	/**
 	 * Creates a panel containing the selection-related options.
 	 *
-	 * @param msg The resource bundle to use for localization.
 	 * @param o The component orientation.
 	 * @return The panel.
 	 */
-	private Box createSelectionPanel(ResourceBundle msg,
-									ComponentOrientation o) {
+	private Box createSelectionPanel(ComponentOrientation o) {
 
 		Box p = Box.createVerticalBox();
-		p.setBorder(new OptionPanelBorder(msg.getString("Selection")));
+		p.setBorder(new OptionPanelBorder(MSG.getString("Selection")));
 
 		JRadioButton nativeRB = new JRadioButton("Use native selection colors");
 		addLeftAligned(p, nativeRB, 3);
@@ -251,10 +206,10 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		selColorButton = new RColorSwatchesButton();
 		selColorButton.addPropertyChangeListener(
 					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		JLabel selLabel = new JLabel(msg.getString("SelColor"));
+		JLabel selLabel = new JLabel(MSG.getString("SelColor"));
 		selLabel.setLabelFor(selColorButton);
 
-		selectedTextColorCB = new JCheckBox(msg.getString("SelectedTextColor"));
+		selectedTextColorCB = new JCheckBox(MSG.getString("SelectedTextColor"));
 		selectedTextColorCB.addActionListener(this);
 		selectedTextColorButton = new RColorSwatchesButton();
 		selectedTextColorButton.addPropertyChangeListener(
@@ -283,11 +238,11 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	protected void doApplyImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
-		mainView.setCaretColor(getCaretColor());
+		mainView.setCaretColor(caretColorButton.getColor());
 		mainView.setSelectionColor(getSelectionColor());
 		mainView.setCaretStyle(RTextArea.INSERT_MODE, getCaretStyle(RTextArea.INSERT_MODE));
 		mainView.setCaretStyle(RTextArea.OVERWRITE_MODE, getCaretStyle(RTextArea.OVERWRITE_MODE));
-		mainView.setCaretBlinkRate(getBlinkRate());
+		mainView.setCaretBlinkRate((Integer)blinkRateSpinner.getValue());
 		mainView.setSelectedTextColor(getColor(selectedTextColorButton));
 		mainView.setUseSelectedTextColor(selectedTextColorCB.isSelected());
 
@@ -297,26 +252,6 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
-	}
-
-
-	/**
-	 * Returns the blink rate selected by the user.
-	 *
-	 * @return The blink rate.
-	 */
-	public int getBlinkRate() {
-		return (Integer)blinkRateSpinner.getValue();
-	}
-
-
-	/**
-	 * Returns the color the user chose for the caret.
-	 *
-	 * @return The caret color the user chose.
-	 */
-	public Color getCaretColor() {
-		return caretColorButton.getColor();
 	}
 
 
@@ -371,6 +306,49 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	}
 
 
+	@Override
+	protected void handleRestoreDefaults() {
+
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
+
+		// This panel's defaults are based on the current theme.
+		RText app = (RText)getOptionsDialog().getParent();
+		Theme rstaTheme;
+		try {
+			rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
+		} catch (IOException ioe) {
+			app.displayException(ioe);
+			return;
+		}
+
+		Color defaultCaretColor = rstaTheme.caretColor;
+		Color defaultSelectionColor = rstaTheme.selectionBG;
+		boolean defaultSelectedTextColorCBChecked = rstaTheme.useSelectionFG;
+		Color defaultSelectedTextColor = rstaTheme.selectionFG;
+		CaretStyle defaultInsertCaret = CaretStyle.THICK_VERTICAL_LINE_STYLE;
+		CaretStyle defaultOverwriteCaret = CaretStyle.BLOCK_STYLE;
+		Integer defaultCaretBlinkRate = 500;
+
+		if (!caretColorButton.getColor().equals(defaultCaretColor) ||
+			!getSelectionColor().equals(defaultSelectionColor) ||
+			getCaretStyle(RTextArea.INSERT_MODE)!=defaultInsertCaret ||
+			getCaretStyle(RTextArea.OVERWRITE_MODE)!=defaultOverwriteCaret ||
+			!blinkRateSpinner.getValue().equals(defaultCaretBlinkRate) ||
+			selectedTextColorCB.isSelected() != defaultSelectedTextColorCBChecked ||
+			!selectedTextColorButton.getColor().equals(defaultSelectedTextColor)) {
+
+			setCaretColor(defaultCaretColor);
+			setSelectionColor(defaultSelectionColor);
+			setCaretStyle(RTextArea.INSERT_MODE, defaultInsertCaret);
+			setCaretStyle(RTextArea.OVERWRITE_MODE, defaultOverwriteCaret);
+			blinkRateSpinner.setValue(defaultCaretBlinkRate);
+			setSelectedTextColorEnabled(defaultSelectedTextColorCBChecked);
+			selectedTextColorButton.setColor(Color.white);
+			setDirty(true);
+		}
+	}
+
+
 	/**
 	 * Called when a property changes in an object we're listening to.
 	 */
@@ -388,7 +366,6 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 * Sets the blink rate displayed.
 	 *
 	 * @param blinkRate The blink rate to display.
-	 * @see #getBlinkRate()
 	 */
 	private void setBlinkRate(int blinkRate) {
 		blinkRateSpinner.setValue(blinkRate);
@@ -400,7 +377,6 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	 *
 	 * @param color The caret color to display.  If <code>null</code> is
 	 *        passed in, <code>Color.BLACK</code> is used.
-	 * @see #getCaretColor()
 	 */
 	private void setCaretColor(Color color) {
 		if (color==null) {
@@ -462,6 +438,7 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 		setSelectedTextColorEnabled(mainView.getUseSelectedTextColor());
 		selectedTextColorButton.setColor(mainView.getSelectedTextColor());
 
+		syncEditorOptionsPreviewContext();
 	}
 
 
@@ -476,4 +453,18 @@ public class CaretAndSelectionOptionPanel extends OptionsDialogPanel
 	}
 
 
+	@Override
+	protected void syncEditorOptionsPreviewContext() {
+
+		EditorOptionsPreviewContext context = EditorOptionsPreviewContext.get();
+
+		// "Carets" section
+		context.setInsertCaret(getCaretStyle(RTextArea.INSERT_MODE));
+		context.setOverwriteCaret(getCaretStyle(RTextArea.OVERWRITE_MODE));
+		context.setCaretBlinkRate((Integer)blinkRateSpinner.getValue());
+		context.setCaretColor(caretColorButton.getColor());
+
+		// "Selection" section
+		// TODO: Implement me
+	}
 }

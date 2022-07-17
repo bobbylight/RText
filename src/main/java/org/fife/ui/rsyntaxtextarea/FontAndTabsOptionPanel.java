@@ -9,7 +9,6 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.FontSelector;
-import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rtextarea.RTextArea;
 
@@ -18,11 +17,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 
 /**
@@ -31,8 +28,8 @@ import java.util.ResourceBundle;
  * @author Robert Futrell
  * @version 1.0
  */
-public class FontAndTabsOptionPanel extends OptionsDialogPanel
-		implements ActionListener, DocumentListener, PropertyChangeListener {
+public class FontAndTabsOptionPanel extends AbstractTextAreaOptionPanel
+		implements DocumentListener, PropertyChangeListener {
 
 	/**
 	 * ID used to identify this option panel.
@@ -50,8 +47,6 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 	private JCheckBox visibleEOLCheckBox;
 	private JCheckBox showTabLinesCheckBox;
 
-	private JButton restoreDefaultsButton;
-
 
 	/**
 	 * Constructor.
@@ -62,10 +57,8 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
-		ResourceBundle msg = ResourceBundle.getBundle(
-								"org.fife.ui.rsyntaxtextarea.TextAreaOptionPanel");
 
-		setName(msg.getString("Title.Font"));
+		setName(MSG.getString("Title.Font"));
 
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
@@ -76,7 +69,7 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 
 		// The "Font" section for configuring the main editor font
 		JPanel fontPanel = new JPanel(new BorderLayout());
-		fontPanel.setBorder(new OptionPanelBorder(msg.getString("Font")));
+		fontPanel.setBorder(new OptionPanelBorder(MSG.getString("Font")));
 		fontSelector = new FontSelector();
 		fontSelector.setColorSelectable(true);
 		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
@@ -87,9 +80,9 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 		topPanel.add(Box.createVerticalStrut(5));
 
 		Box tabPanel = Box.createVerticalBox();
-		tabPanel.setBorder(new OptionPanelBorder(msg.getString("Tabs")));
+		tabPanel.setBorder(new OptionPanelBorder(MSG.getString("Tabs")));
 		Box inputPanel = createHorizontalBox();
-		tabSizeLabel = new JLabel(msg.getString("TabSize"));
+		tabSizeLabel = new JLabel(MSG.getString("TabSize"));
 		tabSizeField = new JTextField();
 		tabSizeField.getDocument().addDocumentListener(this);
 		Dimension size = new Dimension(40,tabSizeField.getPreferredSize().height);
@@ -99,7 +92,7 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 		inputPanel.add(tabSizeField);
 		inputPanel.add(Box.createHorizontalGlue());
 		tabPanel.add(inputPanel);
-		emulateTabsCheckBox = new JCheckBox(msg.getString("EmulateTabs"));
+		emulateTabsCheckBox = new JCheckBox(MSG.getString("EmulateTabs"));
 		emulateTabsCheckBox.setActionCommand("EmulateTabsCheckBox");
 		emulateTabsCheckBox.addActionListener(this);
 		addLeftAligned(tabPanel, emulateTabsCheckBox);
@@ -109,17 +102,17 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 		topPanel.add(Box.createVerticalStrut(5));
 
 		Box otherPanel = Box.createVerticalBox();
-		otherPanel.setBorder(new OptionPanelBorder(msg.getString("Other")));
+		otherPanel.setBorder(new OptionPanelBorder(MSG.getString("Other")));
 
-		visibleWhitespaceCheckBox = createCheckBox(msg, "VisibleWhitespace");
+		visibleWhitespaceCheckBox = createCheckBox("VisibleWhitespace");
 		addLeftAligned(otherPanel, visibleWhitespaceCheckBox);
 		otherPanel.add(Box.createVerticalStrut(3));
 
-		visibleEOLCheckBox = createCheckBox(msg, "VisibleEOL");
+		visibleEOLCheckBox = createCheckBox("VisibleEOL");
 		addLeftAligned(otherPanel, visibleEOLCheckBox);
 		otherPanel.add(Box.createVerticalStrut(3));
 
-		showTabLinesCheckBox = new JCheckBox(msg.getString("ShowIndentGuide"));
+		showTabLinesCheckBox = new JCheckBox(MSG.getString("ShowIndentGuide"));
 		showTabLinesCheckBox.setActionCommand("ShowIndentGuide");
 		showTabLinesCheckBox.addActionListener(this);
 		Box box = createHorizontalBox();
@@ -131,19 +124,12 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 		topPanel.add(otherPanel);
 
 		// The "preview panel" shows how the editor will look with these (unsaved) changes
-		JPanel previewPanel = new PreviewPanel(msg, 9, 40);
-
-		Box rdPanel = createHorizontalBox();
-		restoreDefaultsButton = new JButton(msg.getString("RestoreDefaults"));
-		restoreDefaultsButton.setActionCommand("RestoreDefaults");
-		restoreDefaultsButton.addActionListener(this);
-		rdPanel.add(restoreDefaultsButton);
-		rdPanel.add(Box.createHorizontalGlue());
+		JPanel previewPanel = new PreviewPanel(MSG, 9, 40);
 
 		// Create a panel containing the preview and "Restore Defaults"
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 		bottomPanel.add(previewPanel);
-		bottomPanel.add(rdPanel, BorderLayout.SOUTH);
+		bottomPanel.add(createRestoreDefaultsPanel(), BorderLayout.SOUTH);
 		topPanel.add(bottomPanel);
 
 		add(topPanel, BorderLayout.NORTH);
@@ -152,55 +138,12 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * Listens for actions in this panel.
-	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
-		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
-		if ("RestoreDefaults".equals(command)) {
-
-			// This panel's defaults are based on the current theme.
-			RText app = (RText)getOptionsDialog().getParent();
-			Theme rstaTheme;
-			try {
-				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-				return;
-			}
-
-			// Note we're a little cheap here and go with RSTA's default font rather
-			// than look for fonts in themes.  This is OK since we don't actually
-			// set fonts in any of the default themes.
-			Font defaultFont = RTextArea.getDefaultFont();
-			Color defaultForeground = rstaTheme.scheme.getStyle(TokenTypes.IDENTIFIER).foreground;
-			int defaultTabSize = RTextArea.getDefaultTabSize();
-
-			if (!fontSelector.getDisplayedFont().equals(defaultFont) ||
-					!fontSelector.getFontColor().equals(defaultForeground) ||
-					fontSelector.getUnderline() ||
-					getTabSize()!=defaultTabSize ||
-					emulateTabsCheckBox.isSelected() ||
-					visibleWhitespaceCheckBox.isSelected() ||
-					visibleEOLCheckBox.isSelected() ||
-					showTabLinesCheckBox.isSelected()) {
-				fontSelector.setDisplayedFont(defaultFont, false);
-				fontSelector.setFontColor(defaultForeground);
-				setTabSize(defaultTabSize);
-				emulateTabsCheckBox.setSelected(false);
-				visibleWhitespaceCheckBox.setSelected(false);
-				visibleEOLCheckBox.setSelected(false);
-				showTabLinesCheckBox.setSelected(false);
-				setDirty(true);
-			}
-
-		}
-
-		else if ("EmulateTabsCheckBox".equals(command)) {
+		if ("EmulateTabsCheckBox".equals(command)) {
 			setDirty(true);
 		}
 
@@ -216,6 +159,9 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 			setDirty(true);
 		}
 
+		else {
+			super.actionPerformed(e);
+		}
 	}
 
 
@@ -228,8 +174,8 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 	}
 
 
-	private JCheckBox createCheckBox(ResourceBundle msg, String key) {
-		JCheckBox cb = new JCheckBox(msg.getString(key));
+	private JCheckBox createCheckBox(String key) {
+		JCheckBox cb = new JCheckBox(MSG.getString(key));
 		cb.setActionCommand(key);
 		cb.addActionListener(this);
 		return cb;
@@ -317,6 +263,48 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 	}
 
 
+	@Override
+	protected void handleRestoreDefaults() {
+
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
+
+		// This panel's defaults are based on the current theme.
+		RText app = (RText)getOptionsDialog().getParent();
+		Theme rstaTheme;
+		try {
+			rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
+		} catch (IOException ioe) {
+			app.displayException(ioe);
+			return;
+		}
+
+		// Note we're a little cheap here and go with RSTA's default font rather
+		// than look for fonts in themes.  This is OK since we don't actually
+		// set fonts in any of the default themes.
+		Font defaultFont = RTextArea.getDefaultFont();
+		Color defaultForeground = rstaTheme.scheme.getStyle(TokenTypes.IDENTIFIER).foreground;
+		int defaultTabSize = RTextArea.getDefaultTabSize();
+
+		if (!fontSelector.getDisplayedFont().equals(defaultFont) ||
+			!fontSelector.getFontColor().equals(defaultForeground) ||
+			fontSelector.getUnderline() ||
+			getTabSize()!=defaultTabSize ||
+			emulateTabsCheckBox.isSelected() ||
+			visibleWhitespaceCheckBox.isSelected() ||
+			visibleEOLCheckBox.isSelected() ||
+			showTabLinesCheckBox.isSelected()) {
+			fontSelector.setDisplayedFont(defaultFont, false);
+			fontSelector.setFontColor(defaultForeground);
+			setTabSize(defaultTabSize);
+			emulateTabsCheckBox.setSelected(false);
+			visibleWhitespaceCheckBox.setSelected(false);
+			visibleEOLCheckBox.setSelected(false);
+			showTabLinesCheckBox.setSelected(false);
+			setDirty(true);
+		}
+	}
+
+
 	/**
 	 * Called when a text field in this panel gets updated.
 	 */
@@ -343,17 +331,6 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 	@Override
 	public void removeUpdate(DocumentEvent e) {
 		doDocumentUpdated(e);
-	}
-
-
-	@Override
-	public void setDirty(boolean dirty) {
-		// We do this even if dirty isn't changing to ensure the
-		// preview panel is kept in sync
-		if (dirty) {
-			syncEditorOptionsPreviewContext();
-		}
-		super.setDirty(dirty);
 	}
 
 
@@ -405,7 +382,8 @@ public class FontAndTabsOptionPanel extends OptionsDialogPanel
 	}
 
 
-	private void syncEditorOptionsPreviewContext() {
+	@Override
+	protected void syncEditorOptionsPreviewContext() {
 		EditorOptionsPreviewContext context = EditorOptionsPreviewContext.get();
 		context.getSyntaxScheme().changeBaseFont(context.getFont(), fontSelector.getDisplayedFont());
 		context.setFont(fontSelector.getDisplayedFont());

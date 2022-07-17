@@ -12,12 +12,10 @@ package org.fife.ui.rsyntaxtextarea;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -35,8 +33,8 @@ import org.fife.ui.rtextarea.RTextArea;
  * @author Robert Futrell
  * @version 0.8
  */
-public class RTextAreaOptionPanel extends OptionsDialogPanel
-		implements ActionListener, DocumentListener, PropertyChangeListener {
+public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
+		implements DocumentListener, PropertyChangeListener {
 
 	/**
 	 * ID used to identify this option panel.
@@ -55,11 +53,8 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	private JCheckBox aaCheckBox;
 	private JCheckBox fractionalMetricsCheckBox;
 
-	private Box bracketMatchingPanel;
 	private JCheckBox bracketMatchCheckBox;
 	private JCheckBox bothBracketsCB;
-
-	private JButton restoreDefaultsButton;
 
 
 	/**
@@ -71,10 +66,8 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
-		ResourceBundle msg = ResourceBundle.getBundle(
-								"org.fife.ui.rsyntaxtextarea.TextAreaOptionPanel");
 
-		setName(msg.getString("Title"));
+		setName(MSG.getString("Title"));
 
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
@@ -84,15 +77,15 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		Box topPanel = Box.createVerticalBox();
 
 		Box bigOtherPanel = Box.createVerticalBox();
-		bigOtherPanel.setBorder(new OptionPanelBorder(msg.getString("Other")));
+		bigOtherPanel.setBorder(new OptionPanelBorder(MSG.getString("Other")));
 
-		wordWrapCheckBox = new JCheckBox(msg.getString("WordWrap"));
+		wordWrapCheckBox = new JCheckBox(MSG.getString("WordWrap"));
 		wordWrapCheckBox.setActionCommand("WordWrapCheckBox");
 		wordWrapCheckBox.addActionListener(this);
 		addLeftAligned(bigOtherPanel, wordWrapCheckBox);
 
 		Box otherPanel = new Box(BoxLayout.LINE_AXIS);
-		highlightCurrentLineCheckBox = new JCheckBox(msg.getString("HighlightCL"));
+		highlightCurrentLineCheckBox = new JCheckBox(MSG.getString("HighlightCL"));
 		highlightCurrentLineCheckBox.setActionCommand("HighlightCurrentLineCheckBox");
 		highlightCurrentLineCheckBox.addActionListener(this);
 		otherPanel.add(highlightCurrentLineCheckBox);
@@ -100,7 +93,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		bigOtherPanel.add(otherPanel);
 
 		otherPanel = new Box(BoxLayout.LINE_AXIS);
-		marginLineCheckBox = new JCheckBox(msg.getString("DrawML"));
+		marginLineCheckBox = new JCheckBox(MSG.getString("DrawML"));
 		marginLineCheckBox.setActionCommand("MarginLineCheckBox");
 		marginLineCheckBox.addActionListener(this);
 		marginLinePositionField = new JTextField();
@@ -115,7 +108,7 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		bigOtherPanel.add(otherPanel);
 		bigOtherPanel.add(Box.createVerticalStrut(3));
 
-		autoInsertClosingCurlyCheckBox = createCheckBox(msg, "AutoCloseCurlys");
+		autoInsertClosingCurlyCheckBox = createCheckBox("AutoCloseCurlys");
 		addLeftAligned(bigOtherPanel, autoInsertClosingCurlyCheckBox);
 		bigOtherPanel.add(Box.createVerticalStrut(3));
 
@@ -124,28 +117,28 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		addLeftAligned(bigOtherPanel, autoIndentCheckBox);
 		bigOtherPanel.add(Box.createVerticalStrut(3));
 		*/
-		remWhitespaceLinesCheckBox = createCheckBox(msg, "RemWhitespaceLines");
+		remWhitespaceLinesCheckBox = createCheckBox("RemWhitespaceLines");
 		addLeftAligned(bigOtherPanel, remWhitespaceLinesCheckBox);
 		bigOtherPanel.add(Box.createVerticalStrut(3));
 
-		aaCheckBox = new JCheckBox(msg.getString("SmoothText"));
+		aaCheckBox = new JCheckBox(MSG.getString("SmoothText"));
 		aaCheckBox.setActionCommand("aaCB");
 		aaCheckBox.addActionListener(this);
 		addLeftAligned(bigOtherPanel, aaCheckBox);
 		bigOtherPanel.add(Box.createVerticalStrut(3));
 
-		fractionalMetricsCheckBox = createCheckBox(msg, "FracFM");
+		fractionalMetricsCheckBox = createCheckBox("FracFM");
 		addLeftAligned(bigOtherPanel, fractionalMetricsCheckBox);
 		bigOtherPanel.add(Box.createVerticalStrut(3));
 
-		bracketMatchingPanel = createHorizontalBox();
-		bracketMatchCheckBox = new JCheckBox(msg.getString("HighlightMB"));
+		Box bracketMatchingPanel = createHorizontalBox();
+		bracketMatchCheckBox = new JCheckBox(MSG.getString("HighlightMB"));
 		bracketMatchCheckBox.setActionCommand("BracketMatchCheckBox");
 		bracketMatchCheckBox.addActionListener(this);
 		bracketMatchingPanel.add(bracketMatchCheckBox);
 		bracketMatchingPanel.add(Box.createHorizontalGlue());
 		addLeftAligned(bigOtherPanel, bracketMatchingPanel);
-		bothBracketsCB = new JCheckBox(msg.getString("HighlightBothBrackets"));
+		bothBracketsCB = new JCheckBox(MSG.getString("HighlightBothBrackets"));
 		bothBracketsCB.setActionCommand("BothBracketsCB");
 		bothBracketsCB.addActionListener(this);
 		addLeftAligned(bigOtherPanel, bothBracketsCB, 3, 20);
@@ -154,19 +147,12 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 		topPanel.add(bigOtherPanel);
 
 		// The "preview panel" shows how the editor will look with these (unsaved) changes
-		JPanel previewPanel = new PreviewPanel(msg, 9, 40);
-
-		Box rdPanel = createHorizontalBox();
-		restoreDefaultsButton = new JButton(msg.getString("RestoreDefaults"));
-		restoreDefaultsButton.setActionCommand("RestoreDefaults");
-		restoreDefaultsButton.addActionListener(this);
-		rdPanel.add(restoreDefaultsButton);
-		rdPanel.add(Box.createHorizontalGlue());
+		JPanel previewPanel = new PreviewPanel(MSG, 9, 40);
 
 		// Create a panel containing the preview and "Restore Defaults"
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 		bottomPanel.add(previewPanel);
-		bottomPanel.add(rdPanel, BorderLayout.SOUTH);
+		bottomPanel.add(createRestoreDefaultsPanel(), BorderLayout.SOUTH);
 		topPanel.add(bottomPanel);
 
 		add(topPanel, BorderLayout.NORTH);
@@ -182,52 +168,8 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
-		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
-		if ("RestoreDefaults".equals(command)) {
-
-			// This panel's defaults are based on the current theme.
-			RText app = (RText)getOptionsDialog().getParent();
-			Theme rstaTheme;
-			try {
-				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-				return;
-			}
-
-			// Note we're a little cheap here and go with RSTA's default font rather
-			// than look for fonts in themes.  This is OK since we don't actually
-			// set fonts in any of the default themes.
-			int defaultMarginLinePosition = RTextArea.getDefaultMarginLinePosition();
-			boolean defaultAA = File.separatorChar=='\\';
-
-			if (wordWrapCheckBox.isSelected() ||
-					!highlightCurrentLineCheckBox.isSelected() ||
-					!marginLineCheckBox.isSelected() ||
-					getMarginLinePosition()!=defaultMarginLinePosition ||
-					autoInsertClosingCurlyCheckBox.isSelected() ||
-					remWhitespaceLinesCheckBox.isSelected() ||
-					aaCheckBox.isSelected()!=defaultAA ||
-					fractionalMetricsCheckBox.isSelected() ||
-					!bracketMatchCheckBox.isSelected() ||
-					bothBracketsCB.isSelected()) {
-				wordWrapCheckBox.setSelected(false);
-				highlightCurrentLineCheckBox.setSelected(true);
-				setMarginLineEnabled(true);
-				setMarginLinePosition(defaultMarginLinePosition);
-				autoInsertClosingCurlyCheckBox.setSelected(false);
-				remWhitespaceLinesCheckBox.setSelected(false);
-				aaCheckBox.setSelected(defaultAA);
-				fractionalMetricsCheckBox.setSelected(false);
-				setBracketMatchCheckboxSelected(true);
-				bothBracketsCB.setSelected(false);
-				setDirty(true);
-			}
-
-		}
-
-		else if ("WordWrapCheckBox".equals(command)) {
+		if ("WordWrapCheckBox".equals(command)) {
 			setDirty(true);
 		}
 
@@ -284,6 +226,9 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 			setDirty(true);
 		}
 
+		else {
+			handleRestoreDefaults();
+		}
 	}
 
 
@@ -296,8 +241,8 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	private JCheckBox createCheckBox(ResourceBundle msg, String key) {
-		JCheckBox cb = new JCheckBox(msg.getString(key));
+	private JCheckBox createCheckBox(String key) {
+		JCheckBox cb = new JCheckBox(MSG.getString(key));
 		cb.setActionCommand(key);
 		cb.addActionListener(this);
 		return cb;
@@ -385,6 +330,52 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	@Override
 	public JComponent getTopJComponent() {
 		return wordWrapCheckBox;
+	}
+
+
+	protected void handleRestoreDefaults() {
+
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
+
+		// This panel's defaults are based on the current theme.
+		RText app = (RText)getOptionsDialog().getParent();
+		Theme rstaTheme;
+		try {
+			rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
+		} catch (IOException ioe) {
+			app.displayException(ioe);
+			return;
+		}
+
+		// Note we're a little cheap here and go with RSTA's default font rather
+		// than look for fonts in themes.  This is OK since we don't actually
+		// set fonts in any of the default themes.
+		int defaultMarginLinePosition = RTextArea.getDefaultMarginLinePosition();
+		boolean defaultAA = File.separatorChar=='\\';
+
+		if (wordWrapCheckBox.isSelected() ||
+			!highlightCurrentLineCheckBox.isSelected() ||
+			!marginLineCheckBox.isSelected() ||
+			getMarginLinePosition()!=defaultMarginLinePosition ||
+			autoInsertClosingCurlyCheckBox.isSelected() ||
+			remWhitespaceLinesCheckBox.isSelected() ||
+			aaCheckBox.isSelected()!=defaultAA ||
+			fractionalMetricsCheckBox.isSelected() ||
+			!bracketMatchCheckBox.isSelected() ||
+			bothBracketsCB.isSelected()) {
+			wordWrapCheckBox.setSelected(false);
+			highlightCurrentLineCheckBox.setSelected(true);
+			setMarginLineEnabled(true);
+			setMarginLinePosition(defaultMarginLinePosition);
+			autoInsertClosingCurlyCheckBox.setSelected(false);
+			remWhitespaceLinesCheckBox.setSelected(false);
+			aaCheckBox.setSelected(defaultAA);
+			fractionalMetricsCheckBox.setSelected(false);
+			setBracketMatchCheckboxSelected(true);
+			bothBracketsCB.setSelected(false);
+			setDirty(true);
+		}
+
 	}
 
 
@@ -504,7 +495,8 @@ public class RTextAreaOptionPanel extends OptionsDialogPanel
 	}
 
 
-	private void syncEditorOptionsPreviewContext() {
+	@Override
+	protected void syncEditorOptionsPreviewContext() {
 		EditorOptionsPreviewContext context = EditorOptionsPreviewContext.get();
 		context.setWordWrap(wordWrapCheckBox.isSelected());
 		context.setHighlightCurrentLine(highlightCurrentLineCheckBox.isSelected());
