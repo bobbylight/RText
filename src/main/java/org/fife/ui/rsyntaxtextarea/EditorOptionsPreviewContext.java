@@ -53,7 +53,16 @@ final class EditorOptionsPreviewContext {
 	private CaretStyle overwriteCaret;
 	private int caretBlinkRate;
 	private Color caretColor;
-	// TODO: Selection options
+	private Color selectionColor;
+	private Color selectedTextColor;
+	private boolean useSelectedTextColor;
+
+	// Options in the child "highlights" option panel
+	private Color markAllHighlightColor;
+	private boolean markOccurrences;
+	private Color markOccurrencesColor;
+	private boolean highlightSecondaryLanguages;
+
 
 	private EventListenerList listeners;
 
@@ -169,6 +178,10 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+	public boolean getHighlightSecondaryLanguages() {
+		return highlightSecondaryLanguages;
+	}
+
 
 	public CaretStyle getInsertCaret() {
 		return insertCaret;
@@ -184,6 +197,21 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+	public Color getMarkAllHighlightColor() {
+		return markAllHighlightColor;
+	}
+
+
+	public boolean getMarkOccurrences() {
+		return markOccurrences;
+	}
+
+
+	public Color getMarkOccurrencesColor() {
+		return markOccurrencesColor;
+	}
+
+
 	public boolean getOverrideEditorTheme() {
 		return overrideEditorTheme;
 	}
@@ -196,6 +224,16 @@ final class EditorOptionsPreviewContext {
 
 	public String getPreviewLanguage() {
 		return previewLanguage;
+	}
+
+
+	public Color getSelectedTextColor() {
+		return selectedTextColor;
+	}
+
+
+	public Color getSelectionColor() {
+		return selectionColor;
 	}
 
 
@@ -221,6 +259,11 @@ final class EditorOptionsPreviewContext {
 
 	public int getTabSize() {
 		return tabSize;
+	}
+
+
+	public boolean getUseSelectedTextColor() {
+		return useSelectedTextColor;
 	}
 
 
@@ -351,6 +394,14 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+	public void setHighlightSecondaryLanguages(boolean highlightSecondaryLanguages) {
+		if (this.highlightSecondaryLanguages != highlightSecondaryLanguages) {
+			this.highlightSecondaryLanguages = highlightSecondaryLanguages;
+			fireChangeEvent();
+		}
+	}
+
+
 	public void setInsertCaret(CaretStyle insertCaret) {
 		if (this.insertCaret != insertCaret) {
 			this.insertCaret = insertCaret;
@@ -375,6 +426,30 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+	public void setMarkAllHighlightColor(Color markAllHighlightColor) {
+		if (!Objects.equals(this.markAllHighlightColor, markAllHighlightColor)) {
+			this.markAllHighlightColor = markAllHighlightColor;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setMarkOccurrences(boolean markOccurrences) {
+		if (this.markOccurrences != markOccurrences) {
+			this.markOccurrences = markOccurrences;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setMarkOccurrencesColor(Color markOccurrencesColor) {
+		if (!Objects.equals(this.markOccurrencesColor, markOccurrencesColor)) {
+			this.markOccurrencesColor = markOccurrencesColor;
+			fireChangeEvent();
+		}
+	}
+
+
 	public void setOverrideEditorTheme(boolean overrideEditorTheme) {
 		if (this.overrideEditorTheme != overrideEditorTheme) {
 			this.overrideEditorTheme = overrideEditorTheme;
@@ -394,6 +469,22 @@ final class EditorOptionsPreviewContext {
 	public void setPreviewLanguage(String previewLanguage) {
 		if (!Objects.equals(this.previewLanguage, previewLanguage)) {
 			this.previewLanguage = previewLanguage;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setSelectedTextColor(Color selectedTextColor) {
+		if (!Objects.equals(this.selectedTextColor, selectedTextColor)) {
+			this.selectedTextColor = selectedTextColor;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setSelectionColor(Color selectionColor) {
+		if (!Objects.equals(this.selectionColor, selectionColor)) {
+			this.selectionColor = selectionColor;
 			fireChangeEvent();
 		}
 	}
@@ -434,6 +525,14 @@ final class EditorOptionsPreviewContext {
 	public void setTabSize(int tabSize) {
 		if (this.tabSize != tabSize) {
 			this.tabSize = tabSize;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setUseSelectedTextColor(boolean useSelectedTextColor) {
+		if (this.useSelectedTextColor != useSelectedTextColor) {
+			this.useSelectedTextColor = useSelectedTextColor;
 			fireChangeEvent();
 		}
 	}

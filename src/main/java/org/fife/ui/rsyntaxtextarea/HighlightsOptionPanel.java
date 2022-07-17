@@ -8,7 +8,6 @@ package org.fife.ui.rsyntaxtextarea;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextAppThemes;
-import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RColorButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
@@ -18,11 +17,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 
 /**
@@ -30,10 +27,10 @@ import java.util.ResourceBundle;
  * mark occurrences, etc.).
  *
  * @author Robert Futrell
- * @version 0.5
+ * @version 0.6
  */
-public class HighlightsOptionPanel extends OptionsDialogPanel
-		implements ActionListener, ChangeListener, PropertyChangeListener {
+public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
+		implements ChangeListener, PropertyChangeListener {
 
 	private RColorSwatchesButton markAllColorButton;
 	private JCheckBox enableMOCheckBox;
@@ -59,10 +56,7 @@ public class HighlightsOptionPanel extends OptionsDialogPanel
 		ComponentOrientation o = ComponentOrientation.
 									getOrientation(getLocale());
 
-		ResourceBundle msg = ResourceBundle.getBundle(
-					"org.fife.ui.rsyntaxtextarea.TextAreaOptionPanel");
-
-		setName(msg.getString("Title.Highlights"));
+		setName(MSG.getString("Title.Highlights"));
 
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
@@ -71,16 +65,17 @@ public class HighlightsOptionPanel extends OptionsDialogPanel
 		// stuff stays at the "top."
 		Box topPanel = Box.createVerticalBox();
 
-		topPanel.add(createHighlightsPanel(msg));
+		topPanel.add(createHighlightsPanel());
 		topPanel.add(Box.createVerticalStrut(5));
 
-		topPanel.add(createSecondaryLanguagesPanel(msg, o));
+		topPanel.add(createSecondaryLanguagesPanel(o));
 		topPanel.add(Box.createVerticalStrut(10));
 
-		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
-		rdButton.setActionCommand("RestoreDefaults");
-		rdButton.addActionListener(this);
-		addLeftAligned(topPanel, rdButton);
+		// Create a panel containing the preview and "Restore Defaults"
+		JPanel bottomPanel = new JPanel(new BorderLayout());
+		bottomPanel.add(new PreviewPanel(MSG, 9, 40));
+		bottomPanel.add(createRestoreDefaultsPanel(), BorderLayout.SOUTH);
+		topPanel.add(bottomPanel);
 
 		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(o);
@@ -96,54 +91,8 @@ public class HighlightsOptionPanel extends OptionsDialogPanel
 
 		String command = e.getActionCommand();
 		Object source = e.getSource();
-		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
-		if ("RestoreDefaults".equals(command)) {
-
-			// This panel's defaults are based on the current theme.
-			RText app = (RText)getOptionsDialog().getParent();
-			Theme rstaTheme;
-			try {
-				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-				return;
-			}
-
-			Color defaultMarkAllColor = rstaTheme.markAllHighlightColor;
-			Color defaultMarkOccurrencesColor = rstaTheme.markOccurrencesColor;
-			Color[] defaultSecLangColor = new Color[SEC_LANG_COUNT];
-			for (int i = 0; i < defaultSecLangColor.length; i++) {
-				if (rstaTheme.secondaryLanguages != null && rstaTheme.secondaryLanguages.length > i) {
-					defaultSecLangColor[i] = rstaTheme.secondaryLanguages[i];
-				}
-				if (defaultSecLangColor[i] == null) {
-					defaultSecLangColor[i] = DEFAULT_SECONDARY_LANGUAGE_COLORS[i];
-				}
-			}
-
-			if (!getMarkAllHighlightColor().equals(defaultMarkAllColor) ||
-				!enableMOCheckBox.isSelected() ||
-				!moColorButton.getColor().equals(defaultMarkOccurrencesColor) ||
-				secLangCB.isSelected() ||
-				!defaultSecLangColor[0].equals(secLangButtons[0].getColor()) ||
-				!defaultSecLangColor[1].equals(secLangButtons[1].getColor()) ||
-				!defaultSecLangColor[2].equals(secLangButtons[2].getColor())) {
-
-				setMarkAllHighlightColor(defaultMarkAllColor);
-				enableMOCheckBox.setSelected(true);
-				moColorButton.setEnabled(true);
-				moColorButton.setColor(defaultMarkOccurrencesColor);
-				setHighlightSecondaryLanguages(false);
-				for (int i=0; i<SEC_LANG_COUNT; i++) {
-					secLangButtons[i].setColor(defaultSecLangColor[i]);
-				}
-				setDirty(true);
-			}
-
-		}
-
-		else if ("MarkOccurrences".equals(command)) {
+		if ("MarkOccurrences".equals(command)) {
 			boolean selected = enableMOCheckBox.isSelected();
 			moColorButton.setEnabled(selected);
 			setDirty(true);
@@ -155,25 +104,27 @@ public class HighlightsOptionPanel extends OptionsDialogPanel
 			setDirty(true);
 		}
 
+		else {
+			handleRestoreDefaults();
+		}
 	}
 
 
 	/**
 	 * Creates a panel containing the "mark occurrences"-related options.
 	 *
-	 * @param msg The resource bundle to use for localization.
 	 * @return The panel.
 	 */
-	private Box createHighlightsPanel(ResourceBundle msg) {
+	private Box createHighlightsPanel() {
 
 		Box p = Box.createVerticalBox();
-		p.setBorder(new OptionPanelBorder(msg.getString("Section.Highlights")));
+		p.setBorder(new OptionPanelBorder(MSG.getString("Section.Highlights")));
 
 
 		markAllColorButton = new RColorSwatchesButton();
 		markAllColorButton.addPropertyChangeListener(
 			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		JLabel markAllLabel = new JLabel(msg.getString("MarkAllColor"));
+		JLabel markAllLabel = new JLabel(MSG.getString("MarkAllColor"));
 		markAllLabel.setLabelFor(markAllColorButton);
 		Box box = createHorizontalBox();
 		box.add(markAllLabel);
@@ -184,7 +135,7 @@ public class HighlightsOptionPanel extends OptionsDialogPanel
 		p.add(Box.createVerticalStrut(3));
 
 		enableMOCheckBox = new JCheckBox(
-			msg.getString("EnableMarkOccurrences"));
+			MSG.getString("EnableMarkOccurrences"));
 		enableMOCheckBox.setActionCommand("MarkOccurrences");
 		enableMOCheckBox.addActionListener(this);
 
@@ -209,17 +160,15 @@ public class HighlightsOptionPanel extends OptionsDialogPanel
 	 * These should really be elsewhere, but we're getting short on space in
 	 * other text editor-related panels.
 	 *
-	 * @param msg The resource bundle to use for localization.
 	 * @param o The component orientation.
 	 * @return The panel.
 	 */
-	private Box createSecondaryLanguagesPanel(ResourceBundle msg,
-											ComponentOrientation o) {
+	private Box createSecondaryLanguagesPanel(ComponentOrientation o) {
 
 		Box p = Box.createVerticalBox();
-		p.setBorder(new OptionPanelBorder(msg.getString("SecondaryLanguages")));
+		p.setBorder(new OptionPanelBorder(MSG.getString("SecondaryLanguages")));
 
-		secLangCB =  new JCheckBox(msg.getString("HighlightSecondaryLanguages"));
+		secLangCB =  new JCheckBox(MSG.getString("HighlightSecondaryLanguages"));
 		secLangCB.addActionListener(this);
 		addLeftAligned(p, secLangCB);
 
@@ -229,7 +178,7 @@ public class HighlightsOptionPanel extends OptionsDialogPanel
 			secLangButtons[i] = new RColorSwatchesButton();
 			secLangButtons[i].addPropertyChangeListener(
 					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-			secLangLabels[i] = new JLabel(msg.getString(
+			secLangLabels[i] = new JLabel(MSG.getString(
 					"HighlightSecondaryLanguages.Color" + (i+1)));
 			secLangLabels[i].setLabelFor(secLangButtons[i]);
 		}
@@ -315,6 +264,55 @@ public class HighlightsOptionPanel extends OptionsDialogPanel
 	}
 
 
+	@Override
+	protected void handleRestoreDefaults() {
+
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
+
+		// This panel's defaults are based on the current theme.
+		RText app = (RText)getOptionsDialog().getParent();
+		Theme rstaTheme;
+		try {
+			rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
+		} catch (IOException ioe) {
+			app.displayException(ioe);
+			return;
+		}
+
+		Color defaultMarkAllColor = rstaTheme.markAllHighlightColor;
+		Color defaultMarkOccurrencesColor = rstaTheme.markOccurrencesColor;
+		Color[] defaultSecLangColor = new Color[SEC_LANG_COUNT];
+		for (int i = 0; i < defaultSecLangColor.length; i++) {
+			if (rstaTheme.secondaryLanguages != null && rstaTheme.secondaryLanguages.length > i) {
+				defaultSecLangColor[i] = rstaTheme.secondaryLanguages[i];
+			}
+			if (defaultSecLangColor[i] == null) {
+				defaultSecLangColor[i] = DEFAULT_SECONDARY_LANGUAGE_COLORS[i];
+			}
+		}
+
+		if (!getMarkAllHighlightColor().equals(defaultMarkAllColor) ||
+			!enableMOCheckBox.isSelected() ||
+			!moColorButton.getColor().equals(defaultMarkOccurrencesColor) ||
+			secLangCB.isSelected() ||
+			!defaultSecLangColor[0].equals(secLangButtons[0].getColor()) ||
+			!defaultSecLangColor[1].equals(secLangButtons[1].getColor()) ||
+			!defaultSecLangColor[2].equals(secLangButtons[2].getColor())) {
+
+			setMarkAllHighlightColor(defaultMarkAllColor);
+			enableMOCheckBox.setSelected(true);
+			moColorButton.setEnabled(true);
+			moColorButton.setColor(defaultMarkOccurrencesColor);
+			setHighlightSecondaryLanguages(false);
+			for (int i=0; i<SEC_LANG_COUNT; i++) {
+				secLangButtons[i].setColor(defaultSecLangColor[i]);
+			}
+			setDirty(true);
+		}
+
+	}
+
+
 	/**
 	 * Called when a property changes in an object we're listening to.
 	 */
@@ -377,5 +375,20 @@ public class HighlightsOptionPanel extends OptionsDialogPanel
 		setDirty(true);
 	}
 
+
+	@Override
+	protected void syncEditorOptionsPreviewContext() {
+
+		EditorOptionsPreviewContext context = EditorOptionsPreviewContext.get();
+
+		// "Highlights" section
+		context.setMarkAllHighlightColor(getMarkAllHighlightColor());
+		context.setMarkOccurrences(enableMOCheckBox.isSelected());
+		context.setMarkOccurrencesColor(moColorButton.getColor());
+
+		// "Secondary Languages" section
+		context.setHighlightSecondaryLanguages(secLangCB.isSelected());
+		// TODO: Actually update the secondary language colors
+	}
 
 }

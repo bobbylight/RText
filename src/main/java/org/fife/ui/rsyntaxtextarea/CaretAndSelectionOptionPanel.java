@@ -69,39 +69,7 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		// stuff stays at the "top."
 		Box topPanel = Box.createVerticalBox();
 
-		Box caretPanel = Box.createVerticalBox();
-		caretPanel.setBorder(new OptionPanelBorder(MSG.getString("Carets")));
-		JPanel temp = new JPanel(new SpringLayout());
-		JLabel insLabel = new JLabel(MSG.getString("InsertCaret"));
-		insCaretCombo = createCaretComboBox();
-		insCaretCombo.setActionCommand("InsertCaretCombo");
-		insCaretCombo.addActionListener(this);
-		insLabel.setLabelFor(insCaretCombo);
-		JLabel overLabel = new JLabel(MSG.getString("OverwriteCaret"));
-		overCaretCombo = createCaretComboBox();
-		overCaretCombo.setActionCommand("OverwriteCaretCombo");
-		overCaretCombo.addActionListener(this);
-		overLabel.setLabelFor(overCaretCombo);
-		JLabel caretDelayLabel = new JLabel(MSG.getString("BlinkRate"));
-		SpinnerNumberModel spinnerModel = new SpinnerNumberModel(500, 0,10000, 50);
-		blinkRateSpinner = new JSpinner(spinnerModel);
-		blinkRateSpinner.addChangeListener(this);
-		caretDelayLabel.setLabelFor(blinkRateSpinner);
-		JLabel caretColorLabel = new JLabel(MSG.getString("Color"));
-		caretColorButton = new RColorSwatchesButton();
-		caretColorButton.addPropertyChangeListener(
-					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		caretColorLabel.setLabelFor(caretColorButton);
-		JPanel buttonPanel = new JPanel(new BorderLayout());
-		buttonPanel.add(caretColorButton, BorderLayout.LINE_START);
-		UIUtil.addLabelValuePairs(temp, o,
-			insLabel, insCaretCombo,
-			caretDelayLabel, blinkRateSpinner,
-			overLabel, overCaretCombo,
-			caretColorLabel, buttonPanel);
-		UIUtil.makeSpringCompactGrid(temp, 2,4, 0,0, 20,8);
-		caretPanel.add(temp);
-		topPanel.add(caretPanel);
+		topPanel.add(createCaretPanel(o));
 		topPanel.add(Box.createVerticalStrut(5));
 
 		topPanel.add(createSelectionPanel(o));
@@ -182,6 +150,58 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 
 
 	/**
+	 * Creates a panel containing caret-related options.
+	 *
+	 * @param o The component orientation to apply.
+	 * @return The panel.
+	 */
+	private Box createCaretPanel(ComponentOrientation o) {
+
+		Box caretPanel = Box.createVerticalBox();
+		caretPanel.setBorder(new OptionPanelBorder(MSG.getString("Carets")));
+
+		JPanel temp = new JPanel(new SpringLayout());
+
+		JLabel insLabel = new JLabel(MSG.getString("InsertCaret"));
+		insCaretCombo = createCaretComboBox();
+		insCaretCombo.setActionCommand("InsertCaretCombo");
+		insCaretCombo.addActionListener(this);
+		insLabel.setLabelFor(insCaretCombo);
+
+		JLabel overLabel = new JLabel(MSG.getString("OverwriteCaret"));
+		overCaretCombo = createCaretComboBox();
+		overCaretCombo.setActionCommand("OverwriteCaretCombo");
+		overCaretCombo.addActionListener(this);
+		overLabel.setLabelFor(overCaretCombo);
+
+		JLabel caretDelayLabel = new JLabel(MSG.getString("BlinkRate"));
+		SpinnerNumberModel spinnerModel = new SpinnerNumberModel(500, 0,10000, 50);
+		blinkRateSpinner = new JSpinner(spinnerModel);
+		blinkRateSpinner.addChangeListener(this);
+		caretDelayLabel.setLabelFor(blinkRateSpinner);
+
+		JLabel caretColorLabel = new JLabel(MSG.getString("Color"));
+		caretColorButton = new RColorSwatchesButton();
+		caretColorButton.addPropertyChangeListener(
+			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
+		caretColorLabel.setLabelFor(caretColorButton);
+
+		JPanel buttonPanel = new JPanel(new BorderLayout());
+		buttonPanel.add(caretColorButton, BorderLayout.LINE_START);
+
+		UIUtil.addLabelValuePairs(temp, o,
+			insLabel, insCaretCombo,
+			caretDelayLabel, blinkRateSpinner,
+			overLabel, overCaretCombo,
+			caretColorLabel, buttonPanel);
+		UIUtil.makeSpringCompactGrid(temp, 2,4, 0,0, 20,8);
+		caretPanel.add(temp);
+
+		return caretPanel;
+	}
+
+
+	/**
 	 * Creates a panel containing the selection-related options.
 	 *
 	 * @param o The component orientation.
@@ -191,17 +211,6 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 
 		Box p = Box.createVerticalBox();
 		p.setBorder(new OptionPanelBorder(MSG.getString("Selection")));
-
-		JRadioButton nativeRB = new JRadioButton("Use native selection colors");
-		addLeftAligned(p, nativeRB, 3);
-
-		JRadioButton customRB = new JRadioButton("Use themed selection colors");
-		addLeftAligned(p, customRB, 3);
-
-		ButtonGroup group = new ButtonGroup();
-		group.add(nativeRB);
-		group.add(customRB);
-
 
 		selColorButton = new RColorSwatchesButton();
 		selColorButton.addPropertyChangeListener(
@@ -215,19 +224,22 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		selectedTextColorButton.addPropertyChangeListener(
 				RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
 
-		JPanel contents = new JPanel(new SpringLayout());
-		if (o.isLeftToRight()) {
-			contents.add(selLabel); contents.add(selColorButton);
-			contents.add(selectedTextColorCB);
-			contents.add(selectedTextColorButton);
-		}
-		else {
-			contents.add(selColorButton); contents.add(selLabel);
-			contents.add(selectedTextColorButton);
-			contents.add(selectedTextColorCB);
-		}
-		UIUtil.makeSpringCompactGrid(contents, 2, 2, 0, 0, 5, 5);
-		addLeftAligned(p, contents, 0, 20);
+		JPanel selectionColorsPanel = new JPanel(new SpringLayout());
+		UIUtil.addLabelValuePairs(selectionColorsPanel, o,
+			selLabel, selColorButton,
+			selectedTextColorCB, selectedTextColorButton);
+		UIUtil.makeSpringCompactGrid(selectionColorsPanel, 2, 2, 0, 0, 5, 5);
+		addLeftAligned(p, selectionColorsPanel, 0, 20);
+
+		systemSelectionButton = new JButton(MSG.getString("SystemSelection"));
+		systemSelectionButton.addActionListener(this);
+		JPanel systemSelectionPanel = new JPanel(new BorderLayout());
+		systemSelectionPanel.add(systemSelectionButton, BorderLayout.NORTH);
+
+		JPanel mainSelectionPanel = new JPanel(new BorderLayout());
+		mainSelectionPanel.add(selectionColorsPanel, BorderLayout.LINE_START);
+		mainSelectionPanel.add(systemSelectionPanel, BorderLayout.LINE_END);
+		p.add(mainSelectionPanel);
 
 		return p;
 
@@ -239,13 +251,12 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
 		mainView.setCaretColor(caretColorButton.getColor());
-		mainView.setSelectionColor(getSelectionColor());
+		mainView.setSelectionColor(getColor(selColorButton));
 		mainView.setCaretStyle(RTextArea.INSERT_MODE, getCaretStyle(RTextArea.INSERT_MODE));
 		mainView.setCaretStyle(RTextArea.OVERWRITE_MODE, getCaretStyle(RTextArea.OVERWRITE_MODE));
 		mainView.setCaretBlinkRate((Integer)blinkRateSpinner.getValue());
 		mainView.setSelectedTextColor(getColor(selectedTextColorButton));
 		mainView.setUseSelectedTextColor(selectedTextColorCB.isSelected());
-
 	}
 
 
@@ -290,16 +301,6 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 	}
 
 
-	/**
-	 * Returns the color the user chose for selections.
-	 *
-	 * @return The selection color the user chose.
-	 */
-	public Color getSelectionColor() {
-		return getColor(selColorButton);
-	}
-
-
 	@Override
 	public JComponent getTopJComponent() {
 		return caretColorButton;
@@ -330,7 +331,7 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		Integer defaultCaretBlinkRate = 500;
 
 		if (!caretColorButton.getColor().equals(defaultCaretColor) ||
-			!getSelectionColor().equals(defaultSelectionColor) ||
+			!getColor(selColorButton).equals(defaultSelectionColor) ||
 			getCaretStyle(RTextArea.INSERT_MODE)!=defaultInsertCaret ||
 			getCaretStyle(RTextArea.OVERWRITE_MODE)!=defaultOverwriteCaret ||
 			!blinkRateSpinner.getValue().equals(defaultCaretBlinkRate) ||
@@ -411,7 +412,6 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 	 *
 	 * @param color The selection color to display.
 	 *        <code>null</code> is passed in, nothing happens.
-	 * @see #getSelectionColor()
 	 */
 	private void setSelectionColor(Color color) {
 		if (color!=null)
@@ -465,6 +465,8 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		context.setCaretColor(caretColorButton.getColor());
 
 		// "Selection" section
-		// TODO: Implement me
+		context.setSelectionColor(getColor(selColorButton));
+		context.setSelectedTextColor(getColor(selectedTextColorButton));
+		context.setUseSelectedTextColor(selectedTextColorCB.isSelected());
 	}
 }

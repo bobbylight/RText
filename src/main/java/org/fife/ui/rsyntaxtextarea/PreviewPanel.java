@@ -179,7 +179,16 @@ final class PreviewPanel extends JPanel
 		textArea.setCaretStyle(RTextArea.OVERWRITE_MODE, context.getOverwriteCaret());
 		textArea.setCaretColor(context.getCaretColor());
 		textArea.getCaret().setBlinkRate(context.getCaretBlinkRate());
-		// TODO: Selection options
+		textArea.setSelectionColor(context.getSelectionColor());
+		textArea.setSelectedTextColor(context.getSelectedTextColor());
+		textArea.setUseSelectedTextColor(context.getUseSelectedTextColor());
+
+		// Options from the "Highlights" child option panel
+		textArea.setMarkAllHighlightColor(context.getMarkAllHighlightColor());
+		textArea.setMarkOccurrences(context.getMarkOccurrences());
+		textArea.setMarkOccurrencesColor(context.getMarkOccurrencesColor());
+		textArea.setHighlightSecondaryLanguages(context.getHighlightSecondaryLanguages());
+		// TODO: Update the actual secondary language background colors
 	}
 
 
