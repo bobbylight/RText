@@ -280,7 +280,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		carets = new int[2];
 		carets[RTextArea.INSERT_MODE] = CaretStyle.THICK_VERTICAL_LINE_STYLE.ordinal();
 		carets[RTextArea.OVERWRITE_MODE] = CaretStyle.BLOCK_STYLE.ordinal();
-		caretBlinkRate	= 500;
+		caretBlinkRate = 500;
 		dividerLocations = new int[4];
 		for (int i=0; i<4; i++) {
 			// negative => left components preferred size.

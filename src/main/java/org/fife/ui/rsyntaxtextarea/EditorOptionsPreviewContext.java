@@ -7,9 +7,12 @@ package org.fife.ui.rsyntaxtextarea;
 
 import javax.swing.event.EventListenerList;
 import java.awt.*;
+import java.io.IOException;
 import java.util.Objects;
 
 import org.fife.rtext.RText;
+import org.fife.rtext.RTextAppThemes;
+import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.rtextarea.CaretStyle;
 
 
@@ -62,7 +65,7 @@ final class EditorOptionsPreviewContext {
 	private boolean markOccurrences;
 	private Color markOccurrencesColor;
 	private boolean highlightSecondaryLanguages;
-
+	private Color[] secondaryLanguages;
 
 	private EventListenerList listeners;
 
@@ -74,6 +77,7 @@ final class EditorOptionsPreviewContext {
 	 */
 	private EditorOptionsPreviewContext() {
 		listeners = new EventListenerList();
+		secondaryLanguages = new Color[3];
 	}
 
 
@@ -143,6 +147,23 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+	/**
+	 * Returns the RSTA theme the application should use, based on the current
+	 * application state and the state of this preview context.
+	 *
+	 * @param app The application.
+	 * @return The editor theme.
+	 */
+	public Theme getEditorTheme(AbstractGUIApplication<?> app) {
+		try {
+			return RTextAppThemes.getRstaTheme(app.getTheme(), getFont());
+		} catch (IOException ioe) { // Never happens
+			app.displayException(ioe);
+		}
+		return null;
+	}
+
+
 	public boolean getEmulateTabs() {
 		return emulateTabs;
 	}
@@ -187,6 +208,7 @@ final class EditorOptionsPreviewContext {
 		return insertCaret;
 	}
 
+
 	public boolean getMarginLineEnabled() {
 		return marginLineEnabled;
 	}
@@ -224,6 +246,11 @@ final class EditorOptionsPreviewContext {
 
 	public String getPreviewLanguage() {
 		return previewLanguage;
+	}
+
+
+	public Color getSecondaryLanguageBackground(int index) {
+		return secondaryLanguages[index];
 	}
 
 
@@ -469,6 +496,14 @@ final class EditorOptionsPreviewContext {
 	public void setPreviewLanguage(String previewLanguage) {
 		if (!Objects.equals(this.previewLanguage, previewLanguage)) {
 			this.previewLanguage = previewLanguage;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setSecondaryLanguageBackground(int index, Color color) {
+		if (!Objects.equals(this.secondaryLanguages[index], color)) {
+			this.secondaryLanguages[index] = color;
 			fireChangeEvent();
 		}
 	}

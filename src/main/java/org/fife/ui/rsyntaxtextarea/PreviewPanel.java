@@ -11,6 +11,7 @@ import org.fife.ui.RScrollPane;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.app.AppTheme;
+import org.fife.ui.rtextarea.CaretStyle;
 import org.fife.ui.rtextarea.RTextArea;
 
 import javax.swing.*;
@@ -42,16 +43,15 @@ final class PreviewPanel extends JPanel
 	private AbstractGUIApplication<?> app;
 	private ResourceBundle msg;
 
-	private static final String[] SAMPLE_LANGUAGES = { "Java", "JavaScript", "Perl", "Ruby", "XML", };
+	private static final String[] SAMPLE_LANGUAGES = { "Java", "JavaScript", "Perl", "PHP", "Ruby", "XML", };
 
 	private static final String[] SAMPLES = {
-		"previewJava.txt", "previewJavaScript.txt", "previewPerl.txt", "previewRuby.txt", "previewXml.txt",
+		"previewJava.txt", "previewJavaScript.txt", "previewPerl.txt", "previewPhp.txt", "previewRuby.txt", "previewXml.txt",
 	};
 
 	private static final String[] SAMPLE_STYLES = {
-		SyntaxConstants.SYNTAX_STYLE_JAVA, SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT,
-		SyntaxConstants.SYNTAX_STYLE_PERL, SyntaxConstants.SYNTAX_STYLE_RUBY,
-		SyntaxConstants.SYNTAX_STYLE_XML,
+		SyntaxConstants.SYNTAX_STYLE_JAVA, SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT, SyntaxConstants.SYNTAX_STYLE_PERL,
+		SyntaxConstants.SYNTAX_STYLE_PHP, SyntaxConstants.SYNTAX_STYLE_RUBY, SyntaxConstants.SYNTAX_STYLE_XML,
 	};
 
 	static final String DEFAULT_PREVIEW_LANGUAGE = SAMPLE_LANGUAGES[0];
@@ -130,6 +130,8 @@ final class PreviewPanel extends JPanel
 	@Override
 	public void editorOptionsPreviewContextChanged(EditorOptionsPreviewContext context) {
 
+		Theme editorTheme = context.getEditorTheme(app);
+
 		// Options related to this component, not the preview text area
 		if (!Objects.equals(sampleCombo.getSelectedItem(), context.getPreviewLanguage())) {
 			sampleCombo.setSelectedItem(context.getPreviewLanguage());
@@ -164,31 +166,49 @@ final class PreviewPanel extends JPanel
 			textArea.setSyntaxScheme(context.getSyntaxScheme());
 		}
 		else {
-			try {
-				// Ensure the theme uses the proper "base" font and not the default one
-				Theme editorTheme = RTextAppThemes.getRstaTheme(app.getTheme(), textArea.getFont());
-				textArea.setBackgroundObject(editorTheme.bgColor);
-				textArea.setSyntaxScheme(editorTheme.scheme);
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-			}
+			textArea.setBackgroundObject(editorTheme.bgColor);
+			textArea.setSyntaxScheme(editorTheme.scheme);
 		}
 
 		// Options from the "Caret and Selection" child option panel
-		textArea.setCaretStyle(RTextArea.INSERT_MODE, context.getInsertCaret());
-		textArea.setCaretStyle(RTextArea.OVERWRITE_MODE, context.getOverwriteCaret());
-		textArea.setCaretColor(context.getCaretColor());
-		textArea.getCaret().setBlinkRate(context.getCaretBlinkRate());
-		textArea.setSelectionColor(context.getSelectionColor());
-		textArea.setSelectedTextColor(context.getSelectedTextColor());
-		textArea.setUseSelectedTextColor(context.getUseSelectedTextColor());
+		if (context.getOverrideEditorTheme()) {
+			textArea.setCaretStyle(RTextArea.INSERT_MODE, context.getInsertCaret());
+			textArea.setCaretStyle(RTextArea.OVERWRITE_MODE, context.getOverwriteCaret());
+			textArea.setCaretColor(context.getCaretColor());
+			textArea.getCaret().setBlinkRate(context.getCaretBlinkRate());
+			textArea.setSelectionColor(context.getSelectionColor());
+			textArea.setSelectedTextColor(context.getSelectedTextColor());
+			textArea.setUseSelectedTextColor(context.getUseSelectedTextColor());
+		}
+		else {
+			textArea.setCaretStyle(RTextArea.INSERT_MODE, CaretStyle.THICK_VERTICAL_LINE_STYLE);
+			textArea.setCaretStyle(RTextArea.OVERWRITE_MODE, CaretStyle.BLOCK_STYLE);
+			textArea.setCaretColor(editorTheme.caretColor);
+			textArea.getCaret().setBlinkRate(500);
+			textArea.setSelectionColor(editorTheme.selectionBG);
+			textArea.setSelectedTextColor(editorTheme.selectionFG);
+			textArea.setUseSelectedTextColor(editorTheme.useSelectionFG);
+		}
 
 		// Options from the "Highlights" child option panel
-		textArea.setMarkAllHighlightColor(context.getMarkAllHighlightColor());
-		textArea.setMarkOccurrences(context.getMarkOccurrences());
-		textArea.setMarkOccurrencesColor(context.getMarkOccurrencesColor());
-		textArea.setHighlightSecondaryLanguages(context.getHighlightSecondaryLanguages());
-		// TODO: Update the actual secondary language background colors
+		if (context.getOverrideEditorTheme()) {
+			textArea.setMarkAllHighlightColor(context.getMarkAllHighlightColor());
+			textArea.setMarkOccurrences(context.getMarkOccurrences());
+			textArea.setMarkOccurrencesColor(context.getMarkOccurrencesColor());
+			textArea.setHighlightSecondaryLanguages(context.getHighlightSecondaryLanguages());
+			for (int i = 0; i < textArea.getSecondaryLanguageCount(); i++) {
+				textArea.setSecondaryLanguageBackground(i + 1, context.getSecondaryLanguageBackground(i));
+			}
+		}
+		else {
+			textArea.setMarkAllHighlightColor(editorTheme.markAllHighlightColor);
+			textArea.setMarkOccurrences(true);
+			textArea.setMarkOccurrencesColor(editorTheme.markOccurrencesColor);
+			textArea.setHighlightSecondaryLanguages(true);
+			for (int i = 0; i < textArea.getSecondaryLanguageCount(); i++) {
+				textArea.setSecondaryLanguageBackground(i + 1, editorTheme.secondaryLanguages[i]);
+			}
+		}
 	}
 
 

@@ -15,14 +15,12 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.*;
 import org.fife.ui.rtextarea.RTextArea;
 
@@ -334,18 +332,6 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 
 
 	protected void handleRestoreDefaults() {
-
-		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
-
-		// This panel's defaults are based on the current theme.
-		RText app = (RText)getOptionsDialog().getParent();
-		Theme rstaTheme;
-		try {
-			rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
-		} catch (IOException ioe) {
-			app.displayException(ioe);
-			return;
-		}
 
 		// Note we're a little cheap here and go with RSTA's default font rather
 		// than look for fonts in themes.  This is OK since we don't actually

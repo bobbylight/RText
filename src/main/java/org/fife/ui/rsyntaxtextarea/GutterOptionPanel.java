@@ -20,13 +20,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.util.ResourceBundle;
 import javax.swing.*;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.FontSelector;
 import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RColorSwatchesButton;
@@ -152,19 +150,13 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
-		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
 		if ("RestoreDefaults".equals(command)) {
 
 			// This panel's defaults are based on the current theme.
 			RText app = (RText)getOptionsDialog().getParent();
-			Theme rstaTheme;
-			try {
-				rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
-			} catch (IOException ioe) {
-				app.displayException(ioe);
-				return;
-			}
+			EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
+			Theme rstaTheme = editorContext.getEditorTheme(app);
 
 			// Note we're a little cheap here and go with RSTA's default font rather
 			// than look for fonts in themes.  This is OK since we don't actually

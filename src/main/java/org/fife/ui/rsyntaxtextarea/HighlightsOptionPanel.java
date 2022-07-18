@@ -7,7 +7,6 @@ package org.fife.ui.rsyntaxtextarea;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.RColorButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
@@ -19,7 +18,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 
 
 /**
@@ -65,11 +63,14 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		// stuff stays at the "top."
 		Box topPanel = Box.createVerticalBox();
 
+		topPanel.add(createOverridePanel());
+		topPanel.add(Box.createVerticalStrut(5));
+
 		topPanel.add(createHighlightsPanel());
 		topPanel.add(Box.createVerticalStrut(5));
 
 		topPanel.add(createSecondaryLanguagesPanel(o));
-		topPanel.add(Box.createVerticalStrut(10));
+		topPanel.add(Box.createVerticalStrut(5));
 
 		// Create a panel containing the preview and "Restore Defaults"
 		JPanel bottomPanel = new JPanel(new BorderLayout());
@@ -208,17 +209,34 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 
 	@Override
 	protected void doApplyImpl(Frame owner) {
+
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
-		mainView.setMarkAllHighlightColor(getMarkAllHighlightColor());
-		mainView.setMarkOccurrences(enableMOCheckBox.isSelected());
-		mainView.setMarkOccurrencesColor(moColorButton.getColor());
+		mainView.setOverrideEditorStyles(overrideCheckBox.isSelected());
 
-		mainView.setHighlightSecondaryLanguages(secLangCB.isSelected());
-		for (int i=0; i<SEC_LANG_COUNT; i++) {
-			mainView.setSecondaryLanguageColor(i, secLangButtons[i].getColor());
+		if (overrideCheckBox.isSelected()) {
+
+			mainView.setMarkAllHighlightColor(getMarkAllHighlightColor());
+			mainView.setMarkOccurrences(enableMOCheckBox.isSelected());
+			mainView.setMarkOccurrencesColor(moColorButton.getColor());
+
+			mainView.setHighlightSecondaryLanguages(secLangCB.isSelected());
+			for (int i = 0; i < SEC_LANG_COUNT; i++) {
+				mainView.setSecondaryLanguageColor(i, secLangButtons[i].getColor());
+			}
 		}
+		else {
 
+			Theme editorTheme = EditorOptionsPreviewContext.get().getEditorTheme(rtext);
+			mainView.setMarkAllHighlightColor(editorTheme.markAllHighlightColor);
+			mainView.setMarkOccurrences(true);
+			mainView.setMarkOccurrencesColor(editorTheme.markOccurrencesColor);
+
+			mainView.setHighlightSecondaryLanguages(secLangCB.isSelected());
+			for (int i = 0; i < SEC_LANG_COUNT; i++) {
+				mainView.setSecondaryLanguageColor(i, editorTheme.secondaryLanguages[i]);
+			}
+		}
 	}
 
 
@@ -251,33 +269,13 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 	}
 
 
-	/**
-	 * Returns the <code>JComponent</code> at the "top" of this Options
-	 * panel.  This is the component that will receive focus if the user
-	 * switches to this Options panel in the Options dialog.  As an added
-	 * bonus, if this component is a <code>JTextComponent</code>, its
-	 * text is selected for easy changing.
-	 */
-	@Override
-	public JComponent getTopJComponent() {
-		return markAllColorButton;
-	}
-
-
 	@Override
 	protected void handleRestoreDefaults() {
 
-		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
-
 		// This panel's defaults are based on the current theme.
 		RText app = (RText)getOptionsDialog().getParent();
-		Theme rstaTheme;
-		try {
-			rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
-		} catch (IOException ioe) {
-			app.displayException(ioe);
-			return;
-		}
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
+		Theme rstaTheme = editorContext.getEditorTheme(app);
 
 		Color defaultMarkAllColor = rstaTheme.markAllHighlightColor;
 		Color defaultMarkOccurrencesColor = rstaTheme.markOccurrencesColor;
@@ -291,7 +289,8 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 			}
 		}
 
-		if (!getMarkAllHighlightColor().equals(defaultMarkAllColor) ||
+		if (overrideCheckBox.isSelected() ||
+			!getMarkAllHighlightColor().equals(defaultMarkAllColor) ||
 			!enableMOCheckBox.isSelected() ||
 			!moColorButton.getColor().equals(defaultMarkOccurrencesColor) ||
 			secLangCB.isSelected() ||
@@ -299,6 +298,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 			!defaultSecLangColor[1].equals(secLangButtons[1].getColor()) ||
 			!defaultSecLangColor[2].equals(secLangButtons[2].getColor())) {
 
+			overrideCheckBox.setSelected(false);
 			setMarkAllHighlightColor(defaultMarkAllColor);
 			enableMOCheckBox.setSelected(true);
 			moColorButton.setEnabled(true);
@@ -322,6 +322,22 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		// it is, so that the "Apply" button gets updated.
 		if (RColorButton.COLOR_CHANGED_PROPERTY.equals(e.getPropertyName())) {
 			setDirty(true);
+		}
+	}
+
+
+	@Override
+	protected void setComponentsEnabled(boolean enabled, Component... ignore) {
+
+		super.setComponentsEnabled(enabled, ignore);
+
+		// These components ignore the global change above since they have additional
+		// conditions to check to determine whether they are enabled
+		moColorButton.setEnabled(enabled && enableMOCheckBox.isSelected());
+		boolean secondaryLanguagesConfigurable = enabled && secLangCB.isSelected();
+		for (int i=0; i<SEC_LANG_COUNT; i++) {
+			secLangLabels[i].setEnabled(secondaryLanguagesConfigurable);
+			secLangButtons[i].setEnabled(secondaryLanguagesConfigurable);
 		}
 	}
 
@@ -362,6 +378,11 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 			secLangButtons[i].setColor(mainView.getSecondaryLanguageColor(i));
 		}
 
+		// Do this after initializing all values above
+		overrideCheckBox.setSelected(mainView.getOverrideEditorStyles());
+		setComponentsEnabled(overrideCheckBox.isSelected());
+
+		syncEditorOptionsPreviewContext();
 	}
 
 
@@ -380,6 +401,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 	protected void syncEditorOptionsPreviewContext() {
 
 		EditorOptionsPreviewContext context = EditorOptionsPreviewContext.get();
+		context.setOverrideEditorTheme(overrideCheckBox.isSelected());
 
 		// "Highlights" section
 		context.setMarkAllHighlightColor(getMarkAllHighlightColor());
@@ -388,7 +410,9 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 
 		// "Secondary Languages" section
 		context.setHighlightSecondaryLanguages(secLangCB.isSelected());
-		// TODO: Actually update the secondary language colors
+		for (int i = 0; i < SEC_LANG_COUNT; i++) {
+			context.setSecondaryLanguageBackground(i, secLangButtons[i].getColor());
+		}
 	}
 
 }

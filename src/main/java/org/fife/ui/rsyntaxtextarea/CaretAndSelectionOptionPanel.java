@@ -10,21 +10,16 @@
  */
 package org.fife.ui.rsyntaxtextarea;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.ComponentOrientation;
-import java.awt.Frame;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.RColorButton;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
@@ -68,6 +63,9 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		// We'll add everything to this panel, then add this panel so that
 		// stuff stays at the "top."
 		Box topPanel = Box.createVerticalBox();
+
+		topPanel.add(createOverridePanel());
+		topPanel.add(Box.createVerticalStrut(5));
 
 		topPanel.add(createCaretPanel(o));
 		topPanel.add(Box.createVerticalStrut(5));
@@ -248,15 +246,30 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 
 	@Override
 	protected void doApplyImpl(Frame owner) {
+
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
-		mainView.setCaretColor(caretColorButton.getColor());
-		mainView.setSelectionColor(getColor(selColorButton));
-		mainView.setCaretStyle(RTextArea.INSERT_MODE, getCaretStyle(RTextArea.INSERT_MODE));
-		mainView.setCaretStyle(RTextArea.OVERWRITE_MODE, getCaretStyle(RTextArea.OVERWRITE_MODE));
-		mainView.setCaretBlinkRate((Integer)blinkRateSpinner.getValue());
-		mainView.setSelectedTextColor(getColor(selectedTextColorButton));
-		mainView.setUseSelectedTextColor(selectedTextColorCB.isSelected());
+		mainView.setOverrideEditorStyles(overrideCheckBox.isSelected());
+
+		if (overrideCheckBox.isSelected()) {
+			mainView.setCaretColor(caretColorButton.getColor());
+			mainView.setSelectionColor(getColor(selColorButton));
+			mainView.setCaretStyle(RTextArea.INSERT_MODE, getCaretStyle(RTextArea.INSERT_MODE));
+			mainView.setCaretStyle(RTextArea.OVERWRITE_MODE, getCaretStyle(RTextArea.OVERWRITE_MODE));
+			mainView.setCaretBlinkRate((Integer)blinkRateSpinner.getValue());
+			mainView.setSelectedTextColor(getColor(selectedTextColorButton));
+			mainView.setUseSelectedTextColor(selectedTextColorCB.isSelected());
+		}
+		else {
+			Theme editorTheme = EditorOptionsPreviewContext.get().getEditorTheme(rtext);
+			mainView.setCaretColor(editorTheme.caretColor);
+			mainView.setSelectionColor(editorTheme.selectionBG);
+			mainView.setCaretStyle(RTextArea.INSERT_MODE, CaretStyle.THICK_VERTICAL_LINE_STYLE);
+			mainView.setCaretStyle(RTextArea.OVERWRITE_MODE, CaretStyle.BLOCK_STYLE);
+			mainView.setCaretBlinkRate(500);
+			mainView.setSelectedTextColor(editorTheme.selectionFG);
+			mainView.setUseSelectedTextColor(editorTheme.useSelectionFG);
+		}
 	}
 
 
@@ -302,25 +315,12 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 
 
 	@Override
-	public JComponent getTopJComponent() {
-		return caretColorButton;
-	}
-
-
-	@Override
 	protected void handleRestoreDefaults() {
-
-		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
 		// This panel's defaults are based on the current theme.
 		RText app = (RText)getOptionsDialog().getParent();
-		Theme rstaTheme;
-		try {
-			rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
-		} catch (IOException ioe) {
-			app.displayException(ioe);
-			return;
-		}
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
+		Theme rstaTheme = editorContext.getEditorTheme(app);
 
 		Color defaultCaretColor = rstaTheme.caretColor;
 		Color defaultSelectionColor = rstaTheme.selectionBG;
@@ -330,7 +330,8 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		CaretStyle defaultOverwriteCaret = CaretStyle.BLOCK_STYLE;
 		Integer defaultCaretBlinkRate = 500;
 
-		if (!caretColorButton.getColor().equals(defaultCaretColor) ||
+		if (overrideCheckBox.isSelected() ||
+			!caretColorButton.getColor().equals(defaultCaretColor) ||
 			!getColor(selColorButton).equals(defaultSelectionColor) ||
 			getCaretStyle(RTextArea.INSERT_MODE)!=defaultInsertCaret ||
 			getCaretStyle(RTextArea.OVERWRITE_MODE)!=defaultOverwriteCaret ||
@@ -338,6 +339,7 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 			selectedTextColorCB.isSelected() != defaultSelectedTextColorCBChecked ||
 			!selectedTextColorButton.getColor().equals(defaultSelectedTextColor)) {
 
+			overrideCheckBox.setSelected(false);
 			setCaretColor(defaultCaretColor);
 			setSelectionColor(defaultSelectionColor);
 			setCaretStyle(RTextArea.INSERT_MODE, defaultInsertCaret);
@@ -407,6 +409,17 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 	}
 
 
+	@Override
+	protected void setComponentsEnabled(boolean enabled, Component... ignore) {
+
+		super.setComponentsEnabled(enabled, ignore);
+
+		// These components ignore the global change above since they have additional
+		// conditions to check to determine whether they are enabled
+		selectedTextColorButton.setEnabled(enabled && selectedTextColorCB.isSelected());
+	}
+
+
 	/**
 	 * Sets the selection color displayed in this panel.
 	 *
@@ -438,6 +451,10 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		setSelectedTextColorEnabled(mainView.getUseSelectedTextColor());
 		selectedTextColorButton.setColor(mainView.getSelectedTextColor());
 
+		// Do this after initializing all values above
+		overrideCheckBox.setSelected(mainView.getOverrideEditorStyles());
+		setComponentsEnabled(overrideCheckBox.isSelected());
+
 		syncEditorOptionsPreviewContext();
 	}
 
@@ -457,6 +474,7 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 	protected void syncEditorOptionsPreviewContext() {
 
 		EditorOptionsPreviewContext context = EditorOptionsPreviewContext.get();
+		context.setOverrideEditorTheme(overrideCheckBox.isSelected());
 
 		// "Carets" section
 		context.setInsertCaret(getCaretStyle(RTextArea.INSERT_MODE));

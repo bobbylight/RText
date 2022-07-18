@@ -26,12 +26,17 @@ import java.util.ResourceBundle;
  * @version 1.0
  */
 abstract class AbstractTextAreaOptionPanel extends OptionsDialogPanel
-		implements ActionListener, ItemListener {
+		implements ActionListener, ItemListener, EditorOptionsPreviewContextListener {
 
 	protected JCheckBox overrideCheckBox;
 
 	protected static final ResourceBundle MSG = ResourceBundle.getBundle(
 		"org.fife.ui.rsyntaxtextarea.TextAreaOptionPanel");
+
+
+	AbstractTextAreaOptionPanel() {
+		EditorOptionsPreviewContext.get().addListener(this);
+	}
 
 
 	@Override
@@ -67,6 +72,17 @@ abstract class AbstractTextAreaOptionPanel extends OptionsDialogPanel
 		rdPanel.add(rdButton);
 		rdPanel.add(Box.createHorizontalGlue());
 		return rdPanel;
+	}
+
+
+	@Override
+	public void editorOptionsPreviewContextChanged(EditorOptionsPreviewContext context) {
+
+		// If the "override theme styles" checkbox was toggled, update things here
+		boolean overrideEditorTheme = context.getOverrideEditorTheme();
+		if (overrideCheckBox != null && overrideCheckBox.isSelected() != overrideEditorTheme) {
+			overrideCheckBox.setSelected(overrideEditorTheme);
+		}
 	}
 
 

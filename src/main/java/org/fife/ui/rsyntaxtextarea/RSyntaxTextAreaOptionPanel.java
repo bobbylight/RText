@@ -14,14 +14,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.*;
 
 
@@ -223,8 +221,6 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 
 		cp.add(bottomPanel);
 		applyComponentOrientation(orientation);
-
-		EditorOptionsPreviewContext.get().addListener(this);
 	}
 
 
@@ -283,7 +279,6 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
 		mainView.setOverrideEditorStyles(overrideCheckBox.isSelected());
-		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 
 		if (overrideCheckBox.isSelected()) {
 			mainView.setBackgroundObject(getBackgroundObject());
@@ -291,14 +286,10 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 			rtext.setSyntaxScheme(colorScheme); // Doesn't update if it doesn't have to.
 		}
 		else {
-			try {
-				Theme editorTheme = RTextAppThemes.getRstaTheme(rtext.getTheme(), editorContext.getFont());
-				mainView.setBackgroundObject(editorTheme.bgColor);
-				mainView.setBackgroundImageFileName(null);
-				rtext.setSyntaxScheme(editorTheme.scheme); // Doesn't update if it doesn't have to.
-			} catch (IOException ioe) {
-				rtext.displayException(ioe); // Never happens
-			}
+			Theme editorTheme = EditorOptionsPreviewContext.get().getEditorTheme(rtext);
+			mainView.setBackgroundObject(editorTheme.bgColor);
+			mainView.setBackgroundImageFileName(null);
+			rtext.setSyntaxScheme(editorTheme.scheme); // Doesn't update if it doesn't have to.
 		}
 	}
 
@@ -313,6 +304,8 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 			setSyntaxScheme(newScheme);
 			setDirty(true);
 		}
+
+		super.editorOptionsPreviewContextChanged(context);
 	}
 
 
@@ -357,17 +350,10 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 	@Override
 	protected void handleRestoreDefaults() {
 
-		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
-
 		// This panel's defaults are based on the current theme.
 		RText app = (RText)getOptionsDialog().getParent();
-		Theme rstaTheme;
-		try {
-			rstaTheme = RTextAppThemes.getRstaTheme(app.getTheme(), editorContext.getFont());
-		} catch (IOException ioe) {
-			app.displayException(ioe);
-			return;
-		}
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
+		Theme rstaTheme = editorContext.getEditorTheme(app);
 
 		Color defaultBackground = rstaTheme.bgColor;
 		SyntaxScheme currentScheme = colorScheme;
