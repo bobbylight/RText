@@ -58,10 +58,6 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 
 	private boolean isSettingStyle;
 
-	private static final String DEFAULTS_RESTORED			= "RSTAOpts.defaultsRestored";
-	private static final String SYNTAX_COLOR_PROPERTY		= "RSTAOpts.syntaxColor";
-	private static final String SYNTAX_FONT_PROPERTY		= "RSTAOpts.syntaxFont";
-	private static final String UNKNOWN_PROPERTY			= "RSTAOpts.unknown";
 
 	/**
 	 * Constructor.

@@ -14,8 +14,6 @@ import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -26,7 +24,6 @@ import javax.swing.*;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.ui.FontSelector;
-import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rtextarea.RTextArea;
@@ -38,8 +35,8 @@ import org.fife.ui.rtextarea.RTextArea;
  * @author Robert Futrell
  * @version 1.0
  */
-public class GutterOptionPanel extends OptionsDialogPanel
-		implements PropertyChangeListener, ActionListener, ItemListener {
+public class GutterOptionPanel extends AbstractTextAreaOptionPanel
+		implements PropertyChangeListener, ItemListener {
 
 	private JCheckBox lnEnabledCB;
 	private FontSelector fontSelector;
@@ -67,6 +64,9 @@ public class GutterOptionPanel extends OptionsDialogPanel
 		// We'll add everything to this panel, then add this panel so that
 		// stuff stays at the "top."
 		Box topPanel = new Box(BoxLayout.Y_AXIS);
+
+		topPanel.add(createOverridePanel());
+		topPanel.add(Box.createVerticalStrut(5));
 
 		// Line number options.
 		Box lineNumbersPanel = new Box(BoxLayout.Y_AXIS);
@@ -128,10 +128,11 @@ public class GutterOptionPanel extends OptionsDialogPanel
 		topPanel.add(temp);
 		topPanel.add(Box.createVerticalStrut(5));
 
-		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
-		rdButton.setActionCommand("RestoreDefaults");
-		rdButton.addActionListener(this);
-		addLeftAligned(topPanel, rdButton);
+		// Create a panel containing the preview and "Restore Defaults"
+		JPanel bottomPanel = new JPanel(new BorderLayout());
+		bottomPanel.add(new PreviewPanel(MSG, 9, 40));
+		bottomPanel.add(createRestoreDefaultsPanel(), BorderLayout.SOUTH);
+		topPanel.add(bottomPanel);
 
 		topPanel.add(Box.createVerticalGlue());
 		add(topPanel, BorderLayout.NORTH);
@@ -141,67 +142,29 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * Called when an action is performed in this panel.
-	 *
-	 * @param e The event.
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		String command = e.getActionCommand();
-
-		if ("RestoreDefaults".equals(command)) {
-
-			// This panel's defaults are based on the current theme.
-			RText app = (RText)getOptionsDialog().getParent();
-			EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
-			Theme rstaTheme = editorContext.getEditorTheme(app);
-
-			// Note we're a little cheap here and go with RSTA's default font rather
-			// than look for fonts in themes.  This is OK since we don't actually
-			// set fonts in any of the default themes.
-			Font defaultFont = RTextArea.getDefaultFont();
-			Color defLineNumberColor = rstaTheme.lineNumberColor;
-			Color defFoldIconBackground = rstaTheme.foldBG;
-			Color defArmedFoldIconBackground = rstaTheme.armedFoldBG;
-
-			if (!lnEnabledCB.isSelected() ||
-					!defaultFont.equals(fontSelector.getDisplayedFont()) ||
-					!defLineNumberColor.equals(lnColorButton.getColor()) ||
-					!defFoldIconBackground.equals(foldBackgroundButton.getColor()) ||
-					!defArmedFoldIconBackground.equals(armedFoldBackgroundButton.getColor())) {
-
-				lnEnabledCB.setSelected(true);
-				fontSelector.setDisplayedFont(defaultFont, false);
-				lnColorButton.setColor(defLineNumberColor);
-				foldBackgroundButton.setColor(defFoldIconBackground);
-				armedFoldBackgroundButton.setColor(defArmedFoldIconBackground);
-
-				setDirty(true);
-
-			}
-
-		}
-
-	}
-
-
-	/**
-	 * Applies the settings entered into this dialog on the specified
-	 * application.
-	 *
-	 * @param owner The application.
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
+
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
-		mainView.setLineNumbersEnabled(lnEnabledCB.isSelected());
-		mainView.setLineNumberFont(fontSelector.getDisplayedFont());
-		mainView.setLineNumberColor(lnColorButton.getColor());
-		mainView.setFoldBackground(foldBackgroundButton.getColor());
-		mainView.setArmedFoldBackground(armedFoldBackgroundButton.getColor());
+		mainView.setOverrideEditorStyles(overrideCheckBox.isSelected());
+
+		if (overrideCheckBox.isSelected()) {
+			mainView.setLineNumbersEnabled(lnEnabledCB.isSelected());
+			mainView.setLineNumberFont(fontSelector.getDisplayedFont());
+			mainView.setLineNumberColor(lnColorButton.getColor());
+			mainView.setFoldBackground(foldBackgroundButton.getColor());
+			mainView.setArmedFoldBackground(armedFoldBackgroundButton.getColor());
+		}
+		else {
+			EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
+			Theme editorTheme = editorContext.getEditorTheme(rtext);
+			mainView.setLineNumbersEnabled(true);
+			mainView.setLineNumberFont(editorContext.getFont());
+			mainView.setLineNumberColor(editorTheme.lineNumberColor);
+			mainView.setFoldBackground(editorTheme.foldBG);
+			mainView.setArmedFoldBackground(editorTheme.armedFoldBG);
+		}
 	}
 
 
@@ -211,33 +174,49 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * Returns the <code>JComponent</code> at the "top" of this Options
-	 * panel.  This is the component that will receive focus if the user
-	 * switches to this Options panel in the Options dialog.  As an added
-	 * bonus, if this component is a <code>JTextComponent</code>, its
-	 * text is selected for easy changing.
-	 */
 	@Override
-	public JComponent getTopJComponent() {
-		return lnEnabledCB;
+	public void handleRestoreDefaults() {
+
+		// This panel's defaults are based on the current theme.
+		RText app = (RText)getOptionsDialog().getParent();
+		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
+		Theme rstaTheme = editorContext.getEditorTheme(app);
+
+		// Note we're a little cheap here and go with RSTA's default font rather
+		// than look for fonts in themes.  This is OK since we don't actually
+		// set fonts in any of the default themes.
+		Font defaultFont = RTextArea.getDefaultFont();
+		Color defLineNumberColor = rstaTheme.lineNumberColor;
+		Color defFoldIconBackground = rstaTheme.foldBG;
+		Color defArmedFoldIconBackground = rstaTheme.armedFoldBG;
+
+		if (overrideCheckBox.isSelected() ||
+			!lnEnabledCB.isSelected() ||
+			!defaultFont.equals(fontSelector.getDisplayedFont()) ||
+			!defLineNumberColor.equals(lnColorButton.getColor()) ||
+			!defFoldIconBackground.equals(foldBackgroundButton.getColor()) ||
+			!defArmedFoldIconBackground.equals(armedFoldBackgroundButton.getColor())) {
+
+			overrideCheckBox.setSelected(false);
+			lnEnabledCB.setSelected(true);
+			fontSelector.setDisplayedFont(defaultFont, false);
+			lnColorButton.setColor(defLineNumberColor);
+			foldBackgroundButton.setColor(defFoldIconBackground);
+			armedFoldBackgroundButton.setColor(defArmedFoldIconBackground);
+
+			setDirty(true);
+
+		}
 	}
 
 
-	/**
-	 * Called when a check box is selected or deselected.
-	 *
-	 * @param e The event.
-	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		setDirty(true);
+		super.itemStateChanged(e);
 	}
 
 
-	/**
-	 * Called when a property changes in an object we're listening to.
-	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		// We need to forward this on to the options dialog, whatever
@@ -255,14 +234,32 @@ public class GutterOptionPanel extends OptionsDialogPanel
 	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {
+
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
+
 		lnEnabledCB.setSelected(mainView.getLineNumbersEnabled());
 		fontSelector.setDisplayedFont(mainView.getLineNumberFont(), false);
 		lnColorButton.setColor(mainView.getLineNumberColor());
 		foldBackgroundButton.setColor(mainView.getFoldBackground());
 		armedFoldBackgroundButton.setColor(mainView.getArmedFoldBackground());
+
+		// Do this after initializing all values above
+		overrideCheckBox.setSelected(mainView.getOverrideEditorStyles());
+		setComponentsEnabled(overrideCheckBox.isSelected());
+
+		syncEditorOptionsPreviewContext();
 	}
 
 
+	@Override
+	protected void syncEditorOptionsPreviewContext() {
+		EditorOptionsPreviewContext context = EditorOptionsPreviewContext.get();
+		context.setOverrideEditorTheme(overrideCheckBox.isSelected());
+		context.setLineNumbersEnabled(lnEnabledCB.isSelected());
+		context.setLineNumberFont(fontSelector.getDisplayedFont());
+		context.setLineNumberColor(lnColorButton.getColor());
+		context.setFoldBackground(foldBackgroundButton.getColor());
+		context.setArmedFoldBackground(armedFoldBackgroundButton.getColor());
+	}
 }

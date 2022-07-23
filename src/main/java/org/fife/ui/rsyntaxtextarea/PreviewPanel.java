@@ -7,12 +7,13 @@ package org.fife.ui.rsyntaxtextarea;
 
 import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.OptionsDialogPanel;
-import org.fife.ui.RScrollPane;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.app.AppTheme;
 import org.fife.ui.rtextarea.CaretStyle;
+import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.RTextArea;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,6 +41,7 @@ final class PreviewPanel extends JPanel
 
 	private JComboBox<String> sampleCombo;
 	private RSyntaxTextArea textArea;
+	private RTextScrollPane scrollPane;
 	private AbstractGUIApplication<?> app;
 	private ResourceBundle msg;
 
@@ -119,8 +121,10 @@ final class PreviewPanel extends JPanel
 
 		textArea = new RSyntaxTextArea(rows, cols);
 		textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+		textArea.setCodeFoldingEnabled(true);
 		textArea.setPopupMenu(null);
-		add(new RScrollPane(textArea));
+		scrollPane = new RTextScrollPane(textArea);
+		add(scrollPane);
 		add(Box.createVerticalStrut(3));
 
 		refreshDisplayedSample();
@@ -208,6 +212,23 @@ final class PreviewPanel extends JPanel
 			for (int i = 0; i < textArea.getSecondaryLanguageCount(); i++) {
 				textArea.setSecondaryLanguageBackground(i + 1, editorTheme.secondaryLanguages[i]);
 			}
+		}
+
+		// Options from the "Gutter" child option panel
+		Gutter gutter = scrollPane.getGutter();
+		if (context.getOverrideEditorTheme()) {
+			scrollPane.setLineNumbersEnabled(context.getLineNumbersEnabled());
+			gutter.setLineNumberFont(context.getLineNumberFont());
+			gutter.setLineNumberColor(context.getLineNumberColor());
+			gutter.setFoldBackground(context.getFoldBackground());
+			gutter.setArmedFoldBackground(context.getArmedFoldBackground());
+		}
+		else {
+			scrollPane.setLineNumbersEnabled(true);
+			gutter.setLineNumberFont(RTextArea.getDefaultFont());
+			gutter.setLineNumberColor(editorTheme.lineNumberColor);
+			gutter.setFoldBackground(editorTheme.foldBG);
+			gutter.setArmedFoldBackground(editorTheme.armedFoldBG);
 		}
 	}
 

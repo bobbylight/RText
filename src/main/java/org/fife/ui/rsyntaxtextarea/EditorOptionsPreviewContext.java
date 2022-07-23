@@ -67,6 +67,13 @@ final class EditorOptionsPreviewContext {
 	private boolean highlightSecondaryLanguages;
 	private Color[] secondaryLanguages;
 
+	// Options in the child "gutter" option panel
+	private boolean lineNumbersEnabled;
+	private Font lineNumberFont;
+	private Color lineNumberColor;
+	private Color foldBackground;
+	private Color armedFoldBackground;
+
 	private EventListenerList listeners;
 
 	private static final EditorOptionsPreviewContext INSTANCE = new EditorOptionsPreviewContext();
@@ -122,6 +129,11 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+	public Color getArmedFoldBackground() {
+		return armedFoldBackground;
+	}
+
+
 	public boolean getAutoInsertClosingCurly() {
 		return autoInsertClosingCurly;
 	}
@@ -169,6 +181,11 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+	public Color getFoldBackground() {
+		return foldBackground;
+	}
+
+
 	public Font getFont() {
 		return font;
 	}
@@ -206,6 +223,21 @@ final class EditorOptionsPreviewContext {
 
 	public CaretStyle getInsertCaret() {
 		return insertCaret;
+	}
+
+
+	public Color getLineNumberColor() {
+		return lineNumberColor;
+	}
+
+
+	public Font getLineNumberFont() {
+		return lineNumberFont;
+	}
+
+
+	public boolean getLineNumbersEnabled() {
+		return lineNumbersEnabled;
 	}
 
 
@@ -325,6 +357,14 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+	public void setArmedFoldBackground(Color armedFoldBackground) {
+		if (!Objects.equals(this.armedFoldBackground, armedFoldBackground)) {
+			this.armedFoldBackground = armedFoldBackground;
+			fireChangeEvent();
+		}
+	}
+
+
 	public void setAutoInsertClosingCurly(boolean autoInsertClosingCurly) {
 		if (this.autoInsertClosingCurly != autoInsertClosingCurly) {
 			this.autoInsertClosingCurly = autoInsertClosingCurly;
@@ -368,6 +408,14 @@ final class EditorOptionsPreviewContext {
 	public void setEmulateTabs(boolean emulateTabs) {
 		if (this.emulateTabs != emulateTabs) {
 			this.emulateTabs = emulateTabs;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setFoldBackground(Color foldBackground) {
+		if (!Objects.equals(this.foldBackground, foldBackground)) {
+			this.foldBackground = foldBackground;
 			fireChangeEvent();
 		}
 	}
@@ -432,6 +480,30 @@ final class EditorOptionsPreviewContext {
 	public void setInsertCaret(CaretStyle insertCaret) {
 		if (this.insertCaret != insertCaret) {
 			this.insertCaret = insertCaret;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setLineNumberColor(Color lineNumberColor) {
+		if (!Objects.equals(this.lineNumberColor, lineNumberColor)) {
+			this.lineNumberColor = lineNumberColor;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setLineNumberFont(Font font) {
+		if (!Objects.equals(this.lineNumberFont, font)) {
+			this.lineNumberFont = font;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setLineNumbersEnabled(boolean enabled) {
+		if (this.lineNumbersEnabled != enabled) {
+			this.lineNumbersEnabled = enabled;
 			fireChangeEvent();
 		}
 	}
