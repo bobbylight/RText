@@ -47,7 +47,7 @@ wrapper {
 }
 
 checkstyle {
-	toolVersion = '9.3'
+	toolVersion = '10.3.1'
 }
 
 test {
