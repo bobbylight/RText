@@ -333,6 +333,7 @@ final class EditorOptionsPreviewContext {
 
 	public void initialize(RText rtext) {
 		font = rtext.getMainView().getTextAreaFont();
+		lineNumberFont = font;
 		syntaxScheme = rtext.getSyntaxScheme();
 		previewLanguage = PreviewPanel.DEFAULT_PREVIEW_LANGUAGE;
 	}

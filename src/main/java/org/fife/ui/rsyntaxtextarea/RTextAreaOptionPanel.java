@@ -405,17 +405,6 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 	}
 
 
-	@Override
-	public void setDirty(boolean dirty) {
-		// We do this even if dirty isn't changing to ensure the
-		// preview panel is kept in sync
-		if (dirty) {
-			syncEditorOptionsPreviewContext();
-		}
-		super.setDirty(dirty);
-	}
-
-
 	/**
 	 * Sets whether or not the margin line stuff is enabled (i.e.,
 	 * whether or not the "Margin line" checkbox is checked).

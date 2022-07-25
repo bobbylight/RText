@@ -116,7 +116,7 @@ abstract class AbstractTextAreaOptionPanel extends OptionsDialogPanel
 	public void setDirty(boolean dirty) {
 		// We do this even if dirty isn't changing to ensure the
 		// preview panel is kept in sync
-		if (dirty) {
+		if (dirty && !getOptionsDialog().isInitializing()) {
 			syncEditorOptionsPreviewContext();
 		}
 		super.setDirty(dirty);
