@@ -75,13 +75,79 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		Box cp = Box.createVerticalBox();
 		add(cp, BorderLayout.NORTH);
 
-		// The "Override the theme" checkbox
 		cp.add(createOverridePanel());
 		cp.add(Box.createVerticalStrut(5));
 
-		// The "Font" section for configuring the main editor font
+		cp.add(createBackgroundPanel(orientation));
+		cp.add(Box.createVerticalStrut(5));
+
+		cp.add(createSyntaxPanel(orientation));
+		cp.add(Box.createVerticalStrut(5));
+
+		// Create a panel containing the preview and "Restore Defaults"
+		JPanel bottomPanel = new JPanel(new BorderLayout());
+		bottomPanel.add(new PreviewPanel(MSG, 9, 40));
+		bottomPanel.add(createRestoreDefaultsPanel(), BorderLayout.SOUTH);
+
+		cp.add(bottomPanel);
+		applyComponentOrientation(orientation);
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		String command = e.getActionCommand();
+
+		if ("BackgroundButton".equals(command)) {
+			if (backgroundDialog==null) {
+				backgroundDialog = new BackgroundDialog(getOptionsDialog());
+			}
+			backgroundDialog.initializeData(background, bgImageFileName);
+			backgroundDialog.setVisible(true);
+			Object newBG = backgroundDialog.getChosenBackground();
+			// Non-null newBG means user hit OK, not Cancel.
+			if (newBG!=null && !newBG.equals(background)) {
+				setBackgroundObject(newBG);
+				setBackgroundImageFileName(backgroundDialog.
+										getCurrentImageFileName());
+				setDirty(true);
+			}
+		}
+
+		// If the user clicked the "foreground" check box.
+		else if ("fgCheckBox".equals(command) && !isSettingStyle) {
+			boolean selected = fgCheckBox.isSelected();
+			foregroundButton.setEnabled(selected);
+			// Update our color scheme.
+			int i = syntaxList.getSelectedIndex();
+			colorScheme.getStyle(indexToStyle(i)).foreground =
+						selected ? foregroundButton.getColor() : null;
+			setDirty(true);
+		}
+
+		// If the user clicked the "background" check box.
+		else if ("bgCheckBox".equals(command) && !isSettingStyle) {
+			boolean selected = bgCheckBox.isSelected();
+			backgroundButton.setEnabled(selected);
+			// Update our color scheme.
+			int i = syntaxList.getSelectedIndex();
+			colorScheme.getStyle(indexToStyle(i)).background =
+						selected ? backgroundButton.getColor() : null;
+			setDirty(true);
+		}
+
+		else {
+			super.actionPerformed(e);
+		}
+	}
+
+
+	private JComponent createBackgroundPanel(ComponentOrientation orientation) {
+
 		JPanel springPanel = new JPanel(new SpringLayout());
 		springPanel.setBorder(new OptionPanelBorder(MSG.getString("Background")));
+
 		JLabel bgLabel = new JLabel(MSG.getString("Background"));
 		mainBackgroundField = new JTextField(20);
 		mainBackgroundField.setEditable(false);
@@ -89,17 +155,21 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		mainBackgroundButton.setActionCommand("BackgroundButton");
 		mainBackgroundButton.addActionListener(this);
 		bgLabel.setLabelFor(mainBackgroundButton);
+
 		Box bgRestPanel = createHorizontalBox();
 		bgRestPanel.add(mainBackgroundField);
 		bgRestPanel.add(Box.createHorizontalStrut(5));
 		bgRestPanel.add(mainBackgroundButton);
+
 		UIUtil.addLabelValuePairs(springPanel, orientation,
 			bgLabel, bgRestPanel);
 		UIUtil.makeSpringCompactGrid(springPanel, 1, 2, 0, 0, 5, 5);
-		cp.add(springPanel);
-		cp.add(Box.createVerticalStrut(5));
+		return springPanel;
+	}
 
-		// Syntax panel contains all of the "syntax highlighting" stuff.
+
+	private JPanel createSyntaxPanel(ComponentOrientation orientation) {
+
 		JPanel syntaxPanel = new JPanel(new BorderLayout());
 		syntaxPanel.setBorder(BorderFactory.createCompoundBorder(
 			new OptionPanelBorder(MSG.getString("FontsAndColors")),
@@ -175,7 +245,7 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		fgCheckBox.addActionListener(this);
 		foregroundButton = new RColorSwatchesButton(Color.BLACK);
 		foregroundButton.addPropertyChangeListener(
-						RColorButton.COLOR_CHANGED_PROPERTY, this);
+			RColorButton.COLOR_CHANGED_PROPERTY, this);
 		foregroundButton.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
 		temp.add(fgCheckBox);
 		temp.add(Box.createHorizontalStrut(5));
@@ -188,7 +258,7 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		bgCheckBox.addActionListener(this);
 		backgroundButton = new RColorSwatchesButton(Color.BLACK);
 		backgroundButton.addPropertyChangeListener(
-						RColorButton.COLOR_CHANGED_PROPERTY, this);
+			RColorButton.COLOR_CHANGED_PROPERTY, this);
 		backgroundButton.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
 		temp.add(bgCheckBox);
 		temp.add(Box.createHorizontalStrut(5));
@@ -207,65 +277,7 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		temp2.add(propertiesPanel, BorderLayout.NORTH);
 		syntaxPanel.add(temp2);
 
-		// Add the syntax panel to us.
-		cp.add(syntaxPanel);
-
-		// Create a panel containing the preview and "Restore Defaults"
-		JPanel bottomPanel = new JPanel(new BorderLayout());
-		bottomPanel.add(new PreviewPanel(MSG, 9, 40));
-		bottomPanel.add(createRestoreDefaultsPanel(), BorderLayout.SOUTH);
-
-		cp.add(bottomPanel);
-		applyComponentOrientation(orientation);
-	}
-
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		String command = e.getActionCommand();
-
-		if ("BackgroundButton".equals(command)) {
-			if (backgroundDialog==null) {
-				backgroundDialog = new BackgroundDialog(getOptionsDialog());
-			}
-			backgroundDialog.initializeData(background, bgImageFileName);
-			backgroundDialog.setVisible(true);
-			Object newBG = backgroundDialog.getChosenBackground();
-			// Non-null newBG means user hit OK, not Cancel.
-			if (newBG!=null && !newBG.equals(background)) {
-				setBackgroundObject(newBG);
-				setBackgroundImageFileName(backgroundDialog.
-										getCurrentImageFileName());
-				setDirty(true);
-			}
-		}
-
-		// If the user clicked the "foreground" check box.
-		else if ("fgCheckBox".equals(command) && !isSettingStyle) {
-			boolean selected = fgCheckBox.isSelected();
-			foregroundButton.setEnabled(selected);
-			// Update our color scheme.
-			int i = syntaxList.getSelectedIndex();
-			colorScheme.getStyle(indexToStyle(i)).foreground =
-						selected ? foregroundButton.getColor() : null;
-			setDirty(true);
-		}
-
-		// If the user clicked the "background" check box.
-		else if ("bgCheckBox".equals(command) && !isSettingStyle) {
-			boolean selected = bgCheckBox.isSelected();
-			backgroundButton.setEnabled(selected);
-			// Update our color scheme.
-			int i = syntaxList.getSelectedIndex();
-			colorScheme.getStyle(indexToStyle(i)).background =
-						selected ? backgroundButton.getColor() : null;
-			setDirty(true);
-		}
-
-		else {
-			super.actionPerformed(e);
-		}
+		return syntaxPanel;
 	}
 
 

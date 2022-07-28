@@ -65,68 +65,18 @@ public class FontAndTabsOptionPanel extends AbstractTextAreaOptionPanel
 		// stuff stays at the "top."
 		Box topPanel = Box.createVerticalBox();
 
-		// The "Font" section for configuring the main editor font
-		JPanel fontPanel = new JPanel(new BorderLayout());
-		fontPanel.setBorder(new OptionPanelBorder(MSG.getString("Font")));
-		fontSelector = new FontSelector();
-		fontSelector.setColorSelectable(true);
-		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
-		fontSelector.addPropertyChangeListener(FontSelector.FONT_COLOR_PROPERTY, this);
-		fontPanel.add(fontSelector);
-		topPanel.add(fontPanel);
-
+		topPanel.add(createFontPanel());
 		topPanel.add(Box.createVerticalStrut(5));
 
-		Box tabPanel = Box.createVerticalBox();
-		tabPanel.setBorder(new OptionPanelBorder(MSG.getString("Tabs")));
-		Box inputPanel = createHorizontalBox();
-		tabSizeLabel = new JLabel(MSG.getString("TabSize"));
-		tabSizeField = new JTextField();
-		tabSizeField.getDocument().addDocumentListener(this);
-		Dimension size = new Dimension(40,tabSizeField.getPreferredSize().height);
-		tabSizeField.setMaximumSize(size);
-		tabSizeField.setPreferredSize(size);
-		inputPanel.add(tabSizeLabel);
-		inputPanel.add(tabSizeField);
-		inputPanel.add(Box.createHorizontalGlue());
-		tabPanel.add(inputPanel);
-		emulateTabsCheckBox = new JCheckBox(MSG.getString("EmulateTabs"));
-		emulateTabsCheckBox.setActionCommand("EmulateTabsCheckBox");
-		emulateTabsCheckBox.addActionListener(this);
-		addLeftAligned(tabPanel, emulateTabsCheckBox);
-		tabPanel.add(Box.createVerticalGlue());
-		topPanel.add(tabPanel);
-
+		topPanel.add(createTabPanel());
 		topPanel.add(Box.createVerticalStrut(5));
 
-		Box otherPanel = Box.createVerticalBox();
-		otherPanel.setBorder(new OptionPanelBorder(MSG.getString("Other")));
-
-		visibleWhitespaceCheckBox = createCheckBox("VisibleWhitespace");
-		addLeftAligned(otherPanel, visibleWhitespaceCheckBox);
-		otherPanel.add(Box.createVerticalStrut(3));
-
-		visibleEOLCheckBox = createCheckBox("VisibleEOL");
-		addLeftAligned(otherPanel, visibleEOLCheckBox);
-		otherPanel.add(Box.createVerticalStrut(3));
-
-		showTabLinesCheckBox = new JCheckBox(MSG.getString("ShowIndentGuide"));
-		showTabLinesCheckBox.setActionCommand("ShowIndentGuide");
-		showTabLinesCheckBox.addActionListener(this);
-		Box box = createHorizontalBox();
-		box.add(showTabLinesCheckBox);
-		box.add(Box.createHorizontalGlue());
-		addLeftAligned(otherPanel, box);
-		otherPanel.add(Box.createVerticalStrut(3));
-
-		topPanel.add(otherPanel);
-
-		// The "preview panel" shows how the editor will look with these (unsaved) changes
-		JPanel previewPanel = new PreviewPanel(MSG, 9, 40);
+		topPanel.add(createOtherPanel());
+		topPanel.add(Box.createVerticalStrut(5));
 
 		// Create a panel containing the preview and "Restore Defaults"
 		JPanel bottomPanel = new JPanel(new BorderLayout());
-		bottomPanel.add(previewPanel);
+		bottomPanel.add(new PreviewPanel(MSG, 9, 40));
 		bottomPanel.add(createRestoreDefaultsPanel(), BorderLayout.SOUTH);
 		topPanel.add(bottomPanel);
 
@@ -177,6 +127,73 @@ public class FontAndTabsOptionPanel extends AbstractTextAreaOptionPanel
 		cb.setActionCommand(key);
 		cb.addActionListener(this);
 		return cb;
+	}
+
+
+	private JPanel createFontPanel() {
+
+		JPanel fontPanel = new JPanel(new BorderLayout());
+		fontPanel.setBorder(new OptionPanelBorder(MSG.getString("Font")));
+
+		fontSelector = new FontSelector();
+		fontSelector.setColorSelectable(true);
+		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
+		fontSelector.addPropertyChangeListener(FontSelector.FONT_COLOR_PROPERTY, this);
+		fontPanel.add(fontSelector);
+
+		return fontPanel;
+	}
+
+
+	private JComponent createOtherPanel() {
+
+		Box otherPanel = Box.createVerticalBox();
+		otherPanel.setBorder(new OptionPanelBorder(MSG.getString("Other")));
+
+		visibleWhitespaceCheckBox = createCheckBox("VisibleWhitespace");
+		addLeftAligned(otherPanel, visibleWhitespaceCheckBox);
+		otherPanel.add(Box.createVerticalStrut(3));
+
+		visibleEOLCheckBox = createCheckBox("VisibleEOL");
+		addLeftAligned(otherPanel, visibleEOLCheckBox);
+		otherPanel.add(Box.createVerticalStrut(3));
+
+		showTabLinesCheckBox = new JCheckBox(MSG.getString("ShowIndentGuide"));
+		showTabLinesCheckBox.setActionCommand("ShowIndentGuide");
+		showTabLinesCheckBox.addActionListener(this);
+		Box box = createHorizontalBox();
+		box.add(showTabLinesCheckBox);
+		box.add(Box.createHorizontalGlue());
+		addLeftAligned(otherPanel, box);
+
+		return otherPanel;
+	}
+
+
+	private JComponent createTabPanel() {
+
+		Box tabPanel = Box.createVerticalBox();
+		tabPanel.setBorder(new OptionPanelBorder(MSG.getString("Tabs")));
+
+		Box inputPanel = createHorizontalBox();
+		tabSizeLabel = new JLabel(MSG.getString("TabSize"));
+		tabSizeField = new JTextField();
+		tabSizeField.getDocument().addDocumentListener(this);
+		Dimension size = new Dimension(40,tabSizeField.getPreferredSize().height);
+		tabSizeField.setMaximumSize(size);
+		tabSizeField.setPreferredSize(size);
+		inputPanel.add(tabSizeLabel);
+		inputPanel.add(tabSizeField);
+		inputPanel.add(Box.createHorizontalGlue());
+		tabPanel.add(inputPanel);
+
+		emulateTabsCheckBox = new JCheckBox(MSG.getString("EmulateTabs"));
+		emulateTabsCheckBox.setActionCommand("EmulateTabsCheckBox");
+		emulateTabsCheckBox.addActionListener(this);
+		addLeftAligned(tabPanel, emulateTabsCheckBox);
+
+		tabPanel.add(Box.createVerticalGlue());
+		return tabPanel;
 	}
 
 

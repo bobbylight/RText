@@ -144,12 +144,9 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 
 		topPanel.add(bigOtherPanel);
 
-		// The "preview panel" shows how the editor will look with these (unsaved) changes
-		JPanel previewPanel = new PreviewPanel(MSG, 9, 40);
-
 		// Create a panel containing the preview and "Restore Defaults"
 		JPanel bottomPanel = new JPanel(new BorderLayout());
-		bottomPanel.add(previewPanel);
+		bottomPanel.add(new PreviewPanel(MSG, 9, 40));
 		bottomPanel.add(createRestoreDefaultsPanel(), BorderLayout.SOUTH);
 		topPanel.add(bottomPanel);
 

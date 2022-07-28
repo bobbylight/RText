@@ -18,7 +18,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ResourceBundle;
 import javax.swing.*;
 
 import org.fife.rtext.AbstractMainView;
@@ -53,10 +52,7 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
 
-		ResourceBundle msg = ResourceBundle.getBundle(
-					"org.fife.ui.rsyntaxtextarea.GutterOptionPanel");
-
-		setName(msg.getString("Title"));
+		setName(MSG.getString("Title.Gutter"));
 
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
@@ -71,8 +67,8 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 		// Line number options.
 		Box lineNumbersPanel = new Box(BoxLayout.Y_AXIS);
 		lineNumbersPanel.setBorder(new OptionPanelBorder(
-									msg.getString("LineNumbers")));
-		lnEnabledCB = new JCheckBox(msg.getString("Enabled"));
+									MSG.getString("LineNumbers")));
+		lnEnabledCB = new JCheckBox(MSG.getString("Enabled"));
 		lnEnabledCB.addItemListener(this);
 		JComponent temp = new JPanel(new BorderLayout());
 		temp.add(lnEnabledCB, BorderLayout.LINE_START);
@@ -85,7 +81,7 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 		fontPanel.add(fontSelector);
 		lineNumbersPanel.add(fontPanel);
 		lineNumbersPanel.add(Box.createVerticalStrut(5));
-		JLabel lnColorLabel = new JLabel(msg.getString("Color"));
+		JLabel lnColorLabel = new JLabel(MSG.getString("Color"));
 		lnColorButton = new RColorSwatchesButton();
 		lnColorButton.addPropertyChangeListener(
 					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
@@ -103,8 +99,8 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 
 		// Fold area options
 		JPanel foldPanel = new JPanel(new SpringLayout());
-		foldPanel.setBorder(new OptionPanelBorder(msg.getString("FoldArea")));
-		JLabel foldBackgroundLabel = new JLabel(msg.getString("FoldBackground"));
+		foldPanel.setBorder(new OptionPanelBorder(MSG.getString("FoldArea")));
+		JLabel foldBackgroundLabel = new JLabel(MSG.getString("FoldBackground"));
 		foldBackgroundButton = new RColorSwatchesButton();
 		foldBackgroundButton.addPropertyChangeListener(
 					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
@@ -112,7 +108,7 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 		addLeftAligned(foldBgButtonPanel, foldBackgroundButton);
 		foldBackgroundLabel.setLabelFor(foldBackgroundButton);
 		JLabel armedFoldBackgroundLabel = new JLabel(
-				msg.getString("ArmedFoldBackground"));
+				MSG.getString("ArmedFoldBackground"));
 		armedFoldBackgroundButton = new RColorSwatchesButton();
 		armedFoldBackgroundButton.addPropertyChangeListener(
 					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
