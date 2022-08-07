@@ -291,6 +291,7 @@ public final class RTextUtilities {
 			addFilter(chooser, msg, "PHP",
 				"php");
 			addFilter(chooser, msg, "PropertiesFiles", "properties");
+			addFilter(chooser, msg, "Protobuf", "proto");
 			addFilter(chooser, msg, "Python", "py");
 			addFilter(chooser, msg, "Ruby", "rb");
 			addFilter(chooser, msg, "SAS", "sas");

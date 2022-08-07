@@ -39,14 +39,11 @@ import org.fife.ui.app.*;
 import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.app.icons.RasterImageIconGroup;
 import org.fife.ui.app.icons.SvgIconGroup;
-import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.dockablewindows.DockableWindowPanel;
-import org.fife.ui.rsyntaxtextarea.CodeTemplateManager;
-import org.fife.ui.rsyntaxtextarea.FileLocation;
-import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rtextfilechooser.FileChooserOwner;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.util.TranslucencyUtil;
@@ -1026,6 +1023,10 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		getContentPane().add(csp);
 
 		splashScreen.updateStatus(getString("CreatingStatusBar"), 25);
+
+		// TODO: Remove me once code folding is globally toggled, or at least
+		// centrally toggled
+		mainView.setCodeFoldingEnabledFor(SyntaxConstants.SYNTAX_STYLE_PROTO, true);
 
 		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
 			System.err.println("preStatusBarInit: " + (System.currentTimeMillis()-start));
