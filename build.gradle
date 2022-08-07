@@ -20,19 +20,19 @@ dependencies {
 	implementation('com.fifesoft.rtext:fife.common:5.0.1-SNAPSHOT') { changing = true }
 
 	implementation('com.fifesoft:rsyntaxtextarea:3.2.1-SNAPSHOT') { changing = true }
-	implementation('com.fifesoft:autocomplete:3.1.5') { changing = true }
-	implementation('com.fifesoft:rstaui:3.1.4') { changing = true }
-	implementation('com.fifesoft:spellchecker:3.1.4') { changing = true }
+	implementation('com.fifesoft:autocomplete:3.2.0') { changing = true }
+	implementation('com.fifesoft:rstaui:3.2.0') { changing = true }
+	implementation('com.fifesoft:spellchecker:3.2.0') { changing = true }
 	implementation('com.fifesoft:languagesupport:3.1.4')
 
 	implementation 'com.formdev:flatlaf:1.6.5'
 
 	implementation 'net.sf.jtidy:jtidy:r938'
-	implementation 'org.codehaus.groovy:groovy-all:3.0.10'
+	implementation 'org.codehaus.groovy:groovy-all:3.0.12'
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
 
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
 }
 repositories {
 	mavenCentral()
@@ -43,11 +43,11 @@ repositories {
 }
 
 wrapper {
-	gradleVersion = '7.3.3'
+	gradleVersion = '7.5.1'
 }
 
 checkstyle {
-	toolVersion = '10.3.1'
+	toolVersion = '10.3.2'
 }
 
 test {
