@@ -77,6 +77,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	public int maxFileHistorySize;
 	public String fileHistoryString;				// String representing the file history.
 	public boolean currentLineHighlightEnabled;
+	public Color currentLineHighlightColor;
 	public int mainView;						// Either RText.TABBED_VIEW or RText.SPLIT_PANE_VIEW.
 	public boolean overrideEditorStyles;
 	public boolean bracketMatchingEnabled;
@@ -249,6 +250,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		maxFileHistorySize = 20;
 		fileHistoryString = null;
 		currentLineHighlightEnabled = true;
+		currentLineHighlightColor = theme.currentLineHighlight;
 		mainView = RText.TABBED_VIEW;
 		overrideEditorStyles = false;
 		language = "en";	// Default to English.

@@ -30,6 +30,7 @@ import java.beans.PropertyChangeListener;
 public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		implements ChangeListener, PropertyChangeListener {
 
+	private RColorSwatchesButton currentLineColorButton;
 	private RColorSwatchesButton markAllColorButton;
 	private JCheckBox enableMOCheckBox;
 	private RColorSwatchesButton moColorButton;
@@ -111,8 +112,21 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 	}
 
 
+	private void addLabelledColorSelection(Container parent, String labelKey, RColorSwatchesButton button) {
+		button.addPropertyChangeListener(
+			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
+		Box box = createHorizontalBox();
+		box.add(UIUtil.newLabel(MSG, labelKey, button));
+		box.add(Box.createHorizontalStrut(5));
+		box.add(button);
+		box.add(Box.createHorizontalGlue());
+		parent.add(box);
+		parent.add(Box.createVerticalStrut(3));
+	}
+
+
 	/**
-	 * Creates a panel containing the "mark occurrences"-related options.
+	 * Creates a panel containing the "highlights"-related options.
 	 *
 	 * @return The panel.
 	 */
@@ -121,19 +135,11 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		Box p = Box.createVerticalBox();
 		p.setBorder(new OptionPanelBorder(MSG.getString("Section.Highlights")));
 
+		currentLineColorButton = new RColorSwatchesButton();
+		addLabelledColorSelection(p, "CurrentLineHighlightColor", currentLineColorButton);
 
 		markAllColorButton = new RColorSwatchesButton();
-		markAllColorButton.addPropertyChangeListener(
-			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		JLabel markAllLabel = new JLabel(MSG.getString("MarkAllColor"));
-		markAllLabel.setLabelFor(markAllColorButton);
-		Box box = createHorizontalBox();
-		box.add(markAllLabel);
-		box.add(Box.createHorizontalStrut(5));
-		box.add(markAllColorButton);
-		box.add(Box.createHorizontalGlue());
-		p.add(box);
-		p.add(Box.createVerticalStrut(3));
+		addLabelledColorSelection(p, "MarkAllColor", markAllColorButton);
 
 		enableMOCheckBox = new JCheckBox(
 			MSG.getString("EnableMarkOccurrences"));
@@ -144,7 +150,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		moColorButton.addPropertyChangeListener(
 			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
 
-		box = createHorizontalBox();
+		Box box = createHorizontalBox();
 		box.add(enableMOCheckBox);
 		box.add(Box.createHorizontalStrut(5));
 		box.add(moColorButton);
@@ -216,7 +222,8 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 
 		if (overrideCheckBox.isSelected()) {
 
-			mainView.setMarkAllHighlightColor(getMarkAllHighlightColor());
+			mainView.setCurrentLineHighlightColor(currentLineColorButton.getColor());
+			mainView.setMarkAllHighlightColor(markAllColorButton.getColor());
 			mainView.setMarkOccurrences(enableMOCheckBox.isSelected());
 			mainView.setMarkOccurrencesColor(moColorButton.getColor());
 
@@ -259,16 +266,6 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 	}
 
 
-	/**
-	 * Returns the color selected by the user for "mark all".
-	 *
-	 * @return The color.
-	 */
-	public Color getMarkAllHighlightColor() {
-		return markAllColorButton.getColor();
-	}
-
-
 	@Override
 	protected void handleRestoreDefaults() {
 
@@ -290,7 +287,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		}
 
 		if (overrideCheckBox.isSelected() ||
-			!getMarkAllHighlightColor().equals(defaultMarkAllColor) ||
+			!markAllColorButton.getColor().equals(defaultMarkAllColor) ||
 			!enableMOCheckBox.isSelected() ||
 			!moColorButton.getColor().equals(defaultMarkOccurrencesColor) ||
 			secLangCB.isSelected() ||
@@ -355,7 +352,6 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 	 * Sets the color selected for "mark all".
 	 *
 	 * @param color The color to have selected.
-	 * @see #getMarkAllHighlightColor()
 	 */
 	private void setMarkAllHighlightColor(Color color) {
 		if (color!=null)
@@ -368,6 +364,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
+		currentLineColorButton.setColor(mainView.getCurrentLineHighlightColor());
 		setMarkAllHighlightColor(mainView.getMarkAllHighlightColor());
 		enableMOCheckBox.setSelected(mainView.getMarkOccurrences());
 		moColorButton.setEnabled(enableMOCheckBox.isSelected());
@@ -404,7 +401,8 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		context.setOverrideEditorTheme(overrideCheckBox.isSelected());
 
 		// "Highlights" section
-		context.setMarkAllHighlightColor(getMarkAllHighlightColor());
+		context.setCurrentLineHighlightColor(currentLineColorButton.getColor());
+		context.setMarkAllHighlightColor(markAllColorButton.getColor());
 		context.setMarkOccurrences(enableMOCheckBox.isSelected());
 		context.setMarkOccurrencesColor(moColorButton.getColor());
 

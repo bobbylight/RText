@@ -1083,6 +1083,17 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns the color of the current line highlight, if enaabled.
+	 *
+	 * @return The current line highlight color.
+	 * @see #setCurrentLineHighlightColor(Color)
+	 */
+	public Color getCurrentLineHighlightColor() {
+		return currentLineColor;
+	}
+
+
+	/**
 	 * Returns the currently active text area.
 	 *
 	 * @return The currently active text area.
@@ -3240,7 +3251,7 @@ public abstract class AbstractMainView extends JPanel
 	 * @see #isCurrentLineHighlightEnabled
 	 * @see #setCurrentLineHighlightEnabled
 	 */
-	private void setCurrentLineHighlightColor(Color color) {
+	public void setCurrentLineHighlightColor(Color color) {
 		if (color==null)
 			throw new NullPointerException();
 		currentLineColor = color;
@@ -3252,9 +3263,9 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Sets whether or not the current line is highlighted.
+	 * Sets whether the current line is highlighted.
 	 *
-	 * @param enabled Whether or not to highlight the current line.
+	 * @param enabled Whether to highlight the current line.
 	 * @see #isCurrentLineHighlightEnabled
 	 */
 	public void setCurrentLineHighlightEnabled(boolean enabled) {

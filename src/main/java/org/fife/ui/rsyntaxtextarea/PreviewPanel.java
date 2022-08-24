@@ -44,6 +44,7 @@ final class PreviewPanel extends JPanel
 	private RTextScrollPane scrollPane;
 	private AbstractGUIApplication<?> app;
 	private ResourceBundle msg;
+	private boolean firstTime;
 
 	private static final String[] SAMPLE_LANGUAGES = { "Java", "JavaScript", "Perl", "PHP", "Ruby", "XML", };
 
@@ -63,6 +64,7 @@ final class PreviewPanel extends JPanel
 		this.msg = msg;
 		EditorOptionsPreviewContext.get().addListener(this);
 		createUI(rows, cols);
+		firstTime = true;
 	}
 
 
@@ -80,10 +82,13 @@ final class PreviewPanel extends JPanel
 	@Override
 	public void addNotify() {
 		super.addNotify();
-		Window optionsDialog = SwingUtilities.getWindowAncestor(this);
-		app = (AbstractGUIApplication<?>)optionsDialog.getParent();
-		app.addPropertyChangeListener(AbstractGUIApplication.THEME_PROPERTY, this);
-		initializeForTheme(app.getTheme());
+		if (firstTime) {
+			Window optionsDialog = SwingUtilities.getWindowAncestor(this);
+			app = (AbstractGUIApplication<?>) optionsDialog.getParent();
+			app.addPropertyChangeListener(AbstractGUIApplication.THEME_PROPERTY, this);
+			initializeForTheme(app.getTheme());
+			firstTime = false;
+		}
 	}
 
 
@@ -196,6 +201,9 @@ final class PreviewPanel extends JPanel
 
 		// Options from the "Highlights" child option panel
 		if (context.getOverrideEditorTheme()) {
+			if (context.getCurrentLineHighlightColor() != null) { // ugh
+				textArea.setCurrentLineHighlightColor(context.getCurrentLineHighlightColor());
+			}
 			textArea.setMarkAllHighlightColor(context.getMarkAllHighlightColor());
 			textArea.setMarkOccurrences(context.getMarkOccurrences());
 			textArea.setMarkOccurrencesColor(context.getMarkOccurrencesColor());
@@ -205,6 +213,7 @@ final class PreviewPanel extends JPanel
 			}
 		}
 		else {
+			textArea.setCurrentLineHighlightColor(editorTheme.currentLineHighlight);
 			textArea.setMarkAllHighlightColor(editorTheme.markAllHighlightColor);
 			textArea.setMarkOccurrences(true);
 			textArea.setMarkOccurrencesColor(editorTheme.markOccurrencesColor);

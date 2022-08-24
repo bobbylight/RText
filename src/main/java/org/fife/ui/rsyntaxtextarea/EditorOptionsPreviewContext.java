@@ -61,6 +61,7 @@ final class EditorOptionsPreviewContext {
 	private boolean useSelectedTextColor;
 
 	// Options in the child "highlights" option panel
+	private Color currentLineHighlightColor;
 	private Color markAllHighlightColor;
 	private boolean markOccurrences;
 	private Color markOccurrencesColor;
@@ -156,6 +157,11 @@ final class EditorOptionsPreviewContext {
 
 	public boolean getClearWhitespaceLines() {
 		return clearWhitespaceLines;
+	}
+
+
+	public Color getCurrentLineHighlightColor() {
+		return currentLineHighlightColor;
 	}
 
 
@@ -401,6 +407,14 @@ final class EditorOptionsPreviewContext {
 	public void setClearWhitespaceLines(boolean remove) {
 		if (this.clearWhitespaceLines != remove) {
 			this.clearWhitespaceLines = remove;
+			fireChangeEvent();
+		}
+	}
+
+
+	public void setCurrentLineHighlightColor(Color color) {
+		if (this.currentLineHighlightColor != color) {
+			this.currentLineHighlightColor = color;
 			fireChangeEvent();
 		}
 	}

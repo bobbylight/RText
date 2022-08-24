@@ -392,9 +392,9 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 
 
 	/**
-	 * Sets whether or not the bracket match color checkbox is selected.
+	 * Sets whether the bracket match color checkbox is selected.
 	 *
-	 * @param selected Whether or not the checkbox is selected.
+	 * @param selected Whether the checkbox is selected.
 	 */
 	public void setBracketMatchCheckboxSelected(boolean selected) {
 		bracketMatchCheckBox.setSelected(selected);
@@ -403,10 +403,10 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 
 
 	/**
-	 * Sets whether or not the margin line stuff is enabled (i.e.,
-	 * whether or not the "Margin line" checkbox is checked).
+	 * Sets whether the margin line stuff is enabled (i.e.,
+	 * whether the "Margin line" checkbox is checked).
 	 *
-	 * @param enabled Whether or not the margin line options should be
+	 * @param enabled Whether the margin line options should be
 	 *        enabled.
 	 */
 	private void setMarginLineEnabled(boolean enabled) {
