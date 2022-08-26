@@ -2174,7 +2174,7 @@ public abstract class AbstractMainView extends JPanel
 		updateBookmarkIcon();
 		owner.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, this);
 		owner.addPropertyChangeListener(AbstractGUIApplication.THEME_PROPERTY, e -> {
-			installAppTheme((AppTheme)e.getNewValue());
+			installAppTheme((AppTheme)e.getNewValue(), true);
 		});
 		searchManager = new SearchManager(owner);
 
@@ -2210,6 +2210,7 @@ public abstract class AbstractMainView extends JPanel
 		setUseSelectedTextColor(prefs.useSelectedTextColor);
 		setLineWrap(prefs.wordWrap);
 		setCurrentLineHighlightEnabled(prefs.currentLineHighlightEnabled);
+		setCurrentLineHighlightColor(prefs.currentLineHighlightColor);
 		setBracketMatchingEnabled(prefs.bracketMatchingEnabled);
 		setMatchBothBrackets(prefs.matchBothBrackets);
 		setMatchedBracketBGColor(prefs.matchedBracketBGColor);
@@ -2292,7 +2293,7 @@ public abstract class AbstractMainView extends JPanel
 		setSelectedIndex(0);
 
 		// Do this after other initialization
-		installAppTheme(owner.getTheme());
+		installAppTheme(owner.getTheme(), false);
 
 		// Update the title of the RText window.
 		owner.setMessages(currentTextArea.getFileFullPath(), null);
@@ -2300,18 +2301,19 @@ public abstract class AbstractMainView extends JPanel
 	}
 
 
-	private void installAppTheme(AppTheme theme) {
+	private void installAppTheme(AppTheme theme, boolean overrideOtherProps) {
 
 		Color labelErrorForeground = (Color)theme.getExtraUiDefaults().get("rtext.labelErrorForeground");
 		setHighlightModifiedDocumentDisplayNames(labelErrorForeground != null);
 		setModifiedDocumentDisplayNamesColor(labelErrorForeground);
 
-		try {
-			Theme rstaTheme = RTextAppThemes.getRstaTheme(theme, getTextAreaFont());
-			setRstaTheme(rstaTheme);
-			setSyntaxScheme(owner.getSyntaxScheme()); // Could also get from the theme
-		} catch (IOException ioe) {
-			owner.displayException(ioe);
+		if (overrideOtherProps) {
+			try {
+				Theme rstaTheme = RTextAppThemes.getRstaTheme(theme, getTextAreaFont());
+				setRstaTheme(rstaTheme);
+			} catch (IOException ioe) {
+				owner.displayException(ioe);
+			}
 		}
 	}
 
@@ -3874,7 +3876,7 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * TODO: Replace contents here with simply Theme.apply() on all text areas.
+	 * Sets properties in this component to match the specified theme.
 	 *
 	 * @param theme The theme to apply. This cannot be {@code null}.
 	 */

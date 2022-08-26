@@ -97,6 +97,7 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 		prefs.maxFileHistorySize			= menuBar.getMaximumFileHistorySize();
 		prefs.fileHistoryString			= menuBar.getFileHistoryString();
 		prefs.currentLineHighlightEnabled	= mainView.isCurrentLineHighlightEnabled();
+		prefs.currentLineHighlightColor = mainView.getCurrentLineHighlightColor();
 		prefs.mainView					= rtext.getMainViewStyle();
 		prefs.overrideEditorStyles		= mainView.getOverrideEditorStyles();
 		prefs.bracketMatchingEnabled		= mainView.isBracketMatchingEnabled();

@@ -235,6 +235,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		else {
 
 			Theme editorTheme = EditorOptionsPreviewContext.get().getEditorTheme(rtext);
+			mainView.setCurrentLineHighlightColor(editorTheme.currentLineHighlight);
 			mainView.setMarkAllHighlightColor(editorTheme.markAllHighlightColor);
 			mainView.setMarkOccurrences(true);
 			mainView.setMarkOccurrencesColor(editorTheme.markOccurrencesColor);
@@ -274,6 +275,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 		Theme rstaTheme = editorContext.getEditorTheme(app);
 
+		Color defaultCurrentLineColor = rstaTheme.currentLineHighlight;
 		Color defaultMarkAllColor = rstaTheme.markAllHighlightColor;
 		Color defaultMarkOccurrencesColor = rstaTheme.markOccurrencesColor;
 		Color[] defaultSecLangColor = new Color[SEC_LANG_COUNT];
@@ -287,6 +289,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		}
 
 		if (overrideCheckBox.isSelected() ||
+			!currentLineColorButton.getColor().equals(defaultCurrentLineColor) ||
 			!markAllColorButton.getColor().equals(defaultMarkAllColor) ||
 			!enableMOCheckBox.isSelected() ||
 			!moColorButton.getColor().equals(defaultMarkOccurrencesColor) ||
@@ -296,7 +299,8 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 			!defaultSecLangColor[2].equals(secLangButtons[2].getColor())) {
 
 			overrideCheckBox.setSelected(false);
-			setMarkAllHighlightColor(defaultMarkAllColor);
+			currentLineColorButton.setColor(defaultCurrentLineColor);
+			markAllColorButton.setColor(defaultMarkAllColor);
 			enableMOCheckBox.setSelected(true);
 			moColorButton.setEnabled(true);
 			moColorButton.setColor(defaultMarkOccurrencesColor);
@@ -348,24 +352,13 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 	}
 
 
-	/**
-	 * Sets the color selected for "mark all".
-	 *
-	 * @param color The color to have selected.
-	 */
-	private void setMarkAllHighlightColor(Color color) {
-		if (color!=null)
-			markAllColorButton.setColor(color);
-	}
-
-
 	@Override
 	protected void setValuesImpl(Frame owner) {
 
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
 		currentLineColorButton.setColor(mainView.getCurrentLineHighlightColor());
-		setMarkAllHighlightColor(mainView.getMarkAllHighlightColor());
+		markAllColorButton.setColor(mainView.getMarkAllHighlightColor());
 		enableMOCheckBox.setSelected(mainView.getMarkOccurrences());
 		moColorButton.setEnabled(enableMOCheckBox.isSelected());
 		moColorButton.setColor(mainView.getMarkOccurrencesColor());
