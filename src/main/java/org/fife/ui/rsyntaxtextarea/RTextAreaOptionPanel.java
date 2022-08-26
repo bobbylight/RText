@@ -222,7 +222,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		}
 
 		else {
-			handleRestoreDefaults();
+			super.actionPerformed(e);
 		}
 	}
 

@@ -107,7 +107,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		}
 
 		else {
-			handleRestoreDefaults();
+			super.actionPerformed(e);
 		}
 	}
 
@@ -293,7 +293,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 			!markAllColorButton.getColor().equals(defaultMarkAllColor) ||
 			!enableMOCheckBox.isSelected() ||
 			!moColorButton.getColor().equals(defaultMarkOccurrencesColor) ||
-			secLangCB.isSelected() ||
+			!secLangCB.isSelected() ||
 			!defaultSecLangColor[0].equals(secLangButtons[0].getColor()) ||
 			!defaultSecLangColor[1].equals(secLangButtons[1].getColor()) ||
 			!defaultSecLangColor[2].equals(secLangButtons[2].getColor())) {
@@ -304,7 +304,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 			enableMOCheckBox.setSelected(true);
 			moColorButton.setEnabled(true);
 			moColorButton.setColor(defaultMarkOccurrencesColor);
-			setHighlightSecondaryLanguages(false);
+			setHighlightSecondaryLanguages(true);
 			for (int i=0; i<SEC_LANG_COUNT; i++) {
 				secLangButtons[i].setColor(defaultSecLangColor[i]);
 			}

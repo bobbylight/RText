@@ -261,7 +261,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		marginLineEnabled = true;
 		marginLinePosition = RTextArea.getDefaultMarginLinePosition();
 		marginLineColor = theme.marginLineColor;
-		highlightSecondaryLanguages = false;
+		highlightSecondaryLanguages = true;
 		secondaryLanguageColors = new Color[3];
 		secondaryLanguageColors[0] = theme.secondaryLanguages[0];
 		secondaryLanguageColors[1] = theme.secondaryLanguages[1];
