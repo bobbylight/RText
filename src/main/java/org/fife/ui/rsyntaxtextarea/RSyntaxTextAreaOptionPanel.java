@@ -76,13 +76,13 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		add(cp, BorderLayout.NORTH);
 
 		cp.add(createOverridePanel());
-		cp.add(Box.createVerticalStrut(5));
+		cp.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		cp.add(createBackgroundPanel(orientation));
-		cp.add(Box.createVerticalStrut(5));
+		cp.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		cp.add(createSyntaxPanel(orientation));
-		cp.add(Box.createVerticalStrut(5));
+		cp.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		// Create a panel containing the preview and "Restore Defaults"
 		JPanel bottomPanel = new JPanel(new BorderLayout());

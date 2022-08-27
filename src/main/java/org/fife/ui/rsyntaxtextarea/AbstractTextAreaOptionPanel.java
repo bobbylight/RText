@@ -30,8 +30,13 @@ abstract class AbstractTextAreaOptionPanel extends OptionsDialogPanel
 
 	protected JCheckBox overrideCheckBox;
 
+	protected static final int COMPONENT_VERTICAL_SPACING = 3;
+	protected static final int SECTION_VERTICAL_SPACING = 5;
+
 	protected static final ResourceBundle MSG = ResourceBundle.getBundle(
 		"org.fife.ui.rsyntaxtextarea.TextAreaOptionPanel");
+	private static final ResourceBundle DIALOG_MSG = ResourceBundle.getBundle(
+		"org.fife.rtext.OptionsDialog");
 
 
 	AbstractTextAreaOptionPanel() {
@@ -83,6 +88,22 @@ abstract class AbstractTextAreaOptionPanel extends OptionsDialogPanel
 		if (overrideCheckBox != null && overrideCheckBox.isSelected() != overrideEditorTheme) {
 			overrideCheckBox.setSelected(overrideEditorTheme);
 		}
+	}
+
+
+	/**
+	 * Looks up a localized string. First queries the resource bundle
+	 * for text area-related options panels, then for the parent Options
+	 * dialog itself (for general/high-level strings).
+	 *
+	 * @param key The key to look up.
+	 * @return The localized value.
+	 */
+	protected String getString(String key) {
+		if (MSG.containsKey(key)) {
+			return MSG.getString(key);
+		}
+		return DIALOG_MSG.getString(key);
 	}
 
 

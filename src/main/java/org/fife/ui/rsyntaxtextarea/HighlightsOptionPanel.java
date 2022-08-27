@@ -65,13 +65,13 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		Box topPanel = Box.createVerticalBox();
 
 		topPanel.add(createOverridePanel());
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		topPanel.add(createHighlightsPanel());
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		topPanel.add(createSecondaryLanguagesPanel(o));
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		// Create a panel containing the preview and "Restore Defaults"
 		JPanel bottomPanel = new JPanel(new BorderLayout());
@@ -121,7 +121,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		box.add(button);
 		box.add(Box.createHorizontalGlue());
 		parent.add(box);
-		parent.add(Box.createVerticalStrut(3));
+		parent.add(Box.createVerticalStrut(COMPONENT_VERTICAL_SPACING));
 	}
 
 
@@ -177,7 +177,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 
 		secLangCB =  new JCheckBox(MSG.getString("HighlightSecondaryLanguages"));
 		secLangCB.addActionListener(this);
-		addLeftAligned(p, secLangCB);
+		addLeftAligned(p, secLangCB, COMPONENT_VERTICAL_SPACING);
 
 		secLangLabels = new JLabel[SEC_LANG_COUNT];
 		secLangButtons = new RColorSwatchesButton[SEC_LANG_COUNT];

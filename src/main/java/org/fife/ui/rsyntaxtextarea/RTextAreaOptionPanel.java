@@ -74,75 +74,8 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		// stuff stays at the "top."
 		Box topPanel = Box.createVerticalBox();
 
-		Box bigOtherPanel = Box.createVerticalBox();
-		bigOtherPanel.setBorder(new OptionPanelBorder(MSG.getString("Other")));
-
-		wordWrapCheckBox = new JCheckBox(MSG.getString("WordWrap"));
-		wordWrapCheckBox.setActionCommand("WordWrapCheckBox");
-		wordWrapCheckBox.addActionListener(this);
-		addLeftAligned(bigOtherPanel, wordWrapCheckBox);
-
-		Box otherPanel = new Box(BoxLayout.LINE_AXIS);
-		highlightCurrentLineCheckBox = new JCheckBox(MSG.getString("HighlightCL"));
-		highlightCurrentLineCheckBox.setActionCommand("HighlightCurrentLineCheckBox");
-		highlightCurrentLineCheckBox.addActionListener(this);
-		otherPanel.add(highlightCurrentLineCheckBox);
-		otherPanel.add(Box.createHorizontalGlue());
-		bigOtherPanel.add(otherPanel);
-
-		otherPanel = new Box(BoxLayout.LINE_AXIS);
-		marginLineCheckBox = new JCheckBox(MSG.getString("DrawML"));
-		marginLineCheckBox.setActionCommand("MarginLineCheckBox");
-		marginLineCheckBox.addActionListener(this);
-		marginLinePositionField = new JTextField();
-		marginLinePositionField.getDocument().addDocumentListener(this);
-		Dimension size = new Dimension(40,marginLinePositionField.getPreferredSize().height);
-		marginLinePositionField.setMaximumSize(size);
-		marginLinePositionField.setPreferredSize(size);
-		otherPanel.add(marginLineCheckBox);
-		otherPanel.add(marginLinePositionField);
-
-		otherPanel.add(Box.createHorizontalGlue());
-		bigOtherPanel.add(otherPanel);
-		bigOtherPanel.add(Box.createVerticalStrut(3));
-
-		autoInsertClosingCurlyCheckBox = createCheckBox("AutoCloseCurlys");
-		addLeftAligned(bigOtherPanel, autoInsertClosingCurlyCheckBox);
-		bigOtherPanel.add(Box.createVerticalStrut(3));
-
-		/*
-		autoIndentCheckBox = createCheckBox("AutoIndent");
-		addLeftAligned(bigOtherPanel, autoIndentCheckBox);
-		bigOtherPanel.add(Box.createVerticalStrut(3));
-		*/
-		remWhitespaceLinesCheckBox = createCheckBox("RemWhitespaceLines");
-		addLeftAligned(bigOtherPanel, remWhitespaceLinesCheckBox);
-		bigOtherPanel.add(Box.createVerticalStrut(3));
-
-		aaCheckBox = new JCheckBox(MSG.getString("SmoothText"));
-		aaCheckBox.setActionCommand("aaCB");
-		aaCheckBox.addActionListener(this);
-		addLeftAligned(bigOtherPanel, aaCheckBox);
-		bigOtherPanel.add(Box.createVerticalStrut(3));
-
-		fractionalMetricsCheckBox = createCheckBox("FracFM");
-		addLeftAligned(bigOtherPanel, fractionalMetricsCheckBox);
-		bigOtherPanel.add(Box.createVerticalStrut(3));
-
-		Box bracketMatchingPanel = createHorizontalBox();
-		bracketMatchCheckBox = new JCheckBox(MSG.getString("HighlightMB"));
-		bracketMatchCheckBox.setActionCommand("BracketMatchCheckBox");
-		bracketMatchCheckBox.addActionListener(this);
-		bracketMatchingPanel.add(bracketMatchCheckBox);
-		bracketMatchingPanel.add(Box.createHorizontalGlue());
-		addLeftAligned(bigOtherPanel, bracketMatchingPanel);
-		bothBracketsCB = new JCheckBox(MSG.getString("HighlightBothBrackets"));
-		bothBracketsCB.setActionCommand("BothBracketsCB");
-		bothBracketsCB.addActionListener(this);
-		addLeftAligned(bigOtherPanel, bothBracketsCB, 3, 20);
-		bigOtherPanel.add(Box.createVerticalStrut(3));
-
-		topPanel.add(bigOtherPanel);
+		topPanel.add(createGeneralPanel());
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		// Create a panel containing the preview and "Restore Defaults"
 		JPanel bottomPanel = new JPanel(new BorderLayout());
@@ -241,6 +174,70 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		cb.setActionCommand(key);
 		cb.addActionListener(this);
 		return cb;
+	}
+
+
+	private Container createGeneralPanel() {
+
+		Box generalPanel = Box.createVerticalBox();
+		generalPanel.setBorder(new OptionPanelBorder(getString("OptGenTitle")));
+
+		wordWrapCheckBox = new JCheckBox(MSG.getString("WordWrap"));
+		wordWrapCheckBox.setActionCommand("WordWrapCheckBox");
+		wordWrapCheckBox.addActionListener(this);
+		addLeftAligned(generalPanel, wordWrapCheckBox, COMPONENT_VERTICAL_SPACING);
+
+		highlightCurrentLineCheckBox = new JCheckBox(MSG.getString("HighlightCL"));
+		highlightCurrentLineCheckBox.setActionCommand("HighlightCurrentLineCheckBox");
+		highlightCurrentLineCheckBox.addActionListener(this);
+		addLeftAligned(generalPanel, highlightCurrentLineCheckBox, COMPONENT_VERTICAL_SPACING);
+
+		Box otherPanel = new Box(BoxLayout.LINE_AXIS);
+		marginLineCheckBox = new JCheckBox(MSG.getString("DrawML"));
+		marginLineCheckBox.setActionCommand("MarginLineCheckBox");
+		marginLineCheckBox.addActionListener(this);
+		marginLinePositionField = new JTextField();
+		marginLinePositionField.getDocument().addDocumentListener(this);
+		Dimension size = new Dimension(40,marginLinePositionField.getPreferredSize().height);
+		marginLinePositionField.setMaximumSize(size);
+		marginLinePositionField.setPreferredSize(size);
+		otherPanel.add(marginLineCheckBox);
+		otherPanel.add(marginLinePositionField);
+
+		otherPanel.add(Box.createHorizontalGlue());
+		addLeftAligned(generalPanel, otherPanel, COMPONENT_VERTICAL_SPACING);
+
+		autoInsertClosingCurlyCheckBox = createCheckBox("AutoCloseCurlys");
+		addLeftAligned(generalPanel, autoInsertClosingCurlyCheckBox, COMPONENT_VERTICAL_SPACING);
+
+		/*
+		autoIndentCheckBox = createCheckBox("AutoIndent");
+		addLeftAligned(generalPanel, autoIndentCheckBox, COMPONENT_VERTICAL_SPACING);
+		*/
+		remWhitespaceLinesCheckBox = createCheckBox("RemWhitespaceLines");
+		addLeftAligned(generalPanel, remWhitespaceLinesCheckBox, COMPONENT_VERTICAL_SPACING);
+
+		aaCheckBox = new JCheckBox(MSG.getString("SmoothText"));
+		aaCheckBox.setActionCommand("aaCB");
+		aaCheckBox.addActionListener(this);
+		addLeftAligned(generalPanel, aaCheckBox, COMPONENT_VERTICAL_SPACING);
+
+		fractionalMetricsCheckBox = createCheckBox("FracFM");
+		addLeftAligned(generalPanel, fractionalMetricsCheckBox, COMPONENT_VERTICAL_SPACING);
+
+		Box bracketMatchingPanel = createHorizontalBox();
+		bracketMatchCheckBox = new JCheckBox(MSG.getString("HighlightMB"));
+		bracketMatchCheckBox.setActionCommand("BracketMatchCheckBox");
+		bracketMatchCheckBox.addActionListener(this);
+		bracketMatchingPanel.add(bracketMatchCheckBox);
+		bracketMatchingPanel.add(Box.createHorizontalGlue());
+		addLeftAligned(generalPanel, bracketMatchingPanel, COMPONENT_VERTICAL_SPACING);
+		bothBracketsCB = new JCheckBox(MSG.getString("HighlightBothBrackets"));
+		bothBracketsCB.setActionCommand("BothBracketsCB");
+		bothBracketsCB.addActionListener(this);
+		addLeftAligned(generalPanel, bothBracketsCB, 0, 20);
+
+		return generalPanel;
 	}
 
 

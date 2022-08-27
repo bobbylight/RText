@@ -66,13 +66,13 @@ public class FontAndTabsOptionPanel extends AbstractTextAreaOptionPanel
 		Box topPanel = Box.createVerticalBox();
 
 		topPanel.add(createFontPanel());
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		topPanel.add(createTabPanel());
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		topPanel.add(createOtherPanel());
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		// Create a panel containing the preview and "Restore Defaults"
 		JPanel bottomPanel = new JPanel(new BorderLayout());
@@ -148,15 +148,13 @@ public class FontAndTabsOptionPanel extends AbstractTextAreaOptionPanel
 	private JComponent createOtherPanel() {
 
 		Box otherPanel = Box.createVerticalBox();
-		otherPanel.setBorder(new OptionPanelBorder(MSG.getString("Other")));
+		otherPanel.setBorder(new OptionPanelBorder(getString("OptOtherTitle")));
 
 		visibleWhitespaceCheckBox = createCheckBox("VisibleWhitespace");
-		addLeftAligned(otherPanel, visibleWhitespaceCheckBox);
-		otherPanel.add(Box.createVerticalStrut(3));
+		addLeftAligned(otherPanel, visibleWhitespaceCheckBox, COMPONENT_VERTICAL_SPACING);
 
 		visibleEOLCheckBox = createCheckBox("VisibleEOL");
-		addLeftAligned(otherPanel, visibleEOLCheckBox);
-		otherPanel.add(Box.createVerticalStrut(3));
+		addLeftAligned(otherPanel, visibleEOLCheckBox, COMPONENT_VERTICAL_SPACING);
 
 		showTabLinesCheckBox = new JCheckBox(MSG.getString("ShowIndentGuide"));
 		showTabLinesCheckBox.setActionCommand("ShowIndentGuide");
@@ -183,9 +181,10 @@ public class FontAndTabsOptionPanel extends AbstractTextAreaOptionPanel
 		tabSizeField.setMaximumSize(size);
 		tabSizeField.setPreferredSize(size);
 		inputPanel.add(tabSizeLabel);
+		inputPanel.add(Box.createHorizontalStrut(5));
 		inputPanel.add(tabSizeField);
 		inputPanel.add(Box.createHorizontalGlue());
-		tabPanel.add(inputPanel);
+		addLeftAligned(tabPanel, inputPanel, COMPONENT_VERTICAL_SPACING);
 
 		emulateTabsCheckBox = new JCheckBox(MSG.getString("EmulateTabs"));
 		emulateTabsCheckBox.setActionCommand("EmulateTabsCheckBox");

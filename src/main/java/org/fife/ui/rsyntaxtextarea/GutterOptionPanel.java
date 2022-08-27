@@ -62,66 +62,13 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 		Box topPanel = new Box(BoxLayout.Y_AXIS);
 
 		topPanel.add(createOverridePanel());
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		// Line number options.
-		Box lineNumbersPanel = new Box(BoxLayout.Y_AXIS);
-		lineNumbersPanel.setBorder(new OptionPanelBorder(
-									MSG.getString("LineNumbers")));
-		lnEnabledCB = new JCheckBox(MSG.getString("Enabled"));
-		lnEnabledCB.addItemListener(this);
-		JComponent temp = new JPanel(new BorderLayout());
-		temp.add(lnEnabledCB, BorderLayout.LINE_START);
-		lineNumbersPanel.add(temp);
-		JPanel fontPanel = new JPanel(new BorderLayout());
-		fontSelector = new FontSelector();
-		fontSelector.setColorSelectable(true);
-		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
-		fontSelector.addPropertyChangeListener(FontSelector.FONT_COLOR_PROPERTY, this);
-		fontPanel.add(fontSelector);
-		lineNumbersPanel.add(fontPanel);
-		lineNumbersPanel.add(Box.createVerticalStrut(5));
-		JLabel lnColorLabel = new JLabel(MSG.getString("Color"));
-		lnColorButton = new RColorSwatchesButton();
-		lnColorButton.addPropertyChangeListener(
-					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		lnColorLabel.setLabelFor(lnColorButton);
-		temp = new Box(BoxLayout.LINE_AXIS);
-		temp.add(lnColorLabel);
-		temp.add(Box.createHorizontalStrut(5));
-		temp.add(lnColorButton);
-		temp.add(Box.createHorizontalGlue());
-		JPanel temp2 = new JPanel(new BorderLayout());
-		temp2.add(temp, BorderLayout.LINE_START);
-		lineNumbersPanel.add(temp2);
-		topPanel.add(lineNumbersPanel);
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(createLineNumbersPanel());
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		// Fold area options
-		JPanel foldPanel = new JPanel(new SpringLayout());
-		foldPanel.setBorder(new OptionPanelBorder(MSG.getString("FoldArea")));
-		JLabel foldBackgroundLabel = new JLabel(MSG.getString("FoldBackground"));
-		foldBackgroundButton = new RColorSwatchesButton();
-		foldBackgroundButton.addPropertyChangeListener(
-					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		JPanel foldBgButtonPanel = new JPanel(new BorderLayout());
-		addLeftAligned(foldBgButtonPanel, foldBackgroundButton);
-		foldBackgroundLabel.setLabelFor(foldBackgroundButton);
-		JLabel armedFoldBackgroundLabel = new JLabel(
-				MSG.getString("ArmedFoldBackground"));
-		armedFoldBackgroundButton = new RColorSwatchesButton();
-		armedFoldBackgroundButton.addPropertyChangeListener(
-					RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		JPanel armedFoldBgButtonPanel = new JPanel(new BorderLayout());
-		addLeftAligned(armedFoldBgButtonPanel, armedFoldBackgroundButton);
-		armedFoldBackgroundLabel.setLabelFor(armedFoldBackgroundButton);
-		UIUtil.addLabelValuePairs(foldPanel, orientation,
-			foldBackgroundLabel, foldBgButtonPanel,
-			armedFoldBackgroundLabel, armedFoldBgButtonPanel);
-		UIUtil.makeSpringCompactGrid(foldPanel, 2, 2, 0, 0, 5, 5);
-		temp = Box.createVerticalBox();
-		temp.add(foldPanel);
-		topPanel.add(temp);
+		topPanel.add(createFoldAreaPanel(orientation));
 		topPanel.add(Box.createVerticalStrut(5));
 
 		// Create a panel containing the preview and "Restore Defaults"
@@ -135,6 +82,71 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 
 		applyComponentOrientation(orientation);
 
+	}
+
+
+	private JPanel createFoldAreaPanel(ComponentOrientation orientation) {
+
+		JPanel foldPanel = new JPanel(new SpringLayout());
+		foldPanel.setBorder(new OptionPanelBorder(MSG.getString("FoldArea")));
+
+		JLabel foldBackgroundLabel = new JLabel(MSG.getString("FoldBackground"));
+		foldBackgroundButton = new RColorSwatchesButton();
+		foldBackgroundButton.addPropertyChangeListener(
+			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
+		JPanel foldBgButtonPanel = new JPanel(new BorderLayout());
+		addLeftAligned(foldBgButtonPanel, foldBackgroundButton);
+		foldBackgroundLabel.setLabelFor(foldBackgroundButton);
+
+		JLabel armedFoldBackgroundLabel = new JLabel(
+			MSG.getString("ArmedFoldBackground"));
+		armedFoldBackgroundButton = new RColorSwatchesButton();
+		armedFoldBackgroundButton.addPropertyChangeListener(
+			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
+		JPanel armedFoldBgButtonPanel = new JPanel(new BorderLayout());
+		addLeftAligned(armedFoldBgButtonPanel, armedFoldBackgroundButton);
+		armedFoldBackgroundLabel.setLabelFor(armedFoldBackgroundButton);
+
+		UIUtil.addLabelValuePairs(foldPanel, orientation,
+			foldBackgroundLabel, foldBgButtonPanel,
+			armedFoldBackgroundLabel, armedFoldBgButtonPanel);
+		UIUtil.makeSpringCompactGrid(foldPanel, 2, 2, 0, 0, 5, 5);
+		return foldPanel;
+	}
+
+
+	private Box createLineNumbersPanel() {
+
+		Box lineNumbersPanel = new Box(BoxLayout.Y_AXIS);
+		lineNumbersPanel.setBorder(new OptionPanelBorder(
+			MSG.getString("LineNumbers")));
+
+		lnEnabledCB = new JCheckBox(MSG.getString("Enabled"));
+		lnEnabledCB.addItemListener(this);
+		addLeftAligned(lineNumbersPanel, lnEnabledCB, COMPONENT_VERTICAL_SPACING);
+
+		JPanel fontPanel = new JPanel(new BorderLayout());
+		fontSelector = new FontSelector();
+		fontSelector.setColorSelectable(true);
+		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
+		fontSelector.addPropertyChangeListener(FontSelector.FONT_COLOR_PROPERTY, this);
+		fontPanel.add(fontSelector);
+		lineNumbersPanel.add(fontPanel);
+		lineNumbersPanel.add(Box.createVerticalStrut(COMPONENT_VERTICAL_SPACING));
+
+		JLabel lnColorLabel = new JLabel(MSG.getString("Color"));
+		lnColorButton = new RColorSwatchesButton();
+		lnColorButton.addPropertyChangeListener(
+			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
+		lnColorLabel.setLabelFor(lnColorButton);
+		Box temp = new Box(BoxLayout.LINE_AXIS);
+		temp.add(lnColorLabel);
+		temp.add(Box.createHorizontalStrut(5));
+		temp.add(lnColorButton);
+		temp.add(Box.createHorizontalGlue());
+		addLeftAligned(lineNumbersPanel, temp);
+
+		return lineNumbersPanel;
 	}
 
 

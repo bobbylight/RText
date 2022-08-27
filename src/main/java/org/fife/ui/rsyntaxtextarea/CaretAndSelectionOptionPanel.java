@@ -65,13 +65,13 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		Box topPanel = Box.createVerticalBox();
 
 		topPanel.add(createOverridePanel());
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		topPanel.add(createCaretPanel(o));
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		topPanel.add(createSelectionPanel(o));
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		// Create a panel containing the preview and "Restore Defaults"
 		JPanel bottomPanel = new JPanel(new BorderLayout());
