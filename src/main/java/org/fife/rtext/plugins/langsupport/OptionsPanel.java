@@ -78,7 +78,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 		label.setText(msg.getString("Options.Main.Label"));
 		label.addHyperlinkListener(listener);
 		cp.add(label);
-		cp.add(Box.createVerticalStrut(5));
+		cp.add(Box.createVerticalStrut(COMPONENT_VERTICAL_SPACING));
 
 		Box temp = Box.createVerticalBox();
 		temp.setBorder(new OptionPanelBorder(msg.getString("Options.Main.Section")));
@@ -90,7 +90,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 		temp2.add(Box.createHorizontalStrut(5));
 		temp2.add(codeFoldingThresholdCB);
 		temp2.add(Box.createHorizontalGlue());
-		addLeftAligned(temp, temp2);
+		addLeftAligned(temp, temp2, COMPONENT_VERTICAL_SPACING);
 
 		altColorCB = new JCheckBox(msg.getString("Options.Main.AlternateColor"));
 		altColorCB.addActionListener(listener);
@@ -103,11 +103,11 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 		temp2.add(Box.createHorizontalGlue());
 		temp.add(temp2);
 		cp.add(temp);
-		cp.add(Box.createVerticalStrut(10));
+		cp.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton, 5);
+		addLeftAligned(cp, rdButton);
 
 		cp.add(Box.createVerticalGlue());
 

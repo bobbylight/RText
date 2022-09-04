@@ -10,7 +10,6 @@
 package org.fife.rtext.optionsdialog;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.Frame;
@@ -56,34 +55,27 @@ class PrintingOptionPanel extends OptionsDialogPanel
 
 		setLayout(new BorderLayout());
 		setBorder(UIUtil.getEmpty5Border());
+		Box topPanel = Box.createVerticalBox();
 
-		Box printFontPanel = new Box(BoxLayout.LINE_AXIS);
+		JPanel printFontPanel = new JPanel(new BorderLayout());
 		printFontPanel.setBorder(new OptionPanelBorder(msg.getString("OptPrFTitle")));
-		printFontPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
 		fontSelector = new FontSelector();
 		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
 		printFontPanel.add(fontSelector);
-		printFontPanel.add(Box.createHorizontalGlue());
+		topPanel.add(printFontPanel);
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		Box temp = Box.createVerticalBox();
+		Box printHeaderFooterPanel = Box.createVerticalBox();
+		printHeaderFooterPanel.setBorder(new OptionPanelBorder(msg.getString("OptPrHFL")));
 		JCheckBox headerCheckBox = new JCheckBox(msg.getString("OptPrPH"));
 		JCheckBox footerCheckBox = new JCheckBox(msg.getString("OptPrPF"));
 		headerCheckBox.setEnabled(false);
 		footerCheckBox.setEnabled(false);
-		temp.add(headerCheckBox);
-		temp.add(footerCheckBox);
-		Box printHeaderFooterPanel = createHorizontalBox();
-		printHeaderFooterPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		printHeaderFooterPanel.setBorder(new OptionPanelBorder(msg.getString("OptPrHFL")));
-		printHeaderFooterPanel.add(temp);
-		printHeaderFooterPanel.add(Box.createHorizontalGlue());
+		addLeftAligned(printHeaderFooterPanel, headerCheckBox, COMPONENT_VERTICAL_SPACING);
+		addLeftAligned(printHeaderFooterPanel, footerCheckBox);
+		topPanel.add(printHeaderFooterPanel);
 
-		temp = Box.createVerticalBox();
-		temp.add(printFontPanel);
-		temp.add(printHeaderFooterPanel);
-
-		add(temp, BorderLayout.NORTH);
+		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(orientation);
 		setIcon((Icon)rtext.getAction(RText.PRINT_ACTION).getValue(Action.SMALL_ICON));
 		rtext.addPropertyChangeListener(RText.ICON_STYLE_PROPERTY, (e) -> {

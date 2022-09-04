@@ -57,25 +57,18 @@ class ToolOptionPanel extends AbstractConsoleTextAreaOptionPanel<ToolPlugin>
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
 
-		// Set up our border and layout.
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
 		Box topPanel = Box.createVerticalBox();
 
-		// Add the "general" options panel
-		Container generalPanel = createGeneralPanel();
-		topPanel.add(generalPanel);
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(createGeneralPanel());
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		// Add the "tools" option panel
-		Container toolsPanel = createToolsPanel();
-		topPanel.add(toolsPanel);
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(createToolsPanel());
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		addRestoreDefaultsButton(topPanel);
 
-		// Put it all together!
-		topPanel.add(Box.createVerticalGlue());
 		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(orientation);
 

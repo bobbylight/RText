@@ -88,18 +88,18 @@ class SearchOptionPanel extends OptionsDialogPanel
 									getOrientation(getLocale());
 
 		// A panel for toggling the search UI
-		Box otherPanel = Box.createVerticalBox();
-		otherPanel.setBorder(new OptionPanelBorder(
+		Box generalPanel = Box.createVerticalBox();
+		generalPanel.setBorder(new OptionPanelBorder(
 									msg.getString("OptGenTitle")));
 		ButtonGroup bg = new ButtonGroup();
 		dialogRB = UIUtil.newRadio(msg, "Search.UIType.Dialog",
 				bg, this);
-		addLeftAligned(otherPanel, dialogRB);
+		addLeftAligned(generalPanel, dialogRB, COMPONENT_VERTICAL_SPACING);
 		toolbarRB = UIUtil.newRadio(msg, "Search.UIType.Toolbar",
 				bg, this);
-		addLeftAligned(otherPanel, toolbarRB);
-		topPanel.add(otherPanel);
-		topPanel.add(Box.createVerticalStrut(5));
+		addLeftAligned(generalPanel, toolbarRB);
+		topPanel.add(generalPanel);
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		// A panel for "experimental" options.
 		Box expPanel = Box.createVerticalBox();
@@ -107,13 +107,13 @@ class SearchOptionPanel extends OptionsDialogPanel
 										getString("OptExperimentalTitle")));
 		SelectableLabel label = new SelectableLabel(
 								msg.getString("ExperimentalDisclaimer"));
-		expPanel.add(label);
-		expPanel.add(Box.createVerticalStrut(10));
+		addLeftAligned(expPanel, label, COMPONENT_VERTICAL_SPACING);
 		translucentSearchDialogsCB = new JCheckBox(
 								msg.getString("TranslucentSearchBoxes"));
 		translucentSearchDialogsCB.setActionCommand("TranslucentSearchDialogsCB");
 		translucentSearchDialogsCB.addActionListener(this);
-		addLeftAligned(expPanel, translucentSearchDialogsCB);
+		addLeftAligned(expPanel, translucentSearchDialogsCB, COMPONENT_VERTICAL_SPACING);
+
 		ruleLabel = new JLabel(msg.getString("TranslucencyRule"));
 		ruleCombo = new LabelValueComboBox<>();
 		ruleCombo.addLabelValuePair(msg.getString("Translucency.Never"), "0");
@@ -149,17 +149,15 @@ class SearchOptionPanel extends OptionsDialogPanel
 			temp.add(filler);         temp.add(ruleCombo); temp.add(ruleLabel);
 			temp.add(opacityDisplay); temp.add(slider);    temp.add(opacityLabel);
 		}
-		UIUtil.makeSpringCompactGrid(temp, 2,3, 5,5, 5,5);
-		addLeftAligned(expPanel, temp, 5, 20);
+		UIUtil.makeSpringCompactGrid(temp, 2,3, 0, 0, 5,5);
+		addLeftAligned(expPanel, temp, 0, 20);
+		expPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 		topPanel.add(expPanel);
 
 		JButton defaultsButton = new JButton(msg.getString("RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
-		temp = new JPanel(new BorderLayout());
-		temp.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
-		temp.add(defaultsButton, BorderLayout.LINE_START);
-		topPanel.add(temp);
+		addLeftAligned(topPanel, defaultsButton);
 
 		// Do this after everything else is created.
 		if (TranslucencyUtil.get().isTranslucencySupported(false)) {

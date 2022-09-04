@@ -23,7 +23,7 @@ import javax.swing.text.Document;
 
 import org.fife.rtext.*;
 import org.fife.ui.FSATextField;
-import org.fife.ui.Hyperlink;
+import org.fife.ui.SelectableLabel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.dockablewindows.DockableWindow;
@@ -86,15 +86,12 @@ class SourceBrowserOptionPanel
 				new OptionPanelBorder(sbb.getString("OptionPanel.Title")));
 
 		// A check box toggling the plugin's visibility.
-		JPanel temp = new JPanel(new BorderLayout());
 		visibleCB = new JCheckBox(gpb.getString("Visible"));
 		visibleCB.addActionListener(this);
-		temp.add(visibleCB, BorderLayout.LINE_START);
-		topPanel.add(temp);
-		topPanel.add(Box.createVerticalStrut(5));
+		addLeftAligned(topPanel, visibleCB, COMPONENT_VERTICAL_SPACING);
 
 		// A combo in which to select the file system tree placement.
-		temp = new JPanel(new SpringLayout());
+		JPanel temp = new JPanel(new SpringLayout());
 		locationCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(locationCombo);
 		locationCombo.addItem(gpb.getString("Location.top"));
@@ -121,18 +118,12 @@ class SourceBrowserOptionPanel
 		// A panel to select whether the ctags binary is "Exuberant."
 		JLabel label = new JLabel(sbb.getString("OptionPanel.Label.CtagsType"));
 		label.setVerticalAlignment(JLabel.TOP);
-		JPanel typePanel = new JPanel(new BorderLayout());
+		Box typePanel = Box.createVerticalBox();
 		ButtonGroup bg = new ButtonGroup();
 		exubCtagsRB = UIUtil.newRadio(sbb, "OptionPanel.CtagsType.Exuberant", bg, this, true);
-		Container temp2 = new JPanel(new BorderLayout());
-		temp2.add(exubCtagsRB, BorderLayout.LINE_START);
-		typePanel.add(temp2, BorderLayout.NORTH);
+		addLeftAligned(typePanel, exubCtagsRB, COMPONENT_VERTICAL_SPACING);
 		standardCtagsRB = UIUtil.newRadio(sbb, "OptionPanel.CtagsType.Standard", bg, this);
-		temp2 = new JPanel(new BorderLayout());
-		temp2.add(standardCtagsRB, BorderLayout.LINE_START);
-		typePanel.add(temp2, BorderLayout.SOUTH);
-		temp2 = new JPanel(new BorderLayout());
-		temp2.add(typePanel, BorderLayout.LINE_START);
+		addLeftAligned(typePanel, standardCtagsRB);
 
 		Dimension filler = new Dimension(1,1);
 		if (ltr) {
@@ -144,7 +135,7 @@ class SourceBrowserOptionPanel
 			temp.add(ctagsExecutableTextField);
 			temp.add(exeBrowseButton);
 			temp.add(label);
-			temp.add(temp2);
+			temp.add(typePanel);
 			temp.add(Box.createRigidArea(filler)); // MUST have finite pw.
 		}
 		else {
@@ -156,47 +147,36 @@ class SourceBrowserOptionPanel
 			temp.add(ctagsExecutableTextField);
 			temp.add(ctagsExecutableLocationLabel);
 			temp.add(Box.createRigidArea(filler)); // MUST have finite pw.
-			temp.add(temp2);
+			temp.add(typePanel);
 			temp.add(label);
 		}
 
-		UIUtil.makeSpringCompactGrid(temp, 3,3, 5,5, 5,5);
+		UIUtil.makeSpringCompactGrid(temp, 3,3, 0, 0, 5,5);
 		topPanel.add(temp);
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(Box.createVerticalStrut(COMPONENT_VERTICAL_SPACING));
 
 		// A panel for the "HTML tooltips" checkbox.
-		JPanel toolTipPanel = new JPanel(new BorderLayout());
 		htmlToolTipCheckBox = new JCheckBox(sbb.getString(
 									"OptionPanel.HTMLToolTips"));
 		htmlToolTipCheckBox.setActionCommand("HTMLToolTips");
 		htmlToolTipCheckBox.addActionListener(this);
-		toolTipPanel.add(htmlToolTipCheckBox, BorderLayout.LINE_START);
-		topPanel.add(toolTipPanel);
+		addLeftAligned(topPanel, htmlToolTipCheckBox, COMPONENT_VERTICAL_SPACING);
 
 		// A link to the Exuberant Ctags project.
 		topPanel.add(Box.createVerticalStrut(20));
-		temp = new JPanel(new BorderLayout());
 		String text = sbb.getString("OptionPanel.ExuberantDesc");
 		int linkPos = text.indexOf("{0}");
 		if (linkPos>-1) { // Always true
 			String part1 = text.substring(0, linkPos);
 			String part3 = text.substring(linkPos+3);
-			temp2 = createHorizontalBox();
-			temp2.add(new JLabel(part1));
-			Hyperlink link = new Hyperlink(
-				sbb.getString("OptionPanel.ExuberantHomePage"),
-				CTAGS_HOME_PAGE);
-			temp2.add(link);
-			temp2.add(new JLabel(part3));
-			temp.add(temp2, BorderLayout.LINE_START);
+			text = "<html>" + part1 +
+				"<a href='" + CTAGS_HOME_PAGE + "'>" +
+				sbb.getString("OptionPanel.ExuberantHomePage") +
+				"</a>" +
+				part3;
 		}
-		else { // Should never be true.
-			label = new JLabel(text);
-			temp.add(label, BorderLayout.LINE_START);
-		}
-		topPanel.add(temp);
+		addLeftAligned(topPanel, new SelectableLabel(text));
 
-		// Put it all together!
 		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(orientation);
 
@@ -326,7 +306,7 @@ class SourceBrowserOptionPanel
 	 */
 	@Override
 	public JComponent getTopJComponent() {
-		return locationCombo;
+		return visibleCB;
 	}
 
 

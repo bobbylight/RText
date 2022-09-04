@@ -61,19 +61,19 @@ import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 class PerlOptionsPanel extends OptionsDialogPanel {
 
 	private final Listener listener;
-	private final JCheckBox enabledCB;
-	private final JCheckBox paramAssistanceCB;
-	private final JCheckBox showDescWindowCB;
-	private final JCheckBox useParensCB;
-	private final JCheckBox compileCB;
-	private final JCheckBox foldingEnabledCB;
-	private final JLabel installLocLabel;
-	private final FSATextField installLocField;
-	private final JButton installBrowseButton;
-	private final JCheckBox warningsCB;
-	private final JCheckBox taintModeCB;
-	private final JCheckBox overridePerl5LibCB;
-	private final ModifiableTable perl5Table;
+	private JCheckBox enabledCB;
+	private JCheckBox paramAssistanceCB;
+	private JCheckBox showDescWindowCB;
+	private JCheckBox useParensCB;
+	private JCheckBox compileCB;
+	private JCheckBox foldingEnabledCB;
+	private JLabel installLocLabel;
+	private FSATextField installLocField;
+	private JButton installBrowseButton;
+	private JCheckBox warningsCB;
+	private JCheckBox taintModeCB;
+	private JCheckBox overridePerl5LibCB;
+	private ModifiableTable perl5Table;
 	private final JButton rdButton;
 
 	private static final String PERL5LIB		= "PERL5LIB";
@@ -100,64 +100,132 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 		setLayout(new BorderLayout());
 		setBorder(UIUtil.getEmpty5Border());
 
-		Box cp = Box.createVerticalBox();
-		cp.setBorder(null);
-		add(cp, BorderLayout.NORTH);
+		Box topPanel = Box.createVerticalBox();
 
-		Box box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.General.Section.Folding")));
-		cp.add(box);
-		cp.add(Box.createVerticalStrut(5));
+		topPanel.add(createFoldingPanel(msg));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
-		addLeftAligned(box, foldingEnabledCB);
+		topPanel.add(createCodeCompletionPanel(msg));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.Perl.Section.CodeCompletion")));
-		cp.add(box);
-		cp.add(Box.createVerticalStrut(5));
+		topPanel.add(createSyntaxCheckingPanel(msg, o));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
+
+		topPanel.add(createPerl5LibPanel(msg));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
+
+		rdButton = new JButton(app.getString("RestoreDefaults"));
+		rdButton.addActionListener(listener);
+		addLeftAligned(topPanel, rdButton);
+
+		add(topPanel, BorderLayout.NORTH);
+		applyComponentOrientation(o);
+
+	}
+
+
+	private JCheckBox createCB(String key) {
+		if (key.indexOf('.')==-1) {
+			key = "Options.Perl." + key;
+		}
+		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
+		cb.addActionListener(listener);
+		return cb;
+	}
+
+
+	private Box createCodeCompletionPanel(ResourceBundle msg) {
+
+		Box ccPanel = Box.createVerticalBox();
+		ccPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.Perl.Section.CodeCompletion")));
 
 		enabledCB = createCB("Options.General.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB, 3);
-
-		Box box2 = Box.createVerticalBox();
-		if (o.isLeftToRight()) {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-		}
-		else {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-		}
-		box.add(box2);
+		addLeftAligned(ccPanel, enabledCB, COMPONENT_VERTICAL_SPACING);
 
 		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box2, showDescWindowCB, 3);
+		addLeftAligned(ccPanel, showDescWindowCB, COMPONENT_VERTICAL_SPACING, 20);
 
 		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
-		addLeftAligned(box2, paramAssistanceCB, 3);
+		addLeftAligned(ccPanel, paramAssistanceCB,  COMPONENT_VERTICAL_SPACING, 20);
 
 		useParensCB = createCB("UseParensInCodeCompletion");
-		addLeftAligned(box2, useParensCB);
+		addLeftAligned(ccPanel, useParensCB, 0, 20);
 
-		box2.add(Box.createVerticalGlue());
+		return ccPanel;
+	}
 
-		box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.Perl.Section.SyntaxChecking")));
-		cp.add(box);
+
+	private Box createFoldingPanel(ResourceBundle msg) {
+
+		Box foldingPanel = Box.createVerticalBox();
+		foldingPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.General.Section.Folding")));
+
+		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
+		addLeftAligned(foldingPanel, foldingEnabledCB);
+
+		return foldingPanel;
+	}
+
+
+	/**
+	 * Creates a path separator-separated string to use for the
+	 * <code>PERL5LIB</code> environment variable, based on the values entered
+	 * into the table.
+	 *
+	 * @return The new <code>PERL5LIB</code> value.
+	 */
+	private String createPerl5LibFromTable() {
+		StringBuilder sb = new StringBuilder();
+		int rowCount = perl5Table.getTable().getRowCount();
+		for (int row=0; row<rowCount; row++) {
+			sb.append(perl5Table.getTable().getValueAt(row, 0));
+			if (row<rowCount-1) {
+				sb.append(File.pathSeparatorChar);
+			}
+		}
+		return sb.toString();
+	}
+
+
+	private Box createPerl5LibPanel(ResourceBundle msg) {
+
+		Box perl5LibPanel = Box.createVerticalBox();
+		perl5LibPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.Perl.Section.Perl5Lib")));
+
+		overridePerl5LibCB = createCB("OverridePerl5Lib");
+		addLeftAligned(perl5LibPanel, overridePerl5LibCB, COMPONENT_VERTICAL_SPACING);
+
+		DefaultTableModel model = new DefaultTableModel(0, 1);
+		perl5Table = new ModifiableTable(model, ModifiableTable.BOTTOM,
+			ModifiableTable.ALL_BUTTONS);
+		perl5Table.addModifiableTableListener(listener);
+		perl5Table.setRowHandler(new Perl5LibTableRowHandler());
+		perl5Table.getTable().setTableHeader(null);
+		Dimension s = perl5Table.getTable().getPreferredScrollableViewportSize();
+		s.height = 110; // JTable default is 400!
+		perl5Table.getTable().setPreferredScrollableViewportSize(s);
+		perl5LibPanel.add(perl5Table);
+
+		return perl5LibPanel;
+	}
+
+
+	private Box createSyntaxCheckingPanel(ResourceBundle msg,
+										  ComponentOrientation o) {
+
+		Box syntaxCheckingPanel = Box.createVerticalBox();
+		syntaxCheckingPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.Perl.Section.SyntaxChecking")));
 
 		compileCB = createCB("Options.General.UnderlineErrors");
-		addLeftAligned(box, compileCB, 3);
+		addLeftAligned(syntaxCheckingPanel, compileCB, COMPONENT_VERTICAL_SPACING);
 
-		box2 = Box.createVerticalBox();
-		if (o.isLeftToRight()) {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-		}
-		else {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-		}
-		box.add(box2);
+		Box indentedPanel = Box.createVerticalBox();
+		indentedPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
+		syntaxCheckingPanel.add(indentedPanel);
 
 		installLocLabel = new JLabel(msg.getString("Options.Perl.InstallLoc"));
 		installLocField = new FSATextField(true, "");
@@ -179,75 +247,18 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 			installLocLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
 			temp2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
 		}
-		box2.add(temp);
-		box2.add(Box.createVerticalStrut(3));
+		indentedPanel.add(temp);
+		indentedPanel.add(Box.createVerticalStrut(COMPONENT_VERTICAL_SPACING));
 		warningsCB = createCB("Warnings");
 		taintModeCB = createCB("TaintMode");
-		Box box3 = createHorizontalBox();
-		box3.add(warningsCB);
-		box3.add(Box.createHorizontalStrut(40));
-		box3.add(taintModeCB);
-		box3.add(Box.createHorizontalGlue());
-		addLeftAligned(box2, box3);
-		box2.add(Box.createVerticalGlue());
+		Box box = createHorizontalBox();
+		box.add(warningsCB);
+		box.add(Box.createHorizontalStrut(40));
+		box.add(taintModeCB);
+		box.add(Box.createHorizontalGlue());
+		addLeftAligned(indentedPanel, box);
 
-		box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.Perl.Section.Perl5Lib")));
-		cp.add(box);
-		overridePerl5LibCB = createCB("OverridePerl5Lib");
-		addLeftAligned(box, overridePerl5LibCB, 5);
-		DefaultTableModel model = new DefaultTableModel(0, 1);
-		perl5Table = new ModifiableTable(model, ModifiableTable.BOTTOM,
-										ModifiableTable.ALL_BUTTONS);
-		perl5Table.addModifiableTableListener(listener);
-		perl5Table.setRowHandler(new Perl5LibTableRowHandler());
-		perl5Table.getTable().setTableHeader(null);
-		Dimension s = perl5Table.getTable().getPreferredScrollableViewportSize();
-		s.height = 110; // JTable default is 400!
-		perl5Table.getTable().setPreferredScrollableViewportSize(s);
-		box.add(perl5Table);
-
-		cp.add(Box.createVerticalStrut(10));
-
-		rdButton = new JButton(app.getString("RestoreDefaults"));
-		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton);
-
-		//cp.add(Box.createVerticalGlue());
-
-		applyComponentOrientation(o);
-
-	}
-
-
-	private JCheckBox createCB(String key) {
-		if (key.indexOf('.')==-1) {
-			key = "Options.Perl." + key;
-		}
-		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
-		cb.addActionListener(listener);
-		return cb;
-	}
-
-
-	/**
-	 * Creates a path separator-separated string to use for the
-	 * <code>PERL5LIB</code> environment variable, based on the values entered
-	 * into the table.
-	 *
-	 * @return The new <code>PERL5LIB</code> value.
-	 */
-	private String createPerl5LibFromTable() {
-		StringBuilder sb = new StringBuilder();
-		int rowCount = perl5Table.getTable().getRowCount();
-		for (int row=0; row<rowCount; row++) {
-			sb.append(perl5Table.getTable().getValueAt(row, 0));
-			if (row<rowCount-1) {
-				sb.append(File.pathSeparatorChar);
-			}
-		}
-		return sb.toString();
+		return syntaxCheckingPanel;
 	}
 
 

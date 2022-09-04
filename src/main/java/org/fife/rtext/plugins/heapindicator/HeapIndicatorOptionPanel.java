@@ -18,16 +18,13 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -61,50 +58,37 @@ class HeapIndicatorOptionPanel extends PluginOptionsDialogPanel<HeapIndicatorPlu
 		ResourceBundle msg = plugin.getBundle();
 		setName(plugin.getPluginName());
 
-		ComponentOrientation orientation = ComponentOrientation.
-									getOrientation(getLocale());
-
-		Border empty5Border = UIUtil.getEmpty5Border();
 		setLayout(new BorderLayout());
-		setBorder(empty5Border);
+		setBorder(UIUtil.getEmpty5Border());
 
 		// A panel to contain everything that will go into our "top" area.
 		Box topPanel = Box.createVerticalBox();
-		Box topPanel2 = Box.createVerticalBox();
-		topPanel2.setBorder(BorderFactory.createCompoundBorder(
-				new OptionPanelBorder(msg.getString(
-								"Plugin.OptionPanel.Title.General")),
-				empty5Border));
+		topPanel.setBorder(new OptionPanelBorder(msg.getString(
+								"Plugin.OptionPanel.Title.General")));
 
 		// Panel to toggle the indicator's visibility.
-		JPanel temp = new JPanel(new BorderLayout());
 		visibilityCheckBox = new JCheckBox(
 			msg.getString("Plugin.OptionPanel.Visibility.text"));
 		visibilityCheckBox.setMnemonic((int)msg.getString(
 			"Plugin.OptionPanel.Visibility.mnemonic").charAt(0));
 		visibilityCheckBox.addActionListener(this);
-		temp.add(visibilityCheckBox, BorderLayout.LINE_START);
-		topPanel2.add(temp);
-		topPanel2.add(Box.createVerticalStrut(5));
+		addLeftAligned(topPanel, visibilityCheckBox, COMPONENT_VERTICAL_SPACING);
 
 		// Panel for the indicator's refresh rate.
-		temp = new JPanel(new BorderLayout());
-		Box temp2 = new Box(BoxLayout.LINE_AXIS);
-		JLabel label=UIUtil.newLabel(msg, "Plugin.OptionPanel.RefreshRate");
+		Box temp = new Box(BoxLayout.LINE_AXIS);
+		JLabel label = UIUtil.newLabel(msg, "Plugin.OptionPanel.RefreshRate");
 		refreshRateSpinner = new JSpinner(new SpinnerNumberModel(1,1,600,1));
 		label.setLabelFor(refreshRateSpinner);
 		refreshRateSpinner.addChangeListener(this);
-		temp2.add(label);
-		temp2.add(Box.createHorizontalStrut(5));
-		temp2.add(refreshRateSpinner);
-		temp2.add(Box.createHorizontalGlue());
-		temp.add(temp2, BorderLayout.LINE_START);
-		topPanel2.add(temp);
-		topPanel.add(topPanel2);
+		temp.add(label);
+		temp.add(Box.createHorizontalStrut(5));
+		temp.add(refreshRateSpinner);
+		temp.add(Box.createHorizontalGlue());
+		addLeftAligned(topPanel, temp);
 
-		// Put it all together!
 		add(topPanel, BorderLayout.NORTH);
-		applyComponentOrientation(orientation);
+		applyComponentOrientation(ComponentOrientation.
+			getOrientation(getLocale()));
 
 	}
 

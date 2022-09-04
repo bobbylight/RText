@@ -9,9 +9,7 @@
  */
 package org.fife.rtext.plugins.langsupport;
 
-import java.awt.BorderLayout;
-import java.awt.ComponentOrientation;
-import java.awt.Frame;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
@@ -39,11 +37,11 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 class COptionsPanel extends OptionsDialogPanel {
 
 	private final Listener listener;
-	private final JCheckBox enabledCB;
-	private final JCheckBox paramAssistanceCB;
-	private final JCheckBox showDescWindowCB;
-	private final JCheckBox foldingEnabledCB;
-	private final JButton rdButton;
+	private JCheckBox enabledCB;
+	private JCheckBox paramAssistanceCB;
+	private JCheckBox showDescWindowCB;
+	private JCheckBox foldingEnabledCB;
+	private JButton rdButton;
 
 
 	/**
@@ -68,52 +66,21 @@ class COptionsPanel extends OptionsDialogPanel {
 		Border empty5Border = UIUtil.getEmpty5Border();
 		setBorder(empty5Border);
 
-		Box cp = Box.createVerticalBox();
-		cp.setBorder(null);
-		add(cp, BorderLayout.NORTH);
+		Box topPanel = Box.createVerticalBox();
+		topPanel.setBorder(null);
+		add(topPanel, BorderLayout.NORTH);
 
-		Box box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.General.Section.General")));
-		cp.add(box);
-		cp.add(Box.createVerticalStrut(5));
+		topPanel.add(createGeneralPanel(msg, o));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		enabledCB = createCB("Options.General.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB, 5);
+		topPanel.add(createFoldingPanel(msg));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		Box box2 = Box.createVerticalBox();
-		if (o.isLeftToRight()) {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-		}
-		else {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-		}
-		box.add(box2);
-
-		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box2, showDescWindowCB, 5);
-
-		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
-		addLeftAligned(box2, paramAssistanceCB, 5);
-
-		box2.add(Box.createVerticalGlue());
-
-		box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.General.Section.Folding")));
-		cp.add(box);
-		cp.add(Box.createVerticalStrut(5));
-
-		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
-		addLeftAligned(box, foldingEnabledCB, 5);
-
-		cp.add(Box.createVerticalStrut(5));
 		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton);
+		addLeftAligned(topPanel, rdButton);
 
-		cp.add(Box.createVerticalGlue());
-
+		topPanel.add(Box.createVerticalGlue());
 		applyComponentOrientation(o);
 
 	}
@@ -126,6 +93,50 @@ class COptionsPanel extends OptionsDialogPanel {
 		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
+	}
+
+
+	private Container createFoldingPanel(ResourceBundle msg) {
+
+		Box foldingPanel = Box.createVerticalBox();
+		foldingPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.General.Section.Folding")));
+
+		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
+		addLeftAligned(foldingPanel, foldingEnabledCB);
+
+		return foldingPanel;
+	}
+
+
+	private Container createGeneralPanel(ResourceBundle msg,
+										 ComponentOrientation o) {
+
+		Box generalPanel = Box.createVerticalBox();
+		generalPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.General.Section.General")));
+
+		enabledCB = createCB("Options.General.EnableCodeCompletion");
+		addLeftAligned(generalPanel, enabledCB, COMPONENT_VERTICAL_SPACING);
+
+		Box subOptionsPanel = Box.createVerticalBox();
+		if (o.isLeftToRight()) {
+			subOptionsPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+		}
+		else {
+			subOptionsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
+		}
+		generalPanel.add(subOptionsPanel);
+
+		showDescWindowCB = createCB("Options.General.ShowDescWindow");
+		addLeftAligned(subOptionsPanel, showDescWindowCB, COMPONENT_VERTICAL_SPACING);
+
+		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
+		addLeftAligned(subOptionsPanel, paramAssistanceCB);
+
+		subOptionsPanel.add(Box.createVerticalGlue());
+
+		return generalPanel;
 	}
 
 

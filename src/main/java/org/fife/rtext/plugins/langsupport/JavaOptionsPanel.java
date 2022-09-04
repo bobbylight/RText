@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -30,7 +29,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
@@ -69,15 +67,15 @@ import org.fife.ui.rtextfilechooser.RDirectoryChooser;
 class JavaOptionsPanel extends OptionsDialogPanel {
 
 	private final Listener listener;
-	private final JCheckBox enabledCB;
-	private final JCheckBox paramAssistanceCB;
-	private final JCheckBox showDescWindowCB;
-	private final DefaultTableModel model;
-	private final JButton addJREButton;
-	private final JCheckBox buildPathModsCB;
-	private final JCheckBox autoActivateCB;
-	private final JLabel aaDelayLabel;
-	private final JTextField aaDelayField;
+	private JCheckBox enabledCB;
+	private JCheckBox paramAssistanceCB;
+	private JCheckBox showDescWindowCB;
+	private DefaultTableModel model;
+	private JButton addJREButton;
+	private JCheckBox buildPathModsCB;
+	private JCheckBox autoActivateCB;
+	private JLabel aaDelayLabel;
+	private JTextField aaDelayField;
 	private final JButton rdButton;
 
 
@@ -99,56 +97,42 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		ComponentOrientation o = ComponentOrientation.
 											getOrientation(getLocale());
 
+		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
-		Border empty5Border = UIUtil.getEmpty5Border();
-		setBorder(empty5Border);
 
-		Box cp = Box.createVerticalBox();
-		cp.setBorder(null);
-		add(cp, BorderLayout.NORTH);
+		Box topPanel = Box.createVerticalBox();
 
-		Box box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.General.Section.General")));
-		cp.add(box);
-		cp.add(Box.createVerticalStrut(5));
+		topPanel.add(createGeneralPanel(msg));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		enabledCB = createCB("Options.Java.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB, 3);
+		topPanel.add(createAutoActivationPanel(msg, o));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		Box box2 = Box.createVerticalBox();
-		if (o.isLeftToRight()) {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-		}
-		else {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-		}
-		box.add(box2);
+		topPanel.add(createBuildPathPanel(msg));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box2, showDescWindowCB, 3);
+		rdButton = new JButton(app.getString("RestoreDefaults"));
+		rdButton.addActionListener(listener);
+		addLeftAligned(topPanel, rdButton);
 
-		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
-		addLeftAligned(box2, paramAssistanceCB);
+		add(topPanel, BorderLayout.NORTH);
+		applyComponentOrientation(o);
 
-		box2.add(Box.createVerticalGlue());
+		addChildPanel(new FoldingOnlyOptionsPanel(app,
+							SyntaxConstants.SYNTAX_STYLE_JAVA, false));
 
-		box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(
-				msg.getString("Options.General.AutoActivation")));
-		cp.add(box);
+	}
+
+
+	private Box createAutoActivationPanel(ResourceBundle msg,
+										  ComponentOrientation o) {
+
+		Box aaPanel = Box.createVerticalBox();
+		aaPanel.setBorder(new OptionPanelBorder(
+			msg.getString("Options.General.AutoActivation")));
 
 		autoActivateCB = createCB("Options.General.EnableAutoActivation");
-		addLeftAligned(box, autoActivateCB, 5);
-
-		box2 = Box.createVerticalBox();
-		if (o.isLeftToRight()) {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-		}
-		else {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-		}
-		box.add(box2);
+		addLeftAligned(aaPanel, autoActivateCB, COMPONENT_VERTICAL_SPACING);
 
 		SpringLayout sl = new SpringLayout();
 		JPanel temp = new JPanel(sl);
@@ -184,50 +168,39 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 			temp.add(aaDocKeysField);		temp.add(aaDocKeysLabel);
 		}
 		UIUtil.makeSpringCompactGrid(temp, 2,5, 0,0, 5,5);
-		JPanel temp2 = new JPanel(new BorderLayout());
-		temp2.add(temp, BorderLayout.LINE_START);
-		box2.add(temp2);
+		addLeftAligned(aaPanel, temp, 0, 20);
 
-		box2.add(Box.createVerticalGlue());
+		return aaPanel;
+	}
 
-		box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(
-				msg.getString("Options.Java.BuildPath")));
-		cp.add(box);
+
+	private Box createBuildPathPanel(ResourceBundle msg) {
+
+		Box buildPathPanel = Box.createVerticalBox();
+		buildPathPanel.setBorder(new OptionPanelBorder(
+			msg.getString("Options.Java.BuildPath")));
 
 		model = new DefaultTableModel(0, 2);
 		String[] colNames = { msg.getString("Options.Java.JarFile"),
-							msg.getString("Options.Java.SourceLocation") };
+			msg.getString("Options.Java.SourceLocation") };
 		ModifiableTable bpt = new ModifiableTable(model, colNames,
 			ModifiableTable.BOTTOM, ModifiableTable.ADD_REMOVE_MODIFY);
 		bpt.addModifiableTableListener(listener);
 		bpt.getTable().setPreferredScrollableViewportSize(
-													new Dimension(50, 16*8));
+			new Dimension(50, 16*8));
 		JarRowHandler rowHandler = new JarRowHandler();
 		bpt.setRowHandler(rowHandler);
-		box.add(bpt);
-		box.add(Box.createVerticalStrut(5));
+		buildPathPanel.add(bpt);
+		buildPathPanel.add(Box.createVerticalStrut(COMPONENT_VERTICAL_SPACING));
 
 		addJREButton = new JButton(msg.getString("Options.Java.AddJRE"));
 		addJREButton.addActionListener(listener);
-		addLeftAligned(box, addJREButton, 5);
+		addLeftAligned(buildPathPanel, addJREButton, COMPONENT_VERTICAL_SPACING);
 
 		buildPathModsCB = createCB("CheckForBuildPathMods");
-		addLeftAligned(box, buildPathModsCB, 5);
-		box.add(Box.createVerticalGlue());
+		addLeftAligned(buildPathPanel, buildPathModsCB);
 
-		cp.add(Box.createVerticalStrut(5));
-		rdButton = new JButton(app.getString("RestoreDefaults"));
-		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton, 5);
-
-		cp.add(Box.createVerticalGlue());
-
-		applyComponentOrientation(o);
-
-		addChildPanel(new FoldingOnlyOptionsPanel(app,
-							SyntaxConstants.SYNTAX_STYLE_JAVA, false));
-
+		return buildPathPanel;
 	}
 
 
@@ -238,6 +211,25 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
+	}
+
+
+	private Box createGeneralPanel(ResourceBundle msg) {
+
+		Box generalPanel = Box.createVerticalBox();
+		generalPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.General.Section.General")));
+
+		enabledCB = createCB("Options.Java.EnableCodeCompletion");
+		addLeftAligned(generalPanel, enabledCB, COMPONENT_VERTICAL_SPACING);
+
+		showDescWindowCB = createCB("Options.General.ShowDescWindow");
+		addLeftAligned(generalPanel, showDescWindowCB, COMPONENT_VERTICAL_SPACING, 20);
+
+		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
+		addLeftAligned(generalPanel, paramAssistanceCB, 0, 20);
+
+		return generalPanel;
 	}
 
 

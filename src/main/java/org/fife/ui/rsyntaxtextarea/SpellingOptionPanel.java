@@ -101,8 +101,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		enabledCB = new JCheckBox(msg.getString("Enabled"));
 		enabledCB.setActionCommand("Enabled");
 		enabledCB.addActionListener(listener);
-		addLeftAligned(temp, enabledCB);
-		temp.add(Box.createVerticalStrut(5));
+		addLeftAligned(temp, enabledCB, COMPONENT_VERTICAL_SPACING);
 
 		dictLabel = new JLabel(msg.getString("Dictionary"));
 		dictCombo = new LabelValueComboBox<>();
@@ -146,7 +145,6 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		maxErrorsPanel.add(maxErrorsField, BorderLayout.LINE_START);
 
 		JPanel temp2 = new JPanel(new SpringLayout());
-		temp2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20)); // "Indent"
 		if (orientation.isLeftToRight()) {
 			temp2.add(dictLabel);				temp2.add(dictComboPanel);
 			temp2.add(userDictLabel);			temp2.add(userDictFieldPanel);
@@ -161,21 +159,18 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 			temp2.add(colorButtonPanel);		temp2.add(colorLabel);
 			temp2.add(maxErrorsPanel);			temp2.add(errorsPerFileLabel);
 		}
-		UIUtil.makeSpringCompactGrid(temp2, 5, 2, 5, 5, 5, 5);
-		addLeftAligned(temp, temp2);
-		temp.add(Box.createVerticalStrut(5));
+		UIUtil.makeSpringCompactGrid(temp2, 5, 2, 0, 0, 5, 5);
+		addLeftAligned(temp, temp2, COMPONENT_VERTICAL_SPACING, 20);
 
 		viewSpellingWindowCB = new JCheckBox(msg.getString("ViewSpellingErrorWindow"));
 		viewSpellingWindowCB.setActionCommand("ViewSpellingWindow");
 		viewSpellingWindowCB.addActionListener(listener);
-		addLeftAligned(temp, viewSpellingWindowCB);
-		temp.add(Box.createVerticalStrut(5));
+		addLeftAligned(temp, viewSpellingWindowCB, SECTION_VERTICAL_SPACING);
 
 		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
 		rdButton.setActionCommand("RestoreDefaults");
 		rdButton.addActionListener(listener);
 		addLeftAligned(temp, rdButton);
-		temp.add(Box.createVerticalStrut(5));
 
 		temp.add(Box.createVerticalGlue());
 

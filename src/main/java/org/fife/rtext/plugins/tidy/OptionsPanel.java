@@ -16,18 +16,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.border.Border;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -80,30 +69,25 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 
 		ComponentOrientation o = ComponentOrientation.
 											getOrientation(getLocale());
-		Border empty5Border = UIUtil.getEmpty5Border();
 
 		setLayout(new BorderLayout());
-		setBorder(empty5Border);
-		Box cp = Box.createVerticalBox();
-		add(cp, BorderLayout.NORTH);
+		setBorder(UIUtil.getEmpty5Border());
+		Box topPanel = Box.createVerticalBox();
 
-		cp.add(createHtmlOptionsSection());
-		cp.add(Box.createVerticalStrut(5));
-		cp.add(createXmlOptionsSection());
-		cp.add(Box.createVerticalStrut(5));
-		cp.add(createJsonOptionsSection());
-		cp.add(Box.createVerticalStrut(5));
+		topPanel.add(createHtmlOptionsSection(o));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
+		topPanel.add(createXmlOptionsSection(o));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
+		topPanel.add(createJsonOptionsSection(o));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		JButton defaultsButton = new JButton(
 			plugin.getApplication().getString("RestoreDefaults"));
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
-		Box temp = createHorizontalBox();
-		temp.add(defaultsButton);
-		temp.add(Box.createHorizontalGlue());
-		cp.add(temp);
-		cp.add(Box.createVerticalGlue());
+		addLeftAligned(topPanel, defaultsButton);
 
+		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(o);
 
 	}
@@ -137,7 +121,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 					getIntValue(xmlSpaceSpinner)!=4 ||
 					getIntValue(xmlWrapLenSpinner)!=0 ||
 					jsonIndentFirstLevelCB.isSelected() ||
-					getIntValue(jsonSpaceSpinner)!=3 ||
+					getIntValue(jsonSpaceSpinner)!=2 ||
 					!defaultJsonStyle.equals(
 							jsonStyleCombo.getSelectedValue())) {
 				addXmlPiCB.setSelected(false);
@@ -151,7 +135,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 				xmlSpaceSpinner.setValue(4);
 				xmlWrapLenSpinner.setValue(0);
 				jsonIndentFirstLevelCB.setSelected(false);
-				jsonSpaceSpinner.setValue(3);
+				jsonSpaceSpinner.setValue(2);
 				jsonStyleCombo.setSelectedValue(defaultJsonStyle);
 				setDirty(true);
 			}
@@ -169,77 +153,56 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 	 */
 	private JCheckBox addCheckBox(String key, Box addTo) {
 		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
-		JPanel temp = new JPanel(new BorderLayout());
-		temp.add(cb, BorderLayout.LINE_START);
-		addTo.add(temp);
-		addTo.add(Box.createVerticalStrut(5));
 		cb.addActionListener(this);
+		addLeftAligned(addTo, cb, COMPONENT_VERTICAL_SPACING);
 		return cb;
 	}
 
 
-	private Container createHtmlOptionsSection() {
+	private Container createHtmlOptionsSection(ComponentOrientation o) {
 
 		ResourceBundle msg = Plugin.MSG;
 
-		Box temp = Box.createVerticalBox();
-		temp.setBorder(BorderFactory.createCompoundBorder(
-				new OptionPanelBorder(msg.getString("Options.Section.HTML")),
-				UIUtil.getEmpty5Border()));
+		Box htmlPanel = Box.createVerticalBox();
+		htmlPanel.setBorder(new OptionPanelBorder(msg.getString("Options.Section.HTML")));
 
-		JLabel label = new JLabel(msg.getString("Options.SpaceCount"));
+		JLabel spaceLabel = new JLabel(msg.getString("Options.SpaceCount"));
 		htmlSpaceSpinner = newSpinner(new SpinnerNumberModel(4, -1,25, 1));
-		label.setLabelFor(htmlSpaceSpinner);
-		Container temp2 = createHorizontalBox();
-		temp2.add(label);
-		temp2.add(Box.createHorizontalStrut(5));
-		temp2.add(htmlSpaceSpinner);
-		temp2.add(Box.createHorizontalGlue());
-		temp.add(temp2);
-		temp.add(Box.createVerticalStrut(5));
+		spaceLabel.setLabelFor(htmlSpaceSpinner);
 
-		dropEmptyParasCB = addCheckBox("Options.DropEmptyParas", temp);
-		hideEndTagsCB = addCheckBox("Options.HideOptionalEndTags", temp);
-		logicalEmpCB = addCheckBox("Options.UseLogicalEmphasisTags", temp);
-		makeCleanCB = addCheckBox("Options.ReplacePresentationalTags", temp);
-		upperCaseTagNamesCB = addCheckBox("Options.UpperCaseTagNames", temp);
-		upperCaseAttrNamesCB = addCheckBox("Options.UpperCaseAttrNames", temp);
-
-		label = new JLabel(msg.getString("Options.WrapLength"));
+		JLabel wrapLenLabel = new JLabel(msg.getString("Options.WrapLength"));
 		htmlWrapLenSpinner = newSpinner(new SpinnerNumberModel(4, 0,999999, 1));
-		label.setLabelFor(htmlWrapLenSpinner);
-		temp2 = createHorizontalBox();
-		temp2.add(label);
-		temp2.add(Box.createHorizontalStrut(5));
-		temp2.add(htmlWrapLenSpinner);
-		temp2.add(Box.createHorizontalGlue());
-		temp.add(temp2);
-		temp.add(Box.createVerticalStrut(5));
+		wrapLenLabel.setLabelFor(htmlWrapLenSpinner);
 
-		return temp;
+		JPanel labelledSpinnersPanel = new JPanel(new SpringLayout());
+		UIUtil.addLabelValuePairs(labelledSpinnersPanel, o,
+			spaceLabel, htmlSpaceSpinner,
+			wrapLenLabel, htmlWrapLenSpinner);
+		UIUtil.makeSpringCompactGrid(labelledSpinnersPanel, 2, 2, 0, 0, 5, 5);
+		addLeftAligned(htmlPanel, labelledSpinnersPanel, COMPONENT_VERTICAL_SPACING);
+
+		dropEmptyParasCB = addCheckBox("Options.DropEmptyParas", htmlPanel);
+		hideEndTagsCB = addCheckBox("Options.HideOptionalEndTags", htmlPanel);
+		logicalEmpCB = addCheckBox("Options.UseLogicalEmphasisTags", htmlPanel);
+		makeCleanCB = addCheckBox("Options.ReplacePresentationalTags", htmlPanel);
+		upperCaseTagNamesCB = addCheckBox("Options.UpperCaseTagNames", htmlPanel);
+		upperCaseAttrNamesCB = addCheckBox("Options.UpperCaseAttrNames", htmlPanel);
+
+		return htmlPanel;
 
 	}
 
 
-	private Container createJsonOptionsSection() {
+	private Container createJsonOptionsSection(ComponentOrientation o) {
 
 		ResourceBundle msg = Plugin.MSG;
 
-		Box temp = Box.createVerticalBox();
-		temp.setBorder(BorderFactory.createCompoundBorder(
-				new OptionPanelBorder(msg.getString("Options.Section.JSON")),
-				UIUtil.getEmpty5Border()));
+		Box jsonPanel = Box.createVerticalBox();
+		jsonPanel.setBorder(new OptionPanelBorder(msg.getString("Options.Section.JSON")));
 
-		JLabel label = new JLabel(msg.getString("Options.SpaceCount"));
+		JLabel spaceLabel = new JLabel(msg.getString("Options.SpaceCount"));
 		jsonSpaceSpinner = newSpinner(new SpinnerNumberModel(4, -1,25, 1));
-		label.setLabelFor(jsonSpaceSpinner);
-		Container temp2 = createHorizontalBox();
-		temp2.add(label);
-		temp2.add(Box.createHorizontalStrut(5));
-		temp2.add(jsonSpaceSpinner);
-		temp2.add(Box.createHorizontalGlue());
-		temp.add(temp2);
-		temp.add(Box.createVerticalStrut(5));
+		spaceLabel.setLabelFor(jsonSpaceSpinner);
 
 		jsonStyleCombo = new LabelValueComboBox<>();
 		jsonStyleCombo.addLabelValuePair("JSON", "json");
@@ -247,63 +210,50 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 		jsonStyleCombo.addLabelValuePair(
 				msg.getString("Options.JSON.Style.Minimal"), "minimal");
 		jsonStyleCombo.addActionListener(this);
-		label = UIUtil.newLabel(msg, "Options.JSON.Style", jsonStyleCombo);
-		temp2 = createHorizontalBox();
-		temp2.add(label);
-		temp2.add(Box.createHorizontalStrut(5));
-		temp2.add(jsonStyleCombo);
-		temp2.add(Box.createHorizontalStrut(80));
+		JLabel styleLabel = UIUtil.newLabel(msg, "Options.JSON.Style", jsonStyleCombo);
+
+		JPanel labelledFieldsPaanel = new JPanel(new SpringLayout());
+		UIUtil.addLabelValuePairs(labelledFieldsPaanel, o,
+			spaceLabel, jsonSpaceSpinner,
+			styleLabel, jsonStyleCombo);
+		UIUtil.makeSpringCompactGrid(labelledFieldsPaanel, 2, 2, 0, 0, 5, 5);
+		addLeftAligned(jsonPanel, labelledFieldsPaanel, COMPONENT_VERTICAL_SPACING);
+
 		jsonIndentFirstLevelCB = UIUtil.newCheckBox(msg,
 				"Options.JSON.IndentFirstLevel");
 		jsonIndentFirstLevelCB.addActionListener(this);
-		temp2.add(jsonIndentFirstLevelCB);
-		temp2.add(Box.createHorizontalGlue());
-		JPanel temp3 = new JPanel(new BorderLayout());
-		temp3.add(temp2, BorderLayout.LINE_START);
-		temp.add(temp3);
-		temp.add(Box.createVerticalStrut(5));
+		addLeftAligned(jsonPanel, jsonIndentFirstLevelCB);
 
-		return temp;
+		return jsonPanel;
 
 	}
 
 
-	private Container createXmlOptionsSection() {
+	private Container createXmlOptionsSection(ComponentOrientation o) {
 
 		ResourceBundle msg = Plugin.MSG;
 
-		Box temp = Box.createVerticalBox();
-		temp.setBorder(BorderFactory.createCompoundBorder(
-				new OptionPanelBorder(msg.getString("Options.Section.XML")),
-				UIUtil.getEmpty5Border()));
+		Box xmlPanel = Box.createVerticalBox();
+		xmlPanel.setBorder(new OptionPanelBorder(msg.getString("Options.Section.XML")));
 
-		JLabel label = new JLabel(msg.getString("Options.SpaceCount"));
+		JLabel spaceLabel = new JLabel(msg.getString("Options.SpaceCount"));
 		xmlSpaceSpinner = newSpinner(new SpinnerNumberModel(4, -1,25, 1));
-		label.setLabelFor(xmlSpaceSpinner);
-		Box temp2 = createHorizontalBox();
-		temp2.add(label);
-		temp2.add(Box.createHorizontalStrut(5));
-		temp2.add(xmlSpaceSpinner);
-		temp2.add(Box.createHorizontalGlue());
-		temp.add(temp2);
-		temp.add(Box.createVerticalStrut(5));
+		spaceLabel.setLabelFor(xmlSpaceSpinner);
 
-		addXmlPiCB = addCheckBox("Options.AddXmlDeclaration", temp);
-		temp.add(Box.createVerticalStrut(5));
-
-		label = new JLabel(msg.getString("Options.WrapLength"));
+		JLabel wrapLenLabel = new JLabel(msg.getString("Options.WrapLength"));
 		xmlWrapLenSpinner = newSpinner(new SpinnerNumberModel(4, 0,999999, 1));
-		label.setLabelFor(xmlWrapLenSpinner);
-		temp2 = createHorizontalBox();
-		temp2.add(label);
-		temp2.add(Box.createHorizontalStrut(5));
-		temp2.add(xmlWrapLenSpinner);
-		temp2.add(Box.createHorizontalGlue());
-		temp.add(temp2);
-		temp.add(Box.createVerticalStrut(5));
+		wrapLenLabel.setLabelFor(xmlWrapLenSpinner);
 
-		//temp.add(Box.createVerticalGlue());
-		return temp;
+		JPanel labelledSpinnersPanel = new JPanel(new SpringLayout());
+		UIUtil.addLabelValuePairs(labelledSpinnersPanel, o,
+			spaceLabel, xmlSpaceSpinner,
+			wrapLenLabel, xmlWrapLenSpinner);
+		UIUtil.makeSpringCompactGrid(labelledSpinnersPanel, 2, 2, 0, 0, 5, 5);
+		addLeftAligned(xmlPanel, labelledSpinnersPanel, COMPONENT_VERTICAL_SPACING);
+
+		addXmlPiCB = addCheckBox("Options.AddXmlDeclaration", xmlPanel);
+
+		return xmlPanel;
 
 	}
 

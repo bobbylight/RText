@@ -77,9 +77,10 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 
 		SelectableLabel desc = new SelectableLabel(msg.getString("OptFFDesc"));
 		JPanel temp = new JPanel(new BorderLayout());
-		temp.setBorder(BorderFactory.createEmptyBorder(0,0,5,0));
+		temp.setBorder(BorderFactory.createEmptyBorder(0,0,COMPONENT_VERTICAL_SPACING,0));
 		temp.add(desc, BorderLayout.LINE_START);
 		contentPane.add(temp, BorderLayout.NORTH);
+
 		model = new FilterTableModel(msg.getString("OptFFCol1"), msg.getString("OptFFCol2"));
 		filterTable = new ModifiableTable(model, ModifiableTable.BOTTOM, ModifiableTable.MODIFY);
 		filterTable.setRowHandler(new FileFilterRowHandler());
@@ -99,10 +100,8 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 		ignoreExtsCB.addActionListener(this);
 
 		Box box = Box.createVerticalBox();
-		addLeftAligned(box, guessTypeCB);
-		addLeftAligned(box, ignoreExtsCB);
-		box.add(Box.createVerticalStrut(5)); // Distance from "Restore Defaults"
-		//box.add(Box.createVerticalGlue());
+		addLeftAligned(box, guessTypeCB, COMPONENT_VERTICAL_SPACING);
+		addLeftAligned(box, ignoreExtsCB, SECTION_VERTICAL_SPACING);
 		bottomPanel.add(box, BorderLayout.NORTH);
 
 		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));

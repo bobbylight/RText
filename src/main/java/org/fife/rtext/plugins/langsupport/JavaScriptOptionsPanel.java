@@ -28,7 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
@@ -89,25 +88,24 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		});
 
 		setLayout(new BorderLayout());
-		Border empty5Border = UIUtil.getEmpty5Border();
-		setBorder(empty5Border);
+		setBorder(UIUtil.getEmpty5Border());
 
 		Box cp = Box.createVerticalBox();
 		cp.setBorder(null);
 		add(cp, BorderLayout.NORTH);
 
 		cp.add(createGeneralPanel(msg));
-		cp.add(Box.createVerticalStrut(5));
+		cp.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		cp.add(createSyntaxCheckingEnginePanel(msg));
-		cp.add(Box.createVerticalStrut(5));
+		cp.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		cp.add(createAutoActivationPanel(msg));
-		cp.add(Box.createVerticalStrut(5));
+		cp.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton, 5);
+		addLeftAligned(cp, rdButton);
 
 		cp.add(Box.createVerticalGlue());
 
@@ -132,12 +130,12 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		ComponentOrientation o = ComponentOrientation.
 						getOrientation(getLocale());
 
-		Box box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(
+		Box aaPanel = Box.createVerticalBox();
+		aaPanel.setBorder(new OptionPanelBorder(
 				msg.getString("Options.General.AutoActivation")));
 
 		autoActivateCB = createCB("Options.General.EnableAutoActivation");
-		addLeftAligned(box, autoActivateCB, 5);
+		addLeftAligned(aaPanel, autoActivateCB, COMPONENT_VERTICAL_SPACING);
 
 		SpringLayout sl = new SpringLayout();
 		JPanel temp = new JPanel(sl);
@@ -173,11 +171,9 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 			temp.add(aaDocKeysField);		temp.add(aaDocKeysLabel);
 		}
 		UIUtil.makeSpringCompactGrid(temp, 2,5, 0,0, 5,5);
-		JPanel temp2 = new JPanel(new BorderLayout());
-		temp2.add(temp, BorderLayout.LINE_START);
-		addLeftAligned(box, temp2, 20);
+		addLeftAligned(aaPanel, temp, 0, 20);
 
-		return box;
+		return aaPanel;
 
 	}
 
@@ -200,21 +196,20 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 	 */
 	private Box createGeneralPanel(ResourceBundle msg) {
 
-		Box box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
+		Box generalPanel = Box.createVerticalBox();
+		generalPanel.setBorder(new OptionPanelBorder(msg.
 				getString("Options.General.Section.General")));
 
 		enabledCB = createCB("Options.JavaScript.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB, 5);
+		addLeftAligned(generalPanel, enabledCB, COMPONENT_VERTICAL_SPACING);
 
 		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box, showDescWindowCB, 5, 20);
+		addLeftAligned(generalPanel, showDescWindowCB, COMPONENT_VERTICAL_SPACING, 20);
 
 		paramAssistanceCB = createCB("Options.General.ParameterAssistance");
-		addLeftAligned(box, paramAssistanceCB, 5, 20);
+		addLeftAligned(generalPanel, paramAssistanceCB, 0, 20);
 
-		return box;
-
+		return generalPanel;
 	}
 
 
@@ -237,27 +232,27 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 	 */
 	private Box createSyntaxCheckingEnginePanel(ResourceBundle msg) {
 
-		Box box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(
+		Box panel = Box.createVerticalBox();
+		panel.setBorder(new OptionPanelBorder(
 				msg.getString("Options.JavaScript.SyntaxCheckingEngine")));
 		ButtonGroup syntaxEngineBG = new ButtonGroup();
 		rhinoRB = createRB("Rhino");
 		syntaxEngineBG.add(rhinoRB);
-		addLeftAligned(box, rhinoRB, 5);
+		addLeftAligned(panel, rhinoRB, COMPONENT_VERTICAL_SPACING);
 
 		strictCB = createCB("Strict");
-		addLeftAligned(box, strictCB, 5, 20);
+		addLeftAligned(panel, strictCB, COMPONENT_VERTICAL_SPACING, 20);
 
 		e4xCB = createCB("E4x");
-		addLeftAligned(box, e4xCB, 5, 20);
+		addLeftAligned(panel, e4xCB, COMPONENT_VERTICAL_SPACING, 20);
 
 		jshintRB = createRB("JSHint");
 		syntaxEngineBG.add(jshintRB);
-		addLeftAligned(box, jshintRB, 5);
+		addLeftAligned(panel, jshintRB, COMPONENT_VERTICAL_SPACING);
 
 		jsHintDescLabel = new SelectableLabel(
 				msg.getString("Options.JavaScript.JSHint.Desc"));
-		addLeftAligned(box, jsHintDescLabel, 5, 20);
+		addLeftAligned(panel, jsHintDescLabel, COMPONENT_VERTICAL_SPACING, 20);
 
 		jshintrcLabel = UIUtil.newLabel(msg,
 				"Options.JavaScript.JSHint.JSHintrc");
@@ -267,9 +262,9 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		JPanel temp = new JPanel(new BorderLayout(5, 0));
 		temp.add(jshintrcLabel, BorderLayout.LINE_START);
 		temp.add(jshintrcField);
-		addLeftAligned(box, temp, 5, 20);
+		addLeftAligned(panel, temp);
 
-		return box;
+		return panel;
 
 	}
 

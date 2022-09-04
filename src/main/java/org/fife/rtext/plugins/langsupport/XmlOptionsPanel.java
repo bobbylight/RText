@@ -42,9 +42,9 @@ import org.fife.ui.rsyntaxtextarea.modes.XMLTokenMaker;
  */
 class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 
-	private final JCheckBox codeCompletionEnabledCB;
-	private final JCheckBox autoCompleteClosingTagsCB;
-	private final JCheckBox foldingEnabledCB;
+	private JCheckBox codeCompletionEnabledCB;
+	private JCheckBox autoCompleteClosingTagsCB;
+	private JCheckBox foldingEnabledCB;
 	private final JButton rdButton;
 
 
@@ -67,37 +67,19 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
 
-		Box cp = Box.createVerticalBox();
-		cp.setBorder(null);
-		add(cp, BorderLayout.NORTH);
+		Box topPanel = Box.createVerticalBox();
 
-		Box box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.General.Section.General")));
-		cp.add(box);
-		cp.add(Box.createVerticalStrut(5));
+		topPanel.add(createGeneralPanel(msg));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		codeCompletionEnabledCB = createCB("Options.Xml.EnableCodeCompletion");
-		addLeftAligned(box, codeCompletionEnabledCB, 5);
+		topPanel.add(createFoldingPanel(msg));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		autoCompleteClosingTagsCB = createCB("CompleteClosingTags");
-		addLeftAligned(box, autoCompleteClosingTagsCB, 5);
-
-		box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.General.Section.Folding")));
-		cp.add(box);
-		cp.add(Box.createVerticalStrut(5));
-
-		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
-		addLeftAligned(box, foldingEnabledCB, 5);
-
-		cp.add(Box.createVerticalStrut(5));
 		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(this);
-		addLeftAligned(cp, rdButton, 5);
+		addLeftAligned(topPanel, rdButton);
 
-		cp.add(Box.createVerticalGlue());
+		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(o);
 
 	}
@@ -136,6 +118,35 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 	}
 
 
+	private Box createFoldingPanel(ResourceBundle msg) {
+
+		Box foldingPanel = Box.createVerticalBox();
+		foldingPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.General.Section.Folding")));
+
+		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
+		addLeftAligned(foldingPanel, foldingEnabledCB);
+
+		return foldingPanel;
+	}
+
+
+	private Box createGeneralPanel(ResourceBundle msg) {
+
+		Box generalPanel = Box.createVerticalBox();
+		generalPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.General.Section.General")));
+
+		codeCompletionEnabledCB = createCB("Options.Xml.EnableCodeCompletion");
+		addLeftAligned(generalPanel, codeCompletionEnabledCB, COMPONENT_VERTICAL_SPACING);
+
+		autoCompleteClosingTagsCB = createCB("CompleteClosingTags");
+		addLeftAligned(generalPanel, autoCompleteClosingTagsCB, COMPONENT_VERTICAL_SPACING);
+
+		return generalPanel;
+	}
+
+
 	@Override
 	protected void doApplyImpl(Frame owner) {
 
@@ -162,7 +173,7 @@ class XmlOptionsPanel extends OptionsDialogPanel implements ActionListener {
 
 	@Override
 	public JComponent getTopJComponent() {
-		return autoCompleteClosingTagsCB;
+		return codeCompletionEnabledCB;
 	}
 
 

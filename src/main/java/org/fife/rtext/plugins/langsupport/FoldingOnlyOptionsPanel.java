@@ -32,7 +32,7 @@ import org.fife.ui.UIUtil;
 class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 
 	private final String language;
-	private final JCheckBox enabledCB;
+	private JCheckBox enabledCB;
 	private final JButton rdButton;
 	private final Listener listener;
 
@@ -94,22 +94,14 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 		cp.setBorder(null);
 		add(cp, BorderLayout.NORTH);
 
-		Box box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.General.Section.Folding")));
-		cp.add(box);
-		cp.add(Box.createVerticalStrut(5));
+		cp.add(createFoldingPanel(msg));
+		cp.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		enabledCB = createCB("Options.General.EnableCodeFolding");
-		addLeftAligned(box, enabledCB, 5);
-
-		cp.add(Box.createVerticalStrut(5));
 		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton, 5);
+		addLeftAligned(cp, rdButton);
 
 		cp.add(Box.createVerticalGlue());
-
 		applyComponentOrientation(o);
 
 	}
@@ -119,6 +111,19 @@ class FoldingOnlyOptionsPanel extends OptionsDialogPanel {
 		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
+	}
+
+
+	private Box createFoldingPanel(ResourceBundle msg) {
+
+		Box foldingPanel = Box.createVerticalBox();
+		foldingPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.General.Section.Folding")));
+
+		enabledCB = createCB("Options.General.EnableCodeFolding");
+		addLeftAligned(foldingPanel, enabledCB);
+
+		return foldingPanel;
 	}
 
 

@@ -15,7 +15,6 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -24,7 +23,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
@@ -49,13 +47,13 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 class PhpOptionsPanel extends OptionsDialogPanel {
 
 	private final Listener listener;
-	private final JCheckBox enabledCB;
-	private final JCheckBox showDescWindowCB;
-	private final JCheckBox autoAddClosingTagsCB;
-	private final JCheckBox autoActivateCB;
-	private final JLabel aaDelayLabel;
-	private final JTextField aaDelayField;
-	private final JCheckBox foldingEnabledCB;
+	private JCheckBox enabledCB;
+	private JCheckBox showDescWindowCB;
+	private JCheckBox autoAddClosingTagsCB;
+	private JCheckBox autoActivateCB;
+	private JLabel aaDelayLabel;
+	private JTextField aaDelayField;
+	private JCheckBox foldingEnabledCB;
 	private final JButton rdButton;
 
 
@@ -78,55 +76,38 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 											getOrientation(getLocale());
 
 		setLayout(new BorderLayout());
-		Border empty5Border = UIUtil.getEmpty5Border();
-		setBorder(empty5Border);
+		setBorder(UIUtil.getEmpty5Border());
 
-		Box cp = Box.createVerticalBox();
-		cp.setBorder(null);
-		add(cp, BorderLayout.NORTH);
+		Box topPanel = Box.createVerticalBox();
 
-		Box box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.General.Section.General")));
-		cp.add(box);
-		cp.add(Box.createVerticalStrut(5));
+		topPanel.add(createGeneralPanel(msg));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		enabledCB = createCB("Options.General.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB, 5);
+		topPanel.add(createAutoActivationPanel(msg, o));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		Box box2 = Box.createVerticalBox();
-		if (o.isLeftToRight()) {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-		}
-		else {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-		}
-		box.add(box2);
+		topPanel.add(createFoldingPanel(msg));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box2, showDescWindowCB, 5);
+		rdButton = new JButton(app.getString("RestoreDefaults"));
+		rdButton.addActionListener(listener);
+		addLeftAligned(topPanel, rdButton);
 
-		autoAddClosingTagsCB = createCB("Options.Html.AutoAddClosingTags");
-		addLeftAligned(box, autoAddClosingTagsCB, 5);
+		add(topPanel, BorderLayout.NORTH);
+		applyComponentOrientation(o);
 
-		box2.add(Box.createVerticalGlue());
+	}
 
-		box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(
-				msg.getString("Options.General.AutoActivation")));
-		cp.add(box);
+
+	private Box createAutoActivationPanel(ResourceBundle msg,
+										  ComponentOrientation o) {
+
+		Box aaPanel = Box.createVerticalBox();
+		aaPanel.setBorder(new OptionPanelBorder(
+			msg.getString("Options.General.AutoActivation")));
 
 		autoActivateCB = createCB("Options.General.EnableAutoActivation");
-		addLeftAligned(box, autoActivateCB, 5);
-
-		box2 = Box.createVerticalBox();
-		if (o.isLeftToRight()) {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-		}
-		else {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-		}
-		box.add(box2);
+		addLeftAligned(aaPanel, autoActivateCB, COMPONENT_VERTICAL_SPACING);
 
 		SpringLayout sl = new SpringLayout();
 		JPanel temp = new JPanel(sl);
@@ -139,40 +120,13 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 		aaHtmlKeysLabel.setEnabled(false);
 		JTextField aaHtmlKeysField = new JTextField("<", 10);
 		aaHtmlKeysField.setEnabled(false);
-		if (o.isLeftToRight()) {
-			temp.add(aaDelayLabel);		temp.add(aaDelayField);
-			temp.add(aaHtmlKeysLabel);		temp.add(aaHtmlKeysField);
-		}
-		else {
-			temp.add(aaDelayField);		temp.add(aaDelayLabel);
-			temp.add(aaHtmlKeysField);		temp.add(aaHtmlKeysLabel);
-		}
+		UIUtil.addLabelValuePairs(temp, o,
+			aaDelayLabel, aaDelayField,
+			aaHtmlKeysLabel, aaHtmlKeysField);
 		UIUtil.makeSpringCompactGrid(temp, 2,2, 0,0, 5,5);
-		JPanel temp2 = new JPanel(new BorderLayout());
-		temp2.add(temp, BorderLayout.LINE_START);
-		box2.add(temp2);
+		addLeftAligned(aaPanel, temp, 0, 20);
 
-		box2.add(Box.createVerticalGlue());
-
-		cp.add(Box.createVerticalStrut(5));
-		box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.General.Section.Folding")));
-		cp.add(box);
-		cp.add(Box.createVerticalStrut(5));
-
-		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
-		addLeftAligned(box, foldingEnabledCB, 5);
-
-		cp.add(Box.createVerticalStrut(5));
-		rdButton = new JButton(app.getString("RestoreDefaults"));
-		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton, 5);
-
-		cp.add(Box.createVerticalGlue());
-
-		applyComponentOrientation(o);
-
+		return aaPanel;
 	}
 
 
@@ -183,6 +137,38 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
+	}
+
+
+	private Box createFoldingPanel(ResourceBundle msg) {
+
+		Box foldingPanel = Box.createVerticalBox();
+		foldingPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.General.Section.Folding")));
+
+		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
+		addLeftAligned(foldingPanel, foldingEnabledCB);
+
+		return foldingPanel;
+	}
+
+
+	private Box createGeneralPanel(ResourceBundle msg) {
+
+		Box generalPanel = Box.createVerticalBox();
+		generalPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.General.Section.General")));
+
+		enabledCB = createCB("Options.General.EnableCodeCompletion");
+		addLeftAligned(generalPanel, enabledCB, COMPONENT_VERTICAL_SPACING);
+
+		showDescWindowCB = createCB("Options.General.ShowDescWindow");
+		addLeftAligned(generalPanel, showDescWindowCB, COMPONENT_VERTICAL_SPACING, 20);
+
+		autoAddClosingTagsCB = createCB("Options.Html.AutoAddClosingTags");
+		addLeftAligned(generalPanel, autoAddClosingTagsCB);
+
+		return generalPanel;
 	}
 
 

@@ -16,12 +16,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ResourceBundle;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.border.Border;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
@@ -41,9 +39,9 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 class ShellOptionsPanel extends OptionsDialogPanel {
 
 	private final Listener listener;
-	private final JCheckBox enabledCB;
-	private final JCheckBox showDescWindowCB;
-	private final JCheckBox useSystemManCB;
+	private JCheckBox enabledCB;
+	private JCheckBox showDescWindowCB;
+	private JCheckBox useSystemManCB;
 	private final JButton rdButton;
 
 
@@ -66,46 +64,18 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 											getOrientation(getLocale());
 
 		setLayout(new BorderLayout());
-		Border empty5Border = UIUtil.getEmpty5Border();
-		setBorder(empty5Border);
+		setBorder(UIUtil.getEmpty5Border());
 
-		Box cp = Box.createVerticalBox();
-		cp.setBorder(null);
-		add(cp, BorderLayout.NORTH);
+		Box topPanel = Box.createVerticalBox();
 
-		Box box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.General.Section.General")));
-		cp.add(box);
-		cp.add(Box.createVerticalStrut(5));
+		topPanel.add(createGeneralPanel(msg));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		enabledCB = createCB("Options.General.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB, 5);
-
-		Box box2 = Box.createVerticalBox();
-		if (o.isLeftToRight()) {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
-		}
-		else {
-			box2.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
-		}
-		box.add(box2);
-
-		showDescWindowCB = createCB("Options.General.ShowDescWindow");
-		addLeftAligned(box2, showDescWindowCB, 5);
-
-		useSystemManCB = createCB("UseSystemManPages");
-		addLeftAligned(box2, useSystemManCB, 5);
-
-		box2.add(Box.createVerticalGlue());
-
-		cp.add(Box.createVerticalStrut(5));
 		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton, 5);
+		addLeftAligned(topPanel, rdButton);
 
-		cp.add(Box.createVerticalGlue());
-
+		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(o);
 
 	}
@@ -118,6 +88,25 @@ class ShellOptionsPanel extends OptionsDialogPanel {
 		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
+	}
+
+
+	private Box createGeneralPanel(ResourceBundle msg) {
+
+		Box generalPanel = Box.createVerticalBox();
+		generalPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.General.Section.General")));
+
+		enabledCB = createCB("Options.General.EnableCodeCompletion");
+		addLeftAligned(generalPanel, enabledCB, COMPONENT_VERTICAL_SPACING);
+
+		showDescWindowCB = createCB("Options.General.ShowDescWindow");
+		addLeftAligned(generalPanel, showDescWindowCB, COMPONENT_VERTICAL_SPACING, 20);
+
+		useSystemManCB = createCB("UseSystemManPages");
+		addLeftAligned(generalPanel, useSystemManCB, 0, 20);
+
+		return generalPanel;
 	}
 
 

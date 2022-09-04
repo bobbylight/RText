@@ -88,10 +88,10 @@ class TasksOptionPanel extends PluginOptionsDialogPanel<TasksPlugin>
 		topPanel.setBorder(new OptionPanelBorder(
 				plugin.getString("Options.TaskWindow")));
 
-		// A check box toggling the plugin's visibility.
+		// A checkbox toggling the plugin's visibility.
 		visibleCB = new JCheckBox(gpb.getString("Visible"));
 		visibleCB.addActionListener(this);
-		addLeftAligned(topPanel, visibleCB, 5);
+		addLeftAligned(topPanel, visibleCB, COMPONENT_VERTICAL_SPACING);
 
 		// A combo in which to select the dockable window's placement.
 		Box locationPanel = createHorizontalBox();
@@ -131,7 +131,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel<TasksPlugin>
 		defaultsButton.setActionCommand("RestoreDefaults");
 		defaultsButton.addActionListener(this);
 		JPanel temp = new JPanel(new BorderLayout());
-		temp.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
+		temp.setBorder(BorderFactory.createEmptyBorder(SECTION_VERTICAL_SPACING,0,0,0));
 		temp.add(defaultsButton, BorderLayout.LINE_START);
 		add(temp, BorderLayout.SOUTH);
 

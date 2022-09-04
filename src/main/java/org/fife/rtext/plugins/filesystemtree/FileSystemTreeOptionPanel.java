@@ -17,14 +17,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ResourceBundle;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 import org.fife.rtext.*;
 import org.fife.ui.UIUtil;
@@ -62,24 +59,17 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel<FileSystemTreeP
 		ComponentOrientation orientation = ComponentOrientation.
 									getOrientation(getLocale());
 
-		Border empty5Border = UIUtil.getEmpty5Border();
-		setBorder(BorderFactory.createCompoundBorder(
-				empty5Border,
-				BorderFactory.createCompoundBorder(
-					new OptionPanelBorder(fsvb.getString("OptionPanel.Title")),
-					empty5Border)));
+		setBorder(UIUtil.getEmpty5Border());
 		setLayout(new BorderLayout());
 
-		// A panel to contain everything that will go into our "top" area.
 		Box topPanel = Box.createVerticalBox();
+		topPanel.setBorder(new OptionPanelBorder(
+			fsvb.getString("OptionPanel.Title")));
 
-		// A check box toggling the plugin's visibility.
-		JPanel temp = new JPanel(new BorderLayout());
+		// A checkbox toggling the plugin's visibility.
 		visibleCB = new JCheckBox(gpb.getString("Visible"));
 		visibleCB.addActionListener(this);
-		temp.add(visibleCB, BorderLayout.LINE_START);
-		topPanel.add(temp);
-		topPanel.add(Box.createVerticalStrut(5));
+		addLeftAligned(topPanel, visibleCB, COMPONENT_VERTICAL_SPACING);
 
 		// A combo in which to select the dockable window's placement.
 		Box locationPanel = createHorizontalBox();
@@ -97,9 +87,8 @@ class FileSystemTreeOptionPanel extends PluginOptionsDialogPanel<FileSystemTreeP
 		locationPanel.add(Box.createHorizontalStrut(5));
 		locationPanel.add(locationCombo);
 		locationPanel.add(Box.createHorizontalGlue());
-		topPanel.add(locationPanel);
+		addLeftAligned(topPanel, locationPanel);
 
-		// Put it all together!
 		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(orientation);
 

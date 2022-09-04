@@ -19,7 +19,6 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.border.Border;
 
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.jsp.JspLanguageSupport;
@@ -39,9 +38,9 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 class JspOptionsPanel extends OptionsDialogPanel {
 
 	private final Listener listener;
-	private final JCheckBox enabledCB;
-	private final JCheckBox autoAddClosingTagsCB;
-	private final JCheckBox foldingEnabledCB;
+	private JCheckBox enabledCB;
+	private JCheckBox autoAddClosingTagsCB;
+	private JCheckBox foldingEnabledCB;
 	private final JButton rdButton;
 
 
@@ -64,37 +63,18 @@ class JspOptionsPanel extends OptionsDialogPanel {
 											getOrientation(getLocale());
 
 		setLayout(new BorderLayout());
-		Border empty5Border = UIUtil.getEmpty5Border();
-		setBorder(empty5Border);
+		setBorder(UIUtil.getEmpty5Border());
 
-		Box cp = Box.createVerticalBox();
-		cp.setBorder(null);
-		add(cp, BorderLayout.NORTH);
+		Box topPanel = Box.createVerticalBox();
 
-		Box box = Box.createVerticalBox();
-		box.setBorder(new OptionPanelBorder(msg.
-				getString("Options.General.Section.General")));
-		cp.add(box);
-		cp.add(Box.createVerticalStrut(5));
-
-		enabledCB = createCB("Options.General.EnableCodeCompletion");
-		addLeftAligned(box, enabledCB);
-		cp.add(Box.createVerticalStrut(5));
-
-		autoAddClosingTagsCB = createCB("Options.Html.AutoAddClosingTags");
-		addLeftAligned(box, autoAddClosingTagsCB, 5);
-		cp.add(Box.createVerticalStrut(5));
-
-		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
-		addLeftAligned(box, foldingEnabledCB, 5);
-		cp.add(Box.createVerticalStrut(5));
+		topPanel.add(createGeneralPanel(msg));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		rdButton = new JButton(app.getString("RestoreDefaults"));
 		rdButton.addActionListener(listener);
-		addLeftAligned(cp, rdButton);
+		addLeftAligned(topPanel, rdButton);
 
-		cp.add(Box.createVerticalGlue());
-
+		add(topPanel, BorderLayout.NORTH);
 		applyComponentOrientation(o);
 
 	}
@@ -107,6 +87,25 @@ class JspOptionsPanel extends OptionsDialogPanel {
 		JCheckBox cb = new JCheckBox(Plugin.MSG.getString(key));
 		cb.addActionListener(listener);
 		return cb;
+	}
+
+
+	private Box createGeneralPanel(ResourceBundle msg) {
+
+		Box generalPanel = Box.createVerticalBox();
+		generalPanel.setBorder(new OptionPanelBorder(msg.
+			getString("Options.General.Section.General")));
+
+		enabledCB = createCB("Options.General.EnableCodeCompletion");
+		addLeftAligned(generalPanel, enabledCB, COMPONENT_VERTICAL_SPACING);
+
+		autoAddClosingTagsCB = createCB("Options.Html.AutoAddClosingTags");
+		addLeftAligned(generalPanel, autoAddClosingTagsCB, COMPONENT_VERTICAL_SPACING);
+
+		foldingEnabledCB = createCB("Options.General.EnableCodeFolding");
+		addLeftAligned(generalPanel, foldingEnabledCB);
+
+		return generalPanel;
 	}
 
 

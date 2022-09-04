@@ -128,17 +128,14 @@ public abstract class AbstractConsoleTextAreaOptionPanel<P extends Plugin<?>>
 		ResourceBundle gpb = ResourceBundle.getBundle(
 			"org.fife.ui.app.GUIPlugin");
 
-		Box temp = Box.createVerticalBox();
-		temp.setBorder(new OptionPanelBorder(
+		Box generalPanel = Box.createVerticalBox();
+		generalPanel.setBorder(new OptionPanelBorder(
 			gpb.getString("Options.General")));
 
-		// A check box toggling the plugin's visibility.
+		// A checkbox toggling the plugin's visibility.
 		visibleCB = new JCheckBox(gpb.getString("Visible"));
 		visibleCB.addActionListener(this);
-		JPanel temp2 = new JPanel(new BorderLayout());
-		temp2.add(visibleCB, BorderLayout.LINE_START);
-		temp.add(temp2);
-		temp.add(Box.createVerticalStrut(5));
+		addLeftAligned(generalPanel, visibleCB, COMPONENT_VERTICAL_SPACING);
 
 		// A combo in which to select the dockable window's placement.
 		Box locationPanel = createHorizontalBox();
@@ -156,10 +153,9 @@ public abstract class AbstractConsoleTextAreaOptionPanel<P extends Plugin<?>>
 		locationPanel.add(Box.createHorizontalStrut(5));
 		locationPanel.add(locationCombo);
 		locationPanel.add(Box.createHorizontalGlue());
-		temp.add(locationPanel);
+		addLeftAligned(generalPanel, locationPanel);
 
-		temp.add(Box.createVerticalGlue());
-		return temp;
+		return generalPanel;
 
 	}
 
