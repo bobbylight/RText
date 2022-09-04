@@ -30,6 +30,7 @@ dependencies {
 	implementation 'net.sf.jtidy:jtidy:r938'
 	implementation 'org.codehaus.groovy:groovy-all:3.0.12'
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
+	implementation 'org.jruby:jruby:9.3.7.0'
 
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'

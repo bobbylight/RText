@@ -46,6 +46,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	private final JPanel mainPanel;
 	private final SystemShellTextArea shellTextArea;
 	private final JavaScriptShellTextArea jsTextArea;
+	private final RubyShellTextArea rubyTextArea;
 
 	private final JToolBar toolbar;
 	private final JComboBox<String> shellCombo;
@@ -79,6 +80,11 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(sp);
 		mainPanel.add(sp, "JavaScript");
 
+		rubyTextArea = new RubyShellTextArea(plugin);
+		sp = new RScrollPane(rubyTextArea);
+		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(sp);
+		mainPanel.add(sp, "Ruby");
+
 		// Create a "toolbar" for the shells.
 		toolbar = new JToolBar();
 		toolbar.setFloatable(false);
@@ -91,6 +97,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 		shellCombo.addItemListener(listener);
 		shellCombo.addItem(plugin.getString("System"));
 		shellCombo.addItem(plugin.getString("JavaScript"));
+		shellCombo.addItem(plugin.getString("Ruby"));
 		temp.add(shellCombo);
 		temp.add(Box.createHorizontalGlue());
 		JPanel temp2 = new JPanel(new BorderLayout());
@@ -112,6 +119,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	 * Clears any text from all consoles.
 	 */
 	public void clearConsoles() {
+		rubyTextArea.clear();
 		jsTextArea.clear();
 		shellTextArea.clear();
 	}
@@ -183,6 +191,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	 * @see #getForeground(String)
 	 */
 	public void setForeground(String style, Color fg) {
+		setForegroundImpl(style, fg, rubyTextArea);
 		setForegroundImpl(style, fg, jsTextArea);
 		setForegroundImpl(style, fg, shellTextArea);
 	}
@@ -216,6 +225,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	 * @param highlightInput Whether to syntax highlight user input.
 	 */
 	public void setSyntaxHighlightInput(boolean highlightInput) {
+		rubyTextArea.refreshUserInputStyles();
 		jsTextArea.refreshUserInputStyles();
 		shellTextArea.refreshUserInputStyles();
 	}
@@ -249,13 +259,17 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 			JComboBox<?> source = (JComboBox<?>)e.getSource();
 			if (source==shellCombo) {
 				int index = shellCombo.getSelectedIndex();
-				if (index==0) {
+				if (index == 0) {
 					setPrimaryComponent(shellTextArea);
 					cards.show(mainPanel, "System");
 				}
-				else {
+				else if (index == 1) {
 					setPrimaryComponent(jsTextArea);
 					cards.show(mainPanel, "JavaScript");
+				}
+				else {
+					setPrimaryComponent(rubyTextArea);
+					cards.show(mainPanel, "Ruby");
 				}
 			}
 

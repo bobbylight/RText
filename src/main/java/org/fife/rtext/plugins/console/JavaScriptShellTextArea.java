@@ -60,7 +60,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 	@Override
 	public void appendPrompt() {
-		appendImpl("JS> ", STYLE_PROMPT);
+		appendImpl("js> ", STYLE_PROMPT);
 	}
 
 
