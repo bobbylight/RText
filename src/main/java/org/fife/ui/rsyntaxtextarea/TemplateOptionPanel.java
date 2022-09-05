@@ -112,13 +112,6 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * Returns the <code>JComponent</code> at the "top" of this Options
-	 * panel.  This is the component that will receive focus if the user
-	 * switches to this Options panel in the Options dialog.  As an added
-	 * bonus, if this component is a <code>JTextComponent</code>, its
-	 * text is selected for easy changing.
-	 */
 	@Override
 	public JComponent getTopJComponent() {
 		return templateTable.getTable();

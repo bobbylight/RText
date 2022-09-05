@@ -17,14 +17,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ResourceBundle;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
@@ -61,25 +58,16 @@ class ProjectPluginOptionPanel extends PluginOptionsDialogPanel<ProjectPlugin>
 		ComponentOrientation orientation = ComponentOrientation
 				.getOrientation(getLocale());
 
-		Border empty5Border = UIUtil.getEmpty5Border();
-		setBorder(BorderFactory
-				.createCompoundBorder(empty5Border, BorderFactory
-						.createCompoundBorder(
-								new OptionPanelBorder(Messages
-										.getString("OptionPanel.Title")),
-								empty5Border)));
 		setLayout(new BorderLayout());
-
-		// A panel to contain everything that will go into our "top" area.
+		setBorder(UIUtil.getEmpty5Border());
 		Box topPanel = Box.createVerticalBox();
+		topPanel.setBorder(new OptionPanelBorder(Messages
+			.getString("OptionPanel.Title")));
 
 		// A check box toggling the plugin's visibility.
-		JPanel temp = new JPanel(new BorderLayout());
 		visibleCB = new JCheckBox(gpb.getString("Visible"));
 		visibleCB.addActionListener(this);
-		temp.add(visibleCB, BorderLayout.LINE_START);
-		topPanel.add(temp);
-		topPanel.add(Box.createVerticalStrut(5));
+		addLeftAligned(topPanel, visibleCB, COMPONENT_VERTICAL_SPACING);
 
 		// A combo in which to select the dockable window's placement.
 		Box locationPanel = createHorizontalBox();
@@ -97,7 +85,7 @@ class ProjectPluginOptionPanel extends PluginOptionsDialogPanel<ProjectPlugin>
 		locationPanel.add(Box.createHorizontalStrut(5));
 		locationPanel.add(locationCombo);
 		locationPanel.add(Box.createHorizontalGlue());
-		topPanel.add(locationPanel);
+		addLeftAligned(topPanel, locationPanel);
 
 		// Put it all together!
 		add(topPanel, BorderLayout.NORTH);
@@ -146,16 +134,9 @@ class ProjectPluginOptionPanel extends PluginOptionsDialogPanel<ProjectPlugin>
 	}
 
 
-	/**
-	 * Returns the <code>JComponent</code> at the "top" of this Options
-	 * panel.  This is the component that will receive focus if the user
-	 * switches to this Options panel in the Options dialog.  As an added
-	 * bonus, if this component is a <code>JTextComponent</code>, its
-	 * text is selected for easy changing.
-	 */
 	@Override
 	public JComponent getTopJComponent() {
-		return locationCombo;
+		return visibleCB;
 	}
 
 
