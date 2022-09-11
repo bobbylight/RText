@@ -14,19 +14,7 @@
  *
  */
 
-var removeDuplicates = true; // Change to "false" if you want to keep duplicates
-
-function join(lines) {
-	var sb = new java.lang.StringBuffer();
-	if (lines!=null && lines.length>0) {
-		for (var i=0; i<lines.length; i++) {
-			//System.out.println(lines[i]);
-			sb.append(lines[i]).append('\n');
-		}
-	}
-	return sb.toString();
-}
-
+const removeDuplicates = false; // Change to "true" if you want to remove duplicates
 
 // Note: You'll want to consider wrapping your scripts inside calls to
 // beginAtomicEdit() and endAtomicEdit(), so the actions they perform can
@@ -34,18 +22,12 @@ function join(lines) {
 textArea.beginAtomicEdit();
 try {
 
-	var lines = textArea.text.split("\n");
-
+	let lines = textArea.getText().split('\n');
 	if (removeDuplicates) {
-		var ts = new java.util.TreeSet();
-		for (var i=0; i<lines.length; i++) {
-			ts.add(lines[i]);
-		}
-		lines = ts.toArray();
+		lines = [...new Set(lines)];
 	}
 
-	java.util.Arrays.sort(lines);
-	textArea.text = join(lines);
+	textArea.setText(lines.sort().join('\n'));
 
 } finally {
 	textArea.endAtomicEdit();

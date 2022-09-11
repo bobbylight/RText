@@ -370,8 +370,8 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 	 * application theme.
 	 */
 	void restoreDefaultColors(AppTheme theme) {
-		window.setForeground(AbstractConsoleTextArea.STYLE_EXCEPTION,
-			(Color)theme.getExtraUiDefaults().get("rtext.console.exception"));
+		window.setForeground(AbstractConsoleTextArea.STYLE_RESULT,
+			(Color)theme.getExtraUiDefaults().get("rtext.console.result"));
 		window.setForeground(AbstractConsoleTextArea.STYLE_PROMPT,
 			(Color)theme.getExtraUiDefaults().get("rtext.console.prompt"));
 		window.setForeground(AbstractConsoleTextArea.STYLE_STDOUT,

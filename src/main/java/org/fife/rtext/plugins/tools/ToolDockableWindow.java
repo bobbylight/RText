@@ -186,7 +186,7 @@ public class ToolDockableWindow extends DockableWindow
 	 * @param e The throwable that occurred.
 	 */
 	private void outputStackTrace(Throwable e) {
-		Style style = textArea.getStyle(OutputTextPane.STYLE_EXCEPTION);
+		Style style = textArea.getStyle(OutputTextPane.STYLE_STDERR);
 		StringWriter sw = new StringWriter();
 		PrintWriter pw = new PrintWriter(sw);
 		e.printStackTrace(pw);
@@ -223,7 +223,7 @@ public class ToolDockableWindow extends DockableWindow
 				setDockableWindowTitle(title);
 				String text = MSG.getString("Window.ProcessTerminated");
 				appendWithStyle(text,
-						textArea.getStyle(OutputTextPane.STYLE_EXCEPTION));
+						textArea.getStyle(OutputTextPane.STYLE_STDERR));
 			}
 			else {
 				String title = MSG.getString("Window.Title.ToolError");

@@ -2,7 +2,7 @@
  * 12/22/2010
  *
  * JavaScriptShellTextArea.java - A shell allowing you to muck with RText's
- * innards via Java's JavaScript engine.
+ * innards via JavaScript (via Graal).
  * Copyright (C) 2010 Robert Futrell
  * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
@@ -10,17 +10,13 @@
  */
 package org.fife.rtext.plugins.console;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import java.io.*;
+import java.nio.charset.Charset;
 
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.PolyglotException;
+import org.graalvm.polyglot.Value;
 
 
 /**
@@ -35,12 +31,16 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	/**
 	 * Cached script bindings.
 	 */
-	private Bindings bindings;
+	private Value bindings;
 
 	/**
-	 * Script Engine for JavaScript.
+	 * The GrallVM JavaScript context.
 	 */
-	private ScriptEngine jsEngine;
+	private Context context;
+
+	private ConsoleOutputStream stdout;
+
+	private ConsoleOutputStream stderr;
 
 	/**
 	 * Whether this engine has been initialized.
@@ -97,9 +97,9 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 		possiblyInitialize();
 
 		// Failed to initialize
-		if (jsEngine==null) {
+		if (context == null) {
 			if (appendPrompt) {
-				append(plugin.getString("Error.NotInitialized"), STYLE_EXCEPTION);
+				append(plugin.getString("Error.NotInitialized"), STYLE_STDERR);
 				appendPrompt();
 			}
 			return;
@@ -109,61 +109,29 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 			// We always reset the value of "rtext" and "textArea", but
 			// all other variables they've modified are persistent.
-			bindings.put("rtext", plugin.getApplication());
-			bindings.put("textArea", plugin.getApplication().getMainView().getCurrentTextArea());
+			bindings.putMember("rtext", plugin.getApplication());
+			bindings.putMember("textArea", plugin.getApplication().getMainView().getCurrentTextArea());
 
-			Object obj = jsEngine.eval(code);
-			if (obj!=null) {
+			Value obj = context.eval("js", code);
+			stdout.flush();
+			stderr.flush();
+
+			if (obj != null) {
 				String str = obj.toString();
-				if ((obj instanceof Double || obj instanceof Float) &&
-						str.endsWith(".0")) {
-					str = str.substring(0, str.length() - 2);
-				}
-				append(str, STYLE_STDOUT);
+				append(str, STYLE_RESULT);
 			}
 
+		} catch (PolyglotException pe) {
+			append(pe.getMessage(), STYLE_STDERR);
 		} catch (Exception e) {
-			// Peel off wrapper ScriptException
-			if (e instanceof ScriptException) {
-				append(massageScriptException((ScriptException)e), STYLE_STDERR);
-			}
-			else {
-				StringWriter sw = new StringWriter();
-				e.printStackTrace(new PrintWriter(sw));
-				append(sw.toString(), STYLE_EXCEPTION);
-			}
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			append(sw.toString(), STYLE_STDERR);
 		}
 
 		if (appendPrompt) {
 			appendPrompt();
 		}
-
-	}
-
-
-	/**
-	 * Tries to strip the name of the exception that was wrapped by the
-	 * <code>javax.script.ScriptException</code>.
-	 *
-	 * @param e The exception to massage.
-	 * @return The error message to display for the exception in the console.
-	 */
-	private static String massageScriptException(ScriptException e) {
-
-		String text = e.getMessage();
-
-		String[] rhinoStarts = {
-			"sun.org.mozilla.javascript.internal.EcmaError: ",
-			"sun.org.mozilla.javascript.internal.EvaluatorException: ",
-		};
-		for (String rhinoStart : rhinoStarts) {
-			if (text.startsWith(rhinoStart)) {
-				text = text.substring(rhinoStart.length());
-				break;
-			}
-		}
-
-		return text;
 
 	}
 
@@ -179,38 +147,32 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 		}
 		initialized = true;
 
-		ScriptEngineManager sem = new ScriptEngineManager();
-		jsEngine = sem.getEngineByName("JavaScript");
-		bindings = jsEngine.createBindings();
-		jsEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+		stdout = new ConsoleOutputStream(STYLE_STDOUT);
+		stderr = new ConsoleOutputStream(STYLE_STDERR);
 
-		// Write stdout and stderr to this console.  Must wrap these in
-		// PrintWriters for standard print() and println() methods to work.
-		ScriptContext context = jsEngine.getContext();
-		context.setWriter(new PrintWriter(new OutputWriter(STYLE_STDOUT)));
-		context.setErrorWriter(new PrintWriter(new OutputWriter(STYLE_STDERR)));
+		context = Context.newBuilder("js")
+			.allowAllAccess(true)
+			.option("engine.WarnInterpreterOnly", "false")
+			.out(stdout)
+			.err(stderr)
+			.build();
+		bindings = context.getBindings("js");
 
-		// Import commonly-used packages.  Do this before stdout and
-		// stderr redirecting so the user won't see it in their console.
-		// Also, Nashorn requires the load() below for Rhino compatibility
-		// functions such as importPackage.
-		String imports = "load('nashorn:mozilla_compat.js');" +
-			"importPackage(java.lang, java.io, " +
-			"java.util, java.awt, javax.swing, org.fife.rtext, " +
-			"org.fife.ui.rtextarea, org.fife.ui.rsyntaxtextarea)";
-		handleSubmitImpl(imports, false);
 	}
+
 
 
 	/**
 	 * Listens for output from the script and prints it to this console.
 	 */
-	private class OutputWriter extends Writer {
+	private class ConsoleOutputStream extends OutputStream {
 
+		private final ByteArrayOutputStream baos;
 		private final String style;
 
-		OutputWriter(String style) {
+		ConsoleOutputStream(String style) {
 			this.style = style;
+			baos = new ByteArrayOutputStream();
 		}
 
 		@Override
@@ -220,16 +182,29 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 		@Override
 		public void flush() {
-			// Do nothing
+			if (baos.size() > 0) {
+				String content = baos.toString(Charset.defaultCharset());
+				append(content, style);
+				baos.reset();
+			}
 		}
 
 		@Override
-		public void write(char[] buf, int off, int len) {
-			JavaScriptShellTextArea.this.
-							append(new String(buf, off, len), style);
+		public void write(int b) {
+			baos.write(b);
+			// Be nice and write each line. This does assume all output
+			// is based on ASCII, e.g. cp1252 or a Unicode, but the
+			// final flush would take care of anything that isn't anyway
+			if (b == '\n') {
+				flush();
+			}
+		}
+
+		@Override
+		public void write(byte[] b, int off, int len) {
+			baos.write(b, off, len);
 		}
 
 	}
-
 
 }

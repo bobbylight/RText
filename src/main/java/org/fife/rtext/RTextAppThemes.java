@@ -60,7 +60,7 @@ public final class RTextAppThemes {
 		nativeTheme.addExtraUiDefault("rtext.console.prompt", AbstractConsoleTextArea.DEFAULT_LIGHT_PROMPT_FG);
 		nativeTheme.addExtraUiDefault("rtext.console.stdout", AbstractConsoleTextArea.DEFAULT_LIGHT_STDOUT_FG);
 		nativeTheme.addExtraUiDefault("rtext.console.stderr", AbstractConsoleTextArea.DEFAULT_LIGHT_STDERR_FG);
-		nativeTheme.addExtraUiDefault("rtext.console.exception", AbstractConsoleTextArea.DEFAULT_LIGHT_EXCEPTION_FG);
+		nativeTheme.addExtraUiDefault("rtext.console.result", AbstractConsoleTextArea.DEFAULT_LIGHT_RESULT_FG);
 		themes.add(nativeTheme);
 
 		FlatDarkTheme flatDarkTheme = new FlatDarkTheme();
@@ -72,7 +72,7 @@ public final class RTextAppThemes {
 		flatDarkTheme.addExtraUiDefault("rtext.console.prompt", AbstractConsoleTextArea.DEFAULT_DARK_PROMPT_FG);
 		flatDarkTheme.addExtraUiDefault("rtext.console.stdout", AbstractConsoleTextArea.DEFAULT_DARK_STDOUT_FG);
 		flatDarkTheme.addExtraUiDefault("rtext.console.stderr", AbstractConsoleTextArea.DEFAULT_DARK_STDERR_FG);
-		flatDarkTheme.addExtraUiDefault("rtext.console.exception", AbstractConsoleTextArea.DEFAULT_DARK_EXCEPTION_FG);
+		flatDarkTheme.addExtraUiDefault("rtext.console.result", AbstractConsoleTextArea.DEFAULT_DARK_RESULT_FG);
 		themes.add(flatDarkTheme);
 
 		FlatLightTheme flatLightTheme = new FlatLightTheme();
@@ -84,7 +84,7 @@ public final class RTextAppThemes {
 		flatLightTheme.addExtraUiDefault("rtext.console.prompt", AbstractConsoleTextArea.DEFAULT_LIGHT_PROMPT_FG);
 		flatLightTheme.addExtraUiDefault("rtext.console.stdout", AbstractConsoleTextArea.DEFAULT_LIGHT_STDOUT_FG);
 		flatLightTheme.addExtraUiDefault("rtext.console.stderr", AbstractConsoleTextArea.DEFAULT_LIGHT_STDERR_FG);
-		flatLightTheme.addExtraUiDefault("rtext.console.exception", AbstractConsoleTextArea.DEFAULT_LIGHT_EXCEPTION_FG);
+		flatLightTheme.addExtraUiDefault("rtext.console.result", AbstractConsoleTextArea.DEFAULT_LIGHT_RESULT_FG);
 		themes.add(flatLightTheme);
 
 		return themes;

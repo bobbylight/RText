@@ -197,7 +197,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 				StringWriter sw = new StringWriter();
 				ioe.printStackTrace(new PrintWriter(sw));
 				text = sw.toString();
-				append(text, STYLE_EXCEPTION);
+				append(text, STYLE_STDERR);
 			}
 		}
 		else if (temp.exists()) {
@@ -218,7 +218,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	 * Handles the built-in "$list" command.
 	 */
 	private void handleListCommands() {
-		append(plugin.getString("Usage.CommandListing"), STYLE_STDOUT);
+		append(plugin.getString("Usage.CommandListing"), STYLE_RESULT);
 		appendPrompt();
 	}
 
@@ -285,7 +285,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 			return;
 		}
 
-		append(pwd.getAbsolutePath(), STYLE_STDOUT);
+		append(pwd.getAbsolutePath(), STYLE_RESULT);
 		appendPrompt();
 
 	}
@@ -538,7 +538,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 						e.printStackTrace(new PrintWriter(sw));
 						text = sw.toString();
 					}
-					append(text, STYLE_EXCEPTION);
+					append(text, STYLE_STDERR);
 				}
 				// Not really necessary, should allow GC of Process resources
 				activeProcessThread = null;

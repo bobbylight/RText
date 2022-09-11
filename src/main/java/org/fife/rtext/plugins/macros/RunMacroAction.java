@@ -134,43 +134,31 @@ class RunMacroAction extends AppAction<RText> {
 
 		RText app = getApplication();
 
-		/*
-		ScriptEngineManager sem = new ScriptEngineManager();
-		ScriptEngine jsEngine = sem.getEngineByName("JavaScript");
-		Bindings bindings = jsEngine.createBindings();
-		bindings.put("data", data);
-		jsEngine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
-		jsEngine.eval("println(data.str); alert(data.str); data.i = 999");
-		 */
-
 		ScriptEngine engine;
 		if (sourceName.endsWith(".js")) {
 			engine = initJavaScriptEngine();
-			if (engine==null) { // An error message was already displayed
-				return;
-			}
 		}
 		else if (sourceName.endsWith(".groovy")) {
 			engine = initGroovyEngine();
-			if (engine==null) { // An error message was already displayed
-				return;
-			}
 		}
 		else {
 			app.displayException(new Exception("Bad macro type: " + sourceName));
 			return;
 		}
 
+		if (engine==null) { // An error message was already displayed
+			return;
+		}
+
 		// Create our bindings and cache them for later.
-		Bindings bindings = engine.createBindings();
-		engine.setBindings(bindings, ScriptContext.ENGINE_SCOPE);
+		Bindings bindings = engine.createBindings();//getBindings(ScriptContext.ENGINE_SCOPE);
 
 		// We always reset the value of "rtext" and "textArea", but
 		// all other variables they've modified are persistent.
 		bindings.put("rtext", app);
 		bindings.put("textArea", app.getMainView().getCurrentTextArea());
 
-		engine.eval(r);
+		engine.eval(r, bindings);
 
 	}
 
@@ -229,8 +217,12 @@ class RunMacroAction extends AppAction<RText> {
 				return null;
 			}
 
-			// Write stdout and stderr to this console.  Must wrap these in
-			// PrintWriters for standard print() and println() methods to work.
+			// Engine-specific bindings that must be set *before* any other
+			// calls that update the context
+			Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+			bindings.put("polyglot.js.allowAllAccess", true); // Graal-specific
+			bindings.put("polyglot.engine.WarnInterpreterOnly", "false"); // Graal-specific
+
 			ScriptContext context = engine.getContext();
 			PrintWriter w = new PrintWriter(new OutputStreamWriter(System.out));
 			context.setWriter(w);

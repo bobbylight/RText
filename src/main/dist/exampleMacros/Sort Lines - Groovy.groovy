@@ -12,7 +12,7 @@
  *   https://javadoc.fifesoft.com/rsyntaxtextarea/
  *
  */
-final def removeDuplicates = true // Change to "false" if you want to keep duplicates
+final def removeDuplicates = false // Change to "true" if you want to remove duplicates
 
 // Note: You'll want to consider wrapping your scripts inside calls to
 // beginAtomicEdit() and endAtomicEdit(), so the actions they perform can

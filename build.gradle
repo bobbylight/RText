@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 group = 'com.fifesoft'
 ext.isReleaseVersion = !project.version.endsWith('SNAPSHOT')
 
-assert JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_14)
+assert JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)
 
 configurations.all { // Check for updates every build
 	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
@@ -30,6 +30,8 @@ dependencies {
 	implementation 'net.sf.jtidy:jtidy:r938'
 	implementation 'org.codehaus.groovy:groovy-all:3.0.12'
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
+	implementation 'org.graalvm.js:js:22.2.0'
+	implementation 'org.graalvm.js:js-scriptengine:22.2.0'
 	implementation 'org.jruby:jruby:9.3.7.0'
 
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
@@ -49,6 +51,10 @@ wrapper {
 
 checkstyle {
 	toolVersion = '10.3.2'
+}
+
+tasks.withType(Javadoc) {
+	options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 test {
@@ -81,8 +87,9 @@ ext.sharedManifest = manifest {
 		// OfficeLnFs are only available on Windows but still need to be on the classpath
 		'Class-Path': configurations.runtimeClasspath.findAll { !isPluginJar(it.name) }.collect {
 							def name = it.name
+							System.out.println(name)
 							return name
-						}.join(' ') + ' lnfs/OfficeLnFs.jar'
+						}.join(' ')
 	)
 }
 
@@ -399,7 +406,6 @@ def getWindowsJreDependencyList = { installDistDir ->
 	if (retVal[0] == ',') {
 		retVal = retVal.substring(1)
 	}
-	retVal += ',jdk.scripting.nashorn' // Have to manually add this since it's not a hard dependency
 	return retVal
 }
 

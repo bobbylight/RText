@@ -30,10 +30,10 @@ A file name must be selected in the active editor to open a file.""",
 	}
 	else {
 
-		def isUrl = fileName.startsWith("http://")
+		def isUrl = fileName.startsWith("http://") || fileName.startsWith("https://")
 
 		def file = new File(fileName)
-		if (!file.isAbsolute()) {
+		if (!isUrl && !file.isAbsolute()) {
 			def parentDir = new File(textArea.fileFullPath).parentFile
 			file = new File(parentDir, fileName)
 		}

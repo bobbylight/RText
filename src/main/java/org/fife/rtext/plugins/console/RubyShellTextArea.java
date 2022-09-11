@@ -119,7 +119,7 @@ class RubyShellTextArea extends ConsoleTextArea {
 		// Failed to initialize
 		if (rubyEngine == null) {
 			if (appendPrompt) {
-				append(plugin.getString("Error.NotInitialized"), STYLE_EXCEPTION);
+				append(plugin.getString("Error.NotInitialized"), STYLE_STDERR);
 				appendPrompt();
 			}
 			return;
@@ -140,7 +140,7 @@ class RubyShellTextArea extends ConsoleTextArea {
 						str.endsWith(".0")) {
 					str = str.substring(0, str.length() - 2);
 				}
-				append(str, STYLE_STDOUT);
+				append(str, STYLE_RESULT);
 			}
 
 		} catch (Exception e) {
@@ -151,7 +151,7 @@ class RubyShellTextArea extends ConsoleTextArea {
 			else {
 				StringWriter sw = new StringWriter();
 				e.printStackTrace(new PrintWriter(sw));
-				append(sw.toString(), STYLE_EXCEPTION);
+				append(sw.toString(), STYLE_STDERR);
 			}
 		}
 

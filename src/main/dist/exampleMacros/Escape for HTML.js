@@ -15,12 +15,12 @@
  */
 
 function replaceMultipleSpaces(text) {
-	var p = java.util.regex.Pattern.compile("  +");
-	var m = p.matcher(text);
-	var sb = new java.lang.StringBuffer();
+	const p = java.util.regex.Pattern.compile('  +');
+	const m = p.matcher(text);
+	const sb = new java.lang.StringBuilder();
 	while (m.find()) {
-		var spaces = m.group();
-		m.appendReplacement(sb, spaces.replace(" ", "&nbsp;"));
+		const spaces = m.group();
+		m.appendReplacement(sb, spaces.replace(' ', '&nbsp;'));
 	}
 	m.appendTail(sb);
 	return sb.toString();
@@ -29,24 +29,24 @@ function replaceMultipleSpaces(text) {
 textArea.beginAtomicEdit();
 try {
 
-	var text = textArea.selectedText;
-	if (text==null || text.isEmpty()) {
+	let text = textArea.getSelectedText();
+	if (!text) {
 		javax.swing.JOptionPane.showMessageDialog(rtext,
-				"Error:  No selection.\n" +
-				"Text must be selected to HTML-ify.",
-				"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+				'Error:  No selection.\n' +
+				'Text must be selected to HTML-ify.',
+				'Error', javax.swing.JOptionPane.ERROR_MESSAGE);
 	}
 	else {
-		text = text.replace("&", "&amp;").replace("\"", "&quot;").
-				replace("<", "&lt;").replace(">", "&gt;").
-				replace("\t", "&#009;").replace("\n", "<br>\n");
-		if (text.contains("  ")) { // Replace multiple spaces with &nbsp; sequences
+		text = text.replace('&', '&amp;').replace('"', '&quot;').
+				replace('<', '&lt;').replace('>', '&gt;').
+				replace('\t', '&#009;').replace('\n', '<br>\n');
+		if (text.indexOf('  ') > -1) { // Replace multiple spaces with &nbsp; sequences
 			text = replaceMultipleSpaces(text);
 		}
-		var start = textArea.getSelectionStart();
+		const start = textArea.getSelectionStart();
 		textArea.replaceSelection(text);
 		textArea.setSelectionStart(start);
-		textArea.setSelectionEnd(start+text.length());
+		textArea.setSelectionEnd(start + text.length);
 	}
 
 } finally {
