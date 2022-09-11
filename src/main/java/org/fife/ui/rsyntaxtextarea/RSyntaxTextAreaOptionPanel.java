@@ -41,11 +41,7 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 	 */
 	public static final String OPTION_PANEL_ID = "RTextAreaOptionPanel";
 
-	private JTextField mainBackgroundField;
-	private JButton mainBackgroundButton;
-	private BackgroundDialog backgroundDialog;
-	private Object background;
-	private String bgImageFileName; // null if background is a color.
+	private RColorSwatchesButton mainBackgroundButton;
 
 	private JList<String> syntaxList;
 	private FontSelector fontSelector;
@@ -99,24 +95,8 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 
 		String command = e.getActionCommand();
 
-		if ("BackgroundButton".equals(command)) {
-			if (backgroundDialog==null) {
-				backgroundDialog = new BackgroundDialog(getOptionsDialog());
-			}
-			backgroundDialog.initializeData(background, bgImageFileName);
-			backgroundDialog.setVisible(true);
-			Object newBG = backgroundDialog.getChosenBackground();
-			// Non-null newBG means user hit OK, not Cancel.
-			if (newBG!=null && !newBG.equals(background)) {
-				setBackgroundObject(newBG);
-				setBackgroundImageFileName(backgroundDialog.
-										getCurrentImageFileName());
-				setDirty(true);
-			}
-		}
-
 		// If the user clicked the "foreground" check box.
-		else if ("fgCheckBox".equals(command) && !isSettingStyle) {
+		if ("fgCheckBox".equals(command) && !isSettingStyle) {
 			boolean selected = fgCheckBox.isSelected();
 			foregroundButton.setEnabled(selected);
 			// Update our color scheme.
@@ -149,17 +129,13 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		springPanel.setBorder(new OptionPanelBorder(MSG.getString("Background")));
 
 		JLabel bgLabel = new JLabel(MSG.getString("Background"));
-		mainBackgroundField = new JTextField(20);
-		mainBackgroundField.setEditable(false);
-		mainBackgroundButton = new JButton(MSG.getString("Change"));
-		mainBackgroundButton.setActionCommand("BackgroundButton");
-		mainBackgroundButton.addActionListener(this);
+		mainBackgroundButton = new RColorSwatchesButton();
+		mainBackgroundButton.addPropertyChangeListener(
+			RColorButton.COLOR_CHANGED_PROPERTY, this);
 		bgLabel.setLabelFor(mainBackgroundButton);
 
-		Box bgRestPanel = createHorizontalBox();
-		bgRestPanel.add(mainBackgroundField);
-		bgRestPanel.add(Box.createHorizontalStrut(5));
-		bgRestPanel.add(mainBackgroundButton);
+		JPanel bgRestPanel = new JPanel(new BorderLayout());
+		bgRestPanel.add(mainBackgroundButton, BorderLayout.LINE_START);
 
 		UIUtil.addLabelValuePairs(springPanel, orientation,
 			bgLabel, bgRestPanel);
@@ -289,14 +265,12 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		mainView.setOverrideEditorStyles(overrideCheckBox.isSelected());
 
 		if (overrideCheckBox.isSelected()) {
-			mainView.setBackgroundObject(getBackgroundObject());
-			mainView.setBackgroundImageFileName(getBackgroundImageFileName());
+			mainView.setTextAreaBackgroundColor(mainBackgroundButton.getColor());
 			rtext.setSyntaxScheme(colorScheme); // Doesn't update if it doesn't have to.
 		}
 		else {
 			Theme editorTheme = EditorOptionsPreviewContext.get().getEditorTheme(rtext);
-			mainView.setBackgroundObject(editorTheme.bgColor);
-			mainView.setBackgroundImageFileName(null);
+			mainView.setTextAreaBackgroundColor(editorTheme.bgColor);
 			rtext.setSyntaxScheme(editorTheme.scheme); // Doesn't update if it doesn't have to.
 		}
 	}
@@ -330,31 +304,6 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 	}
 
 
-	/**
-	 * Returns the name of the file containing the chosen background image.
-	 * If the user selected a color for the background, this method returns
-	 * <code>null</code>.
-	 *
-	 * @return The name of the file containing the chosen background image.
-	 * @see #getBackgroundObject()
-	 */
-	public String getBackgroundImageFileName() {
-		return bgImageFileName;
-	}
-
-
-	/**
-	 * Returns the background object (a color or an image) selected by the
-	 * user.
-	 *
-	 * @return The background object.
-	 * @see #getBackgroundImageFileName()
-	 */
-	public Object getBackgroundObject() {
-		return background;
-	}
-
-
 	@Override
 	protected void handleRestoreDefaults() {
 
@@ -368,10 +317,10 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		SyntaxScheme defaultScheme = rstaTheme.scheme;
 
 		if (overrideCheckBox.isSelected() ||
-			!defaultBackground.equals(background) ||
+			!defaultBackground.equals(mainBackgroundButton.getColor()) ||
 			!currentScheme.equals(defaultScheme)) {
 			overrideCheckBox.setSelected(false);
-			setBackgroundObject(defaultBackground);
+			mainBackgroundButton.setColor(defaultBackground);
 			setSyntaxScheme(defaultScheme);
 			setDirty(true);
 			// Force a repaint of the preview panel.
@@ -456,8 +405,7 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 				bg = backgroundButton.getColor();
 			}
 			else {
-				Object bgObj = getBackgroundObject();
-				bg = bgObj instanceof Color ? (Color)bgObj : Color.WHITE;
+				bg = mainBackgroundButton.getColor();
 			}
 			// Method valueChanged() will cause this method to get fired,
 			// so we must make sure we're not in it.
@@ -469,55 +417,11 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 			}
 		}
 
+		// mainBackgroundButton
 		else {
 			setDirty(true);
 		}
 
-	}
-
-
-	/**
-	 * Sets the name of the file containing the background image.  If the
-	 * initial background object is a color, you should pass <code>null</code>
-	 * to this method.
-	 *
-	 * @param name The name of the file containing the background image.
-	 * @see #getBackgroundImageFileName
-	 * @see #setBackgroundObject
-	 */
-	private void setBackgroundImageFileName(String name) {
-		bgImageFileName = name;
-		if (bgImageFileName!=null)
-			mainBackgroundField.setText(bgImageFileName);
-	}
-
-
-	/**
-	 * Sets the background object displayed in this options panel.
-	 *
-	 * @param background The background object.
-	 * @see #getBackgroundObject
-	 */
-	private void setBackgroundObject(Object background) {
-		if (background instanceof Color) {
-			String s = background.toString();
-			mainBackgroundField.setText(s.substring(s.indexOf('[')));
-		}
-		else if (background instanceof Image) {
-			// backgroundField taken care of by setBackgroundImageFileName.
-		}
-		else {
-			throw new IllegalArgumentException("Background must be either " +
-				"a Color or an Image");
-		}
-		this.background = background;
-		Object sampleBG = background;
-		if (sampleBG instanceof Image) { // Lighten as RText will
-			RText parent = (RText)getOptionsDialog().getParent();
-			sampleBG = UIUtil.getTranslucentImage(parent,
-					(Image)sampleBG,
-					parent.getMainView().getBackgroundImageAlpha());
-		}
 	}
 
 
@@ -555,8 +459,7 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 	protected void setValuesImpl(Frame owner) {
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
-		setBackgroundObject(mainView.getBackgroundObject());
-		setBackgroundImageFileName(mainView.getBackgroundImageFileName());
+		mainBackgroundButton.setColor(mainView.getTextAreaBackgroundColor());
 		setSyntaxScheme(rtext.getSyntaxScheme());
 
 		// Do this after initializing all values above
@@ -571,21 +474,8 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 	protected void syncEditorOptionsPreviewContext() {
 		EditorOptionsPreviewContext context = EditorOptionsPreviewContext.get();
 		context.setOverrideEditorTheme(overrideCheckBox.isSelected());
-		context.setBackgroundObject(getBackgroundObject());
+		context.setBackgroundColor(mainBackgroundButton.getColor());
 		context.setSyntaxScheme((SyntaxScheme)colorScheme.clone());
-	}
-
-
-	/**
-	 * Overridden to ensure the background dialog is updated as well.
-	 */
-	@Override
-	public void updateUI() {
-		super.updateUI();
-		if (backgroundDialog!=null) {
-			SwingUtilities.updateComponentTreeUI(backgroundDialog); // Updates dialog.
-			backgroundDialog.updateUI(); // Updates image file chooser.
-		}
 	}
 
 
@@ -625,17 +515,12 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		notNull = style.background!=null;
 		bgCheckBox.setSelected(notNull);
 		backgroundButton.setEnabled(notNull);
-		if (style.background!=null) {
+		if (notNull) {
 			backgroundButton.setColor(style.background);
 		}
 		else {
-			Object parentBG = getBackgroundObject();
-			if (parentBG instanceof Color) {
-				backgroundButton.setColor((Color)parentBG);
-			}
-			else {
-				backgroundButton.setColor(Color.WHITE);
-			}
+			// Show the main text area background color in the disabled button
+			backgroundButton.setColor(mainBackgroundButton.getColor());
 		}
 
 		isSettingStyle = false;

@@ -18,7 +18,6 @@ import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
 import javax.swing.JTabbedPane;
 
@@ -27,7 +26,6 @@ import org.fife.ui.app.prefs.AppPrefs;
 import org.fife.ui.app.prefs.TypeLoader;
 import org.fife.ui.app.themes.FlatDarkTheme;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
-import org.fife.ui.rsyntaxtextarea.Style;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.CaretStyle;
 import org.fife.ui.rtextarea.RTextArea;
@@ -65,7 +63,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	public int textMode;						// Either RTextArea.INSERT_MODE (1) or RTextArea.OVERWRITE_MODE (2).
 	public int tabPlacement;						// One of JTabbedPane.TOP/LEFT/BOTTOM/RIGHT.
 	public Font printFont;						// The font ot use when printing.
-	public Object backgroundObject;				// Either a Color or an Image.
+	public Color backgroundColor;
 	public float imageAlpha;						// How "translucent" to make a background image (0.0f - 1.0f).
 	public boolean wordWrap;						// Whether or not word wrap is enabled.
 	public Color caretColor;
@@ -157,62 +155,6 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	}
 
 
-	private static Font getFontImpl(String str) {
-		StringTokenizer t2 = new StringTokenizer(str, ",");
-		String fontName = t2.nextToken();
-		Font font = null;
-		if (!fontName.equals("null")) {
-			int fontSize = Integer.parseInt(t2.nextToken());
-			boolean isBold = Boolean.parseBoolean(t2.nextToken());
-			boolean isItalic = Boolean.parseBoolean(t2.nextToken());
-			int fontStyle = Font.PLAIN;
-			if (isBold) {
-				if (isItalic)
-					fontStyle = Font.BOLD | Font.ITALIC;
-				else
-					fontStyle = Font.BOLD;
-			}
-			else if (isItalic)
-				fontStyle = Font.ITALIC;
-			font = new Font(fontName, fontStyle, fontSize);
-		}
-		return font;
-	}
-
-
-	/**
-	 * Tokens with background colors set have serious performance implications
-	 * on certain platforms (OS X, and even now Windows with JDK6u10+).  The
-	 * problem is the use of Graphics#setXORMode(), which is almost unusably
-	 * slow on these platforms.  For this reason, we check for any token types
-	 * that have a background color set and equal to the text area background
-	 * color.  If any matches are found, these tokens have their backgrounds
-	 * instead set to <code>null</code>, as their background painting wouldn't
-	 * be seen anyway, to improve performance.<p>
-	 *
-	 * Older RText releases might have had a problem where certain actions in
-	 * the Options dialog would erroneously cause tokens to have a Color.WHITE
-	 * background when in fact they should be <code>null</code>, so this
-	 * check is particularly important moving forward.
-	 *
-	 * @param props The preferences object to check.
-	 */
-	private static void possiblyFixSyntaxSchemeBackground(
-												RTextPrefs props) {
-		Object bgObj = props.backgroundObject;
-		if (bgObj instanceof Color) {
-			Color color = (Color)bgObj;
-			for (int i=0; i<props.colorScheme.getStyleCount(); i++) {
-				Style s = props.colorScheme.getStyle(i);
-				// Some schemes are null (generic token types)
-				if (s!=null && color.equals(s.background)) {
-					s.background = null;
-				}
-			}
-		}
-	}
-
-
 	@Override
 	public void setDefaults() {
 
@@ -236,7 +178,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		textMode = RTextArea.INSERT_MODE;
 		tabPlacement = JTabbedPane.TOP;
 		printFont = null;	// i.e., use RText's font.
-		backgroundObject = theme.bgColor;
+		backgroundColor = theme.bgColor;
 		imageAlpha = 0.3f;	// Arbitrary initial value.
 		wordWrap = false;
 		caretColor = theme.caretColor;

@@ -116,9 +116,8 @@ public abstract class AbstractMainView extends JPanel
 	private Color selectedTextColor;
 	private boolean useSelectedTextColor;
 
-	private Object backgroundObject;				// Object used to draw text areas' backgrounds.
+	private Color background;					// Text aarea background color
 	private float imageAlpha;					// Alpha value used to make the bg image translucent.
-	private String backgroundImageFileName;			// Background image, or null if background is a color.
 
 	protected RText owner;
 
@@ -586,9 +585,8 @@ public abstract class AbstractMainView extends JPanel
 		selectedTextColor	= fromPanel.selectedTextColor;
 		useSelectedTextColor = fromPanel.useSelectedTextColor;
 
-		backgroundObject	= fromPanel.backgroundObject;
+		background			= fromPanel.background;
 		imageAlpha		= fromPanel.imageAlpha;
-		backgroundImageFileName	= fromPanel.backgroundImageFileName;
 
 		owner			= fromPanel.owner;
 		syntaxFilters		= fromPanel.syntaxFilters;
@@ -734,7 +732,7 @@ public abstract class AbstractMainView extends JPanel
 		pane.setFont(getTextAreaFont());
 		//pane.setUnderline(textAreaUnderline);
 		pane.setForeground(getTextAreaForeground());
-		pane.setBackgroundObject(getBackgroundObject());
+		pane.setBackgroundObject(getTextAreaBackgroundColor());
 		pane.setTabSize(getTabSize());
 		pane.setHighlightCurrentLine(highlightCurrentLine);
 		if (currentLineColor != null) {
@@ -980,45 +978,6 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public boolean getAutoInsertClosingCurlys() {
 		return autoInsertClosingCurlys;
-	}
-
-
-	/**
-	 * Returns the alpha value used to make the background image translucent.
-	 * This value does NOT change the background if no image is used (i.e., if
-	 * the background is just a color).
-	 *
-	 * @return The alpha value used to make a background image translucent.
-	 *         This value will be in the range 0.0f to 1.0f.
-	 * @see #setBackgroundImageAlpha
-	 */
-	public float getBackgroundImageAlpha() {
-		return imageAlpha;
-	}
-
-
-	/**
-	 * Returns the full path to the file containing the current background
-	 * image.
-	 *
-	 * @return The path, or <code>null</code> if the current background is a
-	 *         color.
-	 * @see #setBackgroundImageFileName
-	 */
-	public String getBackgroundImageFileName() {
-		return backgroundImageFileName;
-	}
-
-
-	/**
-	 * Returns the <code>Object</code> representing the background for all
-	 * documents in this tabbed pane; either a <code>java.awt.Color</code> or a
-	 * <code>java.lang.String</code>.
-	 *
-	 * @return The background object.
-	 */
-	public Object getBackgroundObject() {
-		return backgroundObject;
 	}
 
 
@@ -1827,6 +1786,31 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Returns the background color to use for text areas.
+	 *
+	 * @return The background color.
+	 * @see #setTextAreaBackgroundColor(Color)
+	 */
+	public Color getTextAreaBackgroundColor() {
+		return background;
+	}
+
+
+	/**
+	 * Returns the alpha value used to make the background image translucent.
+	 * This value does NOT change the background if no image is used (i.e., if
+	 * the background is just a color).
+	 *
+	 * @return The alpha value used to make a background image translucent.
+	 *         This value will be in the range 0.0f to 1.0f.
+	 * @see #setTextAreaBackgroundImageAlpha(float)
+	 */
+	public float getTextAreaBackgroundImageAlpha() {
+		return imageAlpha;
+	}
+
+
+	/**
 	 * Returns the default font to use in text areas.
 	 *
 	 * @return The default font.
@@ -2186,24 +2170,8 @@ public abstract class AbstractMainView extends JPanel
 		emulateTabsWithWhitespace = prefs.emulateTabsWithSpaces;
 		setDocumentSelectionPlacement(prefs.tabPlacement);
 		lineNumbersEnabled = prefs.lineNumbersVisible;
-		setBackgroundImageAlpha(prefs.imageAlpha);
-		Object prefsBackgroundObject = prefs.backgroundObject;
-		if (prefsBackgroundObject instanceof String) {
-			Image image = UIUtil.getImageFromFile(
-									(String)prefsBackgroundObject);
-			if (image!=null) {
-				setBackgroundObject(image);
-				setBackgroundImageFileName((String)prefsBackgroundObject);
-			}
-			else {	// This is when the file passed in no longer exists.
-				setBackgroundObject(Color.WHITE);
-				setBackgroundImageFileName(null);
-			}
-		}
-		else {	// It must be a color here.
-			setBackgroundObject(prefsBackgroundObject);
-			setBackgroundImageFileName(null);
-		}
+		setTextAreaBackgroundImageAlpha(prefs.imageAlpha);
+		setTextAreaBackgroundColor(prefs.backgroundColor);
 		setCaretColor(prefs.caretColor);
 		setSelectionColor(prefs.selectionColor);
 		setSelectedTextColor(prefs.selectedTextColor);
@@ -3048,86 +3016,6 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Sets the alpha value used to make a background image translucent.  Note
-	 * that if the background being used is simply a color and not a JPG or GIF
-	 * image, this value does nothing.
-	 *
-	 * @param alpha The new alpha value to use to make background images
-	 *        translucent. This value should be between 0.0f and 1.0f.
-	 *        If it is less than 0.0f, it will be rounded up to 0.0f; if
-	 *        it is greater than 1.0f, it will be rounded down to 1.0f.
-	 * @see #getBackgroundImageAlpha
-	 */
-	public void setBackgroundImageAlpha(float alpha) {
-		if (alpha<0.0f)
-			alpha = 0.0f;
-		else if (alpha>1.0f)
-			alpha = 1.0f;
-		imageAlpha = alpha;
-	}
-
-
-	/**
-	 * Sets the path to the file containing the current background image.
-	 * Note that this should only be called in conjunction with
-	 * <code>setBackgroundObject</code> when the <code>Object</code> is an
-	 * instance of <code>java.awt.Image</code>  If you are setting the
-	 * background to a <code>java.awt.Color</code>, you should pass
-	 * <code>null</code> to this method.
-	 *
-	 * @param path The path to the file containing the current background
-	 *        image, or <code>null</code> if the current background is an
-	 *        image.
-	 * @see #getBackgroundImageFileName
-	 */
-	public void setBackgroundImageFileName(String path) {
-		backgroundImageFileName = path;
-	}
-
-
-	/**
-	 * Makes the background into this <code>Object</code> (either a
-	 * <code>java.awt.Color</code> or a <code>java.awt.Image</code>).
-	 *
-	 * @param newBackground The <code>java.awt.Color</code> or
-	 *        <code>java.awt.Image</code> object.
-	 */
-	public void setBackgroundObject(Object newBackground) {
-
-		// If they passed in a valid type, remember the object.
-		if (newBackground instanceof Color) {
-			backgroundObject = newBackground;
-		}
-		else if (newBackground instanceof Image) {
-			backgroundObject = UIUtil.getTranslucentImage(owner,
-										(Image)newBackground, imageAlpha);
-		}
-
-		// If they didn't pass in a valid type...
-		else {
-			// Tell them we're defaulting to basic white.
-			ResourceBundle msg = owner.getResourceBundle();
-			JOptionPane.showMessageDialog(this,
-					"Invalid background Object type:\n" + newBackground,
-					msg.getString("ErrorDialogTitle"),
-					JOptionPane.ERROR_MESSAGE);
-
-			// Default to basic white.
-			backgroundObject = Color.WHITE;
-
-		}
-
-		// Now, implement that background.
-		Color gutterBG = backgroundObject instanceof Color ?
-				(Color)backgroundObject : Color.WHITE;
-		for (int i=0; i<getNumDocuments(); i++) {
-			getRTextScrollPaneAt(i).getGutter().setBackground(gutterBG);
-			getRTextEditorPaneAt(i).setBackgroundObject(backgroundObject);
-		}
-	}
-
-
-	/**
 	 * Sets whether or not bracket matching is enabled.
 	 *
 	 * @param enabled Whether or not bracket matching should be enabled.
@@ -3887,7 +3775,7 @@ public abstract class AbstractMainView extends JPanel
 		setSyntaxScheme((SyntaxScheme)theme.scheme.clone());
 
 		//themeObj.activeLineRangeColor;
-		setBackgroundObject(theme.bgColor);
+		setTextAreaBackgroundColor(theme.bgColor);
 		setCaretColor(theme.caretColor);
 		setCurrentLineHighlightColor(theme.currentLineHighlight);
 		//themeObj.fadeCurrentLineHighlight
@@ -4193,6 +4081,41 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Sets the background color to use for text areas.
+	 *
+	 * @param color The new color to use.
+	 * @see #getTextAreaBackgroundColor()
+	 */
+	public void setTextAreaBackgroundColor(Color color) {
+		if (color == null) {
+			color = Color.WHITE;
+
+		}
+		background = color;
+		for (int i=0; i<getNumDocuments(); i++) {
+			getRTextScrollPaneAt(i).getGutter().setBackground(background);
+			getRTextEditorPaneAt(i).setBackgroundObject(background);
+		}
+	}
+
+
+	/**
+	 * Sets the alpha value used to make a background image translucent.  Note
+	 * that if the background being used is simply a color and not a JPG or GIF
+	 * image, this value does nothing.
+	 *
+	 * @param alpha The new alpha value to use to make background images
+	 *        translucent. This value should be between 0.0f and 1.0f.
+	 *        If it is less than 0.0f, it will be rounded up to 0.0f; if
+	 *        it is greater than 1.0f, it will be rounded down to 1.0f.
+	 * @see #getTextAreaBackgroundImageAlpha()
+	 */
+	public void setTextAreaBackgroundImageAlpha(float alpha) {
+		imageAlpha = Math.max(0f, Math.min(alpha, 1f));
+	}
+
+
+	/**
 	 * Sets the default font for text areas.
 	 *
 	 * @param font The font.
@@ -4370,7 +4293,7 @@ public abstract class AbstractMainView extends JPanel
 		// updateLookAndFeel(), each text area's updateUI() is called, which
 		// resets their background to white, evidently.
 		for (int i=0; i<getNumDocuments(); i++)
-			getRTextEditorPaneAt(i).setBackgroundObject(backgroundObject);
+			getRTextEditorPaneAt(i).setBackgroundObject(background);
 		if (currentTextArea != null)
 			currentTextArea.repaint();
 

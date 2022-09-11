@@ -48,7 +48,7 @@ final class EditorOptionsPreviewContext {
 	private boolean showIndentGuides;
 
 	// Options in the child "syntax highlighting" option panel
-	private Object backgroundObject;
+	private Color backgroundColor;
 	private SyntaxScheme syntaxScheme;
 
 	// Options in the child "caret and selection" option panel
@@ -140,8 +140,8 @@ final class EditorOptionsPreviewContext {
 	}
 
 
-	public Object getBackgroundObject() {
-		return backgroundObject;
+	public Color getBackgroundColor() {
+		return backgroundColor;
 	}
 
 
@@ -380,9 +380,9 @@ final class EditorOptionsPreviewContext {
 	}
 
 
-	public void setBackgroundObject(Object backgroundObject) {
-		if (!Objects.equals(this.backgroundObject, backgroundObject)) {
-			this.backgroundObject = backgroundObject;
+	public void setBackgroundColor(Color backgroundColor) {
+		if (!Objects.equals(this.backgroundColor, backgroundColor)) {
+			this.backgroundColor = backgroundColor;
 			fireChangeEvent();
 		}
 	}

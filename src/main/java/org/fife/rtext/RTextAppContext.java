@@ -85,8 +85,8 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 		prefs.textMode					= mainView.getTextMode();
 		prefs.tabPlacement				= mainView.getDocumentSelectionPlacement();
 		prefs.printFont				= mainView.getPrintFont();
-		prefs.backgroundObject			= mainView.getBackgroundObject();
-		prefs.imageAlpha				= mainView.getBackgroundImageAlpha();
+		prefs.backgroundColor			= mainView.getTextAreaBackgroundColor();
+		prefs.imageAlpha				= mainView.getTextAreaBackgroundImageAlpha();
 		prefs.wordWrap					= mainView.getLineWrap();
 		prefs.caretColor				= mainView.getCaretColor();
 		prefs.selectionColor			= mainView.getSelectionColor();

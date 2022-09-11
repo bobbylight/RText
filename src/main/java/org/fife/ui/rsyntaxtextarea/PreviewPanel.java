@@ -171,7 +171,7 @@ final class PreviewPanel extends JPanel
 		// The child "Syntax Highlighting" panel is entirely driven by whether we
 		// override the theme
 		if (context.getOverrideEditorTheme()) {
-			textArea.setBackgroundObject(context.getBackgroundObject());
+			textArea.setBackgroundObject(context.getBackgroundColor());
 			textArea.setSyntaxScheme(context.getSyntaxScheme());
 		}
 		else {
