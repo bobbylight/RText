@@ -29,6 +29,7 @@ abstract class AbstractTextAreaOptionPanel extends OptionsDialogPanel
 		implements ActionListener, ItemListener, EditorOptionsPreviewContextListener {
 
 	protected JCheckBox overrideCheckBox;
+	protected boolean processingEditorOptionsPreviewContextChanges;
 
 	protected static final int COMPONENT_VERTICAL_SPACING = 3;
 	protected static final int SECTION_VERTICAL_SPACING = 5;
@@ -81,8 +82,18 @@ abstract class AbstractTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	@Override
-	public void editorOptionsPreviewContextChanged(EditorOptionsPreviewContext context) {
+	public final void editorOptionsPreviewContextChanged(EditorOptionsPreviewContext context) {
 
+		processingEditorOptionsPreviewContextChanges = true;
+		try {
+			editorOptionsPreviewContextChangedImpl(context);
+		} finally {
+			processingEditorOptionsPreviewContextChanges = false;
+		}
+	}
+
+
+	protected void editorOptionsPreviewContextChangedImpl(EditorOptionsPreviewContext context) {
 		// If the "override theme styles" checkbox was toggled, update things here
 		boolean overrideEditorTheme = context.getOverrideEditorTheme();
 		if (overrideCheckBox != null && overrideCheckBox.isSelected() != overrideEditorTheme) {
@@ -137,7 +148,8 @@ abstract class AbstractTextAreaOptionPanel extends OptionsDialogPanel
 	public void setDirty(boolean dirty) {
 		// We do this even if dirty isn't changing to ensure the
 		// preview panel is kept in sync
-		if (dirty && !getOptionsDialog().isInitializing()) {
+		if (dirty && !getOptionsDialog().isInitializing() &&
+				!processingEditorOptionsPreviewContextChanges) {
 			syncEditorOptionsPreviewContext();
 		}
 		super.setDirty(dirty);
@@ -157,7 +169,8 @@ abstract class AbstractTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Synchronizes all preview panels with the values in this options panel.
+	 * Ensures the values in the shared editor option contexdt are sync'd with
+	 * the values in this options panel.
 	 */
 	protected abstract void syncEditorOptionsPreviewContext();
 }

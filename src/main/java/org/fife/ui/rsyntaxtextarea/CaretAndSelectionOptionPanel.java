@@ -486,5 +486,7 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		context.setSelectionColor(getColor(selColorButton));
 		context.setSelectedTextColor(getColor(selectedTextColorButton));
 		context.setUseSelectedTextColor(selectedTextColorCB.isSelected());
+
+		context.possiblyFireChangeEventAndReset();
 	}
 }

@@ -23,6 +23,8 @@ import org.fife.ui.rtextarea.CaretStyle;
  */
 final class EditorOptionsPreviewContext {
 
+	private boolean dirty;
+
 	private boolean overrideEditorTheme;
 	private String previewLanguage;
 
@@ -97,21 +99,6 @@ final class EditorOptionsPreviewContext {
 	 */
 	void addListener(EditorOptionsPreviewContextListener listener) {
 		listeners.add(EditorOptionsPreviewContextListener.class, listener);
-	}
-
-
-	private void fireChangeEvent() {
-
-		// Guaranteed to return a non-null array
-		Object[] listeners = this.listeners.getListenerList();
-
-		// Process the listeners last to first, notifying
-		// those that are interested in this event
-		for (int i = listeners.length-2; i >= 0; i -= 2) {
-			if (listeners[i] == EditorOptionsPreviewContextListener.class) {
-				((EditorOptionsPreviewContextListener)listeners[i + 1]).editorOptionsPreviewContextChanged(this);
-			}
-		}
 	}
 
 
@@ -345,6 +332,31 @@ final class EditorOptionsPreviewContext {
 	}
 
 
+	public void possiblyFireChangeEventAndReset() {
+
+		if (dirty) {
+
+			// Guaranteed to return a non-null array
+			Object[] listeners = this.listeners.getListenerList();
+
+			// Process the listeners last to first, notifying
+			// those that are interested in this event
+			for (int i = listeners.length - 2; i >= 0; i -= 2) {
+				if (listeners[i] == EditorOptionsPreviewContextListener.class) {
+					((EditorOptionsPreviewContextListener) listeners[i + 1]).editorOptionsPreviewContextChanged(this);
+				}
+			}
+
+			dirty = false;
+		}
+	}
+
+
+	private void registerChanges() {
+		dirty = true;
+	}
+
+
 	/**
 	 * Removes a listener.
 	 *
@@ -359,7 +371,7 @@ final class EditorOptionsPreviewContext {
 	public void setAntiAliasingEnabled(boolean enable) {
 		if (this.antiAliasingEnabled != enable) {
 			this.antiAliasingEnabled = enable;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -367,7 +379,7 @@ final class EditorOptionsPreviewContext {
 	public void setArmedFoldBackground(Color armedFoldBackground) {
 		if (!Objects.equals(this.armedFoldBackground, armedFoldBackground)) {
 			this.armedFoldBackground = armedFoldBackground;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -375,7 +387,7 @@ final class EditorOptionsPreviewContext {
 	public void setAutoInsertClosingCurly(boolean autoInsertClosingCurly) {
 		if (this.autoInsertClosingCurly != autoInsertClosingCurly) {
 			this.autoInsertClosingCurly = autoInsertClosingCurly;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -383,7 +395,7 @@ final class EditorOptionsPreviewContext {
 	public void setBackgroundColor(Color backgroundColor) {
 		if (!Objects.equals(this.backgroundColor, backgroundColor)) {
 			this.backgroundColor = backgroundColor;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -391,7 +403,7 @@ final class EditorOptionsPreviewContext {
 	public void setCaretBlinkRate(int caretBlinkRate) {
 		if (this.caretBlinkRate != caretBlinkRate) {
 			this.caretBlinkRate = caretBlinkRate;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -399,7 +411,7 @@ final class EditorOptionsPreviewContext {
 	public void setCaretColor(Color caretColor) {
 		if (!Objects.equals(this.caretColor, caretColor)) {
 			this.caretColor = caretColor;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -407,7 +419,7 @@ final class EditorOptionsPreviewContext {
 	public void setClearWhitespaceLines(boolean remove) {
 		if (this.clearWhitespaceLines != remove) {
 			this.clearWhitespaceLines = remove;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -415,7 +427,7 @@ final class EditorOptionsPreviewContext {
 	public void setCurrentLineHighlightColor(Color color) {
 		if (this.currentLineHighlightColor != color) {
 			this.currentLineHighlightColor = color;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -423,7 +435,7 @@ final class EditorOptionsPreviewContext {
 	public void setEmulateTabs(boolean emulateTabs) {
 		if (this.emulateTabs != emulateTabs) {
 			this.emulateTabs = emulateTabs;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -431,7 +443,7 @@ final class EditorOptionsPreviewContext {
 	public void setFoldBackground(Color foldBackground) {
 		if (!Objects.equals(this.foldBackground, foldBackground)) {
 			this.foldBackground = foldBackground;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -439,7 +451,7 @@ final class EditorOptionsPreviewContext {
 	public void setFont(Font font) {
 		if (!Objects.equals(this.font, font)) {
 			this.font = font;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -447,7 +459,7 @@ final class EditorOptionsPreviewContext {
 	public void setFontColor(Color color) {
 		if (!Objects.equals(fontColor, color)) {
 			fontColor = color;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -455,7 +467,7 @@ final class EditorOptionsPreviewContext {
 	public void setFractionalFontMetricsEnabled(boolean enable) {
 		if (this.fractionalFontMetricsEnabled != enable) {
 			this.fractionalFontMetricsEnabled = enable;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -463,7 +475,7 @@ final class EditorOptionsPreviewContext {
 	public void setHighlightBothBrackets(boolean highlightBothBrackets) {
 		if (this.highlightBothBrackets != highlightBothBrackets) {
 			this.highlightBothBrackets = highlightBothBrackets;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -471,7 +483,7 @@ final class EditorOptionsPreviewContext {
 	public void setHighlightCurrentLine(boolean highlightCurrentLine) {
 		if (this.highlightCurrentLine != highlightCurrentLine) {
 			this.highlightCurrentLine = highlightCurrentLine;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -479,7 +491,7 @@ final class EditorOptionsPreviewContext {
 	public void setHighlightMatchingBrackets(boolean highlightMatchingBrackets) {
 		if (this.highlightMatchingBrackets != highlightMatchingBrackets) {
 			this.highlightMatchingBrackets = highlightMatchingBrackets;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -487,7 +499,7 @@ final class EditorOptionsPreviewContext {
 	public void setHighlightSecondaryLanguages(boolean highlightSecondaryLanguages) {
 		if (this.highlightSecondaryLanguages != highlightSecondaryLanguages) {
 			this.highlightSecondaryLanguages = highlightSecondaryLanguages;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -495,7 +507,7 @@ final class EditorOptionsPreviewContext {
 	public void setInsertCaret(CaretStyle insertCaret) {
 		if (this.insertCaret != insertCaret) {
 			this.insertCaret = insertCaret;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -503,7 +515,7 @@ final class EditorOptionsPreviewContext {
 	public void setLineNumberColor(Color lineNumberColor) {
 		if (!Objects.equals(this.lineNumberColor, lineNumberColor)) {
 			this.lineNumberColor = lineNumberColor;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -511,7 +523,7 @@ final class EditorOptionsPreviewContext {
 	public void setLineNumberFont(Font font) {
 		if (!Objects.equals(this.lineNumberFont, font)) {
 			this.lineNumberFont = font;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -519,7 +531,7 @@ final class EditorOptionsPreviewContext {
 	public void setLineNumbersEnabled(boolean enabled) {
 		if (this.lineNumbersEnabled != enabled) {
 			this.lineNumbersEnabled = enabled;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -527,7 +539,7 @@ final class EditorOptionsPreviewContext {
 	public void setMarginLineEnabled(boolean marginLineEnabled) {
 		if (this.marginLineEnabled != marginLineEnabled) {
 			this.marginLineEnabled = marginLineEnabled;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -535,7 +547,7 @@ final class EditorOptionsPreviewContext {
 	public void setMarginLinePosition(int marginLinePosition) {
 		if (this.marginLinePosition != marginLinePosition) {
 			this.marginLinePosition = marginLinePosition;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -543,7 +555,7 @@ final class EditorOptionsPreviewContext {
 	public void setMarkAllHighlightColor(Color markAllHighlightColor) {
 		if (!Objects.equals(this.markAllHighlightColor, markAllHighlightColor)) {
 			this.markAllHighlightColor = markAllHighlightColor;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -551,7 +563,7 @@ final class EditorOptionsPreviewContext {
 	public void setMarkOccurrences(boolean markOccurrences) {
 		if (this.markOccurrences != markOccurrences) {
 			this.markOccurrences = markOccurrences;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -559,7 +571,7 @@ final class EditorOptionsPreviewContext {
 	public void setMarkOccurrencesColor(Color markOccurrencesColor) {
 		if (!Objects.equals(this.markOccurrencesColor, markOccurrencesColor)) {
 			this.markOccurrencesColor = markOccurrencesColor;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -567,7 +579,7 @@ final class EditorOptionsPreviewContext {
 	public void setOverrideEditorTheme(boolean overrideEditorTheme) {
 		if (this.overrideEditorTheme != overrideEditorTheme) {
 			this.overrideEditorTheme = overrideEditorTheme;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -575,7 +587,7 @@ final class EditorOptionsPreviewContext {
 	public void setOverwriteCaret(CaretStyle overwriteCaret) {
 		if (this.overwriteCaret != overwriteCaret) {
 			this.overwriteCaret = overwriteCaret;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -583,7 +595,7 @@ final class EditorOptionsPreviewContext {
 	public void setPreviewLanguage(String previewLanguage) {
 		if (!Objects.equals(this.previewLanguage, previewLanguage)) {
 			this.previewLanguage = previewLanguage;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -591,7 +603,7 @@ final class EditorOptionsPreviewContext {
 	public void setSecondaryLanguageBackground(int index, Color color) {
 		if (!Objects.equals(this.secondaryLanguages[index], color)) {
 			this.secondaryLanguages[index] = color;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -599,7 +611,7 @@ final class EditorOptionsPreviewContext {
 	public void setSelectedTextColor(Color selectedTextColor) {
 		if (!Objects.equals(this.selectedTextColor, selectedTextColor)) {
 			this.selectedTextColor = selectedTextColor;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -607,7 +619,7 @@ final class EditorOptionsPreviewContext {
 	public void setSelectionColor(Color selectionColor) {
 		if (!Objects.equals(this.selectionColor, selectionColor)) {
 			this.selectionColor = selectionColor;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -615,7 +627,7 @@ final class EditorOptionsPreviewContext {
 	public void setShowEolMarkers(boolean showEolMarkers) {
 		if (this.showEolMarkers != showEolMarkers) {
 			this.showEolMarkers = showEolMarkers;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -623,7 +635,7 @@ final class EditorOptionsPreviewContext {
 	public void setShowIndentGuides(boolean showIndentGuides) {
 		if (this.showIndentGuides != showIndentGuides) {
 			this.showIndentGuides = showIndentGuides;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -631,7 +643,7 @@ final class EditorOptionsPreviewContext {
 	public void setShowWhitespace(boolean showWhitespace) {
 		if (this.showWhitespace != showWhitespace) {
 			this.showWhitespace = showWhitespace;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -639,7 +651,7 @@ final class EditorOptionsPreviewContext {
 	public void setSyntaxScheme(SyntaxScheme scheme) {
 		if (!Objects.equals(this.syntaxScheme, scheme)) {
 			this.syntaxScheme = scheme;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -647,7 +659,7 @@ final class EditorOptionsPreviewContext {
 	public void setTabSize(int tabSize) {
 		if (this.tabSize != tabSize) {
 			this.tabSize = tabSize;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -655,7 +667,7 @@ final class EditorOptionsPreviewContext {
 	public void setUseSelectedTextColor(boolean useSelectedTextColor) {
 		if (this.useSelectedTextColor != useSelectedTextColor) {
 			this.useSelectedTextColor = useSelectedTextColor;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 
@@ -663,7 +675,7 @@ final class EditorOptionsPreviewContext {
 	public void setWordWrap(boolean wordWrap) {
 		if (this.wordWrap != wordWrap) {
 			this.wordWrap = wordWrap;
-			fireChangeEvent();
+			registerChanges();
 		}
 	}
 }

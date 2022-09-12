@@ -269,5 +269,7 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 		context.setLineNumberColor(lnColorButton.getColor());
 		context.setFoldBackground(foldBackgroundButton.getColor());
 		context.setArmedFoldBackground(armedFoldBackgroundButton.getColor());
+
+		context.possiblyFireChangeEventAndReset();
 	}
 }

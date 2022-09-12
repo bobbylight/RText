@@ -394,6 +394,8 @@ public class FontAndTabsOptionPanel extends AbstractTextAreaOptionPanel
 		context.setShowWhitespace(visibleWhitespaceCheckBox.isSelected());
 		context.setShowEolMarkers(visibleEOLCheckBox.isSelected());
 		context.setShowIndentGuides(showTabLinesCheckBox.isSelected());
+
+		context.possiblyFireChangeEventAndReset();
 	}
 
 

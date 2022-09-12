@@ -204,7 +204,7 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		fontSelector = new FontSelector(FontSelector.CHECK_BOX);
 		fontSelector.setUnderlineSelectable(true);
 		fontSelector.addPropertyChangeListener(FontSelector.FONT_PROPERTY, this);
-		fontSelector.addPropertyChangeListener(FontSelector.ENABLED_PROPERTY, this);
+		fontSelector.addPropertyChangeListener(FontSelector.TOGGLED_ON_PROPERTY, this);
 		fontSelector.putClientProperty(UIUtil.PROPERTY_ALWAYS_IGNORE, Boolean.TRUE);
 
 		// Just to keep it right-aligned with stuff above...
@@ -277,7 +277,7 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 
 
 	@Override
-	public void editorOptionsPreviewContextChanged(EditorOptionsPreviewContext context) {
+	protected void editorOptionsPreviewContextChangedImpl(EditorOptionsPreviewContext context) {
 
 		// If the tracked syntax scheme changed (i.e. the default font changed), we
 		// must update this panel as well
@@ -287,7 +287,7 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 			setDirty(true);
 		}
 
-		super.editorOptionsPreviewContextChanged(context);
+		super.editorOptionsPreviewContextChangedImpl(context);
 	}
 
 
@@ -476,6 +476,8 @@ public class RSyntaxTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		context.setOverrideEditorTheme(overrideCheckBox.isSelected());
 		context.setBackgroundColor(mainBackgroundButton.getColor());
 		context.setSyntaxScheme((SyntaxScheme)colorScheme.clone());
+
+		context.possiblyFireChangeEventAndReset();
 	}
 
 

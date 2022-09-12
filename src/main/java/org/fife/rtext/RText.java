@@ -490,9 +490,9 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		// all plugins have loaded.  A real solution is to have some sort of
 		// options manager that plugins can add options panels to.
 		if (optionsDialog==null || pluginCount!=lastPluginCount) {
+			lastPluginCount = pluginCount;
 			optionsDialog = new org.fife.rtext.optionsdialog.
 												OptionsDialog(this);
-			optionsDialog.setLocationRelativeTo(this);
 		}
 
 		return optionsDialog;

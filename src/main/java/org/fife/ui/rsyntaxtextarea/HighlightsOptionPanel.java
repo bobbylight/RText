@@ -404,6 +404,8 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		for (int i = 0; i < SEC_LANG_COUNT; i++) {
 			context.setSecondaryLanguageBackground(i, secLangButtons[i].getColor());
 		}
+
+		context.possiblyFireChangeEventAndReset();
 	}
 
 }

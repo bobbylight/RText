@@ -470,6 +470,8 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		context.setFractionalFontMetricsEnabled(fractionalMetricsCheckBox.isSelected());
 		context.setHighlightMatchingBrackets(bracketMatchCheckBox.isSelected());
 		context.setHighlightBothBrackets(bothBracketsCB.isSelected());
+
+		context.possiblyFireChangeEventAndReset();
 	}
 
 
