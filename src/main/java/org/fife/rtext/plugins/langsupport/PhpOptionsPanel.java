@@ -224,8 +224,6 @@ class PhpOptionsPanel extends OptionsDialogPanel {
 		autoActivateCB.setSelected(selected);
 		aaDelayLabel.setEnabled(selected);
 		aaDelayField.setEnabled(selected);
-		//aaHtmlKeysLabel.setEnabled(selected);
-		//aaHtmlKeysField.setEnabled(selected);
 	}
 
 

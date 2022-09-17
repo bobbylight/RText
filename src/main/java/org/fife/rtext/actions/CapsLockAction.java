@@ -47,7 +47,7 @@ public class CapsLockAction extends AppAction<RText> {
 										KeyEvent.VK_CAPS_LOCK);
 				StatusBar statusBar = (StatusBar)rtext.getStatusBar();
 				statusBar.setCapsLockIndicatorEnabled(state);
-			} catch (UnsupportedOperationException uoe) {
+			} catch (UnsupportedOperationException ignored) {
 				// Swallow; some OS's (OS X, some Linux) just
 				// don't support this.
 			}

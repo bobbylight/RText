@@ -271,7 +271,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 	/**
 	 * Called when a text field in this panel gets updated.
 	 */
-	private void doDocumentUpdated(DocumentEvent e) {
+	private void doDocumentUpdated() {
 		setDirty(true);
 	}
 
@@ -357,7 +357,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 	 */
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		doDocumentUpdated(e);
+		doDocumentUpdated();
 	}
 
 
@@ -377,7 +377,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 	 */
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		doDocumentUpdated(e);
+		doDocumentUpdated();
 	}
 
 

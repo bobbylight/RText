@@ -51,7 +51,7 @@ public class Tool implements Comparable<Tool> {
 	private static final Object RUN_THREAD_LOCK = new Object();
 
 	private static final Pattern VAR_PATTERN =
-			Pattern.compile("\\$\\{file_(?:name|name_no_ext|dir|full_path)\\}");
+			Pattern.compile("\\$\\{file_(?:name|name_no_ext|dir|full_path)}");
 
 
 	/**
@@ -553,33 +553,6 @@ public class Tool implements Comparable<Tool> {
 		m.appendTail(sb);
 		return sb.toString();
 
-	}
-
-
-	/**
-	 * An entry point for test purposes.
-	 *
-	 * @param args Command line arguments.
-	 */
-	public static void main(String[] args) {
-		Tool tool = new Tool("Name", "Desc");
-		tool.setProgram("C:/temp/test.bat");
-		tool.execute(new ProcessRunnerOutputListener() {
-			@Override
-			public void outputWritten(Process p, String output, boolean stdout){
-				System.out.println(output);
-			}
-			@Override
-			public void processCompleted(Process p, int rc, Throwable e) {
-				if (e!=null) {
-					System.out.println("Error completing process:");
-					e.printStackTrace();
-				}
-				else {
-					System.out.println("Completed, rc=" + rc);
-				}
-			}
-		});
 	}
 
 

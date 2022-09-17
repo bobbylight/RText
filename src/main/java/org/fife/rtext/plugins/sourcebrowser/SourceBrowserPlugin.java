@@ -158,8 +158,6 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 
 		scrollPane = new DockableWindowScrollPane(sourceTree);
 		UIUtil.removeTabbedPaneFocusTraversalKeyBindings(scrollPane);
-		//scrollPane.setViewportBorder(
-		//					BorderFactory.createEmptyBorder(3,3,3,3));
 		wind.add(scrollPane);
 
 		wind.setActive(sbp.active);

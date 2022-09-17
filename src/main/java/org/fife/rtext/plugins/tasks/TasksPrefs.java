@@ -48,7 +48,7 @@ public class TasksPrefs extends Prefs {
 	public String taskIdentifiers;
 
 	private static final Pattern TASK_IDENTIFIERS_PATTERN =
-		Pattern.compile("^$|^[\\p{Alpha}\\?]+(?:\\|[\\p{Alpha}\\?]+)*$");
+		Pattern.compile("^$|^[\\p{Alpha}?]+(?:\\|[\\p{Alpha}?]+)*$");
 
 	static final String DEFAULT_TASK_IDS	= "FIXME|TODO|HACK";
 

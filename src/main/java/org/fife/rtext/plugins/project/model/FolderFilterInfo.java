@@ -75,7 +75,7 @@ public class FolderFilterInfo {
 		String name = file.getName();
 
 		if (isDir) {
-			if (disallowedDirectories!=null && isDir) {
+			if (disallowedDirectories!=null) {
 				if (disallowedDirPatterns==null) {
 					disallowedDirPatterns = wildcardToMatcher(disallowedDirectories);
 				}

@@ -82,10 +82,6 @@ public class ToolDockableWindow extends DockableWindow
 		setIcon(plugin.getPluginIcon());
 		setDockableWindowName(MSG.getString("Window.Name"));
 
-		// Set via preferences
-		//setActive(true);
-		//setPosition(BOTTOM);
-
 		textArea = new OutputTextPane(plugin);
 		setPrimaryComponent(textArea);
 		RScrollPane sp = new RScrollPane(textArea);

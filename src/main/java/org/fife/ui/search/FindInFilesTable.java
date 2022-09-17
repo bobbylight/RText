@@ -405,8 +405,6 @@ public class FindInFilesTable extends JTable implements ResultsComponent, FileSe
 
 			// Initialize width of column to best width for its header.
 			TableColumn column = columnModel.getColumn(j);
-			//column.sizeWidthToFit();
-			//width = column.getWidth();
 			Component c = getTableHeader().getDefaultRenderer().
 						getTableCellRendererComponent(this,
 							column.getHeaderValue(), false, false, 0, 0);

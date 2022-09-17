@@ -228,8 +228,6 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 		autoActivateCB.setSelected(selected);
 		aaDelayLabel.setEnabled(selected);
 		aaDelayField.setEnabled(selected);
-		//aaKeysLabel.setEnabled(selected);
-		//aaKeysField.setEnabled(selected);
 	}
 
 

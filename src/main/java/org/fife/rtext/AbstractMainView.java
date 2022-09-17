@@ -2577,14 +2577,14 @@ public abstract class AbstractMainView extends JPanel
 
 			// If the file's path is changing (must be caused by the file being
 			// saved(?))...
-			case RTextEditorPane.FULL_PATH_PROPERTY:
+			case RTextEditorPane.FULL_PATH_PROPERTY -> {
 				setDocumentDisplayNameAt(getSelectedIndex(), currentTextArea.getFileName());
 				fireCurrentTextAreaEvent(CurrentTextAreaEvent.FILE_NAME_CHANGED,
 					e.getOldValue(), e.getNewValue());
-				break;
+			}
 
 			// If the file's modification status is changing...
-			case RTextEditorPane.DIRTY_PROPERTY:
+			case RTextEditorPane.DIRTY_PROPERTY -> {
 				int selectedIndex = getSelectedIndex();
 				String oldTitle = getDocumentDisplayNameAt(selectedIndex);
 				if ((Boolean)e.getNewValue())
@@ -2596,19 +2596,17 @@ public abstract class AbstractMainView extends JPanel
 				fireCurrentTextAreaEvent(
 					CurrentTextAreaEvent.IS_MODIFIED_CHANGED,
 					e.getOldValue(), e.getNewValue());
-				break;
+			}
 
 			// If the highlighting style of the current file changed...
-			case RTextEditorPane.SYNTAX_STYLE_PROPERTY:
-				fireCurrentTextAreaEvent(
-					CurrentTextAreaEvent.SYNTAX_STYLE_CHANGED,
-					e.getOldValue(), e.getNewValue());
-				break;
+			case RTextEditorPane.SYNTAX_STYLE_PROPERTY -> fireCurrentTextAreaEvent(
+				CurrentTextAreaEvent.SYNTAX_STYLE_CHANGED,
+				e.getOldValue(), e.getNewValue());
 
-			case RText.ICON_STYLE_PROPERTY:
+			case RText.ICON_STYLE_PROPERTY -> {
 				refreshTabIcons();
 				updateBookmarkIcon();
-				break;
+			}
 		}
 
 	}
@@ -2747,7 +2745,9 @@ public abstract class AbstractMainView extends JPanel
 			// Save this document, if it is not read-only
 			if (!getRTextEditorPaneAt(i).isReadOnly()) {
 				setSelectedIndex(i);
-				allSaved |= saveCurrentFile();
+				if (!saveCurrentFile()) {
+					allSaved = false;
+				}
 			}
 		}
 

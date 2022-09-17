@@ -283,8 +283,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		jls.setShowDescWindow(showDescWindowCB.isSelected());
 
 		// Options dealing with syntax checking.
-		boolean reparse = false;
-		reparse |= jls.setErrorParser(rhinoRB.isSelected() ?
+		boolean reparse = jls.setErrorParser(rhinoRB.isSelected() ?
 				JsErrorParser.RHINO : JsErrorParser.JSHINT);
 		reparse |= jls.setDefaultJsHintRCFile(jshintrcField.getSelectedFile()); // jshint
 		reparse |= jls.setStrictMode(strictCB.isSelected()); // rhino
@@ -345,10 +344,6 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		autoActivateCB.setSelected(selected);
 		aaDelayLabel.setEnabled(selected);
 		aaDelayField.setEnabled(selected);
-		//aaJavaKeysLabel.setEnabled(selected);
-		//aaJavaKeysField.setEnabled(selected);
-		//aaDocKeysLabel.setEnabled(selected);
-		//aaDocKeysField.setEnabled(selected);
 	}
 
 
@@ -356,8 +351,6 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 		enabledCB.setSelected(selected);
 		paramAssistanceCB.setEnabled(selected);
 		showDescWindowCB.setEnabled(selected);
-		//strictCB.setEnabled(selected);
-		//e4xCB.setEnabled(selected);
 	}
 
 

@@ -98,7 +98,7 @@ class SaveAsWebPageAction extends AppAction<RText> {
 			}
 
 			// Ensure that it has an HTML extension.
-			if (!chosenFilePath.matches("[^.]*\\.htm[l]?"))
+			if (!chosenFilePath.matches("[^.]*\\.html?"))
 				chosenFilePath = chosenFilePath + ".html";
 
 			// Try and write output to the current filename.

@@ -71,10 +71,10 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 		cp.add(topPanel, BorderLayout.NORTH);
 		topPanel.add(createDescPanel(o));
 		topPanel.add(Box.createVerticalStrut(15));
-		topPanel.add(createFormPanel(o, prevName));
+		topPanel.add(createFormPanel(prevName));
 		topPanel.add(Box.createVerticalGlue());
 
-		cp.add(createButtonPanel(o), BorderLayout.SOUTH);
+		cp.add(createButtonPanel(), BorderLayout.SOUTH);
 
 		setContentPane(cp);
 		getRootPane().setDefaultButton(okButton);
@@ -107,7 +107,7 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 	}
 
 
-	private Container createButtonPanel(ComponentOrientation o) {
+	private Container createButtonPanel() {
 		okButton = createButton("OK");
 		okButton.setEnabled(false);
 		okButton.addActionListener(l);
@@ -135,7 +135,7 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 	}
 
 
-	private Container createFormPanel(ComponentOrientation o, String prevName) {
+	private Container createFormPanel(String prevName) {
 
 		JLabel nameLabel = new JLabel(Messages.
 				getString("RenameDialog.Field.Label"));
@@ -248,13 +248,7 @@ public class LogicalFolderNameDialog extends EscapableDialog {
 				return;
 			}
 
-//			if (isNew && MacroManager.get().containsMacroNamed(name)) {
-//				setWarnMacroName();
-//			}
-//			else {
-//				setGoodMacroName();
-//			}
-setGoodNameValue();
+			setGoodNameValue();
 
 		}
 

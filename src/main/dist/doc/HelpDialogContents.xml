@@ -60,7 +60,7 @@
          <Page name="wordWrapKey" page="WordWrap.html"/>
          <Page name="backgroundKey" page="Background.html"/>
          <Page name="lineNumbersKey" page="LineNumbers.html"/>
-         <Page name="lnfKey" page="LookAndFeel.html"/>
+         <Page name="themeKey" page="Theme.html"/>
       </Node>
       <Node name="uiNodeKey">
          <Node name="optionsDialogKey" page="OptionsDialog.html">

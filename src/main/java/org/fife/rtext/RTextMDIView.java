@@ -511,7 +511,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 			JInternalFrame frame = frames.get(index);
 			try {
 				frame.setSelected(true); // Updates currentTextArea via internalFrameActivated.
-			} catch (PropertyVetoException e) { }
+			} catch (PropertyVetoException ignored) { }
 			//frame.toFront();
 			desktopPane.setSelectedFrame(frame);
 		}
@@ -534,7 +534,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 				if (!frame.isResizable()) {
 					try {
 						frame.setMaximum(false);
-					} catch (PropertyVetoException e) {
+					} catch (PropertyVetoException ignored) {
 					}
 				}
 
@@ -584,7 +584,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 				if (!frame.isResizable()) {
 					try {
 						frame.setMaximum(false);
-					} catch (PropertyVetoException e) {
+					} catch (PropertyVetoException ignored) {
 					}
 				}
 

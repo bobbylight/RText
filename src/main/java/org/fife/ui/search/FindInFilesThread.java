@@ -27,7 +27,6 @@ import java.util.regex.PatternSyntaxException;
 
 import javax.swing.text.Document;
 import javax.swing.text.Element;
-import javax.swing.text.Segment;
 
 import org.fife.io.UnicodeReader;
 import org.fife.rsta.ui.search.FindDialog;
@@ -142,7 +141,6 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 		boolean wholeWord = dialog.getMatchWholeWord();
 		boolean useRegex = dialog.getUseRegEx();
 		boolean doVerboseOutput = dialog.getDoVerboseOutput();
-		Segment seg = new Segment();
 		String searchingFile = dialog.getString2("SearchingFile");
 
 		if (!useRegex && !matchCase)
@@ -224,12 +222,12 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 						if (useRegex) {
 							doSearchRegex(buffer, searchString, textArea,
 								matchCase, wholeWord, matchingLines,
-								fileFullPath, seg);
+								fileFullPath);
 						}
 						else {
 							doSearchNoRegex(buffer, searchString, textArea,
 								matchCase, wholeWord, matchingLines,
-								fileFullPath, seg);
+								fileFullPath);
 						}
 					} catch (Exception e) {
 						// Shouldn't happen...
@@ -295,8 +293,7 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 	private void doSearchNoRegex(String buffer, String searchString,
 							RSyntaxTextArea textArea,
 							boolean matchCase, boolean wholeWord,
-							boolean matchingLines, String fileFullPath,
-							Segment seg) {
+							boolean matchingLines, String fileFullPath) {
 
 		// If search is not case-sensitive, lower-case text to search in
 		// (searchString is already done).
@@ -370,7 +367,7 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 	private void doSearchRegex(String buffer, String searchString,
 							RSyntaxTextArea textArea, boolean matchCase,
 							boolean wholeWord, boolean matchingLines,
-							String fileFullPath, Segment seg) {
+							String fileFullPath) {
 
 		Document doc = textArea.getDocument();
 		Element map = doc.getDefaultRootElement();

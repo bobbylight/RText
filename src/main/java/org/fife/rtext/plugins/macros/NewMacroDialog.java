@@ -281,7 +281,7 @@ class NewMacroDialog extends EscapableDialog {
 		}
 
 		switch (rc) {
-			case JOptionPane.YES_OPTION:
+			case JOptionPane.YES_OPTION -> {
 				if (isNew) { // Don't delete macro file if we're editing it
 					file.delete();
 				}
@@ -290,20 +290,19 @@ class NewMacroDialog extends EscapableDialog {
 				macro.setDesc(descField.getText());
 				macro.setFile(file.getAbsolutePath());
 				KeyStroke ks = shortcutField.getKeyStroke();
-				if (ks!=null) {
+				if (ks != null) {
 					macro.setAccelerator(ks.toString());
 				}
 				escapePressed();
-				break;
-			case JOptionPane.NO_OPTION:
+			}
+			case JOptionPane.NO_OPTION -> {
 				// Do nothing; let the user change the macro name
 				nameField.selectAll();
 				nameField.requestFocusInWindow();
-				break;
-			default://case JOptionPane.CANCEL_OPTION:
+			}
+			default ->//case JOptionPane.CANCEL_OPTION:
 				// Kill the whole dialog
 				escapePressed();
-				break;
 		}
 
 	}
@@ -380,16 +379,12 @@ class NewMacroDialog extends EscapableDialog {
 		bp2.add(Box.createHorizontalStrut(20));
 		bp2.add(editButton);
 		bpParent.add(UIUtil.createButtonFooter(bp2));
-		//bpParent.add(bp2);
 
 		UIUtil.ensureDefaultButtonWidth(okButton);
 		UIUtil.ensureDefaultButtonWidth(cancelButton);
 		UIUtil.ensureDefaultButtonWidth(editButton);
 		okButton.setPreferredSize(editButton.getPreferredSize());
 		cancelButton.setPreferredSize(editButton.getPreferredSize());
-
-		//buttonPanel.setLayout(new GridLayout(1,3, 5,0));
-		//buttonPanel.add(editButton, 1);
 
 		setTitle(MSG.getString("Title.Edit"));
 

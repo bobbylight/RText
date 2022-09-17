@@ -324,10 +324,6 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		autoActivateCB.setSelected(selected);
 		aaDelayLabel.setEnabled(selected);
 		aaDelayField.setEnabled(selected);
-		//aaJavaKeysLabel.setEnabled(selected);
-		//aaJavaKeysField.setEnabled(selected);
-		//aaDocKeysLabel.setEnabled(selected);
-		//aaDocKeysField.setEnabled(selected);
 	}
 
 
