@@ -197,7 +197,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		overrideEditorStyles = false;
 		language = "en";	// Default to English.
 		bracketMatchingEnabled = true;
-		matchBothBrackets = false;
+		matchBothBrackets = true;
 		matchedBracketBGColor = theme.matchedBracketBG;
 		matchedBracketBorderColor = theme.matchedBracketFG;
 		marginLineEnabled = true;

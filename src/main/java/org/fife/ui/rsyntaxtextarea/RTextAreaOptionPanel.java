@@ -335,7 +335,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 			aaCheckBox.isSelected()!=defaultAA ||
 			fractionalMetricsCheckBox.isSelected() ||
 			!bracketMatchCheckBox.isSelected() ||
-			bothBracketsCB.isSelected()) {
+			!bothBracketsCB.isSelected()) {
 			wordWrapCheckBox.setSelected(false);
 			highlightCurrentLineCheckBox.setSelected(true);
 			setMarginLineEnabled(true);
@@ -345,7 +345,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 			aaCheckBox.setSelected(defaultAA);
 			fractionalMetricsCheckBox.setSelected(false);
 			setBracketMatchCheckboxSelected(true);
-			bothBracketsCB.setSelected(false);
+			bothBracketsCB.setSelected(true);
 			setDirty(true);
 		}
 
