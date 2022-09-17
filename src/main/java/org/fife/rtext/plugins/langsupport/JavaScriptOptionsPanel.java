@@ -326,7 +326,7 @@ class JavaScriptOptionsPanel extends OptionsDialogPanel {
 			File jshintrc = jshintrcField.getSelectedFile();
 			if (jshintrc!=null && !jshintrc.isFile()) {
 				String msg = Plugin.MSG.getString(
-						"Options.JavaScirpt.Error.JSHint");
+						"Options.JavaScript.Error.JSHint");
 				result = new OptionsPanelCheckResult(this, jshintrcField, msg);
 			}
 		}

@@ -177,9 +177,9 @@ class RubyShellTextArea extends ConsoleTextArea {
 			"org.jruby.exceptions.SyntaxError: ",
 			"Error during evaluation of Ruby in <script> at line 1: ",
 		};
-		for (String rhinoStart : rubyErrorStarts) {
-			if (text.startsWith(rhinoStart)) {
-				text = text.substring(rhinoStart.length());
+		for (String rubyErrorStart : rubyErrorStarts) {
+			if (text.startsWith(rubyErrorStart)) {
+				text = text.substring(rubyErrorStart.length());
 				break;
 			}
 		}

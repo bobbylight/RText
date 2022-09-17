@@ -118,7 +118,7 @@ class NewMacroDialog extends EscapableDialog {
 		shortcutLabel.setLabelFor(shortcutField);
 		JPanel shortcutPanel = RTextUtilities.createAssistancePanel(shortcutField, DECORATIVE_ICON_WIDTH);
 		JLabel typeLabel = UIUtil.newLabel(MSG, "Label.Type");
-		String[] items = { "Rhino (JavaScript)", "Groovy" };
+		String[] items = { "JavaScript", "Groovy" };
 		typeCombo = new JComboBox<>(items);
 		typeCombo.addActionListener(l);
 		typeCombo.setEditable(false);
