@@ -94,15 +94,8 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		switch (actionCommand) {
 			case "ViewComboBox":
-				setDirty(true);
-				break;
-			case "DocSelCombo":
-				setDirty(true);
-				break;
-			case "AppThemeComboBox":
-				setDirty(true);
-				break;
 			case "ShowHostNameCB":
+			case "AppThemeComboBox":
 				setDirty(true);
 				break;
 		}
@@ -120,7 +113,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 		// Refresh other option panels whose properties were affected
 		org.fife.ui.OptionsDialog dialog = getOptionsDialog();
-		setValues(rtext);
 		dialog.getPanelById(RTextAreaOptionPanel.OPTION_PANEL_ID).setValues(rtext);
 		dialog.getPanelById(RSyntaxTextAreaOptionPanel.OPTION_PANEL_ID).setValues(rtext);
 		// Options panels installed by plugins weren't loaded by the same
@@ -244,7 +236,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		mainView.setDocumentSelectionPlacement(getDocumentSelectionPlacement()); // Doesn't update if it doesn't have to.
 		applySelectedTheme();
 		rtext.setMainViewStyle(getMainViewStyle());	// Doesn't update if it doesn't have to.
-		rtext.setShowHostName(getShowHostName());	// Doesn't update if doesn't have to.
+		rtext.setShowHostName(showHostNameCheckBox.isSelected());	// Doesn't update if doesn't have to.
 	}
 
 
@@ -275,18 +267,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 	 */
 	private int getMainViewStyle() {
 		return viewCombo.getSelectedIndex();
-	}
-
-
-	/**
-	 * Returns whether the user wants the host name displayed in the title
-	 * bar.
-	 *
-	 * @return Whether to show the host name.
-	 * @see #setShowHostName(boolean)
-	 */
-	private boolean getShowHostName() {
-		return showHostNameCheckBox.isSelected();
 	}
 
 
@@ -383,17 +363,6 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 
 
 	/**
-	 * Sets the "show hostname" checkbox's state.
-	 *
-	 * @param show Whether the checkbox should be enabled.
-	 * @see #getShowHostName()
-	 */
-	private void setShowHostName(boolean show) {
-		showHostNameCheckBox.setSelected(show);
-	}
-
-
-	/**
 	 * Sets the values displayed by this panel to reflect those in the
 	 * application.  Child panels are not handled.
 	 *
@@ -407,7 +376,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		setDocumentSelectionPlacement(mainView.getDocumentSelectionPlacement());
 		setTheme(rtext.getTheme());
 		setMainViewStyle(rtext.getMainViewStyle());
-		setShowHostName(rtext.getShowHostName());
+		showHostNameCheckBox.setSelected(rtext.getShowHostName());
 	}
 
 
