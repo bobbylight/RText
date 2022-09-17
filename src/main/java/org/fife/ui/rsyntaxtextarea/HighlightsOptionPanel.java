@@ -67,7 +67,7 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		topPanel.add(createOverridePanel());
 		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
-		topPanel.add(createHighlightsPanel());
+		topPanel.add(createHighlightsPanel(o));
 		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		topPanel.add(createSecondaryLanguagesPanel(o));
@@ -112,34 +112,27 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 	}
 
 
-	private void addLabelledColorSelection(Container parent, String labelKey, RColorSwatchesButton button) {
-		button.addPropertyChangeListener(
-			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		Box box = createHorizontalBox();
-		box.add(UIUtil.newLabel(MSG, labelKey, button));
-		box.add(Box.createHorizontalStrut(5));
-		box.add(button);
-		box.add(Box.createHorizontalGlue());
-		parent.add(box);
-		parent.add(Box.createVerticalStrut(COMPONENT_VERTICAL_SPACING));
-	}
-
-
 	/**
 	 * Creates a panel containing the "highlights"-related options.
 	 *
+	 * @param o The component orientation.
 	 * @return The panel.
 	 */
-	private Box createHighlightsPanel() {
+	private Box createHighlightsPanel(ComponentOrientation o) {
 
 		Box p = Box.createVerticalBox();
 		p.setBorder(new OptionPanelBorder(MSG.getString("Section.Highlights")));
 
+		JPanel temp = new JPanel(new SpringLayout());
 		currentLineColorButton = new RColorSwatchesButton();
-		addLabelledColorSelection(p, "CurrentLineHighlightColor", currentLineColorButton);
-
 		markAllColorButton = new RColorSwatchesButton();
-		addLabelledColorSelection(p, "MarkAllColor", markAllColorButton);
+		JLabel currentLineColorLabel = UIUtil.newLabel(MSG, "CurrentLineHighlightColor", currentLineColorButton);
+		JLabel markAllColorLabel = UIUtil.newLabel(MSG, "MarkAllColor", markAllColorButton);
+		UIUtil.addLabelValuePairs(temp, o,
+			currentLineColorLabel, currentLineColorButton,
+			markAllColorLabel, markAllColorButton);
+		UIUtil.makeSpringCompactGrid(temp, 2, 2, 0,0, 5, COMPONENT_VERTICAL_SPACING);
+		addLeftAligned(p, temp, 0, 20);
 
 		enableMOCheckBox = new JCheckBox(
 			MSG.getString("EnableMarkOccurrences"));
