@@ -176,7 +176,7 @@ class SaveAsWebPageAction extends AppAction<RText> {
 		// Print the body
 		out.println("</head>");
 		out.println("<body>\n<pre>");
-		out.println(sb.toString());
+		out.println(sb);
 		out.println("</pre>\n</body>\n</html>");
 
 		out.close();

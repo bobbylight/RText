@@ -401,7 +401,7 @@ class SourceBrowserOptionPanel
 	/**
 	 * Sets whether the "HTML tooltips" checkbox is selected.
 	 *
-	 * @param use Whether or not the "HTML tooltips" checkbox is selected.
+	 * @param use whether the "HTML tooltips" checkbox is selected.
 	 * @see #getUseHTMLToolTips
 	 */
 	private void setUseHTMLToolTips(boolean use) {

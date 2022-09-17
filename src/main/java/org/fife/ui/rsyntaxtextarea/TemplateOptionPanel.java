@@ -100,7 +100,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 
 
 	/**
-	 * Checks whether or not all input the user specified on this panel is
+	 * Checks whether all input the user specified on this panel is
 	 * valid.
 	 *
 	 * @return This method always returns <code>null</code> as the user cannot

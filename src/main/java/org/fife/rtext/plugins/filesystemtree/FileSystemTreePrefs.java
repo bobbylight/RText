@@ -11,7 +11,6 @@ package org.fife.rtext.plugins.filesystemtree;
 
 import javax.swing.KeyStroke;
 
-import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.prefs.Prefs;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
 

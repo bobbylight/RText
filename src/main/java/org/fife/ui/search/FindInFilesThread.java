@@ -459,7 +459,7 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 	protected Pattern[] getFilterStrings() {
 
 		// Get the list of regular expressions to apply when deciding
-		// whether or not to look in a file.  If we're on Windows, or OS X,
+		// whether to look in a file.  If we're on Windows, or OS X,
 		// do case-insensitive regexes.
 		String[] tokens = dialog.getInFilesPatterns();
 		if (tokens==null || tokens.length==0) {

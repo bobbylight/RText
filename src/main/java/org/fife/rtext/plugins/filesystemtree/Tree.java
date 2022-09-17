@@ -242,16 +242,11 @@ class Tree extends FileSystemTree {
 
 	/**
 	 * Adds an old text file to an RText instance.
+	 *
+	 * @param rtext The parent application.
+	 * @param file The file to open.
 	 */
-	private static class OpenInNewWindowRunnable implements Runnable {
-
-		private final RText rtext;
-		private final String file;
-
-		OpenInNewWindowRunnable(RText rtext, String file) {
-			this.rtext = rtext;
-			this.file = file;
-		}
+	private record OpenInNewWindowRunnable(RText rtext, String file) implements Runnable {
 
 		@Override
 		public void run() {

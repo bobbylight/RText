@@ -148,15 +148,15 @@ public class SearchManager {
 		String searchString = mainView.searchContext.getSearchFor();
 		if (searchString==null || searchString.isEmpty()) {
 			switch (searchingMode) {
-				case DIALOGS:
+				case DIALOGS -> {
 					ensureSearchDialogsCreated();
 					findDialog.setVisible(true);
-					break;
-				case TOOLBARS:
+				}
+				case TOOLBARS -> {
 					ensureToolbarsCreated();
 					rtext.getCollapsibleSectionPanel().
-							showBottomComponent(findToolBar);
-					break;
+						showBottomComponent(findToolBar);
+				}
 			}
 			return;
 		}
@@ -191,7 +191,7 @@ public class SearchManager {
 			// There was a problem with the user's regex search string.
 			// Won't usually happen; should be caught earlier.
 			JOptionPane.showMessageDialog(rtext,
-			"Invalid regular expression:\n" + pse.toString() +
+			"Invalid regular expression:\n" + pse +
 			"\nPlease check your regular expression search string.",
 			"Error", JOptionPane.ERROR_MESSAGE);
 		}
@@ -284,15 +284,15 @@ public class SearchManager {
 		String searchString = context.getSearchFor();
 		if (searchString==null || searchString.isEmpty()) {
 			switch (searchingMode) {
-				case DIALOGS:
+				case DIALOGS -> {
 					ensureSearchDialogsCreated();
 					replaceDialog.setVisible(true);
-					break;
-				case TOOLBARS:
+				}
+				case TOOLBARS -> {
 					ensureToolbarsCreated();
 					rtext.getCollapsibleSectionPanel().
-							showBottomComponent(replaceToolBar);
-					break;
+						showBottomComponent(replaceToolBar);
+				}
 			}
 			return;
 		}
@@ -323,7 +323,7 @@ public class SearchManager {
 			// There was a problem with the user's regex search string.
 			// Won't usually happen; should be caught earlier.
 			JOptionPane.showMessageDialog(rtext,
-			"Invalid regular expression:\n" + pse.toString() +
+			"Invalid regular expression:\n" + pse +
 			"\nPlease check your regular expression search string.",
 			"Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IndexOutOfBoundsException ioobe) {
@@ -353,13 +353,11 @@ public class SearchManager {
 		CollapsibleSectionPanel csp = rtext.getCollapsibleSectionPanel();
 		if (csp!=null) { // UI is fully realized
 			switch (mode) {
-				case DIALOGS:
-					csp.hideBottomComponent();
-					break;
-				case TOOLBARS:
+				case DIALOGS -> csp.hideBottomComponent();
+				case TOOLBARS -> {
 					hideFindDialogIfVisible();
 					hideReplaceDialogIfVisible();
-					break;
+				}
 			}
 		}
 

@@ -117,8 +117,8 @@ public class RemoteFileChooser extends EscapableDialog
 		passLabel = createLabel(passField, msg, "Password");
 		encodingCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(encodingCombo);
-		Map<String, Charset> availcs = Charset.availableCharsets();
-		for (String key : availcs.keySet()) {
+		Map<String, Charset> availableCharsets = Charset.availableCharsets();
+		for (String key : availableCharsets.keySet()) {
 			encodingCombo.addItem(key);
 		}
 		// Get the canonical name of the encoding, as that's what

@@ -13,53 +13,9 @@ package org.fife.rtext.plugins.tidy;
 /**
  * The results of a pretty-print operation.
  *
- * @author Robert Futrell
- * @version 1.0
+ * @param result The result of the operation.
+ * @param text The pretty-printed text, or {@code null} if it was unsuccessful.
+ * @param summary A summary of the operation, or {@code null} if none.
  */
-class PrettyPrintResult {
-
-	private final int result;
-	private final String text;
-	private final String summary;
-
-
-	PrettyPrintResult(int result, String text, String summary) {
-		this.result = result;
-		this.text = text;
-		this.summary = summary;
-	}
-
-
-	/**
-	 * Returns the result of the operation.
-	 *
-	 * @return The result of the operation.
-	 */
-	public int getResult() {
-		return result;
-	}
-
-
-	/**
-	 * Returns a short summary of how the pretty printing went, suitable for
-	 * display in a popup window.
-	 *
-	 * @return A summary, or <code>null</code> if none is available.
-	 */
-	public String getSummary() {
-		return summary;
-	}
-
-
-	/**
-	 * Returns the pretty printed text.
-	 *
-	 * @return The pretty printed text.  This may be <code>null</code> or
-	 *         unchanged if {@link #getResult()} does not return success.
-	 */
-	public String getText() {
-		return text;
-	}
-
-
+record PrettyPrintResult(int result, String text, String summary) {
 }

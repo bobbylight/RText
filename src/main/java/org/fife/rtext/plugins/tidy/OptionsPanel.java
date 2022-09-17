@@ -212,12 +212,12 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin>
 		jsonStyleCombo.addActionListener(this);
 		JLabel styleLabel = UIUtil.newLabel(msg, "Options.JSON.Style", jsonStyleCombo);
 
-		JPanel labelledFieldsPaanel = new JPanel(new SpringLayout());
-		UIUtil.addLabelValuePairs(labelledFieldsPaanel, o,
+		JPanel labelledFieldsPanel = new JPanel(new SpringLayout());
+		UIUtil.addLabelValuePairs(labelledFieldsPanel, o,
 			spaceLabel, jsonSpaceSpinner,
 			styleLabel, jsonStyleCombo);
-		UIUtil.makeSpringCompactGrid(labelledFieldsPaanel, 2, 2, 0, 0, 5, 5);
-		addLeftAligned(jsonPanel, labelledFieldsPaanel, COMPONENT_VERTICAL_SPACING);
+		UIUtil.makeSpringCompactGrid(labelledFieldsPanel, 2, 2, 0, 0, 5, 5);
+		addLeftAligned(jsonPanel, labelledFieldsPanel, COMPONENT_VERTICAL_SPACING);
 
 		jsonIndentFirstLevelCB = UIUtil.newCheckBox(msg,
 				"Options.JSON.IndentFirstLevel");

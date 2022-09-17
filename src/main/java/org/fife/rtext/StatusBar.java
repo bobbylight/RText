@@ -233,7 +233,7 @@ public class StatusBar extends org.fife.ui.StatusBar
 
 
 	/**
-	 * Returns whether or not the row/column indicator is visible.
+	 * Returns whether the row/column indicator is visible.
 	 *
 	 * @return Whether the row/column indicator is enabled.
 	 */
@@ -351,7 +351,7 @@ public class StatusBar extends org.fife.ui.StatusBar
 	/**
 	 * Enables or disables the row/column indicator.
 	 *
-	 * @param isVisible Whether or not the row/column indicator should be
+	 * @param isVisible whether the row/column indicator should be
 	 *        visible.
 	 */
 	public void setRowColumnIndicatorVisible(boolean isVisible) {

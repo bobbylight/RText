@@ -141,15 +141,15 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 	/**
 	 * Returns the two long values in an <code>Object</code> array.
 	 *
-	 * @param num The first long.
-	 * @param denom The second long.
+	 * @param numerator The first number.
+	 * @param denominator The second number.
 	 * @return The two longs in an <code>Object</code> array.
 	 */
-	private static Object[] getParams(long num, long denom) {
+	private static Object[] getParams(long numerator, long denominator) {
 		if (objArray==null)
 			objArray = new Object[2];
-		objArray[0] = num;
-		objArray[1] = denom;
+		objArray[0] = numerator;
+		objArray[1] = denominator;
 		return objArray;
 	}
 
@@ -207,10 +207,10 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 	 */
 	@Override
 	public String getToolTipText() {
-		long num = bytesToKb(getUsedMemory());
-		long denom = bytesToKb(getTotalMemory());
+		long numerator = bytesToKb(getUsedMemory());
+		long denominator = bytesToKb(getTotalMemory());
 		String toolTip = msg.getString("Plugin.ToolTip.text");
-		toolTip = MessageFormat.format(toolTip, getParams(num, denom));
+		toolTip = MessageFormat.format(toolTip, getParams(numerator, denominator));
 		return toolTip;
 	}
 

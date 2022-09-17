@@ -24,7 +24,7 @@ public abstract class BaseAction extends StandardAction implements PopupContent{
 
 
 	protected BaseAction(String keyRoot) {
-		this(keyRoot, (Icon)null);
+		this(keyRoot, null);
 	}
 
 

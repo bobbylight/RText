@@ -2,7 +2,7 @@
  * 03/19/2004
  *
  * RTextSplitPaneView.java - A view for multiple RTextEditorPanes consisting
- * of a left-hand list pane listing all open documents and a cardlayout pane
+ * of a left-hand list pane listing all open documents and a card layout pane
  * on the right showing the currently open document.
  * Copyright (C) 2003 Robert Futrell
  * https://fifesoft.com/rtext

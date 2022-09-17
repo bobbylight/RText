@@ -56,8 +56,7 @@ final class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
 		DefaultMutableTreeNode dmtn = (DefaultMutableTreeNode)value;
 		Object obj = dmtn.getUserObject();
 
-		if (obj instanceof String) { // As opposed to TagEntry.
-			String str = (String)obj;
+		if (obj instanceof String str) { // As opposed to TagEntry.
 			int index = str.indexOf('(');
 			if (index>-1) { // Not true if ctags not found.
 				setText("<html>" + str.substring(0,index) + "<b>" +
@@ -67,14 +66,12 @@ final class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
 
 		// Determine what icon to use.
 		Icon icon = null;
-		if (dmtn instanceof GroupTreeNode) {
-			GroupTreeNode gtn = (GroupTreeNode)dmtn;
+		if (dmtn instanceof GroupTreeNode gtn) {
 			icon = gtn.getIcon();
 		}
 		else {
 			TreeNode parent = dmtn.getParent();
-			if (parent instanceof GroupTreeNode) {
-				GroupTreeNode gtn = (GroupTreeNode)parent;
+			if (parent instanceof GroupTreeNode gtn) {
 				icon = gtn.getIcon();
 			}
 		}

@@ -74,7 +74,7 @@ public class ProjectPlugin extends GUIPlugin<RText> {
 		loadIcons();
 		ProjectPluginPrefs prefs = loadPrefs();
 
-		AppAction<RText> a = new ViewProjectsAction((RText)app, this);
+		AppAction<RText> a = new ViewProjectsAction(app, this);
 		a.setAccelerator(prefs.windowVisibilityAccelerator);
 		app.addAction(VIEW_CONSOLE_ACTION, a);
 

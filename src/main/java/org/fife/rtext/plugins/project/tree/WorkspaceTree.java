@@ -202,9 +202,8 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		}
 
 		else if (dir != null && !dir.exists() &&
-				sel instanceof FileProjectEntryTreeNode) {
+			sel instanceof FileProjectEntryTreeNode fpetn) {
 			// Directory was deleted out from under us
-			FileProjectEntryTreeNode fpetn = (FileProjectEntryTreeNode)sel;
 			promptForRemoval(fpetn);
 		}
 
@@ -230,8 +229,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 
 		// If the only child is the dummy one, we know we haven't populated
 		// this node with true children yet.
-		if (awtn instanceof PhysicalLocationTreeNode) {
-			PhysicalLocationTreeNode pltn = (PhysicalLocationTreeNode)awtn;
+		if (awtn instanceof PhysicalLocationTreeNode pltn) {
 			if (pltn.isNotPopulated()) {
 				Cursor orig = getCursor();
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -258,12 +256,10 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		TreePath path = getSelectionPath();
 		if (path!=null) {
 			Object comp = path.getLastPathComponent();
-			if (comp instanceof FileTreeNode) {
-				FileTreeNode node = (FileTreeNode)comp;
+			if (comp instanceof FileTreeNode node) {
 				return node.getFile();
 			}
-			else if (comp instanceof FileProjectEntryTreeNode) {
-				FileProjectEntryTreeNode node = (FileProjectEntryTreeNode)comp;
+			else if (comp instanceof FileProjectEntryTreeNode node) {
 				return node.getFile();
 			}
 		}
@@ -312,10 +308,7 @@ public class WorkspaceTree extends JTree implements FileSelector {
 				AbstractMainView mainView = plugin.getApplication().getMainView();
 				mainView.openFile(file.getAbsolutePath(), null, true);
 			}
-			else if (getLastSelectedPathComponent() instanceof
-					FileProjectEntryTreeNode) {
-				FileProjectEntryTreeNode node = (FileProjectEntryTreeNode)
-						getLastSelectedPathComponent();
+			else if (getLastSelectedPathComponent() instanceof FileProjectEntryTreeNode node) {
 				promptForRemoval(node);
 			}
 		}

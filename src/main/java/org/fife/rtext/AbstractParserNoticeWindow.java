@@ -145,8 +145,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 		if (table!=null) {
 			model = ((FileExplorerTableModel)table.getModel()).getTableModel();
 			TableCellRenderer r = table.getTableHeader().getDefaultRenderer();
-			if (r instanceof SortableHeaderRenderer) { // Always true
-				SortableHeaderRenderer shr = (SortableHeaderRenderer)r;
+			if (r instanceof SortableHeaderRenderer shr) { // Always true
 				table.getTableHeader().setDefaultRenderer(
 											shr.getDelegateRenderer());
 			}

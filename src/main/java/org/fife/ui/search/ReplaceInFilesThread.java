@@ -163,7 +163,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 
 							PrintWriter w = new PrintWriter(new BufferedWriter(
 								new UnicodeWriter(fileFullPath, encoding)));
-							w.print(replaceSB.toString());
+							w.print(replaceSB);
 							w.close();
 
 							String text = MessageFormat.format(occurrencesString, repCount);

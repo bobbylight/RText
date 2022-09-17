@@ -145,18 +145,15 @@ public class FindInFilesTable extends JTable implements ResultsComponent, FileSe
 
 		// Default renderers installed into all tables.
 		TableCellRenderer r = getDefaultRenderer(Object.class);
-		if (r instanceof Component) { // Never null for JTable
-			Component c = (Component)r;
+		if (r instanceof Component c) { // Never null for JTable
 			c.applyComponentOrientation(o);
 		}
 		r = getDefaultRenderer(Number.class);
-		if (r instanceof Component) { // Never null for JTable
-			Component c = (Component)r;
+		if (r instanceof Component c) { // Never null for JTable
 			c.applyComponentOrientation(o);
 		}
 		r = getDefaultRenderer(Boolean.class);
-		if (r instanceof Component) { // Never null for JTable
-			Component c = (Component)r;
+		if (r instanceof Component c) { // Never null for JTable
 			c.applyComponentOrientation(o);
 		}
 
@@ -168,8 +165,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent, FileSe
 				((FileExplorerTableModel.SortableHeaderRenderer)r).
 								applyComponentOrientation(o);
 			}
-			else if (r instanceof Component) {
-				Component c = (Component)r;
+			else if (r instanceof Component c) {
 				c.applyComponentOrientation(o);
 			}
 		}
@@ -483,8 +479,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent, FileSe
 		Container parent = getParent();
 		if (parent!=null) { // First time through, it'll be null
 			TableCellRenderer r = getTableHeader().getDefaultRenderer();
-			if (r instanceof SortableHeaderRenderer) { // Always true
-				SortableHeaderRenderer shr = (SortableHeaderRenderer)r;
+			if (r instanceof SortableHeaderRenderer shr) { // Always true
 				getTableHeader().setDefaultRenderer(shr.getDelegateRenderer());
 			}
 		}
@@ -522,8 +517,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent, FileSe
 
 			// If it's HTML and selected, don't colorize the HTML, let the
 			// text all be the table's "selected text" color.
-			if (selected && value instanceof String) {
-				String str = (String)value;
+			if (selected && value instanceof String str) {
 				if (str.startsWith("<html>")) {
 					value = str.replaceAll("color=\"[^\"]+\"", "");
 				}

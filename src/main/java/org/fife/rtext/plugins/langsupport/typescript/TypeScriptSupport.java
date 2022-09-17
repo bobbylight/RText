@@ -47,7 +47,7 @@ public class TypeScriptSupport {
 	 */
 	private void addActionToDockableWindowsMenu(RText rtext) {
 
-		MenuBar mb = (MenuBar)rtext.getJMenuBar();
+		MenuBar<?> mb = (MenuBar<?>)rtext.getJMenuBar();
 
 		final JMenu menu = mb.getMenuByName(RTextMenuBar.MENU_DOCKED_WINDOWS);
 		Action a = rtext.getAction(VIEW_TS_BUILD_RESULTS_ACTION);
@@ -79,7 +79,7 @@ public class TypeScriptSupport {
 				buildAction);
 		menu.add(buildMenuItem);
 
-		MenuBar mb = (MenuBar)rtext.getJMenuBar();
+		MenuBar<?> mb = (MenuBar<?>)rtext.getJMenuBar();
 		JMenu editMenu = mb.getMenuByName(RTextMenuBar.MENU_EDIT);
 		int itemCount = editMenu.getMenuComponentCount();
 		editMenu.insert(menu, itemCount - 1);

@@ -59,13 +59,13 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 
 	public boolean lineNumbersVisible;
 	public int tabSize;							// In spaces.
-	public boolean emulateTabsWithSpaces;			// Whether or not to emulate tabs with spaces.
+	public boolean emulateTabsWithSpaces;			// whether to emulate tabs with spaces.
 	public int textMode;						// Either RTextArea.INSERT_MODE (1) or RTextArea.OVERWRITE_MODE (2).
 	public int tabPlacement;						// One of JTabbedPane.TOP/LEFT/BOTTOM/RIGHT.
 	public Font printFont;						// The font ot use when printing.
 	public Color backgroundColor;
 	public float imageAlpha;						// How "translucent" to make a background image (0.0f - 1.0f).
-	public boolean wordWrap;						// Whether or not word wrap is enabled.
+	public boolean wordWrap;						// whether word wrap is enabled.
 	public Color caretColor;
 	public Color selectionColor;
 	public Color selectedTextColor;

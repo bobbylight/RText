@@ -187,14 +187,10 @@ class ToolOptionPanel extends AbstractConsoleTextAreaOptionPanel<ToolPlugin>
 
 	/**
 	 * Wrapper to renderer a Tool nicely in a table.
+	 *
+	 * @param tool The tool to wrap.
 	 */
-	private static class ToolWrapper {
-
-		private final Tool tool;
-
-		ToolWrapper(Tool tool) {
-			this.tool = tool;
-		}
+	private record ToolWrapper(Tool tool) {
 
 		@Override
 		public String toString() {

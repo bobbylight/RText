@@ -795,9 +795,8 @@ public class RTextMenuBar extends MenuBar<RText>
 			// Since we only listen for the "Window" menu, and the Window
 			// menu is only available when the AbstractMainView is the MDI
 			// view...
-			if (!(rtext.getMainView() instanceof RTextMDIView))
+			if (!(rtext.getMainView() instanceof final RTextMDIView mdiView))
 				return;
-			final RTextMDIView mdiView = (RTextMDIView)rtext.getMainView();
 
 			// Add a menu item for each open document.
 			JMenu currentMenu = windowMenu;	// So our menu doesn't get too long.
@@ -859,10 +858,10 @@ public class RTextMenuBar extends MenuBar<RText>
 
 
 	/**
-	 * Sets whether or not the "Window" menu is visible.  This menu should
+	 * Sets whether the "Window" menu is visible.  This menu should
 	 * only be visible on the MDI view.
 	 *
-	 * @param visible Whether or not the menu should be visible.
+	 * @param visible whether the menu should be visible.
 	 */
 	public void setWindowMenuVisible(boolean visible) {
 		if (visible)

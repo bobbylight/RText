@@ -21,7 +21,6 @@ import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.js.JsErrorParser;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 import org.fife.ui.app.prefs.Prefs;
-import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
 
 

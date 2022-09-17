@@ -205,9 +205,7 @@ public class Tool implements Comparable<Tool> {
 		final Map<String, String> env2 = env==null ? null :
 			new HashMap<>(env);
 		if (env2!=null) {
-			for (String key : env2.keySet()) {
-				env2.put(key, varSubstitute(env2.get(key)));
-			}
+			env2.replaceAll((k, v) -> varSubstitute(env2.get(k)));
 		}
 
 		// Run this tool in a separate thread.
@@ -518,7 +516,7 @@ public class Tool implements Comparable<Tool> {
 
 		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
 		Matcher m = VAR_PATTERN.matcher(str);
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		while (m.find()) {
 			String var = m.group(0);

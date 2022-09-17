@@ -103,7 +103,7 @@ class ReplaceAllAction extends AppAction<RText> implements AbstractSearchAction 
 			// There was a problem with the user's regex search string.
 			// Won't usually happen; should be caught earlier.
 			JOptionPane.showMessageDialog(rtext,
-				"Invalid regular expression:\n" + pse.toString() +
+				"Invalid regular expression:\n" + pse +
 					"\nPlease check your regular expression search string.",
 				"Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IndexOutOfBoundsException ioobe) {

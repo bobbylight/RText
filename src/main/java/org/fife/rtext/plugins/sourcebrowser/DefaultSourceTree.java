@@ -145,7 +145,7 @@ class DefaultSourceTree extends JTree {
 
 
 	/**
-	 * Decides whether or not to display the popup menu.
+	 * Decides whether to display the popup menu.
 	 *
 	 * @param e The mouse event to check.
 	 */
@@ -220,8 +220,7 @@ class DefaultSourceTree extends JTree {
 	 */
 	private void refresh() {
 		Object root = getModel().getRoot();
-		if (root instanceof SourceTreeNode) {
-			SourceTreeNode node = (SourceTreeNode)root;
+		if (root instanceof SourceTreeNode node) {
 			node.setSorted(isSorted());
 			node.refresh();
 			((DefaultTreeModel)getModel()).reload();
@@ -330,9 +329,6 @@ class DefaultSourceTree extends JTree {
 		}
 
 
-		/**
-		 * Called when the user clicks in the ctags tree.
-		 */
 		@Override
 		public void mouseClicked(MouseEvent e) {
 
@@ -356,34 +352,22 @@ class DefaultSourceTree extends JTree {
 		}
 
 
-		/**
-		 * Called when the mouse is dragged in the ctags tree.
-		 */
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			mouseMovedImpl(e);
 		}
 
 
-		/**
-		 * Called when the mouse enters the ctags tree.
-		 */
 		@Override
 		public void mouseEntered(MouseEvent e) {
 		}
 
 
-		/**
-		 * Called when the mouse exits the ctags tree.
-		 */
 		@Override
 		public void mouseExited(MouseEvent e) {
 		}
 
 
-		/**
-		 * Called when the mouse is moved in the ctags tree.
-		 */
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			mouseMovedImpl(e);
@@ -484,18 +468,12 @@ class DefaultSourceTree extends JTree {
 		}
 
 
-		/**
-		 * Called when the user downclicks in the ctags tree.
-		 */
 		@Override
 		public void mousePressed(MouseEvent e) {
 			maybeShowPopup(e);
 		}
 
 
-		/**
-		 * Called when the user up-clicks in the ctags tree.
-		 */
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			maybeShowPopup(e);
@@ -520,8 +498,7 @@ class DefaultSourceTree extends JTree {
 			if (path!=null) {
 				Object object = ((DefaultMutableTreeNode)path.
 									getLastPathComponent()).getUserObject();
-				if (object instanceof TagEntry) {
-					TagEntry entry = (TagEntry)object;
+				if (object instanceof TagEntry entry) {
 					RTextEditorPane editor=owner.getMainView().getCurrentTextArea();
 					String pattern = entry.getPlainTextPattern();
 					if (pattern!=null) {

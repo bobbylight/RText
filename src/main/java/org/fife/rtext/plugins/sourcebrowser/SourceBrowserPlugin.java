@@ -193,7 +193,7 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 		boolean doChange = switchedToAnotherTextArea ||
 				(type==CurrentTextAreaEvent.IS_MODIFIED_CHANGED &&
 					(Boolean.FALSE.equals(e.getNewValue()))) ||
-				(type==CurrentTextAreaEvent.SYNTAX_STYLE_CNANGED);
+				(type==CurrentTextAreaEvent.SYNTAX_STYLE_CHANGED);
 		RText owner = getApplication();
 
 		// If we should parse the file...
@@ -697,7 +697,7 @@ public class SourceBrowserPlugin extends GUIPlugin<RText>
 	/**
 	 * Sets whether HTML tooltips are used in this source browser.
 	 *
-	 * @param use Whether or not to use HTML tooltips.
+	 * @param use whether to use HTML tooltips.
 	 * @see #getUseHTMLToolTips
 	 */
 	public void setUseHTMLToolTips(boolean use) {

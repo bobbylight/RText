@@ -789,7 +789,7 @@ public final class RTextUtilities {
 	 * Saves the "Favorite Directories" of RText's file chooser.  It is
 	 * assumed that the file chooser has been created via
 	 * {@link #createFileChooser(RText)} before calling this method.
-	 *
+	 * <p>
 	 * If an error occurs saving the favorites, an error message is
 	 * displayed.
 	 *

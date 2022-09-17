@@ -116,14 +116,14 @@ public abstract class AbstractMainView extends JPanel
 	private Color selectedTextColor;
 	private boolean useSelectedTextColor;
 
-	private Color background;					// Text aarea background color
+	private Color background;					// Text area background color
 	private float imageAlpha;					// Alpha value used to make the bg image translucent.
 
 	protected RText owner;
 
 	private SyntaxFilters syntaxFilters;			// Used to decide how to syntax highlight a file.
 
-	private boolean highlightCurrentLine;			// Whether or not the current line is highlighted.
+	private boolean highlightCurrentLine;			// whether the current line is highlighted.
 	private Color currentLineColor;				// The color with which to highlight the current line.
 
 	private boolean highlightModifiedDocDisplayNames;	// Color display names of modified files differently?
@@ -355,7 +355,7 @@ public abstract class AbstractMainView extends JPanel
 
 	/**
 	 * Overridden so we ensure text areas keep their special LTR or RTL
-	 * orientaitons.
+	 * orientations.
 	 *
 	 * @param o The new component orientation.
 	 */
@@ -372,7 +372,7 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns whether or not tabs are emulated with spaces.
+	 * Returns whether tabs are emulated with spaces.
 	 *
 	 * @return <code>true</code> iff tabs are emulated with spaces.
 	 */
@@ -415,7 +415,7 @@ public abstract class AbstractMainView extends JPanel
 				checkForModification = true;
 			}
 			else {
-				final String actionCommand = "FileModified." + sb.toString();
+				final String actionCommand = "FileModified." + sb;
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
@@ -471,7 +471,7 @@ public abstract class AbstractMainView extends JPanel
 				// Try to close the document.
 				boolean closed = closeCurrentDocument();
 
-				// If the user cancels out of it, quit the whole schibang.
+				// If the user cancels out of it, quit the whole shebang.
 				if (!closed) {
 					// If the newly-active file is read-only, say so in the status bar.
 					owner.setStatusBarReadOnlyIndicatorEnabled(
@@ -1042,7 +1042,7 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns the color of the current line highlight, if enaabled.
+	 * Returns the color of the current line highlight, if enabled.
 	 *
 	 * @return The current line highlight color.
 	 * @see #setCurrentLineHighlightColor(Color)
@@ -1310,9 +1310,9 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns whether or not line numbers are visible in the open documents.
+	 * Returns whether line numbers are visible in the open documents.
 	 *
-	 * @return Whether or not line numbers are enabled.
+	 * @return whether line numbers are enabled.
 	 */
 	public boolean getLineNumbersEnabled() {
 		return lineNumbersEnabled;
@@ -1331,10 +1331,10 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns whether or not line (word) wrap is enabled for the open
+	 * Returns whether line (word) wrap is enabled for the open
 	 * documents.
 	 *
-	 * @return Whether or not line wrap is enabled.
+	 * @return whether line wrap is enabled.
 	 */
 	public boolean getLineWrap() {
 		return lineWrapEnabled;
@@ -2087,7 +2087,7 @@ public abstract class AbstractMainView extends JPanel
 
 			} // End of if (rc==JOptionPane.YES_OPTION)
 
-			// Whether or not we reload, we need to update the "last
+			// whether we reload, we need to update the "last
 			// modified" time for this document, so we don't keep
 			// bugging them about the same outside modification.
 			currentTextArea.syncLastSaveOrLoadTimeToActualFile();
@@ -2299,7 +2299,7 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns whether or not bracket matching is enabled.
+	 * Returns whether bracket matching is enabled.
 	 *
 	 * @return <code>true</code> iff bracket matching is enabled.
 	 * @see #setBracketMatchingEnabled
@@ -2322,7 +2322,7 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns whether or not the current line is highlighted.
+	 * Returns whether the current line is highlighted.
 	 *
 	 * @return Whether or the current line is highlighted.
 	 * @see #setCurrentLineHighlightEnabled
@@ -2345,9 +2345,9 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Returns whether or not the margin line is enabled.
+	 * Returns whether the margin line is enabled.
 	 *
-	 * @return Whether or not the margin line is enabled.
+	 * @return whether the margin line is enabled.
 	 * @see #setMarginLineEnabled
 	 */
 	public boolean isMarginLineEnabled() {
@@ -2601,7 +2601,7 @@ public abstract class AbstractMainView extends JPanel
 			// If the highlighting style of the current file changed...
 			case RTextEditorPane.SYNTAX_STYLE_PROPERTY:
 				fireCurrentTextAreaEvent(
-					CurrentTextAreaEvent.SYNTAX_STYLE_CNANGED,
+					CurrentTextAreaEvent.SYNTAX_STYLE_CHANGED,
 					e.getOldValue(), e.getNewValue());
 				break;
 
@@ -2822,7 +2822,7 @@ public abstract class AbstractMainView extends JPanel
 
 		int returnVal = chooser.showSaveDialog(owner);
 
-		// If they entered a new filename and clicked "OK", save the flie!
+		// If they entered a new filename and clicked "OK", save the file!
 		if(returnVal == RTextFileChooser.APPROVE_OPTION) {
 
 			File chosenFile = chooser.getSelectedFile();
@@ -2937,22 +2937,16 @@ public abstract class AbstractMainView extends JPanel
 		SearchContext context = e.getSearchContext();
 
 		switch (e.getType()) {
-			case MARK_ALL:
+			case MARK_ALL -> {
 				RTextEditorPane textArea = getCurrentTextArea();
 				SearchEngine.markAll(textArea, context);
-				break;
-			case FIND:
-				((AbstractSearchAction)owner.getAction(RText.FIND_NEXT_ACTION)).
-					actionPerformed(context);
-				break;
-			case REPLACE:
-				((AbstractSearchAction)owner.getAction(RText.REPLACE_NEXT_ACTION)).
-					actionPerformed(context);
-				break;
-			case REPLACE_ALL:
-				((AbstractSearchAction)owner.getAction(RText.REPLACE_ALL_ACTION)).
-					actionPerformed(context);
-				break;
+			}
+			case FIND -> ((AbstractSearchAction)owner.getAction(RText.FIND_NEXT_ACTION)).
+				actionPerformed(context);
+			case REPLACE -> ((AbstractSearchAction)owner.getAction(RText.REPLACE_NEXT_ACTION)).
+				actionPerformed(context);
+			case REPLACE_ALL -> ((AbstractSearchAction)owner.getAction(RText.REPLACE_ALL_ACTION)).
+				actionPerformed(context);
 		}
 	}
 
@@ -3016,9 +3010,9 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Sets whether or not bracket matching is enabled.
+	 * Sets whether bracket matching is enabled.
 	 *
-	 * @param enabled Whether or not bracket matching should be enabled.
+	 * @param enabled whether bracket matching should be enabled.
 	 * @see #isBracketMatchingEnabled
 	 */
 	public void setBracketMatchingEnabled(boolean enabled) {
@@ -3322,7 +3316,7 @@ public abstract class AbstractMainView extends JPanel
 	 * Sets whether this panel will highlight modified documents' display
 	 * names with a different color.
 	 *
-	 * @param highlight Whether or not to highlight modified documents' display
+	 * @param highlight whether to highlight modified documents' display
 	 *        names.
 	 * @see #highlightModifiedDocumentDisplayNames
 	 * @see #getModifiedDocumentDisplayNamesColor
@@ -3435,7 +3429,7 @@ public abstract class AbstractMainView extends JPanel
 	/**
 	 * Enables/disables the line numbers for the open documents.
 	 *
-	 * @param enabled Whether or not line numbers should be enabled.
+	 * @param enabled whether line numbers should be enabled.
 	 */
 	public void setLineNumbersEnabled(boolean enabled) {
 		if (enabled!=lineNumbersEnabled) {
@@ -3465,7 +3459,7 @@ public abstract class AbstractMainView extends JPanel
 	/**
 	 * Enables/disables word wrap of the open documents.
 	 *
-	 * @param enabled Whether or not word wrap should be enabled.
+	 * @param enabled whether word wrap should be enabled.
 	 */
 	public void setLineWrap(boolean enabled) {
 		if (enabled!=lineWrapEnabled) {
@@ -3493,10 +3487,10 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Sets whether or not the margin line is enabled in all text areas.  If
+	 * Sets whether the margin line is enabled in all text areas.  If
 	 * this value is the same as the current value, nothing happens.
 	 *
-	 * @param enabled Whether or not the margin line should be enabled.
+	 * @param enabled whether the margin line should be enabled.
 	 * @see #isMarginLineEnabled
 	 */
 	public void setMarginLineEnabled(boolean enabled) {
@@ -4025,10 +4019,10 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
-	 * Changes whether or not tabs should be emulated with spaces (i.e., soft
+	 * Changes whether tabs should be emulated with spaces (i.e., soft
 	 * tabs).
 	 *
-	 * @param areEmulated Whether or not tabs should be emulated with spaces.
+	 * @param areEmulated whether tabs should be emulated with spaces.
 	 */
 	public void setTabsEmulated(boolean areEmulated) {
 		if (areEmulated!=emulateTabsWithWhitespace) {

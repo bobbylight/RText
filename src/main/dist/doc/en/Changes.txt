@@ -1584,7 +1584,7 @@ https://bobbylight.github.io/RText/
    - RText now checks for files being updated outside of the
      editor.  For example, if you have a file "foo.txt" open in
      RText, then open "foo.txt" in another editor and save it,
-     RText will realize this and ask you whether or not you
+     RText will realize this and ask you whether you
      want to reload the file.
    - Fixed bug: The Read-only indicator was broken from when I
      added the ability to change your view style.  This is now
@@ -1631,7 +1631,7 @@ https://bobbylight.github.io/RText/
      on the top or bottom, or made floatable.  Although this
      isn't necessarily a useful feature, it is functionality
      found in more recent Microsoft products, and so I
-     decided to see whether or not I could mimic it.
+     decided to see whether I could mimic it.
    - Look and Feels:
         - Added a new Look and Feel - "Office 2003".  This
           Look and Feel just mimics the blue toolbar and
@@ -1672,7 +1672,7 @@ https://bobbylight.github.io/RText/
           now any kind of open tag can span multiple lines.
    - Added right-click popup options menu to the toolbar.
      Currently the only thing you can do from this menu is
-     "lock" the toolbar (toggle whether or not it is floatable).
+     "lock" the toolbar (toggle whether it is floatable).
    - Improved the OfficeXP Look and Feel:
         - Combo boxes now look like the newer Windows "flat
           style" combo boxes found, for example, in the toolbar
@@ -1805,7 +1805,7 @@ https://bobbylight.github.io/RText/
         - Fixed 'Text Area' panel so that clicking the 'Restore Defaults'
           button only enables the Apply button when it changes something.
    - RText once again remembers more between sessions:
-        - Whether or not the window was maximized.
+        - whether the window was maximized.
         - File filters
         - File history
    - Fixed bug: Background as image stopped working on Windows with the
@@ -1826,7 +1826,7 @@ https://bobbylight.github.io/RText/
      added support for customizing syntax highlighting and other text
      area options.
    - RText now remembers more of your preferences between sessions:
-     whether or not word wrap was on, caret color, selection color, and
+     whether word wrap was on, caret color, selection color, and
      syntax highlighting colors.
    - Fixed small bug involving changing carets and selections:  if you
      had a selection then switched from insert to overwrite mode or

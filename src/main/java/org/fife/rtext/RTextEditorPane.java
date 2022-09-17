@@ -42,7 +42,7 @@ public class RTextEditorPane extends TextEditorPane {
 	 * highlighting.
 	 *
 	 * @param rtext The owning RText instance.
-	 * @param wordWrapEnabled Whether or not to use word wrap in this pane.
+	 * @param wordWrapEnabled Whether to use word wrap in this pane.
 	 * @param textMode Either <code>INSERT_MODE</code> or
 	 *        <code>OVERWRITE_MODE</code>.
 	 * @param loc The location of the file to open.

@@ -211,7 +211,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	/**
-	 * Returns whether or not tabs are emulated with spaces (i.e. "soft" tabs).
+	 * Returns whether tabs are emulated with spaces (i.e. "soft" tabs).
 	 * This simply calls <code>mainView.areTabsEmulated</code>.
 	 *
 	 * @return <code>true</code> if tabs are emulated with spaces;
@@ -1000,18 +1000,18 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 		// Initialize our view object.
 		switch (prefs.mainView) {
-			case TABBED_VIEW:
+			case TABBED_VIEW -> {
 				mainViewStyle = TABBED_VIEW;
 				mainView = new RTextTabbedPaneView(RText.this, filesToOpen, prefs);
-				break;
-			case SPLIT_PANE_VIEW:
+			}
+			case SPLIT_PANE_VIEW -> {
 				mainViewStyle = SPLIT_PANE_VIEW;
 				mainView = new RTextSplitPaneView(RText.this, filesToOpen, prefs);
-				break;
-			default:
+			}
+			default -> {
 				mainViewStyle = MDI_VIEW;
 				mainView = new RTextMDIView(RText.this, filesToOpen, prefs);
-				break;
+			}
 		}
 
 		// Change all RTextAreas' open documents' icon sets.  This must be done
@@ -1115,8 +1115,8 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		saveActionShortcuts(getShortcutsFile());
 
 		// Save preferences for any plugins.
-		Plugin[] plugins = getPlugins();
-		for (Plugin plugin : plugins) {
+		Plugin<?>[] plugins = getPlugins();
+		for (Plugin<?> plugin : plugins) {
 			plugin.savePreferences();
 		}
 
@@ -1170,18 +1170,18 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 			// Create the new view.
 			switch (viewStyle) {
-				case TABBED_VIEW:
+				case TABBED_VIEW -> {
 					mainView = new RTextTabbedPaneView(this, null, prefs);
 					menuBar.setWindowMenuVisible(false);
-					break;
-				case SPLIT_PANE_VIEW:
+				}
+				case SPLIT_PANE_VIEW -> {
 					mainView = new RTextSplitPaneView(this, null, prefs);
 					menuBar.setWindowMenuVisible(false);
-					break;
-				case MDI_VIEW:
+				}
+				case MDI_VIEW -> {
 					mainView = new RTextMDIView(this, null, prefs);
 					menuBar.setWindowMenuVisible(true);
-					break;
+				}
 			}
 
 			// Update property change listeners.
@@ -1261,7 +1261,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	/**
 	 * Enables or disables the row/column indicator in the status bar.
 	 *
-	 * @param isVisible Whether or not the row/column indicator should be
+	 * @param isVisible whether the row/column indicator should be
 	 *        visible.
 	 */
 	public void setRowColumnIndicatorVisible(boolean isVisible) {
@@ -1287,7 +1287,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	/**
 	 * Sets whether the read-only indicator in the status bar is enabled.
 	 *
-	 * @param enabled Whether or not the read-only indicator is enabled.
+	 * @param enabled whether the read-only indicator is enabled.
 	 */
 	public void setStatusBarReadOnlyIndicatorEnabled(boolean enabled) {
 		((StatusBar)getStatusBar()).setReadOnlyIndicatorEnabled(enabled);
@@ -1317,11 +1317,11 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 
 
 	/**
-	 * Changes whether or not tabs should be emulated with spaces
+	 * Changes whether tabs should be emulated with spaces
 	 * (i.e., soft tabs).
 	 * This simply calls <code>mainView.setTabsEmulated</code>.
 	 *
-	 * @param areEmulated Whether or not tabs should be emulated with spaces.
+	 * @param areEmulated whether tabs should be emulated with spaces.
 	 */
 	public void setTabsEmulated(boolean areEmulated) {
 		mainView.setTabsEmulated(areEmulated);

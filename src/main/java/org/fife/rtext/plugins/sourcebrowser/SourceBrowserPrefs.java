@@ -1,7 +1,7 @@
 /*
  * 05/03/2005
  *
- * SourceBrowserPreference.sjava- Preferences for the source browser.
+ * SourceBrowserPrefs.java- Preferences for the source browser.
  * Copyright (C) 2005 Robert Futrell
  * https://fifesoft.com/rtext
  * Licensed under a modified BSD license.
@@ -11,7 +11,6 @@ package org.fife.rtext.plugins.sourcebrowser;
 
 import javax.swing.KeyStroke;
 
-import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.prefs.Prefs;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
 

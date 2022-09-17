@@ -193,8 +193,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 		((FolderProjectEntry)entry).setFilterInfo(info);
 		for (int i=0; i<getChildCount(); i++) {
 			TreeNode child = getChildAt(i);
-			if (child instanceof FileTreeNode) { // i.e. not NotYetPopulated...
-				FileTreeNode ftn = (FileTreeNode)child;
+			if (child instanceof FileTreeNode ftn) { // i.e. not NotYetPopulated...
 				ftn.setFilterInfo(info);
 			}
 		}

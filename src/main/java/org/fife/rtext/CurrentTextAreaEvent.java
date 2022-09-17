@@ -41,7 +41,7 @@ public class CurrentTextAreaEvent extends EventObject {
 	/**
 	 * Fired when the current text area's syntax style changes.
 	 */
-	public static final int SYNTAX_STYLE_CNANGED		= 3;
+	public static final int SYNTAX_STYLE_CHANGED = 3;
 
 	private static final int MAX_TYPE_VALUE			= 3;
 

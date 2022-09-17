@@ -49,8 +49,7 @@ class WorkspaceTreeRenderer extends DefaultTreeCellRenderer {
 		setBorder(BORDER);
 
 		// Not true the first time through!
-		if (value instanceof AbstractWorkspaceTreeNode) {
-			AbstractWorkspaceTreeNode node = (AbstractWorkspaceTreeNode)value;
+		if (value instanceof AbstractWorkspaceTreeNode node) {
 			setIcon(node.getIcon());
 		}
 		return this;

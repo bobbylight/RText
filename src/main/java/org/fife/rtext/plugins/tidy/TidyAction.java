@@ -119,14 +119,14 @@ class TidyAction extends AppAction<RText> {
 
 		int icon = JOptionPane.INFORMATION_MESSAGE;
 
-		switch (result.getResult()) {
+		switch (result.result()) {
 			case PrettyPrinter.RESULT_WARNINGS:
 				icon = JOptionPane.WARNING_MESSAGE;
 				// Fall through
 			case PrettyPrinter.RESULT_OK:
 				textArea.beginAtomicEdit();
 				try {
-					textArea.setText(result.getText());
+					textArea.setText(result.text());
 				} finally { // Treat clear and set as 1 operation (!)
 					textArea.endAtomicEdit();
 				}
@@ -136,14 +136,14 @@ class TidyAction extends AppAction<RText> {
 				break;
 		}
 
-		String summary = result.getSummary();
+		String summary = result.summary();
 		if (summary!=null) {
 			summary = cleanupSummary(summary);
 			String title = Plugin.MSG.getString("Dialog.Result.Title");
 			RText app = getApplication();
 			JOptionPane.showMessageDialog(app, summary, title, icon);
 		}
-		else if (result.getResult()==PrettyPrinter.RESULT_ERRORS) {
+		else if (result.result()==PrettyPrinter.RESULT_ERRORS) {
 			// If somehow we didn't get an error message, but the tidy failed,
 			// still alert the user that something bad happened.
 			UIManager.getLookAndFeel().provideErrorFeedback(null);

@@ -457,8 +457,7 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 			if (selected instanceof FileTreeNode) {
 				file = ((FileTreeNode)selected).getFile();
 			}
-			else if (selected instanceof FileProjectEntryTreeNode) {
-				FileProjectEntryTreeNode node = (FileProjectEntryTreeNode)selected;
+			else if (selected instanceof FileProjectEntryTreeNode node) {
 				file = node.getFile();
 				if (!file.isFile()) {
 					tree.promptForRemoval(node);

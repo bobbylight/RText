@@ -113,17 +113,11 @@ class BuildThread extends GUIWorkerThread<Object> {
 
 	/**
 	 * The result of building via tsc.
+	 *
+	 * @param tsConfig The tsconfig file to use.
+	 * @param pr The process runner used.
 	 */
-	private static final class Result {
-
-		private final File tsConfig;
-		private final ProcessRunner pr;
-
-		private Result(File tsConfig, ProcessRunner pr) {
-			this.tsConfig = tsConfig;
-			this.pr = pr;
-		}
-
+	private record Result(File tsConfig, ProcessRunner pr) {
 	}
 
 

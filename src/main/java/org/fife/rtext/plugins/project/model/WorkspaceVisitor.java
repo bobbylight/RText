@@ -75,7 +75,7 @@ public interface WorkspaceVisitor {
 	void visit(FileProjectEntry entry);
 
 	/**
-	 * Called before visiting a folder projecgt entry node.
+	 * Called before visiting a folder project entry node.
 	 *
 	 * @param entry The visited node.
 	 */

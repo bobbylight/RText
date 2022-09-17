@@ -106,8 +106,8 @@ class MainPanelTransferHandler extends TransferHandler {
 	 * destination <code>AbstractMainView</code>.
 	 *
 	 * @param c The component receiving the "drop".
-	 * @param t The data being transfered (information about the file).
-	 * @return Whether or not the import was successful.
+	 * @param t The data being transferred (information about the file).
+	 * @return whether the import was successful.
 	 */
 	@Override
 	public boolean importData(JComponent c, Transferable t) {
@@ -122,8 +122,8 @@ class MainPanelTransferHandler extends TransferHandler {
 	 *
 	 * @param mainView The main view receiving the data.
 	 * @param c The component receiving the "drop".
-	 * @param t The data being transfered (information about the file).
-	 * @return Whether or not the import was successful.
+	 * @param t The data being transferred (information about the file).
+	 * @return whether the import was successful.
 	 */
 	public static boolean importDataImpl(AbstractMainView mainView,
 								JComponent c, Transferable t) {

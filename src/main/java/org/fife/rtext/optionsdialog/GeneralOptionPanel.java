@@ -131,8 +131,8 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		encCombo = new JComboBox<>();
 		UIUtil.fixComboOrientation(encCombo);
 		// Populate the combo box with all available encodings.
-		Map<String, Charset> availcs = Charset.availableCharsets();
-		for (String key : availcs.keySet()) {
+		Map<String, Charset> availableCharsets = Charset.availableCharsets();
+		for (String key : availableCharsets.keySet()) {
 			encCombo.addItem(key);
 		}
 		encCombo.setActionCommand("Encoding");

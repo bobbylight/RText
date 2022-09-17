@@ -363,7 +363,7 @@ public class FontAndTabsOptionPanel extends AbstractTextAreaOptionPanel
 
 		RText rtext = (RText)owner;
 
-		// Iniitialize the shared preview context if this is the first pass.
+		// Initialize the shared preview context if this is the first pass.
 		// Otherwise we'll get NPE's
 		EditorOptionsPreviewContext previewContext = EditorOptionsPreviewContext.get();
 		if (previewContext.getSyntaxScheme() == null) {

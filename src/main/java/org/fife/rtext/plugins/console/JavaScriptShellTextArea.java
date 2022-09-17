@@ -34,7 +34,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	private Value bindings;
 
 	/**
-	 * The GrallVM JavaScript context.
+	 * The GraalVM JavaScript context.
 	 */
 	private Context context;
 

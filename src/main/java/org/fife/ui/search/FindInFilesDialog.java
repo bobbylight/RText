@@ -618,7 +618,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	/**
 	 * Returns whether to check subfolders.
 	 *
-	 * @return Whether or not to check subfolders.
+	 * @return whether to check subfolders.
 	 * @see #getMatchCase
 	 * @see #getMatchWholeWord
 	 * @see #getUseRegEx
@@ -673,7 +673,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	/**
 	 * Returns whether matches should be case-sensitive.
 	 *
-	 * @return Whether or not matches should be case-sensitive.
+	 * @return whether matches should be case-sensitive.
 	 * @see #getCheckSubfolders
 	 * @see #getMatchWholeWord
 	 * @see #getUseRegEx
@@ -686,7 +686,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	/**
 	 * Returns whether matches should be whole word.
 	 *
-	 * @return Whether or not matches should be whole word.
+	 * @return whether matches should be whole word.
 	 * @see #getCheckSubfolders
 	 * @see #getMatchCase
 	 * @see #getUseRegEx
@@ -710,7 +710,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 * Returns whether each line that matched the search criteria should be
 	 * shown (as opposed to just a match count for each file).
 	 *
-	 * @return Whether or not each matched line should be shown.
+	 * @return whether each matched line should be shown.
 	 */
 	boolean getShowMatchingLines() {
 		return matchingLinesRadioButton.isSelected();
@@ -730,7 +730,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	/**
 	 * Returns whether regular expressions should be used in searches.
 	 *
-	 * @return Whether or not regular expressions should be used in searches.
+	 * @return whether regular expressions should be used in searches.
 	 * @see #getCheckSubfolders
 	 * @see #getMatchCase
 	 * @see #getMatchWholeWord

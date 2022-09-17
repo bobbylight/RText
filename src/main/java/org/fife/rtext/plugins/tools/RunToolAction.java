@@ -101,12 +101,11 @@ class RunToolAction extends AppAction<RText> {
 
 		Container parent = comp.getParent();
 		Container prev = comp;
-		while (!(parent instanceof JTabbedPane)) {
+		while (!(parent instanceof JTabbedPane tp)) {
 			prev = parent;
 			parent = parent.getParent();
-			if (parent instanceof Frame) {
+			if (parent instanceof Frame frame) {
 				// We're in a popup window - just make sure it's not minimized
-				Frame frame = (Frame)parent;
 				if (frame.getState()==Frame.ICONIFIED) {
 					frame.setState(Frame.NORMAL);
 					editor.requestFocusInWindow();
@@ -117,7 +116,6 @@ class RunToolAction extends AppAction<RText> {
 
 		// Now, parent is the JTabbedPane and prev is the component at the
 		// index we want to select.
-		JTabbedPane tp = (JTabbedPane)parent;
 		for (int i=0; i<tp.getTabCount(); i++) {
 			if (prev==tp.getComponentAt(i)) {
 				tp.setSelectedIndex(i);

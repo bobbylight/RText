@@ -94,7 +94,7 @@ public class Plugin extends AbstractPlugin<RText>
 	@Override
 	public void currentTextAreaPropertyChanged(CurrentTextAreaEvent e) {
 		if (e.getType()==CurrentTextAreaEvent.TEXT_AREA_CHANGED ||
-				e.getType()==CurrentTextAreaEvent.SYNTAX_STYLE_CNANGED) {
+				e.getType()==CurrentTextAreaEvent.SYNTAX_STYLE_CHANGED) {
 			possiblyEnableAction();
 		}
 	}

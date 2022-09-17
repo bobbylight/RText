@@ -53,8 +53,6 @@ class RTextWindowListener extends WindowAdapter {
 	 * application window is minimized for a long time (e.g. overnight), the
 	 * system seems to cache the entire app to disk, resulting in a very long
 	 * pause when the user brings the app back up.
-	 *
-	 * {@inheritDoc}
 	 */
 	@Override
 	public void windowIconified(WindowEvent e) {

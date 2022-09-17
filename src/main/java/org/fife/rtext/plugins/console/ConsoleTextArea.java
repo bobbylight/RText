@@ -383,7 +383,7 @@ abstract class ConsoleTextArea extends AbstractConsoleTextArea {
 
 
 	/**
-	 * Called when the user toggles whether or not to syntax highlight user
+	 * Called when the user toggles whether to syntax highlight user
 	 * input in the options dialog.  This method changes the style of
 	 * <b>only</b> the current user input to match the new preference.  Any
 	 * previously submitted commands are not re-highlighted.

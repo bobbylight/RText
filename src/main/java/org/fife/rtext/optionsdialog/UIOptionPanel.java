@@ -93,11 +93,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		String actionCommand = e.getActionCommand();
 
 		switch (actionCommand) {
-			case "ViewComboBox":
-			case "ShowHostNameCB":
-			case "AppThemeComboBox":
-				setDirty(true);
-				break;
+			case "ViewComboBox", "ShowHostNameCB", "AppThemeComboBox" -> setDirty(true);
 		}
 
 	}

@@ -65,8 +65,8 @@ class TabbedPaneViewTransferHandler extends TabbedPaneTransferHandler {
 	 *
 	 * @param c The component receiving the "drop" (the instance of
 	 *        <code>JTabbedPane</code>).
-	 * @param t The data being transfered (information about the file).
-	 * @return Whether or not the import was successful.
+	 * @param t The data being transferred (information about the file).
+	 * @return whether the import was successful.
 	 */
 	@Override
 	public boolean importData(JComponent c, Transferable t) {

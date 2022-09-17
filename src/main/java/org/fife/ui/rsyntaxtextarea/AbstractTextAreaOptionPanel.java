@@ -169,7 +169,7 @@ abstract class AbstractTextAreaOptionPanel extends OptionsDialogPanel
 
 
 	/**
-	 * Ensures the values in the shared editor option contexdt are sync'd with
+	 * Ensures the values in the shared editor option context are sync'd with
 	 * the values in this options panel.
 	 */
 	protected abstract void syncEditorOptionsPreviewContext();

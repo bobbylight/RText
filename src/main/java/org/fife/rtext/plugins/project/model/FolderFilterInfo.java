@@ -236,14 +236,10 @@ public class FolderFilterInfo {
 
 	/**
 	 * Returns whether a file name matches a regular expression.
+	 *
+	 * @param pattern The pattern to use.
 	 */
-	private static class RegexNameMatcher implements NameMatcher {
-
-		private final Pattern pattern;
-
-		RegexNameMatcher(Pattern pattern) {
-			this.pattern = pattern;
-		}
+	private record RegexNameMatcher(Pattern pattern) implements NameMatcher {
 
 		@Override
 		public boolean matches(String text) {
@@ -255,14 +251,10 @@ public class FolderFilterInfo {
 
 	/**
 	 * Returns whether a file name matches a string literal.
+	 *
+	 * @param literal The literal to check against.
 	 */
-	private static class StringLiteralNameMatcher implements NameMatcher {
-
-		private final String literal;
-
-		StringLiteralNameMatcher(String literal) {
-			this.literal = literal;
-		}
+	private record StringLiteralNameMatcher(String literal) implements NameMatcher {
 
 		@Override
 		public boolean matches(String text) {
