@@ -47,7 +47,7 @@ import org.fife.ui.app.themes.NativeTheme;
  */
 public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListener {
 
-	private static final String VERSION				= "5.0.0";
+	private static final String VERSION				= "6.0.0";
 
 	private ToolOptionPanel optionPanel;
 	private Map<String, Icon> icons;

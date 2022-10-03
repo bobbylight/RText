@@ -61,7 +61,7 @@ public class Plugin extends AbstractPlugin<RText>
 	private XmlOptions xmlOptions;
 	private JsonOptions jsonOptions;
 
-	private static final String PLUGIN_VERSION			= "5.0.0";
+	private static final String PLUGIN_VERSION			= "6.0.0";
 
 	private static final String TIDY_ACTION = "PrettyPrintAction";
 

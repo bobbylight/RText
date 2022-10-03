@@ -3,12 +3,12 @@
 # Builds RText.app for OS X.  This assumes you've already run
 # ./gradlew clean build installDist.  In fact, you usually don't
 # run this directly but rather just run
-# ./gradlew clena build installDist generateJre generateMacApp
+# ./gradlew clean build installDist generateJre generateMacApp
 #
 
 # The version of RText you're building.  This appears in the generated
 # .dmg file name.
-APP_VERSION=5.0.0
+APP_VERSION=6.0.0
 
 #
 # You probably don't want to change anything below this line.

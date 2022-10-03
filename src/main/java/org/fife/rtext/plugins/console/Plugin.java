@@ -42,7 +42,7 @@ import org.fife.ui.app.themes.NativeTheme;
  */
 public class Plugin extends GUIPlugin<RText> {
 
-	private static final String VERSION					= "5.0.0";
+	private static final String VERSION					= "6.0.0";
 	private static final String DOCKABLE_WINDOW_CONSOLE	= "consoleDockableWindow";
 
 	private ConsoleWindow window;

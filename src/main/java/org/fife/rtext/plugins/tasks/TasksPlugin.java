@@ -69,7 +69,7 @@ public class TasksPlugin extends GUIPlugin<RText> {
 	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.tasks.TasksPlugin";
 	private static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
 
-	private static final String VERSION					= "5.0.0";
+	private static final String VERSION					= "6.0.0";
 	private static final String VIEW_TASKS_ACTION		= "viewTasksAction";
 	private static final String DOCKABLE_WINDOW_TASKS	= "tasksDockableWindow";
 
