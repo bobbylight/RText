@@ -175,6 +175,9 @@ public abstract class AbstractMainView extends JPanel
 	private boolean textAreaUnderline;
 	private Color textAreaForeground;
 	private ComponentOrientation textAreaOrientation;
+	private FoldIndicatorStyle foldIndicatorStyle;
+	private Color foldForeground;
+	private Color armedFoldForeground;
 	private Color foldBackground;
 	private Color armedFoldBackground;
 
@@ -642,6 +645,9 @@ public abstract class AbstractMainView extends JPanel
 		textAreaUnderline = fromPanel.textAreaUnderline;
 		textAreaForeground = fromPanel.textAreaForeground;
 		textAreaOrientation = fromPanel.textAreaOrientation;
+		foldIndicatorStyle = fromPanel.foldIndicatorStyle;
+		foldForeground = fromPanel.foldForeground;
+		armedFoldForeground = fromPanel.armedFoldForeground;
 		foldBackground = fromPanel.foldBackground;
 		armedFoldBackground = fromPanel.armedFoldBackground;
 
@@ -842,6 +848,9 @@ public abstract class AbstractMainView extends JPanel
 		Color activeLineRangeColor = getAppropriateActiveLineRangeColor();
 		gutter.setActiveLineRangeColor(activeLineRangeColor);
 
+		gutter.setFoldIndicatorStyle(foldIndicatorStyle);
+		gutter.setFoldIndicatorForeground(foldForeground);
+		gutter.setFoldIndicatorArmedForeground(armedFoldForeground);
 		gutter.setFoldBackground(foldBackground);
 		gutter.setArmedFoldBackground(armedFoldBackground);
 
@@ -966,6 +975,18 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public Color getArmedFoldBackground() {
 		return armedFoldBackground;
+	}
+
+
+	/**
+	 * Returns the color to use for the foreground of armed fold icons.
+	 *
+	 * @return The color.
+	 * @see #setArmedFoldForeground(Color)
+	 * @see #getFoldForeground()
+	 */
+	public Color getArmedFoldForeground() {
+		return armedFoldForeground;
 	}
 
 
@@ -1191,6 +1212,29 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public Color getFoldBackground() {
 		return foldBackground;
+	}
+
+
+	/**
+	 * Returns the color to use for the foreground of fold icons.
+	 *
+	 * @return The color.
+	 * @see #setFoldForeground(Color)
+	 * @see #getArmedFoldForeground()
+	 */
+	public Color getFoldForeground() {
+		return foldForeground;
+	}
+
+
+	/**
+	 * Returns the fold indicator style to use in text components.
+	 *
+	 * @return The fold indicator style.
+	 * @see #setFoldIndicatorStyle(FoldIndicatorStyle)
+	 */
+	public FoldIndicatorStyle getFoldIndicatorStyle() {
+		return foldIndicatorStyle;
 	}
 
 
@@ -2223,6 +2267,9 @@ public abstract class AbstractMainView extends JPanel
 		setTextAreaFont(prefs.textAreaFont, prefs.textAreaUnderline);
 		setTextAreaForeground(prefs.textAreaForeground);
 		setTextAreaOrientation(prefs.textAreaOrientation);
+		setFoldIndicatorStyle(prefs.foldIndicatorStyle);
+		setFoldForeground(prefs.foldForeground);
+		setArmedFoldForeground(prefs.armedFoldForeground);
 		setFoldBackground(prefs.foldBackground);
 		setArmedFoldBackground(prefs.armedFoldBackground);
 
@@ -2989,6 +3036,24 @@ public abstract class AbstractMainView extends JPanel
 
 
 	/**
+	 * Sets the color to use for the foreground of armed fold icons.
+	 *
+	 * @param armedFoldForeground The color.
+	 * @see #getArmedFoldForeground()
+	 * @see #setFoldForeground(Color)
+	 */
+	public void setArmedFoldForeground(Color armedFoldForeground) {
+		if (armedFoldForeground != this.armedFoldForeground) {
+			this.armedFoldForeground = armedFoldForeground;
+			for (int i=0; i<getNumDocuments(); i++) {
+				RTextScrollPane scrollPane = getRTextScrollPaneAt(i);
+				scrollPane.getGutter().setFoldIndicatorArmedForeground(armedFoldForeground);
+			}
+		}
+	}
+
+
+	/**
 	 * Toggles whether closing curly braces are auto-inserted for languages
 	 * where it makes sense.  This method fires a property change event of type
 	 * {@link #AUTO_INSERT_CLOSING_CURLYS}.
@@ -3249,6 +3314,41 @@ public abstract class AbstractMainView extends JPanel
 			for (int i = 0; i < getNumDocuments(); i++) {
 				RTextScrollPane scrollPane = getRTextScrollPaneAt(i);
 				scrollPane.getGutter().setFoldBackground(foldBackground);
+			}
+		}
+	}
+
+
+	/**
+	 * Sets the color to use for the foreground of fold icons.
+	 *
+	 * @param foldForeground The color.
+	 * @see #getFoldForeground()
+	 * @see #setArmedFoldForeground(Color)
+	 */
+	public void setFoldForeground(Color foldForeground) {
+		if (foldForeground != this.foldForeground) {
+			this.foldForeground = foldForeground;
+			for (int i = 0; i < getNumDocuments(); i++) {
+				RTextScrollPane scrollPane = getRTextScrollPaneAt(i);
+				scrollPane.getGutter().setFoldIndicatorForeground(foldForeground);
+			}
+		}
+	}
+
+
+	/**
+	 * Sets the fold indicator style to use in text components.
+	 *
+	 * @param style The new style. This cannot be {@code null}.
+	 * @see #getFoldIndicatorStyle()
+	 */
+	public void setFoldIndicatorStyle(FoldIndicatorStyle style) {
+		if (style != this.foldIndicatorStyle) {
+			this.foldIndicatorStyle = style;
+			for (int i = 0; i < getNumDocuments(); i++) {
+				RTextScrollPane scrollPane = getRTextScrollPaneAt(i);
+				scrollPane.getGutter().setFoldIndicatorStyle(foldIndicatorStyle);
 			}
 		}
 	}
@@ -3803,6 +3903,8 @@ public abstract class AbstractMainView extends JPanel
 		setUseSelectedTextColor(theme.useSelectionFG);
 		setRoundedSelectionEdges(theme.selectionRoundedEdges);
 
+		setFoldForeground(theme.foldIndicatorFG);
+		setArmedFoldForeground(theme.foldIndicatorArmedFG);
 		setFoldBackground(theme.foldBG);
 		setArmedFoldBackground(theme.armedFoldBG);
 	}

@@ -147,6 +147,9 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 		prefs.textAreaUnderline			= mainView.getTextAreaUnderline();
 		prefs.textAreaForeground			= mainView.getTextAreaForeground();
 		prefs.textAreaOrientation		= mainView.getTextAreaOrientation();
+		prefs.foldIndicatorStyle		= mainView.getFoldIndicatorStyle();
+		prefs.foldForeground			= mainView.getFoldForeground();
+		prefs.armedFoldForeground		= mainView.getArmedFoldForeground();
 		prefs.foldBackground			= mainView.getFoldBackground();
 		prefs.armedFoldBackground		= mainView.getArmedFoldBackground();
 		prefs.showHostName				= rtext.getShowHostName();

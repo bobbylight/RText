@@ -145,20 +145,12 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 		maxErrorsPanel.add(maxErrorsField, BorderLayout.LINE_START);
 
 		JPanel temp2 = new JPanel(new SpringLayout());
-		if (orientation.isLeftToRight()) {
-			temp2.add(dictLabel);				temp2.add(dictComboPanel);
-			temp2.add(userDictLabel);			temp2.add(userDictFieldPanel);
-			temp2.add(Box.createRigidArea(new Dimension(1,1))); temp2.add(userDictDescField);
-			temp2.add(colorLabel);				temp2.add(colorButtonPanel);
-			temp2.add(errorsPerFileLabel);		temp2.add(maxErrorsPanel);
-		}
-		else {
-			temp2.add(dictComboPanel);			temp2.add(dictLabel);
-			temp2.add(userDictFieldPanel);		temp2.add(userDictLabel);
-			temp2.add(userDictDescField);		temp2.add(Box.createRigidArea(new Dimension(1,1)));
-			temp2.add(colorButtonPanel);		temp2.add(colorLabel);
-			temp2.add(maxErrorsPanel);			temp2.add(errorsPerFileLabel);
-		}
+		UIUtil.addLabelValuePairs(temp2, orientation,
+			dictLabel, dictComboPanel,
+			userDictLabel, userDictFieldPanel,
+			Box.createRigidArea(new Dimension(1,1)), userDictDescField,
+			colorLabel, colorButtonPanel,
+			errorsPerFileLabel, maxErrorsPanel);
 		UIUtil.makeSpringCompactGrid(temp2, 5, 2, 0, 0, 5, 5);
 		addLeftAligned(temp, temp2, COMPONENT_VERTICAL_SPACING, 20);
 
@@ -349,14 +341,14 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 				String defaultMaxErrors = Integer.toString(RTextPrefs.
 												DEFAULT_MAX_SPELLING_ERRORS);
 
-				if (enabledCB.isSelected() ||
+				if (!enabledCB.isSelected() ||
 						dictCombo.getSelectedIndex()!=1 ||
 						!userDictField.getText().equals(userDictFileName) ||
 						!spellingColorButton.getColor().equals(defaultColor) ||
 						!defaultMaxErrors.equals(maxErrorsField.getText()) ||
 						viewSpellingWindowCB.isSelected()) {
 
-					setSpellCheckingEnabled(false);
+					setSpellCheckingEnabled(true);
 					dictCombo.setSelectedIndex(1);
 					userDictField.setFileSystemAware(false);
 					userDictField.setText(userDictFileName);

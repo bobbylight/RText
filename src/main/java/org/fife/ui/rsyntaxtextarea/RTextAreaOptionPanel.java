@@ -22,6 +22,7 @@ import javax.swing.event.DocumentListener;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.ui.*;
+import org.fife.ui.rtextarea.FoldIndicatorStyle;
 import org.fife.ui.rtextarea.RTextArea;
 
 
@@ -39,6 +40,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 	 */
 	public static final String OPTION_PANEL_ID = "RTextAreaOptionPanel";
 
+	private JCheckBox lnEnabledCB;
 	private JCheckBox wordWrapCheckBox;
 	private JCheckBox highlightCurrentLineCheckBox;
 	private JCheckBox marginLineCheckBox;
@@ -53,6 +55,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 
 	private JCheckBox bracketMatchCheckBox;
 	private JCheckBox bothBracketsCB;
+	private LabelValueComboBox<String, FoldIndicatorStyle> foldIndicatorStyleCombo;
 
 
 	/**
@@ -96,12 +99,17 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 	public void actionPerformed(ActionEvent e) {
 
 		String command = e.getActionCommand();
+		Object source = e.getSource();
 
-		if ("WordWrapCheckBox".equals(command)) {
+		if ("ShowLineNumbers".equals(command)) {
 			setDirty(true);
 		}
 
-		else if ("HighlightCurrentLineCheckBox".equals(command)) {
+		else if ("WordWrap".equals(command)) {
+			setDirty(true);
+		}
+
+		else if ("HighlightCL".equals(command)) {
 			setDirty(true);
 		}
 
@@ -154,6 +162,10 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 			setDirty(true);
 		}
 
+		else if (foldIndicatorStyleCombo == source) {
+			setDirty(true);
+		}
+
 		else {
 			super.actionPerformed(e);
 		}
@@ -182,14 +194,13 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		Box generalPanel = Box.createVerticalBox();
 		generalPanel.setBorder(new OptionPanelBorder(getString("OptGenTitle")));
 
-		wordWrapCheckBox = new JCheckBox(MSG.getString("WordWrap"));
-		wordWrapCheckBox.setActionCommand("WordWrapCheckBox");
-		wordWrapCheckBox.addActionListener(this);
+		lnEnabledCB = createCheckBox("ShowLineNumbers");
+		addLeftAligned(generalPanel, lnEnabledCB, COMPONENT_VERTICAL_SPACING);
+
+		wordWrapCheckBox = createCheckBox("WordWrap");
 		addLeftAligned(generalPanel, wordWrapCheckBox, COMPONENT_VERTICAL_SPACING);
 
-		highlightCurrentLineCheckBox = new JCheckBox(MSG.getString("HighlightCL"));
-		highlightCurrentLineCheckBox.setActionCommand("HighlightCurrentLineCheckBox");
-		highlightCurrentLineCheckBox.addActionListener(this);
+		highlightCurrentLineCheckBox = createCheckBox("HighlightCL");
 		addLeftAligned(generalPanel, highlightCurrentLineCheckBox, COMPONENT_VERTICAL_SPACING);
 
 		Box otherPanel = new Box(BoxLayout.LINE_AXIS);
@@ -235,7 +246,21 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		bothBracketsCB = new JCheckBox(MSG.getString("HighlightBothBrackets"));
 		bothBracketsCB.setActionCommand("BothBracketsCB");
 		bothBracketsCB.addActionListener(this);
-		addLeftAligned(generalPanel, bothBracketsCB, 0, 20);
+		addLeftAligned(generalPanel, bothBracketsCB, COMPONENT_VERTICAL_SPACING, 20);
+
+		foldIndicatorStyleCombo = new LabelValueComboBox<>();
+		String label = MSG.getString("FoldIconStyle.Modern");
+		foldIndicatorStyleCombo.addLabelValuePair(label, FoldIndicatorStyle.MODERN);
+		label = MSG.getString("FoldIconStyle.Classic");
+		foldIndicatorStyleCombo.addLabelValuePair(label, FoldIndicatorStyle.CLASSIC);
+		foldIndicatorStyleCombo.addActionListener(this);
+		JLabel foldStyleLabel = UIUtil.newLabel(MSG, "FoldIconStyle", foldIndicatorStyleCombo);
+		Box temp = createHorizontalBox();
+		temp.add(foldStyleLabel);
+		temp.add(Box.createHorizontalStrut(5));
+		temp.add(foldIndicatorStyleCombo);
+		temp.add(Box.createHorizontalGlue());
+		addLeftAligned(generalPanel, temp);
 
 		return generalPanel;
 	}
@@ -253,6 +278,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
 
+		mainView.setLineNumbersEnabled(lnEnabledCB.isSelected());
 		mainView.setLineWrap(wordWrapCheckBox.isSelected());
 		rtext.setRowColumnIndicatorVisible(!mainView.getLineWrap());
 		mainView.setCurrentLineHighlightEnabled(highlightCurrentLineCheckBox.isSelected());
@@ -264,6 +290,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		mainView.setFractionalFontMetricsEnabled(fractionalMetricsCheckBox.isSelected()); // Doesn't update if not necessary.
 		mainView.setBracketMatchingEnabled(bracketMatchCheckBox.isSelected());	// Doesn't update if it doesn't have to.
 		mainView.setMatchBothBrackets(bothBracketsCB.isSelected());
+		mainView.setFoldIndicatorStyle(foldIndicatorStyleCombo.getSelectedValue());
 
 	}
 
@@ -325,8 +352,10 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		// set fonts in any of the default themes.
 		int defaultMarginLinePosition = RTextArea.getDefaultMarginLinePosition();
 		boolean defaultAA = File.separatorChar=='\\';
+		FoldIndicatorStyle defaultFoldIndicatorStyle = FoldIndicatorStyle.MODERN;
 
-		if (wordWrapCheckBox.isSelected() ||
+		if (!lnEnabledCB.isSelected() ||
+			wordWrapCheckBox.isSelected() ||
 			!highlightCurrentLineCheckBox.isSelected() ||
 			!marginLineCheckBox.isSelected() ||
 			getMarginLinePosition()!=defaultMarginLinePosition ||
@@ -335,7 +364,9 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 			aaCheckBox.isSelected()!=defaultAA ||
 			fractionalMetricsCheckBox.isSelected() ||
 			!bracketMatchCheckBox.isSelected() ||
-			!bothBracketsCB.isSelected()) {
+			!bothBracketsCB.isSelected() ||
+			!defaultFoldIndicatorStyle.equals(foldIndicatorStyleCombo.getSelectedValue())) {
+			lnEnabledCB.setSelected(true);
 			wordWrapCheckBox.setSelected(false);
 			highlightCurrentLineCheckBox.setSelected(true);
 			setMarginLineEnabled(true);
@@ -346,6 +377,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 			fractionalMetricsCheckBox.setSelected(false);
 			setBracketMatchCheckboxSelected(true);
 			bothBracketsCB.setSelected(true);
+			foldIndicatorStyleCombo.setSelectedValue(defaultFoldIndicatorStyle);
 			setDirty(true);
 		}
 
@@ -435,13 +467,14 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		RText rtext = (RText)owner;
 
 		// Initialize the shared preview context if this is the first pass.
-		// Otherwise we'll get NPE's
+		// Otherwise, we'll get NPE's
 		EditorOptionsPreviewContext previewContext = EditorOptionsPreviewContext.get();
 		if (previewContext.getSyntaxScheme() == null) {
 			previewContext.initialize(rtext);
 		}
 
 		AbstractMainView mainView = rtext.getMainView();
+		lnEnabledCB.setSelected(mainView.getLineNumbersEnabled());
 		wordWrapCheckBox.setSelected(mainView.getLineWrap());
 		highlightCurrentLineCheckBox.setSelected(mainView.isCurrentLineHighlightEnabled());
 		setMarginLineEnabled(mainView.isMarginLineEnabled());
@@ -452,6 +485,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		fractionalMetricsCheckBox.setSelected(mainView.isFractionalFontMetricsEnabled());
 		setBracketMatchCheckboxSelected(mainView.isBracketMatchingEnabled());
 		bothBracketsCB.setSelected(mainView.getMatchBothBrackets());
+		foldIndicatorStyleCombo.setSelectedValue(mainView.getFoldIndicatorStyle());
 
 		syncEditorOptionsPreviewContext();
 	}
@@ -460,6 +494,7 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 	@Override
 	protected void syncEditorOptionsPreviewContext() {
 		EditorOptionsPreviewContext context = EditorOptionsPreviewContext.get();
+		context.setLineNumbersEnabled(lnEnabledCB.isSelected());
 		context.setWordWrap(wordWrapCheckBox.isSelected());
 		context.setHighlightCurrentLine(highlightCurrentLineCheckBox.isSelected());
 		context.setMarginLineEnabled(marginLineCheckBox.isSelected());
@@ -470,6 +505,8 @@ public class RTextAreaOptionPanel extends AbstractTextAreaOptionPanel
 		context.setFractionalFontMetricsEnabled(fractionalMetricsCheckBox.isSelected());
 		context.setHighlightMatchingBrackets(bracketMatchCheckBox.isSelected());
 		context.setHighlightBothBrackets(bothBracketsCB.isSelected());
+		FoldIndicatorStyle foldIndicatorStyle = foldIndicatorStyleCombo.getSelectedValue();
+		context.setFoldIndicatorStyle(foldIndicatorStyle);
 
 		context.possiblyFireChangeEventAndReset();
 	}

@@ -24,10 +24,12 @@ import javax.swing.JTabbedPane;
 import org.fife.ui.OS;
 import org.fife.ui.app.prefs.AppPrefs;
 import org.fife.ui.app.prefs.TypeLoader;
+import org.fife.ui.app.prefs.loaders.EnumLoader;
 import org.fife.ui.app.themes.FlatDarkTheme;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.CaretStyle;
+import org.fife.ui.rtextarea.FoldIndicatorStyle;
 import org.fife.ui.rtextarea.RTextArea;
 
 
@@ -115,6 +117,9 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	public boolean textAreaUnderline;				// Is default font underlined?
 	public Color textAreaForeground;
 	public ComponentOrientation textAreaOrientation;
+	public FoldIndicatorStyle foldIndicatorStyle;
+	public Color foldForeground;
+	public Color armedFoldForeground;
 	public Color foldBackground;
 	public Color armedFoldBackground;
 	public boolean showHostName;
@@ -146,6 +151,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 
 
 	private void addAppSpecificTypeLoaders() {
+		addTypeLoader(FoldIndicatorStyle.class, new EnumLoader<>(FoldIndicatorStyle.MODERN));
 		addTypeLoader(SyntaxScheme.class, new SyntaxSchemeTypeLoader());
 	}
 
@@ -246,6 +252,9 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		textAreaUnderline	= false;
 		textAreaForeground	= RTextArea.getDefaultForeground();
 		textAreaOrientation = ComponentOrientation.LEFT_TO_RIGHT;
+		foldIndicatorStyle  = FoldIndicatorStyle.MODERN;
+		foldForeground		= theme.foldIndicatorFG;
+		armedFoldForeground	= theme.foldIndicatorArmedFG;
 		foldBackground		= theme.foldBG;
 		armedFoldBackground	= theme.armedFoldBG;
 		showHostName		= false;

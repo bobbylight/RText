@@ -87,25 +87,12 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * Applies the settings entered into this dialog on the specified
-	 * application.
-	 *
-	 * @param owner The application.
-	 */
 	@Override
 	protected void doApplyImpl(Frame owner) {
 		updateCodeTemplateManager();
 	}
 
 
-	/**
-	 * Checks whether all input the user specified on this panel is
-	 * valid.
-	 *
-	 * @return This method always returns <code>null</code> as the user cannot
-	 *         mess up input in this panel.
-	 */
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
@@ -137,13 +124,6 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	}
 
 
-	/**
-	 * Sets the values displayed by this panel to reflect those in the
-	 * application.  Child panels are not handled.
-	 *
-	 * @param owner The parent application.
-	 * @see #setValues(Frame)
-	 */
 	@Override
 	protected void setValuesImpl(Frame owner) {
 		// Remove all old templates and load the new ones.

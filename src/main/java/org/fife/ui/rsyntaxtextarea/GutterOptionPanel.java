@@ -9,11 +9,7 @@
  */
 package org.fife.ui.rsyntaxtextarea;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.ComponentOrientation;
-import java.awt.Font;
-import java.awt.Frame;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -37,9 +33,10 @@ import org.fife.ui.rtextarea.RTextArea;
 public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 		implements PropertyChangeListener, ItemListener {
 
-	private JCheckBox lnEnabledCB;
 	private FontSelector fontSelector;
 	private RColorSwatchesButton lnColorButton;
+	private RColorSwatchesButton foldForegroundButton;
+	private RColorSwatchesButton armedFoldForegroundButton;
 	private RColorSwatchesButton foldBackgroundButton;
 	private RColorSwatchesButton armedFoldBackgroundButton;
 
@@ -84,33 +81,56 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 
 	}
 
+	private Container createFoldAreaPanel(ComponentOrientation orientation) {
 
-	private JPanel createFoldAreaPanel(ComponentOrientation orientation) {
-
-		JPanel foldPanel = new JPanel(new SpringLayout());
+		Box foldPanel = Box.createVerticalBox();
 		foldPanel.setBorder(new OptionPanelBorder(MSG.getString("FoldArea")));
 
-		JLabel foldBackgroundLabel = new JLabel(MSG.getString("FoldBackground"));
+		JPanel foldForegroundColorsPanel = new JPanel(new SpringLayout());
+
+		JLabel fgLabel = UIUtil.newLabel(MSG, "FoldForeground");
+		foldForegroundButton = new RColorSwatchesButton();
+		foldForegroundButton.addPropertyChangeListener(
+			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
+		fgLabel.setLabelFor(foldForegroundButton);
+
+		JLabel armedFgLabel = UIUtil.newLabel(MSG, "ArmedFoldForeground");
+		armedFoldForegroundButton = new RColorSwatchesButton();
+		armedFoldForegroundButton.addPropertyChangeListener(
+			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
+		armedFgLabel.setLabelFor(armedFoldBackgroundButton);
+
+		UIUtil.addLabelValuePairs(foldForegroundColorsPanel, orientation,
+			fgLabel, foldForegroundButton,
+			armedFgLabel, armedFoldForegroundButton);
+		UIUtil.makeSpringCompactGrid(foldForegroundColorsPanel, 2, 2, 0, 0, 5, 5);
+
+		JPanel foldBackgroundColorsPanel = new JPanel(new SpringLayout());
+
+		JLabel foldBackgroundLabel = UIUtil.newLabel(MSG, "FoldBackground");
 		foldBackgroundButton = new RColorSwatchesButton();
 		foldBackgroundButton.addPropertyChangeListener(
 			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		JPanel foldBgButtonPanel = new JPanel(new BorderLayout());
-		addLeftAligned(foldBgButtonPanel, foldBackgroundButton);
 		foldBackgroundLabel.setLabelFor(foldBackgroundButton);
 
-		JLabel armedFoldBackgroundLabel = new JLabel(
-			MSG.getString("ArmedFoldBackground"));
+		JLabel armedFoldBackgroundLabel = UIUtil.newLabel(MSG, "ArmedFoldBackground");
 		armedFoldBackgroundButton = new RColorSwatchesButton();
 		armedFoldBackgroundButton.addPropertyChangeListener(
 			RColorSwatchesButton.COLOR_CHANGED_PROPERTY, this);
-		JPanel armedFoldBgButtonPanel = new JPanel(new BorderLayout());
-		addLeftAligned(armedFoldBgButtonPanel, armedFoldBackgroundButton);
 		armedFoldBackgroundLabel.setLabelFor(armedFoldBackgroundButton);
 
-		UIUtil.addLabelValuePairs(foldPanel, orientation,
-			foldBackgroundLabel, foldBgButtonPanel,
-			armedFoldBackgroundLabel, armedFoldBgButtonPanel);
-		UIUtil.makeSpringCompactGrid(foldPanel, 2, 2, 0, 0, 5, 5);
+		UIUtil.addLabelValuePairs(foldBackgroundColorsPanel, orientation,
+			foldBackgroundLabel, foldBackgroundButton,
+			armedFoldBackgroundLabel, armedFoldBackgroundButton);
+		UIUtil.makeSpringCompactGrid(foldBackgroundColorsPanel, 2, 2, 0, 0, 5, 5);
+
+		Box colorsPanel = createHorizontalBox();
+		colorsPanel.add(foldForegroundColorsPanel);
+		colorsPanel.add(Box.createHorizontalStrut(20));
+		colorsPanel.add(foldBackgroundColorsPanel);
+		colorsPanel.add(Box.createHorizontalGlue());
+		addLeftAligned(foldPanel, colorsPanel);
+
 		return foldPanel;
 	}
 
@@ -120,10 +140,6 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 		Box lineNumbersPanel = new Box(BoxLayout.Y_AXIS);
 		lineNumbersPanel.setBorder(new OptionPanelBorder(
 			MSG.getString("LineNumbers")));
-
-		lnEnabledCB = new JCheckBox(MSG.getString("Enabled"));
-		lnEnabledCB.addItemListener(this);
-		addLeftAligned(lineNumbersPanel, lnEnabledCB, COMPONENT_VERTICAL_SPACING);
 
 		JPanel fontPanel = new JPanel(new BorderLayout());
 		fontSelector = new FontSelector();
@@ -158,18 +174,20 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 		mainView.setOverrideEditorStyles(overrideCheckBox.isSelected());
 
 		if (overrideCheckBox.isSelected()) {
-			mainView.setLineNumbersEnabled(lnEnabledCB.isSelected());
 			mainView.setLineNumberFont(fontSelector.getDisplayedFont());
 			mainView.setLineNumberColor(lnColorButton.getColor());
+			mainView.setFoldForeground(foldForegroundButton.getColor());
+			mainView.setArmedFoldForeground(armedFoldForegroundButton.getColor());
 			mainView.setFoldBackground(foldBackgroundButton.getColor());
 			mainView.setArmedFoldBackground(armedFoldBackgroundButton.getColor());
 		}
 		else {
 			EditorOptionsPreviewContext editorContext = EditorOptionsPreviewContext.get();
 			Theme editorTheme = editorContext.getEditorTheme(rtext);
-			mainView.setLineNumbersEnabled(true);
 			mainView.setLineNumberFont(editorContext.getFont());
 			mainView.setLineNumberColor(editorTheme.lineNumberColor);
+			mainView.setFoldForeground(editorTheme.foldIndicatorFG);
+			mainView.setArmedFoldForeground(editorTheme.foldIndicatorArmedFG);
 			mainView.setFoldBackground(editorTheme.foldBG);
 			mainView.setArmedFoldBackground(editorTheme.armedFoldBG);
 		}
@@ -195,20 +213,24 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 		// set fonts in any of the default themes.
 		Font defaultFont = RTextArea.getDefaultFont();
 		Color defLineNumberColor = rstaTheme.lineNumberColor;
+		Color defFoldIconForeground = rstaTheme.foldIndicatorFG;
+		Color defArmedFoldIconForeground = rstaTheme.foldIndicatorArmedFG;
 		Color defFoldIconBackground = rstaTheme.foldBG;
 		Color defArmedFoldIconBackground = rstaTheme.armedFoldBG;
 
 		if (overrideCheckBox.isSelected() ||
-			!lnEnabledCB.isSelected() ||
 			!defaultFont.equals(fontSelector.getDisplayedFont()) ||
 			!defLineNumberColor.equals(lnColorButton.getColor()) ||
+			!defFoldIconForeground.equals(foldForegroundButton.getColor()) ||
+			!defArmedFoldIconForeground.equals(armedFoldForegroundButton.getColor()) ||
 			!defFoldIconBackground.equals(foldBackgroundButton.getColor()) ||
 			!defArmedFoldIconBackground.equals(armedFoldBackgroundButton.getColor())) {
 
 			overrideCheckBox.setSelected(false);
-			lnEnabledCB.setSelected(true);
 			fontSelector.setDisplayedFont(defaultFont, false);
 			lnColorButton.setColor(defLineNumberColor);
+			foldForegroundButton.setColor(defFoldIconForeground);
+			armedFoldForegroundButton.setColor(defArmedFoldIconForeground);
 			foldBackgroundButton.setColor(defFoldIconBackground);
 			armedFoldBackgroundButton.setColor(defArmedFoldIconBackground);
 
@@ -246,9 +268,10 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 		RText rtext = (RText)owner;
 		AbstractMainView mainView = rtext.getMainView();
 
-		lnEnabledCB.setSelected(mainView.getLineNumbersEnabled());
 		fontSelector.setDisplayedFont(mainView.getLineNumberFont(), false);
 		lnColorButton.setColor(mainView.getLineNumberColor());
+		foldForegroundButton.setColor(mainView.getFoldForeground());
+		armedFoldForegroundButton.setColor(mainView.getArmedFoldForeground());
 		foldBackgroundButton.setColor(mainView.getFoldBackground());
 		armedFoldBackgroundButton.setColor(mainView.getArmedFoldBackground());
 
@@ -264,9 +287,10 @@ public class GutterOptionPanel extends AbstractTextAreaOptionPanel
 	protected void syncEditorOptionsPreviewContext() {
 		EditorOptionsPreviewContext context = EditorOptionsPreviewContext.get();
 		context.setOverrideEditorTheme(overrideCheckBox.isSelected());
-		context.setLineNumbersEnabled(lnEnabledCB.isSelected());
 		context.setLineNumberFont(fontSelector.getDisplayedFont());
 		context.setLineNumberColor(lnColorButton.getColor());
+		context.setFoldForeground(foldForegroundButton.getColor());
+		context.setArmedFoldForeground(armedFoldForegroundButton.getColor());
 		context.setFoldBackground(foldBackgroundButton.getColor());
 		context.setArmedFoldBackground(armedFoldBackgroundButton.getColor());
 

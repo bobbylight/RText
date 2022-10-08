@@ -10,10 +10,7 @@ import org.fife.ui.OptionsDialogPanel;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.app.AppTheme;
-import org.fife.ui.rtextarea.CaretStyle;
-import org.fife.ui.rtextarea.Gutter;
-import org.fife.ui.rtextarea.RTextArea;
-import org.fife.ui.rtextarea.RTextScrollPane;
+import org.fife.ui.rtextarea.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -140,6 +137,7 @@ final class PreviewPanel extends JPanel
 	public void editorOptionsPreviewContextChanged(EditorOptionsPreviewContext context) {
 
 		Theme editorTheme = context.getEditorTheme(app);
+		Gutter gutter = scrollPane.getGutter();
 
 		// Options related to this component, not the preview text area
 		if (!Objects.equals(sampleCombo.getSelectedItem(), context.getPreviewLanguage())) {
@@ -148,6 +146,7 @@ final class PreviewPanel extends JPanel
 		}
 
 		// Options from the main "Text Area" option panel
+		scrollPane.setLineNumbersEnabled(context.getLineNumbersEnabled());
 		textArea.setLineWrap(context.getWordWrap());
 		textArea.setHighlightCurrentLine(context.getHighlightCurrentLine());
 		textArea.setMarginLineEnabled(context.getMarginLineEnabled());
@@ -158,6 +157,7 @@ final class PreviewPanel extends JPanel
 		textArea.setFractionalFontMetricsEnabled(context.getFractionalFontMetricsEnabled());
 		textArea.setBracketMatchingEnabled(context.getHighlightMatchingBrackets());
 		textArea.setPaintMatchedBracketPair(context.getHighlightBothBrackets());
+		gutter.setFoldIndicatorStyle(context.getFoldIndicatorStyle());
 
 		// Options from the "Font" child option panel
 		textArea.setFont(context.getFont());
@@ -224,18 +224,19 @@ final class PreviewPanel extends JPanel
 		}
 
 		// Options from the "Gutter" child option panel
-		Gutter gutter = scrollPane.getGutter();
 		if (context.getOverrideEditorTheme()) {
-			scrollPane.setLineNumbersEnabled(context.getLineNumbersEnabled());
 			gutter.setLineNumberFont(context.getLineNumberFont());
 			gutter.setLineNumberColor(context.getLineNumberColor());
+			gutter.setFoldIndicatorForeground(context.getFoldForeground());
+			gutter.setFoldIndicatorArmedForeground(context.getArmedFoldForeground());
 			gutter.setFoldBackground(context.getFoldBackground());
 			gutter.setArmedFoldBackground(context.getArmedFoldBackground());
 		}
 		else {
-			scrollPane.setLineNumbersEnabled(true);
 			gutter.setLineNumberFont(RTextArea.getDefaultFont());
 			gutter.setLineNumberColor(editorTheme.lineNumberColor);
+			gutter.setFoldIndicatorForeground(editorTheme.foldIndicatorFG);
+			gutter.setFoldIndicatorArmedForeground(editorTheme.foldIndicatorArmedFG);
 			gutter.setFoldBackground(editorTheme.foldBG);
 			gutter.setArmedFoldBackground(editorTheme.armedFoldBG);
 		}

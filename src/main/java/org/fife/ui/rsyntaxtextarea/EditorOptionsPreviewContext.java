@@ -14,6 +14,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextAppThemes;
 import org.fife.ui.app.AbstractGUIApplication;
 import org.fife.ui.rtextarea.CaretStyle;
+import org.fife.ui.rtextarea.FoldIndicatorStyle;
 
 
 /**
@@ -74,6 +75,9 @@ final class EditorOptionsPreviewContext {
 	private boolean lineNumbersEnabled;
 	private Font lineNumberFont;
 	private Color lineNumberColor;
+	private FoldIndicatorStyle foldIndicatorStyle;
+	private Color foldForeground;
+	private Color armedFoldForeground;
 	private Color foldBackground;
 	private Color armedFoldBackground;
 
@@ -119,6 +123,11 @@ final class EditorOptionsPreviewContext {
 
 	public Color getArmedFoldBackground() {
 		return armedFoldBackground;
+	}
+
+
+	public Color getArmedFoldForeground() {
+		return armedFoldForeground;
 	}
 
 
@@ -176,6 +185,16 @@ final class EditorOptionsPreviewContext {
 
 	public Color getFoldBackground() {
 		return foldBackground;
+	}
+
+
+	public Color getFoldForeground() {
+		return foldForeground;
+	}
+
+
+	public FoldIndicatorStyle getFoldIndicatorStyle() {
+		return foldIndicatorStyle;
 	}
 
 
@@ -329,6 +348,7 @@ final class EditorOptionsPreviewContext {
 		lineNumberFont = font;
 		syntaxScheme = rtext.getSyntaxScheme();
 		previewLanguage = PreviewPanel.DEFAULT_PREVIEW_LANGUAGE;
+		foldIndicatorStyle = FoldIndicatorStyle.MODERN;
 	}
 
 
@@ -379,6 +399,14 @@ final class EditorOptionsPreviewContext {
 	public void setArmedFoldBackground(Color armedFoldBackground) {
 		if (!Objects.equals(this.armedFoldBackground, armedFoldBackground)) {
 			this.armedFoldBackground = armedFoldBackground;
+			registerChanges();
+		}
+	}
+
+
+	public void setArmedFoldForeground(Color armedFoldForeground) {
+		if (!Objects.equals(this.armedFoldForeground, armedFoldForeground)) {
+			this.armedFoldForeground = armedFoldForeground;
 			registerChanges();
 		}
 	}
@@ -443,6 +471,22 @@ final class EditorOptionsPreviewContext {
 	public void setFoldBackground(Color foldBackground) {
 		if (!Objects.equals(this.foldBackground, foldBackground)) {
 			this.foldBackground = foldBackground;
+			registerChanges();
+		}
+	}
+
+
+	public void setFoldForeground(Color foldForeground) {
+		if (!Objects.equals(this.foldForeground, foldForeground)) {
+			this.foldForeground = foldForeground;
+			registerChanges();
+		}
+	}
+
+
+	public void setFoldIndicatorStyle(FoldIndicatorStyle style) {
+		if (this.foldIndicatorStyle != style) {
+			this.foldIndicatorStyle = style;
 			registerChanges();
 		}
 	}

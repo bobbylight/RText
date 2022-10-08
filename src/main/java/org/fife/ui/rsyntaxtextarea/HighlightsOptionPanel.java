@@ -100,9 +100,14 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 			setDirty(true);
 		}
 
-		else if (secLangCB==source) {
+		else if (secLangCB == source) {
 			boolean selected = ((JCheckBox)source).isSelected();
 			setHighlightSecondaryLanguages(selected);
+			setDirty(true);
+		}
+
+		else if (currentLineColorButton == source ||
+				markAllColorButton == source) {
 			setDirty(true);
 		}
 
@@ -125,17 +130,18 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 
 		JPanel temp = new JPanel(new SpringLayout());
 		currentLineColorButton = new RColorSwatchesButton();
+		currentLineColorButton.addActionListener(this);
 		markAllColorButton = new RColorSwatchesButton();
+		markAllColorButton.addActionListener(this);
 		JLabel currentLineColorLabel = UIUtil.newLabel(MSG, "CurrentLineHighlightColor", currentLineColorButton);
 		JLabel markAllColorLabel = UIUtil.newLabel(MSG, "MarkAllColor", markAllColorButton);
 		UIUtil.addLabelValuePairs(temp, o,
 			currentLineColorLabel, currentLineColorButton,
 			markAllColorLabel, markAllColorButton);
 		UIUtil.makeSpringCompactGrid(temp, 2, 2, 0,0, 5, COMPONENT_VERTICAL_SPACING);
-		addLeftAligned(p, temp, 0, 20);
+		addLeftAligned(p, temp, COMPONENT_VERTICAL_SPACING);
 
-		enableMOCheckBox = new JCheckBox(
-			MSG.getString("EnableMarkOccurrences"));
+		enableMOCheckBox = UIUtil.newCheckBox(MSG, "EnableMarkOccurrences");
 		enableMOCheckBox.setActionCommand("MarkOccurrences");
 		enableMOCheckBox.addActionListener(this);
 
@@ -186,16 +192,16 @@ public class HighlightsOptionPanel extends AbstractTextAreaOptionPanel
 		JPanel temp = new JPanel(new SpringLayout());
 		if (o.isLeftToRight()) {
 			temp.add(secLangLabels[0]);  temp.add(secLangButtons[0]);
-			temp.add(Box.createVerticalStrut(20));
+			temp.add(Box.createHorizontalStrut(15));
 			temp.add(secLangLabels[1]);  temp.add(secLangButtons[1]);
-			temp.add(Box.createVerticalStrut(20));
+			temp.add(Box.createHorizontalStrut(15));
 			temp.add(secLangLabels[2]);  temp.add(secLangButtons[2]);
 		}
 		else {
 			temp.add(secLangButtons[0]); temp.add(secLangLabels[0]);
-			temp.add(Box.createVerticalStrut(20));
+			temp.add(Box.createHorizontalStrut(15));
 			temp.add(secLangButtons[1]);  temp.add(secLangLabels[1]);
-			temp.add(Box.createVerticalStrut(20));
+			temp.add(Box.createHorizontalStrut(15));
 			temp.add(secLangButtons[2]);  temp.add(secLangLabels[2]);
 		}
 		UIUtil.makeSpringCompactGrid(temp, 1,8, 0,0, 5,5);
