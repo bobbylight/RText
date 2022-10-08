@@ -681,7 +681,7 @@ https://bobbylight.github.io/RText/
      RTL locales is, unfortunately, the editor.
    - Made templates stored on a per-user basis, instead of per-install.
    - Added '!' as a comment-starting token for properties file highlighting.
-   - "Find in Files" now has a shortcut, Ctrl+Shift+F.  This is still changable
+   - "Find in Files" now has a shortcut, Ctrl+Shift+F.  This is still changeable
      in the Options dialog.
    - Updated Dutch translation (Sebastiaan).
    - Updated German translation (bikerpete).
@@ -726,7 +726,7 @@ https://bobbylight.github.io/RText/
 ---------------------
    - Added a "Replace in Files" dialog.
    - Added Lua syntax highlighting.
-   - Properites file syntax highlighting now highlights substitution markers.
+   - Properties file syntax highlighting now highlights substitution markers.
    - Ctrl+Up and Ctrl+Down move the text area up and down one line,
      respectively, without changing the caret position.
    - Shift+Enter now inserts a line break (just like regular Enter), instead
@@ -820,7 +820,7 @@ https://bobbylight.github.io/RText/
 ---------------------
    - Added Python syntax highlighting.
    - Fix bug where closing "last" document in tabbed pane does not give
-     focus to the newly-fucused text area (Bug ID 1387510).
+     focus to the newly-focused text area (Bug ID 1387510).
    - Made the file chooser case-insensitive for OS X (Bug ID 1387585).
    - Fixed bug:  Open the same file twice so they're numbered (1) and (2), then
      save (2) with a new filename - the first file's (1) does not disappear
@@ -933,7 +933,7 @@ https://bobbylight.github.io/RText/
      correspond to the files' types.
    - The default filter in the file dialog now displays all file types
      recognized and supported by RText.
-   - Added a new icon group containg icons from Eclipse.  The icons in this
+   - Added a new icon group containing icons from Eclipse.  The icons in this
      group are under the Eclipse Public License.
    - Added a new icon group containing the BlueSphere icons
      (http://svgicons.sourceforge.net/).
@@ -1006,7 +1006,7 @@ https://bobbylight.github.io/RText/
    - Enhanced the Find in Files dialog:  When searching files with the dialog,
      Unicode files are now automatically recognized as such and searched
      correctly; before, they were (incorrectly) searched as the system's
-     defualt encoding.  Also, if you are on Windows, filenames are now matched
+     default encoding.  Also, if you are on Windows, filenames are now matched
      non-case-sensitively, as expected.
    - Added the ability to add file filters to the Open/Save dialog.  This is
      useful when you frequently use RText to modify files of a certain type
@@ -1023,7 +1023,7 @@ https://bobbylight.github.io/RText/
    - Updated the text area to correctly paint itself when it has borders.  The
      Look and Feels shipped with Java don't have borders around text areas, but
      JGoodies for example does.
-   - Word-wrap mode is now much, much more effecient with documents containing
+   - Word-wrap mode is now much, much more efficient with documents containing
      very long lines.
    - If an Exception is caught and displayed in RText, it will now be syntax
      highlighted, just to make things a little more pretty.
@@ -1036,7 +1036,7 @@ https://bobbylight.github.io/RText/
      section.
    - Upgraded to the Office Look and Feels to 1.0.5.
    - Changed the text component's document structure a little; should be
-     (unnoticably) better performing now.
+     (unnoticeably) better performing now.
    - Refactored some of the syntax highlighting parsers.
 
 
@@ -1113,7 +1113,7 @@ https://bobbylight.github.io/RText/
      now in the "Language" list in the Options dialog; these are works in
      progress, and will be functional in the next release.
    - Simplified some options parsing.  As a side effect of this, if you are
-     upgrading from a previous verision of RText, the first time you start
+     upgrading from a previous version of RText, the first time you start
      version 0.9.0.0, you'll likely receive a message about an Exception being
      thrown while loading options, and you may lose your preferences.  This will
      only happen the first time you start 0.9.0.0.
@@ -1369,7 +1369,7 @@ https://bobbylight.github.io/RText/
      drag tabs across the tabbed pane to sort the documents opened in it.
    - Made the Options dialog resizable and spiced it up a tad.
    - Changed all "Color buttons" so they now present a popup menu when clicked
-     instaed of a JColorChooser.  This popup has several common color "swatches"
+     instead of a JColorChooser.  This popup has several common color "swatches"
      to choose from, as well as a menu item to bring up the color chooser.
      This feature should make it easier to change the various color properties
      in RText.
@@ -1378,7 +1378,7 @@ https://bobbylight.github.io/RText/
    - Made the Help dialog into a JFrame so it can be minimized/put behind the
      main RText window, etc.
    - Improved undo/redo while in overwrite mode.
-   - Fixed a benign NullPointerException from occuring when switching the view
+   - Fixed a benign NullPointerException from occurring when switching the view
      style from tabbed to any one of the others.
    - Fixed bug:  Case-insensitive languages such as HTML, Windows batch and SAS
      were being case-sensitive in their keyword identification.  This is fixed.
@@ -1514,7 +1514,7 @@ https://bobbylight.github.io/RText/
    - The source browser can now be made floatable in its own window, as well
      as docked to one side of the main RText window.
    - Fixed a bug where the source browser didn't always destroy the spawned
-     ctags process when an exception occured during its execution.
+     ctags process when an exception occurred during its execution.
 
 
 0.8.8.1 (06/22/2004):
