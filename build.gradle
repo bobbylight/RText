@@ -17,7 +17,7 @@ configurations.all { // Check for updates every build
 }
 
 dependencies {
-	implementation('com.fifesoft.rtext:fife.common:6.0.0-SNAPSHOT') { changing = true }
+	implementation('com.fifesoft.rtext:fife.common:6.0.0') { changing = true }
 
 	implementation('com.fifesoft:rsyntaxtextarea:3.3.0') { changing = true }
 	implementation('com.fifesoft:autocomplete:3.3.0') { changing = true }
@@ -34,8 +34,8 @@ dependencies {
 	implementation 'org.graalvm.js:js-scriptengine:22.2.0'
 	implementation 'org.jruby:jruby:9.3.8.0'
 
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
 }
 repositories {
 	mavenCentral()
