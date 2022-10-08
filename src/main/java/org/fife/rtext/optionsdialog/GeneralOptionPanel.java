@@ -269,7 +269,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 			String defaultEncName = RTextFileChooser.getDefaultEncoding();
 			String defaultEnc = Charset.forName(defaultEncName).name();
 			boolean defaultUtf8BomSelected = false;
-			final String defaultSizeFieldText = "10";
+			final String defaultSizeFieldText = "25";
 			// Only default to this experimental option if running on Windows
 			boolean defaultDropShadowsInEditor = OS.get() == OS.WINDOWS;
 
