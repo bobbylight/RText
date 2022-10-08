@@ -878,7 +878,7 @@ public class RTextMenuBar extends MenuBar<RText>
 		newItem.setIcon(iconGroup.getNativeIcon("new"));
 		openItem.setIcon(iconGroup.getNativeIcon("open"));
 		openInNewWindowItem.setIcon(iconGroup.getNativeIcon("openinnewwindow"));
-		saveItem.setIcon(iconGroup.getNativeIcon("saave"));
+		saveItem.setIcon(iconGroup.getNativeIcon("save"));
 		saveAsItem.setIcon(iconGroup.getNativeIcon("saveas"));
 		saveAllItem.setIcon(iconGroup.getNativeIcon("saveall"));
 		closeItem.setIcon(iconGroup.getNativeIcon("close"));
