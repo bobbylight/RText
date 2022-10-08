@@ -2,6 +2,22 @@ RText Change Log
 https://bobbylight.github.io/RText/
 -----------------------------------
 
+6.0.0 ()
+------------------
+   - Fix #79: Add ES6 support to JS code completion
+   - Fix #70: Proto file support
+   - Fix #82: Add Ruby support to console plugin
+   - Fix #81: Support "~" to denote the user's home directory in the file chooser
+   - Fix #60: Update JRE to 17 from 14
+   - Fix #67: "Add Examples" for macros doesn't set Options panel as dirty
+   - Fix #66: "Recent Files" dialog should display generic icon for since-deleted files
+   - Fix #61: Update Groovy dependency to 3.x
+   - Fix #78: Modify a Template dialog uses wrong colors with dark theme
+   - Fix #69: Better OS X next/previous tab shortcut
+   - Added several macOS-specific keyboard shortcuts that were missing
+     to the editor
+
+
 5.0.0 (01/30/2022)
 ------------------
    - Major internal refactoring regarding app appearance.  There's little
@@ -9,7 +25,7 @@ https://bobbylight.github.io/RText/
      RText releases will see a simplified experience around options and
      configuration because of this work.
    - Adding Dockerfile syntax highlighting (this already existed but was
-     not configurable
+     not configurable)
    - Fix #58: Terminal locks up when lots of output from processes
 
 
@@ -1512,7 +1528,7 @@ https://bobbylight.github.io/RText/
 0.8.8.0 (06/19/2004):
 ---------------------
    - Added a Source Browser component.  This component requires you
-     to have Exhuberant Ctags installed on your machine
+     to have Exuberant Ctags installed on your machine
      (https://sourceforge.net/projects/ctags).  When the Source
      Browser is enabled, an extra panel is visible in RText listing
      all functions/variables, etc. found in the current document's
@@ -1523,7 +1539,7 @@ https://bobbylight.github.io/RText/
      to keep your document's lines to 80 characters or less.  This
      is configurable from the "Text Area" panel on the Options
      dialog.
-   - Coverted to use the Java Preferences API to remember your
+   - Converted to use the Java Preferences API to remember your
      configuration between sessions.  This means that if you migrate
      from a previous version of RText to 0.8.7.1, the first time you
      start it back up, your options won't be remembered.  After that
@@ -1718,7 +1734,7 @@ https://bobbylight.github.io/RText/
           the '~' character from being interpreted as the beginning
           of a destructor method.
    - Added "Save a Copy as Web Page..." option in File menu.  Now
-     you can export your syntax highlighted souce code into an HTML
+     you can export your syntax highlighted source code into an HTML
      file for display on the web.
    - The toolbar is now dockable.  Until now it's not been dockable,
      as I didn't know how to keep the status bar from interfering with
@@ -1783,7 +1799,7 @@ https://bobbylight.github.io/RText/
      that order, and you closed and reopened RText 0.8.6.2, your file
      history would contain the files in the order c.txt, b.txt, a.txt.
    - Now better at catching errors in rtext.properties file; if the
-     properties file is invaild in any way, RText will give you a
+     properties file is invalid in any way, RText will give you a
      dialog box at startup telling you as much, and use the defaults.
    - Touched up a few of the 16x16 WinXP/Win98 icons.
 
@@ -1838,7 +1854,7 @@ https://bobbylight.github.io/RText/
    - Fixed up inline comments; Javadoc now generates with no errors
      or warnings.
    - Fixed bug: Bad regular expressions in find/replace operations threw
-     unreported exceptions and appeard to not do anything; you now get a
+     unreported exceptions and appeared to not do anything; you now get a
      dialog box telling you to check your regular expression.
 
 
@@ -1887,7 +1903,7 @@ https://bobbylight.github.io/RText/
      to press enter twice to do a search whenever you changed the
      search string (damn Java JComboBoxes...).
    - The File History in the File menu now intelligently abbreviates
-     file paths, instead of just sticking an elipsis wherever it
+     file paths, instead of just sticking an ellipsis wherever it
      feels like it.
    - When you do a "Replace All", RText now tells you how many times
      it did the replacement.
