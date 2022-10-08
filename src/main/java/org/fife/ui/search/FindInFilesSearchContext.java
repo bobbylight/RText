@@ -27,6 +27,7 @@ public class FindInFilesSearchContext extends SearchContext {
 
 	public FindInFilesSearchContext() {
 		searchSubfolders = true;
+		setSearchWrap(true);
 	}
 
 
