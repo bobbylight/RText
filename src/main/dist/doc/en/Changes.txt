@@ -2,7 +2,7 @@ RText Change Log
 https://bobbylight.github.io/RText/
 -----------------------------------
 
-6.0.0 ()
+6.0.0 (10/08/2022)
 ------------------
    - Fix #79: Add ES6 support to JS code completion
    - Fix #70: Proto file support
