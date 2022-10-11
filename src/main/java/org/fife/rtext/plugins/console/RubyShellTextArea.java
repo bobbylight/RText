@@ -108,7 +108,13 @@ class RubyShellTextArea extends ConsoleTextArea {
 	 */
 	private void handleSubmitImpl(String code, boolean appendPrompt) {
 
-		possiblyInitialize();
+		try {
+			possiblyInitialize();
+		} catch (Throwable t) {
+			// Shouldn't happen, but Graal uses e.g. sun.misc.unsafe, so we need all the info we can
+			// get to debug issues with new JRE versions, etc.
+			plugin.getApplication().displayException(t);
+		}
 
 		// Failed to initialize
 		if (rubyEngine == null) {

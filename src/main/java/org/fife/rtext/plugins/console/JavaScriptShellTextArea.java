@@ -94,7 +94,13 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 	 */
 	private void handleSubmitImpl(String code, boolean appendPrompt) {
 
-		possiblyInitialize();
+		try {
+			possiblyInitialize();
+		} catch (Throwable t) {
+			// Shouldn't happen, but Graal uses e.g. sun.misc.unsafe, so we need all the info we can
+			// get to debug issues with new JRE versions, etc.
+			plugin.getApplication().displayException(t);
+		}
 
 		// Failed to initialize
 		if (context == null) {
@@ -149,6 +155,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 		stdout = new ConsoleOutputStream(STYLE_STDOUT);
 		stderr = new ConsoleOutputStream(STYLE_STDERR);
+		System.out.println("aaaa");
 
 		context = Context.newBuilder("js")
 			.allowAllAccess(true)
@@ -156,7 +163,9 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 			.out(stdout)
 			.err(stderr)
 			.build();
+		System.out.println("bbbb - " + context);
 		bindings = context.getBindings("js");
+		System.out.println("cccc - " + context);
 
 	}
 

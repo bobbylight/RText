@@ -153,7 +153,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		UIUtil.makeSpringCompactGrid(newFilePanel, 3,3, 5,5, 5,5);
 		addLeftAligned(temp, newFilePanel);
 		topPanel.add(temp);
-		topPanel.add(Box.createVerticalStrut(5));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		// A panel for other general stuff.
 		Box otherPanel = Box.createVerticalBox();
@@ -199,7 +199,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		addLeftAligned(expPanel, dropShadowsInEditorCB);
 		expPanel.add(Box.createVerticalGlue());
 		topPanel.add(expPanel);
-		topPanel.add(Box.createVerticalStrut(10));
+		topPanel.add(Box.createVerticalStrut(SECTION_VERTICAL_SPACING));
 
 		JButton rdButton = new JButton(msg.getString("RestoreDefaults"));
 		rdButton.setActionCommand("RestoreDefaults");
@@ -269,7 +269,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 			String defaultEncName = RTextFileChooser.getDefaultEncoding();
 			String defaultEnc = Charset.forName(defaultEncName).name();
 			boolean defaultUtf8BomSelected = false;
-			final String defaultSizeFieldText = "25";
+			final float defaultSizeFieldValue = 25;
 			// Only default to this experimental option if running on Windows
 			boolean defaultDropShadowsInEditor = OS.get() == OS.WINDOWS;
 
@@ -278,7 +278,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 				!encCombo.getSelectedItem().equals(defaultEnc) ||
 				utf8BomCB.isSelected()!=defaultUtf8BomSelected ||
 				!sizeCheckCB.isSelected() ||
-				!defaultSizeFieldText.equals(sizeField.getText()) ||
+				defaultSizeFieldValue != ((Number)sizeField.getValue()).floatValue() ||
 				dropShadowsInEditorCB.isSelected()!=defaultDropShadowsInEditor) {
 
 				dirField.setText(null);
@@ -287,7 +287,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 				setDefaultEncoding(defaultEncName);
 				utf8BomCB.setSelected(defaultUtf8BomSelected);
 				setDoFileSizeCheck(true);
-				sizeField.setText(defaultSizeFieldText);
+				sizeField.setValue(defaultSizeFieldValue);
 				dropShadowsInEditorCB.setSelected(defaultDropShadowsInEditor);
 
 				setDirty(true);
@@ -374,7 +374,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	 * file can be before the user is prompted before opening it.
 	 *
 	 * @return The maximum file size.
-	 * @see #setMaxFileSize(float)
 	 * @see #getDoFileSizeCheck()
 	 */
 	public float getMaxFileSize() {
@@ -495,20 +494,6 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	}
 
 
-	/**
-	 * If file size checking is enabled, this is the maximum size a file
-	 * can be before the user is prompted before opening it.
-	 *
-	 * @param size The new maximum size for a file before the user is
-	 *        prompted before opening it.
-	 * @see #getMaxFileSize()
-	 * @see #setDoFileSizeCheck(boolean)
-	 */
-	private void setMaxFileSize(float size) {
-		sizeField.setValue(size);
-	}
-
-
 	@Override
 	protected void setValuesImpl(Frame owner) {
 
@@ -520,7 +505,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 		setDefaultEncoding(mainView.getDefaultEncoding());
 		setWriteUtf8BOM(mainView.getWriteBOMInUtf8Files());
 		setDoFileSizeCheck(mainView.getDoFileSizeCheck());
-		setMaxFileSize(mainView.getMaxFileSize());
+		sizeField.setValue(mainView.getMaxFileSize());
 
 		// Experimental options
 		dropShadowsInEditorCB.setSelected(RTextUtilities.

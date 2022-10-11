@@ -406,6 +406,8 @@ def getWindowsJreDependencyList = { installDistDir ->
 	if (retVal[0] == ',') {
 		retVal = retVal.substring(1)
 	}
+	retVal += ',java.logging,jdk.unsupported' // GraalVM (for JS support) needs java.util.logging and sun.misc.Unsafe
+	retVal += ',java.management' // Needed for JRuby
 	return retVal
 }
 
