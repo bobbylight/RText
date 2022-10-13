@@ -155,7 +155,6 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 
 		stdout = new ConsoleOutputStream(STYLE_STDOUT);
 		stderr = new ConsoleOutputStream(STYLE_STDERR);
-		System.out.println("aaaa");
 
 		context = Context.newBuilder("js")
 			.allowAllAccess(true)
@@ -163,9 +162,7 @@ class JavaScriptShellTextArea extends ConsoleTextArea {
 			.out(stdout)
 			.err(stderr)
 			.build();
-		System.out.println("bbbb - " + context);
 		bindings = context.getBindings("js");
-		System.out.println("cccc - " + context);
 
 	}
 
