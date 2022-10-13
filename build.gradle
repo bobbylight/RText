@@ -17,7 +17,7 @@ configurations.all { // Check for updates every build
 }
 
 dependencies {
-	implementation('com.fifesoft.rtext:fife.common:6.0.0') { changing = true }
+	implementation('com.fifesoft.rtext:fife.common:6.0.1-SNAPSHOT') { changing = true }
 
 	implementation('com.fifesoft:rsyntaxtextarea:3.3.0') { changing = true }
 	implementation('com.fifesoft:autocomplete:3.3.0') { changing = true }
