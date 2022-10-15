@@ -17,7 +17,7 @@ configurations.all { // Check for updates every build
 }
 
 dependencies {
-	implementation('com.fifesoft.rtext:fife.common:6.0.1-SNAPSHOT') { changing = true }
+	implementation('com.fifesoft.rtext:fife.common:6.0.1') { changing = true }
 
 	implementation('com.fifesoft:rsyntaxtextarea:3.3.0') { changing = true }
 	implementation('com.fifesoft:autocomplete:3.3.0') { changing = true }
@@ -408,6 +408,7 @@ def getWindowsJreDependencyList = { installDistDir ->
 	}
 	retVal += ',java.logging,jdk.unsupported' // GraalVM (for JS support) needs java.util.logging and sun.misc.Unsafe
 	retVal += ',java.management' // Needed for JRuby
+	retVal += ',jdk.crypto.ec' // Needed to make HTTPS calls
 	return retVal
 }
 
