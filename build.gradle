@@ -32,7 +32,7 @@ dependencies {
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
 	implementation 'org.graalvm.js:js:22.2.0'
 	implementation 'org.graalvm.js:js-scriptengine:22.2.0'
-	implementation 'org.jruby:jruby:9.3.8.0'
+	implementation 'org.jruby:jruby:9.3.9.0'
 
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
@@ -46,11 +46,11 @@ repositories {
 }
 
 wrapper {
-	gradleVersion = '7.5.1'
+	gradleVersion = '7.6'
 }
 
 checkstyle {
-	toolVersion = '10.3.4'
+	toolVersion = '10.5.0'
 }
 
 tasks.withType(Javadoc) {
