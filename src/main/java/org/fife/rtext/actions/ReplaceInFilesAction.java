@@ -18,6 +18,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AppAction;
 import org.fife.ui.search.ReplaceInFilesDialog;
+import org.fife.util.MacOSUtil;
 
 
 /**
@@ -56,6 +57,7 @@ class ReplaceInFilesAction extends AppAction<RText> {
 		// Create the "Replace in Files" dialog if it hasn't already been.
 		if (mainView.replaceInFilesDialog==null) {
 			mainView.replaceInFilesDialog = new ReplaceInFilesDialog(rtext);
+			MacOSUtil.setTransparentTitleBar(mainView.replaceInFilesDialog, true);
 			mainView.replaceInFilesDialog.setSearchContext(mainView.searchContext);
 			RTextUtilities.configureFindInFilesDialog(mainView.replaceInFilesDialog);
 			mainView.replaceInFilesDialog.addPropertyChangeListener(mainView);

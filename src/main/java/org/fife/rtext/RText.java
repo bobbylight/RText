@@ -46,6 +46,7 @@ import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.dockablewindows.DockableWindowPanel;
 import org.fife.ui.rtextfilechooser.FileChooserOwner;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
+import org.fife.util.MacOSUtil;
 import org.fife.util.TranslucencyUtil;
 
 
@@ -495,6 +496,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 												OptionsDialog(this);
 		}
 
+		MacOSUtil.setTransparentTitleBar(optionsDialog, true);
 		return optionsDialog;
 
 	}
@@ -558,6 +560,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			helpDialog = new HelpDialog(this,
 						contentsPath + "HelpDialogContents.xml",
 						helpPath);
+			MacOSUtil.setTransparentTitleBar(helpDialog, true);
 			helpDialog.setBackButtonIcon(getIconGroup().getIcon("back"));
 			helpDialog.setForwardButtonIcon(getIconGroup().getIcon("forward"));
 		}
@@ -892,6 +895,14 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		for (int i=0; i<count; i++) {
 			openFile(new File(filesToOpen[i]));
 		}
+	}
+
+
+	@Override
+	protected void possiblyInitializeMacOSProperties(AppContext<? extends AbstractGUIApplication<RTextPrefs>, RTextPrefs> context,
+													 RTextPrefs prefs) {
+		MacOSUtil.setTransparentTitleBar(this, true);
+		MacOSUtil.setFullWindowContent(this, true);
 	}
 
 

@@ -46,6 +46,7 @@ import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.fife.ui.rtextarea.*;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.ui.search.*;
+import org.fife.util.MacOSUtil;
 
 
 /**
@@ -1194,6 +1195,7 @@ public abstract class AbstractMainView extends JPanel
 	public FindInFilesDialog getFindInFilesDialog() {
 		if (findInFilesDialog==null) {
 			findInFilesDialog = new FindInFilesDialog(owner);
+			MacOSUtil.setTransparentTitleBar(findInFilesDialog, true);
 			findInFilesDialog.setSearchContext(searchContext);
 			RTextUtilities.configureFindInFilesDialog(findInFilesDialog);
 			findInFilesDialog.addPropertyChangeListener(this);

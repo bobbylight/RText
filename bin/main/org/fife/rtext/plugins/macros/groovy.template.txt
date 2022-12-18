@@ -1,0 +1,18 @@
+/*
+ * This is a Groovy macro for RText.
+ *
+ * Global variables include:
+ *   - rtext:           The focused application window, an instance of
+ *                      org.fife.rtext.RText.
+ *   - textArea:        The active text area, an instance of
+ *                      org.fife.rtext.RTextEditorPane.
+ *
+ * You can use the entire RText and RSyntaxTextArea public API's:
+ *   https://javadoc.fifesoft.com/rtext/
+ *   https://javadoc.fifesoft.com/rsyntaxtextarea/
+ */
+import javax.swing.*
+
+textArea.append("\nThis is new text\n")
+textArea.caretPosition = textArea.document.length
+JOptionPane.showMessageDialog(rtext, "Text has been appended!")

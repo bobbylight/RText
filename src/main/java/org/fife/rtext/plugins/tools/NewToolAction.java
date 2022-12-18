@@ -15,6 +15,7 @@ import javax.swing.Icon;
 
 import org.fife.rtext.RText;
 import org.fife.ui.app.AppAction;
+import org.fife.util.MacOSUtil;
 
 
 /**
@@ -44,6 +45,7 @@ class NewToolAction extends AppAction<RText> {
 
 		RText owner = getApplication();
 		NewToolDialog ntd = new NewToolDialog(owner);
+		MacOSUtil.setTransparentTitleBar(ntd, true);
 		ntd.setVisible(true);
 
 		Tool tool = ntd.getTool();

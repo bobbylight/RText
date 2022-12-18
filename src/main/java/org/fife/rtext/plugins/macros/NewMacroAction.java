@@ -25,6 +25,7 @@ import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.AppAction;
 import org.fife.ui.app.themes.FlatDarkTheme;
 import org.fife.ui.app.themes.FlatLightTheme;
+import org.fife.util.MacOSUtil;
 
 import javax.swing.*;
 
@@ -62,6 +63,7 @@ class NewMacroAction extends AppAction<RText> {
 
 		RText owner = getApplication();
 		NewMacroDialog nmd = new NewMacroDialog(plugin, owner);
+		MacOSUtil.setTransparentTitleBar(nmd, true);
 		nmd.setVisible(true);
 
 		Macro macro = nmd.getMacro();

@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 import org.fife.rsta.ui.TextFilePropertiesDialog;
 import org.fife.rtext.RText;
 import org.fife.ui.app.AppAction;
+import org.fife.util.MacOSUtil;
 
 
 /**
@@ -48,6 +49,7 @@ class FilePropertiesAction extends AppAction<RText> {
 		RText rtext = getApplication();
 		TextFilePropertiesDialog dialog = new TextFilePropertiesDialog(
 							rtext, rtext.getMainView().getCurrentTextArea());
+		MacOSUtil.setTransparentTitleBar(dialog, true);
 		dialog.setVisible(true);
 	}
 

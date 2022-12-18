@@ -9,7 +9,7 @@
  */
 package org.fife.rtext;
 
-import javax.swing.JButton;
+import javax.swing.*;
 
 import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.rtextarea.RTextArea;
@@ -38,7 +38,7 @@ class ToolBar extends CustomizableToolBar {
 
 
 	/**
-	 * Creates the tool bar.
+	 * Creates the toolbar.
 	 *
 	 * @param title The title of this toolbar when it is floating.
 	 * @param rtext The main application that owns this toolbar.

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- A bunch of books. -->
+<books>
+   <book name="Getting Rich Quickly">
+      <author>John Smith</author>
+      <publisher>Self-Help Co., Inc.</publisher>
+      <sample><![CDATA[You'll never have to work another day in your life!]]></sample>
+   </book>
+   <book name="Finding Inner Peace">
+      <author>Susie Peaceful</author>
+      <publisher>Hippie Publications</publisher>
+      <sample><![CDATA[Deep breathing exercises can really reduce stress.]]></sample>
+   </book>
+</books>

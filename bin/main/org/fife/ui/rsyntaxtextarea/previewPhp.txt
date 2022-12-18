@@ -1,0 +1,15 @@
+<html>
+  <head>
+    <title>PHP Test</title>
+    <script>
+      // Do any initialization here
+      console.log('This is JavaScript code');
+    </script>
+  </head>
+  <body>
+  <?php
+    echo '<p>Hello World</p>';
+    echo '<div>This is PHP code</p>';
+  ?>
+  </body>
+</html>

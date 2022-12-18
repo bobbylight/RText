@@ -22,6 +22,7 @@ import org.fife.rsta.ui.search.ReplaceToolBar;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.rtextarea.SearchResult;
+import org.fife.util.MacOSUtil;
 
 
 /**
@@ -86,6 +87,8 @@ public class SearchManager {
 		AbstractMainView mainView = rtext.getMainView();
 		dialog.setSearchContext(mainView.searchContext);
 		rtext.registerChildWindowListeners(dialog);
+
+		MacOSUtil.setTransparentTitleBar(dialog, true);
 	}
 
 

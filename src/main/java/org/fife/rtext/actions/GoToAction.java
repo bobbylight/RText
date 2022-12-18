@@ -20,6 +20,7 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
 import org.fife.ui.app.AppAction;
+import org.fife.util.MacOSUtil;
 
 
 /**
@@ -53,6 +54,7 @@ class GoToAction extends AppAction<RText> {
 
 		if (mainView.goToDialog==null) {
 			mainView.goToDialog = new GoToDialog(rtext);
+			MacOSUtil.setTransparentTitleBar(mainView.goToDialog, true);
 			mainView.goToDialog.setErrorDialogTitle(
 					rtext.getString("ErrorDialogTitle"));
 		}

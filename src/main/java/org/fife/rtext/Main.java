@@ -6,6 +6,8 @@
 package org.fife.rtext;
 
 
+import org.fife.util.MacOSUtil;
+
 import javax.swing.*;
 
 /**
@@ -28,6 +30,14 @@ public final class Main {
 	 * @param args The command line arguments.
 	 */
 	public static void main(String[] args) {
+
+		// Properties that must be set before amy AWT classes are loaded.
+		// Note that some of these are also configured for our installable
+		// package via jpackage, but are also set here for testing before
+		// releases
+		MacOSUtil.setApplicationName("RText");
+		MacOSUtil.setApplicationAppearance(MacOSUtil.AppAppearance.SYSTEM);
+
 		RTextAppContext context = new RTextAppContext();
 		SwingUtilities.invokeLater(() -> context.createApplication(args).setVisible(true));
 	}
