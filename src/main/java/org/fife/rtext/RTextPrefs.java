@@ -31,6 +31,7 @@ import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.CaretStyle;
 import org.fife.ui.rtextarea.FoldIndicatorStyle;
 import org.fife.ui.rtextarea.RTextArea;
+import org.fife.util.MacOSUtil;
 
 
 /**
@@ -220,7 +221,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		tabLinesColor = theme.marginLineColor;
 		rememberWhitespaceLines = true;
 		autoInsertClosingCurlys = false;
-		aaEnabled = File.separatorChar=='\\' || OS.get() == OS.MAC_OS_X;
+		aaEnabled = File.separatorChar=='\\' || MacOSUtil.isMacOs();
 		fractionalMetricsEnabled = false;
 		markAllHighlightColor = theme.markAllHighlightColor;
 		markOccurrences = true;

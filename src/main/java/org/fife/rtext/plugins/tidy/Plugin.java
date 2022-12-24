@@ -33,7 +33,6 @@ import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.ImageTranscodingUtil;
-import org.fife.ui.OS;
 import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.icons.IconGroup;
@@ -41,6 +40,7 @@ import org.fife.ui.app.themes.FlatDarkTheme;
 import org.fife.ui.app.themes.FlatLightTheme;
 import org.fife.ui.app.themes.NativeTheme;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.util.MacOSUtil;
 
 
 /**
@@ -224,7 +224,7 @@ public class Plugin extends AbstractPlugin<RText>
 
 		// On OS X, the "Options" menu item is in the application menu, not
 		// in the Edit menu.
-		if (rtext.getOS()==OS.MAC_OS_X) {
+		if (MacOSUtil.isMacOs()) {
 			menu.addSeparator();
 			menu.add(item);
 		}
