@@ -1,4 +1,5 @@
 .idea
+bin/
 out/
 rtext_*_Source.zip
 rtext_*_unix_bin.tar.gz
