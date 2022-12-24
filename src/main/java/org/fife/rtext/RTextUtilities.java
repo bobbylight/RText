@@ -340,6 +340,7 @@ public final class RTextUtilities {
 						"f", "for", "fort", "f77", "f90",
 						"go",
 						"groovy", "grv",
+						"hbs",
 						"hosts",
 						"htm", "html",
 						"ini",
