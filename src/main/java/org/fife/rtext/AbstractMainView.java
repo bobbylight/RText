@@ -4376,12 +4376,18 @@ public abstract class AbstractMainView extends JPanel
 			goToDialog.pack();
 		}
 
-		// Update the Find In Files dialog, if it exists.
+		// Update the Find/Replace In Files dialogs
 		if (findInFilesDialog != null) {
 			SwingUtilities.updateComponentTreeUI(findInFilesDialog);
-			// Also unique to findInFilesDialog, NOT all JDialogs.
+			// Also unique to this dialog, NOT all JDialogs.
 			findInFilesDialog.updateUI();
 			findInFilesDialog.pack();
+		}
+		if (replaceInFilesDialog != null) {
+			SwingUtilities.updateComponentTreeUI(replaceInFilesDialog);
+			// Also unique to this dialog, NOT all JDialogs.
+			replaceInFilesDialog.updateUI();
+			replaceInFilesDialog.pack();
 		}
 
 		refreshActiveLineRangeColors();

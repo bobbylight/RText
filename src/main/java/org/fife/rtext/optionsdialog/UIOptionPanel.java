@@ -200,7 +200,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		temp.setBorder(new OptionPanelBorder(msg.getString("OptThemeLabel")));
 
 		SelectableLabel label = new SelectableLabel();
-		label.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+		label.setBorder(BorderFactory.createEmptyBorder(0, 0, 2 * COMPONENT_VERTICAL_SPACING, 0));
 		label.setText(msg.getString("OptThemeDesc"));
 		temp.add(label, BorderLayout.NORTH);
 
@@ -214,6 +214,7 @@ public class UIOptionPanel extends OptionsDialogPanel implements ActionListener,
 		applyButton = UIUtil.newButton(msg, "OptThemeApply", listener);
 		temp2.add(applyButton);
 		temp2.add(Box.createHorizontalGlue());
+		temp2.setBorder(BorderFactory.createEmptyBorder(COMPONENT_VERTICAL_SPACING, 0, 0, 0));
 		temp.add(temp2);
 
 		return temp;

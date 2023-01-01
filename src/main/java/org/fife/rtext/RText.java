@@ -1564,7 +1564,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			this.pack();
 			this.setSize(size);
 
-			// So mainView knows to update it's popup menus, etc.
+			// So mainView knows to update its popup menus, etc.
 			if (mainView != null) {
 				mainView.updateLookAndFeel();
 			}

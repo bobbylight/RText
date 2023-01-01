@@ -22,6 +22,7 @@ import javax.swing.event.*;
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ui.AssistanceIconPanel;
+import org.fife.rsta.ui.DecorativeIconPanel;
 import org.fife.rsta.ui.RComboBoxModel;
 import org.fife.rsta.ui.search.AbstractSearchDialog;
 import org.fife.rsta.ui.search.FindReplaceButtonsEnableResult;
@@ -78,6 +79,10 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	// Some strings cached from our resources for efficiency.
 	private String defaultStatusText;
 	private String searchingCompleteString;
+
+	private DecorativeIconPanel inFilesDecorativeIconPanel;
+	private DecorativeIconPanel inFolderDecorativeIconPanel;
+	private DecorativeIconPanel skipFoldersDecorativeIconPanel;
 
 	static final int DECORATIVE_ICON_WIDTH = 12;
 
@@ -451,15 +456,21 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 		temp.add(aip, BorderLayout.LINE_START);
 
 		JPanel temp2 = new JPanel(new BorderLayout());
-		temp2.add(RTextUtilities.createAssistancePanel(inFilesComboBox, DECORATIVE_ICON_WIDTH));
+		JPanel assistancePanel = RTextUtilities.createAssistancePanel(inFilesComboBox, DECORATIVE_ICON_WIDTH);
+		inFilesDecorativeIconPanel = (DecorativeIconPanel)assistancePanel.getComponent(0); // yuck
+		temp2.add(assistancePanel);
 		temp2.add(Box.createHorizontalStrut(AssistanceIconPanel.WIDTH), BorderLayout.LINE_START);
 
 		JPanel temp3 = new JPanel(new BorderLayout());
-		temp3.add(RTextUtilities.createAssistancePanel(inFolderTextField, DECORATIVE_ICON_WIDTH));
+		assistancePanel = RTextUtilities.createAssistancePanel(inFolderTextField, DECORATIVE_ICON_WIDTH);
+		inFolderDecorativeIconPanel = (DecorativeIconPanel)assistancePanel.getComponent(0); // yuck
+		temp3.add(assistancePanel);
 		temp3.add(Box.createHorizontalStrut(AssistanceIconPanel.WIDTH), BorderLayout.LINE_START);
 
 		JPanel temp4 = new JPanel(new BorderLayout());
-		temp4.add(RTextUtilities.createAssistancePanel(skipFoldersComboBox, DECORATIVE_ICON_WIDTH));
+		assistancePanel = RTextUtilities.createAssistancePanel(skipFoldersComboBox, DECORATIVE_ICON_WIDTH);
+		skipFoldersDecorativeIconPanel = (DecorativeIconPanel)assistancePanel.getComponent(0); // yuck
+		temp4.add(assistancePanel);
 		temp4.add(Box.createHorizontalStrut(AssistanceIconPanel.WIDTH), BorderLayout.LINE_START);
 
 		ComponentOrientation orientation = ComponentOrientation.
@@ -885,6 +896,16 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 
 		});
 
+	}
+
+
+	@Override
+	public void setContentAssistImage(Image image) {
+		super.setContentAssistImage(image);
+		int imageWidth = image.getWidth(null);
+		inFilesDecorativeIconPanel.setIconWidth(imageWidth);
+		inFolderDecorativeIconPanel.setIconWidth(imageWidth);
+		skipFoldersDecorativeIconPanel.setIconWidth(imageWidth);
 	}
 
 
