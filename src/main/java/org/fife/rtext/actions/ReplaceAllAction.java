@@ -19,8 +19,8 @@ import javax.swing.JOptionPane;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
-import org.fife.rtext.RTextUtilities;
 import org.fife.ui.app.AppAction;
+import org.fife.ui.rsyntaxtextarea.HtmlUtil;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.rtextarea.SearchResult;
@@ -90,7 +90,7 @@ class ReplaceAllAction extends AppAction<RText> implements AbstractSearchAction 
 					JOptionPane.INFORMATION_MESSAGE);
 			}
 			else { // count==0.
-				searchString = RTextUtilities.escapeForHTML(searchString, null);
+				searchString = HtmlUtil.escapeForHtml(searchString, null, false);
 				String temp = rtext.getString("CannotFindString", searchString);
 				// "null" parent returns focus to previously focused window,
 				// whether it be RText, the Find dialog or the Replace dialog.

@@ -19,6 +19,7 @@ import org.fife.rsta.ui.search.FindDialog;
 import org.fife.rsta.ui.search.FindToolBar;
 import org.fife.rsta.ui.search.ReplaceDialog;
 import org.fife.rsta.ui.search.ReplaceToolBar;
+import org.fife.ui.rsyntaxtextarea.HtmlUtil;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.rtextarea.SearchResult;
@@ -171,7 +172,7 @@ public class SearchManager {
 
 			SearchResult result = SearchEngine.find(textArea, context);
 			if (!result.wasFound()) {
-				searchString = RTextUtilities.escapeForHTML(searchString, null);
+				searchString = HtmlUtil.escapeForHtml(searchString, null, false);
 				String temp = rtext.getString("CannotFindString", searchString);
 				// "null" parent returns focus to previously focused window,
 				// whether it be RText, the Find dialog or the Replace dialog.
@@ -307,7 +308,7 @@ public class SearchManager {
 
 			SearchResult result = SearchEngine.replace(textArea, context);
 			if (!result.wasFound()) {
-				searchString = RTextUtilities.escapeForHTML(searchString, null);
+				searchString = HtmlUtil.escapeForHtml(searchString, null, false);
 				String temp = rtext.getString("CannotFindString", searchString);
 				// "null" parent returns focus to previously focused window,
 				// whether it be RText, the Find dialog or the Replace dialog.

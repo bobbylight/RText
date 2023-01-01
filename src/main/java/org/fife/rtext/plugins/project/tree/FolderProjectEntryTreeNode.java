@@ -24,6 +24,7 @@ import org.fife.rtext.plugins.project.PopupContent;
 import org.fife.rtext.plugins.project.ProjectPlugin;
 import org.fife.rtext.plugins.project.model.FolderFilterInfo;
 import org.fife.rtext.plugins.project.model.FolderProjectEntry;
+import org.fife.ui.rsyntaxtextarea.HtmlUtil;
 
 
 /**
@@ -99,6 +100,11 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 	@Override
 	protected NameChecker createNameChecker() {
 		return new FolderProjectEntryNameChecker();
+	}
+
+
+	private static String escapeForHtml(String text) {
+		return HtmlUtil.escapeForHtml(text, null, false);
 	}
 
 

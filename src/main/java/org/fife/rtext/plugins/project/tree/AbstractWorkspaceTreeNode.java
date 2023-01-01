@@ -27,7 +27,6 @@ import javax.swing.tree.MutableTreeNode;
 
 import org.fife.rsta.ac.java.DecoratableIcon;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextUtilities;
 import org.fife.rtext.plugins.project.BaseAction;
 import org.fife.rtext.plugins.project.LogicalFolderNameDialog;
 import org.fife.rtext.plugins.project.Messages;
@@ -76,11 +75,6 @@ public abstract class AbstractWorkspaceTreeNode extends DefaultMutableTreeNode {
 				Actions.SystemOpenAction.OpenMethod.OPEN));
 		actions.add(openInMenu);
 		actions.add(null);
-	}
-
-
-	String escapeForHtml(String text) {
-		return RTextUtilities.escapeForHTML(text, null);
 	}
 
 

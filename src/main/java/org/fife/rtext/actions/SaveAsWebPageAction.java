@@ -27,9 +27,9 @@ import javax.swing.JOptionPane;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextEditorPane;
-import org.fife.rtext.RTextUtilities;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.AppAction;
+import org.fife.ui.rsyntaxtextarea.HtmlUtil;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.ui.rtextfilechooser.filters.HTMLFileFilter;
 import org.fife.ui.rsyntaxtextarea.Token;
@@ -157,7 +157,7 @@ class SaveAsWebPageAction extends AppAction<RText> {
 					styles[token.getType()] = temp.toString();
 				}
 				sb.append("<span class=\"s").append(token.getType()).append("\">");
-				sb.append(RTextUtilities.escapeForHTML(token.getLexeme(), "\n", true));
+				sb.append(HtmlUtil.escapeForHtml(token.getLexeme(), "\n", true));
 				sb.append("</span>");
 				token = token.getNextToken();
 			}
