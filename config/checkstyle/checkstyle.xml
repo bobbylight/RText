@@ -34,7 +34,7 @@
     <!--
         If you set the basedir property below, then all reported file
         names will be relative to the specified directory. See
-        http://checkstyle.sourceforge.net/5.x/config.html#Checker
+        https://checkstyle.sourceforge.io/config.html#Checker
 
         <property name="basedir" value="${basedir}"/>
     -->
@@ -43,7 +43,7 @@
     <property name="tabWidth" value="4"/>
 
     <!-- Part of turning off individual checks: -->
-    <!-- http://stackoverflow.com/questions/4023185/how-to-disable-a-particular-checkstyle-rule-for-a-particular-line-of-code -->
+    <!-- https://stackoverflow.com/questions/4023185/disable-a-particular-checkstyle-rule-for-a-particular-line-of-code -->
     <module name="SuppressWarningsFilter" />
 
     <!-- Checks that a package-info.java file exists for each package.            -->
@@ -93,7 +93,7 @@
     <module name="TreeWalker">
 
         <!-- Part of turning off individual checks: -->
-        <!-- http://stackoverflow.com/questions/5761188/checkstyle-suppressioncommentfilter-not-ignoring-specified-rule/5764666#5764666 -->
+        <!-- https://stackoverflow.com/questions/5761188/checkstyle-suppressioncommentfilter-not-ignoring-specified-rule/5764666#5764666 -->
         <module name="SuppressWarningsHolder" />
 
         <!-- Checks for Javadoc comments.                              -->
