@@ -853,27 +853,6 @@ public final class RTextUtilities {
 
 
 	/**
-	 * Strips ".orig", ".bak", and ".old" from the end of a fileName, if they
-	 * are there.
-	 *
-	 * @param fileName The file name.
-	 * @return The same file name, with any of the above extensions removed.
-	 */
-	static String stripBackupExtensions(String fileName) {
-		if (fileName!=null) {
-			if (fileName.endsWith(".bak") ||
-					fileName.endsWith(".old")) {
-				fileName = fileName.substring(0, fileName.length() - 4);
-			}
-			else if (fileName.endsWith(".orig")) {
-				fileName = fileName.substring(0, fileName.length() - 5);
-			}
-		}
-		return fileName;
-	}
-
-
-	/**
 	 * Returns an icon group fit for {@code RSyntaxTextArea} from an application
 	 * icon group.
 	 *

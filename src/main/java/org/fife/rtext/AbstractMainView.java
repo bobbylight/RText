@@ -4098,7 +4098,7 @@ public abstract class AbstractMainView extends JPanel
 		// denote the actual file type.
 		String fileName = pane.getFileName().toLowerCase();
 		if (getIgnoreBackupExtensions()) {
-			fileName = RTextUtilities.stripBackupExtensions(fileName);
+			fileName = FileTypeUtil.stripBackupExtensions(fileName);
 		}
 
 		// If there was no extension on the file name, guess the content
