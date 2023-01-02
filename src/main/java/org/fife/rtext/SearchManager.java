@@ -55,7 +55,7 @@ public class SearchManager {
 
 
 	/**
-	 * Changes all listeners registered on search dialogs/tool bars from an
+	 * Changes all listeners registered on search dialogs/toolbars from an
 	 * old main view to the new one.
 	 *
 	 * @param fromView The old main view.
@@ -108,7 +108,7 @@ public class SearchManager {
 
 
 	/**
-	 * Ensures the find and replace tool bars are created.
+	 * Ensures the find and replace toolbars are created.
 	 */
 	private void ensureToolbarsCreated() {
 		if (findToolBar==null) {
@@ -169,28 +169,7 @@ public class SearchManager {
 		RTextEditorPane textArea = mainView.getCurrentTextArea();
 
 		try {
-
-			SearchResult result = SearchEngine.find(textArea, context);
-			if (!result.wasFound()) {
-				searchString = HtmlUtil.escapeForHtml(searchString, null, false);
-				String temp = rtext.getString("CannotFindString", searchString);
-				// "null" parent returns focus to previously focused window,
-				// whether it be RText, the Find dialog or the Replace dialog.
-				JOptionPane.showMessageDialog(null, temp,
-							rtext.getString("InfoDialogHeader"),
-							JOptionPane.INFORMATION_MESSAGE);
-			}
-			else if (result.isWrapped()) {
-				// Beep if we wrapped
-				UIManager.getLookAndFeel().provideErrorFeedback(textArea);
-			}
-
-			// If they used the "find next" tool bar button, make sure the
-			// editor gets focused.
-			if (isNoSearchUIVisible()) {
-				textArea.requestFocusInWindow();
-			}
-
+			handleSearchResult(context, SearchEngine.find(textArea, context));
 		} catch (PatternSyntaxException pse) {
 			// There was a problem with the user's regex search string.
 			// Won't usually happen; should be caught earlier.
@@ -209,13 +188,46 @@ public class SearchManager {
 
 
 	/**
-	 * Returns whether dialogs or tool bars are used for searching.
+	 * Returns whether dialogs or toolbars are used for searching.
 	 *
 	 * @return The searching mode.
 	 * @see #setSearchingMode(SearchingMode)
 	 */
 	public SearchingMode getSearchingMode() {
 		return searchingMode;
+	}
+
+
+	/**
+	 * Handles the result of a find or replace operation.
+	 *
+	 * @param context The search context.
+	 * @param result The result of the search operation.
+	 */
+	private void handleSearchResult(SearchContext context, SearchResult result) {
+
+		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
+
+		if (!result.wasFound()) {
+			String searchString = context.getSearchFor();
+			searchString = HtmlUtil.escapeForHtml(searchString, null, false);
+			String temp = rtext.getString("CannotFindString", searchString);
+			// "null" parent returns focus to previously focused window,
+			// whether it be RText, the Find dialog or the Replace dialog.
+			JOptionPane.showMessageDialog(null, temp,
+				rtext.getString("InfoDialogHeader"),
+				JOptionPane.INFORMATION_MESSAGE);
+		}
+		else if (result.isWrapped()) {
+			// Beep if we wrapped
+			UIManager.getLookAndFeel().provideErrorFeedback(textArea);
+		}
+
+		// If they used the "replace next" toolbar button, make sure the
+		// editor gets focused.
+		if (isNoSearchUIVisible()) {
+			textArea.requestFocusInWindow();
+		}
 	}
 
 
@@ -234,7 +246,7 @@ public class SearchManager {
 
 
 	/**
-	 * Returns whether any search UI (find or replace dialog or tool bar) is
+	 * Returns whether any search UI (find or replace dialog or toolbar) is
 	 * visible.
 	 *
 	 * @return Whether any search UI is visible.
@@ -305,24 +317,7 @@ public class SearchManager {
 		RTextEditorPane textArea = mainView.getCurrentTextArea();
 
 		try {
-
-			SearchResult result = SearchEngine.replace(textArea, context);
-			if (!result.wasFound()) {
-				searchString = HtmlUtil.escapeForHtml(searchString, null, false);
-				String temp = rtext.getString("CannotFindString", searchString);
-				// "null" parent returns focus to previously focused window,
-				// whether it be RText, the Find dialog or the Replace dialog.
-				JOptionPane.showMessageDialog(null, temp,
-							rtext.getString("InfoDialogHeader"),
-							JOptionPane.INFORMATION_MESSAGE);
-			}
-
-			// If they used the "replace next" tool bar button, make sure the
-			// editor gets focused.
-			if (isNoSearchUIVisible()) {
-				textArea.requestFocusInWindow();
-			}
-
+			handleSearchResult(context, SearchEngine.replace(textArea, context));
 		} catch (PatternSyntaxException pse) {
 			// There was a problem with the user's regex search string.
 			// Won't usually happen; should be caught earlier.
@@ -343,7 +338,7 @@ public class SearchManager {
 
 
 	/**
-	 * Toggles whether to use dialogs or tool bars for searching.
+	 * Toggles whether to use dialogs or toolbars for searching.
 	 *
 	 * @param mode The new search mode.
 	 * @see #getSearchingMode()
@@ -371,7 +366,7 @@ public class SearchManager {
 
 
 	/**
-	 * Displays the "find" UI (either a dialog or a tool bar).
+	 * Displays the "find" UI (either a dialog or a toolbar).
 	 *
 	 * @see #showReplaceUI()
 	 */
@@ -413,7 +408,7 @@ public class SearchManager {
 
 
 	/**
-	 * Displays the "replace" UI (either a dialog or a tool bar).
+	 * Displays the "replace" UI (either a dialog or a toolbar).
 	 *
 	 * @see #showFindUI()
 	 */
@@ -486,7 +481,7 @@ public class SearchManager {
 			// Also unique to replaceDialog, NOT all JDialogs.
 			replaceDialog.updateUI();
 			replaceDialog.pack();
-			// tool bars are handled by the CollapsibleSectionPanel
+			// toolbars are handled by the CollapsibleSectionPanel
 		}
 
 	}
