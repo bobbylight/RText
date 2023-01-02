@@ -252,12 +252,20 @@ public class FindInFilesTable extends JTable implements ResultsComponent, FileSe
 			ResourceBundle bundle = ResourceBundle.getBundle(
 				FileSystemTree.class.getName());
 
+
+			contextMenu.add(new Actions.CopyAction(this));
+			contextMenu.add(new Actions.CopyFullPathAction(this));
+			contextMenu.addSeparator();
+
 			JMenu openInMenu = new JMenu(bundle.getString("PopupMenu.OpenIn"));
 			openInMenu.add(new Actions.SystemOpenAction(this,
 				Actions.SystemOpenAction.OpenMethod.EDIT));
 			openInMenu.add(new Actions.SystemOpenAction(this,
 				Actions.SystemOpenAction.OpenMethod.OPEN));
 			contextMenu.add(openInMenu);
+			contextMenu.addSeparator();
+
+			contextMenu.add(new Actions.PropertiesAction(this));
 		}
 
 		return getSelectedRow() > -1 ? contextMenu : null;

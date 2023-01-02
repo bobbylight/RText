@@ -404,11 +404,7 @@ public class RTextMenuBar extends MenuBar<RText>
 		recentFilesMenu = new RecentFilesMenu(menuMsg.getString("RecentFiles")) {
 			@Override
 			protected Action createOpenAction(String fileFullPath) {
-				OpenFileFromHistoryAction action =
-					new OpenFileFromHistoryAction(rtext);
-				action.setName(UIUtil.getDisplayPathForFile(RTextMenuBar.this, fileFullPath));
-				action.setFileFullPath(fileFullPath);
-				return action;
+				return new OpenFileAction(rtext, fileFullPath);
 			}
 		};
 		fileMenu.add(recentFilesMenu);
