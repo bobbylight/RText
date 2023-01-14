@@ -84,7 +84,6 @@ ext.sharedManifest = manifest {
 		'Implementation-Version': version,
 		'Build-Date': Instant.now().toString(),
 		'Main-Class': 'org/fife/rtext/Main',
-		// OfficeLnFs are only available on Windows but still need to be on the classpath
 		'Class-Path': configurations.runtimeClasspath.findAll { !isPluginJar(it.name) }.collect {
 							def name = it.name
 							System.out.println(name)

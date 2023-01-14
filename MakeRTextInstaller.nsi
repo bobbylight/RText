@@ -96,7 +96,7 @@ Section Uninstall
   RMDir /r "$INSTDIR\jre-14.0.1"   ; From prior installs
   RMDir /r "$INSTDIR\jre-17.0.2"   ; From prior installs
   RMDir /r "$INSTDIR\jre-17.0.5"
-  RMDir /r "$INSTDIR\lnfs"
+  RMDir /r "$INSTDIR\lnfs"         ; From prior installs
   RMDir /r "$INSTDIR\plugins"
   Delete /REBOOTOK "$INSTDIR\RText.*"
   Delete /REBOOTOK "$INSTDIR\*FileIOExtras.dll"
