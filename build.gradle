@@ -19,9 +19,9 @@ configurations.all { // Check for updates every build
 dependencies {
 	implementation('com.fifesoft.rtext:fife.common:6.0.2-SNAPSHOT') { changing = true }
 
-	implementation('com.fifesoft:rsyntaxtextarea:3.3.2-SNAPSHOT') { changing = true }
-	implementation('com.fifesoft:autocomplete:3.3.1-SNAPSHOT') { changing = true }
-	implementation('com.fifesoft:rstaui:3.3.1-SNAPSHOT') { changing = true }
+	implementation('com.fifesoft:rsyntaxtextarea:3.3.2') { changing = true }
+	implementation('com.fifesoft:autocomplete:3.3.1') { changing = true }
+	implementation('com.fifesoft:rstaui:3.3.1') { changing = true }
 	implementation('com.fifesoft:spellchecker:3.3.1') { changing = true }
 	implementation('com.fifesoft:languagesupport:3.3.0')
 

@@ -94,7 +94,8 @@ Section Uninstall
   RMDir /r "$INSTDIR\icongroups"   ; From prior installs
   RMDir /r "$INSTDIR\jre-11.0.1"   ; From prior installs
   RMDir /r "$INSTDIR\jre-14.0.1"   ; From prior installs
-  RMDir /r "$INSTDIR\jre-17.0.2"
+  RMDir /r "$INSTDIR\jre-17.0.2"   ; From prior installs
+  RMDir /r "$INSTDIR\jre-17.0.5"
   RMDir /r "$INSTDIR\lnfs"
   RMDir /r "$INSTDIR\plugins"
   Delete /REBOOTOK "$INSTDIR\RText.*"

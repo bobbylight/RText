@@ -284,11 +284,11 @@ class NewToolDialog extends EscapableDialog implements ActionListener {
 		programBrowseButton.addActionListener(this);
 		JLabel dirLabel = new JLabel(MSG.getString("Directory"));
 		dirField = new FSATextField();
-DefaultCompletionProvider provider = new DefaultCompletionProvider();
-provider.addCompletion(new BasicCompletion(provider, "${file_dir}", "Directory of the current file"));
-AutoCompletion ac = new AutoCompletion(provider);
-ac.setAutoCompleteSingleChoices(false);
-ac.install(dirField);
+		DefaultCompletionProvider provider = new DefaultCompletionProvider();
+		provider.addCompletion(new BasicCompletion(provider, "${file_dir}", "Directory of the current file"));
+		AutoCompletion ac = new AutoCompletion(provider);
+		ac.setAutoCompleteSingleChoices(false);
+		ac.install(dirField);
 		dirField.setDirectoriesOnly(true);
 		AssistanceIconPanel aip = new AssistanceIconPanel(dirField);
 		aip.setAssistanceEnabled(AbstractSearchDialog.getContentAssistImage());
