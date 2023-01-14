@@ -11,8 +11,6 @@ package org.fife.rtext.plugins.macros;
 
 import java.awt.event.ActionEvent;
 import java.io.*;
-import java.util.regex.Pattern;
-
 import javax.script.*;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
@@ -51,9 +49,6 @@ class RunMacroAction extends AppAction<RText> {
 	 */
 	private static ScriptEngine groovyEngine;
 
-	private static final Pattern GROOVY_JAR_NAME_PATTERN =
-			Pattern.compile("^groovy-[\\d.]+\\.jar$");
-
 
 	/**
 	 * Constructor.
@@ -77,17 +72,6 @@ class RunMacroAction extends AppAction<RText> {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		handleSubmit(macro);
-	}
-
-
-	private File getGroovyJar() {
-		File[] pluginFiles = getPluginDir().listFiles();
-		for (File file : pluginFiles) {
-			if (GROOVY_JAR_NAME_PATTERN.matcher(file.getName()).matches()) {
-				return file;
-			}
-		}
-		return null;
 	}
 
 
@@ -169,24 +153,10 @@ class RunMacroAction extends AppAction<RText> {
 	 * @return The script engine, or <code>null</code> if it cannot be created.
 	 */
 	private ScriptEngine initGroovyEngine() {
-
-		File groovyJar = getGroovyJar();
-		if (groovyJar==null || !groovyJar.isFile()) {
-			String message = plugin.getString("Error.NoGroovyJar",
-					getPluginDir().getAbsolutePath());
-			RText app = getApplication();
-			String title = app.getString("ErrorDialogTitle");
-			JOptionPane.showMessageDialog(app, message, title,
-					JOptionPane.ERROR_MESSAGE);
-			return null;
-		}
-
 		if (groovyEngine==null) {
 			groovyEngine = initScriptEngineImpl("Groovy");
 		}
-
 		return groovyEngine;
-
 	}
 
 
