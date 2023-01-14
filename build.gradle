@@ -28,7 +28,7 @@ dependencies {
 	implementation 'com.formdev:flatlaf:3.0'
 
 	implementation 'net.sf.jtidy:jtidy:r938'
-	implementation 'org.codehaus.groovy:groovy-all:3.0.13'
+	implementation 'org.apache.groovy:groovy-all:4.0.7'
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
 	implementation 'org.graalvm.js:js:22.2.0'
 	implementation 'org.graalvm.js:js-scriptengine:22.2.0'
