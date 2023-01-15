@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.macros;
 
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -16,10 +17,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
+import javax.swing.*;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
@@ -85,6 +83,30 @@ public class MacroPlugin extends AbstractPlugin<RText>
 		JMenuItem item = new JMenuItem(a);
 		item.setToolTipText(null);
 		return item;
+	}
+
+
+	void editMacro(Macro macro, Component parent) {
+
+		RText rtext = getApplication();
+		String text;
+		int messageType = JOptionPane.INFORMATION_MESSAGE;
+		File file = new File(macro.getFile());
+
+		if (file.isFile()) { // Should always be true
+			rtext.openFile(file);
+			text = MSG.getString("Message.MacroOpened");
+			text = MessageFormat.format(text, macro.getName());
+		}
+
+		else { // Macro script was deleted outside of RText.
+			text = MSG.getString("Error.ScriptDoesntExist");
+			text = MessageFormat.format(text, file.getAbsolutePath());
+			messageType = JOptionPane.ERROR_MESSAGE;
+		}
+
+		String title = rtext.getString("InfoDialogHeader");
+		JOptionPane.showMessageDialog(parent, text, title, messageType);
 	}
 
 

@@ -16,10 +16,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.SortedSet;
+import java.util.*;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -32,6 +29,7 @@ import javax.swing.table.TableColumnModel;
 
 import org.fife.rtext.RText;
 import org.fife.ui.KeyStrokeCellRenderer;
+import org.fife.ui.StandardAction;
 import org.fife.ui.UIUtil;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.modifiabletable.AbstractRowHandler;
@@ -55,6 +53,8 @@ class MacroOptionPanel extends PluginOptionsDialogPanel<MacroPlugin>
 
 	static final String TITLE_KEY				= "Plugin.Name";
 
+	private static final String DIALOG_MSG_BUNDLE = "org.fife.rtext.plugins.macros.NewMacroDialog";
+	private static final ResourceBundle DIALOG_MSG = ResourceBundle.getBundle(DIALOG_MSG_BUNDLE);
 
 	/**
 	 * Constructor.
@@ -82,6 +82,8 @@ class MacroOptionPanel extends PluginOptionsDialogPanel<MacroPlugin>
 				plugin.getString("Options.TableHeader.Description") }, 0);
 
 		List<Action> customButtons = new ArrayList<>();
+		EditScriptAction editScriptAction = new EditScriptAction();
+		customButtons.add(editScriptAction);
 		customButtons.add(new AddExampleMacrosAction(plugin));
 
 		macroTable = new ModifiableTable(model, ModifiableTable.BOTTOM,
@@ -89,6 +91,10 @@ class MacroOptionPanel extends PluginOptionsDialogPanel<MacroPlugin>
 										customButtons);
 		macroTable.addModifiableTableListener(this);
 		macroTable.setRowHandler(new MacroTableRowHandler());
+		macroTable.getTable().getSelectionModel().addListSelectionListener((e) -> {
+			int row = macroTable.getSelectedRow();
+			editScriptAction.setEnabled(row > -1 && macroTable.isEnabled());
+		});
 		JTable table = macroTable.getTable();
 		TableColumnModel tcm = table.getColumnModel();
 		tcm.getColumn(1).setCellRenderer(KeyStrokeCellRenderer.create());
@@ -301,6 +307,26 @@ class MacroOptionPanel extends PluginOptionsDialogPanel<MacroPlugin>
 
 		}
 
+	}
+
+
+	/**
+	 * Edits the currently selected macro.
+	 */
+	private class EditScriptAction extends StandardAction {
+
+		EditScriptAction() {
+			super(DIALOG_MSG, "Button.Edit");
+			setEnabled(false); // Enabled once the user selects a row
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int selectedRow = macroTable.getSelectedRow();
+			if (selectedRow > -1) {
+				getPlugin().editMacro((Macro)model.getValueAt(selectedRow, 0), getOptionsDialog());
+			}
+		}
 	}
 
 

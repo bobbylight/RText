@@ -169,29 +169,9 @@ class NewMacroDialog extends EscapableDialog {
 	 * Called when the user clicks the "Edit Script" button.
 	 */
 	private void editPressed() {
-
-		String text;
-		int messageType = JOptionPane.INFORMATION_MESSAGE;
-
 		// The "Edit" button is only visible when editing an existing macro, so
 		// our "macro" variable should be defined.
-		File file = new File(macro.getFile());
-
-		if (file.isFile()) { // Should always be true
-			rtext.openFile(file);
-			text = MSG.getString("Message.MacroOpened");
-			text = MessageFormat.format(text, macro.getName());
-		}
-
-		else { // Macro script was deleted outside of RText.
-			text = MSG.getString("Error.ScriptDoesntExist");
-			text = MessageFormat.format(text, file.getAbsolutePath());
-			messageType = JOptionPane.ERROR_MESSAGE;
-		}
-
-		String title = rtext.getString("InfoDialogHeader");
-		JOptionPane.showMessageDialog(this, text, title, messageType);
-
+		plugin.editMacro(macro, this);
 	}
 
 
