@@ -3,7 +3,7 @@
  *
  * OpenRemoteDialog.java - Dialog for opening or saving a remote file via FTP.
  * Copyright (C) 2008 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

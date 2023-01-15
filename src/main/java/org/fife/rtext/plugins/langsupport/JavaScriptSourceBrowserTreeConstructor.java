@@ -4,7 +4,7 @@
  * JavaScriptSourceBrowserTreeConstructor.java - "Plug-in" for the SourceBrowser
  * plug-in that creates the tree view to use for JavaScript source code.
  * Copyright (C) 2008 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

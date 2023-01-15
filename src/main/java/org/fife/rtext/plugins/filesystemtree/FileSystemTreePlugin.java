@@ -4,7 +4,7 @@
  * FileSystemTreePlugin.java - A plugin that displays a tree of files on the
  * local filesystem, allowing for easy opening of files.
  * Copyright (C) 2005 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

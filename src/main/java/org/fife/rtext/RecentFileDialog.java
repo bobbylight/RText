@@ -4,7 +4,7 @@
  * RecentFileDialog.java - Allows the user to quickly open a recently-opened
  * file.
  * Copyright (C) 2014 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

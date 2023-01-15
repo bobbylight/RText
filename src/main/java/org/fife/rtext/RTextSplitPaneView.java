@@ -5,7 +5,7 @@
  * of a left-hand list pane listing all open documents and a card layout pane
  * on the right showing the currently open document.
  * Copyright (C) 2003 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

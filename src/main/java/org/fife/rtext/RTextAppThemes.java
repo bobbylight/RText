@@ -1,5 +1,5 @@
 /*
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
@@ -64,7 +64,7 @@ public final class RTextAppThemes {
 
 		FlatDarkTheme flatDarkTheme = new FlatDarkTheme();
 		flatDarkTheme.setHyperlinkForeground(new Color(0x589df6));
-		flatDarkTheme.addExtraUiDefault("rtext.editorTheme", "/org/fife/ui/rsyntaxtextarea/themes/monokai.xml");
+		flatDarkTheme.addExtraUiDefault("rtext.editorTheme", "/org/fife/ui/rsyntaxtextarea/themes/dark.xml");
 		flatDarkTheme.addExtraUiDefault("rtext.iconGroupName", "IntelliJ Icons (Dark)");
 		flatDarkTheme.addExtraUiDefault("rtext.labelErrorForeground", DARK_MODIFIED_DOCUMENT_NAME_COLOR);
 		flatDarkTheme.addExtraUiDefault("rtext.listAltRowColor", darkListAltRowColor);
@@ -91,7 +91,7 @@ public final class RTextAppThemes {
 
 			FlatMacDarkTheme flatMacDarkTheme = new FlatMacDarkTheme();
 			flatMacDarkTheme.setHyperlinkForeground(new Color(0x589df6));
-			flatMacDarkTheme.addExtraUiDefault("rtext.editorTheme", "/org/fife/ui/rsyntaxtextarea/themes/dark.xml");
+			flatMacDarkTheme.addExtraUiDefault("rtext.editorTheme", "/org/fife/ui/rsyntaxtextarea/themes/monokai.xml");
 			flatMacDarkTheme.addExtraUiDefault("rtext.iconGroupName", "IntelliJ Icons (Dark)");
 			flatMacDarkTheme.addExtraUiDefault("rtext.labelErrorForeground", DARK_MODIFIED_DOCUMENT_NAME_COLOR);
 			flatMacDarkTheme.addExtraUiDefault("rtext.listAltRowColor", darkListAltRowColor);

@@ -3,7 +3,7 @@
  *
  * ProjectEntry.java - A file or directory in a project.
  * Copyright (C) 2012 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

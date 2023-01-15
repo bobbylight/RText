@@ -3,7 +3,7 @@
  *
  * NewAction.java - Action used to open a new document in RText.
  * Copyright (C) 2003 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

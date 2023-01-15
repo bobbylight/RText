@@ -4,7 +4,7 @@
  * RSyntaxTextAreaOptionsPanel.java - An options panel that can be
  * added to org.fife.ui.OptionsDialog for an RSyntaxTextArea.
  * Copyright (C) 2004 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

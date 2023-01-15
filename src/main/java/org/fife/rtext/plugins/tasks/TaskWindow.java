@@ -4,7 +4,7 @@
  * TaskWindow.java - A dockable window that lists tasks (todo's, fixme's, etc.)
  * in open files.
  * Copyright (C) 2009 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

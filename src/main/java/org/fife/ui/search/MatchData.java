@@ -4,7 +4,7 @@
  * MatchData.java - Information about a match found in a file by a
  * FindInFilesDialog.
  * Copyright (C) 2005 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

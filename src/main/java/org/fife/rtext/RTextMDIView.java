@@ -3,7 +3,7 @@
  *
  * RTextMDIView.java - A multi-document interface implementation.
  * Copyright (C) 2004 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

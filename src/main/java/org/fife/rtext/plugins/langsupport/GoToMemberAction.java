@@ -4,7 +4,7 @@
  * GoToMemberAction.java - Wraps the "Go to Member" action in some
  * LanguageSupports.
  * Copyright (C) 2012 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

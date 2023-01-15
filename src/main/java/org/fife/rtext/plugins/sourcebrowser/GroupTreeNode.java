@@ -4,7 +4,7 @@
  * GroupTreeNode.java - A tree node that contains a group of children in the
  * Source Browser.
  * Copyright (C) 2008 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

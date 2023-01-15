@@ -4,7 +4,7 @@
  * MoveFocusRightAction - Focuses the dockable window group to the right of
  * the currently focused component.
  * Copyright (C) 2012 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

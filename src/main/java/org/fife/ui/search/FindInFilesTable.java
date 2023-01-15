@@ -4,7 +4,7 @@
  * FindInFilesTable.java - A table listing search results in a Find in Files
  * dialog.
  * Copyright (C) 2005 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */

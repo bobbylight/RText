@@ -4,7 +4,7 @@
  * TextAreaOrientationAction.java - Aligns text in all open editors either
  * right-to-left or left-to-right.
  * Copyright (C) 2006 Robert Futrell
- * https://fifesoft.com/rtext
+ * https://bobbylight.github.io/RText/
  * Licensed under a modified BSD license.
  * See the included license file for details.
  */
