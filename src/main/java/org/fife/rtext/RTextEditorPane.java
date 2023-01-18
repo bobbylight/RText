@@ -19,6 +19,7 @@ import javax.swing.*;
 
 import org.fife.print.RPrintUtilities;
 import org.fife.rtext.plugins.filesystemtree.FileSystemTreePlugin;
+import org.fife.ui.StandardMenuItem;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 import org.fife.ui.rtextarea.RTATextTransferHandler;
@@ -69,6 +70,20 @@ public class RTextEditorPane extends TextEditorPane {
 			SELECT_CURRENT_FILE_ACTION_NAME)));
 
 		return popup;
+	}
+
+
+	@Override
+	protected JMenuItem createPopupMenuItem(Action a) {
+		JMenuItem item = new StandardMenuItem(a) {
+			@Override
+			public void setToolTipText(String text) {
+				// Ignore!  Actions (e.g. undo/redo) set this when changing
+				// their text due to changing enabled state.
+			}
+		};
+		item.setAccelerator(null);
+		return item;
 	}
 
 

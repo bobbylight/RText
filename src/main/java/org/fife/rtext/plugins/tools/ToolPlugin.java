@@ -30,6 +30,7 @@ import org.fife.rtext.RText;
 import org.fife.rtext.RTextMenuBar;
 import org.fife.rtext.RTextUtilities;
 import org.fife.ui.ImageTranscodingUtil;
+import org.fife.ui.StandardMenuItem;
 import org.fife.ui.app.*;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.console.AbstractConsoleTextArea;
@@ -95,6 +96,7 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 		putDockableWindow(DOCKABLE_WINDOW_TOOLS, window);
 
 		rtext.addPropertyChangeListener(AbstractGUIApplication.THEME_PROPERTY, this);
+		updateActionIcons(rtext.getIconGroup());
 	}
 
 
@@ -105,7 +107,7 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 	 * @return The menu item.
 	 */
 	private static JMenuItem createMenuItem(Action a) {
-		JMenuItem item = new JMenuItem(a);
+		JMenuItem item = new StandardMenuItem(a);
 		item.setToolTipText(null);
 		return item;
 	}
@@ -130,6 +132,11 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 	 */
 	public ToolDockableWindow getDockableWindow() {
 		return window;
+	}
+
+
+	Icon getIcon(String iconName) {
+		return icons.get(iconName);
 	}
 
 
@@ -199,8 +206,8 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 
 	@Override
 	public void iconGroupChanged(IconGroup iconGroup) {
+		updateActionIcons(iconGroup);
 		window.setIcon(getPluginIcon());
-		newToolAction.setIcon(getPluginIcon());
 		if (optionPanel != null) {
 			optionPanel.setIcon(getPluginIcon());
 		}
@@ -267,6 +274,10 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 			Image lightThemeImage = ImageTranscodingUtil.rasterize("tools light",
 				getClass().getResourceAsStream("flat-light/tools.svg"), 16, 16);
 			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+
+			Image whiteImage = ImageTranscodingUtil.rasterize("tools white",
+				getClass().getResourceAsStream("flat-white/tools.svg"), 16, 16);
+			icons.put("white", new ImageIcon(whiteImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -451,6 +462,19 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 	public boolean uninstall() {
 		// TODO: Remove dockable window from application.
 		return true;
+	}
+
+
+	private void updateActionIcons(IconGroup iconGroup) {
+
+		Icon icon = iconGroup.getIcon("newtool");
+		if (icon != null) {
+			newToolAction.setIcon(icon);
+			newToolAction.setRolloverIcon((Icon)null);
+		}
+		else {
+			newToolAction.restoreDefaultIcon(this);
+		}
 	}
 
 

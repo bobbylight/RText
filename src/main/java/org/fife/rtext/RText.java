@@ -35,6 +35,7 @@ import org.fife.rtext.actions.ActionFactory;
 import org.fife.ui.CustomizableToolBar;
 import org.fife.ui.OptionsDialog;
 import org.fife.ui.SplashScreen;
+import org.fife.ui.StandardAction;
 import org.fife.ui.app.*;
 import org.fife.ui.app.icons.IconGroup;
 import org.fife.ui.app.icons.RasterImageIconGroup;
@@ -869,14 +870,17 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		iconGroupMap = new HashMap<>();
 		String resourceRoot = "org/fife/rtext/graphics/";
 
-		iconGroupMap.put(DEFAULT_ICON_GROUP_NAME,
-			new SvgIconGroup(this, DEFAULT_ICON_GROUP_NAME,
-				resourceRoot + "intellij-icons-dark",
-				resourceRoot + "intellij-icons-light")); // Proper contrast
-		iconGroupMap.put("IntelliJ Icons (Light)",
-			new SvgIconGroup(this, "IntelliJ Icons (Light)",
-				resourceRoot + "intellij-icons-light",
-				null));
+		IconGroup darkIconGroup = new SvgIconGroup(this, DEFAULT_ICON_GROUP_NAME,
+			resourceRoot + "intellij-icons-dark",
+			resourceRoot + "intellij-icons-light"); // Proper contrast
+		iconGroupMap.put(DEFAULT_ICON_GROUP_NAME, darkIconGroup);
+
+		SvgIconGroup lightIconGroup = new SvgIconGroup(this, "IntelliJ Icons (Light)",
+			resourceRoot + "intellij-icons-light",
+			null);
+		lightIconGroup.setRolloverPath(resourceRoot + "intellij-icons-white");
+		iconGroupMap.put("IntelliJ Icons (Light)", lightIconGroup);
+
 		iconGroupMap.put("Eclipse Icons", new RasterImageIconGroup("Eclipse Icons",
 			resourceRoot + "eclipse-icons",
 			null));
@@ -941,13 +945,15 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		setSearchWindowOpacity(prefs.searchWindowOpacity);
 		setSearchWindowOpacityRule(prefs.searchWindowOpacityRule);
 
-		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
-			System.err.println("preDisplayInit: " + (System.currentTimeMillis()-start));
-		}
-
 		RTextUtilities.setDropShadowsEnabledInEditor(prefs.dropShadowsInEditor);
 
 		setWindowDraggableByMenuBarAndToolBar();
+
+		SwingUtilities.invokeLater(this::updateTextAreaIcons);
+
+		if (Boolean.getBoolean(PROPERTY_PRINT_START_TIMES)) {
+			System.err.println("preDisplayInit: " + (System.currentTimeMillis()-start));
+		}
 	}
 
 
@@ -1482,6 +1488,12 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	}
 
 
+	private void updateAppIcon(String actionName, IconGroup iconGroup, String iconName) {
+		getAction(actionName).putValue(Action.SMALL_ICON, iconGroup.getIcon(iconName));
+		getAction(actionName).putValue(StandardAction.ROLLOVER_SMALL_ICON, iconGroup.getRolloverIcon(iconName));
+	}
+
+
 	@Override
 	protected void updateIconsForNewIconGroup(IconGroup iconGroup) {
 
@@ -1490,51 +1502,27 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		Dimension size = getSize();
 
 		// Text area icons
-		updateTextAreaIcon(RTextArea.CUT_ACTION, "cut");
-		updateTextAreaIcon(RTextArea.COPY_ACTION, "copy");
-		updateTextAreaIcon(RTextArea.PASTE_ACTION, "paste");
-		updateTextAreaIcon(RTextArea.DELETE_ACTION, "delete");
-		updateTextAreaIcon(RTextArea.UNDO_ACTION, "undo");
-		updateTextAreaIcon(RTextArea.REDO_ACTION, "redo");
-		updateTextAreaIcon(RTextArea.SELECT_ALL_ACTION, "selectall");
+		updateTextAreaIcons();
 
 		// All other icons
-		Icon icon = iconGroup.getIcon("new");
-		getAction(NEW_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("open");
-		getAction(OPEN_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("save");
-		getAction(SAVE_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("saveall");
-		getAction(SAVE_ALL_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("openinnewwindow");
-		getAction(OPEN_NEWWIN_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("saveas");
-		getAction(SAVE_AS_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("options");
-		getAction(OPTIONS_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("help");
-		getAction(HELP_ACTION_KEY).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("about");
-		getAction(ABOUT_ACTION_KEY).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("close");
-		getAction(CLOSE_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("find");
-		getAction(FIND_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("findnext");
-		getAction(FIND_NEXT_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("replace");
-		getAction(REPLACE_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("replacenext");
-		getAction(REPLACE_NEXT_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("print");
-		getAction(PRINT_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("printpreview");
-		getAction(PRINT_PREVIEW_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("closeall");
-		getAction(CLOSE_ALL_ACTION).putValue(Action.SMALL_ICON, icon);
-		icon = iconGroup.getIcon("goto");
-		getAction(GOTO_ACTION).putValue(Action.SMALL_ICON, icon);
+		updateAppIcon(NEW_ACTION, iconGroup, "new");
+		updateAppIcon(OPEN_ACTION, iconGroup, "open");
+		updateAppIcon(SAVE_ACTION, iconGroup, "save");
+		updateAppIcon(SAVE_ALL_ACTION, iconGroup, "saveall");
+		updateAppIcon(OPEN_NEWWIN_ACTION, iconGroup, "openinnewwindow");
+		updateAppIcon(SAVE_AS_ACTION, iconGroup, "saveas");
+		updateAppIcon(OPTIONS_ACTION, iconGroup, "options");
+		updateAppIcon(HELP_ACTION_KEY, iconGroup, "help");
+		updateAppIcon(ABOUT_ACTION_KEY, iconGroup, "about");
+		updateAppIcon(CLOSE_ACTION, iconGroup, "close");
+		updateAppIcon(FIND_ACTION, iconGroup, "find");
+		updateAppIcon(FIND_NEXT_ACTION, iconGroup, "findnext");
+		updateAppIcon(REPLACE_ACTION, iconGroup, "replace");
+		updateAppIcon(REPLACE_NEXT_ACTION, iconGroup, "replacenext");
+		updateAppIcon(PRINT_ACTION, iconGroup, "print");
+		updateAppIcon(PRINT_PREVIEW_ACTION, iconGroup, "printpreview");
+		updateAppIcon(CLOSE_ALL_ACTION, iconGroup, "closeall");
+		updateAppIcon(GOTO_ACTION, iconGroup, "goto");
 
 		// Do this because the toolbar has changed it's size.
 		if (isDisplayable()) {
@@ -1600,6 +1588,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		getAction(OPTIONS_ACTION).actionPerformed(new ActionEvent(this,0,"unused"));
 	}
 
+
 	@Override
 	public void openFile(File file) {
 		//gets called when we receive an open event from the finder on OS X
@@ -1610,15 +1599,27 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 		});
 	}
 
-	private void updateTextAreaIcon(int actionName, String iconName) {
+
+	private void updateTextAreaIcon(int textAreaAction, String iconName) {
 
 		Icon icon = getIconGroup().getIcon(iconName);
+		Icon rolloverIcon = getIconGroup().getRolloverIcon(iconName);
 
-		Action action = RTextArea.getAction(actionName);
+		Action action = RTextArea.getAction(textAreaAction);
 		if (action != null) { // Can be null when the app is first starting up
 			action.putValue(Action.SMALL_ICON, icon);
+			action.putValue(StandardAction.ROLLOVER_SMALL_ICON, rolloverIcon);
 		}
 	}
 
 
+	private void updateTextAreaIcons() {
+		updateTextAreaIcon(RTextArea.CUT_ACTION, "cut");
+		updateTextAreaIcon(RTextArea.COPY_ACTION, "copy");
+		updateTextAreaIcon(RTextArea.PASTE_ACTION, "paste");
+		updateTextAreaIcon(RTextArea.DELETE_ACTION, "delete");
+		updateTextAreaIcon(RTextArea.UNDO_ACTION, "undo");
+		updateTextAreaIcon(RTextArea.REDO_ACTION, "redo");
+		updateTextAreaIcon(RTextArea.SELECT_ALL_ACTION, "selectall");
+	}
 }

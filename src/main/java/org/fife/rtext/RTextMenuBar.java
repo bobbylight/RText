@@ -869,7 +869,7 @@ public class RTextMenuBar extends MenuBar<RText>
 
 
 	@Override
-	protected void updateIcons(IconGroup iconGroup) {
+	protected void updateIconsForNativeMenuBar(IconGroup iconGroup) {
 
 		newItem.setIcon(iconGroup.getNativeIcon("new"));
 		openItem.setIcon(iconGroup.getNativeIcon("open"));

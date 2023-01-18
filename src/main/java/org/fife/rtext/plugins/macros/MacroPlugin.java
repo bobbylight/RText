@@ -21,6 +21,7 @@ import javax.swing.*;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.StandardMenuItem;
 import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginOptionsDialogPanel;
@@ -80,7 +81,7 @@ public class MacroPlugin extends AbstractPlugin<RText>
 	 * @return The menu item.
 	 */
 	private static JMenuItem createMenuItem(Action a) {
-		JMenuItem item = new JMenuItem(a);
+		JMenuItem item = new StandardMenuItem(a);
 		item.setToolTipText(null);
 		return item;
 	}
@@ -363,6 +364,7 @@ public class MacroPlugin extends AbstractPlugin<RText>
 		Icon icon = iconGroup.getIcon("newmacro");
 		if (icon != null) {
 			newMacroAction.setIcon(icon);
+			newMacroAction.setRolloverIcon((Icon)null);
 		}
 		else {
 			newMacroAction.restoreDefaultIcon();
@@ -371,6 +373,7 @@ public class MacroPlugin extends AbstractPlugin<RText>
 		icon = iconGroup.getIcon("editmacros");
 		if (icon != null) {
 			editMacrosAction.setIcon(icon);
+			editMacrosAction.setRolloverIcon((Icon)null);
 		}
 		else {
 			editMacrosAction.restoreDefaultIcon();

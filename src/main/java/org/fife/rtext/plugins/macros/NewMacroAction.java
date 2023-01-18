@@ -118,13 +118,20 @@ class NewMacroAction extends AppAction<RText> {
 					Image darkThemeImage = ImageTranscodingUtil.rasterize("macro dark",
 						getClass().getResourceAsStream("flat-dark/cog_add.svg"), 16, 16);
 					setIcon(new ImageIcon(darkThemeImage));
+					setRolloverIcon((Icon)null);
 				}
 				case FlatLightTheme.ID -> {
 					Image lightThemeImage = ImageTranscodingUtil.rasterize("macro light",
 						getClass().getResourceAsStream("flat-light/cog_add.svg"), 16, 16);
 					setIcon(new ImageIcon(lightThemeImage));
+					Image whiteImage = ImageTranscodingUtil.rasterize("macro white",
+						getClass().getResourceAsStream("flat-white/cog_add.svg"), 16, 16);
+					setRolloverIcon(new ImageIcon(whiteImage));
 				}
-				default -> setIcon("eclipse/cog_add.png");
+				default -> {
+					setIcon("eclipse/cog_add.png");
+					setRolloverIcon((Icon)null);
+				}
 			}
 		} catch (IOException ioe) {
 			ioe.printStackTrace();

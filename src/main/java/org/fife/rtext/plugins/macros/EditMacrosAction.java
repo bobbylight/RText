@@ -59,6 +59,7 @@ class EditMacrosAction extends AppAction<RText> {
 			case FlatDarkTheme.ID, FlatLightTheme.ID -> setIcon((Icon)null);
 			default -> setIcon("eclipse/cog.png");
 		}
+		setRolloverIcon((Icon)null);
 	}
 
 
