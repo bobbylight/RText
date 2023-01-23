@@ -112,7 +112,17 @@ class NewMacroAction extends AppAction<RText> {
 
 
 	void restoreDefaultIcon() {
+
 		try {
+
+			if (MacOSUtil.isMacOs()) {
+				Image lightThemeImage = ImageTranscodingUtil.rasterize("macro light",
+					getClass().getResourceAsStream("flat-light/cog_add.svg"), 16, 16);
+				setIcon(new ImageIcon(lightThemeImage));
+				setRolloverIcon((Icon)null);
+				return;
+			}
+
 			switch (getApplication().getTheme().getId()) {
 				case FlatDarkTheme.ID -> {
 					Image darkThemeImage = ImageTranscodingUtil.rasterize("macro dark",

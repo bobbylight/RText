@@ -9,6 +9,7 @@
  */
 package org.fife.rtext.plugins.tools;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 import javax.swing.*;
@@ -58,6 +59,13 @@ class NewToolAction extends AppAction<RText> {
 
 
 	void restoreDefaultIcon(ToolPlugin plugin) {
+
+		if (MacOSUtil.isMacOs()) {
+			setIcon(plugin.getIcon(FlatLightTheme.ID));
+			setRolloverIcon((Icon)null);
+			return;
+		}
+
 		String themeId = getApplication().getTheme().getId();
 		setIcon(plugin.getIcon(themeId));
 		Icon rolloverIcon = FlatLightTheme.ID.equals(themeId) ?
