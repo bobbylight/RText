@@ -46,9 +46,7 @@ import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.icons.IconGroup;
-import org.fife.ui.app.themes.FlatDarkTheme;
-import org.fife.ui.app.themes.FlatLightTheme;
-import org.fife.ui.app.themes.NativeTheme;
+import org.fife.ui.app.themes.*;
 import org.fife.ui.autocomplete.CompletionXMLParser;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -263,10 +261,12 @@ public class Plugin extends GUIPlugin<RText> {
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("plugin_langsupport dark",
 				getClass().getResourceAsStream("flat-dark/plugin_langsupport.svg"), 16, 16);
 			pluginIcons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+			pluginIcons.put(FlatMacDarkTheme.ID, new ImageIcon(darkThemeImage));
 
 			Image lightThemeImage = ImageTranscodingUtil.rasterize("langsupport light",
 				getClass().getResourceAsStream("flat-light/plugin_langsupport.svg"), 16, 16);
 			pluginIcons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+			pluginIcons.put(FlatMacLightTheme.ID, new ImageIcon(lightThemeImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}

@@ -25,9 +25,7 @@ import org.fife.ui.UIUtil;
 import org.fife.ui.WebLookAndFeelUtils;
 import org.fife.ui.app.*;
 import org.fife.ui.app.icons.IconGroup;
-import org.fife.ui.app.themes.FlatDarkTheme;
-import org.fife.ui.app.themes.FlatLightTheme;
-import org.fife.ui.app.themes.NativeTheme;
+import org.fife.ui.app.themes.*;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowScrollPane;
 
@@ -284,10 +282,12 @@ public class FileSystemTreePlugin extends GUIPlugin<RText> {
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("fst dark",
 				getClass().getResourceAsStream("flat-dark/filesystemtree.svg"), 16, 16);
 			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+			icons.put(FlatMacDarkTheme.ID, new ImageIcon(darkThemeImage));
 
 			Image lightThemeImage = ImageTranscodingUtil.rasterize("fst light",
 				getClass().getResourceAsStream("flat-light/filesystemtree.svg"), 16, 16);
 			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+			icons.put(FlatMacLightTheme.ID, new ImageIcon(lightThemeImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}

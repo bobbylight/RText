@@ -30,9 +30,7 @@ import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.icons.IconGroup;
-import org.fife.ui.app.themes.FlatDarkTheme;
-import org.fife.ui.app.themes.FlatLightTheme;
-import org.fife.ui.app.themes.NativeTheme;
+import org.fife.ui.app.themes.*;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.rsyntaxtextarea.parser.Parser;
 
@@ -225,10 +223,12 @@ public class TasksPlugin extends GUIPlugin<RText> {
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("tasks dark",
 				getClass().getResourceAsStream("flat-dark/tasks.svg"), 16, 16);
 			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+			icons.put(FlatMacDarkTheme.ID, new ImageIcon(darkThemeImage));
 
 			Image lightThemeImage = ImageTranscodingUtil.rasterize("tasks light",
 				getClass().getResourceAsStream("flat-light/tasks.svg"), 16, 16);
 			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+			icons.put(FlatMacLightTheme.ID, new ImageIcon(lightThemeImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}

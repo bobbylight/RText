@@ -9,7 +9,6 @@
  */
 package org.fife.rtext.plugins.macros;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,10 +20,9 @@ import java.util.ResourceBundle;
 
 import org.fife.io.IOUtil;
 import org.fife.rtext.RText;
-import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.AppAction;
-import org.fife.ui.app.themes.FlatDarkTheme;
 import org.fife.ui.app.themes.FlatLightTheme;
+import org.fife.ui.app.themes.NativeTheme;
 import org.fife.util.MacOSUtil;
 
 import javax.swing.*;
@@ -53,7 +51,6 @@ class NewMacroAction extends AppAction<RText> {
 	 */
 	NewMacroAction(MacroPlugin plugin, RText owner, ResourceBundle msg) {
 		super(owner, msg, "NewMacroAction");
-		restoreDefaultIcon();
 		this.plugin = plugin;
 	}
 
@@ -113,38 +110,18 @@ class NewMacroAction extends AppAction<RText> {
 
 	void restoreDefaultIcon() {
 
-		try {
-
-			if (MacOSUtil.isMacOs()) {
-				Image lightThemeImage = ImageTranscodingUtil.rasterize("macro light",
-					getClass().getResourceAsStream("flat-light/cog_add.svg"), 16, 16);
-				setIcon(new ImageIcon(lightThemeImage));
-				setRolloverIcon((Icon)null);
-				return;
-			}
-
-			switch (getApplication().getTheme().getId()) {
-				case FlatDarkTheme.ID -> {
-					Image darkThemeImage = ImageTranscodingUtil.rasterize("macro dark",
-						getClass().getResourceAsStream("flat-dark/cog_add.svg"), 16, 16);
-					setIcon(new ImageIcon(darkThemeImage));
-					setRolloverIcon((Icon)null);
-				}
-				case FlatLightTheme.ID -> {
-					Image lightThemeImage = ImageTranscodingUtil.rasterize("macro light",
-						getClass().getResourceAsStream("flat-light/cog_add.svg"), 16, 16);
-					setIcon(new ImageIcon(lightThemeImage));
-					Image whiteImage = ImageTranscodingUtil.rasterize("macro white",
-						getClass().getResourceAsStream("flat-white/cog_add.svg"), 16, 16);
-					setRolloverIcon(new ImageIcon(whiteImage));
-				}
-				default -> {
-					setIcon("eclipse/cog_add.png");
-					setRolloverIcon((Icon)null);
-				}
-			}
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		String themeId = getApplication().getTheme().getId();
+		if (MacOSUtil.isMacOs()) {
+			String menuItemThemeId = NativeTheme.ID.equals(themeId) ?
+				themeId : FlatLightTheme.ID;
+			setIcon(plugin.getIcon(menuItemThemeId));
+			setRolloverIcon((Icon)null);
+			return;
 		}
+
+		setIcon(plugin.getIcon(themeId));
+		Icon rolloverIcon = FlatLightTheme.ID.equals(themeId) ?
+			plugin.getIcon("white") : null;
+		setRolloverIcon(rolloverIcon);
 	}
 }

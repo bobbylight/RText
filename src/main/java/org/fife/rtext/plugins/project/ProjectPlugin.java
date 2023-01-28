@@ -39,9 +39,7 @@ import org.fife.ui.app.GUIPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.AppAction;
 import org.fife.ui.app.icons.IconGroup;
-import org.fife.ui.app.themes.FlatDarkTheme;
-import org.fife.ui.app.themes.FlatLightTheme;
-import org.fife.ui.app.themes.NativeTheme;
+import org.fife.ui.app.themes.*;
 
 
 /**
@@ -269,10 +267,12 @@ public class ProjectPlugin extends GUIPlugin<RText> {
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("project dark",
 				getClass().getResourceAsStream("flat-dark/project.svg"), 16, 16);
 			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+			icons.put(FlatMacDarkTheme.ID, new ImageIcon(darkThemeImage));
 
 			Image lightThemeImage = ImageTranscodingUtil.rasterize("project light",
 				getClass().getResourceAsStream("flat-light/project.svg"), 16, 16);
 			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+			icons.put(FlatMacLightTheme.ID, new ImageIcon(lightThemeImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}

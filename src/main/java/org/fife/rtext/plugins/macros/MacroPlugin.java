@@ -15,18 +15,22 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.swing.*;
 
 import org.fife.rtext.RText;
 import org.fife.rtext.RTextUtilities;
+import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.StandardMenuItem;
 import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.AppAction;
 import org.fife.ui.app.icons.IconGroup;
+import org.fife.ui.app.themes.*;
 
 
 /**
@@ -44,6 +48,7 @@ public class MacroPlugin extends AbstractPlugin<RText>
 	private JMenu macrosMenu;
 	private final NewMacroAction newMacroAction;
 	private final EditMacrosAction editMacrosAction;
+	private Map<String, Icon> icons;
 
 	private static final String MSG_BUNDLE = "org.fife.rtext.plugins.macros.MacrosPlugin";
 	static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_BUNDLE);
@@ -60,6 +65,7 @@ public class MacroPlugin extends AbstractPlugin<RText>
 	public MacroPlugin(RText rtext) {
 
 		super(rtext);
+		loadIcons();
 		MacroPrefs prefs = loadPrefs();
 
 		newMacroAction = new NewMacroAction(this, rtext, MSG);
@@ -111,6 +117,11 @@ public class MacroPlugin extends AbstractPlugin<RText>
 	}
 
 
+	Icon getIcon(String iconName) {
+		return icons.get(iconName);
+	}
+
+
 	/**
 	 * Returns the directory that macro definitions are saved to.
 	 *
@@ -138,8 +149,7 @@ public class MacroPlugin extends AbstractPlugin<RText>
 
 	@Override
 	public Icon getPluginIcon() {
-		// This allows us to get a theme-specific icon if there is one
-		return newMacroAction != null ? newMacroAction.getIcon() : null;
+		return icons.get(getApplication().getTheme().getId());
 	}
 
 
@@ -219,6 +229,33 @@ public class MacroPlugin extends AbstractPlugin<RText>
 
 		loadMacros(); // Do after menu has been added
 
+	}
+
+
+	private void loadIcons() {
+
+		icons = new HashMap<>();
+
+		try {
+
+			icons.put(NativeTheme.ID, new ImageIcon(getClass().getResource("eclipse/cog_add.png")));
+
+			Image darkThemeImage = ImageTranscodingUtil.rasterize("macro dark",
+				getClass().getResourceAsStream("flat-dark/cog_add.svg"), 16, 16);
+			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+			icons.put(FlatMacDarkTheme.ID, new ImageIcon(darkThemeImage));
+
+			Image lightThemeImage = ImageTranscodingUtil.rasterize("macro light",
+				getClass().getResourceAsStream("flat-light/cog_add.svg"), 16, 16);
+			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+			icons.put(FlatMacLightTheme.ID, new ImageIcon(lightThemeImage));
+
+			Image whiteImage = ImageTranscodingUtil.rasterize("macro white",
+				getClass().getResourceAsStream("flat-white/cog_add.svg"), 16, 16);
+			icons.put("white", new ImageIcon(whiteImage));
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 

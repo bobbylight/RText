@@ -36,9 +36,7 @@ import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.AbstractPlugin;
 import org.fife.ui.app.PluginOptionsDialogPanel;
 import org.fife.ui.app.icons.IconGroup;
-import org.fife.ui.app.themes.FlatDarkTheme;
-import org.fife.ui.app.themes.FlatLightTheme;
-import org.fife.ui.app.themes.NativeTheme;
+import org.fife.ui.app.themes.*;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.util.MacOSUtil;
 
@@ -264,10 +262,12 @@ public class Plugin extends AbstractPlugin<RText>
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("tidy dark",
 				getClass().getResourceAsStream("flat-dark/tidy.svg"), 16, 16);
 			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+			icons.put(FlatMacDarkTheme.ID, new ImageIcon(darkThemeImage));
 
 			Image lightThemeImage = ImageTranscodingUtil.rasterize("tidy light",
 				getClass().getResourceAsStream("flat-light/tidy.svg"), 16, 16);
 			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+			icons.put(FlatMacLightTheme.ID, new ImageIcon(lightThemeImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}

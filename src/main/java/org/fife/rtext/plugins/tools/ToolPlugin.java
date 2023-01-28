@@ -35,9 +35,7 @@ import org.fife.ui.app.*;
 import org.fife.ui.app.MenuBar;
 import org.fife.ui.app.console.AbstractConsoleTextArea;
 import org.fife.ui.app.icons.IconGroup;
-import org.fife.ui.app.themes.FlatDarkTheme;
-import org.fife.ui.app.themes.FlatLightTheme;
-import org.fife.ui.app.themes.NativeTheme;
+import org.fife.ui.app.themes.*;
 
 
 /**
@@ -270,10 +268,12 @@ public class ToolPlugin extends GUIPlugin<RText> implements PropertyChangeListen
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("tools dark",
 				getClass().getResourceAsStream("flat-dark/tools.svg"), 16, 16);
 			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+			icons.put(FlatMacDarkTheme.ID, new ImageIcon(darkThemeImage));
 
 			Image lightThemeImage = ImageTranscodingUtil.rasterize("tools light",
 				getClass().getResourceAsStream("flat-light/tools.svg"), 16, 16);
 			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+			icons.put(FlatMacLightTheme.ID, new ImageIcon(lightThemeImage));
 
 			Image whiteImage = ImageTranscodingUtil.rasterize("tools white",
 				getClass().getResourceAsStream("flat-white/tools.svg"), 16, 16);

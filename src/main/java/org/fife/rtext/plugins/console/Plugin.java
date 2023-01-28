@@ -29,9 +29,7 @@ import org.fife.ui.ImageTranscodingUtil;
 import org.fife.ui.app.*;
 import org.fife.ui.app.console.AbstractConsoleTextArea;
 import org.fife.ui.app.icons.IconGroup;
-import org.fife.ui.app.themes.FlatDarkTheme;
-import org.fife.ui.app.themes.FlatLightTheme;
-import org.fife.ui.app.themes.NativeTheme;
+import org.fife.ui.app.themes.*;
 
 
 /**
@@ -196,10 +194,12 @@ public class Plugin extends GUIPlugin<RText> {
 			Image darkThemeImage = ImageTranscodingUtil.rasterize("console dark",
 				getClass().getResourceAsStream("flat-dark/console.svg"), 16, 16);
 			icons.put(FlatDarkTheme.ID, new ImageIcon(darkThemeImage));
+			icons.put(FlatMacDarkTheme.ID, new ImageIcon(darkThemeImage));
 
 			Image lightThemeImage = ImageTranscodingUtil.rasterize("console light",
 				getClass().getResourceAsStream("flat-light/console.svg"), 16, 16);
 			icons.put(FlatLightTheme.ID, new ImageIcon(lightThemeImage));
+			icons.put(FlatMacLightTheme.ID, new ImageIcon(lightThemeImage));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
