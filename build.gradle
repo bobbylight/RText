@@ -28,14 +28,14 @@ dependencies {
 	implementation 'com.formdev:flatlaf:3.0'
 
 	implementation 'net.sf.jtidy:jtidy:r938'
-	implementation 'org.apache.groovy:groovy-all:4.0.7'
+	implementation 'org.apache.groovy:groovy-all:4.0.8'
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
-	implementation 'org.graalvm.js:js:22.2.0'
-	implementation 'org.graalvm.js:js-scriptengine:22.2.0'
-	implementation 'org.jruby:jruby:9.3.9.0'
+	implementation 'org.graalvm.js:js:22.3.1'
+	implementation 'org.graalvm.js:js-scriptengine:22.3.1'
+	implementation 'org.jruby:jruby:9.4.0.0'
 
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 }
 repositories {
 	mavenCentral()
@@ -50,7 +50,7 @@ wrapper {
 }
 
 checkstyle {
-	toolVersion = '10.5.0'
+	toolVersion = '10.6.0'
 }
 
 tasks.withType(Javadoc) {
