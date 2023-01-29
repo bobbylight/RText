@@ -2,6 +2,15 @@ RText Change Log
 https://bobbylight.github.io/RText/
 -----------------------------------
 
+6.0.1 (01/28/2023)
+------------------
+   - Added Handlebars syntax highlighting
+   - Fix #89: Add "Edit Macro" button to the Macros table in options
+   - Fix #87: Find in Files: add Copy file, path, and get its properties to context menu
+   - Fix #88: Beep when Replace operation wraps to top of document
+   - Fix #86: MacOS appearance tweaks, and add "macOS"-specific themes for that OS
+
+
 6.0.0 (10/08/2022)
 ------------------
    - Fix #79: Add ES6 support to JS code completion
