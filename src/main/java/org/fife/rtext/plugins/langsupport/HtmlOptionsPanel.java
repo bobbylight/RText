@@ -267,7 +267,7 @@ class HtmlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Listens for events in this options panel.
 	 */
-	private class Listener implements ActionListener, DocumentListener {
+	private final class Listener implements ActionListener, DocumentListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {

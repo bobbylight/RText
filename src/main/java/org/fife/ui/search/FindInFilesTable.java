@@ -514,7 +514,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent, FileSe
 	/**
 	 * The default renderer for the table.
 	 */
-	private static class StandardCellRenderer extends DefaultTableCellRenderer {
+	private static final class StandardCellRenderer extends DefaultTableCellRenderer {
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table,
@@ -541,7 +541,7 @@ public class FindInFilesTable extends JTable implements ResultsComponent, FileSe
 	/**
 	 * Renderer for "verbose information" and "error" cells.
 	 */
-	private class VerboseCellRenderer extends DefaultTableCellRenderer {
+	private final class VerboseCellRenderer extends DefaultTableCellRenderer {
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table,

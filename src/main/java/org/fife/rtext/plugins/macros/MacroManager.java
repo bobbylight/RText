@@ -272,7 +272,7 @@ public final class MacroManager {
 	/**
 	 * Filter that locates old macro definition files.
 	 */
-	private static class OldMacroFilenameFilter implements FileFilter {
+	private static final class OldMacroFilenameFilter implements FileFilter {
 
 		@Override
 		public boolean accept(File file) {

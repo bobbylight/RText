@@ -251,7 +251,7 @@ class ConsoleWindow extends DockableWindow implements PropertyChangeListener {
 	/**
 	 * Listens for events in this dockable window.
 	 */
-	private class Listener implements ItemListener {
+	private final class Listener implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {

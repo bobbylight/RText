@@ -1050,7 +1050,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	/**
 	 * Listens for changes in the "Find what" text field.
 	 */
-	private class FindInFilesDocumentListener implements DocumentListener {
+	private final class FindInFilesDocumentListener implements DocumentListener {
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {

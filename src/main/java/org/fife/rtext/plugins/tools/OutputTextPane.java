@@ -288,7 +288,7 @@ class OutputTextPane extends AbstractConsoleTextArea {
 	/**
 	 * Listens for events in this text area.
 	 */
-	private class Listener extends MouseAdapter {
+	private final class Listener extends MouseAdapter {
 
 		private void handleMouseEvent(MouseEvent e) {
 			if (e.isPopupTrigger()) {

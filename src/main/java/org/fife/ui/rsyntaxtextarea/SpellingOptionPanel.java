@@ -295,7 +295,7 @@ public class SpellingOptionPanel extends OptionsDialogPanel {
 	/**
 	 * Listens for events in this panel.
 	 */
-	private class Listener implements DocumentListener, ActionListener,
+	private final class Listener implements DocumentListener, ActionListener,
 								PropertyChangeListener {
 
 		@Override

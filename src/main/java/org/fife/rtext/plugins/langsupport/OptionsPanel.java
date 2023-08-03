@@ -196,7 +196,7 @@ class OptionsPanel extends PluginOptionsDialogPanel<Plugin> {
 	/**
 	 * Listens for events in this panel.
 	 */
-	private class Listener implements ActionListener, HyperlinkListener {
+	private final class Listener implements ActionListener, HyperlinkListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {

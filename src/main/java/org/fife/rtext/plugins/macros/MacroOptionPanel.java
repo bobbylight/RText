@@ -333,7 +333,7 @@ class MacroOptionPanel extends PluginOptionsDialogPanel<MacroPlugin>
 	/**
 	 * Handles modification of macro table values.
 	 */
-	private class MacroTableRowHandler extends AbstractRowHandler {
+	private final class MacroTableRowHandler extends AbstractRowHandler {
 
 		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {

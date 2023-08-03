@@ -246,7 +246,7 @@ public final class ToolManager {
 	/**
 	 * Filter that locates tool definition files.
 	 */
-	private static class ToolFilenameFilter implements FileFilter {
+	private static final class ToolFilenameFilter implements FileFilter {
 
 		@Override
 		public boolean accept(File file) {

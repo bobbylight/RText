@@ -156,7 +156,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	/**
 	 * Listens for events in this option panel.
 	 */
-	private class Listener implements ModifiableTableListener {
+	private final class Listener implements ModifiableTableListener {
 
 		// A row was added, removed or modified in the template table.
 		@Override
@@ -386,7 +386,7 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 	 * A document filter that only allows letters, numbers, and
 	 * '_' to go through.
 	 */
-	private static class TemplateNameDocumentFilter extends PickyDocumentFilter{
+	private static final class TemplateNameDocumentFilter extends PickyDocumentFilter{
 
 		@Override
 		protected String cleanseImpl(String text) {

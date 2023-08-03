@@ -351,7 +351,7 @@ public class NewExistingFolderDialog extends EscapableDialog {
 	/**
 	 * Listens for all events in this directory chooser.
 	 */
-	private class Listener implements ActionListener, TreeSelectionListener,
+	private final class Listener implements ActionListener, TreeSelectionListener,
 							PropertyChangeListener {
 
 		@Override

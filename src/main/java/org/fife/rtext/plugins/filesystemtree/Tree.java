@@ -175,7 +175,7 @@ class Tree extends FileSystemTree {
 	/**
 	 * Listens for events in this tree.
 	 */
-	private class Listener extends MouseAdapter implements
+	private final class Listener extends MouseAdapter implements
 									PropertyChangeListener {
 
 		@Override

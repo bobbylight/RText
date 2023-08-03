@@ -409,7 +409,7 @@ public class Workspace implements ModelEntity {
 	/**
 	 * Resolves entities and handles errors while parsing workspace XML.
 	 */
-	private static class Handler extends DefaultHandler {
+	private static final class Handler extends DefaultHandler {
 
 		@Override
 		public void error(SAXParseException e) throws SAXException {

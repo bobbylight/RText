@@ -283,7 +283,7 @@ class AboutDialog extends EscapableDialog {
 	/**
 	 * Listens for events in this dialog.
 	 */
-	private class Listener implements HyperlinkListener {
+	private final class Listener implements HyperlinkListener {
 
 		private void handleLocalLink(URL url) {
 
@@ -320,7 +320,7 @@ class AboutDialog extends EscapableDialog {
 	/**
 	 * The border of the "top section" of the About dialog.
 	 */
-	private static class TopBorder extends AbstractBorder {
+	private static final class TopBorder extends AbstractBorder {
 
 		@Serial
 		private static final long serialVersionUID = 1L;

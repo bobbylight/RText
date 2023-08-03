@@ -388,7 +388,7 @@ class NewMacroDialog extends EscapableDialog {
 	/**
 	 * Listens for events in this dialog.
 	 */
-	private class Listener implements ActionListener, DocumentListener {
+	private final class Listener implements ActionListener, DocumentListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {

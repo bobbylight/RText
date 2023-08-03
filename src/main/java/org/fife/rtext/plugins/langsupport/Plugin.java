@@ -708,7 +708,7 @@ public class Plugin extends GUIPlugin<RText> {
 	/**
 	 * Listens for events in RText.
 	 */
-	private class Listener implements PropertyChangeListener {
+	private final class Listener implements PropertyChangeListener {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent e) {

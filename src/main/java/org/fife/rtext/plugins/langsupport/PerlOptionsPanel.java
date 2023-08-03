@@ -439,7 +439,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Listens for events in this options panel.
 	 */
-	private class Listener implements ActionListener, DocumentListener,
+	private final class Listener implements ActionListener, DocumentListener,
 							ModifiableTableListener {
 
 		@Override
@@ -557,7 +557,7 @@ class PerlOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * The row handler for the PERL5LIB table.
 	 */
-	private class Perl5LibTableRowHandler extends AbstractRowHandler {
+	private final class Perl5LibTableRowHandler extends AbstractRowHandler {
 
 		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {

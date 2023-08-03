@@ -260,7 +260,7 @@ public class RecentFileDialog extends EscapableDialog {
 	/**
 	 * Listens for events in this dialog.
 	 */
-	private class Listener extends MouseAdapter implements ActionListener,
+	private final class Listener extends MouseAdapter implements ActionListener,
 			DocumentListener, KeyListener {
 
 		@Override

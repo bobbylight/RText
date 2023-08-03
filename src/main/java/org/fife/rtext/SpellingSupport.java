@@ -439,7 +439,7 @@ public class SpellingSupport implements SpellingParserListener {
 	 * Creates the spelling parser off the EDT, then safely starts it on the
 	 * EDT.
 	 */
-	private class CreateParserRunnable implements Runnable {
+	private final class CreateParserRunnable implements Runnable {
 
 		@Override
 		public void run() {

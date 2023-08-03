@@ -401,7 +401,7 @@ public class HeapIndicatorPlugin extends StatusBarPlugin<RText> {
 	/**
 	 * Timer event that gets fired.  This refreshes the GC icon.
 	 */
-	private class TimerEvent implements ActionListener {
+	private final class TimerEvent implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {

@@ -251,7 +251,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel<TasksPlugin>
 	/**
 	 * A document filter that only allows letters and '?' go through.
 	 */
-	private static class IdNameDocumentFilter extends PickyDocumentFilter {
+	private static final class IdNameDocumentFilter extends PickyDocumentFilter {
 
 		@Override
 		protected String cleanseImpl(String text) {
@@ -382,7 +382,7 @@ class TasksOptionPanel extends PluginOptionsDialogPanel<TasksPlugin>
 	/**
 	 * Row handler for task identifiers.
 	 */
-	private class IdRowHandler extends AbstractRowHandler {
+	private final class IdRowHandler extends AbstractRowHandler {
 
 		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {

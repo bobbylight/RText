@@ -326,7 +326,7 @@ class FileFilterOptionPanel extends OptionsDialogPanel
 	 * Handles the addition, removal, and modifying of rows in
 	 * the file filter table.
 	 */
-	private class FileFilterRowHandler extends AbstractRowHandler {
+	private final class FileFilterRowHandler extends AbstractRowHandler {
 
 		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {

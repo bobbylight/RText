@@ -517,7 +517,7 @@ class SystemShellTextArea extends ConsoleTextArea {
 	 * Listens for output from the currently active process and appends it
 	 * to the console.
 	 */
-	private class ProcessOutputListener implements ProcessRunnerOutputListener{
+	private final class ProcessOutputListener implements ProcessRunnerOutputListener{
 
 		@Override
 		public void outputWritten(Process p, String output, boolean stdout) {

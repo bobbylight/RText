@@ -174,7 +174,7 @@ class JspOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Listens for events in this options panel.
 	 */
-	private class Listener implements ActionListener {
+	private final class Listener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {

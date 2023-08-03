@@ -806,7 +806,7 @@ inCloseCurrentDocument = true;
 	 * Listens for the user drag-and-dropping tabs in this tabbed
 	 * pane.
 	 */
-	private class TabDragListener extends MouseInputAdapter {
+	private final class TabDragListener extends MouseInputAdapter {
 
 		private int tab;
 		private JComponent draggedTab;

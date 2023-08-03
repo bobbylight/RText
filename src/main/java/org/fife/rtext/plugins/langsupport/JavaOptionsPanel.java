@@ -362,7 +362,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Handler for editing jars/source attachments in the table.
 	 */
-	private class JarRowHandler extends AbstractRowHandler {
+	private final class JarRowHandler extends AbstractRowHandler {
 
 		@Override
 		public Object[] getNewRowInfo(Object[] old) {
@@ -463,7 +463,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	/**
 	 * Listens for events in this options panel.
 	 */
-	private class Listener implements ActionListener, DocumentListener,
+	private final class Listener implements ActionListener, DocumentListener,
 								ModifiableTableListener {
 
 		@Override

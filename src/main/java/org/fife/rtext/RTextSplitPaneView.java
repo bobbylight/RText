@@ -498,7 +498,7 @@ class RTextSplitPaneView extends AbstractMainView
 	/**
 	 * Renders components in the list of open documents.
 	 */
-	private class DocumentListCellRenderer extends DefaultListCellRenderer {
+	private final class DocumentListCellRenderer extends DefaultListCellRenderer {
 
 		@Override
 		public Component getListCellRendererComponent(JList list,
@@ -549,7 +549,7 @@ class RTextSplitPaneView extends AbstractMainView
 	/**
 	 * Listens for mouse events in the document list.
 	 */
-	private class ListListener extends MouseAdapter {
+	private final class ListListener extends MouseAdapter {
 
 		private JMenuItem createItem(String actionName) {
 			JMenuItem item = new JMenuItem(owner.getAction(actionName));

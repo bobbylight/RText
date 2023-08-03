@@ -672,7 +672,7 @@ abstract class ConsoleTextArea extends AbstractConsoleTextArea {
 	/**
 	 * Listens for events in this text area.
 	 */
-	private class Listener extends MouseAdapter implements DocumentListener {
+	private final class Listener extends MouseAdapter implements DocumentListener {
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
@@ -750,7 +750,7 @@ abstract class ConsoleTextArea extends AbstractConsoleTextArea {
 	/**
 	 * Called when the user presses Enter.  Submits the command they entered.
 	 */
-	private class SubmitAction extends AbstractAction {
+	private final class SubmitAction extends AbstractAction {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {

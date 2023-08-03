@@ -79,7 +79,7 @@ class OpenInNewWindowAction extends AppAction<RText> {
 	 * @author Robert Futrell
 	 * @version 1.0
 	 */
-	private class OpenFileChooserRunnable implements Runnable {
+	private final class OpenFileChooserRunnable implements Runnable {
 
 		@Override
 		public void run() {

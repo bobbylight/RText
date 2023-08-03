@@ -621,7 +621,7 @@ class NewToolDialog extends EscapableDialog implements ActionListener {
 	/**
 	 * Row handler for the command line arguments table.
 	 */
-	private class ArgTableRowHandler extends AbstractRowHandler {
+	private final class ArgTableRowHandler extends AbstractRowHandler {
 
 		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {
@@ -768,7 +768,7 @@ class NewToolDialog extends EscapableDialog implements ActionListener {
 	/**
 	 * Row handler for the environment variable table.
 	 */
-	private class EnvVarTableRowHandler extends AbstractRowHandler {
+	private final class EnvVarTableRowHandler extends AbstractRowHandler {
 
 		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {

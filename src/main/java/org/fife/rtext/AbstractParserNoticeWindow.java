@@ -245,7 +245,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 	/**
 	 * A table cell renderer for icons.
 	 */
-	private static class IconTableCellRenderer extends DefaultTableCellRenderer{
+	private static final class IconTableCellRenderer extends DefaultTableCellRenderer{
 
 		static final Border B = BorderFactory.createEmptyBorder(0, 5, 0, 5);
 
@@ -296,7 +296,7 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 	/**
 	 * Listens for mouse events in the parser notice table.
 	 */
-	private class TableMouseListener extends MouseAdapter {
+	private final class TableMouseListener extends MouseAdapter {
 
 		private void focusLine(RTextEditorPane textArea, int line) {
 			try {

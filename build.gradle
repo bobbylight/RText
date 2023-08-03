@@ -19,23 +19,23 @@ configurations.all { // Check for updates every build
 dependencies {
 	implementation('com.fifesoft.rtext:fife.common:6.0.2') { changing = true }
 
-	implementation('com.fifesoft:rsyntaxtextarea:3.3.2') { changing = true }
+	implementation('com.fifesoft:rsyntaxtextarea:3.3.4') { changing = true }
 	implementation('com.fifesoft:autocomplete:3.3.1') { changing = true }
 	implementation('com.fifesoft:rstaui:3.3.1') { changing = true }
 	implementation('com.fifesoft:spellchecker:3.3.1') { changing = true }
 	implementation('com.fifesoft:languagesupport:3.3.0')
 
-	implementation 'com.formdev:flatlaf:3.0'
+	implementation 'com.formdev:flatlaf:3.1.1'
 
 	implementation 'net.sf.jtidy:jtidy:r938'
-	implementation 'org.apache.groovy:groovy-all:4.0.8'
+	implementation 'org.apache.groovy:groovy-all:4.0.13'
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
-	implementation 'org.graalvm.js:js:22.3.1'
-	implementation 'org.graalvm.js:js-scriptengine:22.3.1'
-	implementation 'org.jruby:jruby:9.4.0.0'
+	implementation 'org.graalvm.js:js:22.3.3'
+	implementation 'org.graalvm.js:js-scriptengine:22.3.3'
+	implementation 'org.jruby:jruby:9.4.3.0'
 
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
 }
 repositories {
 	mavenCentral()
@@ -46,11 +46,11 @@ repositories {
 }
 
 wrapper {
-	gradleVersion = '7.6'
+	gradleVersion = '8.2.1'
 }
 
 checkstyle {
-	toolVersion = '10.6.0'
+	toolVersion = '10.12.2'
 }
 
 tasks.withType(Javadoc) {
@@ -76,22 +76,6 @@ compileJava {
 	options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
 }
 
-ext.sharedManifest = manifest {
-	attributes(
-		'Specification-Title': 'rtext',
-		'Specification-Version': version,
-		'Implementation-Title': 'org.fife.rtext',
-		'Implementation-Version': version,
-		'Build-Date': Instant.now().toString(),
-		'Main-Class': 'org/fife/rtext/Main',
-		'Class-Path': configurations.runtimeClasspath.findAll { !isPluginJar(it.name) }.collect {
-							def name = it.name
-							System.out.println(name)
-							return name
-						}.join(' ')
-	)
-}
-
 processResources {
 	doFirst {
 		new File(projectDir.absolutePath, 'build/resources/main/build-date.txt').text =
@@ -99,8 +83,26 @@ processResources {
 	}
 }
 
+java {
+	withSourcesJar()
+	withJavadocJar()
+}
 jar {
-	manifest { from sharedManifest }
+	manifest {
+		attributes(
+			'Specification-Title': 'rtext',
+			'Specification-Version': version,
+			'Implementation-Title': 'org.fife.rtext',
+			'Implementation-Version': version,
+			'Build-Date': Instant.now().toString(),
+			'Main-Class': 'org/fife/rtext/Main',
+			'Class-Path': configurations.runtimeClasspath.findAll { !isPluginJar(it.name) }.collect {
+				def name = it.name
+				System.out.println(name)
+				return name
+			}.join(' ')
+		)
+	}
 	include 'build-date.txt'
 	include 'org/fife/**'
 	exclude 'org/fife/rtext/plugins/**'
@@ -230,21 +232,10 @@ task toolsJar(type: Jar) {
 		)
 	}
 }
-task javadocJar (type: Jar, dependsOn: javadoc) {
-	manifest { from sharedManifest }
-	classifier = 'javadoc'
-	from javadoc.destinationDir
-}
-task sourceJar (type: Jar) {
-	manifest { from sharedManifest }
-	classifier = 'sources'
-	from sourceSets.main.allSource
-}
 artifacts {
 	archives /*mainJar,*/ consoleJar, fileSystemTreeJar, heapIndicatorJar,
 			macroSupportJar, projectSupportJar, languageSupportJar,
-			sourceBrowserJar, taskListJar, tidyJar, toolsJar,
-			javadocJar, sourceJar
+			sourceBrowserJar, taskListJar, tidyJar, toolsJar
 }
 
 distTar.dependsOn(jar, consoleJar, fileSystemTreeJar, heapIndicatorJar, macroSupportJar, projectSupportJar,
@@ -298,7 +289,7 @@ distributions {
 	}
 }
 
-srcDistZip.classifier = 'src'
+srcDistZip.archiveClassifier = 'src'
 srcDistZip {
 	from projectDir
 	include '.classpath'

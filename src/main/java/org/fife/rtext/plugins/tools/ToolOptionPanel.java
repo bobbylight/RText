@@ -203,7 +203,7 @@ class ToolOptionPanel extends AbstractConsoleTextAreaOptionPanel<ToolPlugin>
 	/**
 	 * Handles modification of tool table values.
 	 */
-	private class ToolTableRowHandler extends AbstractRowHandler {
+	private final class ToolTableRowHandler extends AbstractRowHandler {
 
 		@Override
 		public Object[] getNewRowInfo(Object[] oldData) {

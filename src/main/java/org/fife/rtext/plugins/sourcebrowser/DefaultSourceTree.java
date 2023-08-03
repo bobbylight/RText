@@ -302,7 +302,7 @@ class DefaultSourceTree extends JTree {
 	/**
 	 * Listens for events in this tree.
 	 */
-	private class Listener extends MouseAdapter implements ActionListener,
+	private final class Listener extends MouseAdapter implements ActionListener,
 			TreeSelectionListener {
 
 		/**
