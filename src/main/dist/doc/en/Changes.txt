@@ -2,6 +2,13 @@ RText Change Log
 https://bobbylight.github.io/RText/
 -----------------------------------
 
+6.0.2 (08/05/2023)
+------------------
+   - Adding auto=indent to Python
+   - Fixed a bug in code folding for Python
+   - Fixed a rendering bug for selected files in the source browser tree
+
+
 6.0.1 (01/28/2023)
 ------------------
    - Added Handlebars syntax highlighting
