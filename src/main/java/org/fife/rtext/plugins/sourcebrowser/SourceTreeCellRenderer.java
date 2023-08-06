@@ -82,7 +82,7 @@ final class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
 					setIcon(icon = greenBullet);
 				}
 			}
-			if (/*getIcon()*/icon==null) {
+			if (icon==null) {
 				setIcon(row==0 ? this.tree.getRootIcon() : blueBullet);
 			}
 		}
@@ -90,7 +90,6 @@ final class SourceTreeCellRenderer extends DefaultTreeCellRenderer {
 			setIcon(icon);
 		}
 
-		setOpaque(true);
 		return this;
 
 	}

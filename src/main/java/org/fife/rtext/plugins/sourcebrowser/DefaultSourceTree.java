@@ -122,7 +122,7 @@ class DefaultSourceTree extends JTree {
 	 * Returns the text being displayed for the specified row in the ctags
 	 * tree.
 	 *
-	 * @param row The for for which to return text.
+	 * @param row The row for which to return text.
 	 * @return The text.
 	 */
 	private String getTagTextForRow(int row) {
