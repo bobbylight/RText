@@ -16,11 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -34,6 +30,7 @@ import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.ui.GUIWorkerThread;
 import org.fife.ui.OS;
+import org.fife.ui.rsyntaxtextarea.FileTypeUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;
@@ -62,8 +59,6 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 	protected String skipThisFolderString;
 	protected String newFilesToExamineString;
 	protected String occurrencesString;
-
-	//private static final Pattern TAB_PATTERN	= Pattern.compile("\\t");
 
 
 	/**
@@ -447,7 +442,7 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 		File[] moreFiles = dir.listFiles();
 		if (moreFiles==null) {
 			// Should never happen (as dirs return empty arrays).
-			return new ArrayList<>(0);
+			return Collections.emptyList();
 		}
 		return Arrays.asList(moreFiles);
 	}
@@ -462,24 +457,13 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 		if (tokens==null || tokens.length==0) {
 			return null;
 		}
-		int tokenCount = tokens.length;
-		Pattern[] filterStrings = new Pattern[tokenCount];
-		int flags = 0;
-		if (!OS.get().isCaseSensitive()) {
-			flags = Pattern.CASE_INSENSITIVE;
-		}
 		try {
-			for (int i=0; i<tokenCount; i++) {
-				String pattern = getRegexForFileFilter(tokens[i]);
-				filterStrings[i] = Pattern.compile(pattern, flags);
-			}
+			return Arrays.stream(tokens).map(
+				FileTypeUtil::fileFilterToPattern).toArray(Pattern[]::new);
 		} catch (PatternSyntaxException e) {
 			e.printStackTrace(); // Never happens.
 			return null;
 		}
-
-		return filterStrings;
-
 	}
 
 
@@ -514,31 +498,6 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 		}
 		return sb.toString();
 
-	}
-
-
-	/**
-	 * Converts a <code>String</code> representing a wildcard file filter into
-	 * another <code>String</code> containing a regular expression good for
-	 * finding files that match the wildcard expressions.<br><br>
-	 * Example: For<br><br>
-	 * <code>String regEx = getRegexForFileFilter("*.c");</code>
-	 * <br><br>
-	 * <code>regEx</code> will contain <code>^.*\.c$</code>.
-	 *
-	 * @param filter The file filter for which to create equivalent
-	 *        regular expressions.  This filter can currently only contain
-	 *        the wildcards '*' and '?'.
-	 * @return A <code>String</code> representing an equivalent regular
-	 *         expression for the string passed in.  If an error occurs,
-	 *         <code>null</code> is returned.
-	 */
-	protected static String getRegexForFileFilter(String filter) {
-		filter = filter.replaceAll("\\.", "\\\\.");		// '.' => '\.'
-		filter = filter.replaceAll("\\*", ".*");		// '*' => '.*'
-		filter = filter.replaceAll("\\?", ".");			// '?' => '.'
-		filter = filter.replaceAll("\\$", "\\\\\\$");	// '$' => '\$'
-		return "^" + filter + "$";
 	}
 
 

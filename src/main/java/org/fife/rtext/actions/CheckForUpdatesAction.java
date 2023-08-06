@@ -61,51 +61,51 @@ class CheckForUpdatesAction extends AppAction<RText> {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+		RText rtext = getApplication();
+		Properties props = new Properties();
+
 		try {
 
 			URL url = new URL(CHECK_URL);
 			InputStream in = (InputStream)url.getContent();
-			BufferedInputStream bin = new BufferedInputStream(in);
-			Properties props = new Properties();
-			props.load(bin);
-			bin.close();
+			try (BufferedInputStream bin = new BufferedInputStream(in)) {
+				props.load(bin);
+			}
 
 			String fileVersion = props.getProperty("File.Version");
 			if (!"1".equals(fileVersion)) {
 				throw new IOException("Unsupported file version: " + fileVersion);
 			}
-
-			RText rtext = getApplication();
-			String current = rtext.getVersionString();
-			String latest = props.getProperty("Latest.RText.Version");
-			String releaseDate = props.getProperty("Latest.Release.Date");
-
-			if (current.startsWith(latest)) {
-				String msg = rtext.getString("UpdateStatus.UpToDate");
-				String title = rtext.getString("InfoDialogHeader");
-				JOptionPane.showMessageDialog(null, msg, title,
-								JOptionPane.INFORMATION_MESSAGE);
-			}
-			else {
-				String msg = rtext.getString("UpdateStatus.NeedToUpdate",
-												latest, releaseDate);
-				String title = rtext.getString("InfoDialogHeader");
-				int rc = JOptionPane.showConfirmDialog(rtext, msg, title,
-											JOptionPane.YES_NO_OPTION);
-				if (rc==JOptionPane.YES_OPTION) {
-					msg = rtext.getString("UpdateStatus.ShutdownReminder");
-					JOptionPane.showMessageDialog(rtext, msg, title,
-										JOptionPane.WARNING_MESSAGE);
-					if (!UIUtil.browse(DOWNLOAD_URL)) {
-						UIManager.getLookAndFeel().provideErrorFeedback(rtext);
-					}
-				}
-			}
-
 		} catch (IOException ioe) {
-			getApplication().displayException(ioe);
+			rtext.displayException(ioe);
+			return;
 		}
 
+		String current = rtext.getVersionString();
+		String latest = props.getProperty("Latest.RText.Version");
+		String releaseDate = props.getProperty("Latest.Release.Date");
+
+		if (current.startsWith(latest)) {
+			String msg = rtext.getString("UpdateStatus.UpToDate");
+			String title = rtext.getString("InfoDialogHeader");
+			JOptionPane.showMessageDialog(null, msg, title,
+							JOptionPane.INFORMATION_MESSAGE);
+		}
+		else {
+			String msg = rtext.getString("UpdateStatus.NeedToUpdate",
+											latest, releaseDate);
+			String title = rtext.getString("InfoDialogHeader");
+			int rc = JOptionPane.showConfirmDialog(rtext, msg, title,
+										JOptionPane.YES_NO_OPTION);
+			if (rc==JOptionPane.YES_OPTION) {
+				msg = rtext.getString("UpdateStatus.ShutdownReminder");
+				JOptionPane.showMessageDialog(rtext, msg, title,
+									JOptionPane.WARNING_MESSAGE);
+				if (!UIUtil.browse(DOWNLOAD_URL)) {
+					UIManager.getLookAndFeel().provideErrorFeedback(rtext);
+				}
+			}
+		}
 	}
 
 
