@@ -30,7 +30,7 @@ all unit tests, and create the jar, and run:
     ./gradlew build installDist
     java -jar build/install/rtext/RText.jar
 
-Note that RText requires Java 17 or later to build.
+Note that RText requires Java 21 or later to build.
 
 ### Building the Windows application and installer
 
@@ -40,7 +40,7 @@ and a starter `RText.exe` file is added into `build/install/rtext`:
 
     ./gradlew clean build installDist generateWindowsStarterExe
 
-The `generateWindowsStarterExe` task uses a JDK 17 install and `launch4j` as defined in
+The `generateWindowsStarterExe` task uses a JDK 21 install and `launch4j` as defined in
 `gradle.properties`.
 
 Note this gradle task runs `jlink` directly and uses `launch4j` rather than using
