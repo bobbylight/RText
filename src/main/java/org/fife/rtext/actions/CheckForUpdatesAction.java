@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -66,7 +68,7 @@ class CheckForUpdatesAction extends AppAction<RText> {
 
 		try {
 
-			URL url = new URL(CHECK_URL);
+			URL url = new URI(CHECK_URL).toURL();
 			InputStream in = (InputStream)url.getContent();
 			try (BufferedInputStream bin = new BufferedInputStream(in)) {
 				props.load(bin);
@@ -76,7 +78,7 @@ class CheckForUpdatesAction extends AppAction<RText> {
 			if (!"1".equals(fileVersion)) {
 				throw new IOException("Unsupported file version: " + fileVersion);
 			}
-		} catch (IOException ioe) {
+		} catch (IOException | URISyntaxException ioe) {
 			rtext.displayException(ioe);
 			return;
 		}

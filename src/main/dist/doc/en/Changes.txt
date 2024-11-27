@@ -2,6 +2,9 @@ RText Change Log
 https://bobbylight.github.io/RText/
 -----------------------------------
 
+6.0.3
+------------------
+   -
 6.0.2 (08/05/2023)
 ------------------
    - Adding auto=indent to Python

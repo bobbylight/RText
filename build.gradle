@@ -10,14 +10,14 @@ import java.time.format.DateTimeFormatter
 group = 'com.fifesoft'
 ext.isReleaseVersion = !project.version.endsWith('SNAPSHOT')
 
-assert JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)
+assert JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)
 
 configurations.all { // Check for updates every build
 	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 dependencies {
-	implementation('com.fifesoft.rtext:fife.common:6.0.3')
+	implementation('com.fifesoft.rtext:fife.common:6.0.4-SNAPSHOT')
 
 	implementation('com.fifesoft:rsyntaxtextarea:3.3.4')
 	implementation('com.fifesoft:autocomplete:3.3.1')
@@ -46,7 +46,7 @@ repositories {
 }
 
 wrapper {
-	gradleVersion = '8.2.1'
+	gradleVersion = '8.11.1'
 }
 
 checkstyle {
@@ -69,8 +69,7 @@ static isPluginJar(jarName) {
 }
 
 compileJava {
-	sourceCompatibility javaVersion.toString()
-	targetCompatibility javaVersion.toString()
+	options.release = Integer.parseInt(javaReleaseVersion)
 	options.debug = true
 	options.debugOptions.debugLevel = 'source,vars,lines'
 	options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'

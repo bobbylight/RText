@@ -273,10 +273,11 @@ public class RemoteFileChooser extends EscapableDialog
 	 *        the protocol should be used.
 	 * @return The URL
 	 * @throws MalformedURLException If something goes horribly wrong.
+	 * @throws URISyntaxException If something goes horribly wrong.
 	 */
 	private static URL createURL(String protocol, String user,
 								 char[] pass, String host, String port, String file)
-					throws MalformedURLException {
+					throws MalformedURLException, URISyntaxException {
 		String urlStr = protocol + "://";
 		if ("ftp".equalsIgnoreCase(protocol)) {
 			if (file.charAt(0)=='/') { // Absolute path
@@ -289,7 +290,7 @@ public class RemoteFileChooser extends EscapableDialog
 			urlStr += ":" + port;
 		}
 		urlStr += "/" + file;
-		return new URL(urlStr);
+		return new URI(urlStr).toURL();
 	}
 
 
@@ -436,7 +437,7 @@ public class RemoteFileChooser extends EscapableDialog
 		URL url;
 		try {
 			url = createURL(protocol, user, pass, host, port, file);
-		} catch (MalformedURLException mue) {
+		} catch (MalformedURLException | URISyntaxException mue) {
 			owner.displayException(mue);
 			return;
 		}
