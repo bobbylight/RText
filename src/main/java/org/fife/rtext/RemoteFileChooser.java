@@ -133,13 +133,10 @@ public class RemoteFileChooser extends EscapableDialog
 
 		// Make a panel containing the OK and Cancel buttons.
 		JPanel buttonPanel = new JPanel(new GridLayout(1,3, 5,5));
-		okButton = UIUtil.newButton(msg, "OK", "OKMnemonic");
-		okButton.setActionCommand("OK");
-		okButton.addActionListener(this);
-		JButton cancelButton = UIUtil.newButton(msg, "Cancel",
-											"CancelMnemonic");
-		cancelButton.setActionCommand("Cancel");
-		cancelButton.addActionListener(this);
+		okButton = createButton(msg, "OK",
+			"OKMnemonic", "OK", this);
+		JButton cancelButton = createButton(msg, "Cancel",
+			"CancelMnemonic", "Cancel", this);
 		advancedButton = new JToggleButton(msg.getString("Advanced"));
 		advancedButton.setMnemonic((int)msg.getString("AdvancedMnemonic").
 								charAt(0));
@@ -576,5 +573,13 @@ public class RemoteFileChooser extends EscapableDialog
 		}
 	}
 
+	public JButton createButton(ResourceBundle msg, String textKey, String mnemonicKey,
+								String actionCommand, ActionListener actionListener) {
+		JButton button = UIUtil.newButton(msg, textKey, mnemonicKey);
+		button.setActionCommand(actionCommand);
+		button.addActionListener(actionListener);
+
+		return button;
+	}
 
 }
