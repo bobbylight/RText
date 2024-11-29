@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "RText"
-!define PRODUCT_VERSION "6.0.2"
+!define PRODUCT_VERSION "6.0.3"
 !define PRODUCT_WEB_SITE "https://bobbylight.github.io/RText/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RText.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"

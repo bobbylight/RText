@@ -4,10 +4,12 @@ https://bobbylight.github.io/RText/
 
 6.0.3
 ------------------
+   - Updating bundled JRE from 17 to 21
    -
+
 6.0.2 (08/05/2023)
 ------------------
-   - Adding auto=indent to Python
+   - Adding auto-indent to Python
    - Fixed a bug in code folding for Python
    - Fixed a rendering bug for selected files in the source browser tree
 
