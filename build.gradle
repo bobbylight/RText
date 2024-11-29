@@ -34,8 +34,8 @@ dependencies {
 	implementation 'org.graalvm.js:js-scriptengine:22.3.3'
 	implementation 'org.jruby:jruby:9.4.3.0'
 
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.3'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.3'
 }
 repositories {
 	mavenCentral()
@@ -301,7 +301,7 @@ srcDistZip {
 	include 'mac/**'
 	include 'README.md'
 	include '.settings/**'
-	include 'MakeRTextIntaller.nsi'
+	include 'MakeRTextInstaller.nsi'
 	include 'RText.exe'
 	include 'src/**'
 	include 'TO-DO'
