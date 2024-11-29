@@ -25,7 +25,7 @@ dependencies {
 	implementation('com.fifesoft:spellchecker:3.3.1')
 	implementation('com.fifesoft:languagesupport:3.3.0')
 
-	implementation 'com.formdev:flatlaf:3.1.1'
+	implementation 'com.formdev:flatlaf:3.5.2'
 
 	implementation 'net.sf.jtidy:jtidy:r938'
 	implementation 'org.apache.groovy:groovy-all:4.0.24'
