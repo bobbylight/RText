@@ -265,7 +265,7 @@ class NewMacroDialog extends EscapableDialog {
 				nameField.selectAll();
 				nameField.requestFocusInWindow();
 			}
-			default ->//case JOptionPane.CANCEL_OPTION:
+			default -> //case JOptionPane.CANCEL_OPTION:
 				// Kill the whole dialog
 				escapePressed();
 		}

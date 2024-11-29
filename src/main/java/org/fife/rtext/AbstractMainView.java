@@ -2872,7 +2872,7 @@ public abstract class AbstractMainView extends JPanel
 		int returnVal = chooser.showSaveDialog(owner);
 
 		// If they entered a new filename and clicked "OK", save the file!
-		if(returnVal == RTextFileChooser.APPROVE_OPTION) {
+		if (returnVal == RTextFileChooser.APPROVE_OPTION) {
 
 			File chosenFile = chooser.getSelectedFile();
 			String chosenFileName = chosenFile.getName();
