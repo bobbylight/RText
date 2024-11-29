@@ -30,8 +30,8 @@ dependencies {
 	implementation 'net.sf.jtidy:jtidy:r938'
 	implementation 'org.apache.groovy:groovy-all:4.0.13'
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
-	implementation 'org.graalvm.js:js:22.3.3'
-	implementation 'org.graalvm.js:js-scriptengine:22.3.3'
+	implementation 'org.graalvm.js:js:24.1.1'
+	implementation 'org.graalvm.js:js-scriptengine:24.1.1'
 	implementation 'org.jruby:jruby:9.4.9.0'
 
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.3'
