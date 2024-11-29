@@ -32,7 +32,7 @@ dependencies {
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
 	implementation 'org.graalvm.js:js:22.3.3'
 	implementation 'org.graalvm.js:js-scriptengine:22.3.3'
-	implementation 'org.jruby:jruby:9.4.3.0'
+	implementation 'org.jruby:jruby:9.4.9.0'
 
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.3'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.3'
