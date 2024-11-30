@@ -175,17 +175,7 @@ public final class RTextUtilities {
 	 * @param fnfd The <code>FindInFilesDialog</code> to configure.
 	 */
 	public static void configureFindInFilesDialog(FindInFilesDialog fnfd) {
-		fnfd.addInFilesComboBoxFilter("*.asm");
-		fnfd.addInFilesComboBoxFilter("*.bat *.cmd");
-		fnfd.addInFilesComboBoxFilter("*.c *.cpp *.cxx *.h");
-		fnfd.addInFilesComboBoxFilter("*.cs");
-		fnfd.addInFilesComboBoxFilter("*.htm *.html");
-		fnfd.addInFilesComboBoxFilter("*.java");
-		fnfd.addInFilesComboBoxFilter("*.js");
-		fnfd.addInFilesComboBoxFilter("*.pl *.perl *.pm");
-		fnfd.addInFilesComboBoxFilter("*.py");
-		fnfd.addInFilesComboBoxFilter("*.sh *.bsh *.csh *.ksh");
-		fnfd.addInFilesComboBoxFilter("*.txt");
+		fnfd.addInFilesComboBoxFilter("*");
 	}
 
 
@@ -294,6 +284,7 @@ public final class RTextUtilities {
 			addFilter(chooser, msg, "Protobuf", "proto");
 			addFilter(chooser, msg, "Python", "py");
 			addFilter(chooser, msg, "Ruby", "rb");
+			addFilter(chooser, msg, "Rust", "rs");
 			addFilter(chooser, msg, "SAS", "sas");
 			addFilter(chooser, msg, "Scala", "scala");
 			addFilter(chooser, msg, "SQL", "sql");
@@ -361,10 +352,12 @@ public final class RTextUtilities {
 						"properties",
 						"py",
 						"rb",
+						"rs",
 						"sas",
 						"scala",
 						"sql",
 						"tcl",
+						"ts", "tsx",
 						"txt",
 						"sh", "bsh", "csh", "ksh",
 						"vb",
