@@ -646,7 +646,7 @@ public class FindInFilesDialog extends AbstractSearchDialog {
 	 * @return The list of folders to skip.
 	 */
 	private static String getDefaultFoldersToSkip() {
-		return ".git, CVS, .svn, bower_components, node_modules";
+		return ".git, node_modules, .gradle, .svn, CVS, bower_components";
 	}
 
 
