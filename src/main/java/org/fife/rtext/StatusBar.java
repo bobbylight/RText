@@ -19,6 +19,7 @@ import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import javax.swing.JLabel;
+import javax.swing.text.BadLocationException;
 
 import org.fife.ui.StatusBarPanel;
 
@@ -59,6 +60,8 @@ public class StatusBar extends org.fife.ui.StatusBar
 	private String fileSaveSuccessfulText;
 	private String openedFileText;
 	private String selectionLengthText;
+	private String selectionLengthAndLineBreakCountText;
+	private String selectionLengthAndLineBreakCountPluralText;
 
 	// Hack: Sine row/column can change so frequently, we break apart
 	// the row/column text in the status bar for speedy updating.
@@ -95,6 +98,10 @@ public class StatusBar extends org.fife.ui.StatusBar
 		fileSaveSuccessfulText = msg.getString("FileSaveSuccessful");
 		openedFileText = msg.getString("OpenedFile");
 		selectionLengthText = msg.getString("SelectionLength");
+		selectionLengthAndLineBreakCountText =
+			msg.getString("SelectionLengthWithLineBreakCount");
+		selectionLengthAndLineBreakCountPluralText =
+			msg.getString("SelectionLengthWithLineBreakCountPlural");
 		initRowColumnTextStuff(msg);
 		row = newRow;
 		column = newColumn; // DON'T call setRowAndColumn() yet!
@@ -387,15 +394,32 @@ public class StatusBar extends org.fife.ui.StatusBar
 	private void updateSelectionLengthDisplay() {
 
 		RTextEditorPane textArea = rtext.getMainView().getCurrentTextArea();
-		int selectionLength = textArea.getSelectionEnd() -
-			textArea.getSelectionStart();
+		int selectionStart = textArea.getSelectionStart();
+		int selectionEnd = textArea.getSelectionEnd();
+		int selectionLength = selectionEnd - selectionStart;
+		int selectedLineBreakCount = 0;
+		try {
+			selectedLineBreakCount = textArea.getLineOfOffset(selectionEnd) -
+				textArea.getLineOfOffset(selectionStart);
+		} catch (BadLocationException ble) {
+			// Never happens but would make the UI unusable if somehow this started firing
+			// and we showed a modal when it did
+			ble.printStackTrace();
+		}
 
 		if (selectionLength == 0) {
 			selectionLengthPanel.setVisible(false);
 		}
 		else {
-			String newValue = MessageFormat.format(selectionLengthText,
-				selectionLength);
+			String textKey = selectionLengthText;
+			if (selectedLineBreakCount == 1) {
+				textKey = selectionLengthAndLineBreakCountText;
+			}
+			else if (selectedLineBreakCount > 1) {
+				textKey = selectionLengthAndLineBreakCountPluralText;
+			}
+			String newValue = MessageFormat.format(textKey,
+				selectionLength, selectedLineBreakCount);
 			selectionLengthIndicator.setText(newValue);
 			if (!selectionLengthPanel.isVisible()) {
 				selectionLengthPanel.setVisible(true);
