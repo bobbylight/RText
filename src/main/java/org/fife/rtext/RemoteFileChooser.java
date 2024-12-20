@@ -573,12 +573,21 @@ public class RemoteFileChooser extends EscapableDialog
 		}
 	}
 
-	public JButton createButton(ResourceBundle msg, String textKey, String mnemonicKey,
+	/**
+	 * Creates a button to use in this modal.
+	 *
+	 * @param msg The resource bundle.
+	 * @param textKey The key for the button label.
+	 * @param mnemonicKey The key for button mnemonic.
+	 * @param actionCommand The action command to fire.
+	 * @param actionListener The listener for events on this button.
+	 * @return The button.
+	 */
+	protected JButton createButton(ResourceBundle msg, String textKey, String mnemonicKey,
 								String actionCommand, ActionListener actionListener) {
 		JButton button = UIUtil.newButton(msg, textKey, mnemonicKey);
 		button.setActionCommand(actionCommand);
 		button.addActionListener(actionListener);
-
 		return button;
 	}
 
