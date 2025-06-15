@@ -72,7 +72,7 @@ class RubyShellTextArea extends ConsoleTextArea {
 		// Could get this by evaluating: rubyEngine.eval("RUBY_VERSION").toString(),
 		// but that would prevent us from lazy-instantiating the Ruby engine
 		if (rubyVersion == null) {
-			rubyVersion = "2.6.8";
+			rubyVersion = "3.4.2";
 		}
 		return rubyVersion;
 	}

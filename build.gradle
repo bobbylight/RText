@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter
 
 group = 'com.fifesoft'
 ext.isReleaseVersion = !project.version.endsWith('SNAPSHOT')
+// Note: Local JDK 21: /Library/Java/JavaVirtualMachines/jdk-21.0.5+11/Contents/Home
 
 assert JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)
 
@@ -19,23 +20,23 @@ configurations.all { // Check for updates every build
 dependencies {
 	implementation('com.fifesoft.rtext:fife.common:6.0.4-SNAPSHOT')
 
-	implementation('com.fifesoft:rsyntaxtextarea:3.5.3-SNAPSHOT')
-	implementation('com.fifesoft:autocomplete:3.3.1')
+	implementation('com.fifesoft:rsyntaxtextarea:3.6.0')
+	implementation('com.fifesoft:autocomplete:3.3.2')
 	implementation('com.fifesoft:rstaui:3.3.1')
-	implementation('com.fifesoft:spellchecker:3.3.1')
+	implementation('com.fifesoft:spellchecker:3.4.0')
 	implementation('com.fifesoft:languagesupport:3.3.0')
 
-	implementation 'com.formdev:flatlaf:3.5.2'
+	implementation 'com.formdev:flatlaf:3.6'
 
 	implementation 'net.sf.jtidy:jtidy:r938'
-	implementation 'org.apache.groovy:groovy-all:4.0.24'
+	implementation 'org.apache.groovy:groovy-all:4.0.27'
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
-	implementation 'org.graalvm.js:js:24.1.1'
-	implementation 'org.graalvm.js:js-scriptengine:24.1.1'
-	implementation 'org.jruby:jruby:9.4.9.0'
+	implementation 'org.graalvm.js:js:24.2.1'
+	implementation 'org.graalvm.js:js-scriptengine:24.2.1'
+	implementation 'org.jruby:jruby:10.0.0.1'
 
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.3'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.3'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.13.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.13.1'
 }
 repositories {
 	mavenCentral()
