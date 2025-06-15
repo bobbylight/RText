@@ -102,7 +102,7 @@
         <module name="JavadocType"/>
         <!--
         <module name="JavadocVariable">
-            <property name="scope" value="package"/>
+            <property name="accessModifiers" value="protected"/>
         </module>
         -->
         <module name="JavadocStyle"/>
@@ -228,6 +228,7 @@
         <module name="MultipleVariableDeclarations"/>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
+        <module name="UnnecessaryNullCheckWithInstanceOf"/>
         <!--        <module name="UnnecessaryParentheses"/>-->
         <module name="UnnecessarySemicolonAfterOuterTypeDeclaration"/>
         <module name="UnnecessarySemicolonAfterTypeMemberDeclaration"/>

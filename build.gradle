@@ -42,16 +42,16 @@ repositories {
 	mavenCentral()
 	mavenLocal()
 	maven {
-		url 'https://oss.sonatype.org/content/repositories/snapshots'
+		url = 'https://oss.sonatype.org/content/repositories/snapshots'
 	}
 }
 
 wrapper {
-	gradleVersion = '8.11.1'
+	gradleVersion = '8.14.2'
 }
 
 checkstyle {
-	toolVersion = '10.20.1'
+	toolVersion = '10.25.0'
 }
 
 tasks.withType(Javadoc) {
@@ -367,7 +367,7 @@ publishing {
 
 signing {
 	// Don't require signing for e.g. ./gradlew install
-	required { gradle.taskGraph.hasTask('publish') && isReleaseVersion }
+	required = gradle.taskGraph.hasTask('publish') && isReleaseVersion
 	sign publishing.publications.maven
 }
 tasks.withType(Sign) {
