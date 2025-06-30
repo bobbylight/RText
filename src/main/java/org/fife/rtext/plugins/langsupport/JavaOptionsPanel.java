@@ -36,8 +36,10 @@ import javax.swing.text.AbstractDocument;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
+import org.fife.rsta.ac.java.buildpath.DirLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.DirSourceLocation;
 import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
+import org.fife.rsta.ac.java.buildpath.Jdk9LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.buildpath.ZipSourceLocation;
@@ -267,20 +269,15 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 		// cause a pause when ctrl+spacing for the first time.
 		jarMan.clearClassFileSources();
 		for (int i=0; i<model.getRowCount(); i++) {
-			File jar = (File)model.getValueAt(i, 0);
-			LibraryInfo info = new JarLibraryInfo(jar);
-			String source = (String)model.getValueAt(i, 1);
-			if (source!=null && source.length()>0) {
-				File loc = new File(source);
-				SourceLocation sourceLoc = loc.isFile() ?
-						new ZipSourceLocation(loc) :
-							new DirSourceLocation(loc);
-				info.setSourceLocation(sourceLoc);
-			}
-			try {
-				jarMan.addClassFileSource(info);
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
+			File classFileLoc = (File)model.getValueAt(i, 0);
+			String sourceLoc = (String)model.getValueAt(i, 1);
+			LibraryInfo info = getLibraryInfo(classFileLoc, sourceLoc);
+			if (info != null) {
+				try {
+					jarMan.addClassFileSource(info);
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
+				}
 			}
 		}
 
@@ -290,6 +287,52 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 	@Override
 	protected OptionsPanelCheckResult ensureValidInputsImpl() {
 		return null;
+	}
+
+
+	private LibraryInfo getLibraryInfo(File classFileLoc, String source) {
+
+		LibraryInfo info = null;
+
+		// Just a jar
+		if (classFileLoc.isFile()) {
+			info = new JarLibraryInfo(classFileLoc);
+		}
+
+		// A directoory can be either a JDK or a class file directory.
+		else if (classFileLoc.isDirectory()) {
+
+			// Determine if this is the root of a JDK 9+ or later.
+			File jmodsDir = new File(classFileLoc, "jmods");
+			if (jmodsDir.isDirectory()) {
+				// TODO: This is copied from LibraryInfo in RSTALanguageSupport.
+				// Should be refactored into a utility method.
+				File[] jmodFiles = jmodsDir.listFiles(pathname -> {
+					if (pathname.isFile()) {
+						String name = pathname.getName();
+						return name.endsWith(".jmod") &&
+							(name.startsWith("java.") || name.startsWith("jdk."));
+					}
+					return false;
+				});
+				info = new Jdk9LibraryInfo(jmodFiles);
+			}
+
+			// Assume this is a directory of class files
+			else {
+				info = new DirLibraryInfo(classFileLoc);
+			}
+		}
+
+		if (info != null && source!=null && source.length()>0) {
+			File loc = new File(source);
+			SourceLocation sourceLoc = loc.isFile() ?
+					new ZipSourceLocation(loc) :
+						new DirSourceLocation(loc);
+			info.setSourceLocation(sourceLoc);
+		}
+
+		return info;
 	}
 
 
@@ -310,15 +353,13 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 		List<LibraryInfo> jars = jarMan.getClassFileSources();
 		for (LibraryInfo li : jars) {
-			JarLibraryInfo info = (JarLibraryInfo)li;
-			File jar = info.getJarFile();
-			SourceLocation sourceLoc = info.getSourceLocation();
+			File classFileLoc = LangSupportUtils.getClassFileLocation(li);
+			SourceLocation sourceLoc = li.getSourceLocation();
 			String source = sourceLoc!=null ? sourceLoc.getLocationAsString() : null;
-			model.addRow(new Object[] { jar, source });
+			model.addRow(new Object[] { classFileLoc, source });
 		}
 
 	}
-
 
 	private void setAutoActivateCBSelected(boolean selected) {
 		autoActivateCB.setSelected(selected);
@@ -501,8 +542,8 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 						if (info.getSourceLocation()!=null) {
 							src = info.getSourceLocation().getLocationAsString();
 						}
-						File rtJar = new File(info.getLocationAsString());
-						model.addRow(new Object[] { rtJar, src });
+						File classFileLoc = LangSupportUtils.getClassFileLocation(info);
+						model.addRow(new Object[] { classFileLoc, src });
 						setDirty(true);
 					}
 				}
@@ -510,13 +551,12 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 
 			else if (rdButton==source) {
 
-				JarLibraryInfo jreInfo = (JarLibraryInfo)LibraryInfo.
-														getMainJreJarInfo();
+				LibraryInfo jreInfo = LibraryInfo.getMainJreJarInfo();
+				File classFileLoc = LangSupportUtils.getClassFileLocation(jreInfo);
 
 				int rowCount = model.getRowCount();
 				boolean jreFieldModified = rowCount!=1 ||
-					!(model.getValueAt(0, 0)).equals(
-												jreInfo.getJarFile());
+					!(model.getValueAt(0, 0)).equals(classFileLoc);
 
 				if (enabledCB.isSelected() ||
 						jreFieldModified ||
@@ -525,7 +565,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 						!buildPathModsCB.isSelected() ||
 						!autoActivateCB.isSelected() ||
 						!"300".equals(aaDelayField.getText())) {
-					setEnabledCBSelected(false);
+					setEnabledCBSelected(true);
 					paramAssistanceCB.setSelected(true);
 					showDescWindowCB.setSelected(true);
 					buildPathModsCB.setSelected(true);
@@ -535,9 +575,7 @@ class JavaOptionsPanel extends OptionsDialogPanel {
 					String src = jreInfo.getSourceLocation()!=null ?
 							jreInfo.getSourceLocation().getLocationAsString() :
 								null;
-					model.addRow(new Object[] {
-							jreInfo.getJarFile(),
-							src });
+					model.addRow(new Object[] { classFileLoc, src });
 					setDirty(true);
 				}
 

@@ -20,11 +20,12 @@
     - some best practices
 
   Checkstyle is very configurable. Be sure to read the documentation at
-  https://checkstyle.sourceforge.io (or in your downloaded distribution).
+  https://checkstyle.org (or in your downloaded distribution).
 
   Most Checks are configurable, be sure to consult the documentation.
 
   To completely disable a check, just comment it out or delete it from the file.
+  To suppress certain violations please review suppression filters.
 
   Finally, it is worth reading the documentation.
 
@@ -34,7 +35,7 @@
     <!--
         If you set the basedir property below, then all reported file
         names will be relative to the specified directory. See
-        https://checkstyle.sourceforge.io/config.html#Checker
+        https://checkstyle.org/config.html#Checker
 
         <property name="basedir" value="${basedir}"/>
     -->
@@ -46,22 +47,22 @@
     <!-- https://stackoverflow.com/questions/4023185/disable-a-particular-checkstyle-rule-for-a-particular-line-of-code -->
     <module name="SuppressWarningsFilter" />
 
-    <!-- Checks that a package-info.java file exists for each package.            -->
-    <!-- See See https://checkstyle.sourceforge.io/checks/javadoc/javadocpackage.html -->
+    <!-- Checks that a package-info.java file exists for each package.     -->
+    <!-- See See https://checkstyle.org/checks/javadoc/javadocpackage.html -->
     <module name="JavadocPackage">
         <property name="allowLegacy" value="true"/> <!-- Allow package.html in addition to package-info.java -->
     </module>
 
-    <!-- Checks whether files end with a new line.                                 -->
-    <!-- See See https://checkstyle.sourceforge.io/checks/misc/newlineatendoffile.html -->
+    <!-- Checks whether files end with a new line.                          -->
+    <!-- See See https://checkstyle.org/checks/misc/newlineatendoffile.html -->
     <!--<module name="NewlineAtEndOfFile"/>-->
 
-    <!-- Checks that property files contain the same keys.              -->
-    <!-- https://checkstyle.sourceforge.io/checks/misc/translation.html -->
+    <!-- Checks that property files contain the same keys.   -->
+    <!-- https://checkstyle.org/checks/misc/translation.html -->
     <module name="Translation"/>
 
-    <!-- Checks for Size Violations.                               -->
-    <!-- https://checkstyle.sourceforge.io/checks/sizes/index.html -->
+    <!-- Checks for Size Violations.                    -->
+    <!-- https://checkstyle.org/checks/sizes/index.html -->
     <module name="FileLength">
         <property name="max" value="3100"/>
     </module>
@@ -70,12 +71,12 @@
         <property name="max" value="131"/>
     </module>
 
-    <!-- Checks for whitespace                                              -->
-    <!-- See https://checkstyle.sourceforge.io/checks/whitespace/index.html -->
+    <!-- Checks for whitespace                                   -->
+    <!-- See https://checkstyle.org/checks/whitespace/index.html -->
     <!--<module name="FileTabCharacter"/>-->
 
-    <!-- Miscellaneous other checks.                                     -->
-    <!-- See https://checkstyle.sourceforge.io/checks/regexp/index.html -->
+    <!-- Miscellaneous other checks.                         -->
+    <!-- See https://checkstyle.org/checks/regexp/index.html -->
     <module name="RegexpSingleline">
         <property name="format" value="\s+$"/>
         <property name="minimum" value="0"/>
@@ -84,7 +85,7 @@
     </module>
 
     <!-- Checks for Headers                                             -->
-    <!-- See https://checkstyle.sourceforge.io/checks/header/index.html -->
+    <!-- See https://checkstyle.org/checks/header/index.html -->
     <!-- <module name="Header"> -->
     <!--   <property name="headerFile" value="${checkstyle.header.file}"/> -->
     <!--   <property name="fileExtensions" value="java"/> -->
@@ -96,8 +97,8 @@
         <!-- https://stackoverflow.com/questions/5761188/checkstyle-suppressioncommentfilter-not-ignoring-specified-rule/5764666#5764666 -->
         <module name="SuppressWarningsHolder" />
 
-        <!-- Checks for Javadoc comments.                              -->
-        <!-- See https://checkstyle.sourceforge.io/checks/javadoc/index.html -->
+        <!-- Checks for Javadoc comments.                         -->
+        <!-- See https://checkstyle.org/checks/javadoc/index.html -->
         <!--<module name="JavadocMethod"/> This is just too whiny for now. -->
         <module name="JavadocType"/>
         <!--
@@ -126,8 +127,8 @@
 
         <module name="JavadocContentLocationCheck"/>
 
-        <!-- Checks for Naming Conventions.                                 -->
-        <!-- See https://checkstyle.sourceforge.io/checks/naming/index.html -->
+        <!-- Checks for Naming Conventions.                      -->
+        <!-- See https://checkstyle.org/checks/naming/index.html -->
         <module name="ConstantName"/>
         <module name="LocalFinalVariableName"/>
         <module name="LocalVariableName"/>
@@ -139,23 +140,23 @@
         <module name="StaticVariableName"/>
         <module name="TypeName"/>
 
-        <!-- Checks for annotations.                                            -->
-        <!-- See https://checkstyle.sourceforge.io/checks/annotation/index.html -->
+        <!-- Checks for annotations.                                 -->
+        <!-- See https://checkstyle.org/checks/annotation/index.html -->
         <module name="AnnotationLocation"/>
         <module name="AnnotationUseStyle"/>
         <module name="MissingDeprecated"/>
         <module name="MissingOverride"/>
 
-        <!-- Checks for imports                                                  -->
-        <!-- See See https://checkstyle.sourceforge.io/checks/imports/index.html -->
+        <!-- Checks for imports                                       -->
+        <!-- See See https://checkstyle.org/checks/imports/index.html -->
         <!--<module name="AvoidStarImport"/>-->
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
 
 
-        <!-- Checks for Size Violations.                                       -->
-        <!-- See See https://checkstyle.sourceforge.io/checks/sizes/index.html -->
+        <!-- Checks for Size Violations.                            -->
+        <!-- See See https://checkstyle.org/checks/sizes/index.html -->
         <module name="MethodLength">
             <property name="max" value="300"/>
         </module>
@@ -165,8 +166,8 @@
         </module>
 
 
-        <!-- Checks for whitespace                                              -->
-        <!-- See https://checkstyle.sourceforge.io/checks/whitespace/index.html -->
+        <!-- Checks for whitespace                                   -->
+        <!-- See https://checkstyle.org/checks/whitespace/index.html -->
         <module name="EmptyForIteratorPad"/>
         <module name="GenericWhitespace"/>
         <module name="MethodParamPad"/>
@@ -186,14 +187,14 @@
         <!--<module name="WhitespaceAround"/>-->
 
 
-        <!-- Modifier Checks                                                  -->
-        <!-- See https://checkstyle.sourceforge.io/checks/modifier/index.html -->
+        <!-- Modifier Checks                                       -->
+        <!-- See https://checkstyle.org/checks/modifier/index.html -->
         <module name="ModifierOrder"/>
         <module name="RedundantModifier"/>
 
 
-        <!-- Checks for blocks. You know, those {}'s                        -->
-        <!-- See https://checkstyle.sourceforge.io/checks/blocks/index.html -->
+        <!-- Checks for blocks. You know, those {}'s             -->
+        <!-- See https://checkstyle.org/checks/blocks/index.html -->
         <module name="AvoidNestedBlocks"/>
         <!--<module name="EmptyBlock"/>-->
         <module name="LeftCurly"/>
@@ -205,8 +206,8 @@
             <property name="tokens" value="CLASS_DEF, ENUM_DEF, LITERAL_ELSE, LITERAL_SWITCH, METHOD_DEF"/>
         </module>
 
-        <!-- Checks for common coding problems                              -->
-        <!-- See https://checkstyle.sourceforge.io/checks/coding/index.html -->
+        <!-- Checks for common coding problems                   -->
+        <!-- See https://checkstyle.org/checks/coding/index.html -->
         <!--<module name="AvoidInlineConditionals"/>-->
         <module name="EmptyStatement"/>
         <module name="EqualsAvoidNull"/>
@@ -226,6 +227,7 @@
         <!--<module name="MagicNumber"/> &lt;!&ndash; Unfortunately, too much noise &ndash;&gt;-->
         <!--<module name="MissingSwitchDefault"/>-->
         <module name="MultipleVariableDeclarations"/>
+        <module name="PatternVariableAssignment"/>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="UnnecessaryNullCheckWithInstanceOf"/>
@@ -236,8 +238,8 @@
         <module name="UnnecessarySemicolonInTryWithResources"/>
         <module name="UnusedLocalVariable"/>
 
-        <!-- Checks for class design                                        -->
-        <!-- See https://checkstyle.sourceforge.io/checks/design/index.html -->
+        <!-- Checks for class design                             -->
+        <!-- See https://checkstyle.org/checks/design/index.html -->
         <!--<module name="DesignForExtension"/>-->
         <module name="FinalClass"/>
         <module name="HideUtilityClassConstructor"/>
@@ -248,8 +250,8 @@
         </module>
 
 
-        <!-- Miscellaneous other checks.                                  -->
-        <!-- See https://checkstyle.sourceforge.io/checks/misc/index.html -->
+        <!-- Miscellaneous other checks.                       -->
+        <!-- See https://checkstyle.org/checks/misc/index.html -->
         <module name="ArrayTypeStyle"/>
         <module name="AvoidEscapedUnicodeCharacters">
             <property name="allowByTailComment" value="true"/>
@@ -259,8 +261,8 @@
         <!-- <module name="TodoComment"/> -->
         <module name="UpperEll"/>
 
-        <!-- Checks for metrics.                                             -->
-        <!-- See https://checkstyle.sourceforge.io/checks/metrics/index.html -->
+        <!-- Checks for metrics.                                  -->
+        <!-- See https://checkstyle.org/checks/metrics/index.html -->
         <!--        <module name="CyclomaticComplexity"/>-->
 
     </module>
