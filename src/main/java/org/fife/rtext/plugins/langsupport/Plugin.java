@@ -27,8 +27,10 @@ import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.html.HtmlLanguageSupport;
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
+import org.fife.rsta.ac.java.buildpath.DirLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.DirSourceLocation;
 import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
+import org.fife.rsta.ac.java.buildpath.Jdk9LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.buildpath.ZipSourceLocation;
@@ -150,6 +152,32 @@ public class Plugin extends GUIPlugin<RText> {
 	@Override
 	public DockableWindow getDockableWindow(String id) {
 		return super.getDockableWindow(id);
+	}
+
+
+	private static LibraryInfo getLibraryInfo(File classFileLoc) {
+		if (classFileLoc.isFile()) {
+			return new JarLibraryInfo(classFileLoc);
+		}
+
+		// Determine if this is the root of a JDK 9+ or later.
+		File jmodsDir = new File(classFileLoc, "jmods");
+		if (jmodsDir.isDirectory()) {
+			// TODO: This is copied from LibraryInfo in RSTALanguageSupport.
+			// Should be refactored into a utility method.
+			File[] jmodFiles = jmodsDir.listFiles(pathname -> {
+				if (pathname.isFile()) {
+					String name = pathname.getName();
+					return name.endsWith(".jmod") &&
+						(name.startsWith("java.") || name.startsWith("jdk."));
+				}
+				return false;
+			});
+			return new Jdk9LibraryInfo(jmodFiles);
+		}
+
+		// Assume this is a directory of class files
+		return new DirLibraryInfo(classFileLoc);
 	}
 
 
@@ -347,8 +375,8 @@ public class Plugin extends GUIPlugin<RText> {
 		for (int i=0; i<count; i++) {
 			File jar = new File(prefs.java_classpath_jars[i]);
 			// Just in case the file went away out from under us
-			if (jar.isFile()) {
-				JarLibraryInfo info = new JarLibraryInfo(jar);
+			if (jar.exists()) {
+				LibraryInfo info = getLibraryInfo(jar);
 				if (prefs.java_classpath_src[i]!=null) {
 					File src = new File(prefs.java_classpath_src[i]);
 					if (src.isFile()) {
@@ -580,7 +608,7 @@ public class Plugin extends GUIPlugin<RText> {
 			prefs.java_classpath_src = new String[count];
 			for (int i=0; i<count; i++) {
 				LibraryInfo info = jars.get(i);
-				String jarFile = info.getLocationAsString();
+				String jarFile = LangSupportUtils.getClassFileLocation(info).getAbsolutePath();
 				prefs.java_classpath_jars[i] = jarFile;
 				SourceLocation srcLocFile = info.getSourceLocation();
 				if (srcLocFile!=null) {

@@ -24,7 +24,7 @@ dependencies {
 	implementation('com.fifesoft:autocomplete:3.3.2')
 	implementation('com.fifesoft:rstaui:3.3.1')
 	implementation('com.fifesoft:spellchecker:3.4.0')
-	implementation('com.fifesoft:languagesupport:3.3.0')
+	implementation('com.fifesoft:languagesupport:3.4.0')
 
 	implementation 'com.formdev:flatlaf:3.6'
 
@@ -51,7 +51,7 @@ wrapper {
 }
 
 checkstyle {
-	toolVersion = '10.25.0'
+	toolVersion = '10.26.0'
 }
 
 tasks.withType(Javadoc) {
