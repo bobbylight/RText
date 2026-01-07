@@ -42,7 +42,7 @@ import org.fife.ui.app.themes.*;
 public class MacroPlugin extends AbstractPlugin<RText>
 		implements PropertyChangeListener {
 
-	private static final String VERSION				= "6.0.3";
+	private static final String VERSION				= "6.1.0";
 
 	private MacroOptionPanel optionPanel;
 	private JMenu macrosMenu;

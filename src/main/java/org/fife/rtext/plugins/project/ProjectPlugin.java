@@ -63,7 +63,7 @@ public class ProjectPlugin extends GUIPlugin<RText> {
 
 	private static final String VIEW_CONSOLE_ACTION	= "viewProjectWindowAction";
 	private static final String DOCKABLE_WINDOW_PROJECTS = "projectsDockableWindow";
-	private static final String VERSION_STRING = "6.0.3";
+	private static final String VERSION_STRING = "6.1.0";
 
 
 	public ProjectPlugin(RText app) {
