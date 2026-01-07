@@ -25,7 +25,6 @@ import javax.swing.text.Document;
 import javax.swing.text.Element;
 
 import org.fife.io.UnicodeReader;
-import org.fife.rsta.ui.search.FindDialog;
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
 import org.fife.ui.GUIWorkerThread;
@@ -309,7 +308,7 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 		while ((i=buffer.indexOf(searchString, i))!=-1) {
 
 			// If we found a match...
-			if (!wholeWord || FindDialog.isWholeWord(buffer, i, len)) {
+			if (!wholeWord || isWholeWord(buffer, i, len)) {
 
 				numMatches++;
 				if (matchingLines) {
@@ -381,7 +380,7 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 			int end = m.end();
 
 			// If we found a match...
-			if (!wholeWord || FindDialog.isWholeWord(buffer, start, end-start)) {
+			if (!wholeWord || isWholeWord(buffer, start, end-start)) {
 
 				numMatches++;
 
@@ -517,6 +516,34 @@ class FindInFilesThread extends GUIWorkerThread<Object> {
 			}
 		}
 		return true;
+	}
+
+
+	/**
+	 * Returns whether the characters on either side of
+	 * <code>substr(searchIn, startPos, startPos+searchStringLength)</code>
+	 * are <em>not</em> letters or digits.
+	 */
+	protected static boolean isWholeWord(CharSequence searchIn,
+									   int offset, int len) {
+
+		boolean wsBefore;
+		boolean wsAfter;
+
+		try {
+			wsBefore = !Character.isLetterOrDigit(searchIn.charAt(offset - 1));
+		} catch (IndexOutOfBoundsException e) {
+			wsBefore = true;
+		}
+
+		try {
+			wsAfter = !Character.isLetterOrDigit(searchIn.charAt(offset + len));
+		} catch (IndexOutOfBoundsException e) {
+			wsAfter = true;
+		}
+
+		return wsBefore && wsAfter;
+
 	}
 
 

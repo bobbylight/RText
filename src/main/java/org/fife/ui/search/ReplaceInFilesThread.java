@@ -15,7 +15,6 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.fife.io.*;
-import org.fife.rsta.ui.search.FindDialog;
 import org.fife.ui.rtextarea.SearchEngine;
 
 
@@ -268,7 +267,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 		while ((i=buffer.indexOf(searchString, i))!=-1) {
 
 			// If we found a match...
-			if (!wholeWord || FindDialog.isWholeWord(buffer, i, len)) {
+			if (!wholeWord || isWholeWord(buffer, i, len)) {
 
 				replaceSB.append(origBuffer, start, i);
 				replaceSB.append(replaceString);
@@ -330,7 +329,7 @@ class ReplaceInFilesThread extends FindInFilesThread {
 			int end = m.end();
 
 			// If we found a match...
-			if (!wholeWord || FindDialog.isWholeWord(sb, start, end-start)) {
+			if (!wholeWord || isWholeWord(sb, start, end-start)) {
 				replaceSB.append(sb.substring(lastEnd, m.start()));
 				replaceSB.append(SearchEngine.getReplacementText(m, replaceString));
 				lastEnd = m.end();
