@@ -1,3 +1,7 @@
+plugins {
+	id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
+}
+
 import java.time.Instant
 import org.apache.tools.ant.taskdefs.condition.Os
 
@@ -6,6 +10,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 ['java', 'distribution', 'checkstyle', 'maven-publish', 'signing', 'eclipse' ].each { apply plugin: it }
+apply plugin: 'io.github.gradle-nexus.publish-plugin'
 
 group = 'com.fifesoft'
 ext.isReleaseVersion = !project.version.endsWith('SNAPSHOT')
@@ -18,7 +23,7 @@ configurations.all { // Check for updates every build
 }
 
 dependencies {
-	implementation('com.fifesoft.rtext:fife.common:6.0.4-SNAPSHOT')
+	implementation('com.fifesoft.rtext:fife.common:6.1.0-SNAPSHOT')
 
 	implementation('com.fifesoft:rsyntaxtextarea:3.6.1')
 	implementation('com.fifesoft:autocomplete:3.3.3')
@@ -42,7 +47,7 @@ repositories {
 	mavenCentral()
 	mavenLocal()
 	maven {
-		url = 'https://oss.sonatype.org/content/repositories/snapshots'
+		url = 'https://central.sonatype.com/repository/maven-snapshots/'
 	}
 }
 
@@ -310,18 +315,6 @@ srcDistZip {
 
 
 publishing {
-	repositories {
-		maven {
-			def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-			def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-			url = isReleaseVersion ? releasesRepoUrl : snapshotsRepoUrl
-			credentials { // Credentials usually kept in user's .gradle/gradle.properties
-				// We must defensively check for these properties so Travis CI build works
-				username = project.hasProperty('ossrhUsername') ? ossrhUsername : 'unknown'
-				password = project.hasProperty('ossrhPassword') ? ossrhPassword : 'unknown'
-			}
-		}
-	}
 	publications {
 		maven(MavenPublication) {
 
@@ -436,3 +429,15 @@ task generateMacApp {
 	}
 }
 generateMacApp.dependsOn('build', 'installDist')
+
+nexusPublishing {
+	repositories {
+		sonatype {
+			nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+			snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+			// We must defensively check for these properties so CI builds work
+			username.set(project.hasProperty('sonatypeUsername') ? sonatypeUsername : 'unknown')
+			password.set(project.hasProperty('sonatypePassword') ? sonatypePassword : 'unknown')
+		}
+	}
+}
