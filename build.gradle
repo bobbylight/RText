@@ -34,14 +34,14 @@ dependencies {
 	implementation 'com.formdev:flatlaf:3.6'
 
 	implementation 'com.github.jtidy:jtidy:1.0.5'
-	implementation 'org.apache.groovy:groovy-all:4.0.27'
+	implementation 'org.apache.groovy:groovy-all:5.0.3'
 	implementation 'com.esotericsoftware:jsonbeans:0.7'
-	implementation 'org.graalvm.js:js:24.2.1'
-	implementation 'org.graalvm.js:js-scriptengine:24.2.1'
-	implementation 'org.jruby:jruby:10.0.0.1'
+	implementation 'org.graalvm.js:js:25.0.1'
+	implementation 'org.graalvm.js:js-scriptengine:25.0.1'
+	implementation 'org.jruby:jruby:10.0.2.0'
 
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.13.1'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.13.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:6.0.1'
 }
 repositories {
 	mavenCentral()
