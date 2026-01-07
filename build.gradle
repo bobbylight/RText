@@ -56,7 +56,7 @@ wrapper {
 }
 
 checkstyle {
-	toolVersion = '10.26.0'
+	toolVersion = '13.0.0'
 }
 
 tasks.withType(Javadoc) {
