@@ -30,7 +30,7 @@ all unit tests, and create the jar, and run:
     ./gradlew build installDist
     java -jar build/install/rtext/RText.jar
 
-Note that RText requires Java 21 or later to build.
+Note that RText requires Java 25 or later to build.
 
 ### Building the Windows application and installer
 

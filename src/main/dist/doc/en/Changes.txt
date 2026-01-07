@@ -2,9 +2,9 @@ RText Change Log
 https://bobbylight.github.io/RText/
 -----------------------------------
 
-6.0.3
+6.1.0
 ------------------
-   - Updating bundled JRE from 17 to 21
+   - Updating bundled JRE from 17 to 25
    -
 
 6.0.2 (08/05/2023)

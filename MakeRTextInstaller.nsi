@@ -2,7 +2,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "RText"
-!define PRODUCT_VERSION "6.0.3"
+!define PRODUCT_VERSION "6.1.0"
 !define PRODUCT_WEB_SITE "https://bobbylight.github.io/RText/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\RText.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -97,7 +97,8 @@ Section Uninstall
   RMDir /r "$INSTDIR\jre-17.0.2"   ; From prior installs
   RMDir /r "$INSTDIR\jre-17.0.5"   ; From prior installs
   RMDir /r "$INSTDIR\jre-17.0.6"   ; From prior installs
-  RMDir /r "$INSTDIR\jre-17.0.8"
+  RMDir /r "$INSTDIR\jre-17.0.8"   ; From prior installs
+  RMDir /r "$INSTDIR\jre-25.0.1"
   RMDir /r "$INSTDIR\lnfs"         ; From prior installs
   RMDir /r "$INSTDIR\plugins"
   Delete /REBOOTOK "$INSTDIR\RText.*"

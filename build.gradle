@@ -14,9 +14,9 @@ apply plugin: 'io.github.gradle-nexus.publish-plugin'
 
 group = 'com.fifesoft'
 ext.isReleaseVersion = !project.version.endsWith('SNAPSHOT')
-// Note: Local JDK 21: /Library/Java/JavaVirtualMachines/jdk-21.0.5+11/Contents/Home
+// Note: Local JDK 25: /Library/Java/JavaVirtualMachines/jdk-25.0.1+8/Contents/Home
 
-assert JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)
+assert JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_25)
 
 configurations.all { // Check for updates every build
 	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
@@ -423,7 +423,8 @@ generateWindowsStarterExe.dependsOn('generateWindowsJre')
 
 task generateMacApp {
 	doLast {
-		exec {
+		def execOps = services.get(org.gradle.process.ExecOperations)
+		execOps.exec {
 			commandLine '/bin/bash', '-c', './mac/build-mac-app.sh'
 		}
 	}
