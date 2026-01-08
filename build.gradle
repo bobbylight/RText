@@ -67,11 +67,13 @@ test {
 	useJUnitPlatform()
 }
 
-static isPluginJar(jarName) {
-	return jarName.startsWith('plugin-') ||
-		jarName.startsWith('groovy') || jarName.startsWith('jsonbeans') ||
-		jarName.startsWith('jtidy') || jarName.startsWith('languagesupport') ||
-		jarName.startsWith('rhino') || jarName.startsWith('tidy')
+class JarPredicates {
+	static boolean isPluginJar(String jarName) {
+		return jarName.startsWith('plugin-') ||
+			jarName.startsWith('groovy') || jarName.startsWith('jsonbeans') ||
+			jarName.startsWith('jtidy') || jarName.startsWith('languagesupport') ||
+			jarName.startsWith('rhino') || jarName.startsWith('tidy')
+	}
 }
 
 compileJava {
@@ -82,8 +84,9 @@ compileJava {
 }
 
 processResources {
+	def projectRoot = projectDir
 	doFirst {
-		new File(projectDir.absolutePath, 'build/resources/main/build-date.txt').text =
+		new File(projectRoot, 'build/resources/main/build-date.txt').text =
 			ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT)
 	}
 }
@@ -101,7 +104,7 @@ jar {
 			'Implementation-Version': version,
 			'Build-Date': Instant.now().toString(),
 			'Main-Class': 'org/fife/rtext/Main',
-			'Class-Path': configurations.runtimeClasspath.findAll { !isPluginJar(it.name) }.collect {
+			'Class-Path': configurations.runtimeClasspath.findAll { !JarPredicates.isPluginJar(it.name) }.collect {
 				def name = it.name
 				System.out.println(name)
 				return name
@@ -236,10 +239,19 @@ tasks.register('toolsJar', Jar) {
 		)
 	}
 }
-artifacts {
-	archives /*mainJar,*/ consoleJar, fileSystemTreeJar, heapIndicatorJar,
-			macroSupportJar, projectSupportJar, languageSupportJar,
-			sourceBrowserJar, taskListJar, tidyJar, toolsJar
+tasks.named('assemble') {
+    dependsOn(
+        tasks.named('consoleJar'),
+        tasks.named('fileSystemTreeJar'),
+        tasks.named('heapIndicatorJar'),
+        tasks.named('macroSupportJar'),
+        tasks.named('projectSupportJar'),
+        tasks.named('languageSupportJar'),
+        tasks.named('sourceBrowserJar'),
+        tasks.named('taskListJar'),
+        tasks.named('tidyJar'),
+        tasks.named('toolsJar')
+    )
 }
 
 distTar.dependsOn(jar, consoleJar, fileSystemTreeJar, heapIndicatorJar, macroSupportJar, projectSupportJar,
@@ -274,7 +286,7 @@ distributions {
 			from { getDistributionFiles(configurations) }
 			eachFile { details ->
 				def path = details.path
-				if (isPluginJar(path)) {
+				if (JarPredicates.isPluginJar(path)) {
 					//println "Is a plugin jar: ${path}"
 					details.path = "plugins/" + path
 				}
