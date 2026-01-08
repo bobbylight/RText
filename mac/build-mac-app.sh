@@ -3,7 +3,7 @@
 # Builds RText.app for OS X.  This assumes you've already run
 # ./gradlew clean build installDist.  In fact, you usually don't
 # run this directly but rather just run
-# ./gradlew clean build installDist generateJre generateMacApp
+# ./gradlew clean build generateMacApp
 #
 
 # The version of RText you're building.  This appears in the generated

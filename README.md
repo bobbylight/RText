@@ -44,22 +44,21 @@ The `generateWindowsStarterExe` task uses a JDK 21 install and `launch4j` as def
 `gradle.properties`.
 
 Note this gradle task runs `jlink` directly and uses `launch4j` rather than using
-`jpackage` directly since our app needs loose files and `jpackage` seems to require
-all files being wrapped into the generated .exe.  This is different than our OS X
-app task (discussed below) which uses `jpackage`.
+`jpackage` since our app needs loose files and `jpackage` seems to require all files
+being wrapped into the generated .exe.  This is different than our macOS app task
+(discussed below) which uses `jpackage`.
 
 After building the installable image, you can create the win32 installer by
 running the `MakeRTextInstaller.nsi` [NSIS](https://nsis.sourceforge.io/Main_Page)
 script at the root of the project.
 
-### Building the OS X application
+### Building the macOS application
 
-Building the OS X package has just been revamped.  To build the .app bundle into
-`build/install/RText-<version>.dmg`:
+To build the .app bundle into`build/install/RText-<version>.dmg`:
 
     ./gradlew clean build generateMacApp
 
 The generated `RText-<version>.dmg` can be used to install `RText.app` to the Applications
 folder.  Note that this app currently isn't signed, so Gatekeeper will likely prevent
-you from installing.  In order to get around this you'll need to tweak your security
-policy to allow installing of apps from outside the App Store.
+you from installing.  To get around this you'll need to tweak your security policy to
+allow installing of apps from outside the App Store.
