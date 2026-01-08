@@ -196,7 +196,7 @@ class RTextMDIView extends AbstractMainView implements InternalFrameListener {
 		// correctly. If there are no open documents, add a new empty one.
 		if (getNumDocuments()>0) {
 			renumberDisplayNames();
-			JInternalFrame frame = frames.get(0);
+			JInternalFrame frame = frames.getFirst();
 			desktopPane.setSelectedFrame(frame);
 			try {
 				frame.setSelected(true); // Updates currentTextArea.

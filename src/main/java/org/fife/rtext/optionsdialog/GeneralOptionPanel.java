@@ -58,7 +58,7 @@ class GeneralOptionPanel extends OptionsDialogPanel
 	private static final String TERM_CR		= "\r";
 	private static final String TERM_LF		= "\n";
 	private static final String TERM_CRLF	= "\r\n";
-	private static final String TERM_SYSTEM	= System.getProperty("line.separator");
+	private static final String TERM_SYSTEM	= System.lineSeparator();
 
 
 	/**

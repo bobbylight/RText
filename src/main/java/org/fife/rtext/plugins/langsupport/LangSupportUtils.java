@@ -39,7 +39,7 @@ final class LangSupportUtils {
 			return ((JarLibraryInfo)li).getJarFile();
 		}
 		else if (li instanceof DirLibraryInfo) {
-			return new File(((DirLibraryInfo)li).getLocationAsString());
+			return new File(li.getLocationAsString());
 		}
 		else if (li instanceof Jdk9LibraryInfo) {
 			return ((Jdk9LibraryInfo)li).getJreHome();

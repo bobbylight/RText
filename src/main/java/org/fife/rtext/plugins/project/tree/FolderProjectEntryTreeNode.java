@@ -130,7 +130,7 @@ public class FolderProjectEntryTreeNode extends FileProjectEntryTreeNode
 				Messages.getString("Action.New"));
 		newMenu.add(new NewFileOrFolderAction(this, true));
 		newMenu.add(new NewFileOrFolderAction(this, false));
-		actions.add(0, newMenu);
+		actions.addFirst(newMenu);
 
 		actions.add(actions.size()-1, new ConfigureFiltersAction());
 

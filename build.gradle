@@ -116,7 +116,7 @@ jar {
 // RText is odd in that we generate multiple jars from a single source tree.
 //task mainJar(type: Jar) {
 //}
-task consoleJar(type: Jar) {
+tasks.register('consoleJar', Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/console/**'
 		archiveFileName = provider { 'plugin-console.jar' }
@@ -128,7 +128,7 @@ task consoleJar(type: Jar) {
 		)
 	}
 }
-task fileSystemTreeJar(type: Jar) {
+tasks.register('fileSystemTreeJar', Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/filesystemtree/**'
 		archiveFileName = provider { 'plugin-fileSystemTree.jar' }
@@ -140,7 +140,7 @@ task fileSystemTreeJar(type: Jar) {
 		)
 	}
 }
-task heapIndicatorJar(type: Jar) {
+tasks.register('heapIndicatorJar', Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/heapindicator/**'
 		archiveFileName = provider { 'plugin-heapIndicator.jar' }
@@ -152,7 +152,7 @@ task heapIndicatorJar(type: Jar) {
 		)
 	}
 }
-task macroSupportJar(type: Jar) {
+tasks.register('macroSupportJar', Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/macros/**'
 		archiveFileName = provider { 'plugin-macros.jar' }
@@ -164,7 +164,7 @@ task macroSupportJar(type: Jar) {
 		)
 	}
 }
-task projectSupportJar(type: Jar) {
+tasks.register('projectSupportJar', Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/project/**'
 		archiveFileName = provider { 'plugin-projects.jar' }
@@ -176,7 +176,7 @@ task projectSupportJar(type: Jar) {
 		)
 	}
 }
-task languageSupportJar(type: Jar) {
+tasks.register('languageSupportJar', Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/langsupport/**'
 		archiveFileName = provider { 'plugin-languageSupport.jar' }
@@ -188,7 +188,7 @@ task languageSupportJar(type: Jar) {
 		)
 	}
 }
-task sourceBrowserJar(type: Jar) {
+tasks.register('sourceBrowserJar', Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/sourcebrowser/**'
 		archiveFileName = provider { 'plugin-sourceBrowser.jar' }
@@ -200,7 +200,7 @@ task sourceBrowserJar(type: Jar) {
 		)
 	}
 }
-task taskListJar(type: Jar) {
+tasks.register('taskListJar', Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/tasks/**'
 		archiveFileName = provider { 'plugin-tasks.jar' }
@@ -212,7 +212,7 @@ task taskListJar(type: Jar) {
 		)
 	}
 }
-task tidyJar(type: Jar) {
+tasks.register('tidyJar', Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/tidy/**'
 		archiveFileName = provider { 'plugin-tidy.jar' }
@@ -224,7 +224,7 @@ task tidyJar(type: Jar) {
 		)
 	}
 }
-task toolsJar(type: Jar) {
+tasks.register('toolsJar', Jar) {
 	from (sourceSets.main.output) {
 		include 'org/fife/rtext/plugins/tools/**'
 		archiveFileName = provider { 'plugin-tools.jar' }
@@ -394,7 +394,8 @@ def getWindowsJreDependencyList = { installDistDir ->
 	return retVal
 }
 
-task generateWindowsJre {
+tasks.register('generateWindowsJre') {
+	dependsOn('build', 'installDist')
 	doLast {
 
 		def installDistDir = 'build/install/rtext'
@@ -410,18 +411,18 @@ task generateWindowsJre {
 		}
 	}
 }
-generateWindowsJre.dependsOn('build', 'installDist')
 
-task generateWindowsStarterExe {
+tasks.register('generateWindowsStarterExe') {
+	dependsOn('generateWindowsJre')
 	doLast {
 		exec {
 			commandLine launch4jExe, 'launch4j.xml'
 		}
 	}
 }
-generateWindowsStarterExe.dependsOn('generateWindowsJre')
 
-task generateMacApp {
+tasks.register('generateMacApp') {
+	dependsOn('build', 'installDist')
 	doLast {
 		def execOps = services.get(org.gradle.process.ExecOperations)
 		execOps.exec {
@@ -429,7 +430,6 @@ task generateMacApp {
 		}
 	}
 }
-generateMacApp.dependsOn('build', 'installDist')
 
 nexusPublishing {
 	repositories {

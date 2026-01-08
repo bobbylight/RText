@@ -105,7 +105,7 @@ public class RecentFileManager implements PropertyChangeListener {
 		int index = indexOf(file);
 		if (index > -1) {
 			FileLocation loc = files.remove(index);
-			files.add(0, loc);
+			files.addFirst(loc);
 			return;
 		}
 
@@ -123,11 +123,11 @@ public class RecentFileManager implements PropertyChangeListener {
 			// exist
 			return;
 		}
-		files.add(0, loc);
+		files.addFirst(loc);
 
 		// Too many files?  Oust the file in history added least recently.
 		if (files.size() > MAX_FILE_COUNT) {
-			files.remove(files.size() - 1);
+			files.removeLast();
 		}
 
 	}

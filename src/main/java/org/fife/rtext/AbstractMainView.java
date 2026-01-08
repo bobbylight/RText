@@ -20,6 +20,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.net.URL;
+import java.nio.file.FileSystems;
 import java.util.*;
 import java.util.Timer;
 import javax.imageio.ImageIO;
@@ -1103,7 +1104,7 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	private String getDefaultFileName() {
 		return owner.getWorkingDirectory() +
-			System.getProperty("file.separator") + owner.getNewFileName();
+			FileSystems.getDefault().getSeparator() + owner.getNewFileName();
 	}
 
 
@@ -3551,7 +3552,7 @@ public abstract class AbstractMainView extends JPanel
 	 */
 	public void setLineTerminator(String terminator) {
 		if (terminator!=null &&
-				terminator.equals(System.getProperty("line.separator"))) {
+				terminator.equals(System.lineSeparator())) {
 			terminator = null;
 		}
 		defaultLineTerminator = terminator;
