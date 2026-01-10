@@ -380,12 +380,12 @@ tasks.withType(Sign) {
 }
 
 
-def getWindowsJreDependencyList = { installDistDir ->
+def getWindowsJreDependencyList = { execOps, jdkRoot, installDistDir ->
 
 	// Store the output instead of printing to the console
 	def stdout = new ByteArrayOutputStream()
 
-	exec {
+	execOps.exec {
 		workingDir installDistDir
 		if (Os.isFamily(Os.FAMILY_WINDOWS)) {
 			commandLine "${jdkRoot}/bin/jdeps", '--ignore-missing-deps', '--list-deps', 'RText.jar', 'plugins/plugin*.jar'
@@ -411,11 +411,14 @@ tasks.register('generateWindowsJre') {
 	doLast {
 
 		def installDistDir = 'build/install/rtext'
+		def jdkRoot = project.findProperty('jdkRootWindows')
+		def embeddedJreFolderName = project.findProperty('embeddedJreFolderName')
+		def execOps = services.get(org.gradle.process.ExecOperations)
 
-		def moduleList = getWindowsJreDependencyList(installDistDir)
+		def moduleList = getWindowsJreDependencyList(execOps, jdkRoot, installDistDir)
 		println "Generating JRE with modules: ${moduleList}"
 
-		exec {
+		execOps.exec {
 			workingDir installDistDir
 			commandLine "${jdkRoot}/bin/jlink", '--module-path', "\"${jdkRoot}/jmods\"", '--add-modules',
 					moduleList, '--output', embeddedJreFolderName, '--strip-debug', '--compress', '2',
@@ -427,7 +430,8 @@ tasks.register('generateWindowsJre') {
 tasks.register('generateWindowsStarterExe') {
 	dependsOn('generateWindowsJre')
 	doLast {
-		exec {
+		def execOps = services.get(org.gradle.process.ExecOperations)
+		execOps.exec {
 			commandLine launch4jExe, 'launch4j.xml'
 		}
 	}
