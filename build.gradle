@@ -408,11 +408,12 @@ def getWindowsJreDependencyList = { execOps, jdkRoot, installDistDir ->
 
 tasks.register('generateWindowsJre') {
 	dependsOn('build', 'installDist')
+	def jdkRoot = project.findProperty('jdkRootWindows')
+	def embeddedJreFolderName = project.findProperty('embeddedJreFolderName')
+
 	doLast {
 
 		def installDistDir = 'build/install/rtext'
-		def jdkRoot = project.findProperty('jdkRootWindows')
-		def embeddedJreFolderName = project.findProperty('embeddedJreFolderName')
 		def execOps = services.get(org.gradle.process.ExecOperations)
 
 		def moduleList = getWindowsJreDependencyList(execOps, jdkRoot, installDistDir)
