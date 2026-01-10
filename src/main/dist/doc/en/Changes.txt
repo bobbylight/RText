@@ -2,10 +2,13 @@ RText Change Log
 https://bobbylight.github.io/RText/
 -----------------------------------
 
-6.1.0
+6.1.0 (01/10/2026)
 ------------------
-   - Updating bundled JRE from 17 to 25
-   -
+   - Added code folding and syntax highlighting for Rust
+   - Show the number of selected line breaks in gutter
+   - Support Java 9 and later JDKs in Java Language Support
+   - Updated bundled JRE from 17 to 25
+
 
 6.0.2 (08/05/2023)
 ------------------
