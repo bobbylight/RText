@@ -47,7 +47,6 @@ class NewToolAction extends AppAction<RText> {
 
 		RText owner = getApplication();
 		NewToolDialog ntd = new NewToolDialog(owner);
-		MacOSUtil.setTransparentTitleBar(ntd, true);
 		ntd.setVisible(true);
 
 		Tool tool = ntd.getTool();

@@ -54,7 +54,7 @@ class GoToAction extends AppAction<RText> {
 
 		if (mainView.goToDialog==null) {
 			mainView.goToDialog = new GoToDialog(rtext);
-			MacOSUtil.setTransparentTitleBar(mainView.goToDialog, true);
+			MacOSUtil.applyMacOsTweaks(mainView.goToDialog);
 			mainView.goToDialog.setErrorDialogTitle(
 					rtext.getString("ErrorDialogTitle"));
 		}

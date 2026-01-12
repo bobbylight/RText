@@ -60,7 +60,6 @@ class NewMacroAction extends AppAction<RText> {
 
 		RText owner = getApplication();
 		NewMacroDialog nmd = new NewMacroDialog(plugin, owner);
-		MacOSUtil.setTransparentTitleBar(nmd, true);
 		nmd.setVisible(true);
 
 		Macro macro = nmd.getMacro();
