@@ -497,7 +497,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 												OptionsDialog(this);
 		}
 
-		MacOSUtil.setTransparentTitleBar(optionsDialog, true);
 		return optionsDialog;
 
 	}
@@ -561,7 +560,6 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 			helpDialog = new HelpDialog(this,
 						contentsPath + "HelpDialogContents.xml",
 						helpPath);
-			MacOSUtil.setTransparentTitleBar(helpDialog, true);
 			helpDialog.setBackButtonIcon(getIconGroup().getIcon("back"));
 			helpDialog.setForwardButtonIcon(getIconGroup().getIcon("forward"));
 		}

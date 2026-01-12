@@ -49,7 +49,7 @@ class FilePropertiesAction extends AppAction<RText> {
 		RText rtext = getApplication();
 		TextFilePropertiesDialog dialog = new TextFilePropertiesDialog(
 							rtext, rtext.getMainView().getCurrentTextArea());
-		MacOSUtil.setTransparentTitleBar(dialog, true);
+		MacOSUtil.applyMacOsTweaks(dialog);
 		dialog.setVisible(true);
 	}
 
