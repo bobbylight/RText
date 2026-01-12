@@ -103,6 +103,7 @@ jar {
 			'Implementation-Title': 'org.fife.rtext',
 			'Implementation-Version': version,
 			'Build-Date': Instant.now().toString(),
+			'Enable-Native-Access': 'ALL-UNNAMED', // Needed for flatlaf, see https://github.com/JFormDesigner/FlatLaf/issues/1035
 			'Main-Class': 'org/fife/rtext/Main',
 			'Class-Path': configurations.runtimeClasspath.findAll { !JarPredicates.isPluginJar(it.name) }.collect {
 				def name = it.name

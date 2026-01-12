@@ -25,7 +25,7 @@ you would expect:
 ## Building
 
 RText uses [Gradle](https://gradle.org/) to build.  To compile, run
-all unit tests, and create the jar, and run:
+all unit tests, create the jar, and run the app:
 
     ./gradlew build installDist
     java -jar build/install/rtext/RText.jar
