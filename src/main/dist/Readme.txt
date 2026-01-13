@@ -44,9 +44,9 @@ a plugin API is being developed to add new functionality to RText with ease.
 
 2. Requirements
 ---------------
-Using the Source Browser plugin (which comes standard with RText) requires
+Using the Outline panel to view your code's structure requires
 either Exuberant Ctags, or the classic "ctags" UNIX command.  If you do not
-have either installed, RText will still work normally, but the Source Browser
+have either installed, RText will still work normally, but the Outline panel
 will be disabled.  You can download Exuberant CTags here:
 https://sourceforge.net/projects/ctags
 
@@ -138,6 +138,5 @@ robet@fifesoft.com
 
 8. Special Thanks
 -----------------
-- Sourceforge.net for hosting RText's bug tracker and other tools.
 - Steve Christensen for creating Solaris packages.
 - Rob Manning for getting RText into Maven.
