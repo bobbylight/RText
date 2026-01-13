@@ -198,8 +198,8 @@ public class TemplateOptionPanel extends OptionsDialogPanel {
 			idField = new JTextField(20);
 			Document doc = idField.getDocument();
 			doc.addDocumentListener(this);
-			if (doc instanceof AbstractDocument) {
-				((AbstractDocument)doc).setDocumentFilter(
+			if (doc instanceof AbstractDocument ad) {
+				ad.setDocumentFilter(
 					new TemplateNameDocumentFilter());
 			}
 			idLabel.setLabelFor(idField);

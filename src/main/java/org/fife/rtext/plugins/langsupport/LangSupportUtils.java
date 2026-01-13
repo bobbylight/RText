@@ -35,14 +35,14 @@ final class LangSupportUtils {
 	 * @return The file.
 	 */
 	public static File getClassFileLocation(LibraryInfo li) {
-		if (li instanceof JarLibraryInfo) {
-			return ((JarLibraryInfo)li).getJarFile();
+		if (li instanceof JarLibraryInfo jli) {
+			return jli.getJarFile();
 		}
 		else if (li instanceof DirLibraryInfo) {
 			return new File(li.getLocationAsString());
 		}
-		else if (li instanceof Jdk9LibraryInfo) {
-			return ((Jdk9LibraryInfo)li).getJreHome();
+		else if (li instanceof Jdk9LibraryInfo j9li) {
+			return j9li.getJreHome();
 		}
 		throw new IllegalArgumentException("Unknown LibraryInfo type: " + li.getClass().getName());
 	}

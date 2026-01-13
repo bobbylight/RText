@@ -92,7 +92,7 @@ public class Macro implements Comparable<Macro>, Cloneable {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		return o instanceof Macro && compareTo((Macro)o)==0;
+		return o instanceof Macro other && compareTo(other)==0;
 	}
 
 

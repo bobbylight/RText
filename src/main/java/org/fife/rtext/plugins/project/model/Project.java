@@ -64,8 +64,8 @@ public class Project implements Comparable<Project>, ProjectEntryParent {
 		if (o==this) {
 			return true;
 		}
-		if (o instanceof Project) {
-			return compareTo((Project)o)==0;
+		if (o instanceof Project other) {
+			return compareTo(other)==0;
 		}
 		return false;
 	}

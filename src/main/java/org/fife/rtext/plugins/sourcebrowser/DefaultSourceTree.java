@@ -393,21 +393,20 @@ class DefaultSourceTree extends JTree {
 			String text = null;
 
 			// If it's a high-level node (e.g. "Methods (4)").
-			if (object instanceof String) {
-				text = (String)object;
+			if (object instanceof String str) {
+				text = str;
 			}
 
 			// If it's a low-level node (function, variable, etc.).  Note
 			// that this should always be a TagEntry, but we're just being
 			// safe by checking here.
-			else if (object instanceof TagEntry) {
-				ExtendedTagEntry entry = (ExtendedTagEntry)object;
+			else if (object instanceof ExtendedTagEntry entry) {
 				text = mouseMovedTagEntry(entry);
 			}
 
 			// Set the tooltip text.
-			if (treeRenderer instanceof JComponent) {
-				((JComponent)treeRenderer).setToolTipText(text);
+			if (treeRenderer instanceof JComponent jc) {
+				jc.setToolTipText(text);
 			}
 
 		}
