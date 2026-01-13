@@ -311,8 +311,8 @@ public class RemoteFileChooser extends EscapableDialog
 	@Override
 	public void focusGained(FocusEvent e) {
 		Object source = e.getSource();
-		if (source instanceof JTextComponent) {
-			((JTextComponent)source).selectAll();
+		if (source instanceof JTextComponent tc) {
+			tc.selectAll();
 		}
 	}
 

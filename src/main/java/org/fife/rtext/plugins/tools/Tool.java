@@ -178,7 +178,7 @@ public class Tool implements Comparable<Tool> {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		return o instanceof Tool && compareTo((Tool)o)==0;
+		return o instanceof Tool other && compareTo(other)==0;
 	}
 
 

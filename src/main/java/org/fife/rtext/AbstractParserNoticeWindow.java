@@ -195,11 +195,11 @@ public abstract class AbstractParserNoticeWindow extends DockableWindow {
 		public void addRow(Object[] data) {
 			// NOTE: It's valid for data[1] to be Strings, in which case
 			// it's taken to be the full path of a file.
-			if (data[1] instanceof RTextEditorPane) {
-				data[1] = new TextAreaWrapper((RTextEditorPane)data[1]);
+			if (data[1] instanceof RTextEditorPane pane) {
+				data[1] = new TextAreaWrapper(pane);
 			}
-			else if (data[1] instanceof String) {
-				data[1] = new TextAreaWrapper((String)data[1]);
+			else if (data[1] instanceof String str) {
+				data[1] = new TextAreaWrapper(str);
 			}
 			super.addRow(data);
 		}

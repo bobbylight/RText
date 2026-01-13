@@ -288,8 +288,8 @@ public class WorkspaceTree extends JTree implements FileSelector {
 		TreePath path = getPathForLocation(e.getX(), e.getY());
 		if (path!=null) {
 			Object last = path.getLastPathComponent();
-			if (last instanceof AbstractWorkspaceTreeNode) {
-				return ((AbstractWorkspaceTreeNode)last).getToolTipText();
+			if (last instanceof AbstractWorkspaceTreeNode node) {
+				return node.getToolTipText();
 			}
 		}
 		return null;
@@ -329,8 +329,8 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object selected = getLastSelectedPathComponent();
-				if (selected instanceof AbstractWorkspaceTreeNode) {
-					((AbstractWorkspaceTreeNode)selected).handleRename();
+				if (selected instanceof AbstractWorkspaceTreeNode node) {
+					node.handleRename();
 				}
 			}
 		});
@@ -350,8 +350,8 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object selected = getLastSelectedPathComponent();
-				if (selected instanceof ProjectEntryTreeNode) {
-					((ProjectEntryTreeNode)selected).handleRemove();
+				if (selected instanceof ProjectEntryTreeNode node) {
+					node.handleRemove();
 				}
 			}
 		});
@@ -371,8 +371,8 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object selected = getLastSelectedPathComponent();
-				if (selected instanceof PhysicalLocationTreeNode) {
-					refreshChildren((PhysicalLocationTreeNode)selected);
+				if (selected instanceof PhysicalLocationTreeNode node) {
+					refreshChildren(node);
 				}
 			}
 		});
@@ -397,8 +397,8 @@ public class WorkspaceTree extends JTree implements FileSelector {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Object selected = getLastSelectedPathComponent();
-				if (selected instanceof AbstractWorkspaceTreeNode) {
-					((AbstractWorkspaceTreeNode)selected).handleProperties();
+				if (selected instanceof AbstractWorkspaceTreeNode node) {
+					node.handleProperties();
 				}
 			}
 		});

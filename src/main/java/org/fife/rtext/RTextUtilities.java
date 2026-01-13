@@ -746,14 +746,14 @@ public final class RTextUtilities {
 							@Override
 							public void decorate(JWindow window) {
 								Container cp = window.getContentPane();
-								if (cp instanceof JComponent) {
+								if (cp instanceof JComponent jc) {
 									TranslucencyUtil util =
 										TranslucencyUtil.get();
 									util.setOpaque(window, false);
-									((JComponent)cp).setBorder(
+									jc.setBorder(
 										BorderFactory.createCompoundBorder(
 											ShadowPopupBorder.getInstance(),
-											((JComponent)cp).getBorder()));
+											jc.getBorder()));
 								}
 							}
 						});

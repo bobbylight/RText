@@ -204,19 +204,14 @@ public class SyntaxFilters implements SyntaxConstants {
 		for (int i=0; i<length; i++) {
 			char c = fileFilterString.charAt(i);
 			switch (c) {
-				case '*':
-				case '?':
-				case '.':
-				case '-':
-				case '_':
-				case '$':
-				case ' ':
-					continue;
-				default:
+				case '*', '?', '.', '-', '_', '$', ' ' -> {
+					// Valid special character, keep going
+				}
+				default -> {
 					if (!Character.isLetterOrDigit(c)) {
 						return false;
 					}
-					break;
+				}
 			}
 		}
 		return true;

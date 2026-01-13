@@ -44,8 +44,8 @@ public class FileProjectEntry extends AbstractProjectEntry {
 
 	@Override
 	public int compareTo(ProjectEntry entry) {
-		if (entry instanceof FileProjectEntry) {
-			return file.compareTo(entry.getFile());
+		if (entry instanceof FileProjectEntry other) {
+			return file.compareTo(other.getFile());
 		}
 		return -1;
 	}
@@ -56,8 +56,8 @@ public class FileProjectEntry extends AbstractProjectEntry {
 		if (o==this) {
 			return true;
 		}
-		return o instanceof FileProjectEntry &&
-				compareTo((FileProjectEntry)o)==0;
+		return o instanceof FileProjectEntry other &&
+				compareTo(other)==0;
 	}
 
 

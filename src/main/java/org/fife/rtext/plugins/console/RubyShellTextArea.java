@@ -145,8 +145,8 @@ class RubyShellTextArea extends ConsoleTextArea {
 
 		} catch (Exception e) {
 			// Peel off wrapper ScriptException
-			if (e instanceof ScriptException) {
-				append(massageScriptException((ScriptException)e), STYLE_STDERR);
+			if (e instanceof ScriptException se) {
+				append(massageScriptException(se), STYLE_STDERR);
 			}
 			else {
 				StringWriter sw = new StringWriter();

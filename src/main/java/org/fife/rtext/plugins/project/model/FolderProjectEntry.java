@@ -45,8 +45,8 @@ public class FolderProjectEntry extends AbstractProjectEntry {
 
 	@Override
 	public int compareTo(ProjectEntry o) {
-		if (o instanceof FolderProjectEntry) {
-			return dir.compareTo(o.getFile());
+		if (o instanceof FolderProjectEntry other) {
+			return dir.compareTo(other.getFile());
 		}
 		return -1;
 	}
@@ -57,8 +57,8 @@ public class FolderProjectEntry extends AbstractProjectEntry {
 		if (o==this) {
 			return true;
 		}
-		return o instanceof FolderProjectEntry &&
-				compareTo((FolderProjectEntry)o)==0;
+		return o instanceof FolderProjectEntry other &&
+				compareTo(other)==0;
 	}
 
 
