@@ -25,7 +25,7 @@ import org.fife.ui.RColorSwatchesButton;
 import org.fife.ui.UIUtil;
 import org.fife.ui.rtextarea.CaretStyle;
 import org.fife.ui.rtextarea.ConfigurableCaret;
-import org.fife.ui.rtextarea.RTextArea;
+import org.fife.ui.rtextarea.TextMode;
 
 
 /**
@@ -254,8 +254,8 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		if (overrideCheckBox.isSelected()) {
 			mainView.setCaretColor(caretColorButton.getColor());
 			mainView.setSelectionColor(getColor(selColorButton));
-			mainView.setCaretStyle(RTextArea.INSERT_MODE, getCaretStyle(RTextArea.INSERT_MODE));
-			mainView.setCaretStyle(RTextArea.OVERWRITE_MODE, getCaretStyle(RTextArea.OVERWRITE_MODE));
+			mainView.setCaretStyle(TextMode.INSERT, getCaretStyle(TextMode.INSERT));
+			mainView.setCaretStyle(TextMode.OVERWRITE, getCaretStyle(TextMode.OVERWRITE));
 			mainView.setCaretBlinkRate((Integer)blinkRateSpinner.getValue());
 			mainView.setSelectedTextColor(getColor(selectedTextColorButton));
 			mainView.setUseSelectedTextColor(selectedTextColorCB.isSelected());
@@ -264,8 +264,8 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 			Theme editorTheme = EditorOptionsPreviewContext.get().getEditorTheme(rtext);
 			mainView.setCaretColor(editorTheme.caretColor);
 			mainView.setSelectionColor(editorTheme.selectionBG);
-			mainView.setCaretStyle(RTextArea.INSERT_MODE, CaretStyle.THICK_VERTICAL_LINE_STYLE);
-			mainView.setCaretStyle(RTextArea.OVERWRITE_MODE, CaretStyle.BLOCK_STYLE);
+			mainView.setCaretStyle(TextMode.INSERT, CaretStyle.THICK_VERTICAL_LINE_STYLE);
+			mainView.setCaretStyle(TextMode.OVERWRITE, CaretStyle.BLOCK_STYLE);
 			mainView.setCaretBlinkRate(500);
 			mainView.setSelectedTextColor(editorTheme.selectionFG);
 			mainView.setUseSelectedTextColor(editorTheme.useSelectionFG);
@@ -283,15 +283,15 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 	 * Returns the caret style for either the insert or overwrite caret
 	 * that the user chose.
 	 *
-	 * @param mode Either <code>RTextArea.INSERT_MODE</code> or
-	 *        <code>RTextArea.OVERWRITE_MODE</code>.
+	 * @param mode Either <code>TextMode.INSERT</code> or
+	 *        <code>TextMode.OVERWRITE</code>.
 	 * @return The style of that caret, such as
 	 *        <code>CaretStyle.VERTICAL_LINE_STYLE</code>.
 	 * @see ConfigurableCaret
 	 */
-	public CaretStyle getCaretStyle(int mode) {
+	public CaretStyle getCaretStyle(TextMode mode) {
 		int ordinal;
-		if (mode==RTextArea.INSERT_MODE) {
+		if (mode==TextMode.INSERT) {
 			ordinal = insCaretCombo.getSelectedIndex();
 		}
 		else {
@@ -333,8 +333,8 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		if (overrideCheckBox.isSelected() ||
 			!caretColorButton.getColor().equals(defaultCaretColor) ||
 			!getColor(selColorButton).equals(defaultSelectionColor) ||
-			getCaretStyle(RTextArea.INSERT_MODE)!=defaultInsertCaret ||
-			getCaretStyle(RTextArea.OVERWRITE_MODE)!=defaultOverwriteCaret ||
+			getCaretStyle(TextMode.INSERT)!=defaultInsertCaret ||
+			getCaretStyle(TextMode.OVERWRITE)!=defaultOverwriteCaret ||
 			!blinkRateSpinner.getValue().equals(defaultCaretBlinkRate) ||
 			selectedTextColorCB.isSelected() != defaultSelectedTextColorCBChecked ||
 			!selectedTextColorButton.getColor().equals(defaultSelectedTextColor)) {
@@ -342,8 +342,8 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 			overrideCheckBox.setSelected(false);
 			setCaretColor(defaultCaretColor);
 			setSelectionColor(defaultSelectionColor);
-			setCaretStyle(RTextArea.INSERT_MODE, defaultInsertCaret);
-			setCaretStyle(RTextArea.OVERWRITE_MODE, defaultOverwriteCaret);
+			setCaretStyle(TextMode.INSERT, defaultInsertCaret);
+			setCaretStyle(TextMode.OVERWRITE, defaultOverwriteCaret);
 			blinkRateSpinner.setValue(defaultCaretBlinkRate);
 			setSelectedTextColorEnabled(defaultSelectedTextColorCBChecked);
 			selectedTextColorButton.setColor(Color.white);
@@ -393,18 +393,18 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 	 * Sets the caret style for either the insert or overwrite caret, as
 	 * displayed in this option panel.
 	 *
-	 * @param mode Either <code>RTextArea.INSERT_MODE</code> or
-	 *        <code>RTextArea.OVERWRITE_MODE</code>.
+	 * @param mode Either <code>TextMode.INSERT</code> or
+	 *        <code>TextMode.OVERWRITE</code>.
 	 * @param style The style for the specified caret, such as
 	 *        <code>CaretStyle.VERTICAL_LINE_STYLE</code>.
-	 * @see #getCaretStyle(int)
+	 * @see #getCaretStyle(TextMode)
 	 */
-	private void setCaretStyle(int mode, CaretStyle style) {
+	private void setCaretStyle(TextMode mode, CaretStyle style) {
 		switch (mode) {
-			case RTextArea.INSERT_MODE -> insCaretCombo.setSelectedIndex(style.ordinal());
-			case RTextArea.OVERWRITE_MODE -> overCaretCombo.setSelectedIndex(style.ordinal());
-			default -> throw new IllegalArgumentException("mode must be " + RTextArea.INSERT_MODE + " or " +
-				RTextArea.OVERWRITE_MODE);
+			case TextMode.INSERT -> insCaretCombo.setSelectedIndex(style.ordinal());
+			case TextMode.OVERWRITE -> overCaretCombo.setSelectedIndex(style.ordinal());
+			default -> throw new IllegalArgumentException("mode must be " + TextMode.INSERT + " or " +
+				TextMode.OVERWRITE);
 		}
 	}
 
@@ -445,8 +445,8 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		AbstractMainView mainView = rtext.getMainView();
 		setCaretColor(mainView.getCaretColor());
 		setSelectionColor(mainView.getSelectionColor());
-		setCaretStyle(RTextArea.INSERT_MODE, mainView.getCaretStyle(RTextArea.INSERT_MODE));
-		setCaretStyle(RTextArea.OVERWRITE_MODE, mainView.getCaretStyle(RTextArea.OVERWRITE_MODE));
+		setCaretStyle(TextMode.INSERT, mainView.getCaretStyle(TextMode.INSERT));
+		setCaretStyle(TextMode.OVERWRITE, mainView.getCaretStyle(TextMode.OVERWRITE));
 		setBlinkRate(mainView.getCaretBlinkRate());
 		setSelectedTextColorEnabled(mainView.getUseSelectedTextColor());
 		selectedTextColorButton.setColor(mainView.getSelectedTextColor());
@@ -477,8 +477,8 @@ public class CaretAndSelectionOptionPanel extends AbstractTextAreaOptionPanel
 		context.setOverrideEditorTheme(overrideCheckBox.isSelected());
 
 		// "Carets" section
-		context.setInsertCaret(getCaretStyle(RTextArea.INSERT_MODE));
-		context.setOverwriteCaret(getCaretStyle(RTextArea.OVERWRITE_MODE));
+		context.setInsertCaret(getCaretStyle(TextMode.INSERT));
+		context.setOverwriteCaret(getCaretStyle(TextMode.OVERWRITE));
 		context.setCaretBlinkRate((Integer)blinkRateSpinner.getValue());
 		context.setCaretColor(caretColorButton.getColor());
 

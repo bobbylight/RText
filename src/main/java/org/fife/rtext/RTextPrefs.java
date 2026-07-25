@@ -31,6 +31,7 @@ import org.fife.ui.rsyntaxtextarea.Theme;
 import org.fife.ui.rtextarea.CaretStyle;
 import org.fife.ui.rtextarea.FoldIndicatorStyle;
 import org.fife.ui.rtextarea.RTextArea;
+import org.fife.ui.rtextarea.TextMode;
 import org.fife.util.MacOSUtil;
 
 
@@ -63,7 +64,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	public boolean lineNumbersVisible;
 	public int tabSize;							// In spaces.
 	public boolean emulateTabsWithSpaces;			// whether to emulate tabs with spaces.
-	public int textMode;						// Either RTextArea.INSERT_MODE (1) or RTextArea.OVERWRITE_MODE (2).
+	public TextMode textMode;
 	public int tabPlacement;						// One of JTabbedPane.TOP/LEFT/BOTTOM/RIGHT.
 	public Font printFont;						// The font ot use when printing.
 	public Color backgroundColor;
@@ -154,6 +155,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 	private void addAppSpecificTypeLoaders() {
 		addTypeLoader(FoldIndicatorStyle.class, new EnumLoader<>(FoldIndicatorStyle.MODERN));
 		addTypeLoader(SyntaxScheme.class, new SyntaxSchemeTypeLoader());
+		addTypeLoader(TextMode.class, new EnumLoader<>(TextMode.INSERT));
 	}
 
 
@@ -182,7 +184,7 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		lineNumbersVisible = true;
 		tabSize = RTextArea.getDefaultTabSize();
 		emulateTabsWithSpaces = false;
-		textMode = RTextArea.INSERT_MODE;
+		textMode = TextMode.INSERT;
 		tabPlacement = JTabbedPane.TOP;
 		printFont = null;	// i.e., use RText's font.
 		backgroundColor = theme.bgColor;
@@ -229,8 +231,8 @@ public class RTextPrefs extends AppPrefs implements RTextActionInfo {
 		roundedSelectionEdges = false;
 		workingDirectory = System.getProperty("user.dir");
 		carets = new int[2];
-		carets[RTextArea.INSERT_MODE] = CaretStyle.THICK_VERTICAL_LINE_STYLE.ordinal();
-		carets[RTextArea.OVERWRITE_MODE] = CaretStyle.BLOCK_STYLE.ordinal();
+		carets[TextMode.INSERT.ordinal()] = CaretStyle.THICK_VERTICAL_LINE_STYLE.ordinal();
+		carets[TextMode.OVERWRITE.ordinal()] = CaretStyle.BLOCK_STYLE.ordinal();
 		caretBlinkRate = 500;
 		dividerLocations = new int[4];
 		for (int i=0; i<4; i++) {

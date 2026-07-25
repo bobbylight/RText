@@ -8,7 +8,7 @@ package org.fife.rtext;
 import org.fife.ui.app.AppContext;
 import org.fife.ui.app.AppTheme;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
-import org.fife.ui.rtextarea.RTextArea;
+import org.fife.ui.rtextarea.TextMode;
 
 import java.awt.*;
 import java.io.File;
@@ -125,8 +125,8 @@ public class RTextAppContext extends AppContext<RText, RTextPrefs> {
 		prefs.markOccurrencesColor		= mainView.getMarkOccurrencesColor();
 		prefs.roundedSelectionEdges		= mainView.getRoundedSelectionEdges();
 		prefs.workingDirectory			= rtext.getWorkingDirectory();
-		prefs.carets[RTextArea.INSERT_MODE]= mainView.getCaretStyle(RTextArea.INSERT_MODE).ordinal();
-		prefs.carets[RTextArea.OVERWRITE_MODE]= mainView.getCaretStyle(RTextArea.OVERWRITE_MODE).ordinal();
+		prefs.carets[TextMode.INSERT.ordinal()] = mainView.getCaretStyle(TextMode.INSERT).ordinal();
+		prefs.carets[TextMode.OVERWRITE.ordinal()] = mainView.getCaretStyle(TextMode.OVERWRITE).ordinal();
 		prefs.caretBlinkRate			= mainView.getCaretBlinkRate();
 		prefs.dividerLocations[DockableWindowConstants.TOP]	= rtext.getSplitPaneDividerLocation(DockableWindowConstants.TOP);
 		prefs.dividerLocations[DockableWindowConstants.LEFT] = rtext.getSplitPaneDividerLocation(DockableWindowConstants.LEFT);

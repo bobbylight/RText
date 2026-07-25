@@ -108,7 +108,7 @@ public abstract class AbstractMainView extends JPanel
 	public ReplaceInFilesDialog replaceInFilesDialog;
 	public GoToDialog goToDialog;					// Dialog that lets you go to a certain line number.
 
-	private int textMode;						// Either INSERT_MODE or OVERWRITE_MODE.
+	private TextMode textMode;
 	private int tabSize;						// The size (in spaces) tabs are.
 	private boolean emulateTabsWithWhitespace;		// If true, tabs are emulated with spaces.
 
@@ -781,10 +781,8 @@ public abstract class AbstractMainView extends JPanel
 			pane.setHyperlinkForeground(hyperlinkColor);
 		}
 		pane.setRoundedSelectionEdges(getRoundedSelectionEdges());
-		pane.setCaretStyle(RTextEditorPane.INSERT_MODE,
-							carets[RTextEditorPane.INSERT_MODE]);
-		pane.setCaretStyle(RTextEditorPane.OVERWRITE_MODE,
-							carets[RTextEditorPane.OVERWRITE_MODE]);
+		pane.setCaretStyle(TextMode.INSERT, carets[TextMode.INSERT.ordinal()]);
+		pane.setCaretStyle(TextMode.OVERWRITE, carets[TextMode.OVERWRITE.ordinal()]);
 		pane.getCaret().setBlinkRate(getCaretBlinkRate());
 		//pane.setFadeCurrentLineHighlight(fadeCurrentLineHighlight);
 
@@ -1029,15 +1027,14 @@ public abstract class AbstractMainView extends JPanel
 	/**
 	 * Returns the caret style for either the insert or overwrite caret.
 	 *
-	 * @param mode Either <code>RTextArea.INSERT_MODE</code> or
-	 *        <code>RTextArea.OVERWRITE_MODE</code>.
+	 * @param mode The text mode. This cannot be {@code null}.
 	 * @return The style of that caret, such as
 	 *        <code>CaretStyle.VERTICAL_LINE_STYLE</code>.
-	 * @see #setCaretStyle(int, CaretStyle)
+	 * @see #setCaretStyle(TextMode, CaretStyle)
 	 * @see CaretStyle
 	 */
-	public CaretStyle getCaretStyle(int mode) {
-		return carets[mode];
+	public CaretStyle getCaretStyle(TextMode mode) {
+		return carets[mode.ordinal()];
 	}
 
 
@@ -1906,11 +1903,11 @@ public abstract class AbstractMainView extends JPanel
 	/**
 	 * Returns the text mode we're in.
 	 *
-	 * @return <code>RTextEditorPane.INSERT_MODE</code>
-	 *         or <code>RTextEditorPane.OVERWRITE_MODE</code>.
+	 * @return <code>TextMode.INSERT</code>
+	 *         or <code>TextMode.OVERWRITE</code>.
 	 * @see #setTextMode
 	 */
-	public int getTextMode() {
+	public TextMode getTextMode() {
 		return textMode;
 	}
 
@@ -2257,8 +2254,8 @@ public abstract class AbstractMainView extends JPanel
 		setMarkOccurrencesColor(prefs.markOccurrencesColor);
 		setRoundedSelectionEdges(prefs.roundedSelectionEdges);
 		carets = new CaretStyle[2];
-		setCaretStyle(RTextArea.INSERT_MODE, CaretStyle.values()[prefs.carets[0]]);
-		setCaretStyle(RTextArea.OVERWRITE_MODE, CaretStyle.values()[prefs.carets[1]]);
+		setCaretStyle(TextMode.INSERT, CaretStyle.values()[prefs.carets[0]]);
+		setCaretStyle(TextMode.OVERWRITE, CaretStyle.values()[prefs.carets[1]]);
 		setCaretBlinkRate(prefs.caretBlinkRate);
 		setLineTerminator(prefs.defaultLineTerminator);
 		setDefaultEncoding(prefs.defaultEncoding);
@@ -3132,18 +3129,17 @@ public abstract class AbstractMainView extends JPanel
 	/**
 	 * Sets the caret style for either the insert or overwrite caret.
 	 *
-	 * @param mode Either <code>RTextArea.INSERT_MODE</code> or
-	 *        <code>RTextArea.OVERWRITE_MODE</code>.
+	 * @param mode Either <code>TextMode.INSERT</code> or
+	 *        <code>TextMode.OVERWRITE</code>.
 	 * @param style The style for the specified caret, such as
 	 *        <code>CaretStyle.VERTICAL_LINE_STYLE</code>.
-	 * @see #getCaretStyle(int)
+	 * @see #getCaretStyle(TextMode)
 	 */
-	public void setCaretStyle(int mode, CaretStyle style) {
-		if (mode!=RTextArea.INSERT_MODE &&
-				mode!=RTextArea.OVERWRITE_MODE)
+	public void setCaretStyle(TextMode mode, CaretStyle style) {
+		if (mode!=TextMode.INSERT && mode!=TextMode.OVERWRITE)
 			return;
-		if (carets[mode]!=style) {
-			carets[mode] = style;
+		if (carets[mode.ordinal()]!=style) {
+			carets[mode.ordinal()] = style;
 			for (int i=0; i<getNumDocuments(); i++)
 				getRTextEditorPaneAt(i).setCaretStyle(mode, style);
 		}
@@ -4287,14 +4283,12 @@ public abstract class AbstractMainView extends JPanel
 	/**
 	 * Enables either insert mode or overwrite mode for the text documents.
 	 *
-	 * @param mode Either <code>RTextEditorPane.INSERT_MODE</code> or
-	 *        <code>RTextEditorPane.OVERWRITE_MODE</code>.
+	 * @param mode The new text mode
 	 * @throws IllegalArgumentException If <code>mode</code> is invalid.
 	 * @see #getTextMode()
 	 */
-	public void setTextMode(int mode) {
-		if (mode!=RTextEditorPane.INSERT_MODE &&
-				mode!=RTextEditorPane.OVERWRITE_MODE) {
+	public void setTextMode(TextMode mode) {
+		if (mode!=TextMode.INSERT && mode!=TextMode.OVERWRITE) {
 			throw new IllegalArgumentException("Invalid mode: " + mode);
 		}
 		textMode = mode;

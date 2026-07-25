@@ -14,11 +14,11 @@ import java.awt.event.ActionEvent;
 
 import org.fife.rtext.AbstractMainView;
 import org.fife.rtext.RText;
-import org.fife.rtext.RTextEditorPane;
 import org.fife.rtext.StatusBar;
 import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.RTextAreaEditorKit;
 import org.fife.ui.rtextarea.RecordableTextAction;
+import org.fife.ui.rtextarea.TextMode;
 
 
 /**
@@ -49,10 +49,9 @@ public class ToggleTextModeAction extends RecordableTextAction {
 	public void actionPerformedImpl(ActionEvent e, RTextArea textArea) {
 		StatusBar statusBar = (StatusBar)rtext.getStatusBar();
 		AbstractMainView view = rtext.getMainView();
-		boolean isInsertMode = view.getTextMode()==RTextEditorPane.INSERT_MODE;
+		boolean isInsertMode = view.getTextMode()==TextMode.INSERT;
 		statusBar.setOverwriteModeIndicatorEnabled(isInsertMode);
-		view.setTextMode(isInsertMode ? RTextEditorPane.OVERWRITE_MODE :
-										RTextEditorPane.INSERT_MODE);
+		view.setTextMode(isInsertMode ? TextMode.OVERWRITE : TextMode.INSERT);
 	}
 
 

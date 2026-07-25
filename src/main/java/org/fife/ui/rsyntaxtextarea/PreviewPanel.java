@@ -181,8 +181,8 @@ final class PreviewPanel extends JPanel
 
 		// Options from the "Caret and Selection" child option panel
 		if (context.getOverrideEditorTheme()) {
-			textArea.setCaretStyle(RTextArea.INSERT_MODE, context.getInsertCaret());
-			textArea.setCaretStyle(RTextArea.OVERWRITE_MODE, context.getOverwriteCaret());
+			textArea.setCaretStyle(TextMode.INSERT, context.getInsertCaret());
+			textArea.setCaretStyle(TextMode.OVERWRITE, context.getOverwriteCaret());
 			textArea.setCaretColor(context.getCaretColor());
 			textArea.getCaret().setBlinkRate(context.getCaretBlinkRate());
 			textArea.setSelectionColor(context.getSelectionColor());
@@ -190,8 +190,8 @@ final class PreviewPanel extends JPanel
 			textArea.setUseSelectedTextColor(context.getUseSelectedTextColor());
 		}
 		else {
-			textArea.setCaretStyle(RTextArea.INSERT_MODE, CaretStyle.THICK_VERTICAL_LINE_STYLE);
-			textArea.setCaretStyle(RTextArea.OVERWRITE_MODE, CaretStyle.BLOCK_STYLE);
+			textArea.setCaretStyle(TextMode.INSERT, CaretStyle.THICK_VERTICAL_LINE_STYLE);
+			textArea.setCaretStyle(TextMode.OVERWRITE, CaretStyle.BLOCK_STYLE);
 			textArea.setCaretColor(editorTheme.caretColor);
 			textArea.getCaret().setBlinkRate(500);
 			textArea.setSelectionColor(editorTheme.selectionBG);
