@@ -9,8 +9,7 @@
  */
 package org.fife.rtext;
 
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.print.PageFormat;
@@ -23,6 +22,7 @@ import org.fife.ui.StandardMenuItem;
 import org.fife.ui.rsyntaxtextarea.FileLocation;
 import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 import org.fife.ui.rtextarea.RTATextTransferHandler;
+import org.fife.ui.rtextarea.TextMode;
 
 
 /**
@@ -44,14 +44,13 @@ public class RTextEditorPane extends TextEditorPane {
 	 *
 	 * @param rtext The owning RText instance.
 	 * @param wordWrapEnabled Whether to use word wrap in this pane.
-	 * @param textMode Either <code>INSERT_MODE</code> or
-	 *        <code>OVERWRITE_MODE</code>.
+	 * @param textMode The text mode.
 	 * @param loc The location of the file to open.
 	 * @param encoding The encoding of the file.
 	 * @throws IOException If an IO error occurs reading the file to load.
 	 */
 	public RTextEditorPane(RText rtext, boolean wordWrapEnabled,
-		int textMode, FileLocation loc, String encoding) throws IOException {
+		   TextMode textMode, FileLocation loc, String encoding) throws IOException {
 		super(textMode, wordWrapEnabled, loc, encoding);
 		this.rtext = rtext;
 		// Change the transfer handler to one that recognizes drag-and-dropped
@@ -101,7 +100,8 @@ public class RTextEditorPane extends TextEditorPane {
 		Font printWithMeFont = rtext.getMainView().getPrintFont();
 		if (printWithMeFont==null)	// null => print with the current font.
 			printWithMeFont = this.getFont();
-		return RPrintUtilities.printDocumentWordWrap(g, this,
+		Graphics2D g2d = (Graphics2D)g;
+		return RPrintUtilities.printDocumentWordWrap(g2d, this,
 				printWithMeFont, pageIndex, pageFormat, this.getTabSize());
 	}
 

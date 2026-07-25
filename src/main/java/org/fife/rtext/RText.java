@@ -45,6 +45,7 @@ import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.dockablewindows.DockableWindow;
 import org.fife.ui.dockablewindows.DockableWindowConstants;
 import org.fife.ui.dockablewindows.DockableWindowPanel;
+import org.fife.ui.rtextarea.TextMode;
 import org.fife.ui.rtextfilechooser.FileChooserOwner;
 import org.fife.ui.rtextfilechooser.RTextFileChooser;
 import org.fife.util.MacOSUtil;
@@ -350,7 +351,7 @@ public class RText extends AbstractPluggableGUIApplication<RTextPrefs>
 	protected org.fife.ui.StatusBar createStatusBar(RTextPrefs prefs) {
 		return new StatusBar(this, getString("Ready"),
 					!prefs.wordWrap, 1,1,
-					prefs.textMode==RTextEditorPane.OVERWRITE_MODE);
+					prefs.textMode==TextMode.OVERWRITE);
 	}
 
 
